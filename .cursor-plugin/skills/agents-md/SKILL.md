@@ -1,9 +1,9 @@
 ---
-name: agents-md-guide
+name: agents-md
 description: Deep codebase initialisation with hierarchical AGENTS.md documentation and updating of AGENTS.md documentation.
 ---
 
-# Deep Init Skill
+# AGENTS.md Skill
 
 Creates comprehensive, hierarchical AGENTS.md documentation across the entire codebase.
 
@@ -93,9 +93,10 @@ This creates a navigable hierarchy:
 
 ### Step 1: Map Directory Structure
 
-```
-Task(subagent_type="explore", model="haiku",
-  prompt="List all directories recursively. Exclude: node_modules, .git, dist, build, __pycache__, .venv, coverage, .next, .nuxt")
+```text
+Task(description="List directories recursively",
+  subagent_type="explore",
+  prompt="List all directories recursively. Exclude directories that should not be documented: prefer using .gitignore, .cursorignore, and .cursorindexingignore (if present) to determine exclusions; otherwise exclude common dependency, build, cache, and VCS directories (e.g. node_modules, .git, dist, build, __pycache__, .venv, coverage, .next, .nuxt) and any other project-specific directories that are clearly generated or tooling-only.")
 ```
 
 ### Step 2: Create Work Plan
@@ -160,23 +161,23 @@ grep -r "<!-- Parent:" --include="AGENTS.md" .
 
 ## Smart Delegation
 
-| Task               | Agent           |
-| ------------------ | --------------- |
-| Directory mapping  | `explore`       |
-| File analysis      | `architect-low` |
-| Content generation | `writer`        |
-| AGENTS.md writes   | `writer`        |
+| Task               | Agent            |
+| ------------------ | ---------------- |
+| Directory mapping  | `explore`        |
+| File analysis      | `generalPurpose  |
+| Content generation | `generalPurpose` |
+| AGENTS.md writes   | `generalPurpose` |
 
 ## Empty Directory Handling
 
 When encountering empty or near-empty directories:
 
-| Condition                                  | Action                                                  |
-| ------------------------------------------ | ------------------------------------------------------- |
-| No files, no subdirectories                | **Skip** - do not create AGENTS.md                      |
-| No files, has subdirectories               | Create minimal AGENTS.md with subdirectory listing only |
+| Condition                                 | Action                                                  |
+| ----------------------------------------- | ------------------------------------------------------- |
+| No files, no subdirectories               | **Skip** - do not create AGENTS.md                      |
+| No files, has subdirectories              | Create minimal AGENTS.md with subdirectory listing only |
 | Has only generated files (_.min.js,_.map) | Skip or minimal AGENTS.md                               |
-| Has only config files                      | Create AGENTS.md describing configuration purpose       |
+| Has only config files                     | Create AGENTS.md describing configuration purpose       |
 
 Example minimal AGENTS.md for directory-only containers:
 
@@ -200,7 +201,7 @@ Container directory for organizing related modules.
 
 1. **Same-level directories**: Process in parallel
 2. **Different levels**: Sequential (parent first)
-3. **Large directories**: Spawn dedicated agent per directory
+3. **Large directories**: Spawn dedicated subagent per directory
 4. **Small directories**: Batch multiple into one agent
 
 ## Quality Standards

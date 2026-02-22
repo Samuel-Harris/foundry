@@ -5,7 +5,7 @@ description: Initialise comprehensive hierarchical AGENTS.md documentation acros
 
 # Generate Agent Documentation
 
-Use the **agents-md-guide** skill to create or update AGENTS.md documentation.
+Use the `agents-md` skill to create or update AGENTS.md documentation.
 
 **Scope:**
 

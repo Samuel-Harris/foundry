@@ -1,13 +1,11 @@
 ---
-name: agents_md_guide
-description: Guide for understanding, creating, and updating hierarchical AGENTS.md documentation files.
+name: agents-md-guide
+description: Deep codebase initialisation with hierarchical AGENTS.md documentation and updating of AGENTS.md documentation.
 ---
 
-# AGENTS.md Documentation Skill
+# Deep Init Skill
 
-This skill provides guidance on what AGENTS.md files should contain, how to structure them, and how to update them. Use this skill when you need to understand or modify AGENTS.md files.
-
-**Note**: To initialize AGENTS.md documentation across an entire repository, use the `generate_agent_docs` command instead.
+Creates comprehensive, hierarchical AGENTS.md documentation across the entire codebase.
 
 ## Core Concept
 
@@ -28,7 +26,7 @@ Every AGENTS.md (except root) includes a parent reference tag:
 
 This creates a navigable hierarchy:
 
-```text
+```
 /AGENTS.md                          ← Root (no parent tag)
 ├── src/AGENTS.md                   ← <!-- Parent: ../AGENTS.md -->
 │   ├── src/components/AGENTS.md    ← <!-- Parent: ../AGENTS.md -->
@@ -91,9 +89,40 @@ This creates a navigable hierarchy:
 <!-- MANUAL: Any manually added notes below this line are preserved on regeneration -->
 ```
 
-## Updating Existing AGENTS.md Files
+## Execution Workflow
 
-When updating an existing AGENTS.md file:
+### Step 1: Map Directory Structure
+
+```
+Task(subagent_type="explore", model="haiku",
+  prompt="List all directories recursively. Exclude: node_modules, .git, dist, build, __pycache__, .venv, coverage, .next, .nuxt")
+```
+
+### Step 2: Create Work Plan
+
+Generate todo items for each directory, organized by depth level:
+
+```
+Level 0: / (root)
+Level 1: /src, /docs, /tests
+Level 2: /src/components, /src/utils, /docs/api
+...
+```
+
+### Step 3: Generate Level by Level
+
+**IMPORTANT**: Generate parent levels before child levels to ensure parent references are valid.
+
+For each directory:
+
+1. Read all files in the directory
+2. Analyze purpose and relationships
+3. Generate AGENTS.md content
+4. Write file with proper parent reference
+
+### Step 4: Compare and Update (if exists)
+
+When AGENTS.md already exists:
 
 1. **Read existing content**
 2. **Identify sections**:
@@ -108,16 +137,46 @@ When updating an existing AGENTS.md file:
    - Preserve manual annotations
    - Update timestamp
 
+### Step 5: Validate Hierarchy
+
+After generation, run validation checks:
+
+| Check                     | How to Verify                                             | Corrective Action         |
+| ------------------------- | --------------------------------------------------------- | ------------------------- |
+| Parent references resolve | Read each AGENTS.md, check `<!-- Parent: -->` path exists | Fix path or remove orphan |
+| No orphaned AGENTS.md     | Compare AGENTS.md locations to directory structure        | Delete orphaned files     |
+| Completeness              | List all directories, check for AGENTS.md                 | Generate missing files    |
+| Timestamps current        | Check `<!-- Generated: -->` dates                         | Regenerate outdated files |
+
+Validation script pattern:
+
+```bash
+# Find all AGENTS.md files
+find . -name "AGENTS.md" -type f
+
+# Check parent references
+grep -r "<!-- Parent:" --include="AGENTS.md" .
+```
+
+## Smart Delegation
+
+| Task               | Agent           |
+| ------------------ | --------------- |
+| Directory mapping  | `explore`       |
+| File analysis      | `architect-low` |
+| Content generation | `writer`        |
+| AGENTS.md writes   | `writer`        |
+
 ## Empty Directory Handling
 
 When encountering empty or near-empty directories:
 
-| Condition                                 | Action                                                  |
-| ----------------------------------------- | ------------------------------------------------------- |
-| No files, no subdirectories               | **Skip** - do not create AGENTS.md                      |
-| No files, has subdirectories              | Create minimal AGENTS.md with subdirectory listing only |
+| Condition                                  | Action                                                  |
+| ------------------------------------------ | ------------------------------------------------------- |
+| No files, no subdirectories                | **Skip** - do not create AGENTS.md                      |
+| No files, has subdirectories               | Create minimal AGENTS.md with subdirectory listing only |
 | Has only generated files (_.min.js,_.map) | Skip or minimal AGENTS.md                               |
-| Has only config files                     | Create AGENTS.md describing configuration purpose       |
+| Has only config files                      | Create AGENTS.md describing configuration purpose       |
 
 Example minimal AGENTS.md for directory-only containers:
 
@@ -136,6 +195,13 @@ Container directory for organizing related modules.
 | --------- | ------------------------------------ |
 | `subdir/` | Description (see `subdir/AGENTS.md`) |
 ```
+
+## Parallelization Rules
+
+1. **Same-level directories**: Process in parallel
+2. **Different levels**: Sequential (parent first)
+3. **Large directories**: Spawn dedicated agent per directory
+4. **Small directories**: Batch multiple into one agent
 
 ## Quality Standards
 
@@ -271,23 +337,19 @@ Reusable React components organized by feature and complexity.
 <!-- MANUAL: -->
 ```
 
-## Validation
+## Triggering Update Mode
 
-When working with AGENTS.md files, validate:
+When running on an existing codebase with AGENTS.md files:
 
-| Check                     | How to Verify                                             | Corrective Action         |
-| ------------------------- | --------------------------------------------------------- | ------------------------- |
-| Parent references resolve | Read each AGENTS.md, check `<!-- Parent: -->` path exists | Fix path or remove orphan |
-| No orphaned AGENTS.md     | Compare AGENTS.md locations to directory structure        | Delete orphaned files     |
-| Completeness              | List all directories, check for AGENTS.md                 | Generate missing files    |
-| Timestamps current        | Check `<!-- Generated: -->` dates                         | Regenerate outdated files |
+1. Detect existing files first
+2. Read and parse existing content
+3. Analyze current directory state
+4. Generate diff between existing and current
+5. Apply updates while preserving manual sections
 
-Validation script pattern:
+## Performance Considerations
 
-```bash
-# Find all AGENTS.md files
-find . -name "AGENTS.md" -type f
-
-# Check parent references
-grep -r "<!-- Parent:" --include="AGENTS.md" .
-```
+- **Cache directory listings** - Don't re-scan same directories
+- **Batch small directories** - Process multiple at once
+- **Skip unchanged** - If directory hasn't changed, skip regeneration
+- **Parallel writes** - Multiple agents writing different files simultaneously

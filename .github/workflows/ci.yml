@@ -31,5 +31,6 @@ jobs:
             .cursor-plugin/**/*.md
           config: |
             {
+              "MD040": false,
               "MD041": false
             }

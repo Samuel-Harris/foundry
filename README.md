@@ -8,6 +8,8 @@ As a Cursor plugin, Relay exposes a `handoff` command (defined in `.cursor-plugi
 
 To validate, run `node scripts/validate-template.mjs`.
 
-# Attributions
-- Repo initialised from https://github.com/cursor/plugin-template.
-- Logo generated with ChatGPT
+## Attributions
+
+- Repo initialised from <https://github.com/cursor/plugin-template>.
+- Logo generated with ChatGPT.
+- generate_agent_docs skill was created from the deepinit skill in <https://github.com/Yeachan-Heo/oh-my-claudecode>.

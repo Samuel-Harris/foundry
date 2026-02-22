@@ -29,3 +29,7 @@ jobs:
         with:
           globs: |
             .cursor-plugin/**/*.md
+          config: |
+            {
+              "MD041": false
+            }

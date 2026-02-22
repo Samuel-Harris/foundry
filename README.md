@@ -1,0 +1,2 @@
+# relay
+Relay bridges the gap between AI coding sessions. It equips Cursor with commands for structured handoffs, automatic documentation upkeep, and git diff context — giving agents the awareness they need to stay aligned with your current work, no matter when or where they pick up the thread.

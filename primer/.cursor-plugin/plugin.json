@@ -1,0 +1,12 @@
+{
+  "name": "primer",
+  "displayName": "Primer",
+  "version": "0.1.0",
+  "description": "Primer audits and scaffolds a repository to ensure it's optimally configured for agentic development with Cursor.",
+  "author": {
+    "name": "sam"
+  },
+  "license": "MIT",
+  "keywords": ["cursor", "scaffolding", "audit", "documentation"],
+  "logo": "assets/logo.png"
+}

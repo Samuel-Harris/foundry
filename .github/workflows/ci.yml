@@ -18,3 +18,14 @@ jobs:
 
       - name: Run plugin validation
         run: node scripts/validate-template.mjs
+
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run markdownlint on .cursor-plugin
+        uses: DavidAnson/markdownlint-cli2-action@v17
+        with:
+          globs: |
+            .cursor-plugin/**/*.md

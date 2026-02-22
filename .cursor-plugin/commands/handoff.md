@@ -1,3 +1,8 @@
+---
+name: handoff
+description: Create a comprehensive AI context handoff document for long-running sessions.
+---
+
 # AI Context Handoff Prompt
 
 You are approaching the context window limit for this session. Please create a comprehensive handoff document that will allow me to continue this work in a fresh session with a new AI agent. This handoff should preserve critical context while discarding irrelevant information.

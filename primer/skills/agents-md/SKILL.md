@@ -93,10 +93,12 @@ This creates a navigable hierarchy:
 
 ### Step 1: Map Directory Structure
 
+**CRITICAL**: DO NOT generate documentation for any directory that is ignored by `.gitignore` or `.cursorignore`.
+
 ```text
 Task(description="List directories recursively",
   subagent_type="explore",
-  prompt="List all directories recursively. Exclude directories that should not be documented: prefer using .gitignore, .cursorignore, and .cursorindexingignore (if present) to determine exclusions; otherwise exclude common dependency, build, cache, and VCS directories (e.g. node_modules, .git, dist, build, __pycache__, .venv, coverage, .next, .nuxt) and any other project-specific directories that are clearly generated or tooling-only.")
+  prompt="List all directories recursively. STRICTLY EXCLUDE any directories that are ignored by .gitignore or .cursorignore. Also exclude common dependency, build, cache, and VCS directories (e.g. node_modules, .git, dist, build, __pycache__, .venv, coverage, .next, .nuxt) and any other project-specific directories that are clearly generated or tooling-only.")
 ```
 
 ### Step 2: Create Work Plan

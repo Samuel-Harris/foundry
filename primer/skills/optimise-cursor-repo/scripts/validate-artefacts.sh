@@ -45,14 +45,16 @@ print_ok() {
 
 # Validate Skills
 validate_skills() {
-    print_header "Validating Skills (.cursor/skills/*/SKILL.md)"
+    print_header "Validating Skills (.cursor/skills/**/SKILL.md)"
 
-    if ! compgen -G ".cursor/skills/*/SKILL.md" > /dev/null 2>&1; then
+    skill_count=$(find .cursor/skills -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+
+    if [ "$skill_count" -eq 0 ]; then
         echo "  No skills found"
         return
     fi
 
-    for skill in .cursor/skills/*/SKILL.md; do
+    while IFS= read -r skill; do
         echo -e "\n  Checking ${skill}..."
         has_issues=false
 
@@ -76,7 +78,7 @@ validate_skills() {
         if [ "$has_issues" = false ]; then
             print_ok
         fi
-    done
+    done < <(find .cursor/skills -name "SKILL.md" 2>/dev/null | sort)
 }
 
 # Validate Rules

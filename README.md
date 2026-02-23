@@ -1,5 +1,7 @@
 # Foundry
 
+![Foundry](assets/foundry-logo.png)
+
 Foundry is a collection of Cursor plugins designed to optimise your agentic coding workflows.
 
 ## Plugins
@@ -42,4 +44,4 @@ To validate these plugins, run `node scripts/validate-template.mjs`.
 - Repo initialised from <https://github.com/cursor/plugin-template>.
 - generate_agent_docs skill was created from the deepinit skill in <https://github.com/Yeachan-Heo/oh-my-claudecode>.
 - Relay logo generated with ChatGPT.
-- Primer logo generated with Gemini nano banana.
+- Foundry and Primer logos generated with Gemini nano banana.

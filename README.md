@@ -1,5 +1,7 @@
 # Foundry
 
+[![CI](https://github.com/Samuel-Harris/foundry/actions/workflows/ci.yml/badge.svg)](https://github.com/Samuel-Harris/foundry/actions/workflows/ci.yml)
+
 ![Foundry](assets/foundry-logo.png)
 
 Foundry is a collection of Cursor plugins designed to optimise your agentic coding workflows.

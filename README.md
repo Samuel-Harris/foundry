@@ -12,7 +12,7 @@ Foundry is a collection of Cursor plugins designed to optimise your agentic codi
 
 ![Primer](primer/assets/primer-logo.png)
 
-Primer audits and scaffolds a repository to ensure it is optimally configured for agentic development with Cursor. These skills are configured with `disable-model-invocation: true` to ensure they are only triggered when explicitly requested.
+Primer audits and scaffolds a repository to ensure it is optimally configured for agentic development with Cursor.
 
 #### Components
 
@@ -26,7 +26,7 @@ Primer audits and scaffolds a repository to ensure it is optimally configured fo
 
 ![Relay](relay/assets/relay-logo.png)
 
-Relay bridges the gap between AI coding sessions. It equips Cursor with skills for structured handoffs and git diff context — giving agents the awareness they need to stay aligned with your current work, no matter when or where they pick up the thread. These skills are configured with `disable-model-invocation: true` to ensure they are only triggered when explicitly requested.
+Relay bridges the gap between AI coding sessions. It equips Cursor with skills for structured handoffs and git diff context — giving agents the awareness they need to stay aligned with your current work, no matter when or where they pick up the thread.
 
 #### Components
 

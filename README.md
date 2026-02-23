@@ -16,11 +16,12 @@ Primer audits and scaffolds a repository to ensure it is optimally configured fo
 
 #### Components
 
-| Type  | Name                        | Description                                                                                                     |
-| :---- | :-------------------------- | :-------------------------------------------------------------------------------------------------------------- |
-| Rule  | `keep-agent-mds-up-to-date` | Keep project documentation up to date when code changes make them stale.                                        |
-| Skill | `agents-md`                 | Deep codebase initialisation with hierarchical AGENTS.md documentation and updating of AGENTS.md documentation. |
-| Skill | `generate_agent_docs`       | Initialise comprehensive hierarchical AGENTS.md documentation across the entire codebase.                       |
+| Type  | Name                        | Description                                                                                                           |
+| :---- | :-------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
+| Rule  | `keep-agent-mds-up-to-date` | Keep project documentation up to date when code changes make them stale.                                              |
+| Skill | `agents-md`                 | Deep codebase initialisation with hierarchical AGENTS.md documentation and updating of AGENTS.md documentation.       |
+| Skill | `optimise-cursor-repo`      | Audit a repository and produce prioritised recommendations for improving Cursor performance and developer experience. |
+| Skill | `generate_agent_docs`       | Initialise comprehensive hierarchical AGENTS.md documentation across the entire codebase.                             |
 
 ### Relay
 

@@ -1,6 +1,7 @@
 ---
 name: handoff
 description: Create a comprehensive AI context handoff document for long-running sessions.
+disable-model-invocation: true
 ---
 
 # AI Context Handoff Prompt

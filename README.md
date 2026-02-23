@@ -46,5 +46,3 @@ To validate these plugins, run `node scripts/validate-template.mjs`.
 
 - Repo initialised from <https://github.com/cursor/plugin-template>.
 - generate_agent_docs skill was created from the deepinit skill in <https://github.com/Yeachan-Heo/oh-my-claudecode>.
-- Foundry and Relay logo generated with ChatGPT.
-- Primer logos generated with Gemini nano banana.

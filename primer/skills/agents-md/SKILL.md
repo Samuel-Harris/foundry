@@ -164,7 +164,7 @@ grep -r "<!-- Parent:" --include="AGENTS.md" .
 | Task               | Agent            |
 | ------------------ | ---------------- |
 | Directory mapping  | `explore`        |
-| File analysis      | `generalPurpose  |
+| File analysis      | `generalPurpose` |
 | Content generation | `generalPurpose` |
 | AGENTS.md writes   | `generalPurpose` |
 

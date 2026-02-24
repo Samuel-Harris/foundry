@@ -18,16 +18,16 @@ Audit a repository's Cursor configuration, indexing setup, rules, hooks, documen
 
 Cursor evolves rapidly. Always consult these sources for the latest information:
 
-- <https://cursor.com/docs/context/rules> — Rules configuration
-- <https://cursor.com/docs/context/skills> — Skills configuration
-- <https://cursor.com/docs/context/subagents> — Subagents configuration
-- <https://cursor.com/docs/agent/hooks> — Hooks system
-- <https://cursor.com/docs/plugins> — Plugins and marketplace
-- <https://cursor.com/changelog> — Changelog
+- https://cursor.com/docs/context/rules — Rules configuration
+- https://cursor.com/docs/context/skills — Skills configuration
+- https://cursor.com/docs/context/subagents — Subagents configuration
+- https://cursor.com/docs/agent/hooks — Hooks system
+- https://cursor.com/docs/plugins — Plugins and marketplace
+- https://cursor.com/changelog — Changelog
 
 ## Scope
 
-This skill is for **audit and recommendation only**. Do not make changes to the repository. Present findings as a prioritised report.
+This skill has two phases: **audit** then **implementation**. During the audit phase, do not make changes to the repository — present findings as a prioritised report. Implementation only happens after the user approves specific recommendations (see "After the Report").
 
 For AGENTS.md creation and updates, refer to the **deepinit** skill.
 
@@ -267,7 +267,7 @@ Check `.cursor/mcp.json` or `mcp.json`. Only suggest MCP servers for services th
 
 Plugins are installed from the [Cursor Marketplace](https://cursor.com/marketplace) and bundle rules, skills, agents, commands, MCP servers, and hooks. Check Cursor Settings > Rules for installed plugins.
 
-For creating plugins: requires `.cursor-plugin/plugin.json` manifest. See <https://cursor.com/docs/plugins/building> for format.
+For creating plugins: requires `.cursor-plugin/plugin.json` manifest. See https://cursor.com/docs/plugins/building for format.
 
 ### 14. Sandbox Configuration
 
@@ -317,7 +317,7 @@ See `references/audit-process.md` for detailed parallel and sequential audit wor
 5. Measure context weight
 6. Check Cursor documentation for new features
 7. **Content placement analysis** — apply Decision Tree to all AGENTS.md files, rules, and skills (including skill subdirectories)
-8. **Verify each recommendation** — read relevant files to
+8. **Verify each recommendation** — read relevant files to confirm gaps exist before including in report
 
 ---
 

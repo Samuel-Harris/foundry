@@ -27,7 +27,7 @@ If the environment supports subagents, parallelise the audit for speed:
 
 ### Subagent 4: Documentation Currency Check
 
-- Fetch <https://cursor.com/changelog> for recent features
+- Fetch https://cursor.com/changelog for recent features
 - Compare repo configuration against latest available features
 - Identify missing configurations for new features
 
@@ -153,4 +153,4 @@ cat sandbox.json 2>/dev/null
 
 ### Step 9: Check Cursor documentation
 
-Consult <https://docs.cursor.com> and <https://cursor.com/changelog> for any new features, settings, or configuration options not covered in this skill. Include relevant new findings in your recommendations.
+Consult https://docs.cursor.com and https://cursor.com/changelog for any new features, settings, or configuration options not covered in this skill. Include relevant new findings in your recommendations.

@@ -18,16 +18,16 @@ Audit a repository's Cursor configuration, indexing setup, rules, hooks, documen
 
 Cursor evolves rapidly. Always consult these sources for the latest information:
 
-- <https://cursor.com/docs/context/rules> — Rules configuration
-- <https://cursor.com/docs/context/skills> — Skills configuration
-- <https://cursor.com/docs/context/subagents> — Subagents configuration
-- <https://cursor.com/docs/agent/hooks> — Hooks system
-- <https://cursor.com/docs/plugins> — Plugins and marketplace
-- <https://cursor.com/changelog> — Changelog
+- https://cursor.com/docs/context/rules — Rules configuration
+- https://cursor.com/docs/context/skills — Skills configuration
+- https://cursor.com/docs/context/subagents — Subagents configuration
+- https://cursor.com/docs/agent/hooks — Hooks system
+- https://cursor.com/docs/plugins — Plugins and marketplace
+- https://cursor.com/changelog — Changelog
 
 ## Scope
 
-This skill is for **audit and recommendation only**. Do not make changes to the repository. Present findings as a prioritised report.
+This skill has two phases: **audit** then **implementation**. During the audit phase, do not make changes to the repository — present findings as a prioritised report. Implementation only happens after the user approves specific recommendations (see "After the Report").
 
 For AGENTS.md creation and updates, refer to the **deepinit** skill.
 
@@ -234,11 +234,11 @@ All fields are optional but recommended for discoverability:
 
 ```yaml
 ---
-name: subagent-name          # Defaults to filename without extension
+name: subagent-name # Defaults to filename without extension
 description: What this subagent does and when to use it
-model: inherit               # Options: fast, inherit, or specific model ID
-readonly: true               # For read-only subagents
-is_background: false         # Run asynchronously without blocking parent
+model: inherit # Options: fast, inherit, or specific model ID
+readonly: true # For read-only subagents
+is_background: false # Run asynchronously without blocking parent
 ---
 ```
 
@@ -267,11 +267,40 @@ Check `.cursor/mcp.json` or `mcp.json`. Only suggest MCP servers for services th
 
 Plugins are installed from the [Cursor Marketplace](https://cursor.com/marketplace) and bundle rules, skills, agents, commands, MCP servers, and hooks. Check Cursor Settings > Rules for installed plugins.
 
-For creating plugins: requires `.cursor-plugin/plugin.json` manifest. See <https://cursor.com/docs/plugins/building> for format.
+For creating plugins: requires `.cursor-plugin/plugin.json` manifest. See https://cursor.com/docs/plugins/building for format.
 
 ### 14. Sandbox Configuration
 
 Check `sandbox.json` for network and filesystem access controls.
+
+### 15. Content Placement Analysis
+
+Apply the **Decision Tree** (above) to evaluate whether content is correctly placed across AGENTS.md files, rules, and skills.
+
+**Reading requirements:**
+
+- **All** AGENTS.md files in the repository
+- All rules in `.cursor/rules/`
+- All skills: both `SKILL.md` and any files in subdirectories (e.g., `references/`, `scripts/`)
+
+**Use subagents** to parallelise reading across major directories (e.g., backend/, frontend/, terraform/).
+
+**For each section >10 lines, ask:**
+
+1. Is this needed on every request? → If no, shouldn't be in root AGENTS.md or always-apply rule
+2. Is this scoped to specific files/directories? → Should be a glob-scoped rule
+3. Is this procedural ("how to do X")? → Should be a skill
+4. Is this guidance ("how to behave")? → Should be a rule
+
+**Flag content that should move:**
+
+| Current Location  | Content Type                          | Should Be        |
+| ----------------- | ------------------------------------- | ---------------- |
+| AGENTS.md         | Procedural instructions               | Skill            |
+| AGENTS.md         | Area-specific conventions (>50 lines) | Glob-scoped rule |
+| Always-apply rule | Area-specific content                 | Glob-scoped rule |
+| Rule              | Multi-step procedures                 | Skill            |
+| Skill             | Passive guidance only                 | Rule             |
 
 ---
 
@@ -287,7 +316,8 @@ See `references/audit-process.md` for detailed parallel and sequential audit wor
 4. Check for index pollution (large directories, generated code, binary files)
 5. Measure context weight
 6. Check Cursor documentation for new features
-7. **Verify each recommendation** — read relevant files to confirm gaps exist before including in report
+7. **Content placement analysis** — apply Decision Tree to all AGENTS.md files, rules, and skills (including skill subdirectories)
+8. **Verify each recommendation** — read relevant files to confirm gaps exist before including in report
 
 ---
 

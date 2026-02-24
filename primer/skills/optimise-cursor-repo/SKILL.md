@@ -58,17 +58,23 @@ For AGENTS.md creation and updates, refer to the **deepinit** skill.
 ## Decision Tree: Where Should This Information Live?
 
 ```
-Is this information needed on EVERY request?
+Is this information needed on EVERY request, regardless of what files are being worked on?
 ├─ YES → Is it under ~5 lines?
 │   ├─ YES → Root AGENTS.md
 │   └─ NO → Always-apply rule (but question whether it truly needs to be always-on)
-├─ NO → Is it scoped to specific files or directories?
-│   ├─ YES → Glob-scoped rule (e.g., globs: api/**/*.py,api/**/*.md)
+├─ NO → Is it specific to a subdirectory, package, or service?
+│   ├─ YES → Is it identity/orientation info (purpose, structure, key files, local conventions)?
+│   │   ├─ YES → Subdirectory AGENTS.md (loaded when agent works near those files; wins by proximity)
+│   │   └─ NO → Is it procedural (multi-step "how to do X")?
+│   │       ├─ YES → Skill scoped to that area
+│   │       └─ NO → Glob-scoped rule (e.g., `globs: ["api/**/*.py"]`)
 │   └─ NO → Does the agent need to decide when it's relevant?
-│       ├─ YES → Skill (SKILL.md)
+│       ├─ YES → Is it procedural (multi-step "how to do X")?
+│       │   ├─ YES → Skill (SKILL.md)
+│       │   └─ NO → Apply-intelligently rule (description, no globs)
 │       └─ NO → Is it triggered by an explicit user action?
-│           ├─ YES → Skill with disable-model-invocation: true
-│           └─ NO → Subagent (.cursor/agents/) if it needs isolated
+│           ├─ YES → Command (`.cursor/commands/`)
+│           └─ NO → Subagent (`.cursor/agents/`) if it needs isolated
 │                   context, otherwise skill
 ```
 

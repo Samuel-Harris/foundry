@@ -234,11 +234,11 @@ All fields are optional but recommended for discoverability:
 
 ```yaml
 ---
-name: subagent-name          # Defaults to filename without extension
+name: subagent-name # Defaults to filename without extension
 description: What this subagent does and when to use it
-model: inherit               # Options: fast, inherit, or specific model ID
-readonly: true               # For read-only subagents
-is_background: false         # Run asynchronously without blocking parent
+model: inherit # Options: fast, inherit, or specific model ID
+readonly: true # For read-only subagents
+is_background: false # Run asynchronously without blocking parent
 ---
 ```
 
@@ -273,6 +273,35 @@ For creating plugins: requires `.cursor-plugin/plugin.json` manifest. See <https
 
 Check `sandbox.json` for network and filesystem access controls.
 
+### 15. Content Placement Analysis
+
+Apply the **Decision Tree** (above) to evaluate whether content is correctly placed across AGENTS.md files, rules, and skills.
+
+**Reading requirements:**
+
+- **All** AGENTS.md files in the repository
+- All rules in `.cursor/rules/`
+- All skills: both `SKILL.md` and any files in subdirectories (e.g., `references/`, `scripts/`)
+
+**Use subagents** to parallelise reading across major directories (e.g., backend/, frontend/, terraform/).
+
+**For each section >10 lines, ask:**
+
+1. Is this needed on every request? → If no, shouldn't be in root AGENTS.md or always-apply rule
+2. Is this scoped to specific files/directories? → Should be a glob-scoped rule
+3. Is this procedural ("how to do X")? → Should be a skill
+4. Is this guidance ("how to behave")? → Should be a rule
+
+**Flag content that should move:**
+
+| Current Location  | Content Type                          | Should Be        |
+| ----------------- | ------------------------------------- | ---------------- |
+| AGENTS.md         | Procedural instructions               | Skill            |
+| AGENTS.md         | Area-specific conventions (>50 lines) | Glob-scoped rule |
+| Always-apply rule | Area-specific content                 | Glob-scoped rule |
+| Rule              | Multi-step procedures                 | Skill            |
+| Skill             | Passive guidance only                 | Rule             |
+
 ---
 
 ## Audit Process
@@ -287,7 +316,8 @@ See `references/audit-process.md` for detailed parallel and sequential audit wor
 4. Check for index pollution (large directories, generated code, binary files)
 5. Measure context weight
 6. Check Cursor documentation for new features
-7. **Verify each recommendation** — read relevant files to confirm gaps exist before including in report
+7. **Content placement analysis** — apply Decision Tree to all AGENTS.md files, rules, and skills (including skill subdirectories)
+8. **Verify each recommendation** — read relevant files to
 
 ---
 

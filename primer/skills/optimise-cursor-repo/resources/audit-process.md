@@ -31,6 +31,16 @@ If the environment supports subagents, parallelise the audit for speed:
 - Compare repo configuration against latest available features
 - Identify missing configurations for new features
 
+### Subagent 5: Content Placement Analysis
+
+- Read **all** AGENTS.md files in the repository
+- Read all rules in `.cursor/rules/`
+- Read all skills: `SKILL.md` files **and** their subdirectory contents (e.g., `references/*.md`)
+- Apply the Decision Tree from SKILL.md to each section >10 lines
+- Flag content that should be in a different artefact type
+
+For large repos, split into multiple subagents by directory.
+
 Synthesise all subagent findings into the final report.
 
 ---
@@ -122,7 +132,17 @@ for agent in .cursor/agents/*.md; do
 done 2>/dev/null
 ```
 
-### Step 7: Assess MCP and plugins
+### Step 7: Content Placement Analysis
+
+Read **all** AGENTS.md files, rules, and skills (including skill subdirectories like `references/`). For each section >10 lines, apply the Decision Tree:
+
+1. **AGENTS.md**: Is it project identity/structure, or should it be a rule/skill?
+2. **Rules**: Is it guidance ("how to behave") or procedures ("how to do")?
+3. **Skills**: Is it procedural, or passive guidance that should be a rule?
+
+Flag any content that should move between artefact types.
+
+### Step 8: Assess MCP and plugins
 
 ```bash
 cat .cursor/mcp.json 2>/dev/null
@@ -131,6 +151,6 @@ ls .cursor/plugins/ 2>/dev/null
 cat sandbox.json 2>/dev/null
 ```
 
-### Step 8: Check Cursor documentation
+### Step 9: Check Cursor documentation
 
 Consult <https://docs.cursor.com> and <https://cursor.com/changelog> for any new features, settings, or configuration options not covered in this skill. Include relevant new findings in your recommendations.

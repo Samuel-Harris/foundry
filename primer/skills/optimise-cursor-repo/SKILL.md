@@ -1,6 +1,6 @@
 ---
 name: optimise-cursor-repo
-description: Audit a repository and produce prioritised recommendations for improving Cursor performance and developer experience. Use when the user wants to optimise their repo for Cursor, improve indexing, add rules, or assess their Cursor configuration.
+description: Audit a repository's Cursor configuration or evaluate whether a specific artefact (rule, skill, command, subagent) is correctly placed. Use when optimising the repo for Cursor, improving indexing, adding or assessing rules/skills, or deciding where information should live.
 ---
 
 # Cursor Repo Optimisation
@@ -29,7 +29,7 @@ Cursor evolves rapidly. Always consult these sources for the latest information:
 
 This skill has two phases: **audit** then **implementation**. During the audit phase, do not make changes to the repository — present findings as a prioritised report. Implementation only happens after the user approves specific recommendations (see "After the Report").
 
-For AGENTS.md creation and updates, refer to the **deepinit** skill.
+For AGENTS.md creation and updates, refer to the **generate-agent-docs** skill.
 
 ---
 
@@ -43,6 +43,7 @@ For AGENTS.md creation and updates, refer to the **deepinit** skill.
 - Suggesting migrations for artefacts that are already correctly configured
 - Flagging files for indexing exclusion when they're already in `.cursorindexingignore`
 - Proposing new workflows without checking if existing skills/commands already implement them
+- Marking rules as "well configured" without checking whether their content duplicates existing AGENTS.md guidance
 
 **For each potential recommendation:**
 
@@ -57,31 +58,44 @@ For AGENTS.md creation and updates, refer to the **deepinit** skill.
 
 ## Decision Tree: Where Should This Information Live?
 
+**Multi-agent portability is paramount.** AGENTS.md files are supported by all major AI coding agents (Cursor, Claude Code, OpenCode, etc.), while `.cursor/rules/` are Cursor-specific. This means:
+
+- **Default to AGENTS.md** for directory-scoped guidance
+- **Broad glob patterns are an anti-pattern** — if a rule's glob is `dir/**/*.py` or `dir/**/*.ts`, that content belongs in `dir/AGENTS.md`
+- **Use rules only when precise file-pattern scoping is required** — e.g., `**/*.test.ts`, `**/*.config.js`, `**/migrations/*.py`
+
+If a rule covers "most files in a directory", it should be in that directory's AGENTS.md instead.
+
 ```
-Is this information needed on EVERY request?
-├─ YES → Is it under ~5 lines?
-│   ├─ YES → Root AGENTS.md
-│   └─ NO → Always-apply rule (but question whether it truly needs to be always-on)
-├─ NO → Is it scoped to specific files or directories?
-│   ├─ YES → Glob-scoped rule (e.g., globs: api/**/*.py,api/**/*.md)
+Is this information needed on EVERY request, regardless of what files are being worked on?
+├─ YES → Root AGENTS.md (keep total under ~100 lines)
+│   └─ Won't fit? → Always-apply rule (Cursor-only; use sparingly)
+├─ NO → Is it specific to a subdirectory, package, or service?
+│   ├─ YES → Is it procedural (multi-step "how to do X")?
+│   │   ├─ YES → Skill scoped to that area
+│   │   └─ NO → Does it need precise file-pattern scoping (e.g., only *.test.py)?
+│   │       ├─ YES → Glob-scoped rule (Cursor-only; prefer AGENTS.md when possible)
+│   │       └─ NO → Subdirectory AGENTS.md (preferred; portable across agents)
 │   └─ NO → Does the agent need to decide when it's relevant?
-│       ├─ YES → Skill (SKILL.md)
+│       ├─ YES → Is it procedural (multi-step "how to do X")?
+│       │   ├─ YES → Skill (SKILL.md)
+│       │   └─ NO → Apply-intelligently rule (description, no globs)
 │       └─ NO → Is it triggered by an explicit user action?
-│           ├─ YES → Skill with disable-model-invocation: true
-│           └─ NO → Subagent (.cursor/agents/) if it needs isolated
+│           ├─ YES → Command (`.cursor/commands/`)
+│           └─ NO → Subagent (`.cursor/agents/`) if it needs isolated
 │                   context, otherwise skill
 ```
 
 ### Artefact Type Reference
 
-| Artefact                         | Nature                   | Loading                        | Best For                                                            |
-| -------------------------------- | ------------------------ | ------------------------------ | ------------------------------------------------------------------- |
-| AGENTS.md                        | Passive, always loaded   | Every request                  | Project identity, directory map, universal constraints (~100 lines) |
-| Always-apply rule                | Passive, always loaded   | Every request                  | Universal coding style, language preferences (use sparingly)        |
-| Glob-scoped rule                 | Passive, auto-attached   | When matching files in context | Area-specific conventions (API patterns, migrations, tests)         |
-| Skill                            | Active, agent-discovered | When task matches description  | Procedural workflows, domain expertise, multi-step "how-to"         |
-| Skill (disable-model-invocation) | Active, user-invoked     | Only when user types `/skill`  | Saved prompts, repeatable workflows user triggers explicitly        |
-| Subagent                         | Active, delegated        | When parent agent delegates    | Tasks needing isolated context, parallel execution                  |
+| Artefact                         | Nature                   | Loading                        | Best For                                                                   |
+| -------------------------------- | ------------------------ | ------------------------------ | -------------------------------------------------------------------------- |
+| AGENTS.md                        | Passive, always loaded   | Every request                  | **Preferred.** Identity, constraints, conventions (portable across agents) |
+| Always-apply rule                | Passive, always loaded   | Every request                  | Universal style when root AGENTS.md is too large (Cursor-only; sparingly)  |
+| Glob-scoped rule                 | Passive, auto-attached   | When matching files in context | Precise file-pattern scoping AGENTS.md can't cover (Cursor-only)           |
+| Skill                            | Active, agent-discovered | When task matches description  | Procedural workflows, domain expertise, multi-step "how-to"                |
+| Skill (disable-model-invocation) | Active, user-invoked     | Only when user types `/skill`  | Saved prompts, repeatable workflows user triggers explicitly               |
+| Subagent                         | Active, delegated        | When parent agent delegates    | Tasks needing isolated context, parallel execution                         |
 
 #### Legacy Artefact Types
 
@@ -92,7 +106,7 @@ Is this information needed on EVERY request?
 
 **Note:** Cursor includes a `/migrate-to-skills` command that can convert apply-intelligently rules and commands to skills if desired.
 
-**The acid test:** If it tells the agent _how to behave_, it's a rule. If it tells the agent _how to do something_, it's a skill. If it's a prompt you're tired of retyping, it's a skill with `disable-model-invocation: true`. If it needs a clean context window, it's a subagent.
+**The acid test:** Default to AGENTS.md for directory-scoped guidance (portable across agents). Use a rule only when precise file-pattern scoping is needed. If it tells the agent _how to do something_, it's a skill. If it's a prompt you're tired of retyping, it's a skill with `disable-model-invocation: true`. If it needs a clean context window, it's a subagent.
 
 ---
 
@@ -105,20 +119,28 @@ For bash commands to run for each area, see `references/audit-commands.md`.
 Check `.cursorignore`, `.cursorindexingignore`, and `.gitignore`. The key distinction:
 
 - `.cursorignore` — Files invisible to Cursor entirely
-- `.cursorindexingignore` — Files excluded from index but manually includable via `@file`
+- `.cursorindexingignore` — Files excluded from the semantic index but still readable by the agent and `@`-mentionable in chat
 
 **Flag for exclusion:** Large reference docs, scraped data, database snapshots, generated code, binary content, build artefacts, vendored dependencies.
+
+**Exclude `.cursor/` from indexing.** Rules, hooks, subagents, and skill reference docs are all loaded by Cursor natively or read by the agent via the Read tool — none of them need to be in the semantic index. Skills are already listed in the agent's context via the system prompt. Add `.cursor/` to `.cursorindexingignore`.
 
 ### 2. Rules Configuration
 
 | Mode                    | Frontmatter                                | Guidance                                                                  |
 | ----------------------- | ------------------------------------------ | ------------------------------------------------------------------------- |
 | Always Apply            | `alwaysApply: true`                        | Use sparingly — loads on every request                                    |
-| Apply to Specific Files | `alwaysApply: false` + `globs: <patterns>` | Preferred for area-specific rules                                         |
+| Apply to Specific Files | `alwaysApply: false` + `globs: <patterns>` | When precise file-pattern scoping is needed (Cursor-only)                 |
 | Apply Intelligently     | `description` only, no globs               | Agent decides based on description; consider skill for procedural content |
 | Apply Manually          | No globs, no description                   | Only when `@`-mentioned                                                   |
 
-**Anti-patterns:** God rules (>500 lines), procedural rules (should be skills), stale rules, conflicting rules, overly broad globs.
+**Anti-patterns:**
+
+- God rules (>500 lines)
+- Procedural rules (should be skills)
+- Stale rules, conflicting rules
+- **Broad glob patterns that cover most files in a directory** — this is a common anti-pattern. If a rule's glob is `backend/**/*.py` or `frontend/**/*.ts,frontend/**/*.tsx`, that content belongs in `backend/AGENTS.md` or `frontend/AGENTS.md` respectively. Rules are Cursor-specific; AGENTS.md is portable across all major AI coding agents (Cursor, Claude Code, OpenCode, Aider, etc.)
+- Rules duplicating content already in AGENTS.md — if the same constraints appear in both places, delete the rule
 
 **Sizing:** Individual rules <500 lines, all always-apply rules combined <200 lines.
 
@@ -285,22 +307,48 @@ Apply the **Decision Tree** (above) to evaluate whether content is correctly pla
 
 **Use subagents** to parallelise reading across major directories (e.g., backend/, frontend/, terraform/).
 
+**Cross-reference rules against AGENTS.md for duplication:**
+
+For each glob-scoped rule, read the AGENTS.md files in the directories covered by its glob pattern. If the rule's constraints are already present in those AGENTS.md files, flag the rule for deletion — the content already lives where it should. Do not mark duplicated rules as "well configured".
+
+**Migrate broad rules to AGENTS.md:**
+
+Glob-scoped rules with patterns like `backend/**/*.py` or `frontend/**/*.ts,frontend/**/*.tsx` are an anti-pattern — they cover essentially all code files in a directory, which is exactly what AGENTS.md is for. These should be migrated:
+
+1. **If the content is NOT in AGENTS.md** — move the rule's content into the appropriate subdirectory AGENTS.md, then delete the rule
+2. **If the content IS already in AGENTS.md** — delete the rule (it's redundant)
+
+This matters for multi-agent portability: AGENTS.md is supported by Cursor, Claude Code, OpenCode, Aider, and other AI coding agents. Rules are Cursor-specific. Preferring AGENTS.md ensures the project's conventions work across all tools.
+
 **For each section >10 lines, ask:**
 
 1. Is this needed on every request? → If no, shouldn't be in root AGENTS.md or always-apply rule
-2. Is this scoped to specific files/directories? → Should be a glob-scoped rule
-3. Is this procedural ("how to do X")? → Should be a skill
-4. Is this guidance ("how to behave")? → Should be a rule
+2. Is this scoped to a directory? → Subdirectory AGENTS.md (preferred for portability)
+3. Does it need precise file-pattern scoping? → Glob-scoped rule (Cursor-only)
+4. Is this procedural ("how to do X")? → Should be a skill
 
 **Flag content that should move:**
 
-| Current Location  | Content Type                          | Should Be        |
-| ----------------- | ------------------------------------- | ---------------- |
-| AGENTS.md         | Procedural instructions               | Skill            |
-| AGENTS.md         | Area-specific conventions (>50 lines) | Glob-scoped rule |
-| Always-apply rule | Area-specific content                 | Glob-scoped rule |
-| Rule              | Multi-step procedures                 | Skill            |
-| Skill             | Passive guidance only                 | Rule             |
+| Current Location  | Content Type                                 | Should Be                                                  |
+| ----------------- | -------------------------------------------- | ---------------------------------------------------------- |
+| Root AGENTS.md    | Procedural instructions                      | Skill                                                      |
+| Root AGENTS.md    | Area-specific conventions                    | Subdirectory AGENTS.md                                     |
+| Always-apply rule | Area-specific content                        | Subdirectory AGENTS.md                                     |
+| Glob-scoped rule  | Broad pattern (`dir/**/*.py`, `dir/**/*.ts`) | Subdirectory AGENTS.md (delete rule)                       |
+| Glob-scoped rule  | Duplicates content in directory's AGENTS.md  | Delete rule (content already exists)                       |
+| Rule              | Multi-step procedures                        | Skill                                                      |
+| Skill             | Passive guidance only                        | Subdirectory AGENTS.md (or rule if precise scoping needed) |
+
+**When glob-scoped rules ARE appropriate:**
+
+Rules are justified when you need precise file-pattern scoping that AGENTS.md cannot provide, such as:
+
+- `**/*.test.ts` — test file conventions
+- `**/*.config.{js,ts}` — configuration file patterns
+- `**/migrations/*.py` — migration-specific rules
+- `**/*.stories.tsx` — Storybook conventions
+
+If the glob would match "most files in a directory", use AGENTS.md instead.
 
 ---
 

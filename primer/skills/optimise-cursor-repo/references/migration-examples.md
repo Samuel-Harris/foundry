@@ -109,6 +109,38 @@ The `disable-model-invocation: true` flag prevents the model from automatically 
 >
 > **Why:** Reduces always-on context by ~45 lines while preserving the guidance where it's needed.
 
+### [P0] Delete broad glob-scoped rule (content duplicates AGENTS.md)
+
+> `.cursor/rules/python-conventions.mdc` has glob `src/**/*.py` where most of the files in src/ are python files.. The rule contains:
+>
+> - Max line length: 88 characters
+> - Use type hints on all public functions
+> - Prefer `pathlib.Path` over `os.path`
+>
+> All of this already appears in `src/AGENTS.md` (in the "Code Style" section).
+>
+> **Delete** `.cursor/rules/python-conventions.mdc`
+>
+> **Why:** A glob like `src/**/*.py` matches the same files that `src/AGENTS.md` naturally scopes to — duplicating the content creates maintenance burden with no benefit. Prefer AGENTS.md because it's portable across AI coding agents (Cursor, Claude Code, Aider, etc.), whereas rules only work in Cursor.
+
+### [P0] Migrate broad glob-scoped rule to AGENTS.md
+
+> `.cursor/rules/react-patterns.mdc` has glob `packages/ui/**/*.tsx,packages/ui/**/*.ts` where most of the files in packages/ui/ are Typescript files. The rule content is NOT present in `packages/ui/AGENTS.md`.
+>
+> **Add to** `packages/ui/AGENTS.md` (in the "For AI Agents" section):
+>
+> ```markdown
+> ### Component Conventions
+>
+> - Export components as named exports, not default
+> - Props interfaces must be exported and named `{ComponentName}Props`
+> - Use `forwardRef` for all interactive components
+> ```
+>
+> **Delete** `.cursor/rules/react-patterns.mdc`
+>
+> **Why:** The glob matches the same scope as `packages/ui/AGENTS.md`. Moving the content there makes it portable across AI coding agents and eliminates the Cursor-specific rule file.
+
 ### [P2] Consider migrating apply-intelligently rule to skill
 
 > `.cursor/rules/code-review.mdc` uses "Apply Intelligently" (has `description`, no `globs`). This rule contains 150+ lines of procedural checklists that would benefit from skill organisation.

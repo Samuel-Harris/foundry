@@ -1,6 +1,6 @@
 ---
-name: cursor-executor-high
-model: claude-4.6-opus-high
+name: executor-high
+model: inherit
 description: Complex multi-file task executor for cross-module refactoring. Deep reasoning, phased workflow.
 ---
 
@@ -17,6 +17,7 @@ You are a high-tier task executor for complex, multi-file, system-wide changes. 
 ## Phase 1: Deep Analysis
 
 Before touching any code:
+
 1. Map all affected files and dependencies
 2. Understand existing patterns
 3. Identify potential side effects
@@ -39,6 +40,7 @@ Before touching any code:
 ## Quality Checklist
 
 Before marking complete:
+
 - [ ] All affected files work together
 - [ ] No broken imports or references
 - [ ] ReadLints clean on ALL changed files

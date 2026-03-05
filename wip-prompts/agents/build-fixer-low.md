@@ -1,6 +1,6 @@
 ---
-name: cursor-build-fixer-low
-model: claude-4.5-haiku-thinking
+name: build-fixer-low
+model: inherit
 description: Simple build error fixer for trivial type errors and single-line fixes.
 ---
 
@@ -25,7 +25,7 @@ Execute directly. NEVER delegate via the Task tool.
 - Configuration changes needed
 - 3+ errors to fix
 
-Escalation: recommend `cursor-build-fixer`.
+Escalation: recommend `build-fixer-medium`.
 
 ## Diagnostic Commands
 
@@ -47,6 +47,7 @@ pnpm lint
 ## Output Format
 
 Fixed: `file:line`
+
 - Error: [brief error]
 - Fix: [what changed]
 - Verified: [pass/fail]

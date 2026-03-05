@@ -1,5 +1,5 @@
 ---
-name: cursor-swarm
+name: swarm
 description: Coordinated parallel agents on a shared task list. Analyses the task, decomposes into subtasks, and dispatches agents in batches of up to 4. Use for large-scale implementation, review, or refactoring tasks.
 ---
 
@@ -12,7 +12,7 @@ Decompose a large task into subtasks and dispatch coordinated agents in parallel
 Two entry points:
 
 1. **Direct** — the user describes a task (e.g., "fix all type errors"). The swarm analyses the codebase, plans subtasks, and executes.
-2. **From ralplan** — a validated plan file (produced by `cursor-ralplan`) is provided. The swarm skips its own analysis and planning, using the plan's tasks, file lists, and dependency graph directly.
+2. **From ralplan** — a validated plan file (produced by `ralplan`) is provided. The swarm skips its own analysis and planning, using the plan's tasks, file lists, and dependency graph directly.
 
 ## Architecture
 
@@ -62,7 +62,7 @@ Two entry points:
 
 > **Skip this phase when a ralplan plan file is provided.** Proceed directly to Phase 2 (ralplan variant).
 
-Use a `cursor-explore-medium` subagent to scan the codebase, identify affected files, and break the task into concrete subtasks. Each subtask should target specific files with a clear scope. Use `-medium` (not `-low`) because decomposition requires cross-module reasoning.
+Use a `explore-medium` subagent to scan the codebase, identify affected files, and break the task into concrete subtasks. Each subtask should target specific files with a clear scope. Use `explore-medium` (not `explore-low`) because decomposition requires cross-module reasoning.
 
 ### Phase 1.5 — Short-Circuit Check
 
@@ -76,14 +76,14 @@ If analysis yields fewer than 3 subtasks, skip the swarm machinery — execute t
 
 1. Choose the most appropriate `subagent_type` individually — different subtasks can use different agent types and tiers within the same swarm:
 
-   | Agent                    | When to use                                                           |
-   | ------------------------ | --------------------------------------------------------------------- |
-   | `cursor-executor-low`    | Single-file, mechanical changes (add import, config tweak, rename)    |
-   | `cursor-executor-medium` | Standard multi-step implementation within a bounded scope             |
-   | `cursor-executor-high`   | Multi-file refactoring, cross-module changes, complex dependency work |
-   | `cursor-build-fixer-low` | Single trivial type error or syntax fix                               |
-   | `cursor-build-fixer`     | Multiple or complex build/type errors                                 |
-   | `cursor-architect-high`  | Read-only analysis (readonly)                                         |
+   | Agent             | When to use                                                           |
+   | ----------------- | --------------------------------------------------------------------- |
+   | `executor-low`    | Single-file, mechanical changes (add import, config tweak, rename)    |
+   | `executor-medium` | Standard multi-step implementation within a bounded scope             |
+   | `executor-high`   | Multi-file refactoring, cross-module changes, complex dependency work |
+   | `build-fixer-low` | Single trivial type error or syntax fix                               |
+   | `build-fixer`     | Multiple or complex build/type errors                                 |
+   | `architect-high`  | Read-only analysis (readonly)                                         |
 
 2. Determine batch grouping: agent count per batch = min(subtask_count_remaining, 4)
 3. Create a TodoWrite tracking all subtasks
@@ -102,9 +102,9 @@ For each agent in the batch, create a Task call with:
 Example dispatch (single message with up to 4 parallel Task calls):
 
 ```
-Task 1: { subagent_type: "cursor-build-fixer-low", prompt: "Fix type error in backend/shared/models/user.py: ... Execute directly. NEVER delegate via Task tool." }
-Task 2: { subagent_type: "cursor-executor-medium", prompt: "Add validation logic in backend/copilot/logic/auth.py: ... Execute directly. NEVER delegate via Task tool." }
-Task 3: { subagent_type: "cursor-executor-low", prompt: "Add missing import in backend/copilot/api/endpoints/projects.py: ... Execute directly. NEVER delegate via Task tool." }
+Task 1: { subagent_type: "build-fixer-low", prompt: "Fix type error in backend/shared/models/user.py: ... Execute directly. NEVER delegate via Task tool." }
+Task 2: { subagent_type: "executor-medium", prompt: "Add validation logic in backend/copilot/logic/auth.py: ... Execute directly. NEVER delegate via Task tool." }
+Task 3: { subagent_type: "executor-low", prompt: "Add missing import in backend/copilot/api/endpoints/projects.py: ... Execute directly. NEVER delegate via Task tool." }
 ```
 
 ### Phase 4 — Collect
@@ -141,8 +141,8 @@ Report:
 ### Fix All Type Errors (Direct)
 
 ```
-→ Phase 1: cursor-explore-medium finds 12 type errors across 8 files
-→ Phase 2: plan 8 subtasks — 6 trivial (cursor-build-fixer-low), 2 complex (cursor-build-fixer)
+→ Phase 1: explore-medium finds 12 type errors across 8 files
+→ Phase 2: plan 8 subtasks — 6 trivial (build-fixer-low), 2 complex (build-fixer-medium)
 → Phase 3: dispatch batch 1 (4 agents), batch 2 (4 agents)
 → Phase 6: "8/8 completed, 0 failed, 8 files changed"
 ```
@@ -150,8 +150,8 @@ Report:
 ### Mixed Refactoring (Direct)
 
 ```
-→ Phase 1: cursor-explore-medium identifies 5 subtasks — 2 type fixes, 1 config change, 2 logic implementations
-→ Phase 2: plan with cursor-build-fixer-low (2), cursor-executor-low (1), cursor-executor-medium (2)
+→ Phase 1: explore-medium identifies 5 subtasks — 2 type fixes, 1 config change, 2 logic implementations
+→ Phase 2: plan with build-fixer-low (2), executor-low (1), executor-medium (2)
 → Phase 3: batch 1 dispatches 4 non-overlapping subtasks
 → Phase 5: batch 2 dispatches remaining 1
 → Phase 6: "5/5 completed, 0 failed"

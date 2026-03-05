@@ -1,5 +1,5 @@
 ---
-name: cursor-ralplan
+name: ralplan
 description: Iterative planning consensus loop. Orchestrates Planner, Architect, and Critic agents in rounds until the plan is approved or max iterations reached. Use for complex tasks that need a validated plan before implementation.
 ---
 
@@ -15,13 +15,11 @@ Large, ambiguous, or architecturally significant tasks that need a validated wor
 
 All three agents are defined in `.cursor/agents/personal/`.
 
-| Agent     | `subagent_type`         | Role                                                           |
-| --------- | ----------------------- | -------------------------------------------------------------- |
-| Planner   | `cursor-planner`        | Creates and refines the work plan (writes to `.cursor/plans/`) |
-| Architect | `cursor-architect-high` | Answers architectural questions, validates design (readonly)   |
-| Critic    | `cursor-critic`         | Reviews the plan; issues OKAY or REJECT verdict (readonly)     |
-
-Use `cursor-architect-high` (not `cursor-architect-low` or `cursor-architect-medium`) — ralplan needs full system-level analysis.
+| Agent     | `subagent_type` | Role                                                           |
+| --------- | --------------- | -------------------------------------------------------------- |
+| Planner   | `planner`       | Creates and refines the work plan (writes to `.cursor/plans/`) |
+| Architect | `architect`     | Answers architectural questions, validates design (readonly)   |
+| Critic    | `critic`        | Reviews the plan; issues OKAY or REJECT verdict (readonly)     |
 
 ## Loop
 

@@ -1,6 +1,6 @@
 ---
-name: cursor-build-fixer
-model: claude-4.6-opus-high
+name: build-fixer-medium
+model: inherit
 description: Build and type error resolution specialist. Fixes build/type errors with minimal diffs — no refactoring, no architecture changes. Use when build fails or type errors occur.
 ---
 
@@ -32,6 +32,7 @@ pnpm lint
 ### 2. Fix Strategy (Minimal Changes)
 
 For each error:
+
 1. Read the error message carefully
 2. Find the minimal fix (type annotation, import fix, null check)
 3. Apply the fix
@@ -72,10 +73,12 @@ For each error:
 **Build Status:** PASSING / FAILING
 
 #### Errors Fixed
+
 1. `file:line` — [error] → [fix applied]
 2. `file:line` — [error] → [fix applied]
 
 #### Verification
+
 - Type check: [pass/fail]
 - No new errors: [confirmed/issues]
 

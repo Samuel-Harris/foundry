@@ -1,6 +1,6 @@
 ---
-name: cursor-executor-medium
-model: claude-4.6-sonnet-medium-thinking
+name: executor-medium
+model: inherit
 description: Focused task executor for implementation work. NEVER delegates to sub-agents.
 ---
 

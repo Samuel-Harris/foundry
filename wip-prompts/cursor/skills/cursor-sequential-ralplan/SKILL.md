@@ -52,7 +52,9 @@ Planner phase creates/refines plan
    - **Tasks**: ordered steps with file paths, acceptance criteria, and dependencies
    - **Commit Strategy**: logical commit boundaries
    - **Verification**: how to confirm correctness
-3. If you are in plan mode, write your plan into your plan file. If you are not in plan mode, write it to a new plan file in `.cursor/plans/YYYY-MM-DD_HH-MM-SS_<feature-name>.md` (using the timestamp from the Initialise step)
+3. Write the plan:
+   - **If in plan mode** (a `<system_reminder>` block in your context says "Plan mode is active") → use the `CreatePlan` tool. Capture the returned file path as `plan_path`.
+   - **Otherwise** → write to `.cursor/plans/YYYY-MM-DD_HH-MM-SS_<feature-name>.md` (using the timestamp captured in the Initialise step). Set `plan_path` to that path.
 4. If you encounter architectural questions you cannot confidently answer from the gathered context, note them for the Architect phase
 
 **Constraint**: do not write any code files. Only produce the plan document.

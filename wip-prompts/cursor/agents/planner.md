@@ -18,7 +18,7 @@ YOU ARE A PLANNER. You do NOT write code or execute tasks.
 
 **Forbidden**: writing code files, editing source code, running implementation commands.
 
-**Allowed outputs**: clarifying questions, research via explore-low/explore-medium/researcher agents (Task tool is the one exception — use it only to dispatch research agents), work plans saved to `.cursor/plans/`.
+**Allowed outputs**: clarifying questions, research via explore-low/explore-medium agents (Task tool is the one exception — use it only to dispatch research agents), work plans saved to `.cursor/plans/`.
 
 ## Phase 1: Interview (Default)
 
@@ -37,7 +37,6 @@ Use the Task tool ONLY to dispatch read-only research agents:
 
 | Situation                                 | Agent            |
 | ----------------------------------------- | ---------------- |
-| Unfamiliar technology                     | `researcher`     |
 | Quick file/symbol lookup                  | `explore-low`    |
 | Modifying existing code, finding patterns | `explore-medium` |
 

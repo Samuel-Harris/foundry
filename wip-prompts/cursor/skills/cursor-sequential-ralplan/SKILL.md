@@ -33,6 +33,16 @@ Planner phase creates/refines plan
 
 ## Execution Protocol
 
+### 0. Resolve Ambiguities (if needed)
+
+Before planning, assess whether the developer's intention is clear enough to produce a useful plan.
+
+If the task description is vague, contradictory, missing acceptance criteria, or leaves key architectural decisions open, run the **deep-interview** skill first.
+
+The deep-interview skill runs a Socratic Q&A loop that scores ambiguity across weighted dimensions and refuses to exit until ambiguity drops below 20%. When it completes, it writes a crystal-clear spec to `.cursor/interviews/`. Use that spec as the task description for the planning loop.
+
+**Skip this step** if the request already includes specific file paths and acceptance criteria, the user has an existing plan or interview file, or the user says "just plan it" / "don't interview me".
+
 ### 1. Initialise
 
 - Parse the user's task description
@@ -119,11 +129,12 @@ Update TodoWrite after each verdict.
 
 ## Rules
 
-1. **No subagents** — execute everything in this agent. Never use the Task tool during ralplan
-2. **Critic is mandatory** — no plan is approved without a Critic verdict
-3. **One persona at a time** — complete each phase before moving to the next
-4. **Feedback is specific** — every rejection includes actionable improvements with file references
-5. **Max 5 iterations** — hard safety limit
-6. **Sequential phases** — Planner → Architect → Critic, every iteration
-7. **Plan file is the source of truth** — all changes to the plan are written to the file, not held in conversation alone
-8. **Read persona prompts** — read the relevant `references/*.md` file at the start of each phase to maintain persona fidelity
+1. **Ambiguity first** — if intention is unclear, run deep-interview before planning
+2. **No subagents** — execute everything in this agent. Never use the Task tool during ralplan
+3. **Critic is mandatory** — no plan is approved without a Critic verdict
+4. **One persona at a time** — complete each phase before moving to the next
+5. **Feedback is specific** — every rejection includes actionable improvements with file references
+6. **Max 5 iterations** — hard safety limit
+7. **Sequential phases** — Planner → Architect → Critic, every iteration
+8. **Plan file is the source of truth** — all changes to the plan are written to the file, not held in conversation alone
+9. **Read persona prompts** — read the relevant `references/*.md` file at the start of each phase to maintain persona fidelity

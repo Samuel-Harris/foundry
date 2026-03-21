@@ -62,7 +62,7 @@ Two entry points:
 
 > **Skip this phase when a ralplan plan file is provided.** Proceed directly to Phase 2 (ralplan variant).
 
-Use a `explore-medium` subagent to scan the codebase, identify affected files, and break the task into concrete subtasks. Each subtask should target specific files with a clear scope. Use `explore-medium` (not `explore-low`) because decomposition requires cross-module reasoning.
+Use an `explore` subagent to scan the codebase, identify affected files, and break the task into concrete subtasks. Each subtask should target specific files with a clear scope. Decomposition requires cross-module reasoning — use `explore`, not a lightweight scan.
 
 ### Phase 1.5 — Short-Circuit Check
 
@@ -141,7 +141,7 @@ Report:
 ### Fix All Type Errors (Direct)
 
 ```
-→ Phase 1: explore-medium finds 12 type errors across 8 files
+→ Phase 1: explore finds 12 type errors across 8 files
 → Phase 2: plan 8 subtasks — 6 trivial (build-fixer-low), 2 complex (build-fixer-medium)
 → Phase 3: dispatch batch 1 (4 agents), batch 2 (4 agents)
 → Phase 6: "8/8 completed, 0 failed, 8 files changed"
@@ -150,7 +150,7 @@ Report:
 ### Mixed Refactoring (Direct)
 
 ```
-→ Phase 1: explore-medium identifies 5 subtasks — 2 type fixes, 1 config change, 2 logic implementations
+→ Phase 1: explore identifies 5 subtasks — 2 type fixes, 1 config change, 2 logic implementations
 → Phase 2: plan with build-fixer-low (2), executor-low (1), executor-medium (2)
 → Phase 3: batch 1 dispatches 4 non-overlapping subtasks
 → Phase 5: batch 2 dispatches remaining 1

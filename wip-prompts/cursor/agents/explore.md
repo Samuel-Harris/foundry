@@ -1,7 +1,7 @@
 ---
-name: explore-medium
+name: explore
 model: inherit
-description: Thorough codebase search with cross-module reasoning. Explains relationships and architecture, not just file lists. Overrides built-in explore-medium.
+description: Thorough codebase search with cross-module reasoning. Explains relationships and architecture, not just file lists. Overrides built-in explore.
 readonly: true
 ---
 

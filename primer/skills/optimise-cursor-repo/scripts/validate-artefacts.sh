@@ -45,14 +45,21 @@ print_ok() {
 
 # Validate Skills
 validate_skills() {
-    print_header "Validating Skills (.cursor/skills/*/SKILL.md)"
+    print_header "Validating Skills (.cursor/skills/**/SKILL.md)"
 
-    if ! compgen -G ".cursor/skills/*/SKILL.md" > /dev/null 2>&1; then
+    local skill_files=()
+    local skill
+
+    while IFS= read -r skill; do
+        skill_files+=("$skill")
+    done < <(find .cursor/skills -type f -name "SKILL.md" | sort)
+
+    if [ "${#skill_files[@]}" -eq 0 ]; then
         echo "  No skills found"
         return
     fi
 
-    for skill in .cursor/skills/*/SKILL.md; do
+    for skill in "${skill_files[@]}"; do
         echo -e "\n  Checking ${skill}..."
         has_issues=false
 

@@ -1,3 +1,8 @@
+---
+alwaysApply: false
+description: Use when creating or refining implementation plans, especially handoff-ready plans another agent will execute.
+---
+
 # Plan Handoff Standard
 
 When writing a plan, assume a different agent will execute it later. The plan must be a self-contained handoff, not just a list of edits.

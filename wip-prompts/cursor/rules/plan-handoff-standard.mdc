@@ -9,7 +9,7 @@ When writing a plan, assume a different agent will execute it later. The plan mu
 
 ## Before Finalising A Plan
 
-- If the intended behaviour, design, constraints, or success criteria are ambiguous, stop and use `/deep-interview` before finalising the plan.
+- If the intended behaviour, design, constraints, or success criteria are ambiguous, stop and use the `deep-interview` skill before finalising the plan.
 - Resolve important design and behaviour decisions in the plan itself. Do not leave key choices implicit.
 - If the user intentionally leaves an area open, record the open question explicitly and explain the consequences of each option.
 - A plan must not leave unresolved implementation or design choices to the implementing agent unless the user explicitly asked for options.

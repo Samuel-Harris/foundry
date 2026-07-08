@@ -1,9 +1,5 @@
 ---
-description: >-
-  Gate backward-compatibility and dual code paths: default to one canonical
-  contract; ask the user before adding parallel APIs, legacy modes, or compat
-  parameters. Use when adding a second way to do something, preserving old
-  CLI/JSON/schema shapes, or “just in case” adapters.
+description: Gate backward-compatibility and dual code paths: default to one canonical contract; ask the user before adding parallel APIs, legacy modes, or compat parameters. Use when adding a second way to do something, preserving old CLI/JSON/schema shapes, or “just in case” adapters.
 alwaysApply: false
 ---
 

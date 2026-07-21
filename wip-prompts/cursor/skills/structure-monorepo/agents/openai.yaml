@@ -1,0 +1,4 @@
+interface:
+  display_name: "Structure Monorepo"
+  short_description: "Design and implement fitted monorepo structures"
+  default_prompt: "Use $structure-monorepo to propose and, after my approval, implement a monorepo structure fitted to this repository."

@@ -14,7 +14,7 @@ This skill owns the review packet, the parallel launch, and the synthesis. Calle
 
 If the caller already passed a packet, use it. Otherwise gather the actual edits from the merge-base with `$BASE` to the working tree, including untracked files.
 
-`$BASE` is the comparison base (branch name, without `origin/`). If the caller does not pass it, take it from the user request, the PR base, or the current branch's upstream. Do not default to `main` when a different base is in play. If `$BASE` is still unknown, ask.
+`$BASE` is the comparison base (branch name, without `origin/`). If the caller does not pass it, take it from the user request or the PR base. Do not default to `main` when a different base is in play. Do not use the current branch's git upstream (`@{upstream}`): on a pushed feature branch that is `origin/<same-branch>`, so `merge-base` collapses to `HEAD` and the packet misses committed work. If `$BASE` is still unknown, ask.
 
 Do not use two-dot `git diff origin/$BASE` (that reverse-diffs later commits on `$BASE`) and do not use three-dot `origin/$BASE...HEAD` alone (that misses uncommitted work).
 

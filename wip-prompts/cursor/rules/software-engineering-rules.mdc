@@ -182,3 +182,21 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 **The Style Drift.** You write code in your "preferred" style instead of matching the project. Functional patterns in an OOP codebase. Classes in a functional codebase. TypeScript patterns in a JavaScript project. Match the codebase, not your preferences.
 
 **The Runaway Refactor.** You start fixing one thing. It touches another thing. That touches another. Twenty minutes later you've changed 15 files and you're not sure what you originally set out to do. If a fix is cascading, stop. Tell the user what's happening. Get buy-in before continuing.
+
+## 11. Pull Request Size Limit
+
+A pull request must not exceed **5,000 changed lines**, measured as additions plus deletions against the PR's base branch. This is a hard limit, not a target, and includes application code, tests, migrations, generated files, lockfiles, and formatting changes.
+
+Before creating or updating a PR, measure its full diff against its intended base branch. If it would exceed 5,000 changed lines, split the work before handoff; never create an oversized PR with a promise to split it later.
+
+Oversized work must be divided into a real GitHub PR stack:
+
+- Each branch is based on the preceding branch.
+- The first PR targets the original base branch; each later PR targets the previous branch in the stack.
+- Every PR in the stack stays at or below 5,000 changed lines against its own target branch.
+- Split by coherent deploy or implementation concern and order dependencies from bottom to top.
+- Every PR must be independently mergeable in stack order. Once its predecessors have merged, it must leave the base branch working, tested, and safe to deploy without requiring any later PR in the stack.
+- Design schema, API, configuration, and rollout changes so a partially merged stack remains correct. Earlier PRs must remain safe indefinitely if later PRs are delayed or never merged.
+- Do not hide an oversized change by moving files between layers, excluding generated output from the count, or using a cumulative diff different from the PR's actual base.
+
+If the work cannot be split safely while preserving correctness, stop and ask the user how to proceed. Do not silently exceed the limit.

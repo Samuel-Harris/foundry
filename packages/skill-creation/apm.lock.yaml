@@ -1,0 +1,1064 @@
+lockfile_version: '1'
+apm_version: 0.30.0
+dependencies:
+- repo_url: _local/planning
+  name: planning
+  version: 0.1.0
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/deep-interview
+  - .agents/skills/deep-interview/SKILL.md
+  - .agents/skills/masterplan
+  - .agents/skills/masterplan/SKILL.md
+  - .agents/skills/masterplan/references/masterplan-template.md
+  - .agents/skills/ralplan
+  - .agents/skills/ralplan/SKILL.md
+  - .claude/agents/critic.md
+  - .claude/agents/planner.md
+  - .claude/rules/plan-handoff-standard.md
+  - .claude/skills/deep-interview
+  - .claude/skills/deep-interview/SKILL.md
+  - .claude/skills/masterplan
+  - .claude/skills/masterplan/SKILL.md
+  - .claude/skills/masterplan/references/masterplan-template.md
+  - .claude/skills/ralplan
+  - .claude/skills/ralplan/SKILL.md
+  - .cursor/agents/critic.md
+  - .cursor/agents/planner.md
+  - .cursor/rules/plan-handoff-standard.mdc
+  - .github/agents/critic.agent.md
+  - .github/agents/planner.agent.md
+  - .github/instructions/plan-handoff-standard.instructions.md
+  deployed_file_hashes:
+    .agents/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+    .agents/skills/masterplan/SKILL.md: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+    .agents/skills/masterplan/references/masterplan-template.md: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
+    .agents/skills/ralplan/SKILL.md: sha256:49d83cec3c63c2b554213863144996651aea76b136f50429c014ad6fcc35f929
+    .claude/agents/critic.md: sha256:8606dca48e113b97d227cc43a3158824116cff4995cfc73812df9671cd9c27ea
+    .claude/agents/planner.md: sha256:364b29c44cdc286a814ea49360e11f70a1ea74821dadbe1b58b14e699b303d7f
+    .claude/rules/plan-handoff-standard.md: sha256:f0ec092002ea61372395ab2b78dc93a3b8cb1755fb52fdb48e2686c8825b2026
+    .claude/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+    .claude/skills/masterplan/SKILL.md: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+    .claude/skills/masterplan/references/masterplan-template.md: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
+    .claude/skills/ralplan/SKILL.md: sha256:49d83cec3c63c2b554213863144996651aea76b136f50429c014ad6fcc35f929
+    .cursor/agents/critic.md: sha256:8606dca48e113b97d227cc43a3158824116cff4995cfc73812df9671cd9c27ea
+    .cursor/agents/planner.md: sha256:364b29c44cdc286a814ea49360e11f70a1ea74821dadbe1b58b14e699b303d7f
+    .cursor/rules/plan-handoff-standard.mdc: sha256:49b1409faf9ced510522b9d4c6d61ae12a2cd66ee4ef25fc06f09cfe4036e6e9
+    .github/agents/critic.agent.md: sha256:8606dca48e113b97d227cc43a3158824116cff4995cfc73812df9671cd9c27ea
+    .github/agents/planner.agent.md: sha256:364b29c44cdc286a814ea49360e11f70a1ea74821dadbe1b58b14e699b303d7f
+    .github/instructions/plan-handoff-standard.instructions.md: sha256:0de1036a04cc97cd14ffe6f2c7e7596856f99d9d968eb03097d3a19b2b9a80fc
+  source: local
+  local_path: ../planning
+  declared_license: MIT
+- repo_url: _local/repo-maintenance
+  name: repo-maintenance
+  version: 0.1.0
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/agents-md
+  - .agents/skills/agents-md/SKILL.md
+  - .agents/skills/generate-agent-docs
+  - .agents/skills/generate-agent-docs/SKILL.md
+  - .agents/skills/optimise-agent-config
+  - .agents/skills/optimise-agent-config/SKILL.md
+  - .agents/skills/optimise-agent-config/references/audit-commands.md
+  - .agents/skills/optimise-agent-config/references/audit-process.md
+  - .agents/skills/optimise-agent-config/references/migration-examples.md
+  - .agents/skills/optimise-agent-config/scripts/validate-artefacts.sh
+  - .claude/rules/keep-agent-mds-up-to-date.md
+  - .claude/skills/agents-md
+  - .claude/skills/agents-md/SKILL.md
+  - .claude/skills/generate-agent-docs
+  - .claude/skills/generate-agent-docs/SKILL.md
+  - .claude/skills/optimise-agent-config
+  - .claude/skills/optimise-agent-config/SKILL.md
+  - .claude/skills/optimise-agent-config/references/audit-commands.md
+  - .claude/skills/optimise-agent-config/references/audit-process.md
+  - .claude/skills/optimise-agent-config/references/migration-examples.md
+  - .claude/skills/optimise-agent-config/scripts/validate-artefacts.sh
+  - .cursor/rules/keep-agent-mds-up-to-date.mdc
+  - .github/instructions/keep-agent-mds-up-to-date.instructions.md
+  deployed_file_hashes:
+    .agents/skills/agents-md/SKILL.md: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
+    .agents/skills/generate-agent-docs/SKILL.md: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+    .agents/skills/optimise-agent-config/SKILL.md: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+    .agents/skills/optimise-agent-config/references/audit-commands.md: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+    .agents/skills/optimise-agent-config/references/audit-process.md: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+    .agents/skills/optimise-agent-config/references/migration-examples.md: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+    .agents/skills/optimise-agent-config/scripts/validate-artefacts.sh: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
+    .claude/rules/keep-agent-mds-up-to-date.md: sha256:506693270e51fb74c5c039fe3ce9747f71a556a0b06c07eedc8367ff7c4b5522
+    .claude/skills/agents-md/SKILL.md: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
+    .claude/skills/generate-agent-docs/SKILL.md: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+    .claude/skills/optimise-agent-config/SKILL.md: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+    .claude/skills/optimise-agent-config/references/audit-commands.md: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+    .claude/skills/optimise-agent-config/references/audit-process.md: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+    .claude/skills/optimise-agent-config/references/migration-examples.md: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+    .claude/skills/optimise-agent-config/scripts/validate-artefacts.sh: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
+    .cursor/rules/keep-agent-mds-up-to-date.mdc: sha256:06dc074873a6013eebf0e902454bd4ae2c75242dc358635aff56be2e0b2054d3
+    .github/instructions/keep-agent-mds-up-to-date.instructions.md: sha256:f398491aa52a5e95a89b1ade8dde133e4f44e6c855b38109c999ca34df2811db
+  source: local
+  local_path: ../repo-maintenance
+  declared_license: MIT
+- repo_url: _local/architect
+  name: architect
+  version: 0.1.0
+  depth: 2
+  resolved_by: _local/planning
+  package_type: apm_package
+  deployed_files:
+  - .claude/agents/architect.md
+  - .cursor/agents/architect.md
+  - .github/agents/architect.agent.md
+  deployed_file_hashes:
+    .claude/agents/architect.md: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+    .cursor/agents/architect.md: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+    .github/agents/architect.agent.md: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+  source: local
+  local_path: ../architect
+  declaring_parent: ../planning
+  anchored_local_path: /Users/sam/MyStuff/projects/foundry/packages/architect
+  declared_license: MIT
+- repo_url: _local/review
+  name: review
+  version: 0.1.0
+  depth: 2
+  resolved_by: _local/planning
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/thermo-nuclear-code-quality-review
+  - .agents/skills/thermo-nuclear-code-quality-review/SKILL.md
+  - .agents/skills/thermo-nuclear-review
+  - .agents/skills/thermo-nuclear-review/SKILL.md
+  - .agents/skills/thermos
+  - .agents/skills/thermos/SKILL.md
+  - .claude/agents/thermo-nuclear-code-quality-review-subagent.md
+  - .claude/agents/thermo-nuclear-review-subagent.md
+  - .claude/skills/thermo-nuclear-code-quality-review
+  - .claude/skills/thermo-nuclear-code-quality-review/SKILL.md
+  - .claude/skills/thermo-nuclear-review
+  - .claude/skills/thermo-nuclear-review/SKILL.md
+  - .claude/skills/thermos
+  - .claude/skills/thermos/SKILL.md
+  - .cursor/agents/thermo-nuclear-code-quality-review-subagent.md
+  - .cursor/agents/thermo-nuclear-review-subagent.md
+  - .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md
+  - .github/agents/thermo-nuclear-review-subagent.agent.md
+  deployed_file_hashes:
+    .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+    .agents/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+    .agents/skills/thermos/SKILL.md: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
+    .claude/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+    .claude/agents/thermo-nuclear-review-subagent.md: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+    .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+    .claude/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+    .claude/skills/thermos/SKILL.md: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
+    .cursor/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+    .cursor/agents/thermo-nuclear-review-subagent.md: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+    .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+    .github/agents/thermo-nuclear-review-subagent.agent.md: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+  source: local
+  local_path: ../review
+  declaring_parent: ../planning
+  anchored_local_path: /Users/sam/MyStuff/projects/foundry/packages/review
+  declared_license: MIT
+- repo_url: _local/swarm
+  name: swarm
+  version: 0.1.0
+  depth: 2
+  resolved_by: _local/planning
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/swarm
+  - .agents/skills/swarm/SKILL.md
+  - .claude/agents/build-fixer-low.md
+  - .claude/agents/build-fixer-medium.md
+  - .claude/agents/executor-high.md
+  - .claude/agents/executor-low.md
+  - .claude/agents/executor-medium.md
+  - .claude/agents/explore.md
+  - .claude/skills/swarm
+  - .claude/skills/swarm/SKILL.md
+  - .cursor/agents/build-fixer-low.md
+  - .cursor/agents/build-fixer-medium.md
+  - .cursor/agents/executor-high.md
+  - .cursor/agents/executor-low.md
+  - .cursor/agents/executor-medium.md
+  - .cursor/agents/explore.md
+  - .github/agents/build-fixer-low.agent.md
+  - .github/agents/build-fixer-medium.agent.md
+  - .github/agents/executor-high.agent.md
+  - .github/agents/executor-low.agent.md
+  - .github/agents/executor-medium.agent.md
+  - .github/agents/explore.agent.md
+  deployed_file_hashes:
+    .agents/skills/swarm/SKILL.md: sha256:e97fd5cadd39495e0e37ed8f7798590e0949e5124a6044b687bc34158c086e5a
+    .claude/agents/build-fixer-low.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
+    .claude/agents/build-fixer-medium.md: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
+    .claude/agents/executor-high.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
+    .claude/agents/executor-low.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
+    .claude/agents/executor-medium.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
+    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .claude/skills/swarm/SKILL.md: sha256:e97fd5cadd39495e0e37ed8f7798590e0949e5124a6044b687bc34158c086e5a
+    .cursor/agents/build-fixer-low.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
+    .cursor/agents/build-fixer-medium.md: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
+    .cursor/agents/executor-high.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
+    .cursor/agents/executor-low.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
+    .cursor/agents/executor-medium.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
+    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .github/agents/build-fixer-low.agent.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
+    .github/agents/build-fixer-medium.agent.md: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
+    .github/agents/executor-high.agent.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
+    .github/agents/executor-low.agent.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
+    .github/agents/executor-medium.agent.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
+    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+  source: local
+  local_path: ../swarm
+  declaring_parent: ../planning
+  anchored_local_path: /Users/sam/MyStuff/projects/foundry/packages/swarm
+  declared_license: MIT
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/agents/architect.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/architect
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/architect
+  content_hash: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+- kind: project-relative
+  target: claude
+  value: .claude/agents/build-fixer-low.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
+- kind: project-relative
+  target: claude
+  value: .claude/agents/build-fixer-medium.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
+- kind: project-relative
+  target: claude
+  value: .claude/agents/critic.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:8606dca48e113b97d227cc43a3158824116cff4995cfc73812df9671cd9c27ea
+- kind: project-relative
+  target: claude
+  value: .claude/agents/executor-high.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
+- kind: project-relative
+  target: claude
+  value: .claude/agents/executor-low.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
+- kind: project-relative
+  target: claude
+  value: .claude/agents/executor-medium.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
+- kind: project-relative
+  target: claude
+  value: .claude/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: claude
+  value: .claude/agents/planner.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:364b29c44cdc286a814ea49360e11f70a1ea74821dadbe1b58b14e699b303d7f
+- kind: project-relative
+  target: claude
+  value: .claude/agents/thermo-nuclear-code-quality-review-subagent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+- kind: project-relative
+  target: claude
+  value: .claude/agents/thermo-nuclear-review-subagent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+- kind: project-relative
+  target: claude
+  value: .claude/rules/keep-agent-mds-up-to-date.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:506693270e51fb74c5c039fe3ce9747f71a556a0b06c07eedc8367ff7c4b5522
+- kind: project-relative
+  target: claude
+  value: .claude/rules/plan-handoff-standard.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:f0ec092002ea61372395ab2b78dc93a3b8cb1755fb52fdb48e2686c8825b2026
+- kind: project-relative
+  target: claude
+  value: .claude/skills/agents-md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/agents-md/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-interview
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-interview/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+- kind: project-relative
+  target: claude
+  value: .claude/skills/design-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/design-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:db81b70a44f49871541ababb5a23b44134c06624acd637bd70b369430cb40b49
+- kind: project-relative
+  target: claude
+  value: .claude/skills/generate-agent-docs
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/generate-agent-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+- kind: project-relative
+  target: claude
+  value: .claude/skills/masterplan
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/masterplan/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/masterplan/references/masterplan-template.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/references/audit-commands.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/references/audit-process.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/references/migration-examples.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/scripts/validate-artefacts.sh
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ralplan
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ralplan/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:49d83cec3c63c2b554213863144996651aea76b136f50429c014ad6fcc35f929
+- kind: project-relative
+  target: claude
+  value: .claude/skills/swarm
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/swarm/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:e97fd5cadd39495e0e37ed8f7798590e0949e5124a6044b687bc34158c086e5a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/thermo-nuclear-code-quality-review
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/thermo-nuclear-code-quality-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/thermo-nuclear-review
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/thermo-nuclear-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+- kind: project-relative
+  target: claude
+  value: .claude/skills/thermos
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/thermos/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/agents-md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/agents-md/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/deep-interview
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/deep-interview/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/generate-agent-docs
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/generate-agent-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/masterplan
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/masterplan/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/masterplan/references/masterplan-template.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/optimise-agent-config
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/optimise-agent-config/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/optimise-agent-config/references/audit-commands.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/optimise-agent-config/references/audit-process.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/optimise-agent-config/references/migration-examples.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/optimise-agent-config/scripts/validate-artefacts.sh
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/ralplan
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/ralplan/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:49d83cec3c63c2b554213863144996651aea76b136f50429c014ad6fcc35f929
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/swarm
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/swarm/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:e97fd5cadd39495e0e37ed8f7798590e0949e5124a6044b687bc34158c086e5a
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/thermo-nuclear-code-quality-review
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/thermo-nuclear-code-quality-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/thermo-nuclear-review
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/thermo-nuclear-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/thermos
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/thermos/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
+- kind: project-relative
+  target: copilot
+  value: .github/agents/architect.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/architect
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/architect
+  content_hash: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+- kind: project-relative
+  target: copilot
+  value: .github/agents/build-fixer-low.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
+- kind: project-relative
+  target: copilot
+  value: .github/agents/build-fixer-medium.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
+- kind: project-relative
+  target: copilot
+  value: .github/agents/critic.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:8606dca48e113b97d227cc43a3158824116cff4995cfc73812df9671cd9c27ea
+- kind: project-relative
+  target: copilot
+  value: .github/agents/executor-high.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
+- kind: project-relative
+  target: copilot
+  value: .github/agents/executor-low.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
+- kind: project-relative
+  target: copilot
+  value: .github/agents/executor-medium.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
+- kind: project-relative
+  target: copilot
+  value: .github/agents/explore.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: copilot
+  value: .github/agents/planner.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:364b29c44cdc286a814ea49360e11f70a1ea74821dadbe1b58b14e699b303d7f
+- kind: project-relative
+  target: copilot
+  value: .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+- kind: project-relative
+  target: copilot
+  value: .github/agents/thermo-nuclear-review-subagent.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/keep-agent-mds-up-to-date.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:f398491aa52a5e95a89b1ade8dde133e4f44e6c855b38109c999ca34df2811db
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/plan-handoff-standard.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:0de1036a04cc97cd14ffe6f2c7e7596856f99d9d968eb03097d3a19b2b9a80fc
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/architect.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/architect
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/architect
+  content_hash: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/build-fixer-low.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/build-fixer-medium.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/critic.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:8606dca48e113b97d227cc43a3158824116cff4995cfc73812df9671cd9c27ea
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/executor-high.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/executor-low.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/executor-medium.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/swarm
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/planner.md
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:364b29c44cdc286a814ea49360e11f70a1ea74821dadbe1b58b14e699b303d7f
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/thermo-nuclear-code-quality-review-subagent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/thermo-nuclear-review-subagent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/review
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/review
+  content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+- kind: project-relative
+  target: cursor
+  value: .cursor/rules/keep-agent-mds-up-to-date.mdc
+  runtime: null
+  scope: project
+  owners:
+  - ../repo-maintenance
+  active_owner: ../repo-maintenance
+  content_hash: sha256:06dc074873a6013eebf0e902454bd4ae2c75242dc358635aff56be2e0b2054d3
+- kind: project-relative
+  target: cursor
+  value: .cursor/rules/plan-handoff-standard.mdc
+  runtime: null
+  scope: project
+  owners:
+  - ../planning
+  active_owner: ../planning
+  content_hash: sha256:49b1409faf9ced510522b9d4c6d61ae12a2cd66ee4ef25fc06f09cfe4036e6e9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/design-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/design-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:db81b70a44f49871541ababb5a23b44134c06624acd637bd70b369430cb40b49
+local_deployed_files:
+- .agents/skills/design-skill
+- .agents/skills/design-skill/SKILL.md
+- .claude/skills/design-skill
+- .claude/skills/design-skill/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/design-skill/SKILL.md: sha256:db81b70a44f49871541ababb5a23b44134c06624acd637bd70b369430cb40b49
+  .claude/skills/design-skill/SKILL.md: sha256:db81b70a44f49871541ababb5a23b44134c06624acd637bd70b369430cb40b49

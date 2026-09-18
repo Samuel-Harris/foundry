@@ -1,0 +1,18 @@
+name: planning
+version: "0.1.0"
+description: "Socratic requirement gathering, plan authoring and plan review."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies:
+  apm:
+    - path: ../architect
+    - path: ../review
+    - path: ../swarm
+scripts:
+  check: apm audit --ci

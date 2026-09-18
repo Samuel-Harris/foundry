@@ -69,7 +69,7 @@ rather than calling `apm` directly.
 Each package has `packages/<name>/apm.yml`:
 
 ```yaml
-name: foundry-planning
+name: planning
 version: "0.1.0"
 description: "Socratic requirement gathering, plan authoring and plan review."
 author: sam
@@ -82,9 +82,9 @@ targets:
 includes: auto
 dependencies:
   apm:
-    - path: ../foundry-architect
-    - path: ../foundry-review
-    - path: ../foundry-swarm
+    - path: ../architect
+    - path: ../review
+    - path: ../swarm
 scripts:
   check: apm audit --ci
 ```
@@ -116,22 +116,22 @@ Packages depend on each other through a **sibling relative path**:
 ```yaml
 dependencies:
   apm:
-    - path: ../foundry-planning
+    - path: ../planning
 ```
 
 - This form **works for `apm install`**, `apm install --frozen` and
-  `apm audit --ci`. The lockfile records it as `repo_url: _local/foundry-planning`,
-  `source: local`, `local_path: ../foundry-planning`.
+  `apm audit --ci`. The lockfile records it as `repo_url: _local/planning`,
+  `source: local`, `local_path: ../planning`.
 - This form **fails for `apm pack`**, in every format:
 
   ```text
-  Error: Cannot pack — apm.yml contains local path dependency: ../foundry-planning
+  Error: Cannot pack — apm.yml contains local path dependency: ../planning
   Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
   ```
 
-  The seven packages that declare one — `foundry-default-stack`,
-  `foundry-execution`, `foundry-planning`, `foundry-pr`,
-  `foundry-repo-maintenance`, `foundry-skill-creation` and `foundry-swarm` — are
+  The seven packages that declare one — `default-stack`,
+  `execution`, `planning`, `pr`,
+  `repo-maintenance`, `skill-creation` and `swarm` — are
   therefore **pack-blocked** until `v0.1.0` is tagged. CI asserts that guardrail
   instead of skipping those packages silently.
 - The remote fallback `{git: Samuel-Harris/foundry, path: packages/<name>, ref: "^0.1.0"}`
@@ -144,7 +144,7 @@ dependencies:
 - **A transitive sibling dependency additionally records an absolute path, which
   is harmless.** Direct dependencies get a portable `local_path: ../<name>`, but
   a local dependency reached through another local package (for example
-  `foundry-architect` via `foundry-swarm`) also gets
+  `architect` via `swarm`) also gets
   `anchored_local_path: /absolute/path/to/packages/<name>`. The committed
   lockfiles carry the authoring machine's path. Verified: `install --frozen` and
   `audit --ci` still pass at a different absolute root, and `apm install`
@@ -245,7 +245,7 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
   twice.** If a local package is reachable directly *and* transitively *and* it
   parents another local package, the drift replay fails with `ambiguous
   resolved_by parent ...: 2 local dependencies share that repo_url`. Re-running
-  `apm install` rewrites the same duplicate. `foundry-default-stack` is the only
+  `apm install` rewrites the same duplicate. `default-stack` is the only
   package here affected; its eight-dependency manifest is kept deliberately and
   the failure is asserted rather than being worked around by trimming the
   manifest. Consumer installs of the same manifest audit cleanly. The repro is in
@@ -280,7 +280,7 @@ Jobs: `contract` (primitive validator plus secret scan), `validate-packages`
 `archive-consumer` (pack, install, inventory, tamper rejection) and
 `lint-markdown`. The `validate-packages` matrix carries a `pack_blocked` flag for
 the seven local-path packages and an `audit_known_broken` flag for
-`foundry-default-stack`; both assert the pinned CLI's documented failure rather
+`default-stack`; both assert the pinned CLI's documented failure rather
 than skipping the package.
 
 ## Generated-file policy

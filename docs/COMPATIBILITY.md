@@ -52,24 +52,24 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 
 | Package | Primitives deployed | structural | runtime recognition | workflow behaviour |
 | --- | --- | --- | --- | --- |
-| `foundry-architect` | 1 agent | verified | untested | untested |
-| `foundry-coding-style` | 3 instructions | verified | untested | untested |
-| `foundry-default-stack` | no primitives; resolves 8 direct and 2 transitive packages | verified | untested | untested |
-| `foundry-execution` | 1 skill | verified | untested | untested |
-| `foundry-git-diff` | 3 skills | verified | untested | untested |
-| `foundry-handoff` | 1 skill | verified | untested | untested |
-| `foundry-infrastructure` | 1 skill | verified | untested | untested |
-| `foundry-planning` | 3 skills, 2 agents, 1 instruction | verified | untested | untested |
-| `foundry-pr` | 3 skills | verified | untested | untested |
-| `foundry-repo-init` | 1 skill | verified | untested | untested |
-| `foundry-repo-maintenance` | 3 skills, 1 instruction | verified | untested | untested |
-| `foundry-review` | 3 skills, 2 agents | verified | untested | untested |
-| `foundry-search` | 1 skill | verified | untested | untested |
-| `foundry-skill-creation` | 1 skill | verified | untested | untested |
-| `foundry-swarm` | 1 skill, 6 agents | verified | untested | untested |
-| `foundry-ui` | 1 skill | verified | untested | untested |
+| `architect` | 1 agent | verified | untested | untested |
+| `coding-style` | 3 instructions | verified | untested | untested |
+| `default-stack` | no primitives; resolves 8 direct and 2 transitive packages | verified | untested | untested |
+| `execution` | 1 skill | verified | untested | untested |
+| `git-diff` | 3 skills | verified | untested | untested |
+| `handoff` | 1 skill | verified | untested | untested |
+| `infrastructure` | 1 skill | verified | untested | untested |
+| `planning` | 3 skills, 2 agents, 1 instruction | verified | untested | untested |
+| `pr` | 3 skills | verified | untested | untested |
+| `repo-init` | 1 skill | verified | untested | untested |
+| `repo-maintenance` | 3 skills, 1 instruction | verified | untested | untested |
+| `review` | 3 skills, 2 agents | verified | untested | untested |
+| `search` | 1 skill | verified | untested | untested |
+| `skill-creation` | 1 skill | verified | untested | untested |
+| `swarm` | 1 skill, 6 agents | verified | untested | untested |
+| `ui` | 1 skill | verified | untested | untested |
 
-Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place — with one documented exception. `foundry-default-stack`'s own lockfile cannot be replayed by `apm audit --ci`, because the meta-package reaches `foundry-planning` by two paths and an APM 0.30.0 writer defect then records an ambiguous parent chain. Consumers are unaffected: a clean install of `foundry-default-stack` resolves the same ten packages and passes `apm audit --ci` on all three targets. See `docs/DEPENDENCY-CONTRACTS.md` for the minimal repro and the reasoning behind keeping the eight-declared-requirement manifest.
+Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place — with one documented exception. `default-stack`'s own lockfile cannot be replayed by `apm audit --ci`, because the meta-package reaches `planning` by two paths and an APM 0.30.0 writer defect then records an ambiguous parent chain. Consumers are unaffected: a clean install of `default-stack` resolves the same ten packages and passes `apm audit --ci` on all three targets. See `docs/DEPENDENCY-CONTRACTS.md` for the minimal repro and the reasoning behind keeping the eight-declared-requirement manifest.
 
 `apm install --frozen` succeeds for all sixteen packages in place.
 
@@ -77,25 +77,25 @@ Structural verification covers all three targets: every package installs, deploy
 
 `apm pack --archive` succeeds for the nine packages with an empty `dependencies:` mapping:
 
-- `foundry-architect`
-- `foundry-coding-style`
-- `foundry-git-diff`
-- `foundry-handoff`
-- `foundry-infrastructure`
-- `foundry-repo-init`
-- `foundry-review`
-- `foundry-search`
-- `foundry-ui`
+- `architect`
+- `coding-style`
+- `git-diff`
+- `handoff`
+- `infrastructure`
+- `repo-init`
+- `review`
+- `search`
+- `ui`
 
 It fails for the seven packages whose manifests declare a sibling `path:` dependency, in every bundle format:
 
-- `foundry-default-stack`
-- `foundry-execution`
-- `foundry-planning`
-- `foundry-pr`
-- `foundry-repo-maintenance`
-- `foundry-skill-creation`
-- `foundry-swarm`
+- `default-stack`
+- `execution`
+- `planning`
+- `pr`
+- `repo-maintenance`
+- `skill-creation`
+- `swarm`
 
 Their bundle build is a release-time step that requires the `v0.1.0` tag. Archive install, inventory, skill-only inventory and tamper rejection are verified against the packable bundles, and every bundle is asserted to be free of retired primitives.
 
@@ -118,7 +118,7 @@ Skills that must only run on explicit request set `disable-model-invocation: tru
 These were established by running the pinned CLI, and matter when reading CI results.
 
 - **`apm compile --validate` fails on a skill-only package until an install has run.** It requires at least one agent or instruction in `.apm/`; on a package that ships only skills it exits `1` with `No instruction files found in .apm/ directory`. After an install has materialised the deploy targets it exits `0` and reports `Validated 0 primitives` — still inspecting no skill. Declaring `type: skill` changes neither outcome. CI therefore runs `apm install` before `apm compile --validate`, and `tests/structural/validate_primitives.py` remains the real frontmatter and sibling-file gate.
-- **`apm audit --ci` fails on a lockfile that records a local package twice.** When a local package is reachable both directly and transitively *and* is the `resolved_by` parent of another local package, `apm install` writes two entries sharing a `repo_url` and the drift replay reports `ambiguous resolved_by parent ...: 2 local dependencies share that repo_url`. Re-running `apm install` does not help. Only the package's own lockfile is affected; consumer installs of the same manifest audit cleanly. `foundry-default-stack` is the one package here that hits it. See `docs/DEPENDENCY-CONTRACTS.md`.
+- **`apm audit --ci` fails on a lockfile that records a local package twice.** When a local package is reachable both directly and transitively *and* is the `resolved_by` parent of another local package, `apm install` writes two entries sharing a `repo_url` and the drift replay reports `ambiguous resolved_by parent ...: 2 local dependencies share that repo_url`. Re-running `apm install` does not help. Only the package's own lockfile is affected; consumer installs of the same manifest audit cleanly. `default-stack` is the one package here that hits it. See `docs/DEPENDENCY-CONTRACTS.md`.
 - **`apm pack` refuses any manifest that declares a local path dependency.** It exits `1` with `Cannot pack — apm.yml contains local path dependency: <path>`, in every bundle format. The seven dependency-bearing packages use the sibling `path:` form that `apm install` requires, so their bundles cannot be produced before `v0.1.0` is tagged and pushed. CI asserts this guardrail for those packages instead of skipping them silently. See `docs/DEPENDENCY-CONTRACTS.md` for the full comparison of the `path:` and `{git, path, ref}` forms.
 - **A plugin-format archive does not translate instruction frontmatter per target.** `apm pack --archive` emits a Claude plugin bundle. Installing that archive deploys the expected file inventory, but `.cursor/rules/*.mdc` keeps the source `applyTo` key instead of `globs`, and `.claude/rules/*.md` keeps `applyTo` instead of `paths`. Per-target translation is only applied by a source install. Archive-based CI therefore asserts inventory and tamper rejection, not scoping; scoping translation is asserted from the source installs.
 - **`apm pack --format apm` produces an empty bundle for these packages.** It reports `No deployed files found -- empty bundle created` and writes only the embedded lockfile, so the default plugin-format archive is the only one that carries content in 0.30.0.

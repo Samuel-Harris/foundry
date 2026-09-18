@@ -1,0 +1,16 @@
+name: pr
+version: "0.1.0"
+description: "Pull request comprehension and merge-readiness babysitting."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies:
+  apm:
+    - path: ../swarm
+scripts:
+  check: apm audit --ci

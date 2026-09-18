@@ -286,7 +286,10 @@ archive_failures=0
 for package in "${packages[@]}"; do
   [[ "$PACK_BLOCKED" == *" $package "* ]] && continue
   work_dir="$REPO_ROOT/packages/$package"
-  ( cd "$work_dir" && run_apm pack --archive -o ./dist ) >/dev/null 2>&1
+  # `--target` is passed explicitly: without it `apm pack` detects the target
+  # from the filesystem, which on a clean checkout yields the `minimal`
+  # pseudo-target and produces a bundle `apm install` rejects.
+  ( cd "$work_dir" && run_apm pack --archive -o ./dist --target "$TARGETS" ) >/dev/null 2>&1
   status=$?
   archive="$(find "$work_dir/dist" -maxdepth 1 -name '*.zip' 2>/dev/null | sort | head -1)"
   if (( status != 0 )) || [[ -z "$archive" ]]; then

@@ -255,6 +255,13 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
   per-target instruction translation. `apm pack --format apm` is not a
   substitute: it reports `No deployed files found -- empty bundle created` and
   writes only the embedded lockfile.
+- **Pass `--target` to `apm pack`.** Without it, `apm pack` detects the target
+  from the filesystem. On a clean checkout no target folder exists, so detection
+  returns the `minimal` pseudo-target, the embedded lockfile records
+  `pack.target: minimal`, and the bundle cannot be installed: `apm install` fails
+  with `Error installing dependencies: 'minimal'`. The flag is marked deprecated
+  in 0.30.0 and its value is documented as informational metadata, but
+  `apm install` does read `pack.target`.
 - Packing writes `.claude-plugin/plugin.json` and `.github/plugin/plugin.json`
   into the package directory. Those are build output and are gitignored.
 - Never add `--force`, `--trust-transitive-mcp`, `--allow-insecure`, `--no-policy`

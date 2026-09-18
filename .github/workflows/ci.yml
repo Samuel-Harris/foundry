@@ -201,8 +201,9 @@ jobs:
           import pathlib
           import yaml
 
-          lockfile = next(pathlib.Path("apm_modules").rglob("apm.lock.yaml"))
-          data = yaml.safe_load(lockfile.read_text())
+          # The consumer's own lockfile, not a materialised package's copy: only
+          # it records the resolved graph with per-dependency depth.
+          data = yaml.safe_load(pathlib.Path("apm.lock.yaml").read_text())
           resolved = {
               dep.get("repo_url") or dep.get("materialization_repo_url"): dep.get("depth")
               for dep in data.get("dependencies", [])
@@ -235,12 +236,14 @@ jobs:
               "foundry-skill-creation",
               "foundry-swarm",
           }
-          lockfile = next(pathlib.Path("apm_modules").rglob("apm.lock.yaml"))
+          lockfile = pathlib.Path("apm.lock.yaml")
           data = yaml.safe_load(lockfile.read_text())
+          # The consumer's lockfile records the installed meta-package itself
+          # alongside the ten packages it resolves.
           resolved = {
               (dep.get("repo_url") or "").removeprefix("_local/")
               for dep in data.get("dependencies", [])
-          }
+          } - {"foundry-default-stack"}
           assert resolved == expected, f"got {sorted(resolved)}"
           print("default stack resolved exactly:", sorted(resolved))
           PY
@@ -257,12 +260,17 @@ jobs:
           setup-only: true
           apm-version: ${{ env.APM_VERSION }}
 
+      # `--target` must be passed explicitly. Without it `apm pack` detects the
+      # target from the filesystem, finds no target folder on a clean checkout,
+      # and stamps `pack.target: minimal` into the embedded lockfile -- a bundle
+      # `apm install` then rejects with `Error installing dependencies:
+      # 'minimal'`. See AGENTS.md.
       - name: Pack every packable bundle
         run: |
           for package in foundry-architect foundry-coding-style foundry-git-diff \
             foundry-handoff foundry-infrastructure foundry-repo-init \
             foundry-review foundry-search foundry-ui; do
-            ( cd "packages/$package" && timeout 300 apm pack --archive -o ./dist )
+            ( cd "packages/$package" && timeout 300 apm pack --archive -o ./dist --target "$TARGETS" )
           done
 
       - name: Install and audit an archive in a clean consumer

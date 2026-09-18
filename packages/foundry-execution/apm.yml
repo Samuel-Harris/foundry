@@ -1,0 +1,17 @@
+name: foundry-execution
+version: "0.1.0"
+description: "Take a Linear ticket to a merge-ready draft pull request."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies:
+  apm:
+    - path: ../foundry-pr
+    - path: ../foundry-review
+scripts:
+  check: apm audit --ci

@@ -1,0 +1,201 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6df567ed67568c83e0899bd065e9c37bf306cf01f45ca6c292c4e9326e47387f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init/references/agents-md.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b47336940383a353ebf84e6fbc726ad1db116613e5bb594bc1d89bdd53914d18
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init/references/archetypes.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:94ae8fada9b89afb398957ddc2cafa348b196ad3f0dc2a43ad83fda6c79f00f2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init/references/decision-framework.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:61aecace526a9144ee2585350fc99d381e3322df4cd53ae9ce52d2361dfdb1f8
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init/references/python-stack.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:23f5b4b04546166e2cd23fbc1dd3b095ad001b103243449927b6b3c74cde38fc
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init/references/retrofit.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6b176bf45d5e08d0fc750d56379b3103d02ebf2191676a2be242e15882b013e5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init/references/scaffold-components.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:458145391eacfa251a68d65ce8d3ff4c5d1ee9479780dba668c3830a6e3ca3ae
+- kind: project-relative
+  target: claude
+  value: .claude/skills/monorepo-init/references/typescript-stack.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:edcc65d5caad06aa5e0ef977e35275fc2444cfdbd71d19dc24e774e069cdf39d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6df567ed67568c83e0899bd065e9c37bf306cf01f45ca6c292c4e9326e47387f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init/references/agents-md.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b47336940383a353ebf84e6fbc726ad1db116613e5bb594bc1d89bdd53914d18
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init/references/archetypes.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:94ae8fada9b89afb398957ddc2cafa348b196ad3f0dc2a43ad83fda6c79f00f2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init/references/decision-framework.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:61aecace526a9144ee2585350fc99d381e3322df4cd53ae9ce52d2361dfdb1f8
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init/references/python-stack.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:23f5b4b04546166e2cd23fbc1dd3b095ad001b103243449927b6b3c74cde38fc
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init/references/retrofit.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6b176bf45d5e08d0fc750d56379b3103d02ebf2191676a2be242e15882b013e5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init/references/scaffold-components.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:458145391eacfa251a68d65ce8d3ff4c5d1ee9479780dba668c3830a6e3ca3ae
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/monorepo-init/references/typescript-stack.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:edcc65d5caad06aa5e0ef977e35275fc2444cfdbd71d19dc24e774e069cdf39d
+local_deployed_files:
+- .agents/skills/monorepo-init
+- .agents/skills/monorepo-init/SKILL.md
+- .agents/skills/monorepo-init/references/agents-md.md
+- .agents/skills/monorepo-init/references/archetypes.md
+- .agents/skills/monorepo-init/references/decision-framework.md
+- .agents/skills/monorepo-init/references/python-stack.md
+- .agents/skills/monorepo-init/references/retrofit.md
+- .agents/skills/monorepo-init/references/scaffold-components.md
+- .agents/skills/monorepo-init/references/typescript-stack.md
+- .claude/skills/monorepo-init
+- .claude/skills/monorepo-init/SKILL.md
+- .claude/skills/monorepo-init/references/agents-md.md
+- .claude/skills/monorepo-init/references/archetypes.md
+- .claude/skills/monorepo-init/references/decision-framework.md
+- .claude/skills/monorepo-init/references/python-stack.md
+- .claude/skills/monorepo-init/references/retrofit.md
+- .claude/skills/monorepo-init/references/scaffold-components.md
+- .claude/skills/monorepo-init/references/typescript-stack.md
+local_deployed_file_hashes:
+  .agents/skills/monorepo-init/SKILL.md: sha256:6df567ed67568c83e0899bd065e9c37bf306cf01f45ca6c292c4e9326e47387f
+  .agents/skills/monorepo-init/references/agents-md.md: sha256:b47336940383a353ebf84e6fbc726ad1db116613e5bb594bc1d89bdd53914d18
+  .agents/skills/monorepo-init/references/archetypes.md: sha256:94ae8fada9b89afb398957ddc2cafa348b196ad3f0dc2a43ad83fda6c79f00f2
+  .agents/skills/monorepo-init/references/decision-framework.md: sha256:61aecace526a9144ee2585350fc99d381e3322df4cd53ae9ce52d2361dfdb1f8
+  .agents/skills/monorepo-init/references/python-stack.md: sha256:23f5b4b04546166e2cd23fbc1dd3b095ad001b103243449927b6b3c74cde38fc
+  .agents/skills/monorepo-init/references/retrofit.md: sha256:6b176bf45d5e08d0fc750d56379b3103d02ebf2191676a2be242e15882b013e5
+  .agents/skills/monorepo-init/references/scaffold-components.md: sha256:458145391eacfa251a68d65ce8d3ff4c5d1ee9479780dba668c3830a6e3ca3ae
+  .agents/skills/monorepo-init/references/typescript-stack.md: sha256:edcc65d5caad06aa5e0ef977e35275fc2444cfdbd71d19dc24e774e069cdf39d
+  .claude/skills/monorepo-init/SKILL.md: sha256:6df567ed67568c83e0899bd065e9c37bf306cf01f45ca6c292c4e9326e47387f
+  .claude/skills/monorepo-init/references/agents-md.md: sha256:b47336940383a353ebf84e6fbc726ad1db116613e5bb594bc1d89bdd53914d18
+  .claude/skills/monorepo-init/references/archetypes.md: sha256:94ae8fada9b89afb398957ddc2cafa348b196ad3f0dc2a43ad83fda6c79f00f2
+  .claude/skills/monorepo-init/references/decision-framework.md: sha256:61aecace526a9144ee2585350fc99d381e3322df4cd53ae9ce52d2361dfdb1f8
+  .claude/skills/monorepo-init/references/python-stack.md: sha256:23f5b4b04546166e2cd23fbc1dd3b095ad001b103243449927b6b3c74cde38fc
+  .claude/skills/monorepo-init/references/retrofit.md: sha256:6b176bf45d5e08d0fc750d56379b3103d02ebf2191676a2be242e15882b013e5
+  .claude/skills/monorepo-init/references/scaffold-components.md: sha256:458145391eacfa251a68d65ce8d3ff4c5d1ee9479780dba668c3830a6e3ca3ae
+  .claude/skills/monorepo-init/references/typescript-stack.md: sha256:edcc65d5caad06aa5e0ef977e35275fc2444cfdbd71d19dc24e774e069cdf39d

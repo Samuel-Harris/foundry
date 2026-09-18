@@ -1,0 +1,47 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/uncodixify
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/uncodixify/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2ea5f9f510d11e68c5df05468ea62acf6770f5590604798b00efd9fafbf9af16
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/uncodixify
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/uncodixify/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2ea5f9f510d11e68c5df05468ea62acf6770f5590604798b00efd9fafbf9af16
+local_deployed_files:
+- .agents/skills/uncodixify
+- .agents/skills/uncodixify/SKILL.md
+- .claude/skills/uncodixify
+- .claude/skills/uncodixify/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/uncodixify/SKILL.md: sha256:2ea5f9f510d11e68c5df05468ea62acf6770f5590604798b00efd9fafbf9af16
+  .claude/skills/uncodixify/SKILL.md: sha256:2ea5f9f510d11e68c5df05468ea62acf6770f5590604798b00efd9fafbf9af16

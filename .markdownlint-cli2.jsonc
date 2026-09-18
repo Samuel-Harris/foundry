@@ -1,0 +1,20 @@
+{
+  // Lint source markdown only. `apm install` and `apm pack` write deploy
+  // output and dependency caches under packages/, and markdownlint-cli2 does
+  // not apply .gitignore when globs are passed on the command line.
+  "ignores": [
+    "**/apm_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.claude/**",
+    "**/.agents/**",
+    "**/.cursor/**",
+    "**/.codex/**",
+    "**/.github/agents/**",
+    "**/.github/instructions/**",
+    "**/.github/prompts/**",
+    "**/.github/hooks/**",
+    "**/.claude-plugin/**",
+    "**/.github/plugin/**",
+  ],
+}

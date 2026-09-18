@@ -1,0 +1,74 @@
+---
+description: Use when creating or refining implementation plans, especially handoff-ready plans another agent will execute.
+applyTo: ".foundry/plans/**/*.md"
+---
+
+# Plan Handoff Standard
+
+When writing a plan, assume a different agent will execute it later. The plan must be a self-contained handoff, not just a list of edits.
+
+## Before Finalising A Plan
+
+- If the intended behaviour, design, constraints, or success criteria are ambiguous, stop and use the `deep-interview` skill before finalising the plan.
+- Resolve important design and behaviour decisions in the plan itself. Do not leave key choices implicit.
+- If the user intentionally leaves an area open, record the open question explicitly and explain the consequences of each option.
+- A plan must not leave unresolved implementation or design choices to the implementing agent unless the user explicitly asked for options.
+- If multiple designs are possible, the plan must either:
+  - record the user’s chosen design and explain why it was chosen, or
+  - stop and ask the user to decide before finalising the plan.
+- Do not defer decisions with phrases like `the implementer can choose`, `one option is`, `as appropriate`, `if needed`, `handle this in the best way`, or similar language. If a decision affects behaviour, safety, compatibility, rollout, data shape, or verification, the plan must make that decision explicitly.
+- The implementing agent should be able to execute the plan mechanically and make only local coding judgements, not product, API, migration, rollout, or architectural decisions.
+
+## Every Plan Must Include
+
+- The problem being solved and why it matters.
+- The intended behaviour after the change, including user-visible behaviour, system behaviour, edge cases, and failure handling where relevant.
+- Non-goals, constraints, compatibility expectations, migration expectations, rollout assumptions, and any other boundaries that affect implementation.
+- The intended design: key models, contracts, data flow, state transitions, invariants, and why this design was chosen.
+- The blast radius: known callers, affected files, schemas, APIs, database objects, generated artefacts, and tests.
+- A concrete execution order that another agent can follow directly.
+- Verification: tests, manual checks, downgrade or rollback checks where relevant, and the exact evidence that will prove the work is correct.
+- A final step that runs `thermos` on the changes done, then refactors the written code based on the synthesised review feedback.
+
+## Required Level Of Detail
+
+- Include exact names when they matter: fields, routes, enums, tables, config keys, validation rules, mapping tables, and compatibility rules.
+- Include code snippets for parts where precise structure matters.
+- Include mermaid diagrams when they materially clarify architecture, data flow, migrations, ownership, or state changes.
+- Explain both `what` and `why`. The implementing agent should understand the intent well enough to make nuanced decisions without re-discovering the design.
+- Specify all material design decisions, guardrails, and trade-offs explicitly. Do not leave any decision that affects behaviour, safety, compatibility, performance, rollout, observability, or validation for the implementing agent to make during execution.
+- When a feature has multiple plausible implementations, document the rejected alternatives briefly and state why the chosen design was selected.
+- State exact preconditions and postconditions for any exceptional path, override, migration, replay path, or operator-only workflow.
+- Define what must remain unchanged as clearly as what must change.
+
+## Avoid
+
+- Vague steps such as `update backend`, `handle migration`, or `fix frontend`.
+- Plans that describe only the mechanical edits and not the intended behaviour.
+- Deferring important behaviour or design decisions to the implementing agent unless the user explicitly asked for options.
+- Silent assumptions about backwards compatibility, rollout strategy, failure handling, or acceptance criteria.
+- Plans that leave material design decisions for the implementing agent to make during execution.
+
+## Quality Bar
+
+Before you finish a plan, ask: could another agent implement this without guessing about:
+
+- the core intent,
+- the intended behaviour,
+- the chosen design,
+- the compatibility strategy,
+- the rollout strategy,
+- the verification standard, or
+- any material trade-off or safety constraint?
+
+If yes, the plan is incomplete.
+
+## Example
+
+Bad:
+
+- `Move preferences into a new table and update the frontend.`
+
+Good:
+
+- `Normalise preference overrides into a child table because the current JSONB column conflates persistence and API shape. Preserve a sparse override-map API, define exact enum mappings, describe migration fallback behaviour, list affected callers, and state how success will be verified.`

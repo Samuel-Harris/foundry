@@ -2,31 +2,337 @@ name: CI
 
 on:
   pull_request:
+    paths:
+      - packages/**
+      - .github/**
+      - README.md
+      - CHANGELOG.md
+      - AGENTS.md
+      - docs/**
+      - tests/**
+      - .gitignore
+      - .markdownlint.json
+      - .markdownlint-cli2.jsonc
   push:
     branches: [main]
+    paths:
+      - packages/**
+      - .github/**
+      - README.md
+      - CHANGELOG.md
+      - AGENTS.md
+      - docs/**
+      - tests/**
+      - .gitignore
+      - .markdownlint.json
+      - .markdownlint-cli2.jsonc
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  APM_VERSION: "0.30.0"
+  TARGETS: cursor,claude,copilot
 
 jobs:
-  validate-plugins:
+  contract:
+    name: Primitive contract
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          node-version: "20"
+          python-version: "3.12"
 
-      - name: Run plugin validation
-        run: node scripts/validate-template.mjs
+      - name: Install PyYAML
+        run: python -m pip install --quiet pyyaml
+
+      - name: Validate primitive frontmatter and sibling files
+        run: python tests/structural/validate_primitives.py
+
+      - name: Scan tracked files, generated output and archives for secrets
+        run: python tests/structural/scan_secrets.py
+
+  validate-packages:
+    name: Validate ${{ matrix.package }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # pack_blocked marks manifests that carry a sibling `path:`
+          # dependency. APM 0.30.0 refuses to pack those in every bundle format,
+          # so the guardrail is asserted rather than the package being skipped.
+          # See docs/DEPENDENCY-CONTRACTS.md.
+          - package: foundry-architect
+            pack_blocked: false
+          - package: foundry-coding-style
+            pack_blocked: false
+          - package: foundry-default-stack
+            pack_blocked: true
+            # The meta-package reaches foundry-planning both directly and
+            # transitively, so `apm install` writes two `_local/foundry-planning`
+            # entries and `apm audit --ci` cannot replay the drift. Asserted as a
+            # known APM 0.30.0 defect; the consumer-side audit of the same
+            # manifest passes and is asserted in scratch-consumer.
+            audit_known_broken: true
+          - package: foundry-execution
+            pack_blocked: true
+          - package: foundry-git-diff
+            pack_blocked: false
+          - package: foundry-handoff
+            pack_blocked: false
+          - package: foundry-infrastructure
+            pack_blocked: false
+          - package: foundry-planning
+            pack_blocked: true
+          - package: foundry-pr
+            pack_blocked: true
+          - package: foundry-repo-init
+            pack_blocked: false
+          - package: foundry-repo-maintenance
+            pack_blocked: true
+          - package: foundry-review
+            pack_blocked: false
+          - package: foundry-search
+            pack_blocked: false
+          - package: foundry-skill-creation
+            pack_blocked: true
+          - package: foundry-swarm
+            pack_blocked: true
+          - package: foundry-ui
+            pack_blocked: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up APM ${{ env.APM_VERSION }}
+        uses: microsoft/apm-action@v1
+        with:
+          setup-only: true
+          apm-version: ${{ env.APM_VERSION }}
+
+      # Install must precede `compile --validate`. On a package with no agent and
+      # no instruction, `apm compile --validate` exits 1 with "No instruction
+      # files found in .apm/ directory" until an install has materialised the
+      # deploy targets. See docs/DEPENDENCY-CONTRACTS.md.
+      - name: Install
+        working-directory: packages/${{ matrix.package }}
+        run: timeout 300 apm install --target "$TARGETS"
+
+      - name: Audit lockfile and deployed-file hashes
+        if: ${{ !matrix.audit_known_broken }}
+        working-directory: packages/${{ matrix.package }}
+        run: timeout 300 apm audit --ci
+
+      - name: Assert the duplicated-resolved_by audit defect
+        if: ${{ matrix.audit_known_broken }}
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          set +e
+          timeout 300 apm audit --ci 2>&1 | tee audit.log
+          status="${PIPESTATUS[0]}"
+          set -e
+          if [ "$status" -eq 0 ]; then
+            echo "expected the duplicated-resolved_by defect, but the audit passed" >&2
+            exit 1
+          fi
+          grep -q "ambiguous resolved_by parent" audit.log
+
+      - name: Validate primitives
+        working-directory: packages/${{ matrix.package }}
+        run: timeout 300 apm compile --validate
+
+      - name: Pack dry run
+        if: ${{ !matrix.pack_blocked }}
+        working-directory: packages/${{ matrix.package }}
+        run: timeout 300 apm pack --dry-run --verbose
+
+      - name: Assert local-path pack guardrail
+        if: ${{ matrix.pack_blocked }}
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          set +e
+          timeout 300 apm pack --dry-run --verbose 2>&1 | tee pack.log
+          status="${PIPESTATUS[0]}"
+          set -e
+          if [ "$status" -eq 0 ]; then
+            echo "expected the local-path dependency guardrail, but pack succeeded" >&2
+            exit 1
+          fi
+          grep -q "contains local path dependency" pack.log
+
+  scratch-consumer:
+    name: Scratch consumer (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [cursor, claude, copilot]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up APM ${{ env.APM_VERSION }}
+        uses: microsoft/apm-action@v1
+        with:
+          setup-only: true
+          apm-version: ${{ env.APM_VERSION }}
+
+      - name: Install the default stack into a clean consumer
+        run: |
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          timeout 120 apm init -y --target ${{ matrix.target }}
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-default-stack" --target ${{ matrix.target }}
+          timeout 120 apm view foundry-default-stack
+          timeout 300 apm audit --ci
+
+      - name: Assert the dependency graph resolved
+        run: |
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          timeout 120 apm init -y --target ${{ matrix.target }}
+          # swarm -> architect, so installing swarm alone must record architect as
+          # a transitive dependency at depth 2.
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-swarm" --target ${{ matrix.target }}
+          python3 - <<'PY'
+          import pathlib
+          import yaml
+
+          lockfile = next(pathlib.Path("apm_modules").rglob("apm.lock.yaml"))
+          data = yaml.safe_load(lockfile.read_text())
+          resolved = {
+              dep.get("repo_url") or dep.get("materialization_repo_url"): dep.get("depth")
+              for dep in data.get("dependencies", [])
+          }
+          assert "_local/foundry-architect" in resolved, sorted(resolved)
+          assert resolved["_local/foundry-architect"] == 2, resolved
+          print("swarm pulled architect in transitively:", resolved)
+          PY
+          timeout 300 apm audit --ci
+
+      - name: Assert the default stack resolves ten packages
+        run: |
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          timeout 120 apm init -y --target ${{ matrix.target }}
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-default-stack" --target ${{ matrix.target }}
+          python3 - <<'PY'
+          import pathlib
+          import yaml
+
+          expected = {
+              "foundry-architect",
+              "foundry-coding-style",
+              "foundry-execution",
+              "foundry-git-diff",
+              "foundry-planning",
+              "foundry-pr",
+              "foundry-repo-maintenance",
+              "foundry-review",
+              "foundry-skill-creation",
+              "foundry-swarm",
+          }
+          lockfile = next(pathlib.Path("apm_modules").rglob("apm.lock.yaml"))
+          data = yaml.safe_load(lockfile.read_text())
+          resolved = {
+              (dep.get("repo_url") or "").removeprefix("_local/")
+              for dep in data.get("dependencies", [])
+          }
+          assert resolved == expected, f"got {sorted(resolved)}"
+          print("default stack resolved exactly:", sorted(resolved))
+          PY
+
+  archive-consumer:
+    name: Archive consumer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up APM ${{ env.APM_VERSION }}
+        uses: microsoft/apm-action@v1
+        with:
+          setup-only: true
+          apm-version: ${{ env.APM_VERSION }}
+
+      - name: Pack every packable bundle
+        run: |
+          for package in foundry-architect foundry-coding-style foundry-git-diff \
+            foundry-handoff foundry-infrastructure foundry-repo-init \
+            foundry-review foundry-search foundry-ui; do
+            ( cd "packages/$package" && timeout 300 apm pack --archive -o ./dist )
+          done
+
+      - name: Install and audit an archive in a clean consumer
+        run: |
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          timeout 120 apm init -y --target cursor,claude,copilot
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-review/dist/foundry-review-0.1.0.zip" --target cursor,claude,copilot
+          timeout 300 apm audit --ci
+          test -f .agents/skills/thermos/SKILL.md
+          test -f .cursor/agents/thermo-nuclear-review-subagent.md
+          test -f .claude/agents/thermo-nuclear-review-subagent.md
+          test -f .github/agents/thermo-nuclear-review-subagent.agent.md
+
+      - name: Assert a skill-only bundle ships its skills
+        run: |
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          timeout 120 apm init -y --target cursor,claude,copilot
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-git-diff/dist/foundry-git-diff-0.1.0.zip" --target cursor,claude,copilot
+          timeout 300 apm audit --ci
+          test -f .agents/skills/git-diff-staged-changes-main/SKILL.md
+
+      - name: Reject a tampered archive without a bypass flag
+        run: |
+          archive="$GITHUB_WORKSPACE/packages/foundry-review/dist/foundry-review-0.1.0.zip"
+          cp "$archive" /tmp/tampered.zip
+          python3 - <<'PY'
+          import pathlib
+
+          path = pathlib.Path("/tmp/tampered.zip")
+          data = bytearray(path.read_bytes())
+          data[len(data) // 2] ^= 0x01
+          path.write_bytes(bytes(data))
+          PY
+          consumer="$(mktemp -d)"
+          cd "$consumer"
+          timeout 120 apm init -y --target cursor,claude,copilot
+          if timeout 300 apm install /tmp/tampered.zip --target cursor,claude,copilot; then
+            echo "tampered archive was accepted" >&2
+            exit 1
+          fi
+
+      - name: Assert no retired primitive is bundled
+        run: |
+          for package in foundry-architect foundry-coding-style foundry-git-diff \
+            foundry-handoff foundry-infrastructure foundry-repo-init \
+            foundry-review foundry-search foundry-ui; do
+            archive="$(find "packages/$package/dist" -maxdepth 1 -name '*.zip' | head -1)"
+            if unzip -l "$archive" | grep -qE \
+              'sequential-ralplan|explain-pr|generate-pr-story|port-claude-code-artefact|pr-contention|optimise-cursor-repo'; then
+              echo "$archive bundles a retired primitive" >&2
+              exit 1
+            fi
+          done
 
   lint-markdown:
+    name: Lint markdown
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run markdownlint on .cursor-plugin
+      - name: Run markdownlint
         uses: DavidAnson/markdownlint-cli2-action@v17
         with:
           globs: |
-            .cursor-plugin/**/*.md
+            packages/**/*.md
+            docs/**/*.md
+            tests/**/*.md
+            README.md
+            CHANGELOG.md
+            AGENTS.md
           config: .markdownlint.json

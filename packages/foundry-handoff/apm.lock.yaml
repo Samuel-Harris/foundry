@@ -1,0 +1,47 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/handoff
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/handoff/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7010314395fd3d36a552f0378fa757e8396e63b34d1385e3741d9447f9fd713a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/handoff
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/handoff/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7010314395fd3d36a552f0378fa757e8396e63b34d1385e3741d9447f9fd713a
+local_deployed_files:
+- .agents/skills/handoff
+- .agents/skills/handoff/SKILL.md
+- .claude/skills/handoff
+- .claude/skills/handoff/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/handoff/SKILL.md: sha256:7010314395fd3d36a552f0378fa757e8396e63b34d1385e3741d9447f9fd713a
+  .claude/skills/handoff/SKILL.md: sha256:7010314395fd3d36a552f0378fa757e8396e63b34d1385e3741d9447f9fd713a

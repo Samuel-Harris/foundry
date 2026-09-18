@@ -1,0 +1,69 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/aws-architecture-diagram
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/aws-architecture-diagram/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9baf4952538aa7c86d1e70ceb35704f34396814738f63e03d831a210c88805e9
+- kind: project-relative
+  target: claude
+  value: .claude/skills/aws-architecture-diagram/references/vendor.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:58e0ccb67f0cf838d408de79d6df06f9df47dfb9d446f81a3ebc3fe505e6450e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/aws-architecture-diagram
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/aws-architecture-diagram/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9baf4952538aa7c86d1e70ceb35704f34396814738f63e03d831a210c88805e9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/aws-architecture-diagram/references/vendor.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:58e0ccb67f0cf838d408de79d6df06f9df47dfb9d446f81a3ebc3fe505e6450e
+local_deployed_files:
+- .agents/skills/aws-architecture-diagram
+- .agents/skills/aws-architecture-diagram/SKILL.md
+- .agents/skills/aws-architecture-diagram/references/vendor.md
+- .claude/skills/aws-architecture-diagram
+- .claude/skills/aws-architecture-diagram/SKILL.md
+- .claude/skills/aws-architecture-diagram/references/vendor.md
+local_deployed_file_hashes:
+  .agents/skills/aws-architecture-diagram/SKILL.md: sha256:9baf4952538aa7c86d1e70ceb35704f34396814738f63e03d831a210c88805e9
+  .agents/skills/aws-architecture-diagram/references/vendor.md: sha256:58e0ccb67f0cf838d408de79d6df06f9df47dfb9d446f81a3ebc3fe505e6450e
+  .claude/skills/aws-architecture-diagram/SKILL.md: sha256:9baf4952538aa7c86d1e70ceb35704f34396814738f63e03d831a210c88805e9
+  .claude/skills/aws-architecture-diagram/references/vendor.md: sha256:58e0ccb67f0cf838d408de79d6df06f9df47dfb9d446f81a3ebc3fe505e6450e

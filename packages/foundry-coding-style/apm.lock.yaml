@@ -1,0 +1,104 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/rules/compatibility-surface-gate.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cdc543d23abf987209ff3906f86f79d45f50f64f515c4d69879073511c57138b
+- kind: project-relative
+  target: claude
+  value: .claude/rules/software-engineering-rules.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9e7d4f46f3456856e9b3917f98f0aecc93162cdbd01ce8db8d28f1096e3dc3b5
+- kind: project-relative
+  target: claude
+  value: .claude/rules/zen-of-python.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:66b2463f4c8a779da07a388a1b425ba5e597b0eeaadd03022127f4199a7a412b
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/compatibility-surface-gate.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a8d022e4582efae6e046f400f4d07647fe9678bae97c9f06179e0f8609b38551
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/software-engineering-rules.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cba6854c6994dd10562d538e1a200281899b84f5223768fb4baddde699d1ee1b
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/zen-of-python.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8e1eb11652a0672f179af6697ad1e31f2e804d237cbd0fd5f53414e7d238acdf
+- kind: project-relative
+  target: cursor
+  value: .cursor/rules/compatibility-surface-gate.mdc
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b75411139bd161bcc3c82083ddf91a8407ca9987fb8d344a7e54e46f5f78c588
+- kind: project-relative
+  target: cursor
+  value: .cursor/rules/software-engineering-rules.mdc
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e1894f96417742213e4a0e37993f9e9a6da6720988a904c28a06538d66904d17
+- kind: project-relative
+  target: cursor
+  value: .cursor/rules/zen-of-python.mdc
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:79f5f1d5e33bedff9c2f8cd31f35451a56e6c9ccf33a9ac04ec0a1f8424b248a
+local_deployed_files:
+- .claude/rules/compatibility-surface-gate.md
+- .claude/rules/software-engineering-rules.md
+- .claude/rules/zen-of-python.md
+- .cursor/rules/compatibility-surface-gate.mdc
+- .cursor/rules/software-engineering-rules.mdc
+- .cursor/rules/zen-of-python.mdc
+- .github/instructions/compatibility-surface-gate.instructions.md
+- .github/instructions/software-engineering-rules.instructions.md
+- .github/instructions/zen-of-python.instructions.md
+local_deployed_file_hashes:
+  .claude/rules/compatibility-surface-gate.md: sha256:cdc543d23abf987209ff3906f86f79d45f50f64f515c4d69879073511c57138b
+  .claude/rules/software-engineering-rules.md: sha256:9e7d4f46f3456856e9b3917f98f0aecc93162cdbd01ce8db8d28f1096e3dc3b5
+  .claude/rules/zen-of-python.md: sha256:66b2463f4c8a779da07a388a1b425ba5e597b0eeaadd03022127f4199a7a412b
+  .cursor/rules/compatibility-surface-gate.mdc: sha256:b75411139bd161bcc3c82083ddf91a8407ca9987fb8d344a7e54e46f5f78c588
+  .cursor/rules/software-engineering-rules.mdc: sha256:e1894f96417742213e4a0e37993f9e9a6da6720988a904c28a06538d66904d17
+  .cursor/rules/zen-of-python.mdc: sha256:79f5f1d5e33bedff9c2f8cd31f35451a56e6c9ccf33a9ac04ec0a1f8424b248a
+  .github/instructions/compatibility-surface-gate.instructions.md: sha256:a8d022e4582efae6e046f400f4d07647fe9678bae97c9f06179e0f8609b38551
+  .github/instructions/software-engineering-rules.instructions.md: sha256:cba6854c6994dd10562d538e1a200281899b84f5223768fb4baddde699d1ee1b
+  .github/instructions/zen-of-python.instructions.md: sha256:8e1eb11652a0672f179af6697ad1e31f2e804d237cbd0fd5f53414e7d238acdf

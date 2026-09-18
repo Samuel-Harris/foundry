@@ -1,0 +1,38 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/agents/architect.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+- kind: project-relative
+  target: copilot
+  value: .github/agents/architect.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/architect.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+local_deployed_files:
+- .claude/agents/architect.md
+- .cursor/agents/architect.md
+- .github/agents/architect.agent.md
+local_deployed_file_hashes:
+  .claude/agents/architect.md: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+  .cursor/agents/architect.md: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
+  .github/agents/architect.agent.md: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985

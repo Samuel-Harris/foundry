@@ -1,0 +1,131 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-diff-all-changes-main
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-diff-all-changes-main/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:08dcd23ac6e29a0ac71080d560719bd8aad7103ace4a28a9d3cbd87495048882
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-diff-committed-changes-main
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-diff-committed-changes-main/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:40a65f72bb3a0df5933a9d17457f414657658d41e59ea2f9fbcb8274c06e1b4c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-diff-staged-changes-main
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/git-diff-staged-changes-main/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0ff5e0b8b3c5008696c7f01717f905835a335b5328b7f1a303dd95f0084d21b3
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/git-diff-all-changes-main
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/git-diff-all-changes-main/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:08dcd23ac6e29a0ac71080d560719bd8aad7103ace4a28a9d3cbd87495048882
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/git-diff-committed-changes-main
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/git-diff-committed-changes-main/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:40a65f72bb3a0df5933a9d17457f414657658d41e59ea2f9fbcb8274c06e1b4c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/git-diff-staged-changes-main
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/git-diff-staged-changes-main/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0ff5e0b8b3c5008696c7f01717f905835a335b5328b7f1a303dd95f0084d21b3
+local_deployed_files:
+- .agents/skills/git-diff-all-changes-main
+- .agents/skills/git-diff-all-changes-main/SKILL.md
+- .agents/skills/git-diff-committed-changes-main
+- .agents/skills/git-diff-committed-changes-main/SKILL.md
+- .agents/skills/git-diff-staged-changes-main
+- .agents/skills/git-diff-staged-changes-main/SKILL.md
+- .claude/skills/git-diff-all-changes-main
+- .claude/skills/git-diff-all-changes-main/SKILL.md
+- .claude/skills/git-diff-committed-changes-main
+- .claude/skills/git-diff-committed-changes-main/SKILL.md
+- .claude/skills/git-diff-staged-changes-main
+- .claude/skills/git-diff-staged-changes-main/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/git-diff-all-changes-main/SKILL.md: sha256:08dcd23ac6e29a0ac71080d560719bd8aad7103ace4a28a9d3cbd87495048882
+  .agents/skills/git-diff-committed-changes-main/SKILL.md: sha256:40a65f72bb3a0df5933a9d17457f414657658d41e59ea2f9fbcb8274c06e1b4c
+  .agents/skills/git-diff-staged-changes-main/SKILL.md: sha256:0ff5e0b8b3c5008696c7f01717f905835a335b5328b7f1a303dd95f0084d21b3
+  .claude/skills/git-diff-all-changes-main/SKILL.md: sha256:08dcd23ac6e29a0ac71080d560719bd8aad7103ace4a28a9d3cbd87495048882
+  .claude/skills/git-diff-committed-changes-main/SKILL.md: sha256:40a65f72bb3a0df5933a9d17457f414657658d41e59ea2f9fbcb8274c06e1b4c
+  .claude/skills/git-diff-staged-changes-main/SKILL.md: sha256:0ff5e0b8b3c5008696c7f01717f905835a335b5328b7f1a303dd95f0084d21b3

@@ -1,0 +1,47 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/search-worktrees
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/search-worktrees/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2a1de74cd371dd6cf4281656e1cda98b5f5c13dd696fc4aff62fa4967f49bd8b
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/search-worktrees
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/search-worktrees/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2a1de74cd371dd6cf4281656e1cda98b5f5c13dd696fc4aff62fa4967f49bd8b
+local_deployed_files:
+- .agents/skills/search-worktrees
+- .agents/skills/search-worktrees/SKILL.md
+- .claude/skills/search-worktrees
+- .claude/skills/search-worktrees/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/search-worktrees/SKILL.md: sha256:2a1de74cd371dd6cf4281656e1cda98b5f5c13dd696fc4aff62fa4967f49bd8b
+  .claude/skills/search-worktrees/SKILL.md: sha256:2a1de74cd371dd6cf4281656e1cda98b5f5c13dd696fc4aff62fa4967f49bd8b

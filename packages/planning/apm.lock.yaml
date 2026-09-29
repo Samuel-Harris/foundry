@@ -1,5 +1,5 @@
 lockfile_version: '1'
-apm_version: 0.30.0
+apm_version: 0.32.0
 dependencies:
 - repo_url: _local/architect
   name: architect
@@ -7,6 +7,21 @@ dependencies:
   package_type: apm_package
   source: local
   local_path: ../architect
+  declared_license: MIT
+- repo_url: _local/deep-interview
+  name: deep-interview
+  version: 0.1.0
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/deep-interview
+  - .agents/skills/deep-interview/SKILL.md
+  - .claude/skills/deep-interview
+  - .claude/skills/deep-interview/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+    .claude/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+  source: local
+  local_path: ../deep-interview
   declared_license: MIT
 - repo_url: _local/review
   name: review
@@ -59,7 +74,6 @@ dependencies:
   - .claude/agents/executor-high.md
   - .claude/agents/executor-low.md
   - .claude/agents/executor-medium.md
-  - .claude/agents/explore.md
   - .claude/skills/swarm
   - .claude/skills/swarm/SKILL.md
   - .cursor/agents/build-fixer-low.md
@@ -67,13 +81,11 @@ dependencies:
   - .cursor/agents/executor-high.md
   - .cursor/agents/executor-low.md
   - .cursor/agents/executor-medium.md
-  - .cursor/agents/explore.md
   - .github/agents/build-fixer-low.agent.md
   - .github/agents/build-fixer-medium.agent.md
   - .github/agents/executor-high.agent.md
   - .github/agents/executor-low.agent.md
   - .github/agents/executor-medium.agent.md
-  - .github/agents/explore.agent.md
   deployed_file_hashes:
     .agents/skills/swarm/SKILL.md: sha256:e97fd5cadd39495e0e37ed8f7798590e0949e5124a6044b687bc34158c086e5a
     .claude/agents/build-fixer-low.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
@@ -81,20 +93,17 @@ dependencies:
     .claude/agents/executor-high.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
     .claude/agents/executor-low.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
     .claude/agents/executor-medium.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
-    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
     .claude/skills/swarm/SKILL.md: sha256:e97fd5cadd39495e0e37ed8f7798590e0949e5124a6044b687bc34158c086e5a
     .cursor/agents/build-fixer-low.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
     .cursor/agents/build-fixer-medium.md: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
     .cursor/agents/executor-high.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
     .cursor/agents/executor-low.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
     .cursor/agents/executor-medium.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
-    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
     .github/agents/build-fixer-low.agent.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
     .github/agents/build-fixer-medium.agent.md: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
     .github/agents/executor-high.agent.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
     .github/agents/executor-low.agent.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
     .github/agents/executor-medium.agent.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
-    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
   source: local
   local_path: ../swarm
   declared_license: MIT
@@ -116,6 +125,25 @@ dependencies:
   local_path: ../architect
   declaring_parent: ../swarm
   anchored_local_path: /Users/sam/MyStuff/projects/foundry/packages/architect
+  declared_license: MIT
+- repo_url: _local/explore
+  name: explore
+  version: 0.1.0
+  depth: 2
+  resolved_by: _local/deep-interview
+  package_type: apm_package
+  deployed_files:
+  - .claude/agents/explore.md
+  - .cursor/agents/explore.md
+  - .github/agents/explore.agent.md
+  deployed_file_hashes:
+    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+  source: local
+  local_path: ../explore
+  declaring_parent: ../deep-interview
+  anchored_local_path: /Users/sam/MyStuff/projects/foundry/packages/explore
   declared_license: MIT
 deployments:
 - kind: project-relative
@@ -187,8 +215,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - ../swarm
-  active_owner: ../swarm
+  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: claude
@@ -232,8 +260,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - .
-  active_owner: .
+  - ../deep-interview
+  active_owner: ../deep-interview
   content_hash: null
 - kind: project-relative
   target: claude
@@ -241,8 +269,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - .
-  active_owner: .
+  - ../deep-interview
+  active_owner: ../deep-interview
   content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
 - kind: project-relative
   target: claude
@@ -361,6 +389,24 @@ deployments:
   - ../review
   active_owner: ../review
   content_hash: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/deep-interview
+  runtime: null
+  scope: project
+  owners:
+  - ../deep-interview
+  active_owner: ../deep-interview
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/deep-interview/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../deep-interview
+  active_owner: ../deep-interview
+  content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
 - kind: project-relative
   target: copilot
   value: .agents/skills/swarm
@@ -502,8 +548,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - ../swarm
-  active_owner: ../swarm
+  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: copilot
@@ -610,8 +656,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - ../swarm
-  active_owner: ../swarm
+  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: cursor
@@ -649,24 +695,6 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:49b1409faf9ced510522b9d4c6d61ae12a2cd66ee4ef25fc06f09cfe4036e6e9
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/deep-interview
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: project-relative
-  target: legacy
-  value: .agents/skills/deep-interview/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
 - kind: project-relative
   target: legacy
   value: .agents/skills/masterplan
@@ -713,8 +741,6 @@ deployments:
   active_owner: .
   content_hash: sha256:49d83cec3c63c2b554213863144996651aea76b136f50429c014ad6fcc35f929
 local_deployed_files:
-- .agents/skills/deep-interview
-- .agents/skills/deep-interview/SKILL.md
 - .agents/skills/masterplan
 - .agents/skills/masterplan/SKILL.md
 - .agents/skills/masterplan/references/masterplan-template.md
@@ -723,8 +749,6 @@ local_deployed_files:
 - .claude/agents/critic.md
 - .claude/agents/planner.md
 - .claude/rules/plan-handoff-standard.md
-- .claude/skills/deep-interview
-- .claude/skills/deep-interview/SKILL.md
 - .claude/skills/masterplan
 - .claude/skills/masterplan/SKILL.md
 - .claude/skills/masterplan/references/masterplan-template.md
@@ -737,14 +761,12 @@ local_deployed_files:
 - .github/agents/planner.agent.md
 - .github/instructions/plan-handoff-standard.instructions.md
 local_deployed_file_hashes:
-  .agents/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
   .agents/skills/masterplan/SKILL.md: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
   .agents/skills/masterplan/references/masterplan-template.md: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
   .agents/skills/ralplan/SKILL.md: sha256:49d83cec3c63c2b554213863144996651aea76b136f50429c014ad6fcc35f929
   .claude/agents/critic.md: sha256:8606dca48e113b97d227cc43a3158824116cff4995cfc73812df9671cd9c27ea
   .claude/agents/planner.md: sha256:364b29c44cdc286a814ea49360e11f70a1ea74821dadbe1b58b14e699b303d7f
   .claude/rules/plan-handoff-standard.md: sha256:f0ec092002ea61372395ab2b78dc93a3b8cb1755fb52fdb48e2686c8825b2026
-  .claude/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
   .claude/skills/masterplan/SKILL.md: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
   .claude/skills/masterplan/references/masterplan-template.md: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
   .claude/skills/ralplan/SKILL.md: sha256:49d83cec3c63c2b554213863144996651aea76b136f50429c014ad6fcc35f929

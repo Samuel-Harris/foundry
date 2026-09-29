@@ -11,7 +11,7 @@ targets:
 includes: auto
 dependencies:
   apm:
-    - path: ../planning
+    - path: ../deep-interview
     - path: ../repo-maintenance
 scripts:
   check: apm audit --ci

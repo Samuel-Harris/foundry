@@ -10,7 +10,7 @@ Design, draft, validate and iterate on agent skills.
 
 ## Depends on
 
-- `planning`
+- `deep-interview`
 - `repo-maintenance`
 
 ## Install

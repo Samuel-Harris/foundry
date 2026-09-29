@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Tier 1 structural acceptance suite.
 #
-# Proves structural packaging and deployment for all sixteen packages: manifests
+# Proves structural packaging and deployment for all eighteen packages: manifests
 # resolve, installs succeed, deployed inventory matches the promised primitives,
 # and the pinned CLI's documented limitations are asserted rather than hidden.
 #
 # Runtime recognition, workflow behaviour and agent identity dispatch are out of
 # scope: no client application is launched.
 #
-# Every `apm` invocation is bounded by a hard timeout. APM 0.30.0 serialises
+# Every `apm` invocation is bounded by a hard timeout. APM 0.32.0 serialises
 # state mutations behind one OS-user lock at `$HOME/.apm/.apm-lifecycle.lock`
 # with a 120-second bounded wait, so a concurrent or orphaned APM operation can
 # stall a call for two minutes before it fails. That lock path is derived from
@@ -30,28 +30,28 @@ TARGETS="${APM_TARGETS:-cursor,claude,copilot}"
 IFS=',' read -r -a target_list <<< "$TARGETS"
 APM_TIMEOUT="${APM_TIMEOUT:-180}"
 
-# Manifests that declare a sibling `path:` dependency. APM 0.30.0 refuses to
+# Manifests that declare a sibling `path:` dependency. APM 0.32.0 refuses to
 # pack such a manifest in every bundle format. See docs/DEPENDENCY-CONTRACTS.md;
 # this suite asserts that refusal rather than skipping these packages silently.
-PACK_BLOCKED=" default-stack execution planning pr repo-maintenance skill-creation swarm "
+PACK_BLOCKED=" default-stack deep-interview execution planning pr repo-init repo-maintenance skill-creation swarm "
 
 # `apm audit --ci` cannot replay `default-stack`'s own lockfile: the
-# meta-package reaches `planning` both directly and transitively, so
-# `apm install` writes two `_local/planning` entries with different
-# `resolved_by` values, and the drift replay then cannot tell which one parents
-# `architect` and `swarm`. That is an APM 0.30.0 lockfile-writer
-# defect, reproduced without Foundry in docs/DEPENDENCY-CONTRACTS.md. The
-# consumer-side audit of the same manifest passes, and that is asserted below by
-# the scratch-consumer checks, so this package's own audit is asserted as a
-# known failure rather than treated as a pass.
+# meta-package reaches `pr` both directly and transitively (via `execution`),
+# so `apm install` writes two `_local/pr` entries, and the drift replay then
+# cannot tell which one parents `explore`. That is an APM 0.32.0
+# lockfile-writer defect, reproduced without Foundry in
+# docs/DEPENDENCY-CONTRACTS.md. The consumer-side audit of the same manifest
+# passes, and that is asserted below by the scratch-consumer checks, so this
+# package's own audit is asserted as a known failure rather than treated as a
+# pass.
 AUDIT_KNOWN_BROKEN=" default-stack "
 AUDIT_KNOWN_BROKEN_SIGNATURE="ambiguous resolved_by parent"
 
-# Direct dependencies of the meta-package, plus the two packages they pull in
-# transitively (`swarm` via several packages, `architect` via
-# `swarm`). A default-stack install therefore deploys ten of the sixteen
-# packages, which is what the scratch-consumer inventory check covers.
-DEFAULT_STACK_DEPLOYED="architect coding-style execution git-diff planning pr repo-maintenance review skill-creation swarm"
+# Direct dependencies of the meta-package, plus the four packages they pull in
+# transitively (`swarm`, `architect`, `explore` and `deep-interview`). A
+# default-stack install therefore deploys twelve of the eighteen packages,
+# which is what the scratch-consumer inventory check covers.
+DEFAULT_STACK_DEPLOYED="architect coding-style deep-interview execution explore git-diff planning pr repo-maintenance review skill-creation swarm"
 
 # Primitives that no longer ship. `design-skill` is deliberately absent: it moved
 # to `skill-creation` and is still deployed.
@@ -229,7 +229,7 @@ for target in "${target_list[@]}"; do
   done
   failures=$((failures + inventory_missing))
   if (( inventory_missing == 0 )); then
-    echo "  [+] $target deployed every skill, agent and instruction file for the ten default-stack packages"
+    echo "  [+] $target deployed every skill, agent and instruction file for the twelve default-stack packages"
   fi
 
   retired_hits=0

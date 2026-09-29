@@ -12,5 +12,6 @@ includes: auto
 dependencies:
   apm:
     - path: ../architect
+    - path: ../explore
 scripts:
   check: apm audit --ci

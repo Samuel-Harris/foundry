@@ -1,16 +1,16 @@
 # Working in this repository
 
-Operational notes for agents editing Foundry. This repository publishes sixteen
-[APM](https://microsoft.github.io/apm/) packages — fifteen content packages plus
+Operational notes for agents editing Foundry. This repository publishes eighteen
+[APM](https://microsoft.github.io/apm/) packages — seventeen content packages plus
 a meta-package. Almost everything surprising about it comes from the pinned CLI,
-so this file records **empirically verified APM 0.30.0 behaviour**, not a
+so this file records **empirically verified APM 0.32.0 behaviour**, not a
 restatement of the design. For what each package contains, see `README.md`; for
 the dependency graph and the CLI defects it works around, see
 `docs/DEPENDENCY-CONTRACTS.md`.
 
-## Caveat: this describes apm-cli 0.30.0
+## Caveat: this describes apm-cli 0.32.0
 
-The repository pins **apm-cli 0.30.0**. APM is **pre-1.0** (0.30.0 < 1.0.0), so
+The repository pins **apm-cli 0.32.0**. APM is **pre-1.0** (0.32.0 < 1.0.0), so
 CLI flags, manifest keys, supported targets, deploy paths and bundle formats are
 all subject to change without notice.
 
@@ -20,7 +20,7 @@ but the published wheel ships with `__BUILD_SHA__ = None` and falls back to
 SHA it prints is the **consuming repository's** HEAD, not the CLI's. It changes
 on every commit here and identifies nothing about the installed CLI.
 
-Every statement below was observed with 0.30.0 on macOS. **Re-verify against the
+Every statement below was observed with 0.32.0 on macOS. **Re-verify against the
 installed version before relying on it.** The pinned version is repeated in the
 `README.md` prerequisites and in `.github/workflows/ci.yml` (`apm-version`); the
 three must stay in step. If you bump one, bump all three and re-run
@@ -33,7 +33,7 @@ three must stay in step. If you bump one, bump all three and re-run
   so a fresh clone has only the `PATH` copy.
 - A bare `apm` resolves through `PATH`. On the authoring machine that is
   Homebrew's `/opt/homebrew/bin/apm`.
-- Both are 0.30.0 here. **Prefer the venv copy** so a Homebrew upgrade cannot
+- Both are 0.32.0 here. **Prefer the venv copy** so a Homebrew upgrade cannot
   silently change behaviour. Confirm with `apm --version` before trusting a
   result.
 - `.venv-apm/` and `apm_modules/` are gitignored. Never commit them.
@@ -47,7 +47,7 @@ timeout 300 apm pack --dry-run --verbose          # Linux / CI
 perl -e 'alarm shift; exec @ARGV' 300 apm pack --dry-run --verbose   # macOS, no GNU timeout
 ```
 
-`apm` 0.30.0 serialises every state mutation behind one OS-user lock,
+`apm` 0.32.0 serialises every state mutation behind one OS-user lock,
 `~/.apm/.apm-lifecycle.lock`, with a 120-second bounded wait
 (`LIFECYCLE_LOCK_TIMEOUT = 120.0`). `apm install`, `apm lock`, `apm update`,
 `apm compile`, `apm init`, `apm prune`, `apm deps` and `apm audit --strip` take it, as does every other
@@ -129,15 +129,15 @@ dependencies:
   Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
   ```
 
-  The seven packages that declare one — `default-stack`,
-  `execution`, `planning`, `pr`,
-  `repo-maintenance`, `skill-creation` and `swarm` — are
+  The nine packages that declare one — `default-stack`, `deep-interview`,
+  `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`,
+  `skill-creation` and `swarm` — are
   therefore **pack-blocked** until `v0.1.0` is tagged. CI asserts that guardrail
   instead of skipping those packages silently.
 - The remote fallback `{git: Samuel-Harris/foundry, path: packages/<name>, ref: "^0.1.0"}`
   is **not viable pre-release**: without a pushed tag, a real install stops with
   `No tags on Samuel-Harris/foundry satisfy '^0.1.0'`. Keep the `path:` form;
-  produce bundles for the seven dependency-bearing packages from a release job
+  produce bundles for the nine dependency-bearing packages from a release job
   after the tag exists.
 - Consumers never use the sibling form. They install the remote shorthand,
   `apm install Samuel-Harris/foundry/packages/<name>#v0.1.0`.
@@ -168,7 +168,7 @@ dependencies:
 - Agents are `*.agent.md`, not `*.md`. Instructions are `*.instructions.md`, not
   `*.mdc`. Those suffixes are the source contract; the deployed suffix differs
   per target (see below).
-- **APM 0.30.0 does not validate any of this.** `apm compile --validate` passes
+- **APM 0.32.0 does not validate any of this.** `apm compile --validate` passes
   an agent with no `description`, and `apm pack` bundles a `SKILL.md` with
   invalid YAML. `tests/structural/validate_primitives.py` is the real gate: it
   checks required fields, the name/directory rule, valid YAML, the description
@@ -213,7 +213,7 @@ tool folder is created to influence detection.
 
 Generated, committed, and never hand-edited. Regenerate with `apm install`.
 
-- `lockfile_version`, `apm_version: 0.30.0`, `dependencies: [...]`.
+- `lockfile_version`, `apm_version: 0.32.0`, `dependencies: [...]`.
 - `deployments:` — one entry per deployed path with `target`, `value`,
   `content_hash` (sha256) and ownership. Directories carry `content_hash: null`.
 - Shared skill deployments under `.agents/skills/` are recorded with
@@ -260,7 +260,7 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
   returns the `minimal` pseudo-target, the embedded lockfile records
   `pack.target: minimal`, and the bundle cannot be installed: `apm install` fails
   with `Error installing dependencies: 'minimal'`. The flag is marked deprecated
-  in 0.30.0 and its value is documented as informational metadata, but
+  in 0.32.0 and its value is documented as informational metadata, but
   `apm install` does read `pack.target`.
 - Packing writes `.claude-plugin/plugin.json` and `.github/plugin/plugin.json`
   into the package directory. Those are build output and are gitignored.
@@ -273,13 +273,13 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
 `setup-only: true`. This matters: `apm install` overwrites managed files before
 an audit runs, which would erase tampered bytes before `content-integrity` and
 drift detection could see them. `setup-only` provides the CLI only. The action's
-`apm-version` input defaults to `0.14.0`, so always pass `apm-version: "0.30.0"`.
+`apm-version` input defaults to `0.14.0`, so always pass `apm-version: "0.32.0"`.
 
 Jobs: `contract` (primitive validator plus secret scan), `validate-packages`
-(matrix over all sixteen), `scratch-consumer` (matrix over the three targets),
+(matrix over all eighteen), `scratch-consumer` (matrix over the three targets),
 `archive-consumer` (pack, install, inventory, tamper rejection) and
 `lint-markdown`. The `validate-packages` matrix carries a `pack_blocked` flag for
-the seven local-path packages and an `audit_known_broken` flag for
+the nine local-path packages and an `audit_known_broken` flag for
 `default-stack`; both assert the pinned CLI's documented failure rather
 than skipping the package.
 
@@ -290,7 +290,7 @@ than skipping the package.
   `.gitignore` already ignores `apm_modules/`. `apm install` appends
   `# APM dependencies` and `apm_modules/` to the `.gitignore` in its working
   directory whenever that exact line is absent there, so a package without one
-  grows an untracked file on the next install and dirties the tree. Sixteen
+  grows an untracked file on the next install and dirties the tree. Eighteen
   byte-identical 33-byte files are the expected end state.
 - Never commit deploy output. `.gitignore` excludes `apm_modules/`, `dist/`,
   `build/`, `.claude/`, `.agents/`, `.cursor/rules/`, `.cursor/agents/`,

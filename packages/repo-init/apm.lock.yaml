@@ -1,6 +1,68 @@
 lockfile_version: '1'
-dependencies: []
+apm_version: 0.32.0
+dependencies:
+- repo_url: _local/deep-interview
+  name: deep-interview
+  version: 0.1.0
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/deep-interview
+  - .agents/skills/deep-interview/SKILL.md
+  - .claude/skills/deep-interview
+  - .claude/skills/deep-interview/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+    .claude/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+  source: local
+  local_path: ../deep-interview
+  declared_license: MIT
+- repo_url: _local/explore
+  name: explore
+  version: 0.1.0
+  depth: 2
+  resolved_by: _local/deep-interview
+  package_type: apm_package
+  deployed_files:
+  - .claude/agents/explore.md
+  - .cursor/agents/explore.md
+  - .github/agents/explore.agent.md
+  deployed_file_hashes:
+    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+  source: local
+  local_path: ../explore
+  declaring_parent: ../deep-interview
+  anchored_local_path: /Users/sam/MyStuff/projects/foundry/packages/explore
+  declared_license: MIT
 deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-interview
+  runtime: null
+  scope: project
+  owners:
+  - ../deep-interview
+  active_owner: ../deep-interview
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-interview/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../deep-interview
+  active_owner: ../deep-interview
+  content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
 - kind: project-relative
   target: claude
   value: .claude/skills/monorepo-init
@@ -83,6 +145,105 @@ deployments:
   active_owner: .
   content_hash: sha256:edcc65d5caad06aa5e0ef977e35275fc2444cfdbd71d19dc24e774e069cdf39d
 - kind: project-relative
+  target: claude
+  value: .claude/skills/terraform-monorepo-init
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/terraform-monorepo-init/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:06a7a76d771cd46b09a074a55d61bdb1fd9ba089549dfe5d94ccae3de05a7b83
+- kind: project-relative
+  target: claude
+  value: .claude/skills/terraform-monorepo-init/references/architecture-and-contracts.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ed189b20f88c5fb50eba1a1ba47d30e84c521720940bdeb5276b571a05ec665a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/terraform-monorepo-init/references/discovery-and-planning.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:18b2b434f7f8f4183a5c8f98d390fd9ce910a006f16f1c551716e11c3080bf83
+- kind: project-relative
+  target: claude
+  value: .claude/skills/terraform-monorepo-init/references/implementation-and-acceptance.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8a2448e16889640766893ff8f0e6674619c3b10ed8337204975f1e63a2f404b3
+- kind: project-relative
+  target: claude
+  value: .claude/skills/terraform-monorepo-init/references/sources.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bec9d7afb97b32032c05830e64130ddc55fa44ece096f8f50481adb7beec990c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/terraform-monorepo-init/references/validation-and-github.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:68bb24522abc717c1fa8484ea242332a643b792a3f8b5bde23f4839088ee7ff1
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/deep-interview
+  runtime: null
+  scope: project
+  owners:
+  - ../deep-interview
+  active_owner: ../deep-interview
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/deep-interview/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../deep-interview
+  active_owner: ../deep-interview
+  content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+- kind: project-relative
+  target: copilot
+  value: .github/agents/explore.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
   target: legacy
   value: .agents/skills/monorepo-init
   runtime: null
@@ -163,6 +324,69 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:edcc65d5caad06aa5e0ef977e35275fc2444cfdbd71d19dc24e774e069cdf39d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/terraform-monorepo-init
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/terraform-monorepo-init/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:06a7a76d771cd46b09a074a55d61bdb1fd9ba089549dfe5d94ccae3de05a7b83
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/terraform-monorepo-init/references/architecture-and-contracts.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ed189b20f88c5fb50eba1a1ba47d30e84c521720940bdeb5276b571a05ec665a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/terraform-monorepo-init/references/discovery-and-planning.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:18b2b434f7f8f4183a5c8f98d390fd9ce910a006f16f1c551716e11c3080bf83
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/terraform-monorepo-init/references/implementation-and-acceptance.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8a2448e16889640766893ff8f0e6674619c3b10ed8337204975f1e63a2f404b3
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/terraform-monorepo-init/references/sources.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bec9d7afb97b32032c05830e64130ddc55fa44ece096f8f50481adb7beec990c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/terraform-monorepo-init/references/validation-and-github.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:68bb24522abc717c1fa8484ea242332a643b792a3f8b5bde23f4839088ee7ff1
 local_deployed_files:
 - .agents/skills/monorepo-init
 - .agents/skills/monorepo-init/SKILL.md
@@ -173,6 +397,13 @@ local_deployed_files:
 - .agents/skills/monorepo-init/references/retrofit.md
 - .agents/skills/monorepo-init/references/scaffold-components.md
 - .agents/skills/monorepo-init/references/typescript-stack.md
+- .agents/skills/terraform-monorepo-init
+- .agents/skills/terraform-monorepo-init/SKILL.md
+- .agents/skills/terraform-monorepo-init/references/architecture-and-contracts.md
+- .agents/skills/terraform-monorepo-init/references/discovery-and-planning.md
+- .agents/skills/terraform-monorepo-init/references/implementation-and-acceptance.md
+- .agents/skills/terraform-monorepo-init/references/sources.md
+- .agents/skills/terraform-monorepo-init/references/validation-and-github.md
 - .claude/skills/monorepo-init
 - .claude/skills/monorepo-init/SKILL.md
 - .claude/skills/monorepo-init/references/agents-md.md
@@ -182,6 +413,13 @@ local_deployed_files:
 - .claude/skills/monorepo-init/references/retrofit.md
 - .claude/skills/monorepo-init/references/scaffold-components.md
 - .claude/skills/monorepo-init/references/typescript-stack.md
+- .claude/skills/terraform-monorepo-init
+- .claude/skills/terraform-monorepo-init/SKILL.md
+- .claude/skills/terraform-monorepo-init/references/architecture-and-contracts.md
+- .claude/skills/terraform-monorepo-init/references/discovery-and-planning.md
+- .claude/skills/terraform-monorepo-init/references/implementation-and-acceptance.md
+- .claude/skills/terraform-monorepo-init/references/sources.md
+- .claude/skills/terraform-monorepo-init/references/validation-and-github.md
 local_deployed_file_hashes:
   .agents/skills/monorepo-init/SKILL.md: sha256:6df567ed67568c83e0899bd065e9c37bf306cf01f45ca6c292c4e9326e47387f
   .agents/skills/monorepo-init/references/agents-md.md: sha256:b47336940383a353ebf84e6fbc726ad1db116613e5bb594bc1d89bdd53914d18
@@ -191,6 +429,12 @@ local_deployed_file_hashes:
   .agents/skills/monorepo-init/references/retrofit.md: sha256:6b176bf45d5e08d0fc750d56379b3103d02ebf2191676a2be242e15882b013e5
   .agents/skills/monorepo-init/references/scaffold-components.md: sha256:458145391eacfa251a68d65ce8d3ff4c5d1ee9479780dba668c3830a6e3ca3ae
   .agents/skills/monorepo-init/references/typescript-stack.md: sha256:edcc65d5caad06aa5e0ef977e35275fc2444cfdbd71d19dc24e774e069cdf39d
+  .agents/skills/terraform-monorepo-init/SKILL.md: sha256:06a7a76d771cd46b09a074a55d61bdb1fd9ba089549dfe5d94ccae3de05a7b83
+  .agents/skills/terraform-monorepo-init/references/architecture-and-contracts.md: sha256:ed189b20f88c5fb50eba1a1ba47d30e84c521720940bdeb5276b571a05ec665a
+  .agents/skills/terraform-monorepo-init/references/discovery-and-planning.md: sha256:18b2b434f7f8f4183a5c8f98d390fd9ce910a006f16f1c551716e11c3080bf83
+  .agents/skills/terraform-monorepo-init/references/implementation-and-acceptance.md: sha256:8a2448e16889640766893ff8f0e6674619c3b10ed8337204975f1e63a2f404b3
+  .agents/skills/terraform-monorepo-init/references/sources.md: sha256:bec9d7afb97b32032c05830e64130ddc55fa44ece096f8f50481adb7beec990c
+  .agents/skills/terraform-monorepo-init/references/validation-and-github.md: sha256:68bb24522abc717c1fa8484ea242332a643b792a3f8b5bde23f4839088ee7ff1
   .claude/skills/monorepo-init/SKILL.md: sha256:6df567ed67568c83e0899bd065e9c37bf306cf01f45ca6c292c4e9326e47387f
   .claude/skills/monorepo-init/references/agents-md.md: sha256:b47336940383a353ebf84e6fbc726ad1db116613e5bb594bc1d89bdd53914d18
   .claude/skills/monorepo-init/references/archetypes.md: sha256:94ae8fada9b89afb398957ddc2cafa348b196ad3f0dc2a43ad83fda6c79f00f2
@@ -199,3 +443,9 @@ local_deployed_file_hashes:
   .claude/skills/monorepo-init/references/retrofit.md: sha256:6b176bf45d5e08d0fc750d56379b3103d02ebf2191676a2be242e15882b013e5
   .claude/skills/monorepo-init/references/scaffold-components.md: sha256:458145391eacfa251a68d65ce8d3ff4c5d1ee9479780dba668c3830a6e3ca3ae
   .claude/skills/monorepo-init/references/typescript-stack.md: sha256:edcc65d5caad06aa5e0ef977e35275fc2444cfdbd71d19dc24e774e069cdf39d
+  .claude/skills/terraform-monorepo-init/SKILL.md: sha256:06a7a76d771cd46b09a074a55d61bdb1fd9ba089549dfe5d94ccae3de05a7b83
+  .claude/skills/terraform-monorepo-init/references/architecture-and-contracts.md: sha256:ed189b20f88c5fb50eba1a1ba47d30e84c521720940bdeb5276b571a05ec665a
+  .claude/skills/terraform-monorepo-init/references/discovery-and-planning.md: sha256:18b2b434f7f8f4183a5c8f98d390fd9ce910a006f16f1c551716e11c3080bf83
+  .claude/skills/terraform-monorepo-init/references/implementation-and-acceptance.md: sha256:8a2448e16889640766893ff8f0e6674619c3b10ed8337204975f1e63a2f404b3
+  .claude/skills/terraform-monorepo-init/references/sources.md: sha256:bec9d7afb97b32032c05830e64130ddc55fa44ece096f8f50481adb7beec990c
+  .claude/skills/terraform-monorepo-init/references/validation-and-github.md: sha256:68bb24522abc717c1fa8484ea242332a643b792a3f8b5bde23f4839088ee7ff1

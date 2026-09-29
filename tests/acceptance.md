@@ -18,9 +18,9 @@ apm pack --dry-run --verbose
 apm pack --archive -o ./dist
 ```
 
-The commands that take no package argument are run with the package directory as the working directory; `tests/structural/validate_primitives.py` runs once from the repository root and covers all sixteen packages.
+The commands that take no package argument are run with the package directory as the working directory; `tests/structural/validate_primitives.py` runs once from the repository root and covers all eighteen packages.
 
-`apm install` must run before `apm compile --validate`: on a package whose `.apm/` holds only skills, `compile --validate` exits `1` until an install has materialised the deploy targets. Even then it is a weak check — it counts agents and instructions, validates no skill and enforces no frontmatter. `tests/structural/validate_primitives.py` is the real contract gate and covers all sixteen packages. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
+`apm install` must run before `apm compile --validate`: on a package whose `.apm/` holds only skills, `compile --validate` exits `1` until an install has materialised the deploy targets. Even then it is a weak check — it counts agents and instructions, validates no skill and enforces no frontmatter. `tests/structural/validate_primitives.py` is the real contract gate and covers all eighteen packages. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
 
 The suite must run outside the agent sandbox: APM writes into a `.cursor/` staging directory regardless of the requested targets, and the sandbox denies those writes with `Operation not permitted`.
 
@@ -33,9 +33,9 @@ Each assertion below must produce recorded evidence.
 
 2. **Source install into a clean scratch consumer, per target.** For each of `cursor`, `claude` and `copilot`, separately: `apm init` with that explicit target, then `apm install <absolute path to packages/default-stack> --target <target>`, then `apm view default-stack`, then `apm audit --ci` exits `0`.
 
-3. **Archive install into a separate scratch consumer.** Each packable package is packed with `apm pack --archive -o ./dist`, then installed from the archive in a disposable directory with no access to the authoring checkout or its `apm_modules/` cache. The seven packages with sibling `path:` dependencies — `default-stack`, `execution`, `planning`, `pr`, `repo-maintenance`, `skill-creation` and `swarm` — cannot be packed before the `v0.1.0` tag exists; the suite asserts that documented guardrail instead of skipping them silently (see [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md)).
+3. **Archive install into a separate scratch consumer.** Each packable package is packed with `apm pack --archive -o ./dist`, then installed from the archive in a disposable directory with no access to the authoring checkout or its `apm_modules/` cache. The nine packages with sibling `path:` dependencies — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm` — cannot be packed before the `v0.1.0` tag exists; the suite asserts that documented guardrail instead of skipping them silently (see [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md)).
 
-4. **Deployed inventory matches.** Every expected skill, agent and instruction file for the ten default-stack packages is present after deployment, and no retired item (`pr-contention`, `port-claude-code-artefact`, `sequential-ralplan`, `explain-pr`, `generate-pr-story`, `optimise-cursor-repo`) is deployed. This is a containment assertion plus a denylist, not a reverse diff: an unexpected extra file in a deploy root would not fail the suite.
+4. **Deployed inventory matches.** Every expected skill, agent and instruction file for the twelve default-stack packages is present after deployment, and no retired item (`pr-contention`, `port-claude-code-artefact`, `sequential-ralplan`, `explain-pr`, `generate-pr-story`, `optimise-cursor-repo`) is deployed. This is a containment assertion plus a denylist, not a reverse diff: an unexpected extra file in a deploy root would not fail the suite.
 
 5. **Sibling files resolve after deployment.** Every `references/` and `scripts/` path promised by a skill exists after source deployment, and every relative link inside a primitive resolves on disk. The archive consumer asserts the deployed inventory of one bundle and that no sibling file is missing from it.
 
@@ -45,7 +45,7 @@ Each assertion below must produce recorded evidence.
 
 8. **Missing sibling dependency fails actionably.** Removing a declared sibling dependency produces an actionable failure, not a silent skip.
 
-9. **Frozen install and audit.** `apm install --frozen` succeeds for all sixteen packages and `apm audit --ci` exits `0` for fifteen of them. `default-stack` is the documented exception: its own lockfile cannot be replayed because APM 0.30.0 records an ambiguous `resolved_by` parent for a locally duplicated dependency. The suite asserts that specific failure rather than accepting any failure, and the consumer-side audit of the same manifest is asserted separately in assertion 2. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
+9. **Frozen install and audit.** `apm install --frozen` succeeds for all eighteen packages and `apm audit --ci` exits `0` for seventeen of them. `default-stack` is the documented exception: its own lockfile cannot be replayed because APM 0.32.0 records an ambiguous `resolved_by` parent for `pr`, which is reached both directly and via `execution` and which parents `explore`. The suite asserts that specific failure rather than accepting any failure, and the consumer-side audit of the same manifest is asserted separately in assertion 2. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
 
 10. **Stability.** Re-running install and pack leaves the working tree unchanged: the suite records `git status --porcelain` plus `git diff` before and after, and the two must match.
 

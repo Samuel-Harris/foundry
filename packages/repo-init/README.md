@@ -7,6 +7,11 @@ Scaffold a new repository or monorepo with evidence-based agent guidance.
 | Primitive | Name | Purpose |
 | --- | --- | --- |
 | Skill | `monorepo-init` | Initialise or retrofit a monorepo for structured agentic development through an interactive design interview and a working scaffold with machine-enforced module boundaries, nested AGENTS.md files, pre-commit, CI gates, and CODEOWNERS. |
+| Skill | `terraform-monorepo-init` | Scaffold an application-and-Terraform monorepo through read-only discovery, a mandatory deep-interview, an approved implementation plan and plan-only implementation. |
+
+## Depends on
+
+- `deep-interview`
 
 ## Install
 

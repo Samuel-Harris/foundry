@@ -1,5 +1,5 @@
 lockfile_version: '1'
-apm_version: 0.30.0
+apm_version: 0.32.0
 dependencies:
 - repo_url: _local/architect
   name: architect
@@ -15,6 +15,21 @@ dependencies:
     .github/agents/architect.agent.md: sha256:b5c9a197a448bc3d493fd2d81dcd3b3f6a655ec948cec54bece3038a9bf10985
   source: local
   local_path: ../architect
+  declared_license: MIT
+- repo_url: _local/explore
+  name: explore
+  version: 0.1.0
+  package_type: apm_package
+  deployed_files:
+  - .claude/agents/explore.md
+  - .cursor/agents/explore.md
+  - .github/agents/explore.agent.md
+  deployed_file_hashes:
+    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+  source: local
+  local_path: ../explore
   declared_license: MIT
 deployments:
 - kind: project-relative
@@ -77,8 +92,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - .
-  active_owner: .
+  - ../explore
+  active_owner: ../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: claude
@@ -158,8 +173,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - .
-  active_owner: .
+  - ../explore
+  active_owner: ../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: cursor
@@ -221,8 +236,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - .
-  active_owner: .
+  - ../explore
+  active_owner: ../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: legacy
@@ -250,7 +265,6 @@ local_deployed_files:
 - .claude/agents/executor-high.md
 - .claude/agents/executor-low.md
 - .claude/agents/executor-medium.md
-- .claude/agents/explore.md
 - .claude/skills/swarm
 - .claude/skills/swarm/SKILL.md
 - .cursor/agents/build-fixer-low.md
@@ -258,13 +272,11 @@ local_deployed_files:
 - .cursor/agents/executor-high.md
 - .cursor/agents/executor-low.md
 - .cursor/agents/executor-medium.md
-- .cursor/agents/explore.md
 - .github/agents/build-fixer-low.agent.md
 - .github/agents/build-fixer-medium.agent.md
 - .github/agents/executor-high.agent.md
 - .github/agents/executor-low.agent.md
 - .github/agents/executor-medium.agent.md
-- .github/agents/explore.agent.md
 local_deployed_file_hashes:
   .agents/skills/swarm/SKILL.md: sha256:e97fd5cadd39495e0e37ed8f7798590e0949e5124a6044b687bc34158c086e5a
   .claude/agents/build-fixer-low.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
@@ -272,17 +284,14 @@ local_deployed_file_hashes:
   .claude/agents/executor-high.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
   .claude/agents/executor-low.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
   .claude/agents/executor-medium.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
-  .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
   .claude/skills/swarm/SKILL.md: sha256:e97fd5cadd39495e0e37ed8f7798590e0949e5124a6044b687bc34158c086e5a
   .cursor/agents/build-fixer-low.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
   .cursor/agents/build-fixer-medium.md: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
   .cursor/agents/executor-high.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
   .cursor/agents/executor-low.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
   .cursor/agents/executor-medium.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
-  .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
   .github/agents/build-fixer-low.agent.md: sha256:1d88d2c71cfdbdecb615b91ad65d408764849422ed3047011bb7c48ab37d6304
   .github/agents/build-fixer-medium.agent.md: sha256:42f8cf87f4ee0dd109d90236d5168be91db756cfca700fc0815b7ac46b51899b
   .github/agents/executor-high.agent.md: sha256:5aecc018b3b5aa3ba1b6c37d7b2f9a222a9bb948719a9f3960ba69fa4760d2f6
   .github/agents/executor-low.agent.md: sha256:360d605597ce06621d0eac77a7ed6a44d5c16e31bd21bb7bbefd56d34532cc65
   .github/agents/executor-medium.agent.md: sha256:c26b739cf94d6246f18d43125c1152404ba72eb4514963158e55fceff4bab731
-  .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1

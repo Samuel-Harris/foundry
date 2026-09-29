@@ -1,12 +1,11 @@
 # planning
 
-Socratic requirement gathering, plan authoring and plan review.
+Plan authoring and plan review.
 
 ## What it installs
 
 | Primitive | Name | Purpose |
 | --- | --- | --- |
-| Skill | `deep-interview` | Socratic deep interview with mathematical ambiguity gating before autonomous execution. |
 | Skill | `masterplan` | Generate a holistic product vision from Linear tickets. |
 | Skill | `ralplan` | Iterative planning consensus loop. |
 | Agent | `critic` | Work plan review expert and critic. |
@@ -16,6 +15,7 @@ Socratic requirement gathering, plan authoring and plan review.
 ## Depends on
 
 - `architect`
+- `deep-interview`
 - `review`
 - `swarm`
 

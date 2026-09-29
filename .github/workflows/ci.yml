@@ -32,7 +32,7 @@ permissions:
   contents: read
 
 env:
-  APM_VERSION: "0.30.0"
+  APM_VERSION: "0.32.0"
   TARGETS: cursor,claude,copilot
 
 jobs:
@@ -64,23 +64,27 @@ jobs:
       matrix:
         include:
           # pack_blocked marks manifests that carry a sibling `path:`
-          # dependency. APM 0.30.0 refuses to pack those in every bundle format,
+          # dependency. APM 0.32.0 refuses to pack those in every bundle format,
           # so the guardrail is asserted rather than the package being skipped.
           # See docs/DEPENDENCY-CONTRACTS.md.
           - package: architect
             pack_blocked: false
           - package: coding-style
             pack_blocked: false
+          - package: deep-interview
+            pack_blocked: true
           - package: default-stack
             pack_blocked: true
-            # The meta-package reaches planning both directly and
-            # transitively, so `apm install` writes two `_local/planning`
-            # entries and `apm audit --ci` cannot replay the drift. Asserted as a
-            # known APM 0.30.0 defect; the consumer-side audit of the same
-            # manifest passes and is asserted in scratch-consumer.
+            # `pr` is both a direct dependency and a transitive one (via
+            # `execution`), and it parents `explore`, so `apm install` writes
+            # two `_local/pr` entries and `apm audit --ci` cannot replay the
+            # drift. Asserted as a known APM 0.32.0 defect; the consumer-side
+            # audit of the same manifest passes and is asserted in scratch-consumer.
             audit_known_broken: true
           - package: execution
             pack_blocked: true
+          - package: explore
+            pack_blocked: false
           - package: git-diff
             pack_blocked: false
           - package: handoff
@@ -92,7 +96,7 @@ jobs:
           - package: pr
             pack_blocked: true
           - package: repo-init
-            pack_blocked: false
+            pack_blocked: true
           - package: repo-maintenance
             pack_blocked: true
           - package: review
@@ -214,7 +218,7 @@ jobs:
           PY
           timeout 300 apm audit --ci
 
-      - name: Assert the default stack resolves ten packages
+      - name: Assert the default stack resolves twelve packages
         run: |
           consumer="$(mktemp -d)"
           cd "$consumer"
@@ -227,7 +231,9 @@ jobs:
           expected = {
               "architect",
               "coding-style",
+              "deep-interview",
               "execution",
+              "explore",
               "git-diff",
               "planning",
               "pr",
@@ -239,7 +245,7 @@ jobs:
           lockfile = pathlib.Path("apm.lock.yaml")
           data = yaml.safe_load(lockfile.read_text())
           # The consumer's lockfile records the installed meta-package itself
-          # alongside the ten packages it resolves.
+          # alongside the twelve packages it resolves.
           resolved = {
               (dep.get("repo_url") or "").removeprefix("_local/")
               for dep in data.get("dependencies", [])
@@ -265,11 +271,17 @@ jobs:
       # and stamps `pack.target: minimal` into the embedded lockfile -- a bundle
       # `apm install` then rejects with `Error installing dependencies:
       # 'minimal'`. See AGENTS.md.
+      # An empty `dependencies:` mapping is what makes a package packable.
+      # Scanning the manifests keeps this job aligned with that rule, rather
+      # than repeating the packable names beside the validate-packages matrix.
       - name: Pack every packable bundle
         run: |
-          for package in architect coding-style git-diff \
-            handoff infrastructure repo-init \
-            review search ui; do
+          shopt -s nullglob
+          for manifest in packages/*/apm.yml; do
+            package="$(basename "$(dirname "$manifest")")"
+            if ! grep -qx 'dependencies: {}' "$manifest"; then
+              continue
+            fi
             ( cd "packages/$package" && timeout 300 apm pack --archive -o ./dist --target "$TARGETS" )
           done
 
@@ -316,10 +328,13 @@ jobs:
 
       - name: Assert no retired primitive is bundled
         run: |
-          for package in architect coding-style git-diff \
-            handoff infrastructure repo-init \
-            review search ui; do
-            archive="$(find "packages/$package/dist" -maxdepth 1 -name '*.zip' | head -1)"
+          shopt -s nullglob
+          archives=(packages/*/dist/*.zip)
+          if (( ${#archives[@]} == 0 )); then
+            echo "no archives were packed" >&2
+            exit 1
+          fi
+          for archive in "${archives[@]}"; do
             if unzip -l "$archive" | grep -qE \
               'sequential-ralplan|explain-pr|generate-pr-story|port-claude-code-artefact|pr-contention|optimise-cursor-repo'; then
               echo "$archive bundles a retired primitive" >&2

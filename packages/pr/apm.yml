@@ -11,6 +11,6 @@ targets:
 includes: auto
 dependencies:
   apm:
-    - path: ../swarm
+    - path: ../explore
 scripts:
   check: apm audit --ci

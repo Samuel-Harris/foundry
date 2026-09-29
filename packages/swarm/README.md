@@ -12,11 +12,11 @@ Coordinated parallel subagents working a shared task list.
 | Agent | `executor-high` | Complex multi-file task executor for cross-module refactoring. |
 | Agent | `executor-low` | Simple single-file task executor. |
 | Agent | `executor-medium` | Focused task executor for implementation work. |
-| Agent | `explore` | Thorough codebase search with cross-module reasoning. |
 
 ## Depends on
 
 - `architect`
+- `explore`
 
 ## Install
 

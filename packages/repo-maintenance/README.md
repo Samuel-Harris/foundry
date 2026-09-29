@@ -13,7 +13,7 @@ Keep AGENTS.md files and agent configuration accurate and lean.
 
 ## Depends on
 
-- `swarm`
+- `explore`
 
 ## Install
 

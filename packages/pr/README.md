@@ -12,7 +12,7 @@ Pull request comprehension and merge-readiness babysitting.
 
 ## Depends on
 
-- `swarm`
+- `explore`
 
 ## Install
 

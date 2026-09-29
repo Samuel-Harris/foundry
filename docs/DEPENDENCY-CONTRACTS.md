@@ -4,7 +4,7 @@ This document records the manifest shape each package uses, how sibling packages
 
 ## Tested CLI
 
-`apm-cli==0.30.0`, installed from PyPI. Never run `apm self-update`; the version is pinned deliberately so that lockfile resolution and deployment behaviour are reproducible.
+`apm-cli==0.32.0`, installed from PyPI. Never run `apm self-update`; the version is pinned deliberately so that lockfile resolution and deployment behaviour are reproducible.
 
 ## Package manifest contract
 
@@ -13,7 +13,7 @@ Every package declares the following keys in `apm.yml`:
 ```yaml
 name: planning
 version: "0.1.0"
-description: "Socratic requirement gathering, plan authoring and plan review."
+description: "Plan authoring and plan review."
 author: sam
 license: MIT
 repository: https://github.com/Samuel-Harris/foundry
@@ -25,6 +25,9 @@ includes: auto
 dependencies:
   apm:
     - path: ../architect
+    - path: ../deep-interview
+    - path: ../review
+    - path: ../swarm
 scripts:
   check: apm audit --ci
 ```
@@ -70,7 +73,7 @@ $ apm install --target cursor            # with {git: Samuel-Harris/foundry, pat
 
 The CLI prefixes the failing dependency's identifier with the repository name, so the error names `foundry-planning` while the manifest path is `packages/planning`.
 
-So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:`, because publication is out of scope and install, `--frozen` and `audit --ci` must stay green for every package that can have them green. Bundle production for the seven dependency-bearing packages is deferred to a release job that runs after the tag is pushed, at which point the remote form becomes usable. CI asserts the guardrail for those packages rather than skipping them.
+So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:`, because publication is out of scope and install, `--frozen` and `audit --ci` must stay green for every package that can have them green. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm` — is deferred to a release job that runs after the tag is pushed, at which point the remote form becomes usable. CI asserts the guardrail for those packages rather than skipping them.
 
 Consumers never use the sibling form. A consumer declares a remote dependency:
 
@@ -94,20 +97,20 @@ A remote install requires the `v0.1.0` tag to exist and the consumer to have rep
 
 `packages/default-stack/apm.yml` lists eight sibling packages as `- path: ../<name>` entries and therefore omits `dependencies: {}`, which is non-empty. Installing `packages/default-stack` is the one-command route to the default stack.
 
-Those eight direct dependencies pull in two more transitively, so a single meta-package install resolves ten packages:
+Those eight direct dependencies pull in four more transitively, so a single meta-package install resolves twelve packages:
 
 ```text
 default-stack
 ├── coding-style
 ├── execution        -> pr, review
 ├── git-diff
-├── planning         -> swarm, review, architect
-├── pr               -> swarm
-├── repo-maintenance -> swarm
+├── planning         -> architect, deep-interview, review, swarm
+├── pr               -> explore
+├── repo-maintenance -> explore
 ├── review
-└── skill-creation   -> planning, repo-maintenance
+└── skill-creation   -> deep-interview, repo-maintenance
 
-transitively added: swarm, architect
+transitively added: architect, swarm, deep-interview, explore
 ```
 
 `architect`, `handoff`, `infrastructure`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
@@ -143,35 +146,46 @@ Every primitive that names a primitive shipped by another package is covered by 
 | ----------------------- | --------------------------------------------------------------- | ------------------ | --------------------------------- |
 | `architect`             | `planning` — the `ralplan` skill                                | `architect`        | planning → architect              |
 | `architect`             | `swarm` — the `swarm` skill                                     | `architect`        | swarm → architect                 |
-| `explore`               | `planning` — the `deep-interview` skill and the `planner` agent | `swarm`            | planning → swarm                  |
-| `explore`               | `repo-maintenance` — the `agents-md` skill                      | `swarm`            | repo-maintenance → swarm          |
-| `explore`               | `pr` — the `code-tour` skill                                    | `swarm`            | pr → swarm                        |
+| `explore`               | `swarm` — the `swarm` skill                                     | `explore`          | swarm → explore                   |
+| `explore`               | `deep-interview` — the `deep-interview` skill                   | `explore`          | deep-interview → explore          |
+| `explore`               | `pr` — the `code-tour` skill                                    | `explore`          | pr → explore                      |
+| `explore`               | `repo-maintenance` — the `agents-md` skill                      | `explore`          | repo-maintenance → explore        |
 | `thermos`               | `execution` — the `implement-linear-ticket` skill               | `review`           | execution → review                |
 | `thermos`               | `planning` — the `plan-handoff-standard` instruction            | `review`           | planning → review                 |
 | `babysit`               | `execution` — the `implement-linear-ticket` skill               | `pr`               | execution → pr                    |
-| `deep-interview`        | `skill-creation` — the `design-skill` skill                     | `planning`         | skill-creation → planning         |
+| `deep-interview`        | `planning` — `masterplan`, `ralplan` and `plan-handoff-standard` | `deep-interview`   | planning → deep-interview         |
+| `deep-interview`        | `skill-creation` — the `design-skill` skill                     | `deep-interview`   | skill-creation → deep-interview   |
+| `deep-interview`        | `repo-init` — the `terraform-monorepo-init` skill               | `deep-interview`   | repo-init → deep-interview        |
 | `optimise-agent-config` | `skill-creation` — the `design-skill` skill                     | `repo-maintenance` | skill-creation → repo-maintenance |
 
 `planning`'s `ralplan` treats its handoff to `swarm` as optional, and `plan-handoff-standard` treats its `thermos` step as required; both are satisfied by the edges above, so a single-package install of `planning` carries the capability its own text names.
 
-### Why `architect` exists
+### Why `architect`, `explore` and `deep-interview` exist
 
 Both `planning` and `swarm` need the `architect` agent, and each references it directly. Keeping `architect` inside either package would force one of them to depend on the other for a read-only analysis agent, coupling the planning and execution layers. `architect` is therefore extracted into a dedicated `architect` package that both depend on, and `swarm` no longer names any primitive owned by `planning` (its `swarm` skill takes "a validated plan" as input rather than naming the producing skill).
+
+The same reasoning extracts `explore` and `deep-interview`. `swarm`, `deep-interview`, `pr` and `repo-maintenance` all dispatch the `explore` agent. Keeping that agent inside `swarm` forced `pr` and `repo-maintenance` to depend on `swarm`, and therefore to receive the `swarm` skill and the executor and build-fixer agents they never name. `planning`, `skill-creation` and `repo-init` all name the `deep-interview` skill. Keeping that skill inside `planning` forced `skill-creation` to depend on `planning` for nothing else, and stopped `repo-init` from declaring the dependency at all, because `planning` would have dragged in `architect`, `review` and `swarm`. `deep-interview` depends on `explore` because the skill dispatches that agent.
 
 That orientation is what keeps the graph acyclic:
 
 ```text
-skill-creation -> planning -> swarm -> architect
-                    |           ^
-                    v           |
-                 review repo-maintenance
+repo-init --> deep-interview --> explore
+skill-creation --> deep-interview
+skill-creation --> repo-maintenance --> explore
+planning --> deep-interview
+planning --> swarm --> explore
+planning --> swarm --> architect
+planning --> architect
+planning --> review
+execution --> pr --> explore
+execution --> review
 ```
 
-APM cannot express a dependency cycle, so any future reference that points backwards along `skill-creation → planning → swarm → architect` must be reworded or extracted, not declared.
+APM cannot express a dependency cycle, so any future reference that points backwards along `planning → swarm → architect` or `deep-interview → explore` must be reworded or extracted, not declared.
 
 No test asserts that these references resolve inside a single-package install: `tests/structural/validate_primitives.py` checks that relative links resolve on disk **within this repository**, not across package boundaries. The edges above were derived by scanning every primitive for references to primitives owned by another package.
 
-## APM 0.30.0 CLI behaviour that CI depends on
+## APM 0.32.0 CLI behaviour that CI depends on
 
 ### `apm compile --validate` fails on skill-only packages until an install has run
 
@@ -203,21 +217,21 @@ Error: Cannot pack — apm.yml contains local path dependency: ../planning
 Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
 ```
 
-This is the reason every package with a sibling `path:` dependency cannot be packed before `v0.1.0` is tagged: `default-stack`, `execution`, `planning`, `pr`, `repo-maintenance`, `skill-creation` and `swarm`. The sibling section above records the full comparison and the tested remote fallback.
+This is the reason every package with a sibling `path:` dependency cannot be packed before `v0.1.0` is tagged: `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm`. The sibling section above records the full comparison and the tested remote fallback.
 
 ### `apm audit --ci` cannot replay a lockfile with a duplicated local `resolved_by` parent
 
-This is an APM 0.30.0 lockfile-writer defect. It makes `packages/default-stack` the one package here whose own lockfile fails its own audit.
+This is an APM lockfile-writer defect, re-checked on the pinned 0.32.0 CLI. A clean `apm install` of `packages/default-stack` still writes the duplicate, and `apm audit --ci` still fails with the same signature. It makes that package the one whose own lockfile fails its own audit.
 
-**Trigger.** A local package is reachable by **two** paths from the same manifest (once directly, once transitively) **and** is itself the `resolved_by` parent of another local package. `apm install` then writes two entries with the same `repo_url`, and the drift replay cannot decide which one parents the grandchild. In `default-stack`, `planning` is both a direct dependency and a transitive one (via `skill-creation`), and it parents `architect` and `swarm`:
+**Trigger.** A local package is reachable by **two** paths from the same manifest (once directly, once transitively) **and** is itself the `resolved_by` parent of another local package. `apm install` then writes two entries with the same `repo_url`, and the drift replay cannot decide which one parents the grandchild. In `default-stack`, `pr` is both a direct dependency and a transitive one (via `execution`), and it parents `explore`. `repo-maintenance` is also reached both directly and via `skill-creation`, but the lockfile records `explore`'s parent as `pr`, so the failure that surfaces names `pr`:
 
 ```text
 $ apm audit --ci          # in packages/default-stack
-config-consistency  | 2 MCP config inconsistenc(ies) -- run 'apm install' to reconcile
+config-consistency  | 1 MCP config inconsistenc(ies) -- run 'apm install' to reconcile
 drift               | drift replay failed: corrupt local dependency graph in the lockfile
-                    | (ambiguous resolved_by parent '_local/planning' of
-                    | '_local/architect': 2 local dependencies share that repo_url
-                    | (['../planning', '../planning'])). Fix the
+                    | (ambiguous resolved_by parent '_local/pr' of
+                    | '_local/explore': 2 local dependencies share that repo_url
+                    | (['../pr', '../pr'])). Fix the
                     | resolved_by chain or re-run 'apm install'.
 
 [x] 2 of 8 check(s) failed
@@ -238,9 +252,9 @@ config-consistency details:
 
 Two levels are not enough: `meta → {base, mid → base}` alone audits clean. The failure needs the duplicated package to have a child of its own.
 
-**Scope.** Only the package's own lockfile is affected. All ten packages still resolve and deploy — consumer-side installs of `default-stack` pass `apm audit --ci` on `cursor`, `claude` and `copilot`, and `apm install --frozen` succeeds in place. Both are asserted by `tests/structural/run-tier1.sh` and CI.
+**Scope.** Only the package's own lockfile is affected. All twelve packages still resolve and deploy — consumer-side installs of `default-stack` pass `apm audit --ci` on `cursor`, `claude` and `copilot`, and `apm install --frozen` succeeds in place. Both are asserted by `tests/structural/run-tier1.sh` and CI.
 
-**Handling.** The manifest keeps its eight declared requirements rather than being trimmed to the non-duplicating subset (`coding-style`, `execution`, `git-diff`, `skill-creation`). That subset does audit cleanly and still resolves all ten packages, but it states the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. Instead the defect is asserted: the suite and CI fail if `default-stack`'s audit *passes* or if it fails with a different message, so a fix in a later APM release is noticed rather than silently tolerated.
+**Handling.** The manifest keeps its eight declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. Instead the defect is asserted: the suite and CI fail if `default-stack`'s audit *passes* or if it fails with a different message, so a fix in a later APM release is noticed rather than silently tolerated.
 
 ### Plugin-format archives do not translate instruction frontmatter
 
@@ -248,7 +262,7 @@ Two levels are not enough: `meta → {base, mid → base}` alone audits clean. T
 
 ### Skills are never structurally validated by APM
 
-`apm pack` bundles a `SKILL.md` with no `description`, invalid YAML, or a `name` that disagrees with its directory, and `apm install` deploys it. APM 0.30.0 has no skill frontmatter gate. `tests/structural/validate_primitives.py` fills that gap in CI.
+`apm pack` bundles a `SKILL.md` with no `description`, invalid YAML, or a `name` that disagrees with its directory, and `apm install` deploys it. APM 0.32.0 has no skill frontmatter gate. `tests/structural/validate_primitives.py` fills that gap in CI.
 
 ### `apm install` does not validate primitives it deploys
 

@@ -1,0 +1,14 @@
+name: search
+version: "0.1.0"
+description: "Search the codebase across git worktrees."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies: {}
+scripts:
+  check: apm audit --ci

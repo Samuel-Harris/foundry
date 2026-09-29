@@ -32,7 +32,7 @@ permissions:
   contents: read
 
 env:
-  APM_VERSION: "0.30.0"
+  APM_VERSION: "0.32.0"
   TARGETS: cursor,claude,copilot
 
 jobs:
@@ -64,46 +64,50 @@ jobs:
       matrix:
         include:
           # pack_blocked marks manifests that carry a sibling `path:`
-          # dependency. APM 0.30.0 refuses to pack those in every bundle format,
+          # dependency. APM 0.32.0 refuses to pack those in every bundle format,
           # so the guardrail is asserted rather than the package being skipped.
           # See docs/DEPENDENCY-CONTRACTS.md.
-          - package: foundry-architect
+          - package: architect
             pack_blocked: false
-          - package: foundry-coding-style
+          - package: coding-style
             pack_blocked: false
-          - package: foundry-default-stack
+          - package: deep-interview
             pack_blocked: true
-            # The meta-package reaches foundry-planning both directly and
-            # transitively, so `apm install` writes two `_local/foundry-planning`
-            # entries and `apm audit --ci` cannot replay the drift. Asserted as a
-            # known APM 0.30.0 defect; the consumer-side audit of the same
-            # manifest passes and is asserted in scratch-consumer.
+          - package: default-stack
+            pack_blocked: true
+            # `pr` is both a direct dependency and a transitive one (via
+            # `execution`), and it parents `explore`, so `apm install` writes
+            # two `_local/pr` entries and `apm audit --ci` cannot replay the
+            # drift. Asserted as a known APM 0.32.0 defect; the consumer-side
+            # audit of the same manifest passes and is asserted in scratch-consumer.
             audit_known_broken: true
-          - package: foundry-execution
+          - package: execution
             pack_blocked: true
-          - package: foundry-git-diff
+          - package: explore
             pack_blocked: false
-          - package: foundry-handoff
+          - package: git-diff
             pack_blocked: false
-          - package: foundry-infrastructure
+          - package: handoff
             pack_blocked: false
-          - package: foundry-planning
+          - package: infrastructure
+            pack_blocked: false
+          - package: planning
             pack_blocked: true
-          - package: foundry-pr
+          - package: pr
             pack_blocked: true
-          - package: foundry-repo-init
+          - package: repo-init
+            pack_blocked: true
+          - package: repo-maintenance
+            pack_blocked: true
+          - package: review
             pack_blocked: false
-          - package: foundry-repo-maintenance
-            pack_blocked: true
-          - package: foundry-review
+          - package: search
             pack_blocked: false
-          - package: foundry-search
-            pack_blocked: false
-          - package: foundry-skill-creation
+          - package: skill-creation
             pack_blocked: true
-          - package: foundry-swarm
+          - package: swarm
             pack_blocked: true
-          - package: foundry-ui
+          - package: ui
             pack_blocked: false
     steps:
       - uses: actions/checkout@v4
@@ -185,8 +189,8 @@ jobs:
           consumer="$(mktemp -d)"
           cd "$consumer"
           timeout 120 apm init -y --target ${{ matrix.target }}
-          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-default-stack" --target ${{ matrix.target }}
-          timeout 120 apm view foundry-default-stack
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/default-stack" --target ${{ matrix.target }}
+          timeout 120 apm view default-stack
           timeout 300 apm audit --ci
 
       - name: Assert the dependency graph resolved
@@ -196,7 +200,7 @@ jobs:
           timeout 120 apm init -y --target ${{ matrix.target }}
           # swarm -> architect, so installing swarm alone must record architect as
           # a transitive dependency at depth 2.
-          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-swarm" --target ${{ matrix.target }}
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/swarm" --target ${{ matrix.target }}
           python3 - <<'PY'
           import pathlib
           import yaml
@@ -208,42 +212,44 @@ jobs:
               dep.get("repo_url") or dep.get("materialization_repo_url"): dep.get("depth")
               for dep in data.get("dependencies", [])
           }
-          assert "_local/foundry-architect" in resolved, sorted(resolved)
-          assert resolved["_local/foundry-architect"] == 2, resolved
+          assert "_local/architect" in resolved, sorted(resolved)
+          assert resolved["_local/architect"] == 2, resolved
           print("swarm pulled architect in transitively:", resolved)
           PY
           timeout 300 apm audit --ci
 
-      - name: Assert the default stack resolves ten packages
+      - name: Assert the default stack resolves twelve packages
         run: |
           consumer="$(mktemp -d)"
           cd "$consumer"
           timeout 120 apm init -y --target ${{ matrix.target }}
-          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-default-stack" --target ${{ matrix.target }}
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/default-stack" --target ${{ matrix.target }}
           python3 - <<'PY'
           import pathlib
           import yaml
 
           expected = {
-              "foundry-architect",
-              "foundry-coding-style",
-              "foundry-execution",
-              "foundry-git-diff",
-              "foundry-planning",
-              "foundry-pr",
-              "foundry-repo-maintenance",
-              "foundry-review",
-              "foundry-skill-creation",
-              "foundry-swarm",
+              "architect",
+              "coding-style",
+              "deep-interview",
+              "execution",
+              "explore",
+              "git-diff",
+              "planning",
+              "pr",
+              "repo-maintenance",
+              "review",
+              "skill-creation",
+              "swarm",
           }
           lockfile = pathlib.Path("apm.lock.yaml")
           data = yaml.safe_load(lockfile.read_text())
           # The consumer's lockfile records the installed meta-package itself
-          # alongside the ten packages it resolves.
+          # alongside the twelve packages it resolves.
           resolved = {
               (dep.get("repo_url") or "").removeprefix("_local/")
               for dep in data.get("dependencies", [])
-          } - {"foundry-default-stack"}
+          } - {"default-stack"}
           assert resolved == expected, f"got {sorted(resolved)}"
           print("default stack resolved exactly:", sorted(resolved))
           PY
@@ -265,11 +271,17 @@ jobs:
       # and stamps `pack.target: minimal` into the embedded lockfile -- a bundle
       # `apm install` then rejects with `Error installing dependencies:
       # 'minimal'`. See AGENTS.md.
+      # An empty `dependencies:` mapping is what makes a package packable.
+      # Scanning the manifests keeps this job aligned with that rule, rather
+      # than repeating the packable names beside the validate-packages matrix.
       - name: Pack every packable bundle
         run: |
-          for package in foundry-architect foundry-coding-style foundry-git-diff \
-            foundry-handoff foundry-infrastructure foundry-repo-init \
-            foundry-review foundry-search foundry-ui; do
+          shopt -s nullglob
+          for manifest in packages/*/apm.yml; do
+            package="$(basename "$(dirname "$manifest")")"
+            if ! grep -qx 'dependencies: {}' "$manifest"; then
+              continue
+            fi
             ( cd "packages/$package" && timeout 300 apm pack --archive -o ./dist --target "$TARGETS" )
           done
 
@@ -278,7 +290,7 @@ jobs:
           consumer="$(mktemp -d)"
           cd "$consumer"
           timeout 120 apm init -y --target cursor,claude,copilot
-          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-review/dist/foundry-review-0.1.0.zip" --target cursor,claude,copilot
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/review/dist/review-0.1.0.zip" --target cursor,claude,copilot
           timeout 300 apm audit --ci
           test -f .agents/skills/thermos/SKILL.md
           test -f .cursor/agents/thermo-nuclear-review-subagent.md
@@ -290,13 +302,13 @@ jobs:
           consumer="$(mktemp -d)"
           cd "$consumer"
           timeout 120 apm init -y --target cursor,claude,copilot
-          timeout 300 apm install "$GITHUB_WORKSPACE/packages/foundry-git-diff/dist/foundry-git-diff-0.1.0.zip" --target cursor,claude,copilot
+          timeout 300 apm install "$GITHUB_WORKSPACE/packages/git-diff/dist/git-diff-0.1.0.zip" --target cursor,claude,copilot
           timeout 300 apm audit --ci
           test -f .agents/skills/git-diff-staged-changes-main/SKILL.md
 
       - name: Reject a tampered archive without a bypass flag
         run: |
-          archive="$GITHUB_WORKSPACE/packages/foundry-review/dist/foundry-review-0.1.0.zip"
+          archive="$GITHUB_WORKSPACE/packages/review/dist/review-0.1.0.zip"
           cp "$archive" /tmp/tampered.zip
           python3 - <<'PY'
           import pathlib
@@ -316,10 +328,13 @@ jobs:
 
       - name: Assert no retired primitive is bundled
         run: |
-          for package in foundry-architect foundry-coding-style foundry-git-diff \
-            foundry-handoff foundry-infrastructure foundry-repo-init \
-            foundry-review foundry-search foundry-ui; do
-            archive="$(find "packages/$package/dist" -maxdepth 1 -name '*.zip' | head -1)"
+          shopt -s nullglob
+          archives=(packages/*/dist/*.zip)
+          if (( ${#archives[@]} == 0 )); then
+            echo "no archives were packed" >&2
+            exit 1
+          fi
+          for archive in "${archives[@]}"; do
             if unzip -l "$archive" | grep -qE \
               'sequential-ralplan|explain-pr|generate-pr-story|port-claude-code-artefact|pr-contention|optimise-cursor-repo'; then
               echo "$archive bundles a retired primitive" >&2

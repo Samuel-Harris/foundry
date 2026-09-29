@@ -1,0 +1,295 @@
+lockfile_version: '1'
+apm_version: 0.32.0
+dependencies:
+- repo_url: _local/explore
+  name: explore
+  version: 0.1.0
+  package_type: apm_package
+  deployed_files:
+  - .claude/agents/explore.md
+  - .cursor/agents/explore.md
+  - .github/agents/explore.agent.md
+  deployed_file_hashes:
+    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+  source: local
+  local_path: ../explore
+  declared_license: MIT
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: claude
+  value: .claude/rules/keep-agent-mds-up-to-date.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:506693270e51fb74c5c039fe3ce9747f71a556a0b06c07eedc8367ff7c4b5522
+- kind: project-relative
+  target: claude
+  value: .claude/skills/agents-md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/agents-md/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/generate-agent-docs
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/generate-agent-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/references/audit-commands.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/references/audit-process.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/references/migration-examples.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/optimise-agent-config/scripts/validate-artefacts.sh
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
+- kind: project-relative
+  target: copilot
+  value: .github/agents/explore.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/keep-agent-mds-up-to-date.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f398491aa52a5e95a89b1ade8dde133e4f44e6c855b38109c999ca34df2811db
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: cursor
+  value: .cursor/rules/keep-agent-mds-up-to-date.mdc
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:06dc074873a6013eebf0e902454bd4ae2c75242dc358635aff56be2e0b2054d3
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/agents-md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/agents-md/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/generate-agent-docs
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/generate-agent-docs/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/optimise-agent-config
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/optimise-agent-config/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/optimise-agent-config/references/audit-commands.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/optimise-agent-config/references/audit-process.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/optimise-agent-config/references/migration-examples.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/optimise-agent-config/scripts/validate-artefacts.sh
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
+local_deployed_files:
+- .agents/skills/agents-md
+- .agents/skills/agents-md/SKILL.md
+- .agents/skills/generate-agent-docs
+- .agents/skills/generate-agent-docs/SKILL.md
+- .agents/skills/optimise-agent-config
+- .agents/skills/optimise-agent-config/SKILL.md
+- .agents/skills/optimise-agent-config/references/audit-commands.md
+- .agents/skills/optimise-agent-config/references/audit-process.md
+- .agents/skills/optimise-agent-config/references/migration-examples.md
+- .agents/skills/optimise-agent-config/scripts/validate-artefacts.sh
+- .claude/rules/keep-agent-mds-up-to-date.md
+- .claude/skills/agents-md
+- .claude/skills/agents-md/SKILL.md
+- .claude/skills/generate-agent-docs
+- .claude/skills/generate-agent-docs/SKILL.md
+- .claude/skills/optimise-agent-config
+- .claude/skills/optimise-agent-config/SKILL.md
+- .claude/skills/optimise-agent-config/references/audit-commands.md
+- .claude/skills/optimise-agent-config/references/audit-process.md
+- .claude/skills/optimise-agent-config/references/migration-examples.md
+- .claude/skills/optimise-agent-config/scripts/validate-artefacts.sh
+- .cursor/rules/keep-agent-mds-up-to-date.mdc
+- .github/instructions/keep-agent-mds-up-to-date.instructions.md
+local_deployed_file_hashes:
+  .agents/skills/agents-md/SKILL.md: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
+  .agents/skills/generate-agent-docs/SKILL.md: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+  .agents/skills/optimise-agent-config/SKILL.md: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+  .agents/skills/optimise-agent-config/references/audit-commands.md: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+  .agents/skills/optimise-agent-config/references/audit-process.md: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+  .agents/skills/optimise-agent-config/references/migration-examples.md: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+  .agents/skills/optimise-agent-config/scripts/validate-artefacts.sh: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
+  .claude/rules/keep-agent-mds-up-to-date.md: sha256:506693270e51fb74c5c039fe3ce9747f71a556a0b06c07eedc8367ff7c4b5522
+  .claude/skills/agents-md/SKILL.md: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
+  .claude/skills/generate-agent-docs/SKILL.md: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+  .claude/skills/optimise-agent-config/SKILL.md: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+  .claude/skills/optimise-agent-config/references/audit-commands.md: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+  .claude/skills/optimise-agent-config/references/audit-process.md: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+  .claude/skills/optimise-agent-config/references/migration-examples.md: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+  .claude/skills/optimise-agent-config/scripts/validate-artefacts.sh: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
+  .cursor/rules/keep-agent-mds-up-to-date.mdc: sha256:06dc074873a6013eebf0e902454bd4ae2c75242dc358635aff56be2e0b2054d3
+  .github/instructions/keep-agent-mds-up-to-date.instructions.md: sha256:f398491aa52a5e95a89b1ade8dde133e4f44e6c855b38109c999ca34df2811db

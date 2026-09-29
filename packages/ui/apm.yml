@@ -1,0 +1,14 @@
+name: ui
+version: "0.1.0"
+description: "Remove machine-generated UI slop and restore visual quality."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies: {}
+scripts:
+  check: apm audit --ci

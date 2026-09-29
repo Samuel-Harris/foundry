@@ -1,0 +1,14 @@
+name: git-diff
+version: "0.1.0"
+description: "Read-only git diff summaries measured against a repository's main branch."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies: {}
+scripts:
+  check: apm audit --ci

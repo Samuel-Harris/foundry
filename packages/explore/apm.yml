@@ -1,0 +1,14 @@
+name: explore
+version: "0.1.0"
+description: "Thorough read-only codebase search with cross-module reasoning."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies: {}
+scripts:
+  check: apm audit --ci

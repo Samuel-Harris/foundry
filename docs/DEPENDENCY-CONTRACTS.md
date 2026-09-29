@@ -4,16 +4,16 @@ This document records the manifest shape each package uses, how sibling packages
 
 ## Tested CLI
 
-`apm-cli==0.30.0`, installed from PyPI. Never run `apm self-update`; the version is pinned deliberately so that lockfile resolution and deployment behaviour are reproducible.
+`apm-cli==0.32.0`, installed from PyPI. Never run `apm self-update`; the version is pinned deliberately so that lockfile resolution and deployment behaviour are reproducible.
 
 ## Package manifest contract
 
 Every package declares the following keys in `apm.yml`:
 
 ```yaml
-name: foundry-planning
+name: planning
 version: "0.1.0"
-description: "Socratic requirement gathering, plan authoring and plan review."
+description: "Plan authoring and plan review."
 author: sam
 license: MIT
 repository: https://github.com/Samuel-Harris/foundry
@@ -24,7 +24,10 @@ targets:
 includes: auto
 dependencies:
   apm:
-    - path: ../foundry-architect
+    - path: ../architect
+    - path: ../deep-interview
+    - path: ../review
+    - path: ../swarm
 scripts:
   check: apm audit --ci
 ```
@@ -44,31 +47,33 @@ Packages in this repository depend on each other through a **sibling relative pa
 ```yaml
 dependencies:
   apm:
-    - path: ../foundry-planning
+    - path: ../planning
 ```
 
 This is the documented same-repo sibling mechanism. Do not write `git: <parent repo>` as a substitute.
 
-**Verified, not assumed, and only partly viable.** Installing `packages/foundry-pr` resolved `../foundry-swarm (local)` and, transitively, `../foundry-architect`, then deployed both packages' agents and skills alongside `foundry-pr`'s own three skills. The `path:` form is therefore correct for development and for consumers that resolve the package from the parent repository.
+**Verified, not assumed, and only partly viable.** Installing `packages/pr` resolved `../swarm (local)` and, transitively, `../architect`, then deployed both packages' agents and skills alongside `pr`'s own three skills. The `path:` form is therefore correct for development and for consumers that resolve the package from the parent repository.
 
 It is **not** viable for `apm pack`. The CLI refuses to bundle a local path dependency in every format:
 
 ```text
-$ apm pack --dry-run --verbose           # in packages/foundry-swarm
-Error: Cannot pack — apm.yml contains local path dependency: ../foundry-architect
+$ apm pack --dry-run --verbose           # in packages/swarm
+Error: Cannot pack — apm.yml contains local path dependency: ../architect
 Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
 ```
 
 The remote `{git, path, ref}` form was tested against it and fails for the opposite reason. With `ref: "^0.1.0"` and no release tag pushed, a real install stops:
 
 ```text
-$ apm install --target cursor            # with {git: Samuel-Harris/foundry, path: packages/foundry-planning, ref: "^0.1.0"}
+$ apm install --target cursor            # with {git: Samuel-Harris/foundry, path: packages/planning, ref: "^0.1.0"}
 [x] 1 package failed:
-  +- foundry-foundry-planning -- No matching tag for Samuel-Harris/foundry: No tags on
+  +- foundry-planning -- No matching tag for Samuel-Harris/foundry: No tags on
      Samuel-Harris/foundry satisfy '^0.1.0'. The remote has no tag refs.
 ```
 
-So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:`, because publication is out of scope and install, `--frozen` and `audit --ci` must stay green for every package that can have them green. Bundle production for the seven dependency-bearing packages is deferred to a release job that runs after the tag is pushed, at which point the remote form becomes usable. CI asserts the guardrail for those packages rather than skipping them.
+The CLI prefixes the failing dependency's identifier with the repository name, so the error names `foundry-planning` while the manifest path is `packages/planning`.
+
+So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:`, because publication is out of scope and install, `--frozen` and `audit --ci` must stay green for every package that can have them green. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm` — is deferred to a release job that runs after the tag is pushed, at which point the remote form becomes usable. CI asserts the guardrail for those packages rather than skipping them.
 
 Consumers never use the sibling form. A consumer declares a remote dependency:
 
@@ -76,39 +81,39 @@ Consumers never use the sibling form. A consumer declares a remote dependency:
 dependencies:
   apm:
     - git: Samuel-Harris/foundry
-      path: packages/foundry-planning
+      path: packages/planning
       ref: "v0.1.0"
 ```
 
 or uses the shorthand install command:
 
 ```bash
-apm install Samuel-Harris/foundry/packages/foundry-planning#v0.1.0 --target cursor,claude,copilot
+apm install Samuel-Harris/foundry/packages/planning#v0.1.0 --target cursor,claude,copilot
 ```
 
 A remote install requires the `v0.1.0` tag to exist and the consumer to have repository access.
 
 ## The meta-package
 
-`packages/foundry-default-stack/apm.yml` lists eight sibling packages as `- path: ../<name>` entries and therefore omits `dependencies: {}`, which is non-empty. Installing `packages/foundry-default-stack` is the one-command route to the default stack.
+`packages/default-stack/apm.yml` lists eight sibling packages as `- path: ../<name>` entries and therefore omits `dependencies: {}`, which is non-empty. Installing `packages/default-stack` is the one-command route to the default stack.
 
-Those eight direct dependencies pull in two more transitively, so a single meta-package install resolves ten packages:
+Those eight direct dependencies pull in four more transitively, so a single meta-package install resolves twelve packages:
 
 ```text
-foundry-default-stack
-├── foundry-coding-style
-├── foundry-execution      -> foundry-pr, foundry-review
-├── foundry-git-diff
-├── foundry-planning       -> foundry-swarm, foundry-review, foundry-architect
-├── foundry-pr             -> foundry-swarm
-├── foundry-repo-maintenance -> foundry-swarm
-├── foundry-review
-└── foundry-skill-creation -> foundry-planning, foundry-repo-maintenance
+default-stack
+├── coding-style
+├── execution        -> pr, review
+├── git-diff
+├── planning         -> architect, deep-interview, review, swarm
+├── pr               -> explore
+├── repo-maintenance -> explore
+├── review
+└── skill-creation   -> deep-interview, repo-maintenance
 
-transitively added: foundry-swarm, foundry-architect
+transitively added: architect, swarm, deep-interview, explore
 ```
 
-`foundry-architect`, `foundry-handoff`, `foundry-infrastructure`, `foundry-repo-init`, `foundry-search` and `foundry-ui` are intentionally not part of the default stack; install them individually.
+`architect`, `handoff`, `infrastructure`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
 
 There is deliberately **no `apm.yml` at the repository root**. Root-level compile and pack discovery walks the whole tree, so a root manifest would absorb the nested packages' `.apm/` trees into one package and destroy the per-package boundaries.
 
@@ -118,7 +123,7 @@ There is deliberately **no `apm.yml` at the repository root**. Root-level compil
 - Never hand-author or hand-edit hashes or pins. Regenerate with `apm lock` or `apm install`.
 - `apm install --frozen` reproduces the lockfile exactly and is the CI-safe form.
 - `apm audit --ci` is the release gate.
-- **A transitive sibling dependency records an absolute path, which is inert.** Direct local dependencies are pinned as `local_path: ../<name>`, which is portable, but a local dependency reached transitively (for example `foundry-architect` via `foundry-swarm`) additionally records `anchored_local_path: /absolute/path/to/packages/<name>`. Because the committed lockfiles were generated on the authoring machine, they carry that machine's path. Verified: copying the tree to a different absolute root leaves `apm install --frozen` and `apm audit --ci` green, and a plain `apm install` rewrites `anchored_local_path` to the new location. So the recorded path does not pin the lockfile to a machine, and CI does not need to regenerate it.
+- **A transitive sibling dependency records an absolute path, which is inert.** Direct local dependencies are pinned as `local_path: ../<name>`, which is portable, but a local dependency reached transitively (for example `architect` via `swarm`) additionally records `anchored_local_path: /absolute/path/to/packages/<name>`. Because the committed lockfiles were generated on the authoring machine, they carry that machine's path. Verified: copying the tree to a different absolute root leaves `apm install --frozen` and `apm audit --ci` green, and a plain `apm install` rewrites `anchored_local_path` to the new location. So the recorded path does not pin the lockfile to a machine, and CI does not need to regenerate it.
 
 ## Generated-file policy
 
@@ -137,39 +142,50 @@ The server is documented as a runtime prerequisite instead, and `implement-linea
 
 Every primitive that names a primitive shipped by another package is covered by a declared dependency edge. The graph is acyclic and no reference is left dangling.
 
-| Reference               | Declared in                                                             | Ships in                   | Covering edge                     |
-| ----------------------- | ----------------------------------------------------------------------- | -------------------------- | --------------------------------- |
-| `architect`             | `foundry-planning` — the `ralplan` skill                                | `foundry-architect`        | planning → architect              |
-| `architect`             | `foundry-swarm` — the `swarm` skill                                     | `foundry-architect`        | swarm → architect                 |
-| `explore`               | `foundry-planning` — the `deep-interview` skill and the `planner` agent | `foundry-swarm`            | planning → swarm                  |
-| `explore`               | `foundry-repo-maintenance` — the `agents-md` skill                      | `foundry-swarm`            | repo-maintenance → swarm          |
-| `explore`               | `foundry-pr` — the `code-tour` skill                                    | `foundry-swarm`            | pr → swarm                        |
-| `thermos`               | `foundry-execution` — the `implement-linear-ticket` skill               | `foundry-review`           | execution → review                |
-| `thermos`               | `foundry-planning` — the `plan-handoff-standard` instruction            | `foundry-review`           | planning → review                 |
-| `babysit`               | `foundry-execution` — the `implement-linear-ticket` skill               | `foundry-pr`               | execution → pr                    |
-| `deep-interview`        | `foundry-skill-creation` — the `design-skill` skill                     | `foundry-planning`         | skill-creation → planning         |
-| `optimise-agent-config` | `foundry-skill-creation` — the `design-skill` skill                     | `foundry-repo-maintenance` | skill-creation → repo-maintenance |
+| Reference               | Declared in                                                     | Ships in           | Covering edge                     |
+| ----------------------- | --------------------------------------------------------------- | ------------------ | --------------------------------- |
+| `architect`             | `planning` — the `ralplan` skill                                | `architect`        | planning → architect              |
+| `architect`             | `swarm` — the `swarm` skill                                     | `architect`        | swarm → architect                 |
+| `explore`               | `swarm` — the `swarm` skill                                     | `explore`          | swarm → explore                   |
+| `explore`               | `deep-interview` — the `deep-interview` skill                   | `explore`          | deep-interview → explore          |
+| `explore`               | `pr` — the `code-tour` skill                                    | `explore`          | pr → explore                      |
+| `explore`               | `repo-maintenance` — the `agents-md` skill                      | `explore`          | repo-maintenance → explore        |
+| `thermos`               | `execution` — the `implement-linear-ticket` skill               | `review`           | execution → review                |
+| `thermos`               | `planning` — the `plan-handoff-standard` instruction            | `review`           | planning → review                 |
+| `babysit`               | `execution` — the `implement-linear-ticket` skill               | `pr`               | execution → pr                    |
+| `deep-interview`        | `planning` — `masterplan`, `ralplan` and `plan-handoff-standard` | `deep-interview`   | planning → deep-interview         |
+| `deep-interview`        | `skill-creation` — the `design-skill` skill                     | `deep-interview`   | skill-creation → deep-interview   |
+| `deep-interview`        | `repo-init` — the `terraform-monorepo-init` skill               | `deep-interview`   | repo-init → deep-interview        |
+| `optimise-agent-config` | `skill-creation` — the `design-skill` skill                     | `repo-maintenance` | skill-creation → repo-maintenance |
 
-`foundry-planning`'s `ralplan` treats its handoff to `swarm` as optional, and `plan-handoff-standard` treats its `thermos` step as required; both are satisfied by the edges above, so a single-package install of `foundry-planning` carries the capability its own text names.
+`planning`'s `ralplan` treats its handoff to `swarm` as optional, and `plan-handoff-standard` treats its `thermos` step as required; both are satisfied by the edges above, so a single-package install of `planning` carries the capability its own text names.
 
-### Why `foundry-architect` exists
+### Why `architect`, `explore` and `deep-interview` exist
 
-Both `foundry-planning` and `foundry-swarm` need the `architect` agent, and each references it directly. Keeping `architect` inside either package would force one of them to depend on the other for a read-only analysis agent, coupling the planning and execution layers. `architect` is therefore extracted into `foundry-architect`, a 1-agent package that both depend on, and `foundry-swarm` no longer names any primitive owned by `foundry-planning` (its `swarm` skill takes "a validated plan" as input rather than naming the producing skill).
+Both `planning` and `swarm` need the `architect` agent, and each references it directly. Keeping `architect` inside either package would force one of them to depend on the other for a read-only analysis agent, coupling the planning and execution layers. `architect` is therefore extracted into a dedicated `architect` package that both depend on, and `swarm` no longer names any primitive owned by `planning` (its `swarm` skill takes "a validated plan" as input rather than naming the producing skill).
+
+The same reasoning extracts `explore` and `deep-interview`. `swarm`, `deep-interview`, `pr` and `repo-maintenance` all dispatch the `explore` agent. Keeping that agent inside `swarm` forced `pr` and `repo-maintenance` to depend on `swarm`, and therefore to receive the `swarm` skill and the executor and build-fixer agents they never name. `planning`, `skill-creation` and `repo-init` all name the `deep-interview` skill. Keeping that skill inside `planning` forced `skill-creation` to depend on `planning` for nothing else, and stopped `repo-init` from declaring the dependency at all, because `planning` would have dragged in `architect`, `review` and `swarm`. `deep-interview` depends on `explore` because the skill dispatches that agent.
 
 That orientation is what keeps the graph acyclic:
 
 ```text
-foundry-skill-creation -> foundry-planning -> foundry-swarm -> foundry-architect
-                              |                    ^
-                              v                    |
-                        foundry-review     foundry-repo-maintenance
+repo-init --> deep-interview --> explore
+skill-creation --> deep-interview
+skill-creation --> repo-maintenance --> explore
+planning --> deep-interview
+planning --> swarm --> explore
+planning --> swarm --> architect
+planning --> architect
+planning --> review
+execution --> pr --> explore
+execution --> review
 ```
 
-APM cannot express a dependency cycle, so any future reference that points backwards along `skill-creation → planning → swarm → architect` must be reworded or extracted, not declared.
+APM cannot express a dependency cycle, so any future reference that points backwards along `planning → swarm → architect` or `deep-interview → explore` must be reworded or extracted, not declared.
 
 No test asserts that these references resolve inside a single-package install: `tests/structural/validate_primitives.py` checks that relative links resolve on disk **within this repository**, not across package boundaries. The edges above were derived by scanning every primitive for references to primitives owned by another package.
 
-## APM 0.30.0 CLI behaviour that CI depends on
+## APM 0.32.0 CLI behaviour that CI depends on
 
 ### `apm compile --validate` fails on skill-only packages until an install has run
 
@@ -197,25 +213,25 @@ Where it does run, it counts agents (reported as `chatmodes`) and instructions; 
 `apm pack` refuses any manifest that declares a local `path:` dependency, in every bundle format (`plugin`, `apm`, `agent-plugin`):
 
 ```text
-Error: Cannot pack — apm.yml contains local path dependency: ../foundry-planning
+Error: Cannot pack — apm.yml contains local path dependency: ../planning
 Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
 ```
 
-This is the reason every package with a sibling `path:` dependency cannot be packed before `v0.1.0` is tagged: `foundry-default-stack`, `foundry-execution`, `foundry-planning`, `foundry-pr`, `foundry-repo-maintenance`, `foundry-skill-creation` and `foundry-swarm`. The sibling section above records the full comparison and the tested remote fallback.
+This is the reason every package with a sibling `path:` dependency cannot be packed before `v0.1.0` is tagged: `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm`. The sibling section above records the full comparison and the tested remote fallback.
 
 ### `apm audit --ci` cannot replay a lockfile with a duplicated local `resolved_by` parent
 
-This is an APM 0.30.0 lockfile-writer defect. It makes `packages/foundry-default-stack` the one package here whose own lockfile fails its own audit.
+This is an APM lockfile-writer defect, re-checked on the pinned 0.32.0 CLI. A clean `apm install` of `packages/default-stack` still writes the duplicate, and `apm audit --ci` still fails with the same signature. It makes that package the one whose own lockfile fails its own audit.
 
-**Trigger.** A local package is reachable by **two** paths from the same manifest (once directly, once transitively) **and** is itself the `resolved_by` parent of another local package. `apm install` then writes two entries with the same `repo_url`, and the drift replay cannot decide which one parents the grandchild. In `foundry-default-stack`, `foundry-planning` is both a direct dependency and a transitive one (via `foundry-skill-creation`), and it parents `foundry-architect` and `foundry-swarm`:
+**Trigger.** A local package is reachable by **two** paths from the same manifest (once directly, once transitively) **and** is itself the `resolved_by` parent of another local package. `apm install` then writes two entries with the same `repo_url`, and the drift replay cannot decide which one parents the grandchild. In `default-stack`, `pr` is both a direct dependency and a transitive one (via `execution`), and it parents `explore`. `repo-maintenance` is also reached both directly and via `skill-creation`, but the lockfile records `explore`'s parent as `pr`, so the failure that surfaces names `pr`:
 
 ```text
-$ apm audit --ci          # in packages/foundry-default-stack
-config-consistency  | 2 MCP config inconsistenc(ies) -- run 'apm install' to reconcile
+$ apm audit --ci          # in packages/default-stack
+config-consistency  | 1 MCP config inconsistenc(ies) -- run 'apm install' to reconcile
 drift               | drift replay failed: corrupt local dependency graph in the lockfile
-                    | (ambiguous resolved_by parent '_local/foundry-planning' of
-                    | '_local/foundry-architect': 2 local dependencies share that repo_url
-                    | (['../foundry-planning', '../foundry-planning'])). Fix the
+                    | (ambiguous resolved_by parent '_local/pr' of
+                    | '_local/explore': 2 local dependencies share that repo_url
+                    | (['../pr', '../pr'])). Fix the
                     | resolved_by chain or re-run 'apm install'.
 
 [x] 2 of 8 check(s) failed
@@ -236,9 +252,9 @@ config-consistency details:
 
 Two levels are not enough: `meta → {base, mid → base}` alone audits clean. The failure needs the duplicated package to have a child of its own.
 
-**Scope.** Only the package's own lockfile is affected. All ten packages still resolve and deploy — consumer-side installs of `foundry-default-stack` pass `apm audit --ci` on `cursor`, `claude` and `copilot`, and `apm install --frozen` succeeds in place. Both are asserted by `tests/structural/run-tier1.sh` and CI.
+**Scope.** Only the package's own lockfile is affected. All twelve packages still resolve and deploy — consumer-side installs of `default-stack` pass `apm audit --ci` on `cursor`, `claude` and `copilot`, and `apm install --frozen` succeeds in place. Both are asserted by `tests/structural/run-tier1.sh` and CI.
 
-**Handling.** The manifest keeps its eight declared requirements rather than being trimmed to the non-duplicating subset (`foundry-coding-style`, `foundry-execution`, `foundry-git-diff`, `foundry-skill-creation`). That subset does audit cleanly and still resolves all ten packages, but it states the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. Instead the defect is asserted: the suite and CI fail if `foundry-default-stack`'s audit *passes* or if it fails with a different message, so a fix in a later APM release is noticed rather than silently tolerated.
+**Handling.** The manifest keeps its eight declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. Instead the defect is asserted: the suite and CI fail if `default-stack`'s audit *passes* or if it fails with a different message, so a fix in a later APM release is noticed rather than silently tolerated.
 
 ### Plugin-format archives do not translate instruction frontmatter
 
@@ -246,7 +262,7 @@ Two levels are not enough: `meta → {base, mid → base}` alone audits clean. T
 
 ### Skills are never structurally validated by APM
 
-`apm pack` bundles a `SKILL.md` with no `description`, invalid YAML, or a `name` that disagrees with its directory, and `apm install` deploys it. APM 0.30.0 has no skill frontmatter gate. `tests/structural/validate_primitives.py` fills that gap in CI.
+`apm pack` bundles a `SKILL.md` with no `description`, invalid YAML, or a `name` that disagrees with its directory, and `apm install` deploys it. APM 0.32.0 has no skill frontmatter gate. `tests/structural/validate_primitives.py` fills that gap in CI.
 
 ### `apm install` does not validate primitives it deploys
 

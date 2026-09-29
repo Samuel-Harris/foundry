@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Tier 1 structural acceptance suite.
 #
-# Proves structural packaging and deployment for all sixteen packages: manifests
+# Proves structural packaging and deployment for all eighteen packages: manifests
 # resolve, installs succeed, deployed inventory matches the promised primitives,
 # and the pinned CLI's documented limitations are asserted rather than hidden.
 #
 # Runtime recognition, workflow behaviour and agent identity dispatch are out of
 # scope: no client application is launched.
 #
-# Every `apm` invocation is bounded by a hard timeout. APM 0.30.0 serialises
+# Every `apm` invocation is bounded by a hard timeout. APM 0.32.0 serialises
 # state mutations behind one OS-user lock at `$HOME/.apm/.apm-lifecycle.lock`
 # with a 120-second bounded wait, so a concurrent or orphaned APM operation can
 # stall a call for two minutes before it fails. That lock path is derived from
@@ -30,31 +30,31 @@ TARGETS="${APM_TARGETS:-cursor,claude,copilot}"
 IFS=',' read -r -a target_list <<< "$TARGETS"
 APM_TIMEOUT="${APM_TIMEOUT:-180}"
 
-# Manifests that declare a sibling `path:` dependency. APM 0.30.0 refuses to
+# Manifests that declare a sibling `path:` dependency. APM 0.32.0 refuses to
 # pack such a manifest in every bundle format. See docs/DEPENDENCY-CONTRACTS.md;
 # this suite asserts that refusal rather than skipping these packages silently.
-PACK_BLOCKED=" foundry-default-stack foundry-execution foundry-planning foundry-pr foundry-repo-maintenance foundry-skill-creation foundry-swarm "
+PACK_BLOCKED=" default-stack deep-interview execution planning pr repo-init repo-maintenance skill-creation swarm "
 
-# `apm audit --ci` cannot replay `foundry-default-stack`'s own lockfile: the
-# meta-package reaches `foundry-planning` both directly and transitively, so
-# `apm install` writes two `_local/foundry-planning` entries with different
-# `resolved_by` values, and the drift replay then cannot tell which one parents
-# `foundry-architect` and `foundry-swarm`. That is an APM 0.30.0 lockfile-writer
-# defect, reproduced without Foundry in docs/DEPENDENCY-CONTRACTS.md. The
-# consumer-side audit of the same manifest passes, and that is asserted below by
-# the scratch-consumer checks, so this package's own audit is asserted as a
-# known failure rather than treated as a pass.
-AUDIT_KNOWN_BROKEN=" foundry-default-stack "
+# `apm audit --ci` cannot replay `default-stack`'s own lockfile: the
+# meta-package reaches `pr` both directly and transitively (via `execution`),
+# so `apm install` writes two `_local/pr` entries, and the drift replay then
+# cannot tell which one parents `explore`. That is an APM 0.32.0
+# lockfile-writer defect, reproduced without Foundry in
+# docs/DEPENDENCY-CONTRACTS.md. The consumer-side audit of the same manifest
+# passes, and that is asserted below by the scratch-consumer checks, so this
+# package's own audit is asserted as a known failure rather than treated as a
+# pass.
+AUDIT_KNOWN_BROKEN=" default-stack "
 AUDIT_KNOWN_BROKEN_SIGNATURE="ambiguous resolved_by parent"
 
-# Direct dependencies of the meta-package, plus the two packages they pull in
-# transitively (`foundry-swarm` via several packages, `foundry-architect` via
-# `foundry-swarm`). A default-stack install therefore deploys ten of the sixteen
-# packages, which is what the scratch-consumer inventory check covers.
-DEFAULT_STACK_DEPLOYED="foundry-architect foundry-coding-style foundry-execution foundry-git-diff foundry-planning foundry-pr foundry-repo-maintenance foundry-review foundry-skill-creation foundry-swarm"
+# Direct dependencies of the meta-package, plus the four packages they pull in
+# transitively (`swarm`, `architect`, `explore` and `deep-interview`). A
+# default-stack install therefore deploys twelve of the eighteen packages,
+# which is what the scratch-consumer inventory check covers.
+DEFAULT_STACK_DEPLOYED="architect coding-style deep-interview execution explore git-diff planning pr repo-maintenance review skill-creation swarm"
 
 # Primitives that no longer ship. `design-skill` is deliberately absent: it moved
-# to `foundry-skill-creation` and is still deployed.
+# to `skill-creation` and is still deployed.
 RETIRED="pr-contention port-claude-code-artefact sequential-ralplan explain-pr generate-pr-story optimise-cursor-repo"
 
 failures=0
@@ -208,8 +208,8 @@ for target in "${target_list[@]}"; do
   (
     cd "$consumer" || exit 1
     run_apm init -y --target "$target" >/dev/null 2>&1 || exit 1
-    run_apm install "$REPO_ROOT/packages/foundry-default-stack" --target "$target" >/dev/null 2>&1 || exit 1
-    run_apm view foundry-default-stack >/dev/null 2>&1 || exit 1
+    run_apm install "$REPO_ROOT/packages/default-stack" --target "$target" >/dev/null 2>&1 || exit 1
+    run_apm view default-stack >/dev/null 2>&1 || exit 1
     run_apm audit --ci >/dev/null 2>&1 || exit 1
   )
   report $? "$target scratch consumer (init, install, view, audit)"
@@ -229,7 +229,7 @@ for target in "${target_list[@]}"; do
   done
   failures=$((failures + inventory_missing))
   if (( inventory_missing == 0 )); then
-    echo "  [+] $target deployed every skill, agent and instruction file for the ten default-stack packages"
+    echo "  [+] $target deployed every skill, agent and instruction file for the twelve default-stack packages"
   fi
 
   retired_hits=0
@@ -306,9 +306,9 @@ for package in "${packages[@]}"; do
 done
 report "$archive_failures" "pack --archive for every packable package"
 
-# `foundry-review` carries both skills and agents, so the archive consumer
+# `review` carries both skills and agents, so the archive consumer
 # asserts the two primitive types that a plugin bundle can deploy.
-archive="$(find "$REPO_ROOT/packages/foundry-review/dist" -maxdepth 1 -name '*.zip' 2>/dev/null | sort | head -1)"
+archive="$(find "$REPO_ROOT/packages/review/dist" -maxdepth 1 -name '*.zip' 2>/dev/null | sort | head -1)"
 if [[ -n "$archive" ]]; then
   mkdir -p "$scratch/archive-consumer"
   (
@@ -365,13 +365,13 @@ echo
 echo "Missing sibling dependency fails actionably"
 missing="$scratch/missing"
 mkdir -p "$missing/packages"
-for package in foundry-execution foundry-pr; do
+for package in execution pr; do
   mkdir -p "$missing/packages/$package"
   cp "$REPO_ROOT/packages/$package/apm.yml" "$REPO_ROOT/packages/$package/apm.lock.yaml" "$missing/packages/$package/"
   cp -R "$REPO_ROOT/packages/$package/.apm" "$missing/packages/$package/"
 done
-rm -rf "$missing/packages/foundry-pr"
-missing_output="$( cd "$missing/packages/foundry-execution" && run_apm install --frozen --target cursor 2>&1 )"
+rm -rf "$missing/packages/pr"
+missing_output="$( cd "$missing/packages/execution" && run_apm install --frozen --target cursor 2>&1 )"
 missing_status=$?
 if [[ $missing_status -ne 0 && "$missing_output" == *"does not exist"* ]]; then
   report 0 "missing sibling dependency reports an actionable error"

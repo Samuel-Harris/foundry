@@ -1,0 +1,174 @@
+lockfile_version: '1'
+apm_version: 0.32.0
+dependencies:
+- repo_url: _local/explore
+  name: explore
+  version: 0.1.0
+  package_type: apm_package
+  deployed_files:
+  - .claude/agents/explore.md
+  - .cursor/agents/explore.md
+  - .github/agents/explore.agent.md
+  deployed_file_hashes:
+    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+  source: local
+  local_path: ../explore
+  declared_license: MIT
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: claude
+  value: .claude/skills/babysit
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/babysit/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-tour
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/code-tour/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+- kind: project-relative
+  target: claude
+  value: .claude/skills/summarise-pr
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/summarise-pr/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+- kind: project-relative
+  target: copilot
+  value: .github/agents/explore.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/babysit
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/babysit/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/code-tour
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/code-tour/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/summarise-pr
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/summarise-pr/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+local_deployed_files:
+- .agents/skills/babysit
+- .agents/skills/babysit/SKILL.md
+- .agents/skills/code-tour
+- .agents/skills/code-tour/SKILL.md
+- .agents/skills/summarise-pr
+- .agents/skills/summarise-pr/SKILL.md
+- .claude/skills/babysit
+- .claude/skills/babysit/SKILL.md
+- .claude/skills/code-tour
+- .claude/skills/code-tour/SKILL.md
+- .claude/skills/summarise-pr
+- .claude/skills/summarise-pr/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/babysit/SKILL.md: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+  .agents/skills/code-tour/SKILL.md: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+  .agents/skills/summarise-pr/SKILL.md: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+  .claude/skills/babysit/SKILL.md: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+  .claude/skills/code-tour/SKILL.md: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+  .claude/skills/summarise-pr/SKILL.md: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196

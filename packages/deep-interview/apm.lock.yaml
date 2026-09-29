@@ -1,0 +1,90 @@
+lockfile_version: '1'
+apm_version: 0.32.0
+dependencies:
+- repo_url: _local/explore
+  name: explore
+  version: 0.1.0
+  package_type: apm_package
+  deployed_files:
+  - .claude/agents/explore.md
+  - .cursor/agents/explore.md
+  - .github/agents/explore.agent.md
+  deployed_file_hashes:
+    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+  source: local
+  local_path: ../explore
+  declared_license: MIT
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-interview
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/deep-interview/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+- kind: project-relative
+  target: copilot
+  value: .github/agents/explore.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/explore.md
+  runtime: null
+  scope: project
+  owners:
+  - ../explore
+  active_owner: ../explore
+  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-interview
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/deep-interview/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+local_deployed_files:
+- .agents/skills/deep-interview
+- .agents/skills/deep-interview/SKILL.md
+- .claude/skills/deep-interview
+- .claude/skills/deep-interview/SKILL.md
+local_deployed_file_hashes:
+  .agents/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
+  .claude/skills/deep-interview/SKILL.md: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326

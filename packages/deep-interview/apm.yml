@@ -1,0 +1,16 @@
+name: deep-interview
+version: "0.1.0"
+description: "Socratic requirement gathering with ambiguity gating before planning."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies:
+  apm:
+    - path: ../explore
+scripts:
+  check: apm audit --ci

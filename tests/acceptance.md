@@ -18,9 +18,9 @@ apm pack --dry-run --verbose
 apm pack --archive -o ./dist
 ```
 
-The commands that take no package argument are run with the package directory as the working directory; `tests/structural/validate_primitives.py` runs once from the repository root and covers all eighteen packages.
+The commands that take no package argument are run with the package directory as the working directory; `tests/structural/validate_primitives.py` runs once from the repository root and covers all nineteen packages.
 
-`apm install` must run before `apm compile --validate`: on a package whose `.apm/` holds only skills, `compile --validate` exits `1` until an install has materialised the deploy targets. Even then it is a weak check — it counts agents and instructions, validates no skill and enforces no frontmatter. `tests/structural/validate_primitives.py` is the real contract gate and covers all eighteen packages. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
+`apm install` must run before `apm compile --validate`: on a package whose `.apm/` holds only skills, `compile --validate` exits `1` until an install has materialised the deploy targets. Even then it is a weak check — it counts agents and instructions, validates no skill and enforces no frontmatter. `tests/structural/validate_primitives.py` is the real contract gate and covers all nineteen packages. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
 
 The suite must run outside the agent sandbox: APM writes into a `.cursor/` staging directory regardless of the requested targets, and the sandbox denies those writes with `Operation not permitted`.
 
@@ -45,7 +45,7 @@ Each assertion below must produce recorded evidence.
 
 8. **Missing sibling dependency fails actionably.** Removing a declared sibling dependency produces an actionable failure, not a silent skip.
 
-9. **Frozen install and audit.** `apm install --frozen` succeeds for all eighteen packages and `apm audit --ci` exits `0` for seventeen of them. `default-stack` is the documented exception: its own lockfile cannot be replayed because APM 0.32.0 records an ambiguous `resolved_by` parent for `pr`, which is reached both directly and via `execution` and which parents `explore`. The suite asserts that specific failure rather than accepting any failure, and the consumer-side audit of the same manifest is asserted separately in assertion 2. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
+9. **Frozen install and audit.** `apm install --frozen` succeeds for all nineteen packages and `apm audit --ci` exits `0` for eighteen of them. `default-stack` is the documented exception: its own lockfile cannot be replayed because APM 0.32.0 records an ambiguous `resolved_by` parent for `pr`, which is reached both directly and via `execution` and which parents `explore`. The suite asserts that specific failure rather than accepting any failure, and the consumer-side audit of the same manifest is asserted separately in assertion 2. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
 
 10. **Stability.** Re-running install and pack leaves the working tree unchanged: the suite records the untracked-file list plus `git diff HEAD` before and after, and the two must match. The diff ignores the absolute checkout paths APM records for transitive sibling dependencies, which change whenever the checkout path differs from the one that generated the lockfile.
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tier 1 structural acceptance suite.
 #
-# Proves structural packaging and deployment for all eighteen packages: manifests
+# Proves structural packaging and deployment for all nineteen packages: manifests
 # resolve, installs succeed, deployed inventory matches the promised primitives,
 # and the pinned CLI's documented limitations are asserted rather than hidden.
 #
@@ -49,7 +49,7 @@ AUDIT_KNOWN_BROKEN_SIGNATURE="ambiguous resolved_by parent"
 
 # Direct dependencies of the meta-package, plus the four packages they pull in
 # transitively (`swarm`, `architect`, `explore` and `deep-interview`). A
-# default-stack install therefore deploys twelve of the eighteen packages,
+# default-stack install therefore deploys twelve of the nineteen packages,
 # which is what the scratch-consumer inventory check covers.
 DEFAULT_STACK_DEPLOYED="architect coding-style deep-interview execution explore git-diff planning pr repo-maintenance review skill-creation swarm"
 

@@ -1,0 +1,113 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cursor-cost-review
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cursor-cost-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5f2dac767fcc7a616acfa33cad97ddb8a77eff7be6c5c81c4fa4671ec03c62cf
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cursor-cost-review/references/cost-levers.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:608f74ff75b516e041831dd88c0f96ae65196de7edf2b64760ff621b3f12dc8e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cursor-cost-review/scripts/summarise_transcripts.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f4c48a3d150e9cc1070e954579c706dfe2585e34060d00fb67b01c198603d141
+- kind: project-relative
+  target: claude
+  value: .claude/skills/cursor-cost-review/scripts/summarise_usage_csv.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a6398e2e0fc3e38ddddd3d13dc610118b81b8c9b8599e670887d1de5d06b85b2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/cursor-cost-review
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/cursor-cost-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5f2dac767fcc7a616acfa33cad97ddb8a77eff7be6c5c81c4fa4671ec03c62cf
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/cursor-cost-review/references/cost-levers.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:608f74ff75b516e041831dd88c0f96ae65196de7edf2b64760ff621b3f12dc8e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/cursor-cost-review/scripts/summarise_transcripts.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f4c48a3d150e9cc1070e954579c706dfe2585e34060d00fb67b01c198603d141
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/cursor-cost-review/scripts/summarise_usage_csv.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a6398e2e0fc3e38ddddd3d13dc610118b81b8c9b8599e670887d1de5d06b85b2
+local_deployed_files:
+- .agents/skills/cursor-cost-review
+- .agents/skills/cursor-cost-review/SKILL.md
+- .agents/skills/cursor-cost-review/references/cost-levers.md
+- .agents/skills/cursor-cost-review/scripts/summarise_transcripts.py
+- .agents/skills/cursor-cost-review/scripts/summarise_usage_csv.py
+- .claude/skills/cursor-cost-review
+- .claude/skills/cursor-cost-review/SKILL.md
+- .claude/skills/cursor-cost-review/references/cost-levers.md
+- .claude/skills/cursor-cost-review/scripts/summarise_transcripts.py
+- .claude/skills/cursor-cost-review/scripts/summarise_usage_csv.py
+local_deployed_file_hashes:
+  .agents/skills/cursor-cost-review/SKILL.md: sha256:5f2dac767fcc7a616acfa33cad97ddb8a77eff7be6c5c81c4fa4671ec03c62cf
+  .agents/skills/cursor-cost-review/references/cost-levers.md: sha256:608f74ff75b516e041831dd88c0f96ae65196de7edf2b64760ff621b3f12dc8e
+  .agents/skills/cursor-cost-review/scripts/summarise_transcripts.py: sha256:f4c48a3d150e9cc1070e954579c706dfe2585e34060d00fb67b01c198603d141
+  .agents/skills/cursor-cost-review/scripts/summarise_usage_csv.py: sha256:a6398e2e0fc3e38ddddd3d13dc610118b81b8c9b8599e670887d1de5d06b85b2
+  .claude/skills/cursor-cost-review/SKILL.md: sha256:5f2dac767fcc7a616acfa33cad97ddb8a77eff7be6c5c81c4fa4671ec03c62cf
+  .claude/skills/cursor-cost-review/references/cost-levers.md: sha256:608f74ff75b516e041831dd88c0f96ae65196de7edf2b64760ff621b3f12dc8e
+  .claude/skills/cursor-cost-review/scripts/summarise_transcripts.py: sha256:f4c48a3d150e9cc1070e954579c706dfe2585e34060d00fb67b01c198603d141
+  .claude/skills/cursor-cost-review/scripts/summarise_usage_csv.py: sha256:a6398e2e0fc3e38ddddd3d13dc610118b81b8c9b8599e670887d1de5d06b85b2

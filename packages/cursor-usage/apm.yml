@@ -1,0 +1,14 @@
+name: cursor-usage
+version: "0.1.0"
+description: "Analyse Cursor spend from a usage export and local transcripts, and rank ways to reduce it."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies: {}
+scripts:
+  check: apm audit --ci

@@ -4,11 +4,11 @@
 
 ![Foundry](assets/foundry-logo.png)
 
-Foundry is a collection of 24 agent skills, 11 subagents and 5 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
+Foundry is a collection of 25 agent skills, 11 subagents and 5 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
 
 ## What this is
 
-This repository was previously a Cursor plugin marketplace. It is now an APM monorepo of 18 independently installable packages. Every primitive has a single target-neutral source, and APM handles the per-target directory and frontmatter translation at install time — there are no per-target variants to keep in sync.
+This repository was previously a Cursor plugin marketplace. It is now an APM monorepo of 19 independently installable packages. Every primitive has a single target-neutral source, and APM handles the per-target directory and frontmatter translation at install time — there are no per-target variants to keep in sync.
 
 ## Prerequisites
 
@@ -50,6 +50,7 @@ A remote install requires the `v0.1.0` tag to exist and the consumer repository 
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | `architect`        | agents: `architect`                                                                                                                                                       | The architect agent: read-only strategic architecture and debugging advice.               |
 | `coding-style`     | instructions: `compatibility-surface-gate`, `software-engineering-rules`, `zen-of-python`                                                                                 | Core engineering rules, compatibility guardrails and Python style for agent-written code. |
+| `cursor-usage`     | skills: `cursor-cost-review`                                                                                                                                              | Analyse Cursor spend from a usage export and local transcripts, and rank ways to reduce it. |
 | `deep-interview`   | skills: `deep-interview`                                                                                                                                                  | Socratic requirement gathering with ambiguity gating before planning.                     |
 | `default-stack`    | *no primitives*                                                                                                                                                           | Meta-package that installs the default Foundry stack.                                     |
 | `execution`        | skills: `implement-linear-ticket`                                                                                                                                         | Take a Linear ticket to a merge-ready draft pull request.                                 |
@@ -73,6 +74,7 @@ Each package declares its sibling dependencies in `apm.yml`, so installing one p
 
 | Skill                                | Package            | Trigger                                                                                                                                                           |
 | ------------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cursor-cost-review`                 | `cursor-usage`     | Analyse an exported Cursor usage-events CSV together with local agent transcripts to find where Cursor spend goes and which changes would cut it without lo…    |
 | `implement-linear-ticket`            | `execution`        | Take a Linear ticket to a merge-ready draft GitHub pull request. Resolve the issue, branch from origin/$BASE, plan, implement, run thermos, open a draft PR,…     |
 | `git-diff-all-changes-main`          | `git-diff`         | Show all changes compared to origin/main. Use when the user asks for a full diff of every local change against main.                                              |
 | `git-diff-committed-changes-main`    | `git-diff`         | Show staged and committed changes compared to origin/main. Use when the user asks for the diff of committed work against main.                                    |

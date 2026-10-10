@@ -132,23 +132,35 @@ dependencies:
   The nine packages that declare one — `default-stack`, `deep-interview`,
   `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`,
   `skill-creation` and `swarm` — are
-  therefore **pack-blocked** until `v0.1.0` is tagged. CI asserts that guardrail
-  instead of skipping those packages silently.
-- The remote fallback `{git: Samuel-Harris/foundry, path: packages/<name>, ref: "^0.1.0"}`
-  is **not viable pre-release**: without a pushed tag, a real install stops with
-  `No tags on Samuel-Harris/foundry satisfy '^0.1.0'`. Keep the `path:` form;
-  produce bundles for the nine dependency-bearing packages from a release job
-  after the tag exists.
-- Consumers never use the sibling form. They install the remote shorthand,
-  `apm install Samuel-Harris/foundry/packages/<name>#v0.1.0`.
-- **A transitive sibling dependency additionally records an absolute path, which
-  is harmless.** Direct dependencies get a portable `local_path: ../<name>`, but
-  a local dependency reached through another local package (for example
-  `architect` via `swarm`) also gets
-  `anchored_local_path: /absolute/path/to/packages/<name>`. The committed
-  lockfiles carry the authoring machine's path. Verified: `install --frozen` and
-  `audit --ci` still pass at a different absolute root, and `apm install`
-  rewrites the field to the local path. Do not hand-edit it.
+  therefore **pack-blocked** from their committed manifests. CI asserts that
+  guardrail instead of skipping those packages silently.
+- **Keep the `path:` form permanently.** A remote install rewrites each
+  `path: ../<name>` to `packages/<name>` in the same repository at the same
+  commit, so `apm install Samuel-Harris/foundry/packages/<name>#<ref>` gives a
+  consumer mutually consistent siblings from one tag or branch. Verified with
+  `swarm#main`: `architect` and `explore` resolved at the same commit, and the
+  consumer lockfile records no local path. The remote form
+  `{git: Samuel-Harris/foundry, path: packages/<name>, ref: "^0.1.0"}` would pin
+  siblings to a tag, so a change spanning packages could not be tested on a
+  branch; pre-release it also fails outright with
+  `No tags on Samuel-Harris/foundry satisfy '^0.1.0'`. If bundles are needed,
+  a release job rewrites a throwaway copy of each manifest to the remote form at
+  the release tag and packs that.
+- **Testing a feature branch.** Run `bash tests/structural/run-tier1.sh`
+  against the working tree, then push and install
+  `Samuel-Harris/foundry/packages/<name>#<branch>` in an empty directory.
+- **A transitive sibling dependency additionally records an absolute path.** It
+  works at any checkout root but leaks the authoring machine's path and churns
+  on regeneration. Direct dependencies get a portable `local_path: ../<name>`,
+  but a local dependency reached through another local package (for example
+  `explore` via `pr`) also gets
+  `anchored_local_path: /absolute/path/to/packages/<name>`, and its deployment
+  owners are recorded as `local:/absolute/path/...`. APM only relativises paths
+  inside the project root (`packages/<name>`), and siblings are outside it.
+  Verified: `install --frozen` and `audit --ci` still pass at a different
+  absolute root, but any install there rewrites every occurrence, so CI's
+  lockfile diff ignores those lines. Do not hand-edit or post-process it; the
+  fix is upstream in APM.
 - **Only the direct-dependency form dedupes.** When a package is reachable both
   directly and transitively it appears twice in the lockfile. That is harmless
   unless the duplicated package is itself the parent of a third, which breaks
@@ -221,12 +233,15 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
 - `local_deployed_files` and `local_deployed_file_hashes` list the deployed tree
   and its hashes; `apm audit --ci` and bundle integrity checks compare against
   them.
-- `apm install --frozen` refuses to run when the lockfile is missing or out of
-  sync with `apm.yml`. Use it in CI; use plain `apm install` after editing a
-  manifest.
-- Transitive local dependencies carry an `anchored_local_path`. It is rewritten
-  by the next `apm install` and does not pin the lockfile to a machine, so a
-  lockfile committed from any checkout root is valid. Never hand-edit it.
+- `apm install --frozen` refuses to run only when the lockfile is **missing**.
+  With local dependencies it re-resolves `apm.yml`, rewrites a stale lockfile
+  and exits `0` (`Lockfile presence verified`). Regenerate with `apm install`
+  after editing a manifest or any primitive, and commit the result. CI fails if
+  the lockfile changes after install.
+- Transitive local dependencies carry an absolute `anchored_local_path`. It
+  does not pin the lockfile to a machine, so a lockfile committed from any
+  checkout root is valid, but the next plain `apm install` at a different root
+  rewrites it. Never hand-edit it.
 
 ## Validate, audit and pack
 
@@ -278,7 +293,9 @@ drift detection could see them. `setup-only` provides the CLI only. The action's
 Jobs: `contract` (primitive validator plus secret scan), `validate-packages`
 (matrix over all eighteen), `scratch-consumer` (matrix over the three targets),
 `archive-consumer` (pack, install, inventory, tamper rejection) and
-`lint-markdown`. The `validate-packages` matrix carries a `pack_blocked` flag for
+`lint-markdown`. `validate-packages` installs each package and then fails if
+`apm.lock.yaml` changed, ignoring the absolute-path lines APM records for
+transitive siblings. The `validate-packages` matrix carries a `pack_blocked` flag for
 the nine local-path packages and an `audit_known_broken` flag for
 `default-stack`; both assert the pinned CLI's documented failure rather
 than skipping the package.

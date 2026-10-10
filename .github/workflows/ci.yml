@@ -124,7 +124,16 @@ jobs:
       # deploy targets. See docs/DEPENDENCY-CONTRACTS.md.
       - name: Install
         working-directory: packages/${{ matrix.package }}
-        run: timeout 300 apm install --target "$TARGETS"
+        run: timeout 300 apm install --frozen --target "$TARGETS"
+
+      # With local dependencies `--frozen` only checks that a lockfile exists; it
+      # re-resolves and rewrites it. Any rewrite therefore means the committed
+      # lockfile is stale. The ignored lines are absolute checkout paths that APM
+      # records for transitive siblings and that differ on every runner.
+      - name: Assert the committed lockfile is current
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          git diff --exit-code -I 'anchored_local_path: /' -I 'local:/' -- apm.lock.yaml
 
       - name: Audit lockfile and deployed-file hashes
         if: ${{ !matrix.audit_known_broken }}

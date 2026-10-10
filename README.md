@@ -133,7 +133,7 @@ apm pack --archive -o ./dist
 
 `apm compile --validate` exits `1` on a package whose `.apm/` contains only skills until an install has materialised the deploy targets, so install first. It also inspects no skill, so `tests/structural/validate_primitives.py` is the real frontmatter and sibling-file gate.
 
-`bash tests/structural/run-tier1.sh` runs the whole suite, including the scratch-consumer installs, the archive consumer and the tamper rejection, with every CLI call bounded by a hard timeout. `apm pack` refuses to bundle a package that declares a local `path:` dependency, so every package with sibling dependencies is pack-blocked until the `v0.1.0` tag exists; the suite asserts that guardrail explicitly rather than skipping those packages.
+`bash tests/structural/run-tier1.sh` runs the whole suite, including the scratch-consumer installs, the archive consumer and the tamper rejection, with every CLI call bounded by a hard timeout. `apm pack` refuses to bundle a package that declares a local `path:` dependency, so every package with sibling dependencies is pack-blocked from its committed manifest; the suite asserts that guardrail explicitly rather than skipping those packages.
 
 CI runs the Tier 1 structural suite: per-package install, audit and validation, a scratch-consumer install for each of the three targets, an archive-consumer install with tamper rejection, a secrets scan and markdownlint. See `[tests/acceptance.md](tests/acceptance.md)` for the assertions and `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the manifest and CLI contracts.
 

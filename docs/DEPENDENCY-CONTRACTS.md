@@ -73,9 +73,19 @@ $ apm install --target cursor            # with {git: Samuel-Harris/foundry, pat
 
 The CLI prefixes the failing dependency's identifier with the repository name, so the error names `foundry-planning` while the manifest path is `packages/planning`.
 
-So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:`, because publication is out of scope and install, `--frozen` and `audit --ci` must stay green for every package that can have them green. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm` — is deferred to a release job that runs after the tag is pushed, at which point the remote form becomes usable. CI asserts the guardrail for those packages rather than skipping them.
+So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:` permanently, not only until the tag exists, because a remote install already resolves it correctly (see below) and the remote form would pin every sibling to a tag, so a change spanning two packages could not be tested on a feature branch. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm` — is deferred until bundles are needed; a release job would then rewrite a throwaway copy of each manifest to `{git: Samuel-Harris/foundry, path: packages/<name>, ref: <tag>}` and pack that. CI asserts the guardrail for those packages rather than skipping them.
 
-Consumers never use the sibling form. A consumer declares a remote dependency:
+**A remote install rewrites sibling paths to the same repository and commit.** When APM fetches a package from a git remote, it expands each `path: ../<name>` dependency into a dependency on `packages/<name>` in the same repository at the same resolved commit (`_expand_remote_parent_local_path` in `apm_cli/deps/apm_resolver.py`); a path that escapes the repository root is rejected. Verified with 0.32.0: `apm install Samuel-Harris/foundry/packages/swarm#main` in an empty directory resolved `swarm`, `architect` and, transitively, `explore` all at `main @c00c862a`, and the consumer's lockfile records only `virtual_path: packages/<name>` with `resolved_ref: main`, with no local or absolute path. A consumer therefore gets mutually consistent packages from one tag or branch.
+
+To test a feature branch end to end, push it and install from it in an empty directory:
+
+```bash
+apm install Samuel-Harris/foundry/packages/<name>#<branch> --target cursor,claude,copilot
+```
+
+Every sibling then resolves to the branch's commit. Before pushing, `bash tests/structural/run-tier1.sh` exercises the same dependency graph against the working tree.
+
+Consumers never write the sibling form themselves. A consumer declares a remote dependency:
 
 ```yaml
 dependencies:
@@ -121,9 +131,12 @@ There is deliberately **no `apm.yml` at the repository root**. Root-level compil
 
 - Commit `apm.lock.yaml` per package once generated.
 - Never hand-author or hand-edit hashes or pins. Regenerate with `apm lock` or `apm install`.
-- `apm install --frozen` reproduces the lockfile exactly and is the CI-safe form.
+- `apm install --frozen` does **not** reject a stale lockfile when the dependencies are local. It fails only when the lockfile is missing; otherwise it re-resolves `apm.yml`, rewrites the lockfile and exits `0` with `Lockfile presence verified`. Verified with 0.32.0: adding `- path: ../review` to `packages/swarm/apm.yml` passed `--frozen` and `apm audit --ci`, and the rewritten lockfile gained a `_local/review` entry. A rewrite after install is therefore the staleness signal. CI's `validate-packages` job runs `git diff --exit-code` on `apm.lock.yaml` after installing, ignoring the absolute-path lines described below; that catches both a manifest change and a primitive content change committed without regenerating the lockfile. Locally, `run-tier1.sh` catches the same rewrite with its tracked-file stability check.
 - `apm audit --ci` is the release gate.
-- **A transitive sibling dependency records an absolute path, which is inert.** Direct local dependencies are pinned as `local_path: ../<name>`, which is portable, but a local dependency reached transitively (for example `architect` via `swarm`) additionally records `anchored_local_path: /absolute/path/to/packages/<name>`. Because the committed lockfiles were generated on the authoring machine, they carry that machine's path. Verified: copying the tree to a different absolute root leaves `apm install --frozen` and `apm audit --ci` green, and a plain `apm install` rewrites `anchored_local_path` to the new location. So the recorded path does not pin the lockfile to a machine, and CI does not need to regenerate it.
+- **A transitive sibling dependency records an absolute path. It works at any checkout root, but it leaks the authoring machine's path and churns on regeneration.** Direct local dependencies are pinned as `local_path: ../<name>`, which is portable, but a local dependency reached transitively (for example `explore` via `pr`) additionally records `anchored_local_path: /absolute/path/to/packages/<name>`, and its deployment entries record `owners` and `active_owner` as `local:/absolute/path/to/packages/<name>`.
+  - Cause: APM's `_portable_anchor_identity` relativises the path against the project root with `Path.relative_to`, which only succeeds for paths inside it. Each lockfile's project root is `packages/<name>`, every sibling is outside it, so APM falls back to the absolute path.
+  - Effect: verified by copying the tree to a different absolute root, `apm install --frozen` and `apm audit --ci` stay green, so the recorded path does not pin the lockfile to a machine. Any install there rewrites every occurrence to the new root, so a lockfile regenerated on another machine or in CI differs from the committed one. That is why CI's lockfile-current check ignores lines matching `anchored_local_path: /` and `local:/`; without the filter, five packages (`default-stack`, `execution`, `planning`, `repo-init` and `skill-creation`) fail on every runner.
+  - Fix: upstream. Relativising with `os.path.relpath` would record `../<name>`. Do not post-process lockfiles to remove the path: the value is also APM's identity key for the dependency and its deployment owners. After an APM release fixes it, bump the pin and re-run `apm install` in each package.
 
 ## Generated-file policy
 
@@ -217,7 +230,7 @@ Error: Cannot pack — apm.yml contains local path dependency: ../planning
 Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
 ```
 
-This is the reason every package with a sibling `path:` dependency cannot be packed before `v0.1.0` is tagged: `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm`. The sibling section above records the full comparison and the tested remote fallback.
+This is the reason every package with a sibling `path:` dependency cannot be packed from its committed manifest: `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm`. The sibling section above records the full comparison, the tested remote fallback and the release-job rewrite that would produce their bundles.
 
 ### `apm audit --ci` cannot replay a lockfile with a duplicated local `resolved_by` parent
 

@@ -47,7 +47,7 @@ Each assertion below must produce recorded evidence.
 
 9. **Frozen install and audit.** `apm install --frozen` succeeds for all eighteen packages and `apm audit --ci` exits `0` for seventeen of them. `default-stack` is the documented exception: its own lockfile cannot be replayed because APM 0.32.0 records an ambiguous `resolved_by` parent for `pr`, which is reached both directly and via `execution` and which parents `explore`. The suite asserts that specific failure rather than accepting any failure, and the consumer-side audit of the same manifest is asserted separately in assertion 2. See [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md).
 
-10. **Stability.** Re-running install and pack leaves the working tree unchanged: the suite records `git status --porcelain` plus `git diff` before and after, and the two must match.
+10. **Stability.** Re-running install and pack leaves the working tree unchanged: the suite records the untracked-file list plus `git diff HEAD` before and after, and the two must match. The diff ignores the absolute checkout paths APM records for transitive sibling dependencies, which change whenever the checkout path differs from the one that generated the lockfile.
 
 11. **Secret scan.** Scanned over every tracked and untracked (unignored) working-tree file plus `packages/*/dist/**`, not only tracked files. Files over 2 MB and unreadable files are counted and reported as skipped rather than being counted as clean.
 

@@ -148,7 +148,17 @@ echo "Primitive contract"
 bounded python3 "$REPO_ROOT/tests/structural/validate_primitives.py"
 report $? "validate_primitives.py"
 
-initial_state="$( cd "$REPO_ROOT" && { git status --porcelain | sort; git diff; } | git hash-object --stdin )"
+# APM records transitive sibling dependencies by absolute checkout path, so any
+# install at a root other than the one that generated a lockfile rewrites those
+# lines. They are excluded here and in CI's lockfile-current check.
+tracked_state() {
+  cd "$REPO_ROOT" && {
+    git ls-files --others --exclude-standard | sort
+    git diff HEAD -I 'anchored_local_path: /' -I 'local:/'
+  } | git hash-object --stdin
+}
+
+initial_state="$(tracked_state)"
 
 echo
 echo "Per-package matrix"
@@ -381,7 +391,7 @@ fi
 
 echo
 echo "Stability"
-final_state="$( cd "$REPO_ROOT" && { git status --porcelain | sort; git diff; } | git hash-object --stdin )"
+final_state="$(tracked_state)"
 if [[ "$initial_state" == "$final_state" ]]; then
   report 0 "install and pack leave no tracked-file change"
 else

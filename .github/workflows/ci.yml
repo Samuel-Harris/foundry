@@ -71,6 +71,8 @@ jobs:
             pack_blocked: false
           - package: coding-style
             pack_blocked: false
+          - package: cursor-usage
+            pack_blocked: false
           - package: deep-interview
             pack_blocked: true
           - package: default-stack

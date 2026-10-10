@@ -1,7 +1,7 @@
 # Working in this repository
 
-Operational notes for agents editing Foundry. This repository publishes eighteen
-[APM](https://microsoft.github.io/apm/) packages — seventeen content packages plus
+Operational notes for agents editing Foundry. This repository publishes nineteen
+[APM](https://microsoft.github.io/apm/) packages — eighteen content packages plus
 a meta-package. Almost everything surprising about it comes from the pinned CLI,
 so this file records **empirically verified APM 0.32.0 behaviour**, not a
 restatement of the design. For what each package contains, see `README.md`; for
@@ -291,7 +291,7 @@ drift detection could see them. `setup-only` provides the CLI only. The action's
 `apm-version` input defaults to `0.14.0`, so always pass `apm-version: "0.32.0"`.
 
 Jobs: `contract` (primitive validator plus secret scan), `validate-packages`
-(matrix over all eighteen), `scratch-consumer` (matrix over the three targets),
+(matrix over all nineteen), `scratch-consumer` (matrix over the three targets),
 `archive-consumer` (pack, install, inventory, tamper rejection) and
 `lint-markdown`. `validate-packages` installs each package and then fails if
 `apm.lock.yaml` changed, ignoring the absolute-path lines APM records for
@@ -307,7 +307,7 @@ than skipping the package.
   `.gitignore` already ignores `apm_modules/`. `apm install` appends
   `# APM dependencies` and `apm_modules/` to the `.gitignore` in its working
   directory whenever that exact line is absent there, so a package without one
-  grows an untracked file on the next install and dirties the tree. Eighteen
+  grows an untracked file on the next install and dirties the tree. Nineteen
   byte-identical 33-byte files are the expected end state.
 - Never commit deploy output. `.gitignore` excludes `apm_modules/`, `dist/`,
   `build/`, `.claude/`, `.agents/`, `.cursor/rules/`, `.cursor/agents/`,

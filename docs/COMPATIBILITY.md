@@ -54,6 +54,7 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 | --- | --- | --- | --- | --- |
 | `architect` | 1 agent | verified | untested | untested |
 | `coding-style` | 3 instructions | verified | untested | untested |
+| `cursor-usage` | 1 skill | verified | untested | untested |
 | `deep-interview` | 1 skill | verified | untested | untested |
 | `default-stack` | no primitives; resolves 8 direct and 4 transitive packages | verified | untested | untested |
 | `execution` | 1 skill | verified | untested | untested |
@@ -73,14 +74,15 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 
 Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place — with one documented exception. `default-stack`'s own lockfile cannot be replayed by `apm audit --ci`, because the meta-package reaches `pr` by two paths and an APM 0.32.0 writer defect then records an ambiguous parent chain for `explore`. Consumers are unaffected: a clean install of `default-stack` resolves the same twelve packages and passes `apm audit --ci` on all three targets. See `docs/DEPENDENCY-CONTRACTS.md` for the minimal repro and the reasoning behind keeping the eight-declared-requirement manifest.
 
-`apm install --frozen` succeeds for all eighteen packages in place.
+`apm install --frozen` succeeds for all nineteen packages in place.
 
 ## Archive coverage
 
-`apm pack --archive` succeeds for the nine packages with an empty `dependencies:` mapping:
+`apm pack --archive` succeeds for the ten packages with an empty `dependencies:` mapping:
 
 - `architect`
 - `coding-style`
+- `cursor-usage`
 - `explore`
 - `git-diff`
 - `handoff`

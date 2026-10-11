@@ -22,13 +22,13 @@ Install APM by following the [APM installation guide](https://microsoft.github.i
   python -m pip install "apm-cli==0.32.0"
   ```
 
-- **A pre-commit lockfile check.** Once per clone, point Git at the tracked hooks so a primitive edit cannot be committed without the lockfile CI expects:
+- **Pre-commit checks.** Once per clone, point Git at the tracked hooks:
 
   ```bash
   git config core.hooksPath .githooks
   ```
 
-  The hook runs `apm install --frozen` for the staged package and its dependents, then the same lockfile diff as CI. It requires `apm-cli==0.32.0`. See `AGENTS.md`.
+  The hook lints staged markdown with `markdownlint-cli2` 0.14.0, and runs `apm install --frozen` for a staged package and its dependents, failing if that rewrites `apm.lock.yaml`. CI's only job runs the same script. The lockfile half requires `apm-cli==0.32.0`. See `AGENTS.md`.
 
 ## Install
 
@@ -124,7 +124,7 @@ APM does not sandbox MCP servers. A clean `apm audit` result is a statement abou
 | Claude Code    | `.claude/skills/` | `.claude/agents/` | `.claude/rules/`        |
 | GitHub Copilot | `.agents/skills/` | `.github/agents/` | `.github/instructions/` |
 
-All three targets support instructions, agents and skills, so no primitive is degraded or converted. Structural packaging is verified in CI for all three targets; **runtime recognition and workflow behaviour are untested** — no client application is launched. See `[docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)` for the per-package breakdown and the known limits of the pinned CLI.
+All three targets support instructions, agents and skills, so no primitive is degraded or converted. Structural packaging is verified by the local Tier 1 suite; **runtime recognition and workflow behaviour are untested** — no client application is launched. See `[docs/COMPATIBILITY.md](docs/COMPATIBILITY.md)` for the per-package breakdown and the known limits of the pinned CLI.
 
 ## Development
 
@@ -145,7 +145,7 @@ apm pack --archive -o ./dist
 
 `bash tests/structural/run-tier1.sh` runs the whole suite, including the scratch-consumer installs, the archive consumer and the tamper rejection, with every CLI call bounded by a hard timeout. `apm pack` refuses to bundle a package that declares a local `path:` dependency, so every package with sibling dependencies is pack-blocked from its committed manifest; the suite asserts that guardrail explicitly rather than skipping those packages.
 
-CI runs the Tier 1 structural suite: per-package install, audit and validation, a scratch-consumer install for each of the three targets, an archive-consumer install with tamper rejection, a secrets scan and markdownlint. See `[tests/acceptance.md](tests/acceptance.md)` for the assertions and `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the manifest and CLI contracts.
+CI's only job runs `.githooks/pre-commit` on the pull-request diff, or on the commits just pushed. The Tier 1 suite above is what to run locally before relying on a package change. See `[tests/acceptance.md](tests/acceptance.md)` for its assertions and `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the manifest and CLI contracts.
 
 ## Attributions
 

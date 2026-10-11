@@ -1,50 +1,29 @@
 #!/usr/bin/env bash
-# Refuse a commit that changes package sources without the lockfile CI expects.
+# Refuse a commit that leaves markdown unlinted or a package lockfile stale.
 #
-# `apm install --frozen` rewrites a stale apm.lock.yaml and still exits 0.
-# CI then runs `git diff --exit-code` on that file, ignoring the absolute
-# checkout paths APM records for transitive siblings. This hook runs the same
-# install and the same diff for every staged package, plus every package that
-# depends on one, so that rewrite is caught before push.
+# Markdown: markdownlint-cli2 0.14.0, the version the previous CI action pinned,
+# over README.md, CHANGELOG.md, AGENTS.md and markdown under packages/, docs/
+# and tests/. Config is .markdownlint.json and .markdownlint-cli2.jsonc.
 #
-# Requires apm-cli 0.32.0. Prefer .venv-apm/bin/apm. Bypass with
-# FOUNDRY_SKIP_LOCKFILE_HOOK=1.
+# Lockfile: `apm install --frozen` rewrites a stale apm.lock.yaml and still
+# exits 0. The staleness signal is that rewrite, ignoring the absolute checkout
+# paths APM records for transitive siblings. The script installs every affected
+# package, plus every package that depends on one.
+#
+# Locally it reads the staged diff. CI sets FOUNDRY_DIFF_RANGE (a git range
+# such as origin/main...HEAD) or FOUNDRY_CHECK_ALL=1 and runs this same script.
+#
+# The lockfile half needs apm-cli 0.32.0. Prefer .venv-apm/bin/apm. Bypass that
+# half with FOUNDRY_SKIP_LOCKFILE_HOOK=1. Markdown lint still runs.
 set -euo pipefail
-
-if [[ "${FOUNDRY_SKIP_LOCKFILE_HOOK:-}" == "1" ]]; then
-  echo "pre-commit: skipping lockfile check (FOUNDRY_SKIP_LOCKFILE_HOOK=1)" >&2
-  exit 0
-fi
 
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root"
 
 pinned_version="0.32.0"
+markdownlint_version="${MARKDOWNLINT_CLI2_VERSION:-0.14.0}"
 targets="${APM_TARGETS:-cursor,claude,copilot}"
 apm_timeout="${APM_TIMEOUT:-300}"
-
-if [[ -n "${APM:-}" ]]; then
-  apm="$APM"
-elif [[ -x "$repo_root/.venv-apm/bin/apm" ]]; then
-  apm="$repo_root/.venv-apm/bin/apm"
-else
-  apm="$(command -v apm || true)"
-fi
-
-if [[ -z "$apm" || ! -x "$apm" ]]; then
-  echo "pre-commit: apm ${pinned_version} not found (set APM=, create .venv-apm, or put apm on PATH)" >&2
-  exit 1
-fi
-
-version_line="$("$apm" --version 2>&1 || true)"
-case "$version_line" in
-  *"version ${pinned_version}"*) ;;
-  *)
-    echo "pre-commit: need apm ${pinned_version}, got: ${version_line:-<no version>}" >&2
-    echo "pre-commit: python -m pip install \"apm-cli==${pinned_version}\"  (or use .venv-apm/bin/apm)" >&2
-    exit 1
-    ;;
-esac
 
 bounded() {
   if command -v timeout >/dev/null 2>&1; then
@@ -66,24 +45,115 @@ has_pkg() {
   esac
 }
 
-# Packages whose staged manifest, primitives or lockfile can change hashes.
-seeds=""
-while IFS= read -r path; do
-  [[ -n "$path" ]] || continue
-  case "$path" in
-    packages/*/apm.yml|packages/*/.apm/*|packages/*/apm.lock.yaml) ;;
-    *) continue ;;
+# Same paths the former markdownlint CI job covered.
+is_linted_markdown() {
+  case "$1" in
+    *.md) ;;
+    *) return 1 ;;
   esac
-  pkg="${path#packages/}"
-  pkg="${pkg%%/*}"
-  if ! has_pkg "$seeds" "$pkg"; then
-    seeds="$seeds $pkg"
+  case "$1" in
+    README.md|CHANGELOG.md|AGENTS.md|packages/*|docs/*|tests/*) return 0 ;;
+  esac
+  return 1
+}
+
+run_markdownlint() {
+  echo "pre-commit: markdownlint-cli2 ${markdownlint_version}" >&2
+  if [[ -x "$repo_root/node_modules/.bin/markdownlint-cli2" ]]; then
+    bounded "$repo_root/node_modules/.bin/markdownlint-cli2" "$@"
+  elif command -v npx >/dev/null 2>&1; then
+    bounded npx --yes "markdownlint-cli2@${markdownlint_version}" "$@"
+  else
+    echo "pre-commit: markdownlint-cli2 not found (install Node.js so npx is on PATH)" >&2
+    return 1
   fi
-done < <(git diff --cached --name-only --diff-filter=ACMRD)
+}
+
+if [[ "${FOUNDRY_CHECK_ALL:-}" == "1" ]]; then
+  changed_paths=""
+elif [[ -n "${FOUNDRY_DIFF_RANGE:-}" ]]; then
+  changed_paths="$(git diff --name-only --diff-filter=ACMRD "$FOUNDRY_DIFF_RANGE")"
+else
+  changed_paths="$(git diff --cached --name-only --diff-filter=ACMRD)"
+fi
+
+lint_status=0
+if [[ "${FOUNDRY_CHECK_ALL:-}" == "1" ]]; then
+  run_markdownlint \
+    "packages/**/*.md" \
+    "docs/**/*.md" \
+    "tests/**/*.md" \
+    "README.md" \
+    "CHANGELOG.md" \
+    "AGENTS.md" || lint_status=$?
+else
+  md_files=()
+  while IFS= read -r path; do
+    [[ -n "$path" && -f "$path" ]] || continue
+    is_linted_markdown "$path" || continue
+    md_files+=("$path")
+  done <<< "$changed_paths"
+  if [[ ${#md_files[@]} -gt 0 ]]; then
+    run_markdownlint "${md_files[@]}" || lint_status=$?
+  fi
+fi
+
+if [[ "${FOUNDRY_SKIP_LOCKFILE_HOOK:-}" == "1" ]]; then
+  echo "pre-commit: skipping lockfile check (FOUNDRY_SKIP_LOCKFILE_HOOK=1)" >&2
+  exit "$lint_status"
+fi
+
+if [[ -n "${APM:-}" ]]; then
+  apm="$APM"
+elif [[ -x "$repo_root/.venv-apm/bin/apm" ]]; then
+  apm="$repo_root/.venv-apm/bin/apm"
+else
+  apm="$(command -v apm || true)"
+fi
+
+# Packages whose manifest, primitives or lockfile can change hashes.
+seeds=""
+if [[ "${FOUNDRY_CHECK_ALL:-}" == "1" ]]; then
+  for manifest in "$repo_root"/packages/*/apm.yml; do
+    pkg="$(basename "$(dirname "$manifest")")"
+    seeds="$seeds $pkg"
+  done
+else
+  while IFS= read -r path; do
+    [[ -n "$path" ]] || continue
+    case "$path" in
+      packages/*/apm.yml|packages/*/.apm/*|packages/*/apm.lock.yaml) ;;
+      *) continue ;;
+    esac
+    pkg="${path#packages/}"
+    pkg="${pkg%%/*}"
+    if ! has_pkg "$seeds" "$pkg"; then
+      seeds="$seeds $pkg"
+    fi
+  done <<< "$changed_paths"
+fi
 
 if [[ -z "${seeds# }" ]]; then
-  exit 0
+  if [[ -n "${FOUNDRY_DIFF_RANGE:-}${FOUNDRY_CHECK_ALL:-}" ]]; then
+    echo "pre-commit: no package manifest, primitive or lockfile changes to check" >&2
+  fi
+  exit "$lint_status"
 fi
+
+if [[ -z "$apm" || ! -x "$apm" ]]; then
+  echo "pre-commit: apm ${pinned_version} not found (set APM=, create .venv-apm, or put apm on PATH)" >&2
+  exit 1
+fi
+
+version_line="$("$apm" --version 2>&1 || true)"
+case "$version_line" in
+  *"version ${pinned_version}"*) ;;
+  *)
+    echo "pre-commit: need apm ${pinned_version}, got: ${version_line:-<no version>}" >&2
+    echo "pre-commit: python -m pip install \"apm-cli==${pinned_version}\"  (or use .venv-apm/bin/apm)" >&2
+    exit 1
+    ;;
+esac
 
 # Direct dependents, from sibling `path:` dependencies.
 dependents_of() {
@@ -148,6 +218,8 @@ for pkg in $affected; do
       git checkout -- "$lock"
     fi
   else
+    echo "pre-commit: lockfile diff for packages/$pkg:" >&2
+    git diff -I 'anchored_local_path: /' -I 'local:/' -- "$lock" >&2 || true
     stale="$stale $pkg"
   fi
 done
@@ -160,3 +232,5 @@ if [[ -n "${stale# }" ]]; then
   done
   exit 1
 fi
+
+exit "$lint_status"

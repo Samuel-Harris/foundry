@@ -150,7 +150,7 @@ report $? "validate_primitives.py"
 
 # APM records transitive sibling dependencies by absolute checkout path, so any
 # install at a root other than the one that generated a lockfile rewrites those
-# lines. They are excluded here and in CI's lockfile-current check.
+# lines. They are excluded here and in the pre-commit lockfile check.
 tracked_state() {
   cd "$REPO_ROOT" && {
     git ls-files --others --exclude-standard | sort

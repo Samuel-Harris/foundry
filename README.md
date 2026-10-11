@@ -4,7 +4,7 @@
 
 ![Foundry](assets/foundry-logo.png)
 
-Foundry is a collection of 25 agent skills, 11 subagents and 5 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
+Foundry is a collection of 25 agent skills, 11 subagents and 4 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
 
 ## What this is
 
@@ -21,6 +21,14 @@ Install APM by following the [APM installation guide](https://microsoft.github.i
   ```bash
   python -m pip install "apm-cli==0.32.0"
   ```
+
+- **A pre-commit lockfile check.** Once per clone, point Git at the tracked hooks so a primitive edit cannot be committed without the lockfile CI expects:
+
+  ```bash
+  git config core.hooksPath .githooks
+  ```
+
+  The hook runs `apm install --frozen` for the staged package and its dependents, then the same lockfile diff as CI. It requires `apm-cli==0.32.0`. See `AGENTS.md`.
 
 ## Install
 
@@ -46,27 +54,27 @@ A remote install requires the `v0.1.0` tag to exist and the consumer repository 
 
 ## Packages
 
-| Package            | Contents                                                                                                                                                                  | Purpose                                                                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `architect`        | agents: `architect`                                                                                                                                                       | The architect agent: read-only strategic architecture and debugging advice.               |
-| `coding-style`     | instructions: `compatibility-surface-gate`, `software-engineering-rules`, `zen-of-python`                                                                                 | Core engineering rules, compatibility guardrails and Python style for agent-written code. |
+| Package            | Contents                                                                                                                                                                  | Purpose                                                                                     |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `architect`        | agents: `architect`                                                                                                                                                       | The architect agent: read-only strategic architecture and debugging advice.                 |
+| `coding-style`     | instructions: `compatibility-surface-gate`, `software-engineering-rules`                                                                                                  | Core engineering rules and compatibility guardrails for agent-written code.                 |
 | `cursor-usage`     | skills: `cursor-cost-review`                                                                                                                                              | Analyse Cursor spend from a usage export and local transcripts, and rank ways to reduce it. |
-| `deep-interview`   | skills: `deep-interview`                                                                                                                                                  | Socratic requirement gathering with ambiguity gating before planning.                     |
-| `default-stack`    | *no primitives*                                                                                                                                                           | Meta-package that installs the default Foundry stack.                                     |
-| `execution`        | skills: `implement-linear-ticket`                                                                                                                                         | Take a Linear ticket to a merge-ready draft pull request.                                 |
-| `explore`          | agents: `explore`                                                                                                                                                         | Thorough read-only codebase search with cross-module reasoning.                           |
-| `git-diff`         | skills: `git-diff-all-changes-main`, `git-diff-committed-changes-main`, `git-diff-staged-changes-main`                                                                    | Read-only git diff summaries measured against a repository's main branch.                 |
-| `handoff`          | skills: `handoff`                                                                                                                                                         | Produce a handoff document that lets another agent or session continue the work.          |
-| `infrastructure`   | skills: `aws-architecture-diagram`                                                                                                                                        | AWS architecture diagrams rendered as Mermaid flowcharts.                                 |
-| `planning`         | skills: `masterplan`, `ralplan`; agents: `critic`, `planner`; instructions: `plan-handoff-standard`                                                                       | Plan authoring and plan review.                                                           |
-| `pr`               | skills: `babysit`, `code-tour`, `summarise-pr`                                                                                                                            | Pull request comprehension and merge-readiness babysitting.                               |
-| `repo-init`        | skills: `monorepo-init`, `terraform-monorepo-init`                                                                                                                        | Scaffold a new repository or monorepo with evidence-based agent guidance.                 |
-| `repo-maintenance` | skills: `agents-md`, `generate-agent-docs`, `optimise-agent-config`; instructions: `keep-agent-mds-up-to-date`                                                            | Keep AGENTS.md files and agent configuration accurate and lean.                           |
-| `review`           | skills: `thermo-nuclear-code-quality-review`, `thermo-nuclear-review`, `thermos`; agents: `thermo-nuclear-code-quality-review-subagent`, `thermo-nuclear-review-subagent` | Branch-level correctness, security and maintainability audits.                            |
-| `search`           | skills: `search-worktrees`                                                                                                                                                | Search the codebase across git worktrees.                                                 |
-| `skill-creation`   | skills: `design-skill`                                                                                                                                                    | Design, draft, validate and iterate on agent skills.                                      |
-| `swarm`            | skills: `swarm`; agents: `build-fixer-low`, `build-fixer-medium`, `executor-high`, `executor-low`, `executor-medium`                                                      | Coordinated parallel subagents working a shared task list.                                |
-| `ui`               | skills: `uncodixify`                                                                                                                                                      | Remove machine-generated UI slop and restore visual quality.                              |
+| `deep-interview`   | skills: `deep-interview`                                                                                                                                                  | Socratic requirement gathering with ambiguity gating before planning.                       |
+| `default-stack`    | *no primitives*                                                                                                                                                           | Meta-package that installs the default Foundry stack.                                       |
+| `execution`        | skills: `implement-linear-ticket`                                                                                                                                         | Take a Linear ticket to a merge-ready draft pull request.                                   |
+| `explore`          | agents: `explore`                                                                                                                                                         | Thorough read-only codebase search with cross-module reasoning.                             |
+| `git-diff`         | skills: `git-diff-all-changes-main`, `git-diff-committed-changes-main`, `git-diff-staged-changes-main`                                                                    | Read-only git diff summaries measured against a repository's main branch.                   |
+| `handoff`          | skills: `handoff`                                                                                                                                                         | Produce a handoff document that lets another agent or session continue the work.            |
+| `infrastructure`   | skills: `aws-architecture-diagram`                                                                                                                                        | AWS architecture diagrams rendered as Mermaid flowcharts.                                   |
+| `planning`         | skills: `masterplan`, `ralplan`; agents: `critic`, `planner`; instructions: `plan-handoff-standard`                                                                       | Plan authoring and plan review.                                                             |
+| `pr`               | skills: `babysit`, `code-tour`, `summarise-pr`                                                                                                                            | Pull request comprehension and merge-readiness babysitting.                                 |
+| `repo-init`        | skills: `monorepo-init`, `terraform-monorepo-init`                                                                                                                        | Scaffold a new repository or monorepo with evidence-based agent guidance.                   |
+| `repo-maintenance` | skills: `agents-md`, `generate-agent-docs`, `optimise-agent-config`; instructions: `keep-agent-mds-up-to-date`                                                            | Keep AGENTS.md files and agent configuration accurate and lean.                             |
+| `review`           | skills: `thermo-nuclear-code-quality-review`, `thermo-nuclear-review`, `thermos`; agents: `thermo-nuclear-code-quality-review-subagent`, `thermo-nuclear-review-subagent` | Branch-level correctness, security and maintainability audits.                              |
+| `search`           | skills: `search-worktrees`                                                                                                                                                | Search the codebase across git worktrees.                                                   |
+| `skill-creation`   | skills: `design-skill`                                                                                                                                                    | Design, draft, validate and iterate on agent skills.                                        |
+| `swarm`            | skills: `swarm`; agents: `build-fixer-low`, `build-fixer-medium`, `executor-high`, `executor-low`, `executor-medium`                                                      | Coordinated parallel subagents working a shared task list.                                  |
+| `ui`               | skills: `uncodixify`                                                                                                                                                      | Remove machine-generated UI slop and restore visual quality.                                |
 
 Each package declares its sibling dependencies in `apm.yml`, so installing one package pulls in the primitives it references. See `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the dependency graph.
 
@@ -74,7 +82,7 @@ Each package declares its sibling dependencies in `apm.yml`, so installing one p
 
 | Skill                                | Package            | Trigger                                                                                                                                                           |
 | ------------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cursor-cost-review`                 | `cursor-usage`     | Analyse an exported Cursor usage-events CSV together with local agent transcripts to find where Cursor spend goes and which changes would cut it without lo…    |
+| `cursor-cost-review`                 | `cursor-usage`     | Analyse an exported Cursor usage-events CSV together with local agent transcripts to find where Cursor spend goes and which changes would cut it without lo…      |
 | `implement-linear-ticket`            | `execution`        | Take a Linear ticket to a merge-ready draft GitHub pull request. Resolve the issue, branch from origin/$BASE, plan, implement, run thermos, open a draft PR,…     |
 | `git-diff-all-changes-main`          | `git-diff`         | Show all changes compared to origin/main. Use when the user asks for a full diff of every local change against main.                                              |
 | `git-diff-committed-changes-main`    | `git-diff`         | Show staged and committed changes compared to origin/main. Use when the user asks for the diff of committed work against main.                                    |

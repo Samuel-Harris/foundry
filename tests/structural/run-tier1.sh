@@ -265,7 +265,6 @@ echo "Instruction scoping translation"
 scope_rows=(
   "software-engineering-rules|**/*"
   "compatibility-surface-gate|**/*"
-  "zen-of-python|**/*.py"
   "plan-handoff-standard|.foundry/plans/**/*.md"
   "keep-agent-mds-up-to-date|**/AGENTS.md"
 )
@@ -287,7 +286,7 @@ for row in "${scope_rows[@]}"; do
   fi
 done
 if (( scope_failures == 0 )); then
-  echo "  [+] scoping keys translated for all five instructions on $TARGETS"
+  echo "  [+] scoping keys translated for all four instructions on $TARGETS"
 fi
 
 echo

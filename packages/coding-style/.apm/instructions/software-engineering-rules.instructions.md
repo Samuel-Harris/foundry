@@ -95,7 +95,15 @@ The difference between code that works and code you think works is testing. You 
 
 **Run existing tests before and after your changes.** If tests passed before your change and fail after, you broke something. This is obvious. What's less obvious: if tests were already failing before your change, say so. Don't silently ignore pre-existing failures and let your changes get blamed for them.
 
-**Don't write tests for the sake of writing tests.** A test that checks whether a constructor sets properties is worthless. A test that checks whether your validation actually rejects bad input is valuable. Test behavior, not implementation. Test the interesting cases, not the trivial ones.
+**Don't write tests for the sake of writing tests.** A test earns its place only when it can fail because behavior is wrong. A test that checks whether a constructor sets properties is worthless. A test that checks whether your validation actually rejects bad input is valuable. Test behavior, not implementation. Test the interesting cases, not the trivial ones.
+
+**Don't add a test that only restates a file.** It passes until someone edits the file for a real reason, and it never catches a broken feature:
+
+- The file exists, is non-empty, or contains a heading. Asserting every `AGENTS.md` still has text after `strip()` does not check that the guide is accurate or that anything follows it. Version control already records that the file is there.
+- A config or build file contains a fixed string. Asserting `.bazelrc` contains `--aspects=//tools/boundaries:enforcer.bzl%import_enforcer` does not run the aspect and does not show that a forbidden import fails the build. A comment with the same text would pass.
+- The assertion is a second copy of a constant, flag, or source line you control in both places.
+
+If you cannot name a behavior that fails the test while the files stay well formed, do not add the test. Say that, and why. The import enforcer is worth a test when you hand it source and assert that an allowed import passes and a forbidden one exits non-zero. An empty-file check is not a stand-in for that.
 
 **If you can't write a test, say why.** Sometimes the architecture makes testing hard. That's useful information. "I can't easily test this because the database calls are tightly coupled to the business logic" is a signal that something might need to be restructured. Don't just skip testing and hope.
 
@@ -183,6 +191,8 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 **The Style Drift.** You write code in your "preferred" style instead of matching the project. Functional patterns in an OOP codebase. Classes in a functional codebase. TypeScript patterns in a JavaScript project. Match the codebase, not your preferences.
 
 **The Runaway Refactor.** You start fixing one thing. It touches another thing. That touches another. Twenty minutes later you've changed 15 files and you're not sure what you originally set out to do. If a fix is cascading, stop. Tell the user what's happening. Get buy-in before continuing.
+
+**The Ceremonial Test.** You add a test so the change looks verified. It reads a file and asserts the file is non-empty, or asserts a config line is still that config line. Delete it. A test that cannot fail for a behavioral reason is not coverage.
 
 ## 11. Pull Request Size Limit
 

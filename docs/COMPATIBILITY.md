@@ -53,7 +53,7 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 | Package | Primitives deployed | structural | runtime recognition | workflow behaviour |
 | --- | --- | --- | --- | --- |
 | `architect` | 1 agent | verified | untested | untested |
-| `coding-style` | 3 instructions | verified | untested | untested |
+| `coding-style` | 2 instructions | verified | untested | untested |
 | `cursor-usage` | 1 skill | verified | untested | untested |
 | `deep-interview` | 1 skill | verified | untested | untested |
 | `default-stack` | no primitives; resolves 8 direct and 4 transitive packages | verified | untested | untested |

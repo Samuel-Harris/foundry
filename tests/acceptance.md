@@ -39,7 +39,7 @@ Each assertion below must produce recorded evidence.
 
 5. **Sibling files resolve after deployment.** Every `references/` and `scripts/` path promised by a skill exists after source deployment, and every relative link inside a primitive resolves on disk. The archive consumer asserts the deployed inventory of one bundle and that no sibling file is missing from it.
 
-6. **Instruction scoping translation.** Tier 1 asserts that the deployed scoping key and pattern are correct for each of the five instructions (four distinct patterns: `**/*`, `**/*.py`, `**/AGENTS.md`, `.foundry/plans/**/*.md`): `globs` on `.cursor/rules/*.mdc`, a `paths` list on `.claude/rules/*.md` and `applyTo` verbatim on `.github/instructions/*.instructions.md`. Whether a client fires the rule on matching files and refrains on non-matching files is `untested` — no client is launched. A plugin-format archive install does not apply this translation at all, so scoping is asserted from source installs.
+6. **Instruction scoping translation.** Tier 1 asserts that the deployed scoping key and pattern are correct for each of the four instructions (three distinct patterns: `**/*`, `**/AGENTS.md`, `.foundry/plans/**/*.md`): `globs` on `.cursor/rules/*.mdc`, a `paths` list on `.claude/rules/*.md` and `applyTo` verbatim on `.github/instructions/*.instructions.md`. Whether a client fires the rule on matching files and refrains on non-matching files is `untested` — no client is launched. A plugin-format archive install does not apply this translation at all, so scoping is asserted from source installs.
 
 7. **Tampered archive is rejected.** A copy of an archive with one byte changed is rejected. No bypass flag is used.
 

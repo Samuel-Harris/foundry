@@ -22,9 +22,9 @@ on every commit here and identifies nothing about the installed CLI.
 
 Every statement below was observed with 0.32.0 on macOS. **Re-verify against the
 installed version before relying on it.** The pinned version is repeated in the
-`README.md` prerequisites and in `.github/workflows/ci.yml` (`apm-version`); the
-three must stay in step. If you bump one, bump all three and re-run
-`bash tests/structural/run-tier1.sh`.
+`README.md` prerequisites, in `.github/workflows/ci.yml` (`apm-version`) and in
+`.githooks/pre-commit`; the four must stay in step. If you bump one, bump all
+four and re-run `bash tests/structural/run-tier1.sh`.
 
 ## Which CLI runs
 
@@ -32,10 +32,10 @@ three must stay in step. If you bump one, bump all three and re-run
   exists and fall back to a `PATH`-resolved `apm`. `.venv-apm/` is gitignored,
   so a fresh clone has only the `PATH` copy.
 - A bare `apm` resolves through `PATH`. On the authoring machine that is
-  Homebrew's `/opt/homebrew/bin/apm`.
-- Both are 0.32.0 here. **Prefer the venv copy** so a Homebrew upgrade cannot
-  silently change behaviour. Confirm with `apm --version` before trusting a
-  result.
+  Homebrew's `/opt/homebrew/bin/apm`, which can drift from the pin.
+- **Prefer the venv copy** so a Homebrew upgrade cannot silently change
+  behaviour. Confirm with `apm --version` before trusting a result. The
+  pre-commit hook refuses to run when that version is not 0.32.0.
 - `.venv-apm/` and `apm_modules/` are gitignored. Never commit them.
 
 ## Bound every `apm` call
@@ -318,6 +318,25 @@ than skipping the package.
 - `.cursor/settings.json`, `.vscode/`, `assets/`, `LICENSE`,
   `.markdownlint.json` and the repo-owned `.markdownlint-cli2.jsonc` ignore list
   are preserved, not generated.
+
+## Pre-commit lockfile check
+
+Enable it once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+`.githooks/pre-commit` runs when a commit stages `apm.yml`, anything under
+`.apm/`, or `apm.lock.yaml`. It runs `apm install --frozen --target
+cursor,claude,copilot` in that package and in every package that depends on it
+(directly or transitively), then applies CI's lockfile diff: `git diff
+--exit-code -I 'anchored_local_path: /' -I 'local:/' -- apm.lock.yaml`. A stale
+lockfile is rewritten in the worktree and the commit is refused until that file
+is staged. Unstaged edits under the same package abort the hook first, so the
+install cannot mix them into the lockfile. Set `FOUNDRY_SKIP_LOCKFILE_HOOK=1`
+to bypass it. `APM`, `APM_TIMEOUT` and `APM_TARGETS` override the CLI, the
+per-call bound and the target list.
 
 ## Local Tier 1 suite
 

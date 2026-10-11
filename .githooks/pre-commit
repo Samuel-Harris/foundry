@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+# Refuse a commit that changes package sources without the lockfile CI expects.
+#
+# `apm install --frozen` rewrites a stale apm.lock.yaml and still exits 0.
+# CI then runs `git diff --exit-code` on that file, ignoring the absolute
+# checkout paths APM records for transitive siblings. This hook runs the same
+# install and the same diff for every staged package, plus every package that
+# depends on one, so that rewrite is caught before push.
+#
+# Requires apm-cli 0.32.0. Prefer .venv-apm/bin/apm. Bypass with
+# FOUNDRY_SKIP_LOCKFILE_HOOK=1.
+set -euo pipefail
+
+if [[ "${FOUNDRY_SKIP_LOCKFILE_HOOK:-}" == "1" ]]; then
+  echo "pre-commit: skipping lockfile check (FOUNDRY_SKIP_LOCKFILE_HOOK=1)" >&2
+  exit 0
+fi
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+pinned_version="0.32.0"
+targets="${APM_TARGETS:-cursor,claude,copilot}"
+apm_timeout="${APM_TIMEOUT:-300}"
+
+if [[ -n "${APM:-}" ]]; then
+  apm="$APM"
+elif [[ -x "$repo_root/.venv-apm/bin/apm" ]]; then
+  apm="$repo_root/.venv-apm/bin/apm"
+else
+  apm="$(command -v apm || true)"
+fi
+
+if [[ -z "$apm" || ! -x "$apm" ]]; then
+  echo "pre-commit: apm ${pinned_version} not found (set APM=, create .venv-apm, or put apm on PATH)" >&2
+  exit 1
+fi
+
+version_line="$("$apm" --version 2>&1 || true)"
+case "$version_line" in
+  *"version ${pinned_version}"*) ;;
+  *)
+    echo "pre-commit: need apm ${pinned_version}, got: ${version_line:-<no version>}" >&2
+    echo "pre-commit: python -m pip install \"apm-cli==${pinned_version}\"  (or use .venv-apm/bin/apm)" >&2
+    exit 1
+    ;;
+esac
+
+bounded() {
+  if command -v timeout >/dev/null 2>&1; then
+    timeout "$apm_timeout" "$@"
+  elif command -v gtimeout >/dev/null 2>&1; then
+    gtimeout "$apm_timeout" "$@"
+  elif command -v perl >/dev/null 2>&1; then
+    perl -e 'alarm shift; exec @ARGV' "$apm_timeout" "$@"
+  else
+    echo "pre-commit: no timeout mechanism available (need timeout, gtimeout or perl)" >&2
+    return 127
+  fi
+}
+
+has_pkg() {
+  case " $1 " in
+    *" $2 "*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# Packages whose staged manifest, primitives or lockfile can change hashes.
+seeds=""
+while IFS= read -r path; do
+  [[ -n "$path" ]] || continue
+  case "$path" in
+    packages/*/apm.yml|packages/*/.apm/*|packages/*/apm.lock.yaml) ;;
+    *) continue ;;
+  esac
+  pkg="${path#packages/}"
+  pkg="${pkg%%/*}"
+  if ! has_pkg "$seeds" "$pkg"; then
+    seeds="$seeds $pkg"
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACMRD)
+
+if [[ -z "${seeds# }" ]]; then
+  exit 0
+fi
+
+# Direct dependents, from sibling `path:` dependencies.
+dependents_of() {
+  local name="$1" manifest dep
+  for manifest in "$repo_root"/packages/*/apm.yml; do
+    dep="$(basename "$(dirname "$manifest")")"
+    if grep -Eq "^[[:space:]]*-[[:space:]]*path:[[:space:]]*\\.\\./${name}[[:space:]]*$" "$manifest"; then
+      printf '%s\n' "$dep"
+    fi
+  done
+}
+
+affected="$seeds"
+queue="$seeds"
+while [[ -n "${queue# }" ]]; do
+  next=""
+  for pkg in $queue; do
+    while IFS= read -r dep; do
+      [[ -n "$dep" ]] || continue
+      if ! has_pkg "$affected" "$dep"; then
+        affected="$affected $dep"
+        next="$next $dep"
+      fi
+    done < <(dependents_of "$pkg")
+  done
+  queue="$next"
+done
+
+blockers=0
+for pkg in $affected; do
+  if [[ ! -f "packages/$pkg/apm.yml" ]]; then
+    echo "pre-commit: packages/$pkg/apm.yml is missing; stage the removal or restore the package" >&2
+    blockers=$((blockers + 1))
+    continue
+  fi
+  dirty="$(
+    git diff --name-only -- "packages/$pkg/apm.yml" "packages/$pkg/.apm" "packages/$pkg/apm.lock.yaml"
+    git ls-files --others --exclude-standard -- "packages/$pkg/apm.yml" "packages/$pkg/.apm"
+  )"
+  if [[ -n "$dirty" ]]; then
+    echo "pre-commit: packages/$pkg has unstaged source or lockfile changes; stage or stash them before committing:" >&2
+    printf '  %s\n' $dirty >&2
+    blockers=$((blockers + 1))
+  fi
+done
+if (( blockers > 0 )); then
+  exit 1
+fi
+
+stale=""
+for pkg in $affected; do
+  echo "pre-commit: apm install --frozen in packages/$pkg" >&2
+  if ! ( cd "packages/$pkg" && bounded "$apm" install --frozen --target "$targets" ); then
+    echo "pre-commit: apm install --frozen failed in packages/$pkg" >&2
+    exit 1
+  fi
+  lock="packages/$pkg/apm.lock.yaml"
+  if git diff --quiet -I 'anchored_local_path: /' -I 'local:/' -- "$lock"; then
+    # Absolute checkout paths differ per machine. Drop that churn so a current
+    # lockfile is not rewritten into the commit.
+    if ! git diff --quiet -- "$lock"; then
+      git checkout -- "$lock"
+    fi
+  else
+    stale="$stale $pkg"
+  fi
+done
+
+if [[ -n "${stale# }" ]]; then
+  echo "pre-commit: apm.lock.yaml is stale for:${stale}" >&2
+  echo "pre-commit: install rewrote those files. Review the diff and stage them:" >&2
+  for pkg in $stale; do
+    echo "  git add packages/$pkg/apm.lock.yaml" >&2
+  done
+  exit 1
+fi

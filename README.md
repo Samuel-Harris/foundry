@@ -4,7 +4,7 @@
 
 ![Foundry](assets/foundry-logo.png)
 
-Foundry is a collection of 25 agent skills, 11 subagents and 5 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
+Foundry is a collection of 25 agent skills, 11 subagents and 4 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
 
 ## What this is
 
@@ -21,6 +21,14 @@ Install APM by following the [APM installation guide](https://microsoft.github.i
   ```bash
   python -m pip install "apm-cli==0.32.0"
   ```
+
+- **A pre-commit lockfile check.** Once per clone, point Git at the tracked hooks so a primitive edit cannot be committed without the lockfile CI expects:
+
+  ```bash
+  git config core.hooksPath .githooks
+  ```
+
+  The hook runs `apm install --frozen` for the staged package and its dependents, then the same lockfile diff as CI. It requires `apm-cli==0.32.0`. See `AGENTS.md`.
 
 ## Install
 
@@ -49,7 +57,7 @@ A remote install requires the `v0.1.0` tag to exist and the consumer repository 
 | Package            | Contents                                                                                                                                                                  | Purpose                                                                                   |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | `architect`        | agents: `architect`                                                                                                                                                       | The architect agent: read-only strategic architecture and debugging advice.               |
-| `coding-style`     | instructions: `compatibility-surface-gate`, `software-engineering-rules`, `zen-of-python`                                                                                 | Core engineering rules, compatibility guardrails and Python style for agent-written code. |
+| `coding-style`     | instructions: `compatibility-surface-gate`, `software-engineering-rules`                                                                                                  | Core engineering rules and compatibility guardrails for agent-written code.               |
 | `cursor-usage`     | skills: `cursor-cost-review`                                                                                                                                              | Analyse Cursor spend from a usage export and local transcripts, and rank ways to reduce it. |
 | `deep-interview`   | skills: `deep-interview`                                                                                                                                                  | Socratic requirement gathering with ambiguity gating before planning.                     |
 | `default-stack`    | *no primitives*                                                                                                                                                           | Meta-package that installs the default Foundry stack.                                     |

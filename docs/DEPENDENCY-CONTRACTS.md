@@ -73,7 +73,7 @@ $ apm install --target cursor            # with {git: Samuel-Harris/foundry, pat
 
 The CLI prefixes the failing dependency's identifier with the repository name, so the error names `foundry-planning` while the manifest path is `packages/planning`.
 
-So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:` permanently, not only until the tag exists, because a remote install already resolves it correctly (see below) and the remote form would pin every sibling to a tag, so a change spanning two packages could not be tested on a feature branch. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm` — is deferred until bundles are needed; a release job would then rewrite a throwaway copy of each manifest to `{git: Samuel-Harris/foundry, path: packages/<name>, ref: <tag>}` and pack that. CI asserts the guardrail for those packages rather than skipping them.
+So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:` permanently, not only until the tag exists, because a remote install already resolves it correctly (see below) and the remote form would pin every sibling to a tag, so a change spanning two packages could not be tested on a feature branch. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm` — is deferred until bundles are needed; a release job would then rewrite a throwaway copy of each manifest to `{git: Samuel-Harris/foundry, path: packages/<name>, ref: <tag>}` and pack that. The local Tier 1 suite asserts the guardrail for those packages rather than skipping them.
 
 **A remote install rewrites sibling paths to the same repository and commit.** When APM fetches a package from a git remote, it expands each `path: ../<name>` dependency into a dependency on `packages/<name>` in the same repository at the same resolved commit (`_expand_remote_parent_local_path` in `apm_cli/deps/apm_resolver.py`); a path that escapes the repository root is rejected. Verified with 0.32.0: `apm install Samuel-Harris/foundry/packages/swarm#main` in an empty directory resolved `swarm`, `architect` and, transitively, `explore` all at `main @c00c862a`, and the consumer's lockfile records only `virtual_path: packages/<name>` with `resolved_ref: main`, with no local or absolute path. A consumer therefore gets mutually consistent packages from one tag or branch.
 
@@ -131,11 +131,11 @@ There is deliberately **no `apm.yml` at the repository root**. Root-level compil
 
 - Commit `apm.lock.yaml` per package once generated.
 - Never hand-author or hand-edit hashes or pins. Regenerate with `apm lock` or `apm install`.
-- `apm install --frozen` does **not** reject a stale lockfile when the dependencies are local. It fails only when the lockfile is missing; otherwise it re-resolves `apm.yml`, rewrites the lockfile and exits `0` with `Lockfile presence verified`. Verified with 0.32.0: adding `- path: ../review` to `packages/swarm/apm.yml` passed `--frozen` and `apm audit --ci`, and the rewritten lockfile gained a `_local/review` entry. A rewrite after install is therefore the staleness signal. CI's `validate-packages` job runs `git diff --exit-code` on `apm.lock.yaml` after installing, ignoring the absolute-path lines described below; that catches both a manifest change and a primitive content change committed without regenerating the lockfile. Locally, `run-tier1.sh` catches the same rewrite with its tracked-file stability check.
+- `apm install --frozen` does **not** reject a stale lockfile when the dependencies are local. It fails only when the lockfile is missing; otherwise it re-resolves `apm.yml`, rewrites the lockfile and exits `0` with `Lockfile presence verified`. Verified with 0.32.0: adding `- path: ../review` to `packages/swarm/apm.yml` passed `--frozen` and `apm audit --ci`, and the rewritten lockfile gained a `_local/review` entry. A rewrite after install is therefore the staleness signal. `.githooks/pre-commit`, which CI runs as its only job, runs `git diff` on `apm.lock.yaml` after installing, ignoring the absolute-path lines described below; that catches both a manifest change and a primitive content change committed without regenerating the lockfile. Locally, `run-tier1.sh` catches the same rewrite with its tracked-file stability check.
 - `apm audit --ci` is the release gate.
 - **A transitive sibling dependency records an absolute path. It works at any checkout root, but it leaks the authoring machine's path and churns on regeneration.** Direct local dependencies are pinned as `local_path: ../<name>`, which is portable, but a local dependency reached transitively (for example `explore` via `pr`) additionally records `anchored_local_path: /absolute/path/to/packages/<name>`, and its deployment entries record `owners` and `active_owner` as `local:/absolute/path/to/packages/<name>`.
   - Cause: APM's `_portable_anchor_identity` relativises the path against the project root with `Path.relative_to`, which only succeeds for paths inside it. Each lockfile's project root is `packages/<name>`, every sibling is outside it, so APM falls back to the absolute path.
-  - Effect: verified by copying the tree to a different absolute root, `apm install --frozen` and `apm audit --ci` stay green, so the recorded path does not pin the lockfile to a machine. Any install there rewrites every occurrence to the new root, so a lockfile regenerated on another machine or in CI differs from the committed one. That is why CI's lockfile-current check ignores lines matching `anchored_local_path: /` and `local:/`; without the filter, five packages (`default-stack`, `execution`, `planning`, `repo-init` and `skill-creation`) fail on every runner.
+  - Effect: verified by copying the tree to a different absolute root, `apm install --frozen` and `apm audit --ci` stay green, so the recorded path does not pin the lockfile to a machine. Any install there rewrites every occurrence to the new root, so a lockfile regenerated on another machine or in CI differs from the committed one. That is why the pre-commit lockfile check ignores lines matching `anchored_local_path: /` and `local:/`; without the filter, five packages (`default-stack`, `execution`, `planning`, `repo-init` and `skill-creation`) fail on every runner.
   - Fix: upstream. Relativising with `os.path.relpath` would record `../<name>`. Do not post-process lockfiles to remove the path: the value is also APM's identity key for the dependency and its deployment owners. After an APM release fixes it, bump the pin and re-run `apm install` in each package.
 
 ## Generated-file policy
@@ -155,21 +155,21 @@ The server is documented as a runtime prerequisite instead, and `implement-linea
 
 Every primitive that names a primitive shipped by another package is covered by a declared dependency edge. The graph is acyclic and no reference is left dangling.
 
-| Reference               | Declared in                                                     | Ships in           | Covering edge                     |
-| ----------------------- | --------------------------------------------------------------- | ------------------ | --------------------------------- |
-| `architect`             | `planning` — the `ralplan` skill                                | `architect`        | planning → architect              |
-| `architect`             | `swarm` — the `swarm` skill                                     | `architect`        | swarm → architect                 |
-| `explore`               | `swarm` — the `swarm` skill                                     | `explore`          | swarm → explore                   |
-| `explore`               | `deep-interview` — the `deep-interview` skill                   | `explore`          | deep-interview → explore          |
-| `explore`               | `pr` — the `code-tour` skill                                    | `explore`          | pr → explore                      |
-| `explore`               | `repo-maintenance` — the `agents-md` skill                      | `explore`          | repo-maintenance → explore        |
-| `thermos`               | `execution` — the `implement-linear-ticket` skill               | `review`           | execution → review                |
-| `thermos`               | `planning` — the `plan-handoff-standard` instruction            | `review`           | planning → review                 |
-| `babysit`               | `execution` — the `implement-linear-ticket` skill               | `pr`               | execution → pr                    |
+| Reference               | Declared in                                                      | Ships in           | Covering edge                     |
+| ----------------------- | ---------------------------------------------------------------- | ------------------ | --------------------------------- |
+| `architect`             | `planning` — the `ralplan` skill                                 | `architect`        | planning → architect              |
+| `architect`             | `swarm` — the `swarm` skill                                      | `architect`        | swarm → architect                 |
+| `explore`               | `swarm` — the `swarm` skill                                      | `explore`          | swarm → explore                   |
+| `explore`               | `deep-interview` — the `deep-interview` skill                    | `explore`          | deep-interview → explore          |
+| `explore`               | `pr` — the `code-tour` skill                                     | `explore`          | pr → explore                      |
+| `explore`               | `repo-maintenance` — the `agents-md` skill                       | `explore`          | repo-maintenance → explore        |
+| `thermos`               | `execution` — the `implement-linear-ticket` skill                | `review`           | execution → review                |
+| `thermos`               | `planning` — the `plan-handoff-standard` instruction             | `review`           | planning → review                 |
+| `babysit`               | `execution` — the `implement-linear-ticket` skill                | `pr`               | execution → pr                    |
 | `deep-interview`        | `planning` — `masterplan`, `ralplan` and `plan-handoff-standard` | `deep-interview`   | planning → deep-interview         |
-| `deep-interview`        | `skill-creation` — the `design-skill` skill                     | `deep-interview`   | skill-creation → deep-interview   |
-| `deep-interview`        | `repo-init` — the `terraform-monorepo-init` skill               | `deep-interview`   | repo-init → deep-interview        |
-| `optimise-agent-config` | `skill-creation` — the `design-skill` skill                     | `repo-maintenance` | skill-creation → repo-maintenance |
+| `deep-interview`        | `skill-creation` — the `design-skill` skill                      | `deep-interview`   | skill-creation → deep-interview   |
+| `deep-interview`        | `repo-init` — the `terraform-monorepo-init` skill                | `deep-interview`   | repo-init → deep-interview        |
+| `optimise-agent-config` | `skill-creation` — the `design-skill` skill                      | `repo-maintenance` | skill-creation → repo-maintenance |
 
 `planning`'s `ralplan` treats its handoff to `swarm` as optional, and `plan-handoff-standard` treats its `thermos` step as required; both are satisfied by the edges above, so a single-package install of `planning` carries the capability its own text names.
 
@@ -267,19 +267,19 @@ Two levels are not enough: `meta → {base, mid → base}` alone audits clean. T
 
 **Scope.** Only the package's own lockfile is affected. All twelve packages still resolve and deploy — consumer-side installs of `default-stack` pass `apm audit --ci` on `cursor`, `claude` and `copilot`, and `apm install --frozen` succeeds in place. Both are asserted by `tests/structural/run-tier1.sh` and CI.
 
-**Handling.** The manifest keeps its eight declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. Instead the defect is asserted: the suite and CI fail if `default-stack`'s audit *passes* or if it fails with a different message, so a fix in a later APM release is noticed rather than silently tolerated.
+**Handling.** The manifest keeps its eight declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. Instead the defect is asserted: `tests/structural/run-tier1.sh` fails if `default-stack`'s audit *passes* or if it fails with a different message, so a fix in a later APM release is noticed rather than silently tolerated. CI does not run that audit.
 
 ### Plugin-format archives do not translate instruction frontmatter
 
-`apm pack --archive` emits a Claude plugin bundle. Installing it deploys the expected file inventory, but per-target instruction translation is not applied: `.cursor/rules/*.mdc` keeps `applyTo` instead of gaining `globs`, and `.claude/rules/*.md` keeps `applyTo` instead of gaining `paths`. Archive-based CI asserts inventory, sibling-file presence and tamper rejection; scoping translation is asserted from the source installs. `apm pack --format apm` is not a substitute: it reports `No deployed files found -- empty bundle created` and writes only the embedded lockfile.
+`apm pack --archive` emits a Claude plugin bundle. Installing it deploys the expected file inventory, but per-target instruction translation is not applied: `.cursor/rules/*.mdc` keeps `applyTo` instead of gaining `globs`, and `.claude/rules/*.md` keeps `applyTo` instead of gaining `paths`. The local Tier 1 suite's archive check asserts inventory, sibling-file presence and tamper rejection; scoping translation is asserted from the source installs. `apm pack --format apm` is not a substitute: it reports `No deployed files found -- empty bundle created` and writes only the embedded lockfile.
 
 ### Skills are never structurally validated by APM
 
-`apm pack` bundles a `SKILL.md` with no `description`, invalid YAML, or a `name` that disagrees with its directory, and `apm install` deploys it. APM 0.32.0 has no skill frontmatter gate. `tests/structural/validate_primitives.py` fills that gap in CI.
+`apm pack` bundles a `SKILL.md` with no `description`, invalid YAML, or a `name` that disagrees with its directory, and `apm install` deploys it. APM 0.32.0 has no skill frontmatter gate. `tests/structural/validate_primitives.py` fills that gap in the local Tier 1 suite.
 
 ### `apm install` does not validate primitives it deploys
 
-`apm install --dry-run` at a package root resolves that package's *dependencies*; it does not validate the package's own primitives. Primitive-level verification therefore lives in the scratch-consumer and archive-consumer CI jobs, which assert the deployed inventory.
+`apm install --dry-run` at a package root resolves that package's *dependencies*; it does not validate the package's own primitives. Primitive-level verification lives in the local Tier 1 suite's scratch-consumer and archive-consumer checks, which assert the deployed inventory.
 
 ### Delivery is not a safety statement
 

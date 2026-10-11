@@ -132,8 +132,8 @@ dependencies:
   The nine packages that declare one — `default-stack`, `deep-interview`,
   `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`,
   `skill-creation` and `swarm` — are
-  therefore **pack-blocked** from their committed manifests. CI asserts that
-  guardrail instead of skipping those packages silently.
+  therefore **pack-blocked** from their committed manifests. The local Tier 1
+  suite asserts that guardrail instead of skipping those packages silently.
 - **Keep the `path:` form permanently.** A remote install rewrites each
   `path: ../<name>` to `packages/<name>` in the same repository at the same
   commit, so `apm install Samuel-Harris/foundry/packages/<name>#<ref>` gives a
@@ -158,8 +158,8 @@ dependencies:
   owners are recorded as `local:/absolute/path/...`. APM only relativises paths
   inside the project root (`packages/<name>`), and siblings are outside it.
   Verified: `install --frozen` and `audit --ci` still pass at a different
-  absolute root, but any install there rewrites every occurrence, so CI's
-  lockfile diff ignores those lines. Do not hand-edit or post-process it; the
+  absolute root, but any install there rewrites every occurrence, so the
+  pre-commit lockfile diff ignores those lines. Do not hand-edit or post-process it; the
   fix is upstream in APM.
 - **Only the direct-dependency form dedupes.** When a package is reachable both
   directly and transitively it appears twice in the lockfile. That is harmless
@@ -282,23 +282,19 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
 - Never add `--force`, `--trust-transitive-mcp`, `--allow-insecure`, `--no-policy`
   or any other policy-bypass flag to make a check pass.
 
-## CI and the audit-only pattern
+## CI
 
-`.github/workflows/ci.yml` uses `microsoft/apm-action@v1` with
-`setup-only: true`. This matters: `apm install` overwrites managed files before
-an audit runs, which would erase tampered bytes before `content-integrity` and
-drift detection could see them. `setup-only` provides the CLI only. The action's
-`apm-version` input defaults to `0.14.0`, so always pass `apm-version: "0.32.0"`.
+`.github/workflows/ci.yml` has one job, `pre-commit`. It checks out the full
+history, installs the CLI with `microsoft/apm-action@v1` and `setup-only: true`,
+then runs `.githooks/pre-commit`. `setup-only` matters: the action must not
+install packages itself, or it would rewrite lockfiles before the hook could
+see them. The action's `apm-version` input defaults to `0.14.0`, so always pass
+`apm-version: "0.32.0"`.
 
-Jobs: `contract` (primitive validator plus secret scan), `validate-packages`
-(matrix over all nineteen), `scratch-consumer` (matrix over the three targets),
-`archive-consumer` (pack, install, inventory, tamper rejection) and
-`lint-markdown`. `validate-packages` installs each package and then fails if
-`apm.lock.yaml` changed, ignoring the absolute-path lines APM records for
-transitive siblings. The `validate-packages` matrix carries a `pack_blocked` flag for
-the nine local-path packages and an `audit_known_broken` flag for
-`default-stack`; both assert the pinned CLI's documented failure rather
-than skipping the package.
+On a pull request the hook's range is `origin/<base>...HEAD`. On a push it is
+the push's previous tip to `HEAD`. A manual run, or a push that creates a
+branch, sets `FOUNDRY_CHECK_ALL=1` and checks every package. The Tier 1 suite
+is local: `bash tests/structural/run-tier1.sh`.
 
 ## Generated-file policy
 
@@ -319,24 +315,31 @@ than skipping the package.
   `.markdownlint.json` and the repo-owned `.markdownlint-cli2.jsonc` ignore list
   are preserved, not generated.
 
-## Pre-commit lockfile check
+## Pre-commit checks
 
-Enable it once per clone:
+Enable them once per clone:
 
 ```bash
 git config core.hooksPath .githooks
 ```
 
-`.githooks/pre-commit` runs when a commit stages `apm.yml`, anything under
-`.apm/`, or `apm.lock.yaml`. It runs `apm install --frozen --target
-cursor,claude,copilot` in that package and in every package that depends on it
-(directly or transitively), then applies CI's lockfile diff: `git diff
---exit-code -I 'anchored_local_path: /' -I 'local:/' -- apm.lock.yaml`. A stale
-lockfile is rewritten in the worktree and the commit is refused until that file
-is staged. Unstaged edits under the same package abort the hook first, so the
-install cannot mix them into the lockfile. Set `FOUNDRY_SKIP_LOCKFILE_HOOK=1`
-to bypass it. `APM`, `APM_TIMEOUT` and `APM_TARGETS` override the CLI, the
-per-call bound and the target list.
+`.githooks/pre-commit` lints staged markdown with `markdownlint-cli2` 0.14.0
+(`README.md`, `CHANGELOG.md`, `AGENTS.md`, and markdown under `packages/`,
+`docs/` and `tests/`), using `.markdownlint.json` and
+`.markdownlint-cli2.jsonc`. It resolves the linter with `npx`. When the commit
+also stages `apm.yml`, anything under `.apm/`, or `apm.lock.yaml`, it runs
+`apm install --frozen --target cursor,claude,copilot` in that package and in
+every package that depends on it (directly or transitively), then refuses the
+commit when `git diff` of `apm.lock.yaml` is non-empty after ignoring lines
+matching `anchored_local_path: /` and `local:/`. A stale lockfile is left
+rewritten in the worktree. Unstaged edits under the same package abort the
+lockfile half first, so the install cannot mix them into the lockfile. CI runs
+this script; it does not stage a commit, and instead sets `FOUNDRY_DIFF_RANGE`
+or `FOUNDRY_CHECK_ALL=1` (the latter lints the whole markdown set and every
+package). Set `FOUNDRY_SKIP_LOCKFILE_HOOK=1` to skip the lockfile half.
+Markdown lint still runs. `APM`, `APM_TIMEOUT`, `APM_TARGETS` and
+`MARKDOWNLINT_CLI2_VERSION` override the CLI, the per-call bound, the target
+list and the linter pin.
 
 ## Local Tier 1 suite
 

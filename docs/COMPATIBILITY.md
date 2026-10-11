@@ -16,13 +16,13 @@ No runtime row in this document may be read as `supported`.
 
 ## Tested versions
 
-| Component | Version | Notes |
-| --- | --- | --- |
-| APM CLI | `0.32.0` | Pinned. Installed from PyPI into a virtual environment. |
-| Cursor | unavailable | Not installed, not launched. All Cursor runtime rows are `untested`. |
-| Claude Code | unavailable | Not installed, not launched. All Claude runtime rows are `untested`. |
-| GitHub Copilot | unavailable | Not installed, not launched. All Copilot runtime rows are `untested`. |
-| OS | macOS 25.6.0 | Local verification. CI runs `ubuntu-latest`. |
+| Component      | Version      | Notes                                                                 |
+| -------------- | ------------ | --------------------------------------------------------------------- |
+| APM CLI        | `0.32.0`     | Pinned. Installed from PyPI into a virtual environment.               |
+| Cursor         | unavailable  | Not installed, not launched. All Cursor runtime rows are `untested`.  |
+| Claude Code    | unavailable  | Not installed, not launched. All Claude runtime rows are `untested`.  |
+| GitHub Copilot | unavailable  | Not installed, not launched. All Copilot runtime rows are `untested`. |
+| OS             | macOS 25.6.0 | Local verification. CI runs `ubuntu-latest`.                          |
 
 ## Verification method
 
@@ -34,43 +34,43 @@ These paths were observed directly from an install, not inferred from documentat
 
 The transformations below are applied by a **source** install (`apm install <path or git ref>`). A plugin-format archive install (`apm install <bundle>.zip`) deploys the same inventory but does not apply the per-target instruction frontmatter translation; see the behaviour notes at the end of this document.
 
-| Target | Primitive | Deployed path | Transformation |
-| --- | --- | --- | --- |
-| cursor | Skill | `.agents/skills/<name>/` | `references/`, `scripts/` and `assets/` ship alongside `SKILL.md`. Cursor reads the shared `.agents/skills/` root, so no `.cursor/skills/` directory is created. |
-| cursor | Agent | `.cursor/agents/<name>.md` | `name`, `model`, `description` and `readonly` pass through verbatim. |
-| cursor | Instruction | `.cursor/rules/<name>.mdc` | `applyTo` becomes `globs`. |
-| claude | Skill | `.claude/skills/<name>/` | `references/`, `scripts/` and `assets/` ship alongside `SKILL.md`. |
-| claude | Agent | `.claude/agents/<name>.md` | `name`, `model`, `description` and `readonly` pass through verbatim. |
-| claude | Instruction | `.claude/rules/<name>.md` | `applyTo` becomes `paths`, as a YAML list. The `description` field is not emitted. |
-| copilot | Skill | `.agents/skills/<name>/` | `references/`, `scripts/` and `assets/` ship alongside `SKILL.md`. Copilot shares the `.agents/skills/` root with Cursor, so a mixed-target install deploys the skill once. |
-| copilot | Agent | `.github/agents/<name>.agent.md` | `name`, `model`, `description` and `readonly` pass through verbatim. |
-| copilot | Instruction | `.github/instructions/<name>.instructions.md` | `applyTo` passes through verbatim. |
+| Target  | Primitive   | Deployed path                                 | Transformation                                                                                                                                                              |
+| ------- | ----------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| cursor  | Skill       | `.agents/skills/<name>/`                      | `references/`, `scripts/` and `assets/` ship alongside `SKILL.md`. Cursor reads the shared `.agents/skills/` root, so no `.cursor/skills/` directory is created.            |
+| cursor  | Agent       | `.cursor/agents/<name>.md`                    | `name`, `model`, `description` and `readonly` pass through verbatim.                                                                                                        |
+| cursor  | Instruction | `.cursor/rules/<name>.mdc`                    | `applyTo` becomes `globs`.                                                                                                                                                  |
+| claude  | Skill       | `.claude/skills/<name>/`                      | `references/`, `scripts/` and `assets/` ship alongside `SKILL.md`.                                                                                                          |
+| claude  | Agent       | `.claude/agents/<name>.md`                    | `name`, `model`, `description` and `readonly` pass through verbatim.                                                                                                        |
+| claude  | Instruction | `.claude/rules/<name>.md`                     | `applyTo` becomes `paths`, as a YAML list. The `description` field is not emitted.                                                                                          |
+| copilot | Skill       | `.agents/skills/<name>/`                      | `references/`, `scripts/` and `assets/` ship alongside `SKILL.md`. Copilot shares the `.agents/skills/` root with Cursor, so a mixed-target install deploys the skill once. |
+| copilot | Agent       | `.github/agents/<name>.agent.md`              | `name`, `model`, `description` and `readonly` pass through verbatim.                                                                                                        |
+| copilot | Instruction | `.github/instructions/<name>.instructions.md` | `applyTo` passes through verbatim.                                                                                                                                          |
 
 ## Per-package status
 
 Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and `copilot`. The three runtime columns are `untested` for every package: no client application is launched.
 
-| Package | Primitives deployed | structural | runtime recognition | workflow behaviour |
-| --- | --- | --- | --- | --- |
-| `architect` | 1 agent | verified | untested | untested |
-| `coding-style` | 2 instructions | verified | untested | untested |
-| `cursor-usage` | 1 skill | verified | untested | untested |
-| `deep-interview` | 1 skill | verified | untested | untested |
-| `default-stack` | no primitives; resolves 8 direct and 4 transitive packages | verified | untested | untested |
-| `execution` | 1 skill | verified | untested | untested |
-| `explore` | 1 agent | verified | untested | untested |
-| `git-diff` | 3 skills | verified | untested | untested |
-| `handoff` | 1 skill | verified | untested | untested |
-| `infrastructure` | 1 skill | verified | untested | untested |
-| `planning` | 2 skills, 2 agents, 1 instruction | verified | untested | untested |
-| `pr` | 3 skills | verified | untested | untested |
-| `repo-init` | 2 skills | verified | untested | untested |
-| `repo-maintenance` | 3 skills, 1 instruction | verified | untested | untested |
-| `review` | 3 skills, 2 agents | verified | untested | untested |
-| `search` | 1 skill | verified | untested | untested |
-| `skill-creation` | 1 skill | verified | untested | untested |
-| `swarm` | 1 skill, 5 agents | verified | untested | untested |
-| `ui` | 1 skill | verified | untested | untested |
+| Package            | Primitives deployed                                        | structural | runtime recognition | workflow behaviour |
+| ------------------ | ---------------------------------------------------------- | ---------- | ------------------- | ------------------ |
+| `architect`        | 1 agent                                                    | verified   | untested            | untested           |
+| `coding-style`     | 2 instructions                                             | verified   | untested            | untested           |
+| `cursor-usage`     | 1 skill                                                    | verified   | untested            | untested           |
+| `deep-interview`   | 1 skill                                                    | verified   | untested            | untested           |
+| `default-stack`    | no primitives; resolves 8 direct and 4 transitive packages | verified   | untested            | untested           |
+| `execution`        | 1 skill                                                    | verified   | untested            | untested           |
+| `explore`          | 1 agent                                                    | verified   | untested            | untested           |
+| `git-diff`         | 3 skills                                                   | verified   | untested            | untested           |
+| `handoff`          | 1 skill                                                    | verified   | untested            | untested           |
+| `infrastructure`   | 1 skill                                                    | verified   | untested            | untested           |
+| `planning`         | 2 skills, 2 agents, 1 instruction                          | verified   | untested            | untested           |
+| `pr`               | 3 skills                                                   | verified   | untested            | untested           |
+| `repo-init`        | 2 skills                                                   | verified   | untested            | untested           |
+| `repo-maintenance` | 3 skills, 1 instruction                                    | verified   | untested            | untested           |
+| `review`           | 3 skills, 2 agents                                         | verified   | untested            | untested           |
+| `search`           | 1 skill                                                    | verified   | untested            | untested           |
+| `skill-creation`   | 1 skill                                                    | verified   | untested            | untested           |
+| `swarm`            | 1 skill, 5 agents                                          | verified   | untested            | untested           |
+| `ui`               | 1 skill                                                    | verified   | untested            | untested           |
 
 Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place — with one documented exception. `default-stack`'s own lockfile cannot be replayed by `apm audit --ci`, because the meta-package reaches `pr` by two paths and an APM 0.32.0 writer defect then records an ambiguous parent chain for `explore`. Consumers are unaffected: a clean install of `default-stack` resolves the same twelve packages and passes `apm audit --ci` on all three targets. See `docs/DEPENDENCY-CONTRACTS.md` for the minimal repro and the reasoning behind keeping the eight-declared-requirement manifest.
 

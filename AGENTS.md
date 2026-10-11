@@ -168,11 +168,11 @@ dependencies:
 
 ## Primitive naming contracts
 
-| Primitive | Source path | Required frontmatter |
-| --- | --- | --- |
-| Skill | `.apm/skills/<name>/SKILL.md` | `name`, `description` |
-| Agent | `.apm/agents/<name>.agent.md` | `description` (plus optional `name`, `model`, `tools`, `color`, `handoffs`) |
-| Instruction | `.apm/instructions/<name>.instructions.md` | `description`, `applyTo` |
+| Primitive   | Source path                                | Required frontmatter                                                        |
+| ----------- | ------------------------------------------ | --------------------------------------------------------------------------- |
+| Skill       | `.apm/skills/<name>/SKILL.md`              | `name`, `description`                                                       |
+| Agent       | `.apm/agents/<name>.agent.md`              | `description` (plus optional `name`, `model`, `tools`, `color`, `handoffs`) |
+| Instruction | `.apm/instructions/<name>.instructions.md` | `description`, `applyTo`                                                    |
 
 - **Skill `name` must equal its directory name**, use lowercase letters, digits
   and single hyphens, and be at most 64 characters. `description` is at most
@@ -191,10 +191,10 @@ dependencies:
 
 `applyTo` is translated per target by a **source** install:
 
-| Target | Deployed path | Key emitted |
-| --- | --- | --- |
-| cursor | `.cursor/rules/<name>.mdc` | `globs: "<pattern>"` (keeps `description`) |
-| claude | `.claude/rules/<name>.md` | `paths:` as a YAML list (drops `description`) |
+| Target  | Deployed path                                 | Key emitted                                           |
+| ------- | --------------------------------------------- | ----------------------------------------------------- |
+| cursor  | `.cursor/rules/<name>.mdc`                    | `globs: "<pattern>"` (keeps `description`)            |
+| claude  | `.claude/rules/<name>.md`                     | `paths:` as a YAML list (drops `description`)         |
 | copilot | `.github/instructions/<name>.instructions.md` | `applyTo: "<pattern>"` verbatim (keeps `description`) |
 
 A **plugin-format archive** install does not apply this translation: all three
@@ -206,11 +206,11 @@ gets no `paths`. Assert scoping from source installs only.
 Observed from scratch consumers and the lockfiles. Paths are relative to the
 **consumer** root.
 
-| Primitive | cursor | claude | copilot |
-| --- | --- | --- | --- |
-| Skill | `.agents/skills/<name>/` | `.claude/skills/<name>/` | `.agents/skills/<name>/` |
-| Agent | `.cursor/agents/<name>.md` | `.claude/agents/<name>.md` | `.github/agents/<name>.agent.md` |
-| Instruction | `.cursor/rules/<name>.mdc` | `.claude/rules/<name>.md` | `.github/instructions/<name>.instructions.md` |
+| Primitive   | cursor                     | claude                     | copilot                                       |
+| ----------- | -------------------------- | -------------------------- | --------------------------------------------- |
+| Skill       | `.agents/skills/<name>/`   | `.claude/skills/<name>/`   | `.agents/skills/<name>/`                      |
+| Agent       | `.cursor/agents/<name>.md` | `.claude/agents/<name>.md` | `.github/agents/<name>.agent.md`              |
+| Instruction | `.cursor/rules/<name>.mdc` | `.claude/rules/<name>.md`  | `.github/instructions/<name>.instructions.md` |
 
 Cursor and Copilot share the `.agents/skills/` root, so a mixed-target install
 deploys each skill once. `references/`, `scripts/` and `assets/` ship alongside

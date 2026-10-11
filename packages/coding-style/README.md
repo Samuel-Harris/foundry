@@ -4,9 +4,9 @@ Core engineering rules and compatibility guardrails for agent-written code.
 
 ## What it installs
 
-| Primitive | Name | Purpose |
-| --- | --- | --- |
-| Instruction | `compatibility-surface-gate` | Gate backward-compatibility and dual code paths. |
+| Primitive   | Name                         | Purpose                                                                                                                                 |
+| ----------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Instruction | `compatibility-surface-gate` | Gate backward-compatibility and dual code paths.                                                                                        |
 | Instruction | `software-engineering-rules` | Core engineering rules for agent-written code — read before writing, think before coding, keep changes surgical, and verify with tests. |
 
 ## Install

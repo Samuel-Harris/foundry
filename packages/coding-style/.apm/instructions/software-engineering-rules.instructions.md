@@ -1,5 +1,5 @@
 ---
-description: Core engineering rules for agent-written code — read before writing, think before coding, keep changes surgical, and verify with tests.
+description: Core engineering rules for agent-written code — read before writing, think before coding, keep changes surgical, verify with tests, and keep agent context progressively disclosed.
 applyTo: "**/*"
 ---
 
@@ -194,6 +194,8 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 
 **The Ceremonial Test.** You add a test so the change looks verified. It reads a file and asserts the file is non-empty, or asserts a config line is still that config line. Delete it. A test that cannot fail for a behavioral reason is not coverage.
 
+**The Context Dump.** You learn something about a subsystem and append it to the nearest always-loaded file, because that is where you were looking. Every agent that touches any file below it now pays for that paragraph, whether or not it is relevant. Put the fact in the file that owns it (see section 12).
+
 ## 11. Pull Request Size Limit
 
 A pull request must not exceed **5,000 changed lines**, measured as additions plus deletions against the PR's base branch. This is a hard limit, not a target, and includes application code, tests, migrations, generated files, lockfiles, and formatting changes.
@@ -211,3 +213,24 @@ Oversized work must be divided into a real GitHub PR stack:
 - Do not hide an oversized change by moving files between layers, excluding generated output from the count, or using a cumulative diff different from the PR's actual base.
 
 If the work cannot be split safely while preserving correctness, stop and ask the user how to proceed. Do not silently exceed the limit.
+
+## 12. Progressive Disclosure for Agent Context
+
+Agent instruction files (`AGENTS.md`, `CLAUDE.md`, rules, and similar) are loaded automatically, and every byte in them is paid for on every task that touches their directory, whether or not it is relevant. A 100 KB file read before every edit crowds out the code the agent should be reading, and the one rule that matters gets lost in it.
+
+Structure agent context so each reader loads only what their task needs:
+
+- **Always-loaded files hold orientation, invariants, and routing.** What this directory is for, the handful of rules that hold everywhere beneath it, and a table that says where to read next for each kind of task. Not file catalogues, command references, runbooks, or per-feature detail.
+- **Detail lives in the file that owns it.** A rule about one script belongs in that script's directory file, or in a skill or reference doc loaded only when the task calls for it. Put each fact in the deepest file whose whole subtree it applies to.
+- **One owner per fact.** If two files state the same rule, they will drift, and a reader cannot tell which is right. Keep one copy and delete the other. A pointer to the owner is fine; a paraphrase is a second copy.
+- **Pointers go down or out, never up.** A child file pointing back at its parent for detail means the detail is in the wrong place. Move it down.
+- **Do not catalogue what the code already says.** File-by-file descriptions duplicate module docstrings and go stale silently. Document rules, contracts, and footguns the code cannot show.
+- **Set a size budget for always-loaded files and measure it.** Count the bytes an agent loads for a file in a given directory, summed over every file in the chain. If a change pushes that chain over budget, move detail down before adding more.
+
+When restructuring existing agent context, treat it as a refactor:
+
+- Snapshot the before state and list every command, path, and flag it mentions. After the move, each one must still exist somewhere or be deleted on purpose with a reason.
+- Check commands and paths against the code as you move them. Moving a stale command just moves the bug.
+- Prove navigation still works. Give a fresh agent a real task, let it start from the top-level file with no search, and check that it reaches the owning file in a few hops. A routing table that only its author can follow is not routing.
+
+The test: an agent editing a single file should be able to name every always-loaded line it just read as relevant to that edit, or as one hop from the rule it needs.

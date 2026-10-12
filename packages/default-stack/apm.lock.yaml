@@ -14,11 +14,11 @@ dependencies:
   - .github/instructions/software-engineering-rules.instructions.md
   deployed_file_hashes:
     .claude/rules/compatibility-surface-gate.md: sha256:cdc543d23abf987209ff3906f86f79d45f50f64f515c4d69879073511c57138b
-    .claude/rules/software-engineering-rules.md: sha256:4110a3850b59bcb91194af5bb735a5cf40a898956604b50343d5fc3ece203255
+    .claude/rules/software-engineering-rules.md: sha256:53fe83f3ab137018ada504acf4e1ad5baf9467bb63b51e560b39f21babc6ea96
     .cursor/rules/compatibility-surface-gate.mdc: sha256:b75411139bd161bcc3c82083ddf91a8407ca9987fb8d344a7e54e46f5f78c588
-    .cursor/rules/software-engineering-rules.mdc: sha256:39757c21acdb77001ece52dcd412cc0801f700c005724bbd361a5ea7122068ed
+    .cursor/rules/software-engineering-rules.mdc: sha256:39c37be63108592f2e2f8bbb684a11ac8bd9f354d846dfb27ccaac802d84cbdb
     .github/instructions/compatibility-surface-gate.instructions.md: sha256:a8d022e4582efae6e046f400f4d07647fe9678bae97c9f06179e0f8609b38551
-    .github/instructions/software-engineering-rules.instructions.md: sha256:48218fef6e004b6013f7a278cc23de3463ce1d9a77702d189d98d3c36afb8b51
+    .github/instructions/software-engineering-rules.instructions.md: sha256:20ffd031fd44cd247693e0b1797d7052949b9cf9650b9a6cc0b8ed0559339c08
   source: local
   local_path: ../coding-style
   declared_license: MIT
@@ -511,7 +511,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:4110a3850b59bcb91194af5bb735a5cf40a898956604b50343d5fc3ece203255
+  content_hash: sha256:53fe83f3ab137018ada504acf4e1ad5baf9467bb63b51e560b39f21babc6ea96
 - kind: project-relative
   target: claude
   value: .claude/skills/agents-md
@@ -1384,7 +1384,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:48218fef6e004b6013f7a278cc23de3463ce1d9a77702d189d98d3c36afb8b51
+  content_hash: sha256:20ffd031fd44cd247693e0b1797d7052949b9cf9650b9a6cc0b8ed0559339c08
 - kind: project-relative
   target: cursor
   value: .cursor/agents/architect.md
@@ -1519,4 +1519,4 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:39757c21acdb77001ece52dcd412cc0801f700c005724bbd361a5ea7122068ed
+  content_hash: sha256:39c37be63108592f2e2f8bbb684a11ac8bd9f354d846dfb27ccaac802d84cbdb

@@ -18,7 +18,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:c85746a492936f1dc8fbbb46bcaf870c5f95c3f9626ad45e24564c3dd7e598b8
+  content_hash: sha256:64cded9e9a7bb58765a83fe276ff4c4a497c67ed0855daaf9aed496a1a365ac8
 - kind: project-relative
   target: copilot
   value: .github/instructions/compatibility-surface-gate.instructions.md
@@ -36,7 +36,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:3f2415beee0f845a970a564860441da8f8b56f048b63d5d96a6706a7eb82731b
+  content_hash: sha256:2636f841c1a52b0bcffa7dd670d812c0db158540518612653e380d71ef8f6fd6
 - kind: project-relative
   target: cursor
   value: .cursor/rules/compatibility-surface-gate.mdc
@@ -54,7 +54,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:57ec0fb7eaaa8e139da5f10d2505c25cc325ab25e2cbbd3a107980f67ab1f5c4
+  content_hash: sha256:bd5ac2229dfcd065475163a6899a83487b2ba149becb819dee0405e5b55431ee
 local_deployed_files:
 - .claude/rules/compatibility-surface-gate.md
 - .claude/rules/software-engineering-rules.md
@@ -64,8 +64,8 @@ local_deployed_files:
 - .github/instructions/software-engineering-rules.instructions.md
 local_deployed_file_hashes:
   .claude/rules/compatibility-surface-gate.md: sha256:cdc543d23abf987209ff3906f86f79d45f50f64f515c4d69879073511c57138b
-  .claude/rules/software-engineering-rules.md: sha256:c85746a492936f1dc8fbbb46bcaf870c5f95c3f9626ad45e24564c3dd7e598b8
+  .claude/rules/software-engineering-rules.md: sha256:64cded9e9a7bb58765a83fe276ff4c4a497c67ed0855daaf9aed496a1a365ac8
   .cursor/rules/compatibility-surface-gate.mdc: sha256:b75411139bd161bcc3c82083ddf91a8407ca9987fb8d344a7e54e46f5f78c588
-  .cursor/rules/software-engineering-rules.mdc: sha256:57ec0fb7eaaa8e139da5f10d2505c25cc325ab25e2cbbd3a107980f67ab1f5c4
+  .cursor/rules/software-engineering-rules.mdc: sha256:bd5ac2229dfcd065475163a6899a83487b2ba149becb819dee0405e5b55431ee
   .github/instructions/compatibility-surface-gate.instructions.md: sha256:a8d022e4582efae6e046f400f4d07647fe9678bae97c9f06179e0f8609b38551
-  .github/instructions/software-engineering-rules.instructions.md: sha256:3f2415beee0f845a970a564860441da8f8b56f048b63d5d96a6706a7eb82731b
+  .github/instructions/software-engineering-rules.instructions.md: sha256:2636f841c1a52b0bcffa7dd670d812c0db158540518612653e380d71ef8f6fd6

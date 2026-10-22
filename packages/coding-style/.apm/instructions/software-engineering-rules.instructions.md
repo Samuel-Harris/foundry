@@ -102,6 +102,7 @@ The difference between code that works and code you think works is testing. You 
 - The file exists, is non-empty, or contains a heading. Asserting every `AGENTS.md` still has text after `strip()` does not check that the guide is accurate or that anything follows it. Version control already records that the file is there.
 - A config or build file contains a fixed string. Asserting `.bazelrc` contains `--aspects=//tools/boundaries:enforcer.bzl%import_enforcer` does not run the aspect and does not show that a forbidden import fails the build. A comment with the same text would pass.
 - The assertion is a second copy of a constant, flag, or source line you control in both places.
+- It parses a CI workflow file (GitHub Actions YAML and similar) or pins a list of jobs, paths, or config keys. These are restatements too: do not write them. Test the behavior of the script the workflow calls, and use real CI runs as the evidence for trigger, condition, and job-graph changes.
 
 If you cannot name a behavior that fails the test while the files stay well formed, do not add the test. Say that, and why. The import enforcer is worth a test when you hand it source and assert that an allowed import passes and a forbidden one exits non-zero. An empty-file check is not a stand-in for that.
 
@@ -137,7 +138,9 @@ When something doesn't work, don't guess. Investigate.
 
 **Read the error message.** The whole thing. Including the stack trace. LLMs have a terrible habit of seeing an error and immediately generating a "fix" based on the error type without reading what it actually says. A TypeError could mean a hundred different things. The message and stack trace tell you which one.
 
-**Reproduce first.** Before you change anything, make sure you can reproduce the problem. If you can't reproduce it, you can't verify your fix. "I think this should fix it" is not debugging. It's gambling.
+**Reproduce first.** Before you change anything, make sure you can reproduce the problem. If you can't reproduce it, you can't verify your fix. "I think this should fix it" is not debugging. It's gambling. Never ship a bug fix you have not first seen reproduce the bug.
+
+**Don't call a failure a flake without naming the mechanism.** "Flaky", "stalled", or "infra blip" is a conclusion, not an explanation. Before you use one, read the logs, name what actually failed (a network fetch, a race, a timeout, a cold cache), and check whether a cache, retry, or timeout would prevent it. Only then decide whether it belongs to this change.
 
 **Change one thing at a time.** If you change three things and the bug goes away, you don't know which change fixed it. You also don't know if the other two changes introduced new bugs. Change one thing. Test. Change another. Test.
 
@@ -169,6 +172,10 @@ How you communicate about code matters as much as the code itself.
 **Flag concerns.** If you implemented what was asked but you think there's a problem with the approach, say so. "This works but it makes a database call for every item in the list. If the list gets large this will be slow. Want me to batch it?" is the kind of proactive communication that saves hours later.
 
 **Be precise about what you're uncertain about.** "I'm not sure if this library supports streaming responses" is useful. "I think this should work" is not. The difference is that the first one tells the user exactly what to verify.
+
+**Cite what you read before stating facts about the codebase.** In plans, reviews, and PR comments, every claim about existing code, config, infrastructure, or a commit hash must come from a file, command, or API you read in this session. Cite it, or label the claim unverified. A job name, engine version, or hash recalled from memory is a guess until you have looked it up.
+
+**Write final summaries the reader can act on.** End every summary that follows a PR change with the PR link. Do not refer back to items by labels you invented earlier in the session; say what you mean in place. Describe user-visible behavior concretely: what the user does and what they now see, not an abstraction of it.
 
 **Don't explain things the user already knows.** If they asked you to add a REST endpoint, don't explain what REST is. If they asked for a database index, don't explain what indexes do. Match your explanation level to the user's demonstrated knowledge.
 

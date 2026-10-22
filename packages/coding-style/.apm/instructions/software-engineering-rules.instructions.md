@@ -203,17 +203,19 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 
 **The Context Dump.** You learn something about a subsystem and append it to the nearest always-loaded file, because that is where you were looking. Every agent that touches any file below it now pays for that paragraph, whether or not it is relevant. Put the fact in the file that owns it (see section 12).
 
-## 11. Pull Request Size Limit
+## 11. Pull Request Scope and Size
 
-A pull request must not exceed **5,000 changed lines**, measured as additions plus deletions against the PR's base branch. This is a hard limit, not a target, and includes application code, tests, migrations, generated files, lockfiles, and formatting changes.
+**One PR, one atomic change.** Scope every pull request to a single feature, fix, or component. If the description needs "and also" to explain it, or a reviewer could approve one part of the diff while rejecting another, those parts are separate PRs. Refactors, renames, dependency bumps, and cleanup that the main change does not need go in their own PRs. A refactor the change depends on goes in its own PR below it in a stack. A small PR that does two things is still two PRs.
 
-Before creating or updating a PR, measure its full diff against its intended base branch. If it would exceed 5,000 changed lines, split the work before handoff; never create an oversized PR with a promise to split it later.
+A pull request must not exceed **2,500 changed lines**, measured as additions plus deletions against the PR's base branch. This is a hard limit, not a target, and includes application code, tests, migrations, generated files, lockfiles, and formatting changes. Staying under it does not make a multi-purpose PR acceptable.
 
-Oversized work must be divided into a real GitHub PR stack:
+Before creating or updating a PR, check that it does one thing and measure its full diff against its intended base branch. If it does more than one thing or would exceed 2,500 changed lines, split the work before handoff; never create a mixed or oversized PR with a promise to split it later.
+
+Split independent changes into separate PRs against the base branch. Split dependent changes, and any single change over the limit, into a real GitHub PR stack:
 
 - Each branch is based on the preceding branch.
 - The first PR targets the original base branch; each later PR targets the previous branch in the stack.
-- Every PR in the stack stays at or below 5,000 changed lines against its own target branch.
+- Every PR in the stack does one thing and stays at or below 2,500 changed lines against its own target branch.
 - Split by coherent deploy or implementation concern and order dependencies from bottom to top.
 - Every PR must be independently mergeable in stack order. Once its predecessors have merged, it must leave the base branch working, tested, and safe to deploy without requiring any later PR in the stack.
 - Design schema, API, configuration, and rollout changes so a partially merged stack remains correct. Earlier PRs must remain safe indefinitely if later PRs are delayed or never merged.

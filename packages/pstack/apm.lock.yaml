@@ -1,0 +1,1340 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/agents/comment-sicko.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/benchmark-checklist
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/benchmark-checklist/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+- kind: project-relative
+  target: claude
+  value: .claude/skills/bro
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/bro/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+- kind: project-relative
+  target: claude
+  value: .claude/skills/in-your-own-words
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/in-your-own-words/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
+- kind: project-relative
+  target: claude
+  value: .claude/skills/no-comments
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/no-comments/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-attack-the-premise
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-attack-the-premise/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-boundary-discipline
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-boundary-discipline/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-build-the-lever
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-build-the-lever/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a749cef47303efae04871b9642030583c21137a3bc4f4147387385ab5b23e1e5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-encode-lessons-in-structure
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-encode-lessons-in-structure/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:3186fc7431b49f8b7dd9869b878fc20225a1104c640756dfdc6f4c10461d631e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-exhaust-the-design-space
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-exhaust-the-design-space/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2de83d99f93f60ec6313455b0bc9aa9f0bfb93dd59f414f403691322db00d4db
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-experience-first
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-experience-first/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-explain-the-number
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-explain-the-number/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:804ac9000c05124835955c74939297d0adb155f6ea824918c0080809d97428d9
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-fix-root-causes
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-fix-root-causes/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b554cb2f0a6ef9dad8a918cdf0209bc220747edb2605b5447dc6439ef670aea7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-foundational-thinking
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-foundational-thinking/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:113eb90368bdb115262088a695b0ac51e5be185bf03157b7657440276510cedd
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-guard-the-context-window
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-guard-the-context-window/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b009d6dc0dac2b5266fdd6f2890dceec920bd87a5a2026b064134295606bcc53
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-laziness-protocol
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-laziness-protocol/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0bccb1f0b1009e0ac0e687b8bfce8b956c595175e37874ce53e2fc370efab792
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-make-operations-idempotent
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-make-operations-idempotent/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ead9208f9cb0e68dcdbabec0ce3138a8a647d6ce7e5ca1fec71b87e91fdf74e6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-migrate-callers-then-delete-legacy-apis
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9a02e9d50d1135e62069fbd496905956c291e22dd64f002c2cd8dfe0071201ab
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-minimize-reader-load
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-minimize-reader-load/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:12c76adb981e60d02fef100a999eb3cdc05c64f7f7f005bae00f1b2d96d477d5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-model-the-domain
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-model-the-domain/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6cc287efaf809ab3b057a1ca630d62e22d1458070875f2f0d23beb6489b86713
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-never-block-on-the-human
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-never-block-on-the-human/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-outcome-oriented-execution
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-outcome-oriented-execution/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:415e6ca95f3cf061ce4f995f55144d2ecb8b6a4a20092da34c87d26da9a0a068
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-prove-it-works
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-prove-it-works/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4fdb2904e713066ab28f33496b94974b364847849e5703c81fb74ee138e1aade
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-redesign-from-first-principles
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-redesign-from-first-principles/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-separate-before-serializing-shared-state
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-separate-before-serializing-shared-state/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:50bac90c813a39c400fecd9c741638bcebe5529d845b57837d6b2ca1655600c9
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-sequence-verifiable-units
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-sequence-verifiable-units/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bed92e273291e16299ef086c0e6b53ca9df0d8c3d2a77955fad745e99aea2e56
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-subtract-before-you-add
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-subtract-before-you-add/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-test-behavior-not-implementation
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-test-behavior-not-implementation/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-type-system-discipline
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/principle-type-system-discipline/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+- kind: project-relative
+  target: claude
+  value: .claude/skills/sharpen
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/sharpen/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/tdd
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/tdd/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/unslop
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/unslop/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
+- kind: project-relative
+  target: copilot
+  value: .github/agents/comment-sicko.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/comment-sicko.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/benchmark-checklist
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/benchmark-checklist/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/bro
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/bro/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/in-your-own-words
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/in-your-own-words/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/no-comments
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/no-comments/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-attack-the-premise
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-attack-the-premise/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-boundary-discipline
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-boundary-discipline/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-build-the-lever
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-build-the-lever/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a749cef47303efae04871b9642030583c21137a3bc4f4147387385ab5b23e1e5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-encode-lessons-in-structure
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-encode-lessons-in-structure/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:3186fc7431b49f8b7dd9869b878fc20225a1104c640756dfdc6f4c10461d631e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-exhaust-the-design-space
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-exhaust-the-design-space/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2de83d99f93f60ec6313455b0bc9aa9f0bfb93dd59f414f403691322db00d4db
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-experience-first
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-experience-first/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-explain-the-number
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-explain-the-number/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:804ac9000c05124835955c74939297d0adb155f6ea824918c0080809d97428d9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-fix-root-causes
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-fix-root-causes/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b554cb2f0a6ef9dad8a918cdf0209bc220747edb2605b5447dc6439ef670aea7
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-foundational-thinking
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-foundational-thinking/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:113eb90368bdb115262088a695b0ac51e5be185bf03157b7657440276510cedd
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-guard-the-context-window
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-guard-the-context-window/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b009d6dc0dac2b5266fdd6f2890dceec920bd87a5a2026b064134295606bcc53
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-laziness-protocol
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-laziness-protocol/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0bccb1f0b1009e0ac0e687b8bfce8b956c595175e37874ce53e2fc370efab792
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-make-operations-idempotent
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-make-operations-idempotent/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ead9208f9cb0e68dcdbabec0ce3138a8a647d6ce7e5ca1fec71b87e91fdf74e6
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-migrate-callers-then-delete-legacy-apis
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9a02e9d50d1135e62069fbd496905956c291e22dd64f002c2cd8dfe0071201ab
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-minimize-reader-load
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-minimize-reader-load/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:12c76adb981e60d02fef100a999eb3cdc05c64f7f7f005bae00f1b2d96d477d5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-model-the-domain
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-model-the-domain/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6cc287efaf809ab3b057a1ca630d62e22d1458070875f2f0d23beb6489b86713
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-never-block-on-the-human
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-never-block-on-the-human/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-outcome-oriented-execution
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-outcome-oriented-execution/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:415e6ca95f3cf061ce4f995f55144d2ecb8b6a4a20092da34c87d26da9a0a068
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-prove-it-works
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-prove-it-works/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4fdb2904e713066ab28f33496b94974b364847849e5703c81fb74ee138e1aade
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-redesign-from-first-principles
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-redesign-from-first-principles/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-separate-before-serializing-shared-state
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-separate-before-serializing-shared-state/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:50bac90c813a39c400fecd9c741638bcebe5529d845b57837d6b2ca1655600c9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-sequence-verifiable-units
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-sequence-verifiable-units/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bed92e273291e16299ef086c0e6b53ca9df0d8c3d2a77955fad745e99aea2e56
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-subtract-before-you-add
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-subtract-before-you-add/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-test-behavior-not-implementation
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-test-behavior-not-implementation/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-type-system-discipline
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/principle-type-system-discipline/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/sharpen
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/sharpen/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/tdd
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/tdd/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/unslop
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/unslop/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
+local_deployed_files:
+- .agents/skills/benchmark-checklist
+- .agents/skills/benchmark-checklist/SKILL.md
+- .agents/skills/bro
+- .agents/skills/bro/SKILL.md
+- .agents/skills/in-your-own-words
+- .agents/skills/in-your-own-words/SKILL.md
+- .agents/skills/no-comments
+- .agents/skills/no-comments/SKILL.md
+- .agents/skills/principle-attack-the-premise
+- .agents/skills/principle-attack-the-premise/SKILL.md
+- .agents/skills/principle-boundary-discipline
+- .agents/skills/principle-boundary-discipline/SKILL.md
+- .agents/skills/principle-build-the-lever
+- .agents/skills/principle-build-the-lever/SKILL.md
+- .agents/skills/principle-encode-lessons-in-structure
+- .agents/skills/principle-encode-lessons-in-structure/SKILL.md
+- .agents/skills/principle-exhaust-the-design-space
+- .agents/skills/principle-exhaust-the-design-space/SKILL.md
+- .agents/skills/principle-experience-first
+- .agents/skills/principle-experience-first/SKILL.md
+- .agents/skills/principle-explain-the-number
+- .agents/skills/principle-explain-the-number/SKILL.md
+- .agents/skills/principle-fix-root-causes
+- .agents/skills/principle-fix-root-causes/SKILL.md
+- .agents/skills/principle-foundational-thinking
+- .agents/skills/principle-foundational-thinking/SKILL.md
+- .agents/skills/principle-guard-the-context-window
+- .agents/skills/principle-guard-the-context-window/SKILL.md
+- .agents/skills/principle-laziness-protocol
+- .agents/skills/principle-laziness-protocol/SKILL.md
+- .agents/skills/principle-make-operations-idempotent
+- .agents/skills/principle-make-operations-idempotent/SKILL.md
+- .agents/skills/principle-migrate-callers-then-delete-legacy-apis
+- .agents/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md
+- .agents/skills/principle-minimize-reader-load
+- .agents/skills/principle-minimize-reader-load/SKILL.md
+- .agents/skills/principle-model-the-domain
+- .agents/skills/principle-model-the-domain/SKILL.md
+- .agents/skills/principle-never-block-on-the-human
+- .agents/skills/principle-never-block-on-the-human/SKILL.md
+- .agents/skills/principle-outcome-oriented-execution
+- .agents/skills/principle-outcome-oriented-execution/SKILL.md
+- .agents/skills/principle-prove-it-works
+- .agents/skills/principle-prove-it-works/SKILL.md
+- .agents/skills/principle-redesign-from-first-principles
+- .agents/skills/principle-redesign-from-first-principles/SKILL.md
+- .agents/skills/principle-separate-before-serializing-shared-state
+- .agents/skills/principle-separate-before-serializing-shared-state/SKILL.md
+- .agents/skills/principle-sequence-verifiable-units
+- .agents/skills/principle-sequence-verifiable-units/SKILL.md
+- .agents/skills/principle-subtract-before-you-add
+- .agents/skills/principle-subtract-before-you-add/SKILL.md
+- .agents/skills/principle-test-behavior-not-implementation
+- .agents/skills/principle-test-behavior-not-implementation/SKILL.md
+- .agents/skills/principle-type-system-discipline
+- .agents/skills/principle-type-system-discipline/SKILL.md
+- .agents/skills/sharpen
+- .agents/skills/sharpen/SKILL.md
+- .agents/skills/tdd
+- .agents/skills/tdd/SKILL.md
+- .agents/skills/unslop
+- .agents/skills/unslop/SKILL.md
+- .claude/agents/comment-sicko.md
+- .claude/skills/benchmark-checklist
+- .claude/skills/benchmark-checklist/SKILL.md
+- .claude/skills/bro
+- .claude/skills/bro/SKILL.md
+- .claude/skills/in-your-own-words
+- .claude/skills/in-your-own-words/SKILL.md
+- .claude/skills/no-comments
+- .claude/skills/no-comments/SKILL.md
+- .claude/skills/principle-attack-the-premise
+- .claude/skills/principle-attack-the-premise/SKILL.md
+- .claude/skills/principle-boundary-discipline
+- .claude/skills/principle-boundary-discipline/SKILL.md
+- .claude/skills/principle-build-the-lever
+- .claude/skills/principle-build-the-lever/SKILL.md
+- .claude/skills/principle-encode-lessons-in-structure
+- .claude/skills/principle-encode-lessons-in-structure/SKILL.md
+- .claude/skills/principle-exhaust-the-design-space
+- .claude/skills/principle-exhaust-the-design-space/SKILL.md
+- .claude/skills/principle-experience-first
+- .claude/skills/principle-experience-first/SKILL.md
+- .claude/skills/principle-explain-the-number
+- .claude/skills/principle-explain-the-number/SKILL.md
+- .claude/skills/principle-fix-root-causes
+- .claude/skills/principle-fix-root-causes/SKILL.md
+- .claude/skills/principle-foundational-thinking
+- .claude/skills/principle-foundational-thinking/SKILL.md
+- .claude/skills/principle-guard-the-context-window
+- .claude/skills/principle-guard-the-context-window/SKILL.md
+- .claude/skills/principle-laziness-protocol
+- .claude/skills/principle-laziness-protocol/SKILL.md
+- .claude/skills/principle-make-operations-idempotent
+- .claude/skills/principle-make-operations-idempotent/SKILL.md
+- .claude/skills/principle-migrate-callers-then-delete-legacy-apis
+- .claude/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md
+- .claude/skills/principle-minimize-reader-load
+- .claude/skills/principle-minimize-reader-load/SKILL.md
+- .claude/skills/principle-model-the-domain
+- .claude/skills/principle-model-the-domain/SKILL.md
+- .claude/skills/principle-never-block-on-the-human
+- .claude/skills/principle-never-block-on-the-human/SKILL.md
+- .claude/skills/principle-outcome-oriented-execution
+- .claude/skills/principle-outcome-oriented-execution/SKILL.md
+- .claude/skills/principle-prove-it-works
+- .claude/skills/principle-prove-it-works/SKILL.md
+- .claude/skills/principle-redesign-from-first-principles
+- .claude/skills/principle-redesign-from-first-principles/SKILL.md
+- .claude/skills/principle-separate-before-serializing-shared-state
+- .claude/skills/principle-separate-before-serializing-shared-state/SKILL.md
+- .claude/skills/principle-sequence-verifiable-units
+- .claude/skills/principle-sequence-verifiable-units/SKILL.md
+- .claude/skills/principle-subtract-before-you-add
+- .claude/skills/principle-subtract-before-you-add/SKILL.md
+- .claude/skills/principle-test-behavior-not-implementation
+- .claude/skills/principle-test-behavior-not-implementation/SKILL.md
+- .claude/skills/principle-type-system-discipline
+- .claude/skills/principle-type-system-discipline/SKILL.md
+- .claude/skills/sharpen
+- .claude/skills/sharpen/SKILL.md
+- .claude/skills/tdd
+- .claude/skills/tdd/SKILL.md
+- .claude/skills/unslop
+- .claude/skills/unslop/SKILL.md
+- .cursor/agents/comment-sicko.md
+- .github/agents/comment-sicko.agent.md
+local_deployed_file_hashes:
+  .agents/skills/benchmark-checklist/SKILL.md: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+  .agents/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+  .agents/skills/in-your-own-words/SKILL.md: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
+  .agents/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+  .agents/skills/principle-attack-the-premise/SKILL.md: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
+  .agents/skills/principle-boundary-discipline/SKILL.md: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
+  .agents/skills/principle-build-the-lever/SKILL.md: sha256:a749cef47303efae04871b9642030583c21137a3bc4f4147387385ab5b23e1e5
+  .agents/skills/principle-encode-lessons-in-structure/SKILL.md: sha256:3186fc7431b49f8b7dd9869b878fc20225a1104c640756dfdc6f4c10461d631e
+  .agents/skills/principle-exhaust-the-design-space/SKILL.md: sha256:2de83d99f93f60ec6313455b0bc9aa9f0bfb93dd59f414f403691322db00d4db
+  .agents/skills/principle-experience-first/SKILL.md: sha256:58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b
+  .agents/skills/principle-explain-the-number/SKILL.md: sha256:804ac9000c05124835955c74939297d0adb155f6ea824918c0080809d97428d9
+  .agents/skills/principle-fix-root-causes/SKILL.md: sha256:b554cb2f0a6ef9dad8a918cdf0209bc220747edb2605b5447dc6439ef670aea7
+  .agents/skills/principle-foundational-thinking/SKILL.md: sha256:113eb90368bdb115262088a695b0ac51e5be185bf03157b7657440276510cedd
+  .agents/skills/principle-guard-the-context-window/SKILL.md: sha256:b009d6dc0dac2b5266fdd6f2890dceec920bd87a5a2026b064134295606bcc53
+  .agents/skills/principle-laziness-protocol/SKILL.md: sha256:0bccb1f0b1009e0ac0e687b8bfce8b956c595175e37874ce53e2fc370efab792
+  .agents/skills/principle-make-operations-idempotent/SKILL.md: sha256:ead9208f9cb0e68dcdbabec0ce3138a8a647d6ce7e5ca1fec71b87e91fdf74e6
+  .agents/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md: sha256:9a02e9d50d1135e62069fbd496905956c291e22dd64f002c2cd8dfe0071201ab
+  .agents/skills/principle-minimize-reader-load/SKILL.md: sha256:12c76adb981e60d02fef100a999eb3cdc05c64f7f7f005bae00f1b2d96d477d5
+  .agents/skills/principle-model-the-domain/SKILL.md: sha256:6cc287efaf809ab3b057a1ca630d62e22d1458070875f2f0d23beb6489b86713
+  .agents/skills/principle-never-block-on-the-human/SKILL.md: sha256:05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f
+  .agents/skills/principle-outcome-oriented-execution/SKILL.md: sha256:415e6ca95f3cf061ce4f995f55144d2ecb8b6a4a20092da34c87d26da9a0a068
+  .agents/skills/principle-prove-it-works/SKILL.md: sha256:4fdb2904e713066ab28f33496b94974b364847849e5703c81fb74ee138e1aade
+  .agents/skills/principle-redesign-from-first-principles/SKILL.md: sha256:170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034
+  .agents/skills/principle-separate-before-serializing-shared-state/SKILL.md: sha256:50bac90c813a39c400fecd9c741638bcebe5529d845b57837d6b2ca1655600c9
+  .agents/skills/principle-sequence-verifiable-units/SKILL.md: sha256:bed92e273291e16299ef086c0e6b53ca9df0d8c3d2a77955fad745e99aea2e56
+  .agents/skills/principle-subtract-before-you-add/SKILL.md: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
+  .agents/skills/principle-test-behavior-not-implementation/SKILL.md: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
+  .agents/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+  .agents/skills/sharpen/SKILL.md: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
+  .agents/skills/tdd/SKILL.md: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
+  .agents/skills/unslop/SKILL.md: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
+  .claude/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+  .claude/skills/benchmark-checklist/SKILL.md: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+  .claude/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+  .claude/skills/in-your-own-words/SKILL.md: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
+  .claude/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+  .claude/skills/principle-attack-the-premise/SKILL.md: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
+  .claude/skills/principle-boundary-discipline/SKILL.md: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
+  .claude/skills/principle-build-the-lever/SKILL.md: sha256:a749cef47303efae04871b9642030583c21137a3bc4f4147387385ab5b23e1e5
+  .claude/skills/principle-encode-lessons-in-structure/SKILL.md: sha256:3186fc7431b49f8b7dd9869b878fc20225a1104c640756dfdc6f4c10461d631e
+  .claude/skills/principle-exhaust-the-design-space/SKILL.md: sha256:2de83d99f93f60ec6313455b0bc9aa9f0bfb93dd59f414f403691322db00d4db
+  .claude/skills/principle-experience-first/SKILL.md: sha256:58903529d733b1c1a7c9ccf127d45ef3c7d0d9f0b81164a4dc6b80efe6f2912b
+  .claude/skills/principle-explain-the-number/SKILL.md: sha256:804ac9000c05124835955c74939297d0adb155f6ea824918c0080809d97428d9
+  .claude/skills/principle-fix-root-causes/SKILL.md: sha256:b554cb2f0a6ef9dad8a918cdf0209bc220747edb2605b5447dc6439ef670aea7
+  .claude/skills/principle-foundational-thinking/SKILL.md: sha256:113eb90368bdb115262088a695b0ac51e5be185bf03157b7657440276510cedd
+  .claude/skills/principle-guard-the-context-window/SKILL.md: sha256:b009d6dc0dac2b5266fdd6f2890dceec920bd87a5a2026b064134295606bcc53
+  .claude/skills/principle-laziness-protocol/SKILL.md: sha256:0bccb1f0b1009e0ac0e687b8bfce8b956c595175e37874ce53e2fc370efab792
+  .claude/skills/principle-make-operations-idempotent/SKILL.md: sha256:ead9208f9cb0e68dcdbabec0ce3138a8a647d6ce7e5ca1fec71b87e91fdf74e6
+  .claude/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md: sha256:9a02e9d50d1135e62069fbd496905956c291e22dd64f002c2cd8dfe0071201ab
+  .claude/skills/principle-minimize-reader-load/SKILL.md: sha256:12c76adb981e60d02fef100a999eb3cdc05c64f7f7f005bae00f1b2d96d477d5
+  .claude/skills/principle-model-the-domain/SKILL.md: sha256:6cc287efaf809ab3b057a1ca630d62e22d1458070875f2f0d23beb6489b86713
+  .claude/skills/principle-never-block-on-the-human/SKILL.md: sha256:05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f
+  .claude/skills/principle-outcome-oriented-execution/SKILL.md: sha256:415e6ca95f3cf061ce4f995f55144d2ecb8b6a4a20092da34c87d26da9a0a068
+  .claude/skills/principle-prove-it-works/SKILL.md: sha256:4fdb2904e713066ab28f33496b94974b364847849e5703c81fb74ee138e1aade
+  .claude/skills/principle-redesign-from-first-principles/SKILL.md: sha256:170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034
+  .claude/skills/principle-separate-before-serializing-shared-state/SKILL.md: sha256:50bac90c813a39c400fecd9c741638bcebe5529d845b57837d6b2ca1655600c9
+  .claude/skills/principle-sequence-verifiable-units/SKILL.md: sha256:bed92e273291e16299ef086c0e6b53ca9df0d8c3d2a77955fad745e99aea2e56
+  .claude/skills/principle-subtract-before-you-add/SKILL.md: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
+  .claude/skills/principle-test-behavior-not-implementation/SKILL.md: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
+  .claude/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+  .claude/skills/sharpen/SKILL.md: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
+  .claude/skills/tdd/SKILL.md: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
+  .claude/skills/unslop/SKILL.md: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
+  .cursor/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+  .github/agents/comment-sicko.agent.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2

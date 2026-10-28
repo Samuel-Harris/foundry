@@ -63,6 +63,7 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 | `infrastructure`   | 1 skill                                                    | verified   | untested            | untested           |
 | `planning`         | 1 skill, 1 instruction                                     | verified   | untested            | untested           |
 | `pr`               | 3 skills                                                   | verified   | untested            | untested           |
+| `pstack`           | 31 skills, 1 agents                                        | verified   | untested            | untested           |
 | `repo-init`        | 2 skills                                                   | verified   | untested            | untested           |
 | `repo-maintenance` | 3 skills, 1 instruction                                    | verified   | untested            | untested           |
 | `review`           | 3 skills, 2 agents                                         | verified   | untested            | untested           |
@@ -72,11 +73,11 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 
 Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place — with one documented exception. `default-stack`'s own lockfile cannot be replayed by `apm audit --ci`, because the meta-package reaches `pr` by two paths and an APM 0.32.0 writer defect then records an ambiguous parent chain for `explore`. Consumers are unaffected: a clean install of `default-stack` resolves the same twelve packages and passes `apm audit --ci` on all three targets. See `docs/DEPENDENCY-CONTRACTS.md` for the minimal repro and the reasoning behind keeping the eight-declared-requirement manifest.
 
-`apm install --frozen` succeeds for all seventeen packages in place.
+`apm install --frozen` succeeds for all eighteen packages in place.
 
 ## Archive coverage
 
-`apm pack --archive` succeeds for the nine packages with an empty `dependencies:` mapping:
+`apm pack --archive` succeeds for the ten packages with an empty `dependencies:` mapping:
 
 - `coding-style`
 - `cursor-usage`
@@ -84,6 +85,7 @@ Structural verification covers all three targets: every package installs, deploy
 - `git-diff`
 - `handoff`
 - `infrastructure`
+- `pstack`
 - `review`
 - `search`
 - `ui`

@@ -1,0 +1,14 @@
+name: pstack
+version: "0.1.0"
+description: "poteto's agent workflow: a playbook router, review and design skills, and one-rule engineering principles."
+author: Lauren Tan
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies: {}
+scripts:
+  check: apm audit --ci

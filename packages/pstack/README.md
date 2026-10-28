@@ -6,14 +6,22 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 
 | Primitive | Name | Purpose |
 | --- | --- | --- |
+| Skill | `architect` | Sketch types, signatures and module structure before code, then stay in the loop while implementation fills in. |
+| Skill | `arena` | Spawn parallel candidates at the same task, pick a base, and graft the strongest parts of the losers into it. |
+| Skill | `automate-me` | Draft or revise a personal `-mode` skill from the user's own working history. |
 | Skill | `benchmark-checklist` | Vet a performance measurement before you report or act on it. |
 | Skill | `blast-radius` | Find what a change could break beyond the diff, and prove the one fact that makes it safe by running real code. |
 | Skill | `bro` | Restate the last message in plain human language, with no jargon. |
+| Skill | `correct` | Find the mistakes agents keep repeating in a repository and make each one impossible. |
+| Skill | `create-verification-skill` | Generate a project-local verification skill that drives the app the way a user does. |
+| Skill | `figure-it-out` | Design an auditable, bespoke playbook when no narrower one fits. |
 | Skill | `how` | Explain how code works now: architecture, runtime flow, and where new code should live. |
 | Skill | `in-your-own-words` | Restate what the agent thinks the user's goals and problem are. |
 | Skill | `interrogate` | Have adversaries on different models try to break a change, keeping only findings a run proves. |
 | Skill | `ketchup` | Catch the user up on what changed in this chat since their last message, with every waiting decision listed. |
 | Skill | `ketchup-video` | Catch the user up like `ketchup`, as a short subtitled video of slides. |
+| Skill | `maintain-verification-skill` | Keep a verification skill and its feature map honest with source readers and one live pass. |
+| Skill | `make-bot-ui` | Build a page whose buttons wake a Grok Bot over a webhook. |
 | Skill | `no-comments` | Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints. |
 | Skill | `principle-attack-the-premise` | Test the shared premise of repeated failed fixes before writing another. |
 | Skill | `principle-boundary-discipline` | Concentrate guards at system boundaries and keep business logic pure. |
@@ -39,9 +47,14 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `principle-subtract-before-you-add` | Remove dead weight before building on the simpler base. |
 | Skill | `principle-test-behavior-not-implementation` | Assert what the code's users can observe, not its internals. |
 | Skill | `principle-type-system-discipline` | Make illegal states unrepresentable and parse external data at boundaries. |
+| Skill | `reflect` | Review the active transcript in parallel and route each learning to a concrete skill edit. |
+| Skill | `setup-pstack` | Choose a model per role and a reasoning budget, and write the user-level model rule. |
 | Skill | `sharpen` | Rewrite a prompt to make the task deeper, not bigger, without doing the task. |
+| Skill | `show-me-your-work` | Keep a reviewable decision trail for long-running or unattended work. |
+| Skill | `swarm` | Fan out parallel workers over slices or races and return one report. |
 | Skill | `tdd` | Write the failing test first when a cheap local test path exists. |
 | Skill | `teach` | Explain a body of work plainly by running `how` and `why` and weaving the results together. |
+| Skill | `technical-writing` | Apply a layered technical-writing standard to docs, RFCs, readmes, PR descriptions and commit messages. |
 | Skill | `typescript-best-practices` | Apply TypeScript rules when reading or editing `.ts` or `.tsx` files. |
 | Skill | `unslop` | Cut AI tells from any writing. |
 | Skill | `why` | Explain why code is shaped the way it is from source control and every available evidence source. |

@@ -16,5 +16,6 @@
     "**/.github/hooks/**",
     "**/.claude-plugin/**",
     "**/.github/plugin/**",
+    "**/node_modules/**",
   ],
 }

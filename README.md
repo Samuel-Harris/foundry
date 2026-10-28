@@ -28,7 +28,7 @@ Install APM by following the [APM installation guide](https://microsoft.github.i
   git config core.hooksPath .githooks
   ```
 
-  The hook lints staged markdown with `markdownlint-cli2` 0.14.0, and runs `apm install --frozen` for a staged package and its dependents, failing if that rewrites `apm.lock.yaml`. CI's only job runs the same script. The lockfile half requires `apm-cli==0.32.0`. See `AGENTS.md`.
+  The hook lints staged markdown with `markdownlint-cli2` 0.14.0, and runs `apm install --frozen` for a staged package and its dependents, failing if that rewrites `apm.lock.yaml`. CI's `pre-commit` job runs the same script. The lockfile half requires `apm-cli==0.32.0`. See `AGENTS.md`.
 
 ## Install
 
@@ -197,7 +197,7 @@ apm pack --archive -o ./dist
 
 `bash tests/structural/run-tier1.sh` runs the whole suite, including the scratch-consumer installs, the archive consumer and the tamper rejection, with every CLI call bounded by a hard timeout. `apm pack` refuses to bundle a package that declares a local `path:` dependency, so every package with sibling dependencies is pack-blocked from its committed manifest; the suite asserts that guardrail explicitly rather than skipping those packages.
 
-CI's only job runs `.githooks/pre-commit` on the pull-request diff, or on the commits just pushed. The Tier 1 suite above is what to run locally before relying on a package change. See `[tests/acceptance.md](tests/acceptance.md)` for its assertions and `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the manifest and CLI contracts.
+CI runs `.githooks/pre-commit` on the pull-request diff, or on the commits just pushed, and runs the pstack script tests described in `packages/pstack/README.md`. The Tier 1 suite above is what to run locally before relying on a package change. See `[tests/acceptance.md](tests/acceptance.md)` for its assertions and `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the manifest and CLI contracts.
 
 ## Attributions
 

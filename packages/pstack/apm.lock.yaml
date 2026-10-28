@@ -12,6 +12,87 @@ deployments:
   content_hash: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
 - kind: project-relative
   target: claude
+  value: .claude/skills/architect
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/architect/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4df6693d760a991f470c2a9611d55ffcdece56cacfc15f7ce778266ed52a76a9
+- kind: project-relative
+  target: claude
+  value: .claude/skills/architect/references/design-red-flags.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6851acb68728048a9a01038c68654612f184719c84d465500f596cafea48c627
+- kind: project-relative
+  target: claude
+  value: .claude/skills/architect/references/rationale-template.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:17762ab8024664d3eb5f5dc81a9f14987464c161dba7812ba3b9996ae4a277f5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/architect/references/runner-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:10d5a91722b7f9eeef241b566b906b6283513f4367a64796676f801a1d386598
+- kind: project-relative
+  target: claude
+  value: .claude/skills/arena
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/arena/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bd074c6c8d32300b6357019df82bc1c9c0db3bc866c7f00ff4060281e98606c2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/automate-me
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/automate-me/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:827a372678f78cefed0d6a2dfb039fe0f0c5e1d2cf0047587076dc194f315fbb
+- kind: project-relative
+  target: claude
   value: .claude/skills/benchmark-checklist
   runtime: null
   scope: project
@@ -64,6 +145,87 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+- kind: project-relative
+  target: claude
+  value: .claude/skills/correct
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/correct/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/create-verification-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/create-verification-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a580f8e8e989a3e3a5ae1edfccebd568f971ab24a939e68543c96e73554c4d35
+- kind: project-relative
+  target: claude
+  value: .claude/skills/create-verification-skill/references/feature-map-example/README.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:56c52b280cf8caffa9b0a9c78e5db3e0b081e2f2c50132c54b1c62113230315f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/create-verification-skill/references/feature-map-example/create-note.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7dc91f1cca0c192f46eb9f6429f91fdd9b7dec1b8260bb482294dc6d637e6dab
+- kind: project-relative
+  target: claude
+  value: .claude/skills/create-verification-skill/references/feature-map-example/search.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d3f6305189eddaa53d7e36606d3c92716aa34518383ab1f6f90fcdf1c1295e60
+- kind: project-relative
+  target: claude
+  value: .claude/skills/figure-it-out
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/figure-it-out/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a7d081a18f00f2e3465e115d11690c37fc578242c3914b7ec686355888b42799
 - kind: project-relative
   target: claude
   value: .claude/skills/how
@@ -172,6 +334,42 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
+- kind: project-relative
+  target: claude
+  value: .claude/skills/maintain-verification-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/maintain-verification-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/make-bot-ui
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/make-bot-ui/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
 - kind: project-relative
   target: claude
   value: .claude/skills/no-comments
@@ -624,6 +822,78 @@ deployments:
   content_hash: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
 - kind: project-relative
   target: claude
+  value: .claude/skills/reflect
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/reflect/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0b72a7b360587fd89ff64591a9d0eb212579f0b08d44602c2ccff3423ddba1b4
+- kind: project-relative
+  target: claude
+  value: .claude/skills/reflect/references/divergent-reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b8e12572a40bc742abb2bec5f2c4af9ed46e55a2606afb118dd0a34bdf99dbc7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/reflect/references/judgment-reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:59c217afa4121c9f04b2a887e3a9f1b612434d0c420cc70d25c638fd3261957a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/reflect/references/synthesizer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a0354c534722f7d49aa61e1de2b2e883595c0e3d8f17a87e05fbdf64d92a40cb
+- kind: project-relative
+  target: claude
+  value: .claude/skills/reflect/references/tooling-reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5302ed4632ae64b8fabadfc56c63a4586ea1ca2989a1f0d79a0143e69b9ae4ff
+- kind: project-relative
+  target: claude
+  value: .claude/skills/setup-pstack
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/setup-pstack/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:58d1253f5c8011573afc1a01b7869d4d8b351347a76a72d12c4ba3d27bfbb6aa
+- kind: project-relative
+  target: claude
   value: .claude/skills/sharpen
   runtime: null
   scope: project
@@ -640,6 +910,60 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/show-me-your-work
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/show-me-your-work/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f7d045cc940bb37d4c1ae20b8a31935c269b19b126a64858c0b07a924cf3e7ec
+- kind: project-relative
+  target: claude
+  value: .claude/skills/show-me-your-work/references/decision-log-template.tsv
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76
+- kind: project-relative
+  target: claude
+  value: .claude/skills/show-me-your-work/scripts/log.sh
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/swarm
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/swarm/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:516977560a7b1357ce8ea4b854003de346e0a05e193f4779c415a1620b05011d
 - kind: project-relative
   target: claude
   value: .claude/skills/tdd
@@ -676,6 +1000,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/technical-writing
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/technical-writing/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7f7b005c20cfed77b5e10dc77a623eeae09fccccafc1089ac9614b7a4ee39ece
 - kind: project-relative
   target: claude
   value: .claude/skills/typescript-best-practices
@@ -867,6 +1209,87 @@ deployments:
   content_hash: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
 - kind: project-relative
   target: legacy
+  value: .agents/skills/architect
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/architect/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4df6693d760a991f470c2a9611d55ffcdece56cacfc15f7ce778266ed52a76a9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/architect/references/design-red-flags.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6851acb68728048a9a01038c68654612f184719c84d465500f596cafea48c627
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/architect/references/rationale-template.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:17762ab8024664d3eb5f5dc81a9f14987464c161dba7812ba3b9996ae4a277f5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/architect/references/runner-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:10d5a91722b7f9eeef241b566b906b6283513f4367a64796676f801a1d386598
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/arena
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/arena/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bd074c6c8d32300b6357019df82bc1c9c0db3bc866c7f00ff4060281e98606c2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/automate-me
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/automate-me/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:827a372678f78cefed0d6a2dfb039fe0f0c5e1d2cf0047587076dc194f315fbb
+- kind: project-relative
+  target: legacy
   value: .agents/skills/benchmark-checklist
   runtime: null
   scope: project
@@ -919,6 +1342,87 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/correct
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/correct/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/create-verification-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/create-verification-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a580f8e8e989a3e3a5ae1edfccebd568f971ab24a939e68543c96e73554c4d35
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/create-verification-skill/references/feature-map-example/README.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:56c52b280cf8caffa9b0a9c78e5db3e0b081e2f2c50132c54b1c62113230315f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/create-verification-skill/references/feature-map-example/create-note.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7dc91f1cca0c192f46eb9f6429f91fdd9b7dec1b8260bb482294dc6d637e6dab
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/create-verification-skill/references/feature-map-example/search.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d3f6305189eddaa53d7e36606d3c92716aa34518383ab1f6f90fcdf1c1295e60
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/figure-it-out
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/figure-it-out/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a7d081a18f00f2e3465e115d11690c37fc578242c3914b7ec686355888b42799
 - kind: project-relative
   target: legacy
   value: .agents/skills/how
@@ -1027,6 +1531,42 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/maintain-verification-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/maintain-verification-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/make-bot-ui
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/make-bot-ui/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
 - kind: project-relative
   target: legacy
   value: .agents/skills/no-comments
@@ -1479,6 +2019,78 @@ deployments:
   content_hash: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
 - kind: project-relative
   target: legacy
+  value: .agents/skills/reflect
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/reflect/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0b72a7b360587fd89ff64591a9d0eb212579f0b08d44602c2ccff3423ddba1b4
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/reflect/references/divergent-reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b8e12572a40bc742abb2bec5f2c4af9ed46e55a2606afb118dd0a34bdf99dbc7
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/reflect/references/judgment-reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:59c217afa4121c9f04b2a887e3a9f1b612434d0c420cc70d25c638fd3261957a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/reflect/references/synthesizer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a0354c534722f7d49aa61e1de2b2e883595c0e3d8f17a87e05fbdf64d92a40cb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/reflect/references/tooling-reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5302ed4632ae64b8fabadfc56c63a4586ea1ca2989a1f0d79a0143e69b9ae4ff
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/setup-pstack
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/setup-pstack/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:58d1253f5c8011573afc1a01b7869d4d8b351347a76a72d12c4ba3d27bfbb6aa
+- kind: project-relative
+  target: legacy
   value: .agents/skills/sharpen
   runtime: null
   scope: project
@@ -1495,6 +2107,60 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/show-me-your-work
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/show-me-your-work/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f7d045cc940bb37d4c1ae20b8a31935c269b19b126a64858c0b07a924cf3e7ec
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/show-me-your-work/references/decision-log-template.tsv
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/show-me-your-work/scripts/log.sh
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/swarm
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/swarm/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:516977560a7b1357ce8ea4b854003de346e0a05e193f4779c415a1620b05011d
 - kind: project-relative
   target: legacy
   value: .agents/skills/tdd
@@ -1531,6 +2197,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/technical-writing
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/technical-writing/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7f7b005c20cfed77b5e10dc77a623eeae09fccccafc1089ac9614b7a4ee39ece
 - kind: project-relative
   target: legacy
   value: .agents/skills/typescript-best-practices
@@ -1703,12 +2387,30 @@ deployments:
   active_owner: .
   content_hash: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
 local_deployed_files:
+- .agents/skills/architect
+- .agents/skills/architect/SKILL.md
+- .agents/skills/architect/references/design-red-flags.md
+- .agents/skills/architect/references/rationale-template.md
+- .agents/skills/architect/references/runner-prompt.md
+- .agents/skills/arena
+- .agents/skills/arena/SKILL.md
+- .agents/skills/automate-me
+- .agents/skills/automate-me/SKILL.md
 - .agents/skills/benchmark-checklist
 - .agents/skills/benchmark-checklist/SKILL.md
 - .agents/skills/blast-radius
 - .agents/skills/blast-radius/SKILL.md
 - .agents/skills/bro
 - .agents/skills/bro/SKILL.md
+- .agents/skills/correct
+- .agents/skills/correct/SKILL.md
+- .agents/skills/create-verification-skill
+- .agents/skills/create-verification-skill/SKILL.md
+- .agents/skills/create-verification-skill/references/feature-map-example/README.md
+- .agents/skills/create-verification-skill/references/feature-map-example/create-note.md
+- .agents/skills/create-verification-skill/references/feature-map-example/search.md
+- .agents/skills/figure-it-out
+- .agents/skills/figure-it-out/SKILL.md
 - .agents/skills/how
 - .agents/skills/how/SKILL.md
 - .agents/skills/how/references/explainer-prompt.md
@@ -1721,6 +2423,10 @@ local_deployed_files:
 - .agents/skills/ketchup-video
 - .agents/skills/ketchup-video/SKILL.md
 - .agents/skills/ketchup/SKILL.md
+- .agents/skills/maintain-verification-skill
+- .agents/skills/maintain-verification-skill/SKILL.md
+- .agents/skills/make-bot-ui
+- .agents/skills/make-bot-ui/SKILL.md
 - .agents/skills/no-comments
 - .agents/skills/no-comments/SKILL.md
 - .agents/skills/principle-attack-the-premise
@@ -1771,12 +2477,28 @@ local_deployed_files:
 - .agents/skills/principle-test-behavior-not-implementation/SKILL.md
 - .agents/skills/principle-type-system-discipline
 - .agents/skills/principle-type-system-discipline/SKILL.md
+- .agents/skills/reflect
+- .agents/skills/reflect/SKILL.md
+- .agents/skills/reflect/references/divergent-reviewer.md
+- .agents/skills/reflect/references/judgment-reviewer.md
+- .agents/skills/reflect/references/synthesizer.md
+- .agents/skills/reflect/references/tooling-reviewer.md
+- .agents/skills/setup-pstack
+- .agents/skills/setup-pstack/SKILL.md
 - .agents/skills/sharpen
 - .agents/skills/sharpen/SKILL.md
+- .agents/skills/show-me-your-work
+- .agents/skills/show-me-your-work/SKILL.md
+- .agents/skills/show-me-your-work/references/decision-log-template.tsv
+- .agents/skills/show-me-your-work/scripts/log.sh
+- .agents/skills/swarm
+- .agents/skills/swarm/SKILL.md
 - .agents/skills/tdd
 - .agents/skills/tdd/SKILL.md
 - .agents/skills/teach
 - .agents/skills/teach/SKILL.md
+- .agents/skills/technical-writing
+- .agents/skills/technical-writing/SKILL.md
 - .agents/skills/typescript-best-practices
 - .agents/skills/typescript-best-practices/SKILL.md
 - .agents/skills/typescript-best-practices/references/patterns.md
@@ -1797,12 +2519,30 @@ local_deployed_files:
 - .agents/skills/why/references/sources/slack.md
 - .agents/skills/why/references/synthesizer-prompt.md
 - .claude/agents/comment-sicko.md
+- .claude/skills/architect
+- .claude/skills/architect/SKILL.md
+- .claude/skills/architect/references/design-red-flags.md
+- .claude/skills/architect/references/rationale-template.md
+- .claude/skills/architect/references/runner-prompt.md
+- .claude/skills/arena
+- .claude/skills/arena/SKILL.md
+- .claude/skills/automate-me
+- .claude/skills/automate-me/SKILL.md
 - .claude/skills/benchmark-checklist
 - .claude/skills/benchmark-checklist/SKILL.md
 - .claude/skills/blast-radius
 - .claude/skills/blast-radius/SKILL.md
 - .claude/skills/bro
 - .claude/skills/bro/SKILL.md
+- .claude/skills/correct
+- .claude/skills/correct/SKILL.md
+- .claude/skills/create-verification-skill
+- .claude/skills/create-verification-skill/SKILL.md
+- .claude/skills/create-verification-skill/references/feature-map-example/README.md
+- .claude/skills/create-verification-skill/references/feature-map-example/create-note.md
+- .claude/skills/create-verification-skill/references/feature-map-example/search.md
+- .claude/skills/figure-it-out
+- .claude/skills/figure-it-out/SKILL.md
 - .claude/skills/how
 - .claude/skills/how/SKILL.md
 - .claude/skills/how/references/explainer-prompt.md
@@ -1815,6 +2555,10 @@ local_deployed_files:
 - .claude/skills/ketchup-video
 - .claude/skills/ketchup-video/SKILL.md
 - .claude/skills/ketchup/SKILL.md
+- .claude/skills/maintain-verification-skill
+- .claude/skills/maintain-verification-skill/SKILL.md
+- .claude/skills/make-bot-ui
+- .claude/skills/make-bot-ui/SKILL.md
 - .claude/skills/no-comments
 - .claude/skills/no-comments/SKILL.md
 - .claude/skills/principle-attack-the-premise
@@ -1865,12 +2609,28 @@ local_deployed_files:
 - .claude/skills/principle-test-behavior-not-implementation/SKILL.md
 - .claude/skills/principle-type-system-discipline
 - .claude/skills/principle-type-system-discipline/SKILL.md
+- .claude/skills/reflect
+- .claude/skills/reflect/SKILL.md
+- .claude/skills/reflect/references/divergent-reviewer.md
+- .claude/skills/reflect/references/judgment-reviewer.md
+- .claude/skills/reflect/references/synthesizer.md
+- .claude/skills/reflect/references/tooling-reviewer.md
+- .claude/skills/setup-pstack
+- .claude/skills/setup-pstack/SKILL.md
 - .claude/skills/sharpen
 - .claude/skills/sharpen/SKILL.md
+- .claude/skills/show-me-your-work
+- .claude/skills/show-me-your-work/SKILL.md
+- .claude/skills/show-me-your-work/references/decision-log-template.tsv
+- .claude/skills/show-me-your-work/scripts/log.sh
+- .claude/skills/swarm
+- .claude/skills/swarm/SKILL.md
 - .claude/skills/tdd
 - .claude/skills/tdd/SKILL.md
 - .claude/skills/teach
 - .claude/skills/teach/SKILL.md
+- .claude/skills/technical-writing
+- .claude/skills/technical-writing/SKILL.md
 - .claude/skills/typescript-best-practices
 - .claude/skills/typescript-best-practices/SKILL.md
 - .claude/skills/typescript-best-practices/references/patterns.md
@@ -1893,9 +2653,21 @@ local_deployed_files:
 - .cursor/agents/comment-sicko.md
 - .github/agents/comment-sicko.agent.md
 local_deployed_file_hashes:
+  .agents/skills/architect/SKILL.md: sha256:4df6693d760a991f470c2a9611d55ffcdece56cacfc15f7ce778266ed52a76a9
+  .agents/skills/architect/references/design-red-flags.md: sha256:6851acb68728048a9a01038c68654612f184719c84d465500f596cafea48c627
+  .agents/skills/architect/references/rationale-template.md: sha256:17762ab8024664d3eb5f5dc81a9f14987464c161dba7812ba3b9996ae4a277f5
+  .agents/skills/architect/references/runner-prompt.md: sha256:10d5a91722b7f9eeef241b566b906b6283513f4367a64796676f801a1d386598
+  .agents/skills/arena/SKILL.md: sha256:bd074c6c8d32300b6357019df82bc1c9c0db3bc866c7f00ff4060281e98606c2
+  .agents/skills/automate-me/SKILL.md: sha256:827a372678f78cefed0d6a2dfb039fe0f0c5e1d2cf0047587076dc194f315fbb
   .agents/skills/benchmark-checklist/SKILL.md: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
   .agents/skills/blast-radius/SKILL.md: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
   .agents/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+  .agents/skills/correct/SKILL.md: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
+  .agents/skills/create-verification-skill/SKILL.md: sha256:a580f8e8e989a3e3a5ae1edfccebd568f971ab24a939e68543c96e73554c4d35
+  .agents/skills/create-verification-skill/references/feature-map-example/README.md: sha256:56c52b280cf8caffa9b0a9c78e5db3e0b081e2f2c50132c54b1c62113230315f
+  .agents/skills/create-verification-skill/references/feature-map-example/create-note.md: sha256:7dc91f1cca0c192f46eb9f6429f91fdd9b7dec1b8260bb482294dc6d637e6dab
+  .agents/skills/create-verification-skill/references/feature-map-example/search.md: sha256:d3f6305189eddaa53d7e36606d3c92716aa34518383ab1f6f90fcdf1c1295e60
+  .agents/skills/figure-it-out/SKILL.md: sha256:a7d081a18f00f2e3465e115d11690c37fc578242c3914b7ec686355888b42799
   .agents/skills/how/SKILL.md: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
   .agents/skills/how/references/explainer-prompt.md: sha256:cd4791cdcf597ff09bc9262854af1269a49dd476e49a8653d12b34d135c48a3d
   .agents/skills/how/references/explorer-prompt.md: sha256:9d1e1c1255dab8b8e34e726974c508725e2338c995622d8ab1b4b23eb3f89b66
@@ -1903,6 +2675,8 @@ local_deployed_file_hashes:
   .agents/skills/interrogate/SKILL.md: sha256:9ff58aaecb898d89e56fa74f0996824028fd08f90ef20831d9b7887bc333d1b9
   .agents/skills/ketchup-video/SKILL.md: sha256:501251f66a491969cd06c754e12db1f5f7091007434b6808847418c97c9ab426
   .agents/skills/ketchup/SKILL.md: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
+  .agents/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
+  .agents/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .agents/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
   .agents/skills/principle-attack-the-premise/SKILL.md: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
   .agents/skills/principle-boundary-discipline/SKILL.md: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
@@ -1928,9 +2702,20 @@ local_deployed_file_hashes:
   .agents/skills/principle-subtract-before-you-add/SKILL.md: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
   .agents/skills/principle-test-behavior-not-implementation/SKILL.md: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
   .agents/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+  .agents/skills/reflect/SKILL.md: sha256:0b72a7b360587fd89ff64591a9d0eb212579f0b08d44602c2ccff3423ddba1b4
+  .agents/skills/reflect/references/divergent-reviewer.md: sha256:b8e12572a40bc742abb2bec5f2c4af9ed46e55a2606afb118dd0a34bdf99dbc7
+  .agents/skills/reflect/references/judgment-reviewer.md: sha256:59c217afa4121c9f04b2a887e3a9f1b612434d0c420cc70d25c638fd3261957a
+  .agents/skills/reflect/references/synthesizer.md: sha256:a0354c534722f7d49aa61e1de2b2e883595c0e3d8f17a87e05fbdf64d92a40cb
+  .agents/skills/reflect/references/tooling-reviewer.md: sha256:5302ed4632ae64b8fabadfc56c63a4586ea1ca2989a1f0d79a0143e69b9ae4ff
+  .agents/skills/setup-pstack/SKILL.md: sha256:58d1253f5c8011573afc1a01b7869d4d8b351347a76a72d12c4ba3d27bfbb6aa
   .agents/skills/sharpen/SKILL.md: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
+  .agents/skills/show-me-your-work/SKILL.md: sha256:f7d045cc940bb37d4c1ae20b8a31935c269b19b126a64858c0b07a924cf3e7ec
+  .agents/skills/show-me-your-work/references/decision-log-template.tsv: sha256:6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76
+  .agents/skills/show-me-your-work/scripts/log.sh: sha256:a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e
+  .agents/skills/swarm/SKILL.md: sha256:516977560a7b1357ce8ea4b854003de346e0a05e193f4779c415a1620b05011d
   .agents/skills/tdd/SKILL.md: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
   .agents/skills/teach/SKILL.md: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
+  .agents/skills/technical-writing/SKILL.md: sha256:7f7b005c20cfed77b5e10dc77a623eeae09fccccafc1089ac9614b7a4ee39ece
   .agents/skills/typescript-best-practices/SKILL.md: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
   .agents/skills/typescript-best-practices/references/patterns.md: sha256:bf634afdadb0028c6d69c9ec7a160c766b36bd174e2221475d83e6e519fad72f
   .agents/skills/unslop/SKILL.md: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
@@ -1948,9 +2733,21 @@ local_deployed_file_hashes:
   .agents/skills/why/references/sources/slack.md: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
   .agents/skills/why/references/synthesizer-prompt.md: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
   .claude/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+  .claude/skills/architect/SKILL.md: sha256:4df6693d760a991f470c2a9611d55ffcdece56cacfc15f7ce778266ed52a76a9
+  .claude/skills/architect/references/design-red-flags.md: sha256:6851acb68728048a9a01038c68654612f184719c84d465500f596cafea48c627
+  .claude/skills/architect/references/rationale-template.md: sha256:17762ab8024664d3eb5f5dc81a9f14987464c161dba7812ba3b9996ae4a277f5
+  .claude/skills/architect/references/runner-prompt.md: sha256:10d5a91722b7f9eeef241b566b906b6283513f4367a64796676f801a1d386598
+  .claude/skills/arena/SKILL.md: sha256:bd074c6c8d32300b6357019df82bc1c9c0db3bc866c7f00ff4060281e98606c2
+  .claude/skills/automate-me/SKILL.md: sha256:827a372678f78cefed0d6a2dfb039fe0f0c5e1d2cf0047587076dc194f315fbb
   .claude/skills/benchmark-checklist/SKILL.md: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
   .claude/skills/blast-radius/SKILL.md: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
   .claude/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+  .claude/skills/correct/SKILL.md: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
+  .claude/skills/create-verification-skill/SKILL.md: sha256:a580f8e8e989a3e3a5ae1edfccebd568f971ab24a939e68543c96e73554c4d35
+  .claude/skills/create-verification-skill/references/feature-map-example/README.md: sha256:56c52b280cf8caffa9b0a9c78e5db3e0b081e2f2c50132c54b1c62113230315f
+  .claude/skills/create-verification-skill/references/feature-map-example/create-note.md: sha256:7dc91f1cca0c192f46eb9f6429f91fdd9b7dec1b8260bb482294dc6d637e6dab
+  .claude/skills/create-verification-skill/references/feature-map-example/search.md: sha256:d3f6305189eddaa53d7e36606d3c92716aa34518383ab1f6f90fcdf1c1295e60
+  .claude/skills/figure-it-out/SKILL.md: sha256:a7d081a18f00f2e3465e115d11690c37fc578242c3914b7ec686355888b42799
   .claude/skills/how/SKILL.md: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
   .claude/skills/how/references/explainer-prompt.md: sha256:cd4791cdcf597ff09bc9262854af1269a49dd476e49a8653d12b34d135c48a3d
   .claude/skills/how/references/explorer-prompt.md: sha256:9d1e1c1255dab8b8e34e726974c508725e2338c995622d8ab1b4b23eb3f89b66
@@ -1958,6 +2755,8 @@ local_deployed_file_hashes:
   .claude/skills/interrogate/SKILL.md: sha256:9ff58aaecb898d89e56fa74f0996824028fd08f90ef20831d9b7887bc333d1b9
   .claude/skills/ketchup-video/SKILL.md: sha256:501251f66a491969cd06c754e12db1f5f7091007434b6808847418c97c9ab426
   .claude/skills/ketchup/SKILL.md: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
+  .claude/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
+  .claude/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .claude/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
   .claude/skills/principle-attack-the-premise/SKILL.md: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
   .claude/skills/principle-boundary-discipline/SKILL.md: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
@@ -1983,9 +2782,20 @@ local_deployed_file_hashes:
   .claude/skills/principle-subtract-before-you-add/SKILL.md: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
   .claude/skills/principle-test-behavior-not-implementation/SKILL.md: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
   .claude/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+  .claude/skills/reflect/SKILL.md: sha256:0b72a7b360587fd89ff64591a9d0eb212579f0b08d44602c2ccff3423ddba1b4
+  .claude/skills/reflect/references/divergent-reviewer.md: sha256:b8e12572a40bc742abb2bec5f2c4af9ed46e55a2606afb118dd0a34bdf99dbc7
+  .claude/skills/reflect/references/judgment-reviewer.md: sha256:59c217afa4121c9f04b2a887e3a9f1b612434d0c420cc70d25c638fd3261957a
+  .claude/skills/reflect/references/synthesizer.md: sha256:a0354c534722f7d49aa61e1de2b2e883595c0e3d8f17a87e05fbdf64d92a40cb
+  .claude/skills/reflect/references/tooling-reviewer.md: sha256:5302ed4632ae64b8fabadfc56c63a4586ea1ca2989a1f0d79a0143e69b9ae4ff
+  .claude/skills/setup-pstack/SKILL.md: sha256:58d1253f5c8011573afc1a01b7869d4d8b351347a76a72d12c4ba3d27bfbb6aa
   .claude/skills/sharpen/SKILL.md: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
+  .claude/skills/show-me-your-work/SKILL.md: sha256:f7d045cc940bb37d4c1ae20b8a31935c269b19b126a64858c0b07a924cf3e7ec
+  .claude/skills/show-me-your-work/references/decision-log-template.tsv: sha256:6779378006a2f5225e8c06deb84f1d913fb532041ebbb6e50d94600bfe3f4b76
+  .claude/skills/show-me-your-work/scripts/log.sh: sha256:a65a4bc5fb7cdeadbdb7b7ff1ca4682f4d9c42420942b2977cd17b46c4ac338e
+  .claude/skills/swarm/SKILL.md: sha256:516977560a7b1357ce8ea4b854003de346e0a05e193f4779c415a1620b05011d
   .claude/skills/tdd/SKILL.md: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
   .claude/skills/teach/SKILL.md: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
+  .claude/skills/technical-writing/SKILL.md: sha256:7f7b005c20cfed77b5e10dc77a623eeae09fccccafc1089ac9614b7a4ee39ece
   .claude/skills/typescript-best-practices/SKILL.md: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
   .claude/skills/typescript-best-practices/references/patterns.md: sha256:bf634afdadb0028c6d69c9ec7a160c766b36bd174e2221475d83e6e519fad72f
   .claude/skills/unslop/SKILL.md: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750

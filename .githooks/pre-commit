@@ -183,7 +183,15 @@ while [[ -n "${queue# }" ]]; do
 done
 
 blockers=0
+checked=""
 for pkg in $affected; do
+  if [[ ! -f "packages/$pkg/apm.yml" ]] && ! git ls-files --error-unmatch -- "packages/$pkg/apm.yml" >/dev/null 2>&1; then
+    # Removed in the index (or in the checked range), so it has no lockfile
+    # left to check. Its dependents were seeded above and are still checked.
+    echo "pre-commit: packages/$pkg was removed; skipping its lockfile check" >&2
+    continue
+  fi
+  checked="$checked $pkg"
   if [[ ! -f "packages/$pkg/apm.yml" ]]; then
     echo "pre-commit: packages/$pkg/apm.yml is missing; stage the removal or restore the package" >&2
     blockers=$((blockers + 1))
@@ -204,7 +212,7 @@ if (( blockers > 0 )); then
 fi
 
 stale=""
-for pkg in $affected; do
+for pkg in $checked; do
   echo "pre-commit: apm install --frozen in packages/$pkg" >&2
   if ! ( cd "packages/$pkg" && bounded "$apm" install --frozen --target "$targets" ); then
     echo "pre-commit: apm install --frozen failed in packages/$pkg" >&2

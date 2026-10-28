@@ -282,9 +282,10 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
 
 ## CI
 
-`.github/workflows/ci.yml` has one job, `pre-commit`. It checks out the full
-history, installs the CLI with `microsoft/apm-action@v1` and `setup-only: true`,
-then runs `.githooks/pre-commit`. `setup-only` matters: the action must not
+`.github/workflows/ci.yml` runs `pre-commit` plus a job for each of pstack's
+script test suites, which `packages/pstack/README.md` describes. `pre-commit`
+checks out the full history, installs the CLI with `microsoft/apm-action@v1` and
+`setup-only: true`, then runs `.githooks/pre-commit`. `setup-only` matters: the action must not
 install packages itself, or it would rewrite lockfiles before the hook could
 see them. The action's `apm-version` input defaults to `0.14.0`, so always pass
 `apm-version: "0.32.0"`.

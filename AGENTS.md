@@ -1,7 +1,7 @@
 # Working in this repository
 
-Operational notes for agents editing Foundry. This repository publishes seventeen
-[APM](https://microsoft.github.io/apm/) packages — sixteen content packages plus
+Operational notes for agents editing Foundry. This repository publishes eighteen
+[APM](https://microsoft.github.io/apm/) packages — seventeen content packages plus
 a meta-package. Almost everything surprising about it comes from the pinned CLI,
 so this file records **empirically verified APM 0.32.0 behaviour**, not a
 restatement of the design. For what each package contains, see `README.md`; for
@@ -301,7 +301,7 @@ is local: `bash tests/structural/run-tier1.sh`.
   `.gitignore` already ignores `apm_modules/`. `apm install` appends
   `# APM dependencies` and `apm_modules/` to the `.gitignore` in its working
   directory whenever that exact line is absent there, so a package without one
-  grows an untracked file on the next install and dirties the tree. Seventeen
+  grows an untracked file on the next install and dirties the tree. Eighteen
   byte-identical 33-byte files are the expected end state.
 - Never commit deploy output. `.gitignore` excludes `apm_modules/`, `dist/`,
   `build/`, `.claude/`, `.agents/`, `.cursor/rules/`, `.cursor/agents/`,

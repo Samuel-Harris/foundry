@@ -165,6 +165,24 @@ deployments:
   content_hash: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
 - kind: project-relative
   target: claude
+  value: .claude/skills/create-formal-verification-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/create-formal-verification-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cac82009e3f126c84e1e35644c910451906c442288663511afa3e2bb6c3dd95b
+- kind: project-relative
+  target: claude
   value: .claude/skills/create-verification-skill
   runtime: null
   scope: project
@@ -334,6 +352,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
+- kind: project-relative
+  target: claude
+  value: .claude/skills/maintain-formal-verification-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/maintain-formal-verification-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0c96f54293542d3818b68754562b338073958781a9684454611dca37592e2d2c
 - kind: project-relative
   target: claude
   value: .claude/skills/maintain-verification-skill
@@ -1650,6 +1686,24 @@ deployments:
   content_hash: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
 - kind: project-relative
   target: legacy
+  value: .agents/skills/create-formal-verification-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/create-formal-verification-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cac82009e3f126c84e1e35644c910451906c442288663511afa3e2bb6c3dd95b
+- kind: project-relative
+  target: legacy
   value: .agents/skills/create-verification-skill
   runtime: null
   scope: project
@@ -1819,6 +1873,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/maintain-formal-verification-skill
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/maintain-formal-verification-skill/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0c96f54293542d3818b68754562b338073958781a9684454611dca37592e2d2c
 - kind: project-relative
   target: legacy
   value: .agents/skills/maintain-verification-skill
@@ -2980,6 +3052,8 @@ local_deployed_files:
 - .agents/skills/bro/SKILL.md
 - .agents/skills/correct
 - .agents/skills/correct/SKILL.md
+- .agents/skills/create-formal-verification-skill
+- .agents/skills/create-formal-verification-skill/SKILL.md
 - .agents/skills/create-verification-skill
 - .agents/skills/create-verification-skill/SKILL.md
 - .agents/skills/create-verification-skill/references/feature-map-example/README.md
@@ -2999,6 +3073,8 @@ local_deployed_files:
 - .agents/skills/ketchup-video
 - .agents/skills/ketchup-video/SKILL.md
 - .agents/skills/ketchup/SKILL.md
+- .agents/skills/maintain-formal-verification-skill
+- .agents/skills/maintain-formal-verification-skill/SKILL.md
 - .agents/skills/maintain-verification-skill
 - .agents/skills/maintain-verification-skill/SKILL.md
 - .agents/skills/make-bot-ui
@@ -3144,6 +3220,8 @@ local_deployed_files:
 - .claude/skills/bro/SKILL.md
 - .claude/skills/correct
 - .claude/skills/correct/SKILL.md
+- .claude/skills/create-formal-verification-skill
+- .claude/skills/create-formal-verification-skill/SKILL.md
 - .claude/skills/create-verification-skill
 - .claude/skills/create-verification-skill/SKILL.md
 - .claude/skills/create-verification-skill/references/feature-map-example/README.md
@@ -3163,6 +3241,8 @@ local_deployed_files:
 - .claude/skills/ketchup-video
 - .claude/skills/ketchup-video/SKILL.md
 - .claude/skills/ketchup/SKILL.md
+- .claude/skills/maintain-formal-verification-skill
+- .claude/skills/maintain-formal-verification-skill/SKILL.md
 - .claude/skills/maintain-verification-skill
 - .claude/skills/maintain-verification-skill/SKILL.md
 - .claude/skills/make-bot-ui
@@ -3303,6 +3383,7 @@ local_deployed_file_hashes:
   .agents/skills/blast-radius/SKILL.md: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
   .agents/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
   .agents/skills/correct/SKILL.md: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
+  .agents/skills/create-formal-verification-skill/SKILL.md: sha256:cac82009e3f126c84e1e35644c910451906c442288663511afa3e2bb6c3dd95b
   .agents/skills/create-verification-skill/SKILL.md: sha256:a580f8e8e989a3e3a5ae1edfccebd568f971ab24a939e68543c96e73554c4d35
   .agents/skills/create-verification-skill/references/feature-map-example/README.md: sha256:56c52b280cf8caffa9b0a9c78e5db3e0b081e2f2c50132c54b1c62113230315f
   .agents/skills/create-verification-skill/references/feature-map-example/create-note.md: sha256:7dc91f1cca0c192f46eb9f6429f91fdd9b7dec1b8260bb482294dc6d637e6dab
@@ -3315,6 +3396,7 @@ local_deployed_file_hashes:
   .agents/skills/interrogate/SKILL.md: sha256:9ff58aaecb898d89e56fa74f0996824028fd08f90ef20831d9b7887bc333d1b9
   .agents/skills/ketchup-video/SKILL.md: sha256:501251f66a491969cd06c754e12db1f5f7091007434b6808847418c97c9ab426
   .agents/skills/ketchup/SKILL.md: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
+  .agents/skills/maintain-formal-verification-skill/SKILL.md: sha256:0c96f54293542d3818b68754562b338073958781a9684454611dca37592e2d2c
   .agents/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
   .agents/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .agents/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
@@ -3414,6 +3496,7 @@ local_deployed_file_hashes:
   .claude/skills/blast-radius/SKILL.md: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
   .claude/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
   .claude/skills/correct/SKILL.md: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
+  .claude/skills/create-formal-verification-skill/SKILL.md: sha256:cac82009e3f126c84e1e35644c910451906c442288663511afa3e2bb6c3dd95b
   .claude/skills/create-verification-skill/SKILL.md: sha256:a580f8e8e989a3e3a5ae1edfccebd568f971ab24a939e68543c96e73554c4d35
   .claude/skills/create-verification-skill/references/feature-map-example/README.md: sha256:56c52b280cf8caffa9b0a9c78e5db3e0b081e2f2c50132c54b1c62113230315f
   .claude/skills/create-verification-skill/references/feature-map-example/create-note.md: sha256:7dc91f1cca0c192f46eb9f6429f91fdd9b7dec1b8260bb482294dc6d637e6dab
@@ -3426,6 +3509,7 @@ local_deployed_file_hashes:
   .claude/skills/interrogate/SKILL.md: sha256:9ff58aaecb898d89e56fa74f0996824028fd08f90ef20831d9b7887bc333d1b9
   .claude/skills/ketchup-video/SKILL.md: sha256:501251f66a491969cd06c754e12db1f5f7091007434b6808847418c97c9ab426
   .claude/skills/ketchup/SKILL.md: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
+  .claude/skills/maintain-formal-verification-skill/SKILL.md: sha256:0c96f54293542d3818b68754562b338073958781a9684454611dca37592e2d2c
   .claude/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
   .claude/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .claude/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b

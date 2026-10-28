@@ -148,13 +148,14 @@ echo "Primitive contract"
 bounded python3 "$REPO_ROOT/tests/structural/validate_primitives.py"
 report $? "validate_primitives.py"
 
-# APM records transitive sibling dependencies by absolute checkout path, so any
-# install at a root other than the one that generated a lockfile rewrites those
-# lines. They are excluded here and in the pre-commit lockfile check.
+# APM records transitive sibling dependencies by absolute checkout path, so every
+# install rewrites those lines. The committed form is relative to the package,
+# so normalise before comparing, as the pre-commit lockfile check does.
 tracked_state() {
   cd "$REPO_ROOT" && {
+    python3 scripts/relativise_lockfiles.py packages/*/apm.lock.yaml >&2
     git ls-files --others --exclude-standard | sort
-    git diff HEAD -I 'anchored_local_path: /' -I 'local:/'
+    git diff HEAD
   } | git hash-object --stdin
 }
 

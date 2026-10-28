@@ -435,6 +435,195 @@ deployments:
   content_hash: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
 - kind: project-relative
   target: claude
+  value: .claude/skills/poteto-help
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7a6c3f92ad28ef7f8609011a799b413675647376b6d436b7d81a939aa4e960c5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/01-setup.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:dc65630088178e536f2c830a68f886809082fb85467379b3b8a1a7e585367faf
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/02-poteto-mode.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ead5cd0fb19a3f5a8bcf0321458e976cbe5f2a4242c7c8a2018772f219157cad
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/03-understand.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:466420b8ccdb43cd0890fa448c852ff8828d52b0ea9c89051be4441179fa8723
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/04-design.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5805a921b9ea847fe99f57db1d0cd93aa8782c6bb2942d2b037f3a1ca1184047
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/05-build-and-clean.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cc3a3aba56dc5a7d3ef8e98c43787db70d2bc3b55ff6d91c54aa7a62f94c70d6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/06-verify-and-ship.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:017d3c20a09daf672c7e8ca2714b7977b8e68b6cbf9551c53841efa782c1f320
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/07-overnight.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:89bed02ea9f6c6e61a0a838bf318a67a9a94c7bdc34b8e3fb9c9dcfaa00d9d74
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/08-principles.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5eb13679448dc2bd228f48f6f3c05dba435422ab27e3215424a0fe6357bc6ff4
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/09-make-it-yours.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0a3ea5c75851e5b61982ed35b75d0ce492eab0acd724e6c9fb49c6f1c1d72fb6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/10-recipes-and-pitfalls.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f02b1265ce38e32ed42b146f7809ee3f17bc5bf8e769beb1ba853bce740ad1e1
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/README.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8029539535aa01727a63bbdba620e5bef463076f0c20db108c5c0840cbbb9d40
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/images/design.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b8ed07427f6a0c37dd8ba97961fc0eb5071efeee6c4a230648bdb7547f6f2a8f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/images/overnight.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4b4405e4df8925c5b3abbe702f681af0f3b1f5f32271b599f95717f578f1a0c8
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/images/recipes.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9fa2d51b476635712737795ddef81806efaa0086bb3bfa9f9f45695d9ab0f8e8
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/images/router.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:525843055a4efd2b10acc50a8652fd02b0834ea733a8a2f895c1eb89036017da
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/images/understanding.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b60587e9a9bbe2550e93be9819cf0cd4acf77d90fac769a0c43d82bd8e34e279
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/guide/images/verification.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/prompting.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:da55d284628a3c84e8e38cb5331775583e517bbde93797fd264be49e523c738a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-help/references/recipes.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5323aca73a39a3b607c2bb22cd33551fe893563dfd4b104df838da010e9fc702
+- kind: project-relative
+  target: claude
   value: .claude/skills/poteto-mode
   runtime: null
   scope: project
@@ -1198,6 +1387,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+- kind: project-relative
+  target: claude
+  value: .claude/skills/recall
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/recall/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:10d5722c3f0ac118a9b9178c440268d6b25ebc31441e70bc26ced84c736d1e27
 - kind: project-relative
   target: claude
   value: .claude/skills/reflect
@@ -2307,6 +2514,195 @@ deployments:
   content_hash: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
 - kind: project-relative
   target: legacy
+  value: .agents/skills/poteto-help
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7a6c3f92ad28ef7f8609011a799b413675647376b6d436b7d81a939aa4e960c5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/01-setup.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:dc65630088178e536f2c830a68f886809082fb85467379b3b8a1a7e585367faf
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/02-poteto-mode.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ead5cd0fb19a3f5a8bcf0321458e976cbe5f2a4242c7c8a2018772f219157cad
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/03-understand.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:466420b8ccdb43cd0890fa448c852ff8828d52b0ea9c89051be4441179fa8723
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/04-design.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5805a921b9ea847fe99f57db1d0cd93aa8782c6bb2942d2b037f3a1ca1184047
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/05-build-and-clean.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cc3a3aba56dc5a7d3ef8e98c43787db70d2bc3b55ff6d91c54aa7a62f94c70d6
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/06-verify-and-ship.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:017d3c20a09daf672c7e8ca2714b7977b8e68b6cbf9551c53841efa782c1f320
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/07-overnight.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:89bed02ea9f6c6e61a0a838bf318a67a9a94c7bdc34b8e3fb9c9dcfaa00d9d74
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/08-principles.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5eb13679448dc2bd228f48f6f3c05dba435422ab27e3215424a0fe6357bc6ff4
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/09-make-it-yours.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0a3ea5c75851e5b61982ed35b75d0ce492eab0acd724e6c9fb49c6f1c1d72fb6
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/10-recipes-and-pitfalls.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f02b1265ce38e32ed42b146f7809ee3f17bc5bf8e769beb1ba853bce740ad1e1
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/README.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8029539535aa01727a63bbdba620e5bef463076f0c20db108c5c0840cbbb9d40
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/images/design.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b8ed07427f6a0c37dd8ba97961fc0eb5071efeee6c4a230648bdb7547f6f2a8f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/images/overnight.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4b4405e4df8925c5b3abbe702f681af0f3b1f5f32271b599f95717f578f1a0c8
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/images/recipes.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9fa2d51b476635712737795ddef81806efaa0086bb3bfa9f9f45695d9ab0f8e8
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/images/router.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:525843055a4efd2b10acc50a8652fd02b0834ea733a8a2f895c1eb89036017da
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/images/understanding.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b60587e9a9bbe2550e93be9819cf0cd4acf77d90fac769a0c43d82bd8e34e279
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/guide/images/verification.jpg
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/prompting.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:da55d284628a3c84e8e38cb5331775583e517bbde93797fd264be49e523c738a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-help/references/recipes.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5323aca73a39a3b607c2bb22cd33551fe893563dfd4b104df838da010e9fc702
+- kind: project-relative
+  target: legacy
   value: .agents/skills/poteto-mode
   runtime: null
   scope: project
@@ -3072,6 +3468,24 @@ deployments:
   content_hash: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
 - kind: project-relative
   target: legacy
+  value: .agents/skills/recall
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/recall/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:10d5722c3f0ac118a9b9178c440268d6b25ebc31441e70bc26ced84c736d1e27
+- kind: project-relative
+  target: legacy
   value: .agents/skills/reflect
   runtime: null
   scope: project
@@ -3774,6 +4188,27 @@ local_deployed_files:
 - .agents/skills/make-bot-ui/SKILL.md
 - .agents/skills/no-comments
 - .agents/skills/no-comments/SKILL.md
+- .agents/skills/poteto-help
+- .agents/skills/poteto-help/SKILL.md
+- .agents/skills/poteto-help/references/guide/01-setup.md
+- .agents/skills/poteto-help/references/guide/02-poteto-mode.md
+- .agents/skills/poteto-help/references/guide/03-understand.md
+- .agents/skills/poteto-help/references/guide/04-design.md
+- .agents/skills/poteto-help/references/guide/05-build-and-clean.md
+- .agents/skills/poteto-help/references/guide/06-verify-and-ship.md
+- .agents/skills/poteto-help/references/guide/07-overnight.md
+- .agents/skills/poteto-help/references/guide/08-principles.md
+- .agents/skills/poteto-help/references/guide/09-make-it-yours.md
+- .agents/skills/poteto-help/references/guide/10-recipes-and-pitfalls.md
+- .agents/skills/poteto-help/references/guide/README.md
+- .agents/skills/poteto-help/references/guide/images/design.jpg
+- .agents/skills/poteto-help/references/guide/images/overnight.jpg
+- .agents/skills/poteto-help/references/guide/images/recipes.jpg
+- .agents/skills/poteto-help/references/guide/images/router.jpg
+- .agents/skills/poteto-help/references/guide/images/understanding.jpg
+- .agents/skills/poteto-help/references/guide/images/verification.jpg
+- .agents/skills/poteto-help/references/prompting.md
+- .agents/skills/poteto-help/references/recipes.md
 - .agents/skills/poteto-mode
 - .agents/skills/poteto-mode/SKILL.md
 - .agents/skills/poteto-mode/playbooks/authoring-a-skill.md
@@ -3859,6 +4294,8 @@ local_deployed_files:
 - .agents/skills/principle-test-behavior-not-implementation/SKILL.md
 - .agents/skills/principle-type-system-discipline
 - .agents/skills/principle-type-system-discipline/SKILL.md
+- .agents/skills/recall
+- .agents/skills/recall/SKILL.md
 - .agents/skills/reflect
 - .agents/skills/reflect/SKILL.md
 - .agents/skills/reflect/references/divergent-reviewer.md
@@ -3980,6 +4417,27 @@ local_deployed_files:
 - .claude/skills/make-bot-ui/SKILL.md
 - .claude/skills/no-comments
 - .claude/skills/no-comments/SKILL.md
+- .claude/skills/poteto-help
+- .claude/skills/poteto-help/SKILL.md
+- .claude/skills/poteto-help/references/guide/01-setup.md
+- .claude/skills/poteto-help/references/guide/02-poteto-mode.md
+- .claude/skills/poteto-help/references/guide/03-understand.md
+- .claude/skills/poteto-help/references/guide/04-design.md
+- .claude/skills/poteto-help/references/guide/05-build-and-clean.md
+- .claude/skills/poteto-help/references/guide/06-verify-and-ship.md
+- .claude/skills/poteto-help/references/guide/07-overnight.md
+- .claude/skills/poteto-help/references/guide/08-principles.md
+- .claude/skills/poteto-help/references/guide/09-make-it-yours.md
+- .claude/skills/poteto-help/references/guide/10-recipes-and-pitfalls.md
+- .claude/skills/poteto-help/references/guide/README.md
+- .claude/skills/poteto-help/references/guide/images/design.jpg
+- .claude/skills/poteto-help/references/guide/images/overnight.jpg
+- .claude/skills/poteto-help/references/guide/images/recipes.jpg
+- .claude/skills/poteto-help/references/guide/images/router.jpg
+- .claude/skills/poteto-help/references/guide/images/understanding.jpg
+- .claude/skills/poteto-help/references/guide/images/verification.jpg
+- .claude/skills/poteto-help/references/prompting.md
+- .claude/skills/poteto-help/references/recipes.md
 - .claude/skills/poteto-mode
 - .claude/skills/poteto-mode/SKILL.md
 - .claude/skills/poteto-mode/playbooks/authoring-a-skill.md
@@ -4065,6 +4523,8 @@ local_deployed_files:
 - .claude/skills/principle-test-behavior-not-implementation/SKILL.md
 - .claude/skills/principle-type-system-discipline
 - .claude/skills/principle-type-system-discipline/SKILL.md
+- .claude/skills/recall
+- .claude/skills/recall/SKILL.md
 - .claude/skills/reflect
 - .claude/skills/reflect/SKILL.md
 - .claude/skills/reflect/references/divergent-reviewer.md
@@ -4170,6 +4630,26 @@ local_deployed_file_hashes:
   .agents/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
   .agents/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .agents/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+  .agents/skills/poteto-help/SKILL.md: sha256:7a6c3f92ad28ef7f8609011a799b413675647376b6d436b7d81a939aa4e960c5
+  .agents/skills/poteto-help/references/guide/01-setup.md: sha256:dc65630088178e536f2c830a68f886809082fb85467379b3b8a1a7e585367faf
+  .agents/skills/poteto-help/references/guide/02-poteto-mode.md: sha256:ead5cd0fb19a3f5a8bcf0321458e976cbe5f2a4242c7c8a2018772f219157cad
+  .agents/skills/poteto-help/references/guide/03-understand.md: sha256:466420b8ccdb43cd0890fa448c852ff8828d52b0ea9c89051be4441179fa8723
+  .agents/skills/poteto-help/references/guide/04-design.md: sha256:5805a921b9ea847fe99f57db1d0cd93aa8782c6bb2942d2b037f3a1ca1184047
+  .agents/skills/poteto-help/references/guide/05-build-and-clean.md: sha256:cc3a3aba56dc5a7d3ef8e98c43787db70d2bc3b55ff6d91c54aa7a62f94c70d6
+  .agents/skills/poteto-help/references/guide/06-verify-and-ship.md: sha256:017d3c20a09daf672c7e8ca2714b7977b8e68b6cbf9551c53841efa782c1f320
+  .agents/skills/poteto-help/references/guide/07-overnight.md: sha256:89bed02ea9f6c6e61a0a838bf318a67a9a94c7bdc34b8e3fb9c9dcfaa00d9d74
+  .agents/skills/poteto-help/references/guide/08-principles.md: sha256:5eb13679448dc2bd228f48f6f3c05dba435422ab27e3215424a0fe6357bc6ff4
+  .agents/skills/poteto-help/references/guide/09-make-it-yours.md: sha256:0a3ea5c75851e5b61982ed35b75d0ce492eab0acd724e6c9fb49c6f1c1d72fb6
+  .agents/skills/poteto-help/references/guide/10-recipes-and-pitfalls.md: sha256:f02b1265ce38e32ed42b146f7809ee3f17bc5bf8e769beb1ba853bce740ad1e1
+  .agents/skills/poteto-help/references/guide/README.md: sha256:8029539535aa01727a63bbdba620e5bef463076f0c20db108c5c0840cbbb9d40
+  .agents/skills/poteto-help/references/guide/images/design.jpg: sha256:b8ed07427f6a0c37dd8ba97961fc0eb5071efeee6c4a230648bdb7547f6f2a8f
+  .agents/skills/poteto-help/references/guide/images/overnight.jpg: sha256:4b4405e4df8925c5b3abbe702f681af0f3b1f5f32271b599f95717f578f1a0c8
+  .agents/skills/poteto-help/references/guide/images/recipes.jpg: sha256:9fa2d51b476635712737795ddef81806efaa0086bb3bfa9f9f45695d9ab0f8e8
+  .agents/skills/poteto-help/references/guide/images/router.jpg: sha256:525843055a4efd2b10acc50a8652fd02b0834ea733a8a2f895c1eb89036017da
+  .agents/skills/poteto-help/references/guide/images/understanding.jpg: sha256:b60587e9a9bbe2550e93be9819cf0cd4acf77d90fac769a0c43d82bd8e34e279
+  .agents/skills/poteto-help/references/guide/images/verification.jpg: sha256:2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a
+  .agents/skills/poteto-help/references/prompting.md: sha256:da55d284628a3c84e8e38cb5331775583e517bbde93797fd264be49e523c738a
+  .agents/skills/poteto-help/references/recipes.md: sha256:5323aca73a39a3b607c2bb22cd33551fe893563dfd4b104df838da010e9fc702
   .agents/skills/poteto-mode/SKILL.md: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
   .agents/skills/poteto-mode/playbooks/authoring-a-skill.md: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
   .agents/skills/poteto-mode/playbooks/autonomous-run.md: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
@@ -4230,6 +4710,7 @@ local_deployed_file_hashes:
   .agents/skills/principle-subtract-before-you-add/SKILL.md: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
   .agents/skills/principle-test-behavior-not-implementation/SKILL.md: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
   .agents/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+  .agents/skills/recall/SKILL.md: sha256:10d5722c3f0ac118a9b9178c440268d6b25ebc31441e70bc26ced84c736d1e27
   .agents/skills/reflect/SKILL.md: sha256:0b72a7b360587fd89ff64591a9d0eb212579f0b08d44602c2ccff3423ddba1b4
   .agents/skills/reflect/references/divergent-reviewer.md: sha256:b8e12572a40bc742abb2bec5f2c4af9ed46e55a2606afb118dd0a34bdf99dbc7
   .agents/skills/reflect/references/judgment-reviewer.md: sha256:59c217afa4121c9f04b2a887e3a9f1b612434d0c420cc70d25c638fd3261957a
@@ -4320,6 +4801,26 @@ local_deployed_file_hashes:
   .claude/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
   .claude/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .claude/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+  .claude/skills/poteto-help/SKILL.md: sha256:7a6c3f92ad28ef7f8609011a799b413675647376b6d436b7d81a939aa4e960c5
+  .claude/skills/poteto-help/references/guide/01-setup.md: sha256:dc65630088178e536f2c830a68f886809082fb85467379b3b8a1a7e585367faf
+  .claude/skills/poteto-help/references/guide/02-poteto-mode.md: sha256:ead5cd0fb19a3f5a8bcf0321458e976cbe5f2a4242c7c8a2018772f219157cad
+  .claude/skills/poteto-help/references/guide/03-understand.md: sha256:466420b8ccdb43cd0890fa448c852ff8828d52b0ea9c89051be4441179fa8723
+  .claude/skills/poteto-help/references/guide/04-design.md: sha256:5805a921b9ea847fe99f57db1d0cd93aa8782c6bb2942d2b037f3a1ca1184047
+  .claude/skills/poteto-help/references/guide/05-build-and-clean.md: sha256:cc3a3aba56dc5a7d3ef8e98c43787db70d2bc3b55ff6d91c54aa7a62f94c70d6
+  .claude/skills/poteto-help/references/guide/06-verify-and-ship.md: sha256:017d3c20a09daf672c7e8ca2714b7977b8e68b6cbf9551c53841efa782c1f320
+  .claude/skills/poteto-help/references/guide/07-overnight.md: sha256:89bed02ea9f6c6e61a0a838bf318a67a9a94c7bdc34b8e3fb9c9dcfaa00d9d74
+  .claude/skills/poteto-help/references/guide/08-principles.md: sha256:5eb13679448dc2bd228f48f6f3c05dba435422ab27e3215424a0fe6357bc6ff4
+  .claude/skills/poteto-help/references/guide/09-make-it-yours.md: sha256:0a3ea5c75851e5b61982ed35b75d0ce492eab0acd724e6c9fb49c6f1c1d72fb6
+  .claude/skills/poteto-help/references/guide/10-recipes-and-pitfalls.md: sha256:f02b1265ce38e32ed42b146f7809ee3f17bc5bf8e769beb1ba853bce740ad1e1
+  .claude/skills/poteto-help/references/guide/README.md: sha256:8029539535aa01727a63bbdba620e5bef463076f0c20db108c5c0840cbbb9d40
+  .claude/skills/poteto-help/references/guide/images/design.jpg: sha256:b8ed07427f6a0c37dd8ba97961fc0eb5071efeee6c4a230648bdb7547f6f2a8f
+  .claude/skills/poteto-help/references/guide/images/overnight.jpg: sha256:4b4405e4df8925c5b3abbe702f681af0f3b1f5f32271b599f95717f578f1a0c8
+  .claude/skills/poteto-help/references/guide/images/recipes.jpg: sha256:9fa2d51b476635712737795ddef81806efaa0086bb3bfa9f9f45695d9ab0f8e8
+  .claude/skills/poteto-help/references/guide/images/router.jpg: sha256:525843055a4efd2b10acc50a8652fd02b0834ea733a8a2f895c1eb89036017da
+  .claude/skills/poteto-help/references/guide/images/understanding.jpg: sha256:b60587e9a9bbe2550e93be9819cf0cd4acf77d90fac769a0c43d82bd8e34e279
+  .claude/skills/poteto-help/references/guide/images/verification.jpg: sha256:2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a
+  .claude/skills/poteto-help/references/prompting.md: sha256:da55d284628a3c84e8e38cb5331775583e517bbde93797fd264be49e523c738a
+  .claude/skills/poteto-help/references/recipes.md: sha256:5323aca73a39a3b607c2bb22cd33551fe893563dfd4b104df838da010e9fc702
   .claude/skills/poteto-mode/SKILL.md: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
   .claude/skills/poteto-mode/playbooks/authoring-a-skill.md: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
   .claude/skills/poteto-mode/playbooks/autonomous-run.md: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
@@ -4380,6 +4881,7 @@ local_deployed_file_hashes:
   .claude/skills/principle-subtract-before-you-add/SKILL.md: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
   .claude/skills/principle-test-behavior-not-implementation/SKILL.md: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
   .claude/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+  .claude/skills/recall/SKILL.md: sha256:10d5722c3f0ac118a9b9178c440268d6b25ebc31441e70bc26ced84c736d1e27
   .claude/skills/reflect/SKILL.md: sha256:0b72a7b360587fd89ff64591a9d0eb212579f0b08d44602c2ccff3423ddba1b4
   .claude/skills/reflect/references/divergent-reviewer.md: sha256:b8e12572a40bc742abb2bec5f2c4af9ed46e55a2606afb118dd0a34bdf99dbc7
   .claude/skills/reflect/references/judgment-reviewer.md: sha256:59c217afa4121c9f04b2a887e3a9f1b612434d0c420cc70d25c638fd3261957a

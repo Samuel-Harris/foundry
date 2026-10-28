@@ -52,35 +52,32 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 
 | Package            | Primitives deployed                                        | structural | runtime recognition | workflow behaviour |
 | ------------------ | ---------------------------------------------------------- | ---------- | ------------------- | ------------------ |
-| `architect`        | 1 agent                                                    | verified   | untested            | untested           |
 | `coding-style`     | 2 instructions                                             | verified   | untested            | untested           |
 | `cursor-usage`     | 1 skill                                                    | verified   | untested            | untested           |
 | `deep-interview`   | 1 skill                                                    | verified   | untested            | untested           |
-| `default-stack`    | no primitives; resolves 8 direct and 4 transitive packages | verified   | untested            | untested           |
+| `default-stack`    | no primitives; resolves 8 direct and 2 transitive packages | verified   | untested            | untested           |
 | `execution`        | 1 skill                                                    | verified   | untested            | untested           |
 | `explore`          | 1 agent                                                    | verified   | untested            | untested           |
 | `git-diff`         | 3 skills                                                   | verified   | untested            | untested           |
 | `handoff`          | 1 skill                                                    | verified   | untested            | untested           |
 | `infrastructure`   | 1 skill                                                    | verified   | untested            | untested           |
-| `planning`         | 2 skills, 2 agents, 1 instruction                          | verified   | untested            | untested           |
+| `planning`         | 1 skill, 1 instruction                                     | verified   | untested            | untested           |
 | `pr`               | 3 skills                                                   | verified   | untested            | untested           |
 | `repo-init`        | 2 skills                                                   | verified   | untested            | untested           |
 | `repo-maintenance` | 3 skills, 1 instruction                                    | verified   | untested            | untested           |
 | `review`           | 3 skills, 2 agents                                         | verified   | untested            | untested           |
 | `search`           | 1 skill                                                    | verified   | untested            | untested           |
 | `skill-creation`   | 1 skill                                                    | verified   | untested            | untested           |
-| `swarm`            | 1 skill, 5 agents                                          | verified   | untested            | untested           |
 | `ui`               | 1 skill                                                    | verified   | untested            | untested           |
 
 Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place — with one documented exception. `default-stack`'s own lockfile cannot be replayed by `apm audit --ci`, because the meta-package reaches `pr` by two paths and an APM 0.32.0 writer defect then records an ambiguous parent chain for `explore`. Consumers are unaffected: a clean install of `default-stack` resolves the same twelve packages and passes `apm audit --ci` on all three targets. See `docs/DEPENDENCY-CONTRACTS.md` for the minimal repro and the reasoning behind keeping the eight-declared-requirement manifest.
 
-`apm install --frozen` succeeds for all nineteen packages in place.
+`apm install --frozen` succeeds for all seventeen packages in place.
 
 ## Archive coverage
 
-`apm pack --archive` succeeds for the ten packages with an empty `dependencies:` mapping:
+`apm pack --archive` succeeds for the nine packages with an empty `dependencies:` mapping:
 
-- `architect`
 - `coding-style`
 - `cursor-usage`
 - `explore`
@@ -91,7 +88,7 @@ Structural verification covers all three targets: every package installs, deploy
 - `search`
 - `ui`
 
-It fails for the nine packages whose manifests declare a sibling `path:` dependency, in every bundle format:
+It fails for the eight packages whose manifests declare a sibling `path:` dependency, in every bundle format:
 
 - `default-stack`
 - `deep-interview`
@@ -101,7 +98,6 @@ It fails for the nine packages whose manifests declare a sibling `path:` depende
 - `repo-init`
 - `repo-maintenance`
 - `skill-creation`
-- `swarm`
 
 Their bundle build is a release-time step that requires the `v0.1.0` tag. Archive install, inventory, skill-only inventory and tamper rejection are verified against the packable bundles, and every bundle is asserted to be free of retired primitives.
 

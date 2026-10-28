@@ -4,11 +4,11 @@
 
 ![Foundry](assets/foundry-logo.png)
 
-Foundry is a collection of 25 agent skills, 11 subagents and 4 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
+Foundry is a collection of 23 agent skills, 3 subagents and 4 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
 
 ## What this is
 
-This repository was previously a Cursor plugin marketplace. It is now an APM monorepo of 19 independently installable packages. Every primitive has a single target-neutral source, and APM handles the per-target directory and frontmatter translation at install time — there are no per-target variants to keep in sync.
+This repository was previously a Cursor plugin marketplace. It is now an APM monorepo of 17 independently installable packages. Every primitive has a single target-neutral source, and APM handles the per-target directory and frontmatter translation at install time — there are no per-target variants to keep in sync.
 
 ## Prerequisites
 
@@ -56,7 +56,6 @@ A remote install requires the `v0.1.0` tag to exist and the consumer repository 
 
 | Package            | Contents                                                                                                                                                                  | Purpose                                                                                     |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `architect`        | agents: `architect`                                                                                                                                                       | The architect agent: read-only strategic architecture and debugging advice.                 |
 | `coding-style`     | instructions: `compatibility-surface-gate`, `software-engineering-rules`                                                                                                  | Core engineering rules and compatibility guardrails for agent-written code.                 |
 | `cursor-usage`     | skills: `cursor-cost-review`                                                                                                                                              | Analyse Cursor spend from a usage export and local transcripts, and rank ways to reduce it. |
 | `deep-interview`   | skills: `deep-interview`                                                                                                                                                  | Socratic requirement gathering with ambiguity gating before planning.                       |
@@ -66,14 +65,13 @@ A remote install requires the `v0.1.0` tag to exist and the consumer repository 
 | `git-diff`         | skills: `git-diff-all-changes-main`, `git-diff-committed-changes-main`, `git-diff-staged-changes-main`                                                                    | Read-only git diff summaries measured against a repository's main branch.                   |
 | `handoff`          | skills: `handoff`                                                                                                                                                         | Produce a handoff document that lets another agent or session continue the work.            |
 | `infrastructure`   | skills: `aws-architecture-diagram`                                                                                                                                        | AWS architecture diagrams rendered as Mermaid flowcharts.                                   |
-| `planning`         | skills: `masterplan`, `ralplan`; agents: `critic`, `planner`; instructions: `plan-handoff-standard`                                                                       | Plan authoring and plan review.                                                             |
+| `planning`         | skills: `masterplan`; instructions: `plan-handoff-standard`                                                                                                               | Product vision authoring and the implementation-plan handoff standard.                      |
 | `pr`               | skills: `babysit`, `code-tour`, `summarise-pr`                                                                                                                            | Pull request comprehension and merge-readiness babysitting.                                 |
 | `repo-init`        | skills: `monorepo-init`, `terraform-monorepo-init`                                                                                                                        | Scaffold a new repository or monorepo with evidence-based agent guidance.                   |
 | `repo-maintenance` | skills: `agents-md`, `generate-agent-docs`, `optimise-agent-config`; instructions: `keep-agent-mds-up-to-date`                                                            | Keep AGENTS.md files and agent configuration accurate and lean.                             |
 | `review`           | skills: `thermo-nuclear-code-quality-review`, `thermo-nuclear-review`, `thermos`; agents: `thermo-nuclear-code-quality-review-subagent`, `thermo-nuclear-review-subagent` | Branch-level correctness, security and maintainability audits.                              |
 | `search`           | skills: `search-worktrees`                                                                                                                                                | Search the codebase across git worktrees.                                                   |
 | `skill-creation`   | skills: `design-skill`                                                                                                                                                    | Design, draft, validate and iterate on agent skills.                                        |
-| `swarm`            | skills: `swarm`; agents: `build-fixer-low`, `build-fixer-medium`, `executor-high`, `executor-low`, `executor-medium`                                                      | Coordinated parallel subagents working a shared task list.                                  |
 | `ui`               | skills: `uncodixify`                                                                                                                                                      | Remove machine-generated UI slop and restore visual quality.                                |
 
 Each package declares its sibling dependencies in `apm.yml`, so installing one package pulls in the primitives it references. See `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the dependency graph.
@@ -91,7 +89,6 @@ Each package declares its sibling dependencies in `apm.yml`, so installing one p
 | `aws-architecture-diagram`           | `infrastructure`   | Generate AWS architecture diagrams as Mermaid flowcharts with nested account/VPC subgraphs, numbered data-flow steps, and same-account placement. Use only wh…    |
 | `deep-interview`                     | `deep-interview`   | Socratic deep interview with mathematical ambiguity gating before autonomous execution. Use when the user has a vague idea and wants thorough requirements ga…    |
 | `masterplan`                         | `planning`         | Generate a holistic product vision from Linear tickets. Pulls backlog, to-do, and in-progress tickets and synthesises them into a status-agnostic overview. U…    |
-| `ralplan`                            | `planning`         | Iterative planning consensus loop. Orchestrates Planner, Architect, and Critic agents in rounds until the plan is approved or max iterations reached. Use for…    |
 | `babysit`                            | `pr`               | Keep a GitHub pull request merge-ready in a persistent loop by inspecting its current head, resolving unambiguous merge conflicts, addressing valid review co…    |
 | `code-tour`                          | `pr`               | Walk through every change in a pull request or Git diff as a chat-only, logically ordered code tour with clickable code citations, commit and review context,…    |
 | `summarise-pr`                       | `pr`               | Summarise provided PR change context into concise PR-description bullets. Use when the user asks for a PR description summary, major changes, or design decis…    |
@@ -105,7 +102,6 @@ Each package declares its sibling dependencies in `apm.yml`, so installing one p
 | `thermos`                            | `review`           | Launch both thermo-nuclear review subagents in parallel, then synthesise their findings. Use for thermos, double thermo review, or combined bug/security and…     |
 | `search-worktrees`                   | `search`           | Find files, code, or content across all git worktrees of the current repository. Use when a search must cover every worktree, or when a naive find or grep ac…    |
 | `design-skill`                       | `skill-creation`   | Design, draft, validate, and iterate on agent skills. Use when the user asks to create, design, improve, or test a skill, especially when the skill's goal, b…    |
-| `swarm`                              | `swarm`            | Coordinated parallel agents on a shared task list. Analyses the task, decomposes into subtasks, and dispatches agents in batches of up to 4. Use for large-sc…    |
 | `uncodixify`                         | `ui`               | Guides UI design away from generic AI aesthetic patterns ("Codex UI") toward human-designed, functional interfaces inspired by Linear, Raycast, Stripe, and G…    |
 
 The `Trigger` column is the `description` field of each `SKILL.md`, truncated to 160 characters. It is quoted, not paraphrased. The `git-diff-*` skills assume a base branch of `main`.

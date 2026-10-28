@@ -7,8 +7,13 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Primitive | Name | Purpose |
 | --- | --- | --- |
 | Skill | `benchmark-checklist` | Vet a performance measurement before you report or act on it. |
+| Skill | `blast-radius` | Find what a change could break beyond the diff, and prove the one fact that makes it safe by running real code. |
 | Skill | `bro` | Restate the last message in plain human language, with no jargon. |
+| Skill | `how` | Explain how code works now: architecture, runtime flow, and where new code should live. |
 | Skill | `in-your-own-words` | Restate what the agent thinks the user's goals and problem are. |
+| Skill | `interrogate` | Have adversaries on different models try to break a change, keeping only findings a run proves. |
+| Skill | `ketchup` | Catch the user up on what changed in this chat since their last message, with every waiting decision listed. |
+| Skill | `ketchup-video` | Catch the user up like `ketchup`, as a short subtitled video of slides. |
 | Skill | `no-comments` | Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints. |
 | Skill | `principle-attack-the-premise` | Test the shared premise of repeated failed fixes before writing another. |
 | Skill | `principle-boundary-discipline` | Concentrate guards at system boundaries and keep business logic pure. |
@@ -36,7 +41,10 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `principle-type-system-discipline` | Make illegal states unrepresentable and parse external data at boundaries. |
 | Skill | `sharpen` | Rewrite a prompt to make the task deeper, not bigger, without doing the task. |
 | Skill | `tdd` | Write the failing test first when a cheap local test path exists. |
+| Skill | `teach` | Explain a body of work plainly by running `how` and `why` and weaving the results together. |
+| Skill | `typescript-best-practices` | Apply TypeScript rules when reading or editing `.ts` or `.tsx` files. |
 | Skill | `unslop` | Cut AI tells from any writing. |
+| Skill | `why` | Explain why code is shaped the way it is from source control and every available evidence source. |
 | Agent | `comment-sicko` | Read-only comment reviewer that keeps only comments the code cannot replace. |
 
 ## Install

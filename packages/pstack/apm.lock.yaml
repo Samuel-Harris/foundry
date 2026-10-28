@@ -30,6 +30,24 @@ deployments:
   content_hash: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
 - kind: project-relative
   target: claude
+  value: .claude/skills/blast-radius
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/blast-radius/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
+- kind: project-relative
+  target: claude
   value: .claude/skills/bro
   runtime: null
   scope: project
@@ -48,6 +66,42 @@ deployments:
   content_hash: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
 - kind: project-relative
   target: claude
+  value: .claude/skills/how
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/how/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
+- kind: project-relative
+  target: claude
+  value: .claude/skills/how/references/explainer-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cd4791cdcf597ff09bc9262854af1269a49dd476e49a8653d12b34d135c48a3d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/how/references/explorer-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9d1e1c1255dab8b8e34e726974c508725e2338c995622d8ab1b4b23eb3f89b66
+- kind: project-relative
+  target: claude
   value: .claude/skills/in-your-own-words
   runtime: null
   scope: project
@@ -64,6 +118,60 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
+- kind: project-relative
+  target: claude
+  value: .claude/skills/interrogate
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/interrogate/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9ff58aaecb898d89e56fa74f0996824028fd08f90ef20831d9b7887bc333d1b9
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ketchup
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ketchup-video
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ketchup-video/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:501251f66a491969cd06c754e12db1f5f7091007434b6808847418c97c9ab426
+- kind: project-relative
+  target: claude
+  value: .claude/skills/ketchup/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
 - kind: project-relative
   target: claude
   value: .claude/skills/no-comments
@@ -552,6 +660,51 @@ deployments:
   content_hash: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
 - kind: project-relative
   target: claude
+  value: .claude/skills/teach
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/teach/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/typescript-best-practices
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/typescript-best-practices/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
+- kind: project-relative
+  target: claude
+  value: .claude/skills/typescript-best-practices/references/patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bf634afdadb0028c6d69c9ec7a160c766b36bd174e2221475d83e6e519fad72f
+- kind: project-relative
+  target: claude
   value: .claude/skills/unslop
   runtime: null
   scope: project
@@ -568,6 +721,132 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ee4e0732e2abf2e2b86ab07ffb500e7ec2ae0c478a622b6977f3e14b88236603
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/epistemics.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8ab04746c1dc5861dbe2724074756193bb8e455c52a518f29135bf4d7e069256
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/investigator-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1e7f31b88422e07b80200cf8665c5f67dc387a16fdfddcfeed7af1531871ed0d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/source-playbook.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a7c668212b9b866f6c0331e9be90e16cc00ccf649f5c614dd5d979be3a976155
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/sources/code-archaeology.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/sources/databricks.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e5cebd6e73aac086a538525b2f847e4884559259b3a2f781333ddc7038a91f99
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/sources/datadog.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e4b7c42ce3cd9c392624a0b65c9d1cce3839ab6bd6a71df957d72025c8087236
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/sources/incident-postmortem.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:872df8396b0c0e939da06e22679166c32e24758a26a8e0a14dab483070ee81db
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/sources/linear.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b605f8b67e242652809f61c48f510b6dbd8340a89994292325e250e92cc53a41
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/sources/notion.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8cd02bbf9298224a712186cbe483935319167d7a9cf6dc152af92df26ec132f3
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/sources/sentry.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6d57adbded0ccd4d3b7a127aef5b777fb74d001dfc24908642cf3cf32e8a01c9
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/sources/slack.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
+- kind: project-relative
+  target: claude
+  value: .claude/skills/why/references/synthesizer-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
 - kind: project-relative
   target: copilot
   value: .github/agents/comment-sicko.agent.md
@@ -606,6 +885,24 @@ deployments:
   content_hash: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
 - kind: project-relative
   target: legacy
+  value: .agents/skills/blast-radius
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/blast-radius/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
+- kind: project-relative
+  target: legacy
   value: .agents/skills/bro
   runtime: null
   scope: project
@@ -624,6 +921,42 @@ deployments:
   content_hash: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
 - kind: project-relative
   target: legacy
+  value: .agents/skills/how
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/how/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/how/references/explainer-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cd4791cdcf597ff09bc9262854af1269a49dd476e49a8653d12b34d135c48a3d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/how/references/explorer-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9d1e1c1255dab8b8e34e726974c508725e2338c995622d8ab1b4b23eb3f89b66
+- kind: project-relative
+  target: legacy
   value: .agents/skills/in-your-own-words
   runtime: null
   scope: project
@@ -640,6 +973,60 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/interrogate
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/interrogate/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9ff58aaecb898d89e56fa74f0996824028fd08f90ef20831d9b7887bc333d1b9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/ketchup
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/ketchup-video
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/ketchup-video/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:501251f66a491969cd06c754e12db1f5f7091007434b6808847418c97c9ab426
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/ketchup/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
 - kind: project-relative
   target: legacy
   value: .agents/skills/no-comments
@@ -1128,6 +1515,51 @@ deployments:
   content_hash: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
 - kind: project-relative
   target: legacy
+  value: .agents/skills/teach
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/teach/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/typescript-best-practices
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/typescript-best-practices/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/typescript-best-practices/references/patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:bf634afdadb0028c6d69c9ec7a160c766b36bd174e2221475d83e6e519fad72f
+- kind: project-relative
+  target: legacy
   value: .agents/skills/unslop
   runtime: null
   scope: project
@@ -1144,13 +1576,151 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ee4e0732e2abf2e2b86ab07ffb500e7ec2ae0c478a622b6977f3e14b88236603
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/epistemics.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8ab04746c1dc5861dbe2724074756193bb8e455c52a518f29135bf4d7e069256
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/investigator-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1e7f31b88422e07b80200cf8665c5f67dc387a16fdfddcfeed7af1531871ed0d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/source-playbook.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a7c668212b9b866f6c0331e9be90e16cc00ccf649f5c614dd5d979be3a976155
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/sources/code-archaeology.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/sources/databricks.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e5cebd6e73aac086a538525b2f847e4884559259b3a2f781333ddc7038a91f99
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/sources/datadog.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e4b7c42ce3cd9c392624a0b65c9d1cce3839ab6bd6a71df957d72025c8087236
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/sources/incident-postmortem.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:872df8396b0c0e939da06e22679166c32e24758a26a8e0a14dab483070ee81db
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/sources/linear.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:b605f8b67e242652809f61c48f510b6dbd8340a89994292325e250e92cc53a41
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/sources/notion.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:8cd02bbf9298224a712186cbe483935319167d7a9cf6dc152af92df26ec132f3
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/sources/sentry.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:6d57adbded0ccd4d3b7a127aef5b777fb74d001dfc24908642cf3cf32e8a01c9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/sources/slack.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/why/references/synthesizer-prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
 local_deployed_files:
 - .agents/skills/benchmark-checklist
 - .agents/skills/benchmark-checklist/SKILL.md
+- .agents/skills/blast-radius
+- .agents/skills/blast-radius/SKILL.md
 - .agents/skills/bro
 - .agents/skills/bro/SKILL.md
+- .agents/skills/how
+- .agents/skills/how/SKILL.md
+- .agents/skills/how/references/explainer-prompt.md
+- .agents/skills/how/references/explorer-prompt.md
 - .agents/skills/in-your-own-words
 - .agents/skills/in-your-own-words/SKILL.md
+- .agents/skills/interrogate
+- .agents/skills/interrogate/SKILL.md
+- .agents/skills/ketchup
+- .agents/skills/ketchup-video
+- .agents/skills/ketchup-video/SKILL.md
+- .agents/skills/ketchup/SKILL.md
 - .agents/skills/no-comments
 - .agents/skills/no-comments/SKILL.md
 - .agents/skills/principle-attack-the-premise
@@ -1205,15 +1775,46 @@ local_deployed_files:
 - .agents/skills/sharpen/SKILL.md
 - .agents/skills/tdd
 - .agents/skills/tdd/SKILL.md
+- .agents/skills/teach
+- .agents/skills/teach/SKILL.md
+- .agents/skills/typescript-best-practices
+- .agents/skills/typescript-best-practices/SKILL.md
+- .agents/skills/typescript-best-practices/references/patterns.md
 - .agents/skills/unslop
 - .agents/skills/unslop/SKILL.md
+- .agents/skills/why
+- .agents/skills/why/SKILL.md
+- .agents/skills/why/references/epistemics.md
+- .agents/skills/why/references/investigator-prompt.md
+- .agents/skills/why/references/source-playbook.md
+- .agents/skills/why/references/sources/code-archaeology.md
+- .agents/skills/why/references/sources/databricks.md
+- .agents/skills/why/references/sources/datadog.md
+- .agents/skills/why/references/sources/incident-postmortem.md
+- .agents/skills/why/references/sources/linear.md
+- .agents/skills/why/references/sources/notion.md
+- .agents/skills/why/references/sources/sentry.md
+- .agents/skills/why/references/sources/slack.md
+- .agents/skills/why/references/synthesizer-prompt.md
 - .claude/agents/comment-sicko.md
 - .claude/skills/benchmark-checklist
 - .claude/skills/benchmark-checklist/SKILL.md
+- .claude/skills/blast-radius
+- .claude/skills/blast-radius/SKILL.md
 - .claude/skills/bro
 - .claude/skills/bro/SKILL.md
+- .claude/skills/how
+- .claude/skills/how/SKILL.md
+- .claude/skills/how/references/explainer-prompt.md
+- .claude/skills/how/references/explorer-prompt.md
 - .claude/skills/in-your-own-words
 - .claude/skills/in-your-own-words/SKILL.md
+- .claude/skills/interrogate
+- .claude/skills/interrogate/SKILL.md
+- .claude/skills/ketchup
+- .claude/skills/ketchup-video
+- .claude/skills/ketchup-video/SKILL.md
+- .claude/skills/ketchup/SKILL.md
 - .claude/skills/no-comments
 - .claude/skills/no-comments/SKILL.md
 - .claude/skills/principle-attack-the-premise
@@ -1268,14 +1869,40 @@ local_deployed_files:
 - .claude/skills/sharpen/SKILL.md
 - .claude/skills/tdd
 - .claude/skills/tdd/SKILL.md
+- .claude/skills/teach
+- .claude/skills/teach/SKILL.md
+- .claude/skills/typescript-best-practices
+- .claude/skills/typescript-best-practices/SKILL.md
+- .claude/skills/typescript-best-practices/references/patterns.md
 - .claude/skills/unslop
 - .claude/skills/unslop/SKILL.md
+- .claude/skills/why
+- .claude/skills/why/SKILL.md
+- .claude/skills/why/references/epistemics.md
+- .claude/skills/why/references/investigator-prompt.md
+- .claude/skills/why/references/source-playbook.md
+- .claude/skills/why/references/sources/code-archaeology.md
+- .claude/skills/why/references/sources/databricks.md
+- .claude/skills/why/references/sources/datadog.md
+- .claude/skills/why/references/sources/incident-postmortem.md
+- .claude/skills/why/references/sources/linear.md
+- .claude/skills/why/references/sources/notion.md
+- .claude/skills/why/references/sources/sentry.md
+- .claude/skills/why/references/sources/slack.md
+- .claude/skills/why/references/synthesizer-prompt.md
 - .cursor/agents/comment-sicko.md
 - .github/agents/comment-sicko.agent.md
 local_deployed_file_hashes:
   .agents/skills/benchmark-checklist/SKILL.md: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+  .agents/skills/blast-radius/SKILL.md: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
   .agents/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+  .agents/skills/how/SKILL.md: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
+  .agents/skills/how/references/explainer-prompt.md: sha256:cd4791cdcf597ff09bc9262854af1269a49dd476e49a8653d12b34d135c48a3d
+  .agents/skills/how/references/explorer-prompt.md: sha256:9d1e1c1255dab8b8e34e726974c508725e2338c995622d8ab1b4b23eb3f89b66
   .agents/skills/in-your-own-words/SKILL.md: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
+  .agents/skills/interrogate/SKILL.md: sha256:9ff58aaecb898d89e56fa74f0996824028fd08f90ef20831d9b7887bc333d1b9
+  .agents/skills/ketchup-video/SKILL.md: sha256:501251f66a491969cd06c754e12db1f5f7091007434b6808847418c97c9ab426
+  .agents/skills/ketchup/SKILL.md: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
   .agents/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
   .agents/skills/principle-attack-the-premise/SKILL.md: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
   .agents/skills/principle-boundary-discipline/SKILL.md: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
@@ -1303,11 +1930,34 @@ local_deployed_file_hashes:
   .agents/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
   .agents/skills/sharpen/SKILL.md: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
   .agents/skills/tdd/SKILL.md: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
+  .agents/skills/teach/SKILL.md: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
+  .agents/skills/typescript-best-practices/SKILL.md: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
+  .agents/skills/typescript-best-practices/references/patterns.md: sha256:bf634afdadb0028c6d69c9ec7a160c766b36bd174e2221475d83e6e519fad72f
   .agents/skills/unslop/SKILL.md: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
+  .agents/skills/why/SKILL.md: sha256:ee4e0732e2abf2e2b86ab07ffb500e7ec2ae0c478a622b6977f3e14b88236603
+  .agents/skills/why/references/epistemics.md: sha256:8ab04746c1dc5861dbe2724074756193bb8e455c52a518f29135bf4d7e069256
+  .agents/skills/why/references/investigator-prompt.md: sha256:1e7f31b88422e07b80200cf8665c5f67dc387a16fdfddcfeed7af1531871ed0d
+  .agents/skills/why/references/source-playbook.md: sha256:a7c668212b9b866f6c0331e9be90e16cc00ccf649f5c614dd5d979be3a976155
+  .agents/skills/why/references/sources/code-archaeology.md: sha256:a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7
+  .agents/skills/why/references/sources/databricks.md: sha256:e5cebd6e73aac086a538525b2f847e4884559259b3a2f781333ddc7038a91f99
+  .agents/skills/why/references/sources/datadog.md: sha256:e4b7c42ce3cd9c392624a0b65c9d1cce3839ab6bd6a71df957d72025c8087236
+  .agents/skills/why/references/sources/incident-postmortem.md: sha256:872df8396b0c0e939da06e22679166c32e24758a26a8e0a14dab483070ee81db
+  .agents/skills/why/references/sources/linear.md: sha256:b605f8b67e242652809f61c48f510b6dbd8340a89994292325e250e92cc53a41
+  .agents/skills/why/references/sources/notion.md: sha256:8cd02bbf9298224a712186cbe483935319167d7a9cf6dc152af92df26ec132f3
+  .agents/skills/why/references/sources/sentry.md: sha256:6d57adbded0ccd4d3b7a127aef5b777fb74d001dfc24908642cf3cf32e8a01c9
+  .agents/skills/why/references/sources/slack.md: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
+  .agents/skills/why/references/synthesizer-prompt.md: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
   .claude/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
   .claude/skills/benchmark-checklist/SKILL.md: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+  .claude/skills/blast-radius/SKILL.md: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
   .claude/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
+  .claude/skills/how/SKILL.md: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
+  .claude/skills/how/references/explainer-prompt.md: sha256:cd4791cdcf597ff09bc9262854af1269a49dd476e49a8653d12b34d135c48a3d
+  .claude/skills/how/references/explorer-prompt.md: sha256:9d1e1c1255dab8b8e34e726974c508725e2338c995622d8ab1b4b23eb3f89b66
   .claude/skills/in-your-own-words/SKILL.md: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
+  .claude/skills/interrogate/SKILL.md: sha256:9ff58aaecb898d89e56fa74f0996824028fd08f90ef20831d9b7887bc333d1b9
+  .claude/skills/ketchup-video/SKILL.md: sha256:501251f66a491969cd06c754e12db1f5f7091007434b6808847418c97c9ab426
+  .claude/skills/ketchup/SKILL.md: sha256:cb5e0d5969f22efe21745f9d39c23263e190c19e121eaecbb405c73edddd9b96
   .claude/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
   .claude/skills/principle-attack-the-premise/SKILL.md: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
   .claude/skills/principle-boundary-discipline/SKILL.md: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
@@ -1335,6 +1985,22 @@ local_deployed_file_hashes:
   .claude/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
   .claude/skills/sharpen/SKILL.md: sha256:563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2
   .claude/skills/tdd/SKILL.md: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
+  .claude/skills/teach/SKILL.md: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
+  .claude/skills/typescript-best-practices/SKILL.md: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
+  .claude/skills/typescript-best-practices/references/patterns.md: sha256:bf634afdadb0028c6d69c9ec7a160c766b36bd174e2221475d83e6e519fad72f
   .claude/skills/unslop/SKILL.md: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
+  .claude/skills/why/SKILL.md: sha256:ee4e0732e2abf2e2b86ab07ffb500e7ec2ae0c478a622b6977f3e14b88236603
+  .claude/skills/why/references/epistemics.md: sha256:8ab04746c1dc5861dbe2724074756193bb8e455c52a518f29135bf4d7e069256
+  .claude/skills/why/references/investigator-prompt.md: sha256:1e7f31b88422e07b80200cf8665c5f67dc387a16fdfddcfeed7af1531871ed0d
+  .claude/skills/why/references/source-playbook.md: sha256:a7c668212b9b866f6c0331e9be90e16cc00ccf649f5c614dd5d979be3a976155
+  .claude/skills/why/references/sources/code-archaeology.md: sha256:a4a3970e9db448054aed676f3f7feeee667b4b69f0bd57c8fd72b751be687cc7
+  .claude/skills/why/references/sources/databricks.md: sha256:e5cebd6e73aac086a538525b2f847e4884559259b3a2f781333ddc7038a91f99
+  .claude/skills/why/references/sources/datadog.md: sha256:e4b7c42ce3cd9c392624a0b65c9d1cce3839ab6bd6a71df957d72025c8087236
+  .claude/skills/why/references/sources/incident-postmortem.md: sha256:872df8396b0c0e939da06e22679166c32e24758a26a8e0a14dab483070ee81db
+  .claude/skills/why/references/sources/linear.md: sha256:b605f8b67e242652809f61c48f510b6dbd8340a89994292325e250e92cc53a41
+  .claude/skills/why/references/sources/notion.md: sha256:8cd02bbf9298224a712186cbe483935319167d7a9cf6dc152af92df26ec132f3
+  .claude/skills/why/references/sources/sentry.md: sha256:6d57adbded0ccd4d3b7a127aef5b777fb74d001dfc24908642cf3cf32e8a01c9
+  .claude/skills/why/references/sources/slack.md: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
+  .claude/skills/why/references/synthesizer-prompt.md: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
   .cursor/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
   .github/agents/comment-sicko.agent.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2

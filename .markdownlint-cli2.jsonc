@@ -17,5 +17,7 @@
     "**/.claude-plugin/**",
     "**/.github/plugin/**",
     "**/node_modules/**",
+    // Generated statechart output that the tests compare byte for byte.
+    "packages/pstack/tests/statechart/corpus/**",
   ],
 }

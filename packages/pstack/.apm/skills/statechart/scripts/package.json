@@ -1,0 +1,5 @@
+{
+  "name": "@foundry/pstack-statechart",
+  "private": true,
+  "type": "module"
+}

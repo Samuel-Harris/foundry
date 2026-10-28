@@ -51,6 +51,7 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `setup-pstack` | Choose a model per role and a reasoning budget, and write the user-level model rule. |
 | Skill | `sharpen` | Rewrite a prompt to make the task deeper, not bigger, without doing the task. |
 | Skill | `show-me-your-work` | Keep a reviewable decision trail for long-running or unattended work. |
+| Skill | `statechart` | Check a TLA+ model of a stateful system and draw it as a Mermaid statechart. |
 | Skill | `swarm` | Fan out parallel workers over slices or races and return one report. |
 | Skill | `tdd` | Write the failing test first when a cheap local test path exists. |
 | Skill | `teach` | Explain a body of work plainly by running `how` and `why` and weaving the results together. |

@@ -219,15 +219,12 @@ for pkg in $checked; do
     exit 1
   fi
   lock="packages/$pkg/apm.lock.yaml"
-  if git diff --quiet -I 'anchored_local_path: /' -I 'local:/' -- "$lock"; then
-    # Absolute checkout paths differ per machine. Drop that churn so a current
-    # lockfile is not rewritten into the commit.
-    if ! git diff --quiet -- "$lock"; then
-      git checkout -- "$lock"
-    fi
-  else
+  # APM records transitive siblings by absolute checkout path; the committed
+  # form is relative to the package.
+  python3 "$repo_root/scripts/relativise_lockfiles.py" "$lock" || exit 1
+  if ! git diff --quiet -- "$lock"; then
     echo "pre-commit: lockfile diff for packages/$pkg:" >&2
-    git diff -I 'anchored_local_path: /' -I 'local:/' -- "$lock" >&2 || true
+    git diff -- "$lock" >&2 || true
     stale="$stale $pkg"
   fi
 done

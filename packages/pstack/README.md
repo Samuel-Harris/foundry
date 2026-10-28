@@ -25,6 +25,7 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `maintain-verification-skill` | Keep a verification skill and its feature map honest with source readers and one live pass. |
 | Skill | `make-bot-ui` | Build a page whose buttons wake a Grok Bot over a webhook. |
 | Skill | `no-comments` | Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints. |
+| Skill | `poteto-mode` | Route a task to one of the bundled playbooks and run it with deliberate subagents and verified work. |
 | Skill | `principle-attack-the-premise` | Test the shared premise of repeated failed fixes before writing another. |
 | Skill | `principle-boundary-discipline` | Concentrate guards at system boundaries and keep business logic pure. |
 | Skill | `principle-build-the-lever` | Build the tool that does or proves the work instead of working by hand. |
@@ -62,12 +63,21 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `unslop` | Cut AI tells from any writing. |
 | Skill | `why` | Explain why code is shaped the way it is from source control and every available evidence source. |
 | Agent | `comment-sicko` | Read-only comment reviewer that keeps only comments the code cannot replace. |
+| Agent | `poteto-agent` | Delegate subagent for code-writing and helper tasks spawned during a `/poteto-mode` run. |
 
 ## Install
 
 ```bash
 apm install Samuel-Harris/foundry/packages/pstack#v0.1.0 --target cursor,claude,copilot
 ```
+
+## Getting started
+
+1. Run `/setup-pstack` to pick a model for each role and a reasoning budget.
+2. Run `/poteto-mode` with a goal and a check that can pass or fail.
+3. Type `/poteto-help` with a question when you can't tell which skill fits.
+
+The [pstack guide](.apm/skills/poteto-help/references/guide/README.md) walks through setup, routing, design, verification and overnight runs.
 
 ## Targets
 

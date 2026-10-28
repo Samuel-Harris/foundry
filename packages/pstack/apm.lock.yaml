@@ -12,6 +12,15 @@ deployments:
   content_hash: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
 - kind: project-relative
   target: claude
+  value: .claude/agents/poteto-agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
+- kind: project-relative
+  target: claude
   value: .claude/skills/architect
   runtime: null
   scope: project
@@ -424,6 +433,339 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/authoring-a-skill.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/autonomous-run.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/autopilot-full.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fa02e68ba0d4baeace2573f34154239405ef256dec6b99fdfff211d3ca79fff5
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/autopilot-stack.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:34de4bb101dd56524d8067c73bba5988ead6f93d3ab8f96ac13a6adcb43696cb
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/babysit.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d5806054d462aed575587fb1f6605378abeb65b95fcedaf526e0cbcc1bd94074
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/bug-fix.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a13682b618fc0c03aae5f0d2f5d54f1a28453154e35103f525894e5a99bcf5e2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/eval.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e01b1fd1f198911abd849cd151faeb70a08f63c379d0390e9eb3d2d1b4424599
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/feature.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/hillclimb.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/investigation.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/multi-phase-plan.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9bbd71cd2973830c2bd1e8da614be2b182b23679f29ae7d1685bad78a0c132b4
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/opening-a-pr.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/orchestrate.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4764ff66eda2a2bcfa37bde781490baccde7177149d7dfd012ecdae9bb01139a
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/pause-safely.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/perf-issue.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7f3ad73a9376087d39243ceb5dd826f299fa65c46955ca37dfc54a46b16d35ce
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/prototype.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:80ec27b9221654ee81df36b11e2f5fbda99dfd2f4a3e6b2c85605a3baa14a7dc
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/refactoring.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:36b997a8a6da5e1e705085bbbbdda3b7ab4587d74102265ac746cd9b7b62d3fb
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/runtime-forensics.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:066b6b7fd7a68c1e3e3f43c63dbcc6b9f1f90476b5ec4b42c9bdb5d31788af06
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/session-pickup.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1d17b84a10109d31e4515cde4938bab220bc9944e58d695589622a08d0ce43a4
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/shipping.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:199aadda40d6b0ae82a28bee2f1c66fcc95af3a7b9dc3d3d366beeda5b45c836
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/trace-forensics.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:12d8dfde6e1b11dcb492317933d98f3ebe5e148287d8e428cb0191dd93154d3e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/visual-parity.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:70a79bb445e4c2f38a8f52c4579ed4e447ad8d7afd612034eee06a8992880334
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/playbooks/worktree-cleanup.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:382ebadbd1bf4361f98bb10ac00b6f630214b01a60b28c11c7b89ac9ebeb552e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/references/bugbot-triage.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:70b186faaa5c1abd2d5159093f1f7f4ef9def0ec882aef53718e0a6986ccd24e
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/bootstrap.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/bun.lock
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:47b198c869a574ec101c47f88cf4e06c7e6fa6b494609ec2f680463722551375
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/check-plan.mjs
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e3d4e9ca638c6fb4a2b52c434c17c7af30da4fdd44605ccfe9906f82fe37b555
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/package.json
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f4c14da0c5a1a18a67814eea98e0f6eba0a58182bf8834601001b6c26e376622
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/watch-pr/cli.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/watch-pr/github.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7ba193190d488c8ce0982c85234ebea026e9a595703e99a3c3df0fcd640ddd18
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/watch-pr/policy.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2d4823aeea788acab258ec60eb52e7b9e3a23a6649850af128d6ada5c33d7778
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/watch-pr/render.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/watch-pr/types.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:daa66c56220bae084c18cc6d3b0a2c66c0e72206d298e40973b44ee085ce16d2
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/watch-pr/watch-pr
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4
+- kind: project-relative
+  target: claude
+  value: .claude/skills/poteto-mode/scripts/worktree-audit.sh
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:010481a0692d7fb9c222ce7976113f72664b568edc68f23506777a8e599f21d5
 - kind: project-relative
   target: claude
   value: .claude/skills/principle-attack-the-premise
@@ -1523,6 +1865,15 @@ deployments:
   active_owner: .
   content_hash: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
 - kind: project-relative
+  target: copilot
+  value: .github/agents/poteto-agent.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
+- kind: project-relative
   target: cursor
   value: .cursor/agents/comment-sicko.md
   runtime: null
@@ -1531,6 +1882,15 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/poteto-agent.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
 - kind: project-relative
   target: legacy
   value: .agents/skills/architect
@@ -1945,6 +2305,339 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/authoring-a-skill.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/autonomous-run.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/autopilot-full.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fa02e68ba0d4baeace2573f34154239405ef256dec6b99fdfff211d3ca79fff5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/autopilot-stack.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:34de4bb101dd56524d8067c73bba5988ead6f93d3ab8f96ac13a6adcb43696cb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/babysit.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d5806054d462aed575587fb1f6605378abeb65b95fcedaf526e0cbcc1bd94074
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/bug-fix.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a13682b618fc0c03aae5f0d2f5d54f1a28453154e35103f525894e5a99bcf5e2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/eval.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e01b1fd1f198911abd849cd151faeb70a08f63c379d0390e9eb3d2d1b4424599
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/feature.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/hillclimb.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/investigation.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/multi-phase-plan.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:9bbd71cd2973830c2bd1e8da614be2b182b23679f29ae7d1685bad78a0c132b4
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/opening-a-pr.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/orchestrate.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4764ff66eda2a2bcfa37bde781490baccde7177149d7dfd012ecdae9bb01139a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/pause-safely.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/perf-issue.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7f3ad73a9376087d39243ceb5dd826f299fa65c46955ca37dfc54a46b16d35ce
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/prototype.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:80ec27b9221654ee81df36b11e2f5fbda99dfd2f4a3e6b2c85605a3baa14a7dc
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/refactoring.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:36b997a8a6da5e1e705085bbbbdda3b7ab4587d74102265ac746cd9b7b62d3fb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/runtime-forensics.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:066b6b7fd7a68c1e3e3f43c63dbcc6b9f1f90476b5ec4b42c9bdb5d31788af06
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/session-pickup.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1d17b84a10109d31e4515cde4938bab220bc9944e58d695589622a08d0ce43a4
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/shipping.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:199aadda40d6b0ae82a28bee2f1c66fcc95af3a7b9dc3d3d366beeda5b45c836
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/trace-forensics.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:12d8dfde6e1b11dcb492317933d98f3ebe5e148287d8e428cb0191dd93154d3e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/visual-parity.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:70a79bb445e4c2f38a8f52c4579ed4e447ad8d7afd612034eee06a8992880334
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/playbooks/worktree-cleanup.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:382ebadbd1bf4361f98bb10ac00b6f630214b01a60b28c11c7b89ac9ebeb552e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/references/bugbot-triage.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:70b186faaa5c1abd2d5159093f1f7f4ef9def0ec882aef53718e0a6986ccd24e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/bootstrap.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/bun.lock
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:47b198c869a574ec101c47f88cf4e06c7e6fa6b494609ec2f680463722551375
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/check-plan.mjs
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e3d4e9ca638c6fb4a2b52c434c17c7af30da4fdd44605ccfe9906f82fe37b555
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/package.json
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:f4c14da0c5a1a18a67814eea98e0f6eba0a58182bf8834601001b6c26e376622
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/watch-pr/cli.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/watch-pr/github.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:7ba193190d488c8ce0982c85234ebea026e9a595703e99a3c3df0fcd640ddd18
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/watch-pr/policy.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2d4823aeea788acab258ec60eb52e7b9e3a23a6649850af128d6ada5c33d7778
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/watch-pr/render.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/watch-pr/types.ts
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:daa66c56220bae084c18cc6d3b0a2c66c0e72206d298e40973b44ee085ce16d2
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/watch-pr/watch-pr
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/poteto-mode/scripts/worktree-audit.sh
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:010481a0692d7fb9c222ce7976113f72664b568edc68f23506777a8e599f21d5
 - kind: project-relative
   target: legacy
   value: .agents/skills/principle-attack-the-premise
@@ -3081,6 +3774,43 @@ local_deployed_files:
 - .agents/skills/make-bot-ui/SKILL.md
 - .agents/skills/no-comments
 - .agents/skills/no-comments/SKILL.md
+- .agents/skills/poteto-mode
+- .agents/skills/poteto-mode/SKILL.md
+- .agents/skills/poteto-mode/playbooks/authoring-a-skill.md
+- .agents/skills/poteto-mode/playbooks/autonomous-run.md
+- .agents/skills/poteto-mode/playbooks/autopilot-full.md
+- .agents/skills/poteto-mode/playbooks/autopilot-stack.md
+- .agents/skills/poteto-mode/playbooks/babysit.md
+- .agents/skills/poteto-mode/playbooks/bug-fix.md
+- .agents/skills/poteto-mode/playbooks/eval.md
+- .agents/skills/poteto-mode/playbooks/feature.md
+- .agents/skills/poteto-mode/playbooks/hillclimb.md
+- .agents/skills/poteto-mode/playbooks/investigation.md
+- .agents/skills/poteto-mode/playbooks/multi-phase-plan.md
+- .agents/skills/poteto-mode/playbooks/opening-a-pr.md
+- .agents/skills/poteto-mode/playbooks/orchestrate.md
+- .agents/skills/poteto-mode/playbooks/pause-safely.md
+- .agents/skills/poteto-mode/playbooks/perf-issue.md
+- .agents/skills/poteto-mode/playbooks/prototype.md
+- .agents/skills/poteto-mode/playbooks/refactoring.md
+- .agents/skills/poteto-mode/playbooks/runtime-forensics.md
+- .agents/skills/poteto-mode/playbooks/session-pickup.md
+- .agents/skills/poteto-mode/playbooks/shipping.md
+- .agents/skills/poteto-mode/playbooks/trace-forensics.md
+- .agents/skills/poteto-mode/playbooks/visual-parity.md
+- .agents/skills/poteto-mode/playbooks/worktree-cleanup.md
+- .agents/skills/poteto-mode/references/bugbot-triage.md
+- .agents/skills/poteto-mode/scripts/bootstrap.ts
+- .agents/skills/poteto-mode/scripts/bun.lock
+- .agents/skills/poteto-mode/scripts/check-plan.mjs
+- .agents/skills/poteto-mode/scripts/package.json
+- .agents/skills/poteto-mode/scripts/watch-pr/cli.ts
+- .agents/skills/poteto-mode/scripts/watch-pr/github.ts
+- .agents/skills/poteto-mode/scripts/watch-pr/policy.ts
+- .agents/skills/poteto-mode/scripts/watch-pr/render.ts
+- .agents/skills/poteto-mode/scripts/watch-pr/types.ts
+- .agents/skills/poteto-mode/scripts/watch-pr/watch-pr
+- .agents/skills/poteto-mode/scripts/worktree-audit.sh
 - .agents/skills/principle-attack-the-premise
 - .agents/skills/principle-attack-the-premise/SKILL.md
 - .agents/skills/principle-boundary-discipline
@@ -3203,6 +3933,7 @@ local_deployed_files:
 - .agents/skills/why/references/sources/slack.md
 - .agents/skills/why/references/synthesizer-prompt.md
 - .claude/agents/comment-sicko.md
+- .claude/agents/poteto-agent.md
 - .claude/skills/architect
 - .claude/skills/architect/SKILL.md
 - .claude/skills/architect/references/design-red-flags.md
@@ -3249,6 +3980,43 @@ local_deployed_files:
 - .claude/skills/make-bot-ui/SKILL.md
 - .claude/skills/no-comments
 - .claude/skills/no-comments/SKILL.md
+- .claude/skills/poteto-mode
+- .claude/skills/poteto-mode/SKILL.md
+- .claude/skills/poteto-mode/playbooks/authoring-a-skill.md
+- .claude/skills/poteto-mode/playbooks/autonomous-run.md
+- .claude/skills/poteto-mode/playbooks/autopilot-full.md
+- .claude/skills/poteto-mode/playbooks/autopilot-stack.md
+- .claude/skills/poteto-mode/playbooks/babysit.md
+- .claude/skills/poteto-mode/playbooks/bug-fix.md
+- .claude/skills/poteto-mode/playbooks/eval.md
+- .claude/skills/poteto-mode/playbooks/feature.md
+- .claude/skills/poteto-mode/playbooks/hillclimb.md
+- .claude/skills/poteto-mode/playbooks/investigation.md
+- .claude/skills/poteto-mode/playbooks/multi-phase-plan.md
+- .claude/skills/poteto-mode/playbooks/opening-a-pr.md
+- .claude/skills/poteto-mode/playbooks/orchestrate.md
+- .claude/skills/poteto-mode/playbooks/pause-safely.md
+- .claude/skills/poteto-mode/playbooks/perf-issue.md
+- .claude/skills/poteto-mode/playbooks/prototype.md
+- .claude/skills/poteto-mode/playbooks/refactoring.md
+- .claude/skills/poteto-mode/playbooks/runtime-forensics.md
+- .claude/skills/poteto-mode/playbooks/session-pickup.md
+- .claude/skills/poteto-mode/playbooks/shipping.md
+- .claude/skills/poteto-mode/playbooks/trace-forensics.md
+- .claude/skills/poteto-mode/playbooks/visual-parity.md
+- .claude/skills/poteto-mode/playbooks/worktree-cleanup.md
+- .claude/skills/poteto-mode/references/bugbot-triage.md
+- .claude/skills/poteto-mode/scripts/bootstrap.ts
+- .claude/skills/poteto-mode/scripts/bun.lock
+- .claude/skills/poteto-mode/scripts/check-plan.mjs
+- .claude/skills/poteto-mode/scripts/package.json
+- .claude/skills/poteto-mode/scripts/watch-pr/cli.ts
+- .claude/skills/poteto-mode/scripts/watch-pr/github.ts
+- .claude/skills/poteto-mode/scripts/watch-pr/policy.ts
+- .claude/skills/poteto-mode/scripts/watch-pr/render.ts
+- .claude/skills/poteto-mode/scripts/watch-pr/types.ts
+- .claude/skills/poteto-mode/scripts/watch-pr/watch-pr
+- .claude/skills/poteto-mode/scripts/worktree-audit.sh
 - .claude/skills/principle-attack-the-premise
 - .claude/skills/principle-attack-the-premise/SKILL.md
 - .claude/skills/principle-boundary-discipline
@@ -3371,7 +4139,9 @@ local_deployed_files:
 - .claude/skills/why/references/sources/slack.md
 - .claude/skills/why/references/synthesizer-prompt.md
 - .cursor/agents/comment-sicko.md
+- .cursor/agents/poteto-agent.md
 - .github/agents/comment-sicko.agent.md
+- .github/agents/poteto-agent.agent.md
 local_deployed_file_hashes:
   .agents/skills/architect/SKILL.md: sha256:4df6693d760a991f470c2a9611d55ffcdece56cacfc15f7ce778266ed52a76a9
   .agents/skills/architect/references/design-red-flags.md: sha256:6851acb68728048a9a01038c68654612f184719c84d465500f596cafea48c627
@@ -3400,6 +4170,42 @@ local_deployed_file_hashes:
   .agents/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
   .agents/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .agents/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+  .agents/skills/poteto-mode/SKILL.md: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
+  .agents/skills/poteto-mode/playbooks/authoring-a-skill.md: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
+  .agents/skills/poteto-mode/playbooks/autonomous-run.md: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
+  .agents/skills/poteto-mode/playbooks/autopilot-full.md: sha256:fa02e68ba0d4baeace2573f34154239405ef256dec6b99fdfff211d3ca79fff5
+  .agents/skills/poteto-mode/playbooks/autopilot-stack.md: sha256:34de4bb101dd56524d8067c73bba5988ead6f93d3ab8f96ac13a6adcb43696cb
+  .agents/skills/poteto-mode/playbooks/babysit.md: sha256:d5806054d462aed575587fb1f6605378abeb65b95fcedaf526e0cbcc1bd94074
+  .agents/skills/poteto-mode/playbooks/bug-fix.md: sha256:a13682b618fc0c03aae5f0d2f5d54f1a28453154e35103f525894e5a99bcf5e2
+  .agents/skills/poteto-mode/playbooks/eval.md: sha256:e01b1fd1f198911abd849cd151faeb70a08f63c379d0390e9eb3d2d1b4424599
+  .agents/skills/poteto-mode/playbooks/feature.md: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
+  .agents/skills/poteto-mode/playbooks/hillclimb.md: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
+  .agents/skills/poteto-mode/playbooks/investigation.md: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
+  .agents/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:9bbd71cd2973830c2bd1e8da614be2b182b23679f29ae7d1685bad78a0c132b4
+  .agents/skills/poteto-mode/playbooks/opening-a-pr.md: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
+  .agents/skills/poteto-mode/playbooks/orchestrate.md: sha256:4764ff66eda2a2bcfa37bde781490baccde7177149d7dfd012ecdae9bb01139a
+  .agents/skills/poteto-mode/playbooks/pause-safely.md: sha256:77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d
+  .agents/skills/poteto-mode/playbooks/perf-issue.md: sha256:7f3ad73a9376087d39243ceb5dd826f299fa65c46955ca37dfc54a46b16d35ce
+  .agents/skills/poteto-mode/playbooks/prototype.md: sha256:80ec27b9221654ee81df36b11e2f5fbda99dfd2f4a3e6b2c85605a3baa14a7dc
+  .agents/skills/poteto-mode/playbooks/refactoring.md: sha256:36b997a8a6da5e1e705085bbbbdda3b7ab4587d74102265ac746cd9b7b62d3fb
+  .agents/skills/poteto-mode/playbooks/runtime-forensics.md: sha256:066b6b7fd7a68c1e3e3f43c63dbcc6b9f1f90476b5ec4b42c9bdb5d31788af06
+  .agents/skills/poteto-mode/playbooks/session-pickup.md: sha256:1d17b84a10109d31e4515cde4938bab220bc9944e58d695589622a08d0ce43a4
+  .agents/skills/poteto-mode/playbooks/shipping.md: sha256:199aadda40d6b0ae82a28bee2f1c66fcc95af3a7b9dc3d3d366beeda5b45c836
+  .agents/skills/poteto-mode/playbooks/trace-forensics.md: sha256:12d8dfde6e1b11dcb492317933d98f3ebe5e148287d8e428cb0191dd93154d3e
+  .agents/skills/poteto-mode/playbooks/visual-parity.md: sha256:70a79bb445e4c2f38a8f52c4579ed4e447ad8d7afd612034eee06a8992880334
+  .agents/skills/poteto-mode/playbooks/worktree-cleanup.md: sha256:382ebadbd1bf4361f98bb10ac00b6f630214b01a60b28c11c7b89ac9ebeb552e
+  .agents/skills/poteto-mode/references/bugbot-triage.md: sha256:70b186faaa5c1abd2d5159093f1f7f4ef9def0ec882aef53718e0a6986ccd24e
+  .agents/skills/poteto-mode/scripts/bootstrap.ts: sha256:ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361
+  .agents/skills/poteto-mode/scripts/bun.lock: sha256:47b198c869a574ec101c47f88cf4e06c7e6fa6b494609ec2f680463722551375
+  .agents/skills/poteto-mode/scripts/check-plan.mjs: sha256:e3d4e9ca638c6fb4a2b52c434c17c7af30da4fdd44605ccfe9906f82fe37b555
+  .agents/skills/poteto-mode/scripts/package.json: sha256:f4c14da0c5a1a18a67814eea98e0f6eba0a58182bf8834601001b6c26e376622
+  .agents/skills/poteto-mode/scripts/watch-pr/cli.ts: sha256:89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680
+  .agents/skills/poteto-mode/scripts/watch-pr/github.ts: sha256:7ba193190d488c8ce0982c85234ebea026e9a595703e99a3c3df0fcd640ddd18
+  .agents/skills/poteto-mode/scripts/watch-pr/policy.ts: sha256:2d4823aeea788acab258ec60eb52e7b9e3a23a6649850af128d6ada5c33d7778
+  .agents/skills/poteto-mode/scripts/watch-pr/render.ts: sha256:2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604
+  .agents/skills/poteto-mode/scripts/watch-pr/types.ts: sha256:daa66c56220bae084c18cc6d3b0a2c66c0e72206d298e40973b44ee085ce16d2
+  .agents/skills/poteto-mode/scripts/watch-pr/watch-pr: sha256:d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4
+  .agents/skills/poteto-mode/scripts/worktree-audit.sh: sha256:010481a0692d7fb9c222ce7976113f72664b568edc68f23506777a8e599f21d5
   .agents/skills/principle-attack-the-premise/SKILL.md: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
   .agents/skills/principle-boundary-discipline/SKILL.md: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
   .agents/skills/principle-build-the-lever/SKILL.md: sha256:a749cef47303efae04871b9642030583c21137a3bc4f4147387385ab5b23e1e5
@@ -3486,6 +4292,7 @@ local_deployed_file_hashes:
   .agents/skills/why/references/sources/slack.md: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
   .agents/skills/why/references/synthesizer-prompt.md: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
   .claude/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+  .claude/agents/poteto-agent.md: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
   .claude/skills/architect/SKILL.md: sha256:4df6693d760a991f470c2a9611d55ffcdece56cacfc15f7ce778266ed52a76a9
   .claude/skills/architect/references/design-red-flags.md: sha256:6851acb68728048a9a01038c68654612f184719c84d465500f596cafea48c627
   .claude/skills/architect/references/rationale-template.md: sha256:17762ab8024664d3eb5f5dc81a9f14987464c161dba7812ba3b9996ae4a277f5
@@ -3513,6 +4320,42 @@ local_deployed_file_hashes:
   .claude/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
   .claude/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .claude/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
+  .claude/skills/poteto-mode/SKILL.md: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
+  .claude/skills/poteto-mode/playbooks/authoring-a-skill.md: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
+  .claude/skills/poteto-mode/playbooks/autonomous-run.md: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
+  .claude/skills/poteto-mode/playbooks/autopilot-full.md: sha256:fa02e68ba0d4baeace2573f34154239405ef256dec6b99fdfff211d3ca79fff5
+  .claude/skills/poteto-mode/playbooks/autopilot-stack.md: sha256:34de4bb101dd56524d8067c73bba5988ead6f93d3ab8f96ac13a6adcb43696cb
+  .claude/skills/poteto-mode/playbooks/babysit.md: sha256:d5806054d462aed575587fb1f6605378abeb65b95fcedaf526e0cbcc1bd94074
+  .claude/skills/poteto-mode/playbooks/bug-fix.md: sha256:a13682b618fc0c03aae5f0d2f5d54f1a28453154e35103f525894e5a99bcf5e2
+  .claude/skills/poteto-mode/playbooks/eval.md: sha256:e01b1fd1f198911abd849cd151faeb70a08f63c379d0390e9eb3d2d1b4424599
+  .claude/skills/poteto-mode/playbooks/feature.md: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
+  .claude/skills/poteto-mode/playbooks/hillclimb.md: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
+  .claude/skills/poteto-mode/playbooks/investigation.md: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
+  .claude/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:9bbd71cd2973830c2bd1e8da614be2b182b23679f29ae7d1685bad78a0c132b4
+  .claude/skills/poteto-mode/playbooks/opening-a-pr.md: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
+  .claude/skills/poteto-mode/playbooks/orchestrate.md: sha256:4764ff66eda2a2bcfa37bde781490baccde7177149d7dfd012ecdae9bb01139a
+  .claude/skills/poteto-mode/playbooks/pause-safely.md: sha256:77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d
+  .claude/skills/poteto-mode/playbooks/perf-issue.md: sha256:7f3ad73a9376087d39243ceb5dd826f299fa65c46955ca37dfc54a46b16d35ce
+  .claude/skills/poteto-mode/playbooks/prototype.md: sha256:80ec27b9221654ee81df36b11e2f5fbda99dfd2f4a3e6b2c85605a3baa14a7dc
+  .claude/skills/poteto-mode/playbooks/refactoring.md: sha256:36b997a8a6da5e1e705085bbbbdda3b7ab4587d74102265ac746cd9b7b62d3fb
+  .claude/skills/poteto-mode/playbooks/runtime-forensics.md: sha256:066b6b7fd7a68c1e3e3f43c63dbcc6b9f1f90476b5ec4b42c9bdb5d31788af06
+  .claude/skills/poteto-mode/playbooks/session-pickup.md: sha256:1d17b84a10109d31e4515cde4938bab220bc9944e58d695589622a08d0ce43a4
+  .claude/skills/poteto-mode/playbooks/shipping.md: sha256:199aadda40d6b0ae82a28bee2f1c66fcc95af3a7b9dc3d3d366beeda5b45c836
+  .claude/skills/poteto-mode/playbooks/trace-forensics.md: sha256:12d8dfde6e1b11dcb492317933d98f3ebe5e148287d8e428cb0191dd93154d3e
+  .claude/skills/poteto-mode/playbooks/visual-parity.md: sha256:70a79bb445e4c2f38a8f52c4579ed4e447ad8d7afd612034eee06a8992880334
+  .claude/skills/poteto-mode/playbooks/worktree-cleanup.md: sha256:382ebadbd1bf4361f98bb10ac00b6f630214b01a60b28c11c7b89ac9ebeb552e
+  .claude/skills/poteto-mode/references/bugbot-triage.md: sha256:70b186faaa5c1abd2d5159093f1f7f4ef9def0ec882aef53718e0a6986ccd24e
+  .claude/skills/poteto-mode/scripts/bootstrap.ts: sha256:ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361
+  .claude/skills/poteto-mode/scripts/bun.lock: sha256:47b198c869a574ec101c47f88cf4e06c7e6fa6b494609ec2f680463722551375
+  .claude/skills/poteto-mode/scripts/check-plan.mjs: sha256:e3d4e9ca638c6fb4a2b52c434c17c7af30da4fdd44605ccfe9906f82fe37b555
+  .claude/skills/poteto-mode/scripts/package.json: sha256:f4c14da0c5a1a18a67814eea98e0f6eba0a58182bf8834601001b6c26e376622
+  .claude/skills/poteto-mode/scripts/watch-pr/cli.ts: sha256:89c08863089181a232be782c4b2ed90a1552f44aeecb0dcb7aac2c623620e680
+  .claude/skills/poteto-mode/scripts/watch-pr/github.ts: sha256:7ba193190d488c8ce0982c85234ebea026e9a595703e99a3c3df0fcd640ddd18
+  .claude/skills/poteto-mode/scripts/watch-pr/policy.ts: sha256:2d4823aeea788acab258ec60eb52e7b9e3a23a6649850af128d6ada5c33d7778
+  .claude/skills/poteto-mode/scripts/watch-pr/render.ts: sha256:2b709e86628d5b8fdb61f860e60ababc342b0626c67576305442cf548283a604
+  .claude/skills/poteto-mode/scripts/watch-pr/types.ts: sha256:daa66c56220bae084c18cc6d3b0a2c66c0e72206d298e40973b44ee085ce16d2
+  .claude/skills/poteto-mode/scripts/watch-pr/watch-pr: sha256:d955603be6cc0e8b8ffcec722f635192b2261410b1f2929abea94480e47eb5d4
+  .claude/skills/poteto-mode/scripts/worktree-audit.sh: sha256:010481a0692d7fb9c222ce7976113f72664b568edc68f23506777a8e599f21d5
   .claude/skills/principle-attack-the-premise/SKILL.md: sha256:72082f55779b1920b67271ed1949163f64a8c069df1dff621430c8504177f62f
   .claude/skills/principle-boundary-discipline/SKILL.md: sha256:ce620a9df50674e113821e22b568dbabfd6236a124f0dcefc56d64a0bdfabcff
   .claude/skills/principle-build-the-lever/SKILL.md: sha256:a749cef47303efae04871b9642030583c21137a3bc4f4147387385ab5b23e1e5
@@ -3599,4 +4442,6 @@ local_deployed_file_hashes:
   .claude/skills/why/references/sources/slack.md: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
   .claude/skills/why/references/synthesizer-prompt.md: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
   .cursor/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+  .cursor/agents/poteto-agent.md: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
   .github/agents/comment-sicko.agent.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
+  .github/agents/poteto-agent.agent.md: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8

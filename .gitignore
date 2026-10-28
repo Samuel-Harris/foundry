@@ -12,6 +12,9 @@ apm_modules/
 dist/
 build/
 
+# Node dependencies for the pstack script tests
+node_modules/
+
 # Python bytecode
 __pycache__/
 *.pyc

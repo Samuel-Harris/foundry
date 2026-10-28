@@ -73,6 +73,20 @@ apm install Samuel-Harris/foundry/packages/pstack#v0.1.0 --target cursor,claude,
 
 Deployed to `cursor`, `claude` and `copilot`.
 
+## Tests
+
+The script test suites live under `tests/`, outside `.apm/`, so they are not deployed. CI runs each one.
+
+- `tests/statechart/` tests the `statechart` skill's `scripts/`. Run them with Node.js 22.18 or later:
+
+  ```bash
+  cd packages/pstack/tests/statechart
+  npm ci
+  npm test
+  ```
+
+  The TLC tests skip unless `TLA2TOOLS` names a `tla2tools.jar` (CI uses TLC 1.7.4 and Temurin 25, the versions `scripts/run.ts` pins). On macOS, a `TMPDIR` that is reached through a symlink fails the relative-symlink launcher test; point `TMPDIR` at a resolved path.
+
 ## Upstream
 
 This package ports [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan, released under the MIT licence (see [`LICENSE`](LICENSE)), from upstream commit `c742dd6`. The port is adapted: prose is in British English, and tool, path and feature names are target-neutral so the same source deploys to Cursor, Claude Code and GitHub Copilot. It omits upstream's `benny` automation pack.

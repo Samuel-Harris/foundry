@@ -25,6 +25,7 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `maintain-verification-skill` | Keep a verification skill and its feature map honest with source readers and one live pass. |
 | Skill | `make-bot-ui` | Build a page whose buttons wake a Grok Bot over a webhook. |
 | Skill | `no-comments` | Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints. |
+| Skill | `poteto-help` | Guide users through pstack setup, `/poteto-mode`, and picking the right skill, playbook or principle. |
 | Skill | `poteto-mode` | Route a task to one of the bundled playbooks and run it with deliberate subagents and verified work. |
 | Skill | `principle-attack-the-premise` | Test the shared premise of repeated failed fixes before writing another. |
 | Skill | `principle-boundary-discipline` | Concentrate guards at system boundaries and keep business logic pure. |
@@ -50,6 +51,7 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `principle-subtract-before-you-add` | Remove dead weight before building on the simpler base. |
 | Skill | `principle-test-behavior-not-implementation` | Assert what the code's users can observe, not its internals. |
 | Skill | `principle-type-system-discipline` | Make illegal states unrepresentable and parse external data at boundaries. |
+| Skill | `recall` | Rebuild recent working context from chat history and the shared record into a current-state brief. |
 | Skill | `reflect` | Review the active transcript in parallel and route each learning to a concrete skill edit. |
 | Skill | `setup-pstack` | Choose a model per role and a reasoning budget, and write the user-level model rule. |
 | Skill | `sharpen` | Rewrite a prompt to make the task deeper, not bigger, without doing the task. |
@@ -70,6 +72,14 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 ```bash
 apm install Samuel-Harris/foundry/packages/pstack#v0.1.0 --target cursor,claude,copilot
 ```
+
+## Getting started
+
+1. Run `/setup-pstack` to pick a model for each role and a reasoning budget.
+2. Run `/poteto-mode` with a goal and a check that can pass or fail.
+3. Type `/poteto-help` with a question when you can't tell which skill fits.
+
+The [pstack guide](.apm/skills/poteto-help/references/guide/README.md) walks through setup, routing, design, verification and overnight runs.
 
 ## Targets
 

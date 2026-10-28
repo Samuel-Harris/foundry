@@ -81,3 +81,26 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  poteto-mode-tests:
+    name: pstack poteto-mode tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/pstack
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.5"
+
+      - name: Install test dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck:poteto-mode
+
+      - name: Run tests
+        run: bun run test:poteto-mode

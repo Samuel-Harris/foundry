@@ -1,0 +1,14 @@
+{
+  "name": "@foundry/pstack-dev",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:poteto-mode": "bun test tests/poteto-mode",
+    "typecheck:poteto-mode": "tsc --project tsconfig.poteto-mode.json"
+  },
+  "devDependencies": {
+    "bun-types": "1.3.14",
+    "commander": "14.0.0",
+    "typescript": "7.0.2"
+  }
+}

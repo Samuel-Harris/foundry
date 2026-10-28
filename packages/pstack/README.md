@@ -89,6 +89,15 @@ The script test suites live under `tests/`, outside `.apm/`, so they are not dep
 
   The TLC tests skip unless `TLA2TOOLS` names a `tla2tools.jar` (CI uses TLC 1.7.4 and Temurin 25, the versions `scripts/run.ts` pins). On macOS, a `TMPDIR` that is reached through a symlink fails the relative-symlink launcher test; point `TMPDIR` at a resolved path.
 
+- `tests/poteto-mode/` tests the `poteto-mode` skill's `scripts/` (the `watch-pr` CLI and `check-plan.mjs`). The test package is `package.json` at the package root, beside `.apm/`, because Bun resolves the runtime's `commander` import by walking up from `.apm/skills/poteto-mode/scripts/`; installing it here keeps `node_modules/` out of the deployed skill directory. Run them with Bun 1.3.5 or later:
+
+  ```bash
+  cd packages/pstack
+  bun install --frozen-lockfile
+  bun run typecheck:poteto-mode
+  bun run test:poteto-mode
+  ```
+
 ## Upstream
 
 This package ports [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan, released under the MIT licence (see [`LICENSE`](LICENSE)), from upstream commit `c742dd6`. The port is adapted: prose is in British English, and tool, path and feature names are target-neutral so the same source deploys to Cursor, Claude Code and GitHub Copilot. It omits upstream's `benny` automation pack.

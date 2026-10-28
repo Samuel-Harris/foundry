@@ -24,10 +24,8 @@ targets:
 includes: auto
 dependencies:
   apm:
-    - path: ../architect
     - path: ../deep-interview
     - path: ../review
-    - path: ../swarm
 scripts:
   check: apm audit --ci
 ```
@@ -52,13 +50,13 @@ dependencies:
 
 This is the documented same-repo sibling mechanism. Do not write `git: <parent repo>` as a substitute.
 
-**Verified, not assumed, and only partly viable.** Installing `packages/pr` resolved `../swarm (local)` and, transitively, `../architect`, then deployed both packages' agents and skills alongside `pr`'s own three skills. The `path:` form is therefore correct for development and for consumers that resolve the package from the parent repository.
+**Verified, not assumed, and only partly viable.** Before the `swarm` and `architect` packages were removed, installing `packages/pr` resolved `../swarm (local)` and, transitively, `../architect`, then deployed both packages' agents and skills alongside `pr`'s own three skills. The `path:` form is therefore correct for development and for consumers that resolve the package from the parent repository.
 
 It is **not** viable for `apm pack`. The CLI refuses to bundle a local path dependency in every format:
 
 ```text
-$ apm pack --dry-run --verbose           # in packages/swarm
-Error: Cannot pack — apm.yml contains local path dependency: ../architect
+$ apm pack --dry-run --verbose           # in packages/planning
+Error: Cannot pack — apm.yml contains local path dependency: ../deep-interview
 Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
 ```
 
@@ -73,7 +71,7 @@ $ apm install --target cursor            # with {git: Samuel-Harris/foundry, pat
 
 The CLI prefixes the failing dependency's identifier with the repository name, so the error names `foundry-planning` while the manifest path is `packages/planning`.
 
-So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:` permanently, not only until the tag exists, because a remote install already resolves it correctly (see below) and the remote form would pin every sibling to a tag, so a change spanning two packages could not be tested on a feature branch. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm` — is deferred until bundles are needed; a release job would then rewrite a throwaway copy of each manifest to `{git: Samuel-Harris/foundry, path: packages/<name>, ref: <tag>}` and pack that. The local Tier 1 suite asserts the guardrail for those packages rather than skipping them.
+So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:` permanently, not only until the tag exists, because a remote install already resolves it correctly (see below) and the remote form would pin every sibling to a tag, so a change spanning two packages could not be tested on a feature branch. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance` and `skill-creation` — is deferred until bundles are needed; a release job would then rewrite a throwaway copy of each manifest to `{git: Samuel-Harris/foundry, path: packages/<name>, ref: <tag>}` and pack that. The local Tier 1 suite asserts the guardrail for those packages rather than skipping them.
 
 **A remote install rewrites sibling paths to the same repository and commit.** When APM fetches a package from a git remote, it expands each `path: ../<name>` dependency into a dependency on `packages/<name>` in the same repository at the same resolved commit (`_expand_remote_parent_local_path` in `apm_cli/deps/apm_resolver.py`); a path that escapes the repository root is rejected. Verified with 0.32.0: `apm install Samuel-Harris/foundry/packages/swarm#main` in an empty directory resolved `swarm`, `architect` and, transitively, `explore` all at `main @c00c862a`, and the consumer's lockfile records only `virtual_path: packages/<name>` with `resolved_ref: main`, with no local or absolute path. A consumer therefore gets mutually consistent packages from one tag or branch.
 
@@ -107,23 +105,23 @@ A remote install requires the `v0.1.0` tag to exist and the consumer to have rep
 
 `packages/default-stack/apm.yml` lists eight sibling packages as `- path: ../<name>` entries and therefore omits `dependencies: {}`, which is non-empty. Installing `packages/default-stack` is the one-command route to the default stack.
 
-Those eight direct dependencies pull in four more transitively, so a single meta-package install resolves twelve packages:
+Those eight direct dependencies pull in two more transitively, so a single meta-package install resolves ten packages:
 
 ```text
 default-stack
 ├── coding-style
 ├── execution        -> pr, review
 ├── git-diff
-├── planning         -> architect, deep-interview, review, swarm
+├── planning         -> deep-interview, review
 ├── pr               -> explore
 ├── repo-maintenance -> explore
 ├── review
 └── skill-creation   -> deep-interview, repo-maintenance
 
-transitively added: architect, swarm, deep-interview, explore
+transitively added: deep-interview, explore
 ```
 
-`architect`, `cursor-usage`, `handoff`, `infrastructure`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
+`cursor-usage`, `handoff`, `infrastructure`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
 
 There is deliberately **no `apm.yml` at the repository root**. Root-level compile and pack discovery walks the whole tree, so a root manifest would absorb the nested packages' `.apm/` trees into one package and destroy the per-package boundaries.
 
@@ -157,27 +155,22 @@ Every primitive that names a primitive shipped by another package is covered by 
 
 | Reference               | Declared in                                                      | Ships in           | Covering edge                     |
 | ----------------------- | ---------------------------------------------------------------- | ------------------ | --------------------------------- |
-| `architect`             | `planning` — the `ralplan` skill                                 | `architect`        | planning → architect              |
-| `architect`             | `swarm` — the `swarm` skill                                      | `architect`        | swarm → architect                 |
-| `explore`               | `swarm` — the `swarm` skill                                      | `explore`          | swarm → explore                   |
 | `explore`               | `deep-interview` — the `deep-interview` skill                    | `explore`          | deep-interview → explore          |
 | `explore`               | `pr` — the `code-tour` skill                                     | `explore`          | pr → explore                      |
 | `explore`               | `repo-maintenance` — the `agents-md` skill                       | `explore`          | repo-maintenance → explore        |
 | `thermos`               | `execution` — the `implement-linear-ticket` skill                | `review`           | execution → review                |
 | `thermos`               | `planning` — the `plan-handoff-standard` instruction             | `review`           | planning → review                 |
 | `babysit`               | `execution` — the `implement-linear-ticket` skill                | `pr`               | execution → pr                    |
-| `deep-interview`        | `planning` — `masterplan`, `ralplan` and `plan-handoff-standard` | `deep-interview`   | planning → deep-interview         |
+| `deep-interview`        | `planning` — `masterplan` and `plan-handoff-standard`            | `deep-interview`   | planning → deep-interview         |
 | `deep-interview`        | `skill-creation` — the `design-skill` skill                      | `deep-interview`   | skill-creation → deep-interview   |
 | `deep-interview`        | `repo-init` — the `terraform-monorepo-init` skill                | `deep-interview`   | repo-init → deep-interview        |
 | `optimise-agent-config` | `skill-creation` — the `design-skill` skill                      | `repo-maintenance` | skill-creation → repo-maintenance |
 
-`planning`'s `ralplan` treats its handoff to `swarm` as optional, and `plan-handoff-standard` treats its `thermos` step as required; both are satisfied by the edges above, so a single-package install of `planning` carries the capability its own text names.
+`plan-handoff-standard` treats its `thermos` step as required; the `planning → review` edge above satisfies it, so a single-package install of `planning` carries the capability its own text names.
 
-### Why `architect`, `explore` and `deep-interview` exist
+### Why `explore` and `deep-interview` exist
 
-Both `planning` and `swarm` need the `architect` agent, and each references it directly. Keeping `architect` inside either package would force one of them to depend on the other for a read-only analysis agent, coupling the planning and execution layers. `architect` is therefore extracted into a dedicated `architect` package that both depend on, and `swarm` no longer names any primitive owned by `planning` (its `swarm` skill takes "a validated plan" as input rather than naming the producing skill).
-
-The same reasoning extracts `explore` and `deep-interview`. `swarm`, `deep-interview`, `pr` and `repo-maintenance` all dispatch the `explore` agent. Keeping that agent inside `swarm` forced `pr` and `repo-maintenance` to depend on `swarm`, and therefore to receive the `swarm` skill and the executor and build-fixer agents they never name. `planning`, `skill-creation` and `repo-init` all name the `deep-interview` skill. Keeping that skill inside `planning` forced `skill-creation` to depend on `planning` for nothing else, and stopped `repo-init` from declaring the dependency at all, because `planning` would have dragged in `architect`, `review` and `swarm`. `deep-interview` depends on `explore` because the skill dispatches that agent.
+`deep-interview`, `pr` and `repo-maintenance` all dispatch the `explore` agent. Keeping that agent inside any one of them would force the others to depend on it, and therefore to receive skills they never name. `planning`, `skill-creation` and `repo-init` all name the `deep-interview` skill. Keeping that skill inside `planning` forced `skill-creation` to depend on `planning` for nothing else, and stopped `repo-init` from declaring the dependency at all, because `planning` would have dragged in `review`. `deep-interview` depends on `explore` because the skill dispatches that agent.
 
 That orientation is what keeps the graph acyclic:
 
@@ -186,15 +179,12 @@ repo-init --> deep-interview --> explore
 skill-creation --> deep-interview
 skill-creation --> repo-maintenance --> explore
 planning --> deep-interview
-planning --> swarm --> explore
-planning --> swarm --> architect
-planning --> architect
 planning --> review
 execution --> pr --> explore
 execution --> review
 ```
 
-APM cannot express a dependency cycle, so any future reference that points backwards along `planning → swarm → architect` or `deep-interview → explore` must be reworded or extracted, not declared.
+APM cannot express a dependency cycle, so any future reference that points backwards along `planning → deep-interview → explore` or `execution → pr → explore` must be reworded or extracted, not declared.
 
 No test asserts that these references resolve inside a single-package install: `tests/structural/validate_primitives.py` checks that relative links resolve on disk **within this repository**, not across package boundaries. The edges above were derived by scanning every primitive for references to primitives owned by another package.
 
@@ -230,7 +220,7 @@ Error: Cannot pack — apm.yml contains local path dependency: ../planning
 Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
 ```
 
-This is the reason every package with a sibling `path:` dependency cannot be packed from its committed manifest: `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `skill-creation` and `swarm`. The sibling section above records the full comparison, the tested remote fallback and the release-job rewrite that would produce their bundles.
+This is the reason every package with a sibling `path:` dependency cannot be packed from its committed manifest: `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance` and `skill-creation`. The sibling section above records the full comparison, the tested remote fallback and the release-job rewrite that would produce their bundles.
 
 ### `apm audit --ci` cannot replay a lockfile with a duplicated local `resolved_by` parent
 
@@ -265,7 +255,7 @@ config-consistency details:
 
 Two levels are not enough: `meta → {base, mid → base}` alone audits clean. The failure needs the duplicated package to have a child of its own.
 
-**Scope.** Only the package's own lockfile is affected. All twelve packages still resolve and deploy — consumer-side installs of `default-stack` pass `apm audit --ci` on `cursor`, `claude` and `copilot`, and `apm install --frozen` succeeds in place. Both are asserted by `tests/structural/run-tier1.sh` and CI.
+**Scope.** Only the package's own lockfile is affected. All ten packages still resolve and deploy — consumer-side installs of `default-stack` pass `apm audit --ci` on `cursor`, `claude` and `copilot`, and `apm install --frozen` succeeds in place. Both are asserted by `tests/structural/run-tier1.sh` and CI.
 
 **Handling.** The manifest keeps its eight declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. Instead the defect is asserted: `tests/structural/run-tier1.sh` fails if `default-stack`'s audit *passes* or if it fails with a different message, so a fix in a later APM release is noticed rather than silently tolerated. CI does not run that audit.
 

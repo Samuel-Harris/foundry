@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tier 1 structural acceptance suite.
 #
-# Proves structural packaging and deployment for all nineteen packages: manifests
+# Proves structural packaging and deployment for all seventeen packages: manifests
 # resolve, installs succeed, deployed inventory matches the promised primitives,
 # and the pinned CLI's documented limitations are asserted rather than hidden.
 #
@@ -33,7 +33,7 @@ APM_TIMEOUT="${APM_TIMEOUT:-180}"
 # Manifests that declare a sibling `path:` dependency. APM 0.32.0 refuses to
 # pack such a manifest in every bundle format. See docs/DEPENDENCY-CONTRACTS.md;
 # this suite asserts that refusal rather than skipping these packages silently.
-PACK_BLOCKED=" default-stack deep-interview execution planning pr repo-init repo-maintenance skill-creation swarm "
+PACK_BLOCKED=" default-stack deep-interview execution planning pr repo-init repo-maintenance skill-creation "
 
 # `apm audit --ci` cannot replay `default-stack`'s own lockfile: the
 # meta-package reaches `pr` both directly and transitively (via `execution`),
@@ -47,15 +47,15 @@ PACK_BLOCKED=" default-stack deep-interview execution planning pr repo-init repo
 AUDIT_KNOWN_BROKEN=" default-stack "
 AUDIT_KNOWN_BROKEN_SIGNATURE="ambiguous resolved_by parent"
 
-# Direct dependencies of the meta-package, plus the four packages they pull in
-# transitively (`swarm`, `architect`, `explore` and `deep-interview`). A
-# default-stack install therefore deploys twelve of the nineteen packages,
+# Direct dependencies of the meta-package, plus the two packages they pull in
+# transitively (`explore` and `deep-interview`). A default-stack install
+# therefore deploys ten of the seventeen packages,
 # which is what the scratch-consumer inventory check covers.
-DEFAULT_STACK_DEPLOYED="architect coding-style deep-interview execution explore git-diff planning pr repo-maintenance review skill-creation swarm"
+DEFAULT_STACK_DEPLOYED="coding-style deep-interview execution explore git-diff planning pr repo-maintenance review skill-creation"
 
 # Primitives that no longer ship. `design-skill` is deliberately absent: it moved
 # to `skill-creation` and is still deployed.
-RETIRED="pr-contention port-claude-code-artefact sequential-ralplan explain-pr generate-pr-story optimise-cursor-repo"
+RETIRED="pr-contention port-claude-code-artefact sequential-ralplan ralplan explain-pr generate-pr-story optimise-cursor-repo"
 
 failures=0
 scratch=""
@@ -239,7 +239,7 @@ for target in "${target_list[@]}"; do
   done
   failures=$((failures + inventory_missing))
   if (( inventory_missing == 0 )); then
-    echo "  [+] $target deployed every skill, agent and instruction file for the twelve default-stack packages"
+    echo "  [+] $target deployed every skill, agent and instruction file for the ten default-stack packages"
   fi
 
   retired_hits=0

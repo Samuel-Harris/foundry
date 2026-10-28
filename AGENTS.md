@@ -1,7 +1,7 @@
 # Working in this repository
 
-Operational notes for agents editing Foundry. This repository publishes nineteen
-[APM](https://microsoft.github.io/apm/) packages — eighteen content packages plus
+Operational notes for agents editing Foundry. This repository publishes seventeen
+[APM](https://microsoft.github.io/apm/) packages — sixteen content packages plus
 a meta-package. Almost everything surprising about it comes from the pinned CLI,
 so this file records **empirically verified APM 0.32.0 behaviour**, not a
 restatement of the design. For what each package contains, see `README.md`; for
@@ -82,9 +82,8 @@ targets:
 includes: auto
 dependencies:
   apm:
-    - path: ../architect
+    - path: ../deep-interview
     - path: ../review
-    - path: ../swarm
 scripts:
   check: apm audit --ci
 ```
@@ -129,17 +128,17 @@ dependencies:
   Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
   ```
 
-  The nine packages that declare one — `default-stack`, `deep-interview`,
-  `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`,
-  `skill-creation` and `swarm` — are
+  The eight packages that declare one — `default-stack`, `deep-interview`,
+  `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance` and
+  `skill-creation` — are
   therefore **pack-blocked** from their committed manifests. The local Tier 1
   suite asserts that guardrail instead of skipping those packages silently.
 - **Keep the `path:` form permanently.** A remote install rewrites each
   `path: ../<name>` to `packages/<name>` in the same repository at the same
   commit, so `apm install Samuel-Harris/foundry/packages/<name>#<ref>` gives a
   consumer mutually consistent siblings from one tag or branch. Verified with
-  `swarm#main`: `architect` and `explore` resolved at the same commit, and the
-  consumer lockfile records no local path. The remote form
+  `swarm#main`, before that package was removed: `architect` and `explore`
+  resolved at the same commit, and the consumer lockfile records no local path. The remote form
   `{git: Samuel-Harris/foundry, path: packages/<name>, ref: "^0.1.0"}` would pin
   siblings to a tag, so a change spanning packages could not be tested on a
   branch; pre-release it also fails outright with
@@ -303,7 +302,7 @@ is local: `bash tests/structural/run-tier1.sh`.
   `.gitignore` already ignores `apm_modules/`. `apm install` appends
   `# APM dependencies` and `apm_modules/` to the `.gitignore` in its working
   directory whenever that exact line is absent there, so a package without one
-  grows an untracked file on the next install and dirties the tree. Nineteen
+  grows an untracked file on the next install and dirties the tree. Seventeen
   byte-identical 33-byte files are the expected end state.
 - Never commit deploy output. `.gitignore` excludes `apm_modules/`, `dist/`,
   `build/`, `.claude/`, `.agents/`, `.cursor/rules/`, `.cursor/agents/`,

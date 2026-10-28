@@ -142,7 +142,7 @@ dependencies:
   source: local
   local_path: ../deep-interview
   declaring_parent: ../planning
-  anchored_local_path: /Users/samharris/projects/foundry/packages/deep-interview
+  anchored_local_path: ../deep-interview
   declared_license: MIT
 - repo_url: _local/explore
   name: explore
@@ -161,7 +161,7 @@ dependencies:
   source: local
   local_path: ../explore
   declaring_parent: ../pr
-  anchored_local_path: /Users/samharris/projects/foundry/packages/explore
+  anchored_local_path: ../explore
   declared_license: MIT
 - repo_url: _local/pr
   name: pr
@@ -192,7 +192,7 @@ dependencies:
   source: local
   local_path: ../pr
   declaring_parent: ../execution
-  anchored_local_path: /Users/samharris/projects/foundry/packages/pr
+  anchored_local_path: ../pr
   declared_license: MIT
 - repo_url: _local/repo-maintenance
   name: repo-maintenance
@@ -245,7 +245,7 @@ dependencies:
   source: local
   local_path: ../repo-maintenance
   declaring_parent: ../skill-creation
-  anchored_local_path: /Users/samharris/projects/foundry/packages/repo-maintenance
+  anchored_local_path: ../repo-maintenance
   declared_license: MIT
 - repo_url: _local/review
   name: review
@@ -288,7 +288,7 @@ dependencies:
   source: local
   local_path: ../review
   declaring_parent: ../execution
-  anchored_local_path: /Users/samharris/projects/foundry/packages/review
+  anchored_local_path: ../review
   declared_license: MIT
 deployments:
 - kind: project-relative
@@ -297,8 +297,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/explore
-  active_owner: local:/Users/samharris/projects/foundry/packages/explore
+  - local:../explore
+  active_owner: local:../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: claude
@@ -306,8 +306,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
 - kind: project-relative
   target: claude
@@ -315,8 +315,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
 - kind: project-relative
   target: claude
@@ -333,8 +333,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:506693270e51fb74c5c039fe3ce9747f71a556a0b06c07eedc8367ff7c4b5522
 - kind: project-relative
   target: claude
@@ -360,8 +360,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: null
 - kind: project-relative
   target: claude
@@ -369,8 +369,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
 - kind: project-relative
   target: claude
@@ -378,8 +378,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: null
 - kind: project-relative
   target: claude
@@ -387,8 +387,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
 - kind: project-relative
   target: claude
@@ -396,8 +396,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: null
 - kind: project-relative
   target: claude
@@ -405,8 +405,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
 - kind: project-relative
   target: claude
@@ -414,8 +414,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/deep-interview
-  active_owner: local:/Users/samharris/projects/foundry/packages/deep-interview
+  - local:../deep-interview
+  active_owner: local:../deep-interview
   content_hash: null
 - kind: project-relative
   target: claude
@@ -423,8 +423,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/deep-interview
-  active_owner: local:/Users/samharris/projects/foundry/packages/deep-interview
+  - local:../deep-interview
+  active_owner: local:../deep-interview
   content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
 - kind: project-relative
   target: claude
@@ -450,8 +450,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: null
 - kind: project-relative
   target: claude
@@ -459,8 +459,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
 - kind: project-relative
   target: claude
@@ -567,8 +567,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: null
 - kind: project-relative
   target: claude
@@ -576,8 +576,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
 - kind: project-relative
   target: claude
@@ -585,8 +585,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
 - kind: project-relative
   target: claude
@@ -594,8 +594,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
 - kind: project-relative
   target: claude
@@ -603,8 +603,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
 - kind: project-relative
   target: claude
@@ -612,8 +612,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
 - kind: project-relative
   target: claude
@@ -621,8 +621,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: null
 - kind: project-relative
   target: claude
@@ -630,8 +630,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
 - kind: project-relative
   target: claude
@@ -639,8 +639,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: null
 - kind: project-relative
   target: claude
@@ -648,8 +648,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
 - kind: project-relative
   target: claude
@@ -657,8 +657,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: null
 - kind: project-relative
   target: claude
@@ -666,8 +666,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
 - kind: project-relative
   target: claude
@@ -675,8 +675,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: null
 - kind: project-relative
   target: claude
@@ -684,8 +684,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
 - kind: project-relative
   target: copilot
@@ -693,8 +693,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -702,8 +702,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:9b2d4d61c392267a2bf22d0a54bd970acc4ad5c921ea5925f8e845459df0e29f
 - kind: project-relative
   target: copilot
@@ -711,8 +711,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -720,8 +720,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
 - kind: project-relative
   target: copilot
@@ -729,8 +729,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -738,8 +738,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
 - kind: project-relative
   target: copilot
@@ -747,8 +747,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/deep-interview
-  active_owner: local:/Users/samharris/projects/foundry/packages/deep-interview
+  - local:../deep-interview
+  active_owner: local:../deep-interview
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -756,8 +756,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/deep-interview
-  active_owner: local:/Users/samharris/projects/foundry/packages/deep-interview
+  - local:../deep-interview
+  active_owner: local:../deep-interview
   content_hash: sha256:adee4e91e2f4d157787d89f380f47bf3787f41b0940b5644f85264d07c918326
 - kind: project-relative
   target: copilot
@@ -783,8 +783,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -792,8 +792,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
 - kind: project-relative
   target: copilot
@@ -900,8 +900,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -909,8 +909,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
 - kind: project-relative
   target: copilot
@@ -918,8 +918,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
 - kind: project-relative
   target: copilot
@@ -927,8 +927,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
 - kind: project-relative
   target: copilot
@@ -936,8 +936,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
 - kind: project-relative
   target: copilot
@@ -945,8 +945,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
 - kind: project-relative
   target: copilot
@@ -954,8 +954,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -963,8 +963,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/pr
-  active_owner: local:/Users/samharris/projects/foundry/packages/pr
+  - local:../pr
+  active_owner: local:../pr
   content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
 - kind: project-relative
   target: copilot
@@ -972,8 +972,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -981,8 +981,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
 - kind: project-relative
   target: copilot
@@ -990,8 +990,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -999,8 +999,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
 - kind: project-relative
   target: copilot
@@ -1008,8 +1008,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: null
 - kind: project-relative
   target: copilot
@@ -1017,8 +1017,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
 - kind: project-relative
   target: copilot
@@ -1026,8 +1026,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/explore
-  active_owner: local:/Users/samharris/projects/foundry/packages/explore
+  - local:../explore
+  active_owner: local:../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: copilot
@@ -1035,8 +1035,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
 - kind: project-relative
   target: copilot
@@ -1044,8 +1044,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
 - kind: project-relative
   target: copilot
@@ -1062,8 +1062,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:f398491aa52a5e95a89b1ade8dde133e4f44e6c855b38109c999ca34df2811db
 - kind: project-relative
   target: copilot
@@ -1089,8 +1089,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/explore
-  active_owner: local:/Users/samharris/projects/foundry/packages/explore
+  - local:../explore
+  active_owner: local:../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: cursor
@@ -1098,8 +1098,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
 - kind: project-relative
   target: cursor
@@ -1107,8 +1107,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/review
-  active_owner: local:/Users/samharris/projects/foundry/packages/review
+  - local:../review
+  active_owner: local:../review
   content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
 - kind: project-relative
   target: cursor
@@ -1125,8 +1125,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/samharris/projects/foundry/packages/repo-maintenance
-  active_owner: local:/Users/samharris/projects/foundry/packages/repo-maintenance
+  - local:../repo-maintenance
+  active_owner: local:../repo-maintenance
   content_hash: sha256:06dc074873a6013eebf0e902454bd4ae2c75242dc358635aff56be2e0b2054d3
 - kind: project-relative
   target: cursor

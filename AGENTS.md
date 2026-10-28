@@ -148,18 +148,18 @@ dependencies:
 - **Testing a feature branch.** Run `bash tests/structural/run-tier1.sh`
   against the working tree, then push and install
   `Samuel-Harris/foundry/packages/<name>#<branch>` in an empty directory.
-- **A transitive sibling dependency additionally records an absolute path.** It
-  works at any checkout root but leaks the authoring machine's path and churns
-  on regeneration. Direct dependencies get a portable `local_path: ../<name>`,
-  but a local dependency reached through another local package (for example
-  `explore` via `pr`) also gets
-  `anchored_local_path: /absolute/path/to/packages/<name>`, and its deployment
-  owners are recorded as `local:/absolute/path/...`. APM only relativises paths
-  inside the project root (`packages/<name>`), and siblings are outside it.
-  Verified: `install --frozen` and `audit --ci` still pass at a different
-  absolute root, but any install there rewrites every occurrence, so the
-  pre-commit lockfile diff ignores those lines. Do not hand-edit or post-process it; the
-  fix is upstream in APM.
+- **A transitive sibling dependency is written with an absolute path.** Direct
+  dependencies get a portable `local_path: ../<name>`, but a local dependency
+  reached through another local package (for example `explore` via `pr`) also
+  gets `anchored_local_path`, and its deployment owners are recorded as
+  `local:<path>`. APM only relativises paths inside the project root
+  (`packages/<name>`), and siblings are outside it, so every install writes
+  `/absolute/path/to/packages/<name>`. The committed form is relative
+  (`../<name>`): run `python3 scripts/relativise_lockfiles.py
+  packages/<name>/apm.lock.yaml` after any `apm install`. The pre-commit hook
+  and Tier 1 run it before diffing. Both fields must stay relative together;
+  `apm audit --ci` rejects a relative owner whose `anchored_local_path` is
+  absolute.
 - **Only the direct-dependency form dedupes.** When a package is reachable both
   directly and transitively it appears twice in the lockfile. That is harmless
   unless the duplicated package is itself the parent of a third, which breaks
@@ -237,10 +237,9 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
   and exits `0` (`Lockfile presence verified`). Regenerate with `apm install`
   after editing a manifest or any primitive, and commit the result. CI fails if
   the lockfile changes after install.
-- Transitive local dependencies carry an absolute `anchored_local_path`. It
-  does not pin the lockfile to a machine, so a lockfile committed from any
-  checkout root is valid, but the next plain `apm install` at a different root
-  rewrites it. Never hand-edit it.
+- Transitive local dependencies carry an `anchored_local_path` and `local:`
+  owners that APM writes as absolute paths. Normalise them with
+  `scripts/relativise_lockfiles.py` after installing; never edit them by hand.
 
 ## Validate, audit and pack
 
@@ -329,8 +328,8 @@ git config core.hooksPath .githooks
 also stages `apm.yml`, anything under `.apm/`, or `apm.lock.yaml`, it runs
 `apm install --frozen --target cursor,claude,copilot` in that package and in
 every package that depends on it (directly or transitively), then refuses the
-commit when `git diff` of `apm.lock.yaml` is non-empty after ignoring lines
-matching `anchored_local_path: /` and `local:/`. A stale lockfile is left
+commit when `git diff` of `apm.lock.yaml` is non-empty after normalising it with
+`scripts/relativise_lockfiles.py`. A stale lockfile is left
 rewritten in the worktree. Unstaged edits under the same package abort the
 lockfile half first, so the install cannot mix them into the lockfile. CI runs
 this script; it does not stage a commit, and instead sets `FOUNDRY_DIFF_RANGE`

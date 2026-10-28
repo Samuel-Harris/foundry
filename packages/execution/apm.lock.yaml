@@ -84,7 +84,7 @@ dependencies:
   source: local
   local_path: ../explore
   declaring_parent: ../pr
-  anchored_local_path: /Users/sam/MyStuff/projects/foundry/packages/explore
+  anchored_local_path: ../explore
   declared_license: MIT
 deployments:
 - kind: project-relative
@@ -93,8 +93,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
-  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  - local:../explore
+  active_owner: local:../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: claude
@@ -354,8 +354,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
-  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  - local:../explore
+  active_owner: local:../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: copilot
@@ -381,8 +381,8 @@ deployments:
   runtime: null
   scope: project
   owners:
-  - local:/Users/sam/MyStuff/projects/foundry/packages/explore
-  active_owner: local:/Users/sam/MyStuff/projects/foundry/packages/explore
+  - local:../explore
+  active_owner: local:../explore
   content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: cursor

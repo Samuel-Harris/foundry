@@ -13,6 +13,7 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `blast-radius` | Find what a change could break beyond the diff, and prove the one fact that makes it safe by running real code. |
 | Skill | `bro` | Restate the last message in plain human language, with no jargon. |
 | Skill | `correct` | Find the mistakes agents keep repeating in a repository and make each one impossible. |
+| Skill | `create-formal-verification-skill` | Generate a project-local skill that formally verifies the code where a bug costs most and tests reach least. |
 | Skill | `create-verification-skill` | Generate a project-local verification skill that drives the app the way a user does. |
 | Skill | `figure-it-out` | Design an auditable, bespoke playbook when no narrower one fits. |
 | Skill | `how` | Explain how code works now: architecture, runtime flow, and where new code should live. |
@@ -20,6 +21,7 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 | Skill | `interrogate` | Have adversaries on different models try to break a change, keeping only findings a run proves. |
 | Skill | `ketchup` | Catch the user up on what changed in this chat since their last message, with every waiting decision listed. |
 | Skill | `ketchup-video` | Catch the user up like `ketchup`, as a short subtitled video of slides. |
+| Skill | `maintain-formal-verification-skill` | Bring a formal verification back in line with the code after the code changes. |
 | Skill | `maintain-verification-skill` | Keep a verification skill and its feature map honest with source readers and one live pass. |
 | Skill | `make-bot-ui` | Build a page whose buttons wake a Grok Bot over a webhook. |
 | Skill | `no-comments` | Spawn Comment Sicko, fix accepted findings, and offer encodings for claimed constraints. |

@@ -35,13 +35,13 @@ Install APM by following the [APM installation guide](https://microsoft.github.i
 The default stack, via the meta-package:
 
 ```bash
-apm install Samuel-Harris/foundry/packages/default-stack#v0.1.0 --target cursor,claude,copilot
+apm install Samuel-Harris/foundry/packages/default-stack#^0.1.0 --target cursor,claude,copilot
 ```
 
 A single package:
 
 ```bash
-apm install Samuel-Harris/foundry/packages/<package>#v0.1.0 --target cursor,claude,copilot
+apm install Samuel-Harris/foundry/packages/<package>#^0.1.0 --target cursor,claude,copilot
 ```
 
 From a local development checkout:
@@ -50,7 +50,7 @@ From a local development checkout:
 apm install /absolute/path/to/packages/<package> --target cursor,claude,copilot
 ```
 
-A remote install requires the `v0.1.0` tag to exist and the consumer repository to have access.
+Each package has its own version and its own tags, named `<package>--v<version>`, such as `planning--v0.1.1`. CI tags every new version when it reaches `main`. APM resolves a range such as `^0.1.0` against those tags, so `apm outdated` reports newer releases and `apm update` installs them. Under a `0.x` version, `^0.1.0` accepts only `0.1.x` patches. A remote install requires the consumer repository to have access.
 
 ## Packages
 

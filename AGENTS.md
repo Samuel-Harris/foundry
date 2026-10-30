@@ -141,8 +141,7 @@ dependencies:
   resolved at the same commit, and the consumer lockfile records no local path. The remote form
   `{git: Samuel-Harris/foundry, path: packages/<name>, ref: "^0.1.0"}` would pin
   siblings to a tag, so a change spanning packages could not be tested on a
-  branch; pre-release it also fails outright with
-  `No tags on Samuel-Harris/foundry satisfy '^0.1.0'`. If bundles are needed,
+  branch. If bundles are needed,
   a release job rewrites a throwaway copy of each manifest to the remote form at
   the release tag and packs that.
 - **Testing a feature branch.** Run `bash tests/structural/run-tier1.sh`
@@ -280,6 +279,33 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
 - Never add `--force`, `--trust-transitive-mcp`, `--allow-insecure`, `--no-policy`
   or any other policy-bypass flag to make a check pass.
 
+## Versioning: bump every changed package
+
+**Before opening or updating a PR, run `python3 scripts/versioning.py bump`
+and commit the result.** Consumers pin a range such as `#^0.1.0`, which APM
+resolves against the `<name>--v<version>` tags on the remote, so a package
+change merged without a bump never reaches them.
+
+- A package counts as changed when its `apm.yml`, anything under `.apm/` or its
+  `apm.lock.yaml` differs from `origin/main`. These are the same paths the
+  pre-commit hook seeds from.
+- `bump` raises the patch version of every changed package and of every
+  package that depends on one, directly or transitively. Each lockfile records
+  its siblings' versions, so a dependent's lockfile changes too. It then
+  reinstalls the bumped packages and relativises their lockfiles. It skips a
+  package that is already ahead of `origin/main`, so it is safe to rerun after
+  every commit. Pass `minor` or `major` for a larger bump. Under `0.x`, `^0.1.0`
+  accepts only `0.1.x`, so a minor bump is a breaking release for consumers.
+- `python3 scripts/versioning.py check origin/main` is the CI gate. It fails
+  when a changed package's version is not greater than the base's. On a push to
+  `main` it checks against the previous tip, which catches two PRs that merged
+  the same bump.
+- After every check passes on `main`, the `tag` job creates a lightweight
+  `<name>--v<version>` tag for each version that has none, and pushes it. Never
+  create, move or delete these tags by hand. The tags are lightweight because
+  APM 0.32.0's resolver ignores peeled `^{}` refs and records the SHA of the
+  tag ref itself, which for an annotated tag is the tag object, not the commit.
+
 ## CI
 
 `.github/workflows/ci.yml` runs `pre-commit` plus a job for each of pstack's
@@ -294,6 +320,12 @@ On a pull request the hook's range is `origin/<base>...HEAD`. On a push it is
 the push's previous tip to `HEAD`. A manual run, or a push that creates a
 branch, sets `FOUNDRY_CHECK_ALL=1` and checks every package. The Tier 1 suite
 is local: `bash tests/structural/run-tier1.sh`.
+
+`versions` runs the `tests/versioning` unit tests and
+`scripts/versioning.py check` over the same range. On a push to `main`, `tag`
+runs after every other job passes and pushes the new `<name>--v<version>` tags
+with the job's `contents: write` token. Tags pushed with `GITHUB_TOKEN` start no
+further workflow runs.
 
 ## Generated-file policy
 

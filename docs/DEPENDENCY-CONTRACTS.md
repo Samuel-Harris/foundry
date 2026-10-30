@@ -90,16 +90,16 @@ dependencies:
   apm:
     - git: Samuel-Harris/foundry
       path: packages/planning
-      ref: "v0.1.0"
+      ref: "^0.1.0"
 ```
 
 or uses the shorthand install command:
 
 ```bash
-apm install Samuel-Harris/foundry/packages/planning#v0.1.0 --target cursor,claude,copilot
+apm install Samuel-Harris/foundry/packages/planning#^0.1.0 --target cursor,claude,copilot
 ```
 
-A remote install requires the `v0.1.0` tag to exist and the consumer to have repository access.
+APM resolves the range against the `planning--v<version>` tags that CI creates on `main`. A remote install requires the consumer to have repository access.
 
 ## The meta-package
 

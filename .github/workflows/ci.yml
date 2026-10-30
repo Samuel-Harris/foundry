@@ -46,6 +46,63 @@ jobs:
           fi
           .githooks/pre-commit
 
+  versions:
+    name: Package versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run versioning tests
+        run: python3 -m unittest discover -s tests/versioning
+
+      # On a push, checking against the previous tip catches two PRs that
+      # merged the same bump.
+      - name: Check changed packages are bumped
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            git fetch --no-tags origin "$BASE_REF"
+            python3 scripts/versioning.py check "origin/${BASE_REF}"
+          elif [[ "$EVENT_NAME" == "push" && -n "${BEFORE:-}" && "$BEFORE" != 0000000000000000000000000000000000000000 ]]; then
+            python3 scripts/versioning.py check "$BEFORE"
+          else
+            echo "No base to compare against; skipping the version check."
+          fi
+
+  tag:
+    name: Tag package versions
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Tag and push new package versions
+        run: |
+          set -euo pipefail
+          git fetch --tags origin
+          tags="$(python3 scripts/versioning.py tag)"
+          if [[ -z "$tags" ]]; then
+            echo "No new package versions to tag."
+            exit 0
+          fi
+          refs=()
+          for tag in $tags; do
+            refs+=("refs/tags/${tag}")
+          done
+          printf 'Pushing %s\n' "${refs[@]}"
+          git push --atomic origin "${refs[@]}"
+
   statechart-tests:
     name: pstack statechart tests
     runs-on: ubuntu-latest

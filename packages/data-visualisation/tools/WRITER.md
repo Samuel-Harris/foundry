@@ -1,8 +1,7 @@
 # Chapter writer recipe
 
 You write one chapter of the data-visualisation resource. Read
-`tools/CONVENTIONS.md` in full first, then the rubric at the repository root
-(`viz-resource-build-rubric.md`, sections 1, 3 and 4). Both are binding.
+`tools/CONVENTIONS.md` in full first. It is binding.
 
 ## Inputs
 

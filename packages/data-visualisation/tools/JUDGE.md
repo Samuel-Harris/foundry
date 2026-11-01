@@ -1,8 +1,7 @@
 # Judge recipe
 
 You judge and fix the rubric gates no script can decide, for an assigned set of
-files. Read `tools/CONVENTIONS.md` and the rubric at the repository root
-(`viz-resource-build-rubric.md`, sections 1 and 4) first. The mechanical gates
+files. Read `tools/CONVENTIONS.md` first. The mechanical gates
 already pass (`tools/check.py`: 0 FAIL). Keep them passing.
 
 ## What you judge

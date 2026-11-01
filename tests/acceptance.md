@@ -31,6 +31,9 @@ Each assertion below must produce recorded evidence.
 1. **Primitive contract.** Every skill carries `name` and `description`; every agent carries `description`; every instruction carries `description` and `applyTo`. A skill's `name` equals its directory name. Every `description` is at most 1024 characters. Frontmatter parses as valid YAML. Every relative markdown link inside a primitive resolves on disk.
    — `python3 tests/structural/validate_primitives.py`
 
+   The root `apm.yml` reaches every package that ships primitives, and lists no package that another listed package already reaches.
+   — `python3 tests/structural/check_root_manifest.py`
+
 2. **Source install into a clean scratch consumer, per target.** For each of `cursor`, `claude` and `copilot`, separately: `apm init` with that explicit target, then `apm install <absolute path to packages/default-stack> --target <target>`, then `apm view default-stack`, then `apm audit --ci` exits `0`.
 
 3. **Archive install into a separate scratch consumer.** Each packable package is packed with `apm pack --archive -o ./dist`, then installed from the archive in a disposable directory with no access to the authoring checkout or its `apm_modules/` cache. The eight packages with sibling `path:` dependencies — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance` and `skill-creation` — cannot be packed before the `v0.1.0` tag exists; the suite asserts that documented guardrail instead of skipping them silently (see [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md)).

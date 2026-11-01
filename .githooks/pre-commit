@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Refuse a commit that leaves markdown unlinted or a package lockfile stale.
+# Refuse a commit that leaves markdown unlinted, the root apm.yml missing a
+# package, or a package lockfile stale.
 #
 # Markdown: markdownlint-cli2 0.14.0, the version the previous CI action pinned,
 # over README.md, CHANGELOG.md, AGENTS.md and markdown under packages/, docs/
@@ -12,6 +13,9 @@
 #
 # Locally it reads the staged diff. CI sets FOUNDRY_DIFF_RANGE (a git range
 # such as origin/main...HEAD) or FOUNDRY_CHECK_ALL=1 and runs this same script.
+#
+# Root manifest: tests/structural/check_root_manifest.py, on every run. It is
+# pure Python and needs no APM.
 #
 # The lockfile half needs apm-cli 0.32.0. Prefer .venv-apm/bin/apm. Bypass that
 # half with FOUNDRY_SKIP_LOCKFILE_HOOK=1. Markdown lint still runs.
@@ -97,6 +101,8 @@ else
     run_markdownlint "${md_files[@]}" || lint_status=$?
   fi
 fi
+
+python3 tests/structural/check_root_manifest.py >&2 || lint_status=1
 
 if [[ "${FOUNDRY_SKIP_LOCKFILE_HOOK:-}" == "1" ]]; then
   echo "pre-commit: skipping lockfile check (FOUNDRY_SKIP_LOCKFILE_HOOK=1)" >&2

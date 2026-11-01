@@ -164,6 +164,35 @@ dependencies:
   unless the duplicated package is itself the parent of a third, which breaks
   `apm audit --ci` — see below.
 
+## Root development manifest
+
+The repository root has its own `apm.yml`, named `foundry`, so that one
+`apm install --target cursor,claude,copilot` at the root deploys every
+package's skills, agents and instructions into this checkout. It is for
+working on Foundry with Foundry; consumers keep installing individual packages.
+
+- It lists only **top-level** packages: those no other package depends on.
+  Everything else is reached transitively. Listing a package that is also
+  reachable through another listed one records it twice in the root lockfile,
+  and `apm audit --ci` then fails with `ambiguous resolved_by parent` (see
+  [Validate, audit and pack](#validate-audit-and-pack)). Listing every package
+  directly reproduced exactly that failure for `deep-interview`.
+- `default-stack` is not listed. It ships no primitives of its own, and its
+  eight dependencies would duplicate siblings the root already reaches.
+- `tests/structural/check_root_manifest.py` enforces both rules: every package
+  that ships anything under `.apm/` must be reachable, and no listed package may
+  be reachable through another. It runs in the pre-commit hook and Tier 1. Add
+  a new package to the root manifest when nothing else depends on it, and
+  remove a listed package when another package starts depending on it.
+- The root `apm.lock.yaml` is **gitignored**. It records every package's
+  version and deployed-file hashes, so it would go stale on any package change.
+  The per-package lockfiles stay the committed contract.
+- Deploy output from an earlier install with a different dependency set is not
+  pruned, and `apm audit --ci` reports it as unrecorded drift. Delete
+  `.claude/`, `.agents/`, `.cursor/rules/`, `.cursor/agents/`,
+  `.github/agents/`, `.github/instructions/` and `apm.lock.yaml` at the root,
+  then reinstall.
+
 ## Primitive naming contracts
 
 | Primitive   | Source path                                | Required frontmatter                                                        |
@@ -329,7 +358,8 @@ further workflow runs.
 
 ## Generated-file policy
 
-- Commit `apm.yml`, `README.md` and `apm.lock.yaml` per package.
+- Commit `apm.yml`, `README.md` and `apm.lock.yaml` per package. At the root,
+  commit `apm.yml` but not `apm.lock.yaml`, which is gitignored.
 - Commit each package's `.gitignore`, even though it is generated and the root
   `.gitignore` already ignores `apm_modules/`. `apm install` appends
   `# APM dependencies` and `apm_modules/` to the `.gitignore` in its working
@@ -357,7 +387,8 @@ git config core.hooksPath .githooks
 `.githooks/pre-commit` lints staged markdown with `markdownlint-cli2` 0.14.0
 (`README.md`, `CHANGELOG.md`, `AGENTS.md`, and markdown under `packages/`,
 `docs/` and `tests/`), using `.markdownlint.json` and
-`.markdownlint-cli2.jsonc`. It resolves the linter with `npx`. When the commit
+`.markdownlint-cli2.jsonc`. It resolves the linter with `npx`. It then runs
+`tests/structural/check_root_manifest.py` on every run. When the commit
 also stages `apm.yml`, anything under `.apm/`, or `apm.lock.yaml`, it runs
 `apm install --frozen --target cursor,claude,copilot` in that package and in
 every package that depends on it (directly or transitively), then refuses the
@@ -374,8 +405,8 @@ list and the linter pin.
 
 ## Local Tier 1 suite
 
-`bash tests/structural/run-tier1.sh` runs the primitive validator, the secret
-scan, the per-package matrix (`install --dry-run`, `install --frozen`,
+`bash tests/structural/run-tier1.sh` runs the primitive validator, the root
+manifest check, the secret scan, the per-package matrix (`install --dry-run`, `install --frozen`,
 `audit --ci`, `compile --validate`, `pack --dry-run`, in that order),
 scratch-consumer installs per target with a full file inventory, instruction
 scoping translation, archive packing and install, tamper rejection, the

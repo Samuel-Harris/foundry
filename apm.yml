@@ -1,0 +1,27 @@
+name: foundry
+version: "0.1.0"
+description: "Development manifest that deploys every Foundry package into this repository."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies:
+  apm:
+    - path: ./packages/coding-style
+    - path: ./packages/cursor-usage
+    - path: ./packages/execution
+    - path: ./packages/git-diff
+    - path: ./packages/handoff
+    - path: ./packages/infrastructure
+    - path: ./packages/planning
+    - path: ./packages/pstack
+    - path: ./packages/repo-init
+    - path: ./packages/search
+    - path: ./packages/skill-creation
+    - path: ./packages/ui
+scripts:
+  check: apm audit --ci

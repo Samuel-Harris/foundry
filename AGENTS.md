@@ -335,6 +335,18 @@ change merged without a bump never reaches them.
   APM 0.32.0's resolver ignores peeled `^{}` refs and records the SHA of the
   tag ref itself, which for an annotated tag is the tag object, not the commit.
 
+## Updating pstack from upstream
+
+`packages/pstack` is an adapted port of
+[cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack), and
+`packages/pstack/upstream.json` pins the upstream commit it is based on. Run
+`python3 scripts/pstack_upstream.py status`, then `sync`, which three-way merges
+each upstream change since the pin into the mapped local file and moves the pin.
+Resolve the conflict markers it leaves, re-applying the British English and
+target-neutral adaptations, then bump and test as for any package change. The
+path mapping, and the lists of upstream-only and local-only files, live in the
+script; `status` reports drift when a file falls outside them.
+
 ## CI
 
 `.github/workflows/ci.yml` runs `pre-commit` plus a job for each of pstack's
@@ -350,8 +362,8 @@ the push's previous tip to `HEAD`. A manual run, or a push that creates a
 branch, sets `FOUNDRY_CHECK_ALL=1` and checks every package. The Tier 1 suite
 is local: `bash tests/structural/run-tier1.sh`.
 
-`versions` runs the `tests/versioning` unit tests and
-`scripts/versioning.py check` over the same range. On a push to `main`, `tag`
+`versions` runs the `tests/versioning` and `tests/pstack_upstream` unit tests
+and `scripts/versioning.py check` over the same range. On a push to `main`, `tag`
 runs after every other job passes and pushes the new `<name>--v<version>` tags
 with the job's `contents: write` token. Tags pushed with `GITHUB_TOKEN` start no
 further workflow runs.

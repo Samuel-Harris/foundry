@@ -110,4 +110,13 @@ The script test suites live under `tests/`, outside `.apm/`, so they are not dep
 
 ## Upstream
 
-This package ports [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan, released under the MIT licence (see [`LICENSE`](LICENSE)), from upstream commit `c742dd6`. The port is adapted: prose is in British English, and tool, path and feature names are target-neutral so the same source deploys to Cursor, Claude Code and GitHub Copilot. It omits upstream's `benny` automation pack.
+This package ports [pstack](https://github.com/cursor/plugins/tree/main/pstack) by Lauren Tan, released under the MIT licence (see [`LICENSE`](LICENSE)). [`upstream.json`](upstream.json) records the upstream commit the port is based on. The port is adapted: prose is in British English, and tool, path and feature names are target-neutral so the same source deploys to Cursor, Claude Code and GitHub Copilot. It omits upstream's `benny` automation pack.
+
+### Updating from upstream
+
+Each update is a three-way merge per file: the pinned upstream commit is the base, this package is ours, and upstream at the new commit is theirs. From the repository root:
+
+1. Run `python3 scripts/pstack_upstream.py status` to list the upstream commits since the pin, the planned action for each file and any drift in the path mapping. It writes nothing.
+2. Run `python3 scripts/pstack_upstream.py sync`. It merges, adds and deletes the mapped files, moves the pin, and exits `1` when a file needs a human.
+3. Resolve every conflict marker, and re-apply the British English and target-neutral adaptations to any new upstream text. Files outside the mapping, such as `plugin.json` and `automations/`, are reported for review and never written.
+4. Run `python3 scripts/versioning.py bump`, then `bash tests/structural/run-tier1.sh` and the [tests](#tests) above.

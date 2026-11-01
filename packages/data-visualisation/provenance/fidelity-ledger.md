@@ -22,10 +22,10 @@ block (C1). Non-book text sits only in `[NOT FROM BOOK]` sections or items.
 | chapter-node | 15 | 0 | 11,996 | 20 |
 | idiom-card | 76 | 2,849 | 26,797 | 10,257 |
 | index-node | 1 | 0 | 2,765 | 0 |
-| job-node | 5 | 0 | 6,185 | 15 |
+| job-node | 5 | 0 | 6,183 | 15 |
 | router | 1 | 0 | 1,863 | 0 |
 | section-leaf | 95 | 6,122 | 32,313 | 0 |
-| section-node | 21 | 0 | 11,457 | 0 |
+| section-node | 21 | 0 | 11,451 | 0 |
 | subsection-leaf | 85 | 5,330 | 30,330 | 30 |
 
 <!-- measured-counts:end -->

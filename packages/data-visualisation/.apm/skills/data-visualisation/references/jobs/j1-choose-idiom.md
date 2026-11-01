@@ -47,7 +47,7 @@ The route from a dataset and a question to an idiom, following the book's what�
 
 ### Colour and other channels
 
-- [10.3 Colormaps](../ch10-map-color-other-channels/s10-03-colormaps/node.md) · ~703 words. **Use when** an attribute will be coloured and you must choose categorical, sequential, diverging or bivariate colour by attribute type and number of levels; its colormap cards add code hints beside the leaves [pp.250-260]
+- [10.3 Colormaps](../ch10-map-color-other-channels/s10-03-colormaps/node.md) · ~700 words. **Use when** an attribute will be coloured and you must choose categorical, sequential, diverging or bivariate colour by attribute type and number of levels; its colormap cards add code hints beside the leaves [pp.250-260]
 - [10.4 Other Channels](../ch10-map-color-other-channels/s10-04-other-channels.md) · ~1,403 words. **Use when** colour and position are taken and another attribute needs size, angle, shape, motion or texture [pp.261-265]
 
 ### Several views, layers, or too much data

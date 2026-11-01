@@ -11,7 +11,7 @@ Munzner's *Visualization Analysis and Design* as a page-cited reference for choo
 ## Install
 
 ```bash
-apm install Samuel-Harris/foundry/packages/data-visualisation#v0.1.0 --target cursor,claude,copilot
+apm install Samuel-Harris/foundry/packages/data-visualisation#^0.1.0 --target cursor,claude,copilot
 ```
 
 ## What the skill is for

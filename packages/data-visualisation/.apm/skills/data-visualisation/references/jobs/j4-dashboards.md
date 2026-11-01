@@ -30,7 +30,7 @@ The route for a tool with several views, interaction or more data than one stati
 ### Interaction within a view
 
 - [11.3 Change View over Time](../ch11-manipulate-view/s11-03-change-view-over-time.md) · ~1,234 words. **Use when** users should re-sort, re-encode, re-align or switch idiom within a view, with animated transitions between states [pp.269-274]
-- [11.4 Select Elements](../ch11-manipulate-view/s11-04-select-elements/node.md) · ~491 words. **Use when** designing click and hover targets, selection highlighting, and what a selection triggers in this and other views [pp.274-279]
+- [11.4 Select Elements](../ch11-manipulate-view/s11-04-select-elements/node.md) · ~488 words. **Use when** designing click and hover targets, selection highlighting, and what a selection triggers in this and other views [pp.274-279]
 - [11.5 Navigate: Changing Viewpoint](../ch11-manipulate-view/s11-05-navigate-changing-viewpoint.md) · ~1,213 words. **Use when** users zoom and pan a fixed layout, and items should change representation with their pixels (semantic zooming) or the camera should be constrained [pp.279-283]
 
 ### Rules of thumb

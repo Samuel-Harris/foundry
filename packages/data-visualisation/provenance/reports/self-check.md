@@ -6,9 +6,9 @@ Written by `tools/check.py`: one row per gate of the build rubric. NOT-CHECKABLE
 | --- | --- | --- |
 | A1 | PASS | 326/326 TOC entries mapped; plan and disk agree |
 | A2 | PASS | 299/299 files reachable from SKILL.md (lookup.md not expanded) |
-| A3 | PASS | 43 idiom boxes, each with a boxed card |
+| A3 | PASS | 43 idiom boxes, each with a boxed card quoting every field of its own box and nothing else |
 | A4 | PASS | chapter 10: 10 cards (references/idioms/angle-channel.md, references/idioms/bivariate-colormaps.md, references/idioms/categorical-colormaps.md, references/idioms/colorblind-safe-colormaps.md, references/idioms/curvature-channel.md, references/idioms/motion-channels.md, references/idioms/ordered-colormaps.md, references/idioms/shape-channel.md, references/idioms/size-channels.md, references/idioms/texture-and-stippling.md) (+1 more) |
-| A5 | PASS | lookup links 131 chapters and sections and 76 idiom cards |
+| A5 | PASS | lookup links 131 chapters and sections and 76 idiom cards, and 68 concept rows to files that exist |
 | B1 | NOT-CHECKABLE | 443 use-when criteria carry at least 6 non-title content words (+1 more) |
 | B2 | PASS | 443 child items with exact sizes; every file within its size limit |
 | B3 | PASS | every node has related links; 137 book cross-references seeded |
@@ -17,9 +17,9 @@ Written by `tools/check.py`: one row per gate of the build rubric. NOT-CHECKABLE
 | B6 | NOT-CHECKABLE | every node has Children, Disambiguation and Related sections (+1 more) |
 | C1 | PASS | 646 verbatim blocks match their cited pages |
 | C2 | PASS | 4827 paragraphs, items and rows cited within range |
-| C3 | PASS | 299 files carry valid metadata and leaf page ranges |
-| C4 | PASS | markers are well placed; unmarked text is traced by C1 and C2 |
-| C5 | PASS | ledger documents every level and each file's fidelity matches it |
+| C3 | PASS | 299 files carry valid metadata; every chapter-bound file's pdf_pages lies within its chapter |
+| C4 | PASS | [NOT FROM BOOK] ends only ## headings; no code block or plotting-library name outside [NOT FROM BOOK] text (figure lines and verbatim blocks are book text) |
+| C5 | PASS | the Level \| Choice \| Reason table covers every file kind once; each level's measured verbatim and summary words fit its declared Summary or Mixed choice; each file's fidelity fits its verbatim blocks |
 | C6 | NOT-CHECKABLE | 3886 cited summary units across 256 leaves and idiom cards (+1 more) |
 | D1 | PASS | 197 figures referenced with matching number, page and caption |
 | D2 | PASS | 197 manifest entries with number, page, file, caption and referencing files |
@@ -29,7 +29,7 @@ Written by `tools/check.py`: one row per gate of the build rubric. NOT-CHECKABLE
 | D6 | PASS | 314 image links resolve; file names follow fig-NN-MM |
 | E1 | PASS | j1: reaches 108 files in chapters [2, 3, 5, 7, 8, 9, 10, 12, 13] (+3 more) |
 | E2 | PASS | 76 idiom cards carry matplotlib and D3 hints |
-| E3 | PASS | 212 hint units, none cited |
+| E3 | PASS | 212 hint units, none with a p.N or pp.N-M page reference |
 | E4 | PASS | hints sit in their own sections or items, never in verbatim or summary text |
 | E5 | PASS | every file keeps its book structure with hints removed |
 | F1 | PASS | coverage.json maps 326 entries with level, path and PDF range |
@@ -47,7 +47,7 @@ Written by `tools/check.py`: one row per gate of the build rubric. NOT-CHECKABLE
 
 ## A3 PASS
 
-- 43 idiom boxes, each with a boxed card
+- 43 idiom boxes, each with a boxed card quoting every field of its own box and nothing else
 
 ## A4 PASS
 
@@ -56,7 +56,7 @@ Written by `tools/check.py`: one row per gate of the build rubric. NOT-CHECKABLE
 
 ## A5 PASS
 
-- lookup links 131 chapters and sections and 76 idiom cards
+- lookup links 131 chapters and sections and 76 idiom cards, and 68 concept rows to files that exist
 
 ## B1 NOT-CHECKABLE
 
@@ -95,15 +95,15 @@ Written by `tools/check.py`: one row per gate of the build rubric. NOT-CHECKABLE
 
 ## C3 PASS
 
-- 299 files carry valid metadata and leaf page ranges
+- 299 files carry valid metadata; every chapter-bound file's pdf_pages lies within its chapter
 
 ## C4 PASS
 
-- markers are well placed; unmarked text is traced by C1 and C2
+- [NOT FROM BOOK] ends only ## headings; no code block or plotting-library name outside [NOT FROM BOOK] text (figure lines and verbatim blocks are book text)
 
 ## C5 PASS
 
-- ledger documents every level and each file's fidelity matches it
+- the Level | Choice | Reason table covers every file kind once; each level's measured verbatim and summary words fit its declared Summary or Mixed choice; each file's fidelity fits its verbatim blocks
 
 ## C6 NOT-CHECKABLE
 
@@ -147,7 +147,7 @@ Written by `tools/check.py`: one row per gate of the build rubric. NOT-CHECKABLE
 
 ## E3 PASS
 
-- 212 hint units, none cited
+- 212 hint units, none with a p.N or pp.N-M page reference
 
 ## E4 PASS
 

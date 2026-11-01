@@ -10,7 +10,7 @@ fidelity: summary
 
 # J2 Write Plotting Code
 
-The route for turning a decided idiom into code. Open the idiom's card: its idiom box says what the code must encode, and its last section holds matplotlib and D3 hints marked as not from the book [pp.124-128]. Every card is listed below or under a family node below. Then check the code with [J2 Encoding Checks](j2-encoding-checks.md) [pp.137-139]. If the idiom is not yet chosen, go to [J1 Choose a Chart or Idiom](j1-choose-idiom.md) first [p.171].
+The route for turning a decided idiom into code. Open the idiom's card: its idiom box says what the code must encode, and its last section holds implementation hints marked as not from the book [pp.124-128]. Every card is listed below or under a family node below. Then check the code with [J2 Encoding Checks](j2-encoding-checks.md) [pp.137-139]. If the idiom is not yet chosen, go to [J1 Choose a Chart or Idiom](j1-choose-idiom.md) first [p.171].
 
 ## Children
 
@@ -35,13 +35,13 @@ The route for turning a decided idiom into code. Open the idiom's card: its idio
 - [Geometric Zooming](../idioms/geometric-zooming.md) · ~598 words. **Use when** coding zoom and pan over any fixed layout, such as a zoomable scatterplot, where marks only change drawn size [pp.279-280]
 - [Highlighting](../idioms/highlighting.md) · ~701 words. **Use when** coding how clicked, hovered or brushed items are shown, by outline, colour, size or motion, in one view or linked views [pp.276-278] [p.292]
 - [11 Manipulate View](../ch11-manipulate-view/node.md) · ~1,185 words. **Use when** the interaction is anything else in one view: semantic zooming, constrained camera, animated transitions, re-sorting (LineUp), slicing, cutting or projecting [pp.267-269]
-- [11.4 Select Elements](../ch11-manipulate-view/s11-04-select-elements/node.md) · ~491 words. **Use when** coding selection targets and outcomes, or drawn link curves joining selected items across views [pp.274-279]
+- [11.4 Select Elements](../ch11-manipulate-view/s11-04-select-elements/node.md) · ~488 words. **Use when** coding selection targets and outcomes, or drawn link curves joining selected items across views [pp.274-279]
 
 ### Colour and channel cards
 
 - [Categorical Colormaps](../idioms/categorical-colormaps.md) · ~891 words. **Use when** coding a palette for a categorical column: how many colours, saturation by mark size, what to do with too many categories [pp.251-254]
 - [Ordered Colormaps](../idioms/ordered-colormaps.md) · ~912 words. **Use when** coding a sequential or diverging ramp for an ordinal or quantitative column, or deciding against a rainbow map [pp.254-259]
-- [10.3 Colormaps](../ch10-map-color-other-channels/s10-03-colormaps/node.md) · ~703 words. **Use when** two attributes share colour (Bivariate Colormaps card) or a palette must survive red–green deficiency (Colorblind-Safe card) [pp.259-260]
+- [10.3 Colormaps](../ch10-map-color-other-channels/s10-03-colormaps/node.md) · ~700 words. **Use when** two attributes share colour (Bivariate Colormaps card) or a palette must survive red–green deficiency (Colorblind-Safe card) [pp.259-260]
 - [10 Map Color and Other Channels](../ch10-map-color-other-channels/node.md) · ~815 words. **Use when** an attribute goes on size, angle, shape, curvature, motion or texture, each with its own card [pp.261-265]
 
 ### Other idiom families

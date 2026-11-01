@@ -18,7 +18,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:248d0bed3eba848992ba681a11f7486cff84208dbd37186cb251a9ea18fd10ed
+  content_hash: sha256:e3f6d791fd42eaec6b54dfca948686fecea8c95c0f1fbb4651c3a2e5ab173b6b
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/assets/figures/fig-01-01.png
@@ -882,7 +882,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:06c388d8614d8991476c20024ff55ab5c0026da385eb00a666a3e6a8178aeb87
+  content_hash: sha256:4365c49c4ab4172f512be7d69b81d37e42004a142ea14646645112ecdaf42b79
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/assets/figures/fig-08-06.png
@@ -891,7 +891,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:8ab4f9ec503114677c4927d3c9ad796b03d859d8707e4f789d48d6bcdce6be3d
+  content_hash: sha256:862530469b61675eefdeb2c660e789271a78ddcdd0bc92a0d30530c00ae0a81a
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/assets/figures/fig-08-06b.png
@@ -3087,7 +3087,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:8aa851acaacf2d0ae8e85bd7cb155b9a3312e2e81b0f3e87debaed9b3910f73e
+  content_hash: sha256:afd331cefd78c025367478809ba858a7ca549276a726f3e612764f6da00ba528
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-01-big-picture.md
@@ -3150,7 +3150,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:84b08931e483c9f5e0b9351719fc0543abd9c59ecc495ec3b38c4f5623f6f609
+  content_hash: sha256:0de83365c615029b4f29b1b571244b0fe601fba6efe22b2c3b5c287ef829fd87
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md
@@ -3213,7 +3213,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1a8dfa42f6734b954913faa7d6d694e534ad25c610c9d459c209cfd3995c7fa6
+  content_hash: sha256:1c5656e1489f2d4fc54b9c07e991144de6d36b61e2dc18991ee6793c931b098d
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-01-big-picture.md
@@ -3249,7 +3249,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:24f2fdc652a178ed896b134bd60bea4868a7e52f67112dfe56f4c490e3d546e4
+  content_hash: sha256:349c20ca9682026bb3fc269883bd7d0303f0daa4e523124486a29a4f1a33c9c0
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/s11-04-01-selection-design-choices.md
@@ -4428,7 +4428,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9333e4df37348226259b578f7eb3e72f705839a78dcdd9a490cce7b5d5879432
+  content_hash: sha256:8cb050fc76f415007faf9d09a9131a3d90b4b239c1d76d5a8f794caa9853c442
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/references/jobs/j2-encoding-checks.md
@@ -4446,7 +4446,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:0c96cbf77ead3da531781d2c3297f7bff43758210660f4a673d52558db7a5902
+  content_hash: sha256:292d223d1827ac9e7a96a034795ca031b5c7b82746a2b93aa826f4e66e1e7904
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/references/jobs/j3-critique.md
@@ -4464,7 +4464,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:35fc4cd8cf1816a5b8402cd4f76575cc7a7fd909963363388730db05017572b0
+  content_hash: sha256:6372e2b801b8db89c8af7e801ce40a665d3c1c896e186a316164228592628675
 - kind: project-relative
   target: claude
   value: .claude/skills/data-visualisation/references/lookup.md
@@ -4491,7 +4491,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:248d0bed3eba848992ba681a11f7486cff84208dbd37186cb251a9ea18fd10ed
+  content_hash: sha256:e3f6d791fd42eaec6b54dfca948686fecea8c95c0f1fbb4651c3a2e5ab173b6b
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/assets/figures/fig-01-01.png
@@ -5355,7 +5355,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:06c388d8614d8991476c20024ff55ab5c0026da385eb00a666a3e6a8178aeb87
+  content_hash: sha256:4365c49c4ab4172f512be7d69b81d37e42004a142ea14646645112ecdaf42b79
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/assets/figures/fig-08-06.png
@@ -5364,7 +5364,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:8ab4f9ec503114677c4927d3c9ad796b03d859d8707e4f789d48d6bcdce6be3d
+  content_hash: sha256:862530469b61675eefdeb2c660e789271a78ddcdd0bc92a0d30530c00ae0a81a
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/assets/figures/fig-08-06b.png
@@ -7560,7 +7560,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:8aa851acaacf2d0ae8e85bd7cb155b9a3312e2e81b0f3e87debaed9b3910f73e
+  content_hash: sha256:afd331cefd78c025367478809ba858a7ca549276a726f3e612764f6da00ba528
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-01-big-picture.md
@@ -7623,7 +7623,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:84b08931e483c9f5e0b9351719fc0543abd9c59ecc495ec3b38c4f5623f6f609
+  content_hash: sha256:0de83365c615029b4f29b1b571244b0fe601fba6efe22b2c3b5c287ef829fd87
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md
@@ -7686,7 +7686,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1a8dfa42f6734b954913faa7d6d694e534ad25c610c9d459c209cfd3995c7fa6
+  content_hash: sha256:1c5656e1489f2d4fc54b9c07e991144de6d36b61e2dc18991ee6793c931b098d
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-01-big-picture.md
@@ -7722,7 +7722,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:24f2fdc652a178ed896b134bd60bea4868a7e52f67112dfe56f4c490e3d546e4
+  content_hash: sha256:349c20ca9682026bb3fc269883bd7d0303f0daa4e523124486a29a4f1a33c9c0
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/s11-04-01-selection-design-choices.md
@@ -8901,7 +8901,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9333e4df37348226259b578f7eb3e72f705839a78dcdd9a490cce7b5d5879432
+  content_hash: sha256:8cb050fc76f415007faf9d09a9131a3d90b4b239c1d76d5a8f794caa9853c442
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/references/jobs/j2-encoding-checks.md
@@ -8919,7 +8919,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:0c96cbf77ead3da531781d2c3297f7bff43758210660f4a673d52558db7a5902
+  content_hash: sha256:292d223d1827ac9e7a96a034795ca031b5c7b82746a2b93aa826f4e66e1e7904
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/references/jobs/j3-critique.md
@@ -8937,7 +8937,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:35fc4cd8cf1816a5b8402cd4f76575cc7a7fd909963363388730db05017572b0
+  content_hash: sha256:6372e2b801b8db89c8af7e801ce40a665d3c1c896e186a316164228592628675
 - kind: project-relative
   target: legacy
   value: .agents/skills/data-visualisation/references/lookup.md
@@ -9943,7 +9943,7 @@ local_deployed_files:
 - .claude/skills/data-visualisation/references/jobs/j4-dashboards.md
 - .claude/skills/data-visualisation/references/lookup.md
 local_deployed_file_hashes:
-  .agents/skills/data-visualisation/SKILL.md: sha256:248d0bed3eba848992ba681a11f7486cff84208dbd37186cb251a9ea18fd10ed
+  .agents/skills/data-visualisation/SKILL.md: sha256:e3f6d791fd42eaec6b54dfca948686fecea8c95c0f1fbb4651c3a2e5ab173b6b
   .agents/skills/data-visualisation/assets/figures/fig-01-01.png: sha256:ef3fbfad2aa29a53309699828c1857b26904833ccf87c71aafec26e50c80c192
   .agents/skills/data-visualisation/assets/figures/fig-01-02.png: sha256:ecf12945b1ecf7a8b3641ae2906590dd048aa25662b727c5c628506968914052
   .agents/skills/data-visualisation/assets/figures/fig-01-03.png: sha256:e9db66761e9c9941871b42a9b54ac6bdae9de9e25d72636be5453011bbe1f5e6
@@ -10039,8 +10039,8 @@ local_deployed_file_hashes:
   .agents/skills/data-visualisation/assets/figures/fig-08-02.png: sha256:d71f52694771153d2fe4488666dad301fca9290b0d7300c07891a2b9b493322a
   .agents/skills/data-visualisation/assets/figures/fig-08-03.png: sha256:d45c4d16f3fefc3fba7d3dceb7a26086ca9ea06ec9050d6fe906b4051969d0fa
   .agents/skills/data-visualisation/assets/figures/fig-08-04.png: sha256:d3ed16be5a3e8dd554b2eb47c6c6fcb1c6ac97135fad183853d2c52cc215fbc8
-  .agents/skills/data-visualisation/assets/figures/fig-08-05.png: sha256:06c388d8614d8991476c20024ff55ab5c0026da385eb00a666a3e6a8178aeb87
-  .agents/skills/data-visualisation/assets/figures/fig-08-06.png: sha256:8ab4f9ec503114677c4927d3c9ad796b03d859d8707e4f789d48d6bcdce6be3d
+  .agents/skills/data-visualisation/assets/figures/fig-08-05.png: sha256:4365c49c4ab4172f512be7d69b81d37e42004a142ea14646645112ecdaf42b79
+  .agents/skills/data-visualisation/assets/figures/fig-08-06.png: sha256:862530469b61675eefdeb2c660e789271a78ddcdd0bc92a0d30530c00ae0a81a
   .agents/skills/data-visualisation/assets/figures/fig-08-06b.png: sha256:a24e1bd786d6f26024cefe97e719c9b6844bbd037a3949bb50a184dc7b641778
   .agents/skills/data-visualisation/assets/figures/fig-08-07.png: sha256:34c8506113afaf328720919b8e05607d0fcc1112366f870a26d02c10d4132cd1
   .agents/skills/data-visualisation/assets/figures/fig-08-08.png: sha256:fd5c7191b7dc59f50504646ea46ec93becee98b1e0119206a0759f46725d2fc4
@@ -10322,7 +10322,7 @@ local_deployed_file_hashes:
   .agents/skills/data-visualisation/references/ch09-arrange-networks-trees/s09-04-costs-benefits-connection-matrix.md: sha256:e48a38a8f5c30bf38d20ef615d5233dffc1c9db29d248d8c1215d23c6fc89454
   .agents/skills/data-visualisation/references/ch09-arrange-networks-trees/s09-05-containment-hierarchy-marks.md: sha256:2c72db48086c16d4649f7c1b9a375d40915027f7ac0d82c2711155249bc2967a
   .agents/skills/data-visualisation/references/ch09-arrange-networks-trees/s09-06-further-reading.md: sha256:449c89604edda7079350806df62b177785d6d917060dcc76299ac39caeae7fce
-  .agents/skills/data-visualisation/references/ch10-map-color-other-channels/node.md: sha256:8aa851acaacf2d0ae8e85bd7cb155b9a3312e2e81b0f3e87debaed9b3910f73e
+  .agents/skills/data-visualisation/references/ch10-map-color-other-channels/node.md: sha256:afd331cefd78c025367478809ba858a7ca549276a726f3e612764f6da00ba528
   .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-01-big-picture.md: sha256:68648c66f4612ce890b9ab4588e86f2ce0a1d9e8cb00df69e830b4d698ebc624
   .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-02-color-theory/node.md: sha256:4e4ba2ba696c407ad0f4553323a920dbefec77a9af18a3cae1bb2e36b03ce1c2
   .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-01-color-vision.md: sha256:156a0132b53d96cf1f8030ae44afc1ce48fd9a9d757ec57f9e86677c6b1c4f9e
@@ -10330,7 +10330,7 @@ local_deployed_file_hashes:
   ? .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-03-luminance-saturation-hue.md
   : sha256:94d01e49342407716c804c58863533ef28c00ea5353aac10b97ce9fe3b87ae47
   .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-04-transparency.md: sha256:30c5f3701edb9483e3cf3a3547d5bb4fa1dc7c643d00a98b3eb845f3a9f75cf7
-  .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/node.md: sha256:84b08931e483c9f5e0b9351719fc0543abd9c59ecc495ec3b38c4f5623f6f609
+  .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/node.md: sha256:0de83365c615029b4f29b1b571244b0fe601fba6efe22b2c3b5c287ef829fd87
   ? .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md
   : sha256:9f67dfed3a1809958d07bbed96d6b9bea9d6342ed409cf09b4263bc02aef7319
   .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-02-ordered-colormaps.md: sha256:380e72d8fbf2c4da9eaeab541b50137df2de1e3ab87466ae374d7e288594d5ab
@@ -10340,11 +10340,11 @@ local_deployed_file_hashes:
   : sha256:ae23fa58348dbb55ed46d1051c961a3bbd2607e57dca3a148c52f289b99a645a
   .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-04-other-channels.md: sha256:710cd77bbddb791de6af940fb9cb4be6e084d0563b92145ded2807fe256c3330
   .agents/skills/data-visualisation/references/ch10-map-color-other-channels/s10-05-further-reading.md: sha256:3f522a3038dba608403b630ea45380b502e0d3cdee7162dcc28939dcc7052089
-  .agents/skills/data-visualisation/references/ch11-manipulate-view/node.md: sha256:1a8dfa42f6734b954913faa7d6d694e534ad25c610c9d459c209cfd3995c7fa6
+  .agents/skills/data-visualisation/references/ch11-manipulate-view/node.md: sha256:1c5656e1489f2d4fc54b9c07e991144de6d36b61e2dc18991ee6793c931b098d
   .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-01-big-picture.md: sha256:b982f0a5df07bf1c90c735244370142d9f5c7474d0bfb13ae19033de54a42320
   .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-02-why-change.md: sha256:b80425f49479047e4592825a5f474980a4da125bd35eac2865e7faeeaf6ea811
   .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-03-change-view-over-time.md: sha256:17c0eae3e24419507e43a246bfa4a1051bf2ec0da88e704cc0af296971ef17f5
-  .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/node.md: sha256:24f2fdc652a178ed896b134bd60bea4868a7e52f67112dfe56f4c490e3d546e4
+  .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/node.md: sha256:349c20ca9682026bb3fc269883bd7d0303f0daa4e523124486a29a4f1a33c9c0
   ? .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/s11-04-01-selection-design-choices.md
   : sha256:51d9106e1ae65e8366b34b30df460aa6a5ee7e67c161ebbefa726794d65ad41c
   .agents/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/s11-04-02-highlighting.md: sha256:54829acfbfe611c1aa38eb742cbf93284b2f3c77b92132a891b50d6d85e3f2ac
@@ -10490,13 +10490,13 @@ local_deployed_file_hashes:
   .agents/skills/data-visualisation/references/idioms/topographic-terrain-map.md: sha256:0d20ac1d8f57e3add85b86f17febdfe313bd71bee8b7af87b158aa4c0db39730
   .agents/skills/data-visualisation/references/idioms/treemaps.md: sha256:b369f0ed97f5f178683aed270ce4fa9e4742b80f73dff8a622bbf7dd5b460d63
   .agents/skills/data-visualisation/references/idioms/trellis.md: sha256:d5068d81ad14909dd40900519ec31b8bae3cfef00feffafe35c292defb13668c
-  .agents/skills/data-visualisation/references/jobs/j1-choose-idiom.md: sha256:9333e4df37348226259b578f7eb3e72f705839a78dcdd9a490cce7b5d5879432
+  .agents/skills/data-visualisation/references/jobs/j1-choose-idiom.md: sha256:8cb050fc76f415007faf9d09a9131a3d90b4b239c1d76d5a8f794caa9853c442
   .agents/skills/data-visualisation/references/jobs/j2-encoding-checks.md: sha256:e019536d22afac619e656323fb112a8aa563c975ee82fa9cc7b9cf1388badf8b
-  .agents/skills/data-visualisation/references/jobs/j2-write-plotting-code.md: sha256:0c96cbf77ead3da531781d2c3297f7bff43758210660f4a673d52558db7a5902
+  .agents/skills/data-visualisation/references/jobs/j2-write-plotting-code.md: sha256:292d223d1827ac9e7a96a034795ca031b5c7b82746a2b93aa826f4e66e1e7904
   .agents/skills/data-visualisation/references/jobs/j3-critique.md: sha256:fd984167425fb5cc1d22b57353e7190013354345a9389fdcb5b4591d1324e359
-  .agents/skills/data-visualisation/references/jobs/j4-dashboards.md: sha256:35fc4cd8cf1816a5b8402cd4f76575cc7a7fd909963363388730db05017572b0
+  .agents/skills/data-visualisation/references/jobs/j4-dashboards.md: sha256:6372e2b801b8db89c8af7e801ce40a665d3c1c896e186a316164228592628675
   .agents/skills/data-visualisation/references/lookup.md: sha256:dcab2042d0ba56b7ce1df7706534a01f8b31fc94d4b5b6a51d59d82a55d1d272
-  .claude/skills/data-visualisation/SKILL.md: sha256:248d0bed3eba848992ba681a11f7486cff84208dbd37186cb251a9ea18fd10ed
+  .claude/skills/data-visualisation/SKILL.md: sha256:e3f6d791fd42eaec6b54dfca948686fecea8c95c0f1fbb4651c3a2e5ab173b6b
   .claude/skills/data-visualisation/assets/figures/fig-01-01.png: sha256:ef3fbfad2aa29a53309699828c1857b26904833ccf87c71aafec26e50c80c192
   .claude/skills/data-visualisation/assets/figures/fig-01-02.png: sha256:ecf12945b1ecf7a8b3641ae2906590dd048aa25662b727c5c628506968914052
   .claude/skills/data-visualisation/assets/figures/fig-01-03.png: sha256:e9db66761e9c9941871b42a9b54ac6bdae9de9e25d72636be5453011bbe1f5e6
@@ -10592,8 +10592,8 @@ local_deployed_file_hashes:
   .claude/skills/data-visualisation/assets/figures/fig-08-02.png: sha256:d71f52694771153d2fe4488666dad301fca9290b0d7300c07891a2b9b493322a
   .claude/skills/data-visualisation/assets/figures/fig-08-03.png: sha256:d45c4d16f3fefc3fba7d3dceb7a26086ca9ea06ec9050d6fe906b4051969d0fa
   .claude/skills/data-visualisation/assets/figures/fig-08-04.png: sha256:d3ed16be5a3e8dd554b2eb47c6c6fcb1c6ac97135fad183853d2c52cc215fbc8
-  .claude/skills/data-visualisation/assets/figures/fig-08-05.png: sha256:06c388d8614d8991476c20024ff55ab5c0026da385eb00a666a3e6a8178aeb87
-  .claude/skills/data-visualisation/assets/figures/fig-08-06.png: sha256:8ab4f9ec503114677c4927d3c9ad796b03d859d8707e4f789d48d6bcdce6be3d
+  .claude/skills/data-visualisation/assets/figures/fig-08-05.png: sha256:4365c49c4ab4172f512be7d69b81d37e42004a142ea14646645112ecdaf42b79
+  .claude/skills/data-visualisation/assets/figures/fig-08-06.png: sha256:862530469b61675eefdeb2c660e789271a78ddcdd0bc92a0d30530c00ae0a81a
   .claude/skills/data-visualisation/assets/figures/fig-08-06b.png: sha256:a24e1bd786d6f26024cefe97e719c9b6844bbd037a3949bb50a184dc7b641778
   .claude/skills/data-visualisation/assets/figures/fig-08-07.png: sha256:34c8506113afaf328720919b8e05607d0fcc1112366f870a26d02c10d4132cd1
   .claude/skills/data-visualisation/assets/figures/fig-08-08.png: sha256:fd5c7191b7dc59f50504646ea46ec93becee98b1e0119206a0759f46725d2fc4
@@ -10875,7 +10875,7 @@ local_deployed_file_hashes:
   .claude/skills/data-visualisation/references/ch09-arrange-networks-trees/s09-04-costs-benefits-connection-matrix.md: sha256:e48a38a8f5c30bf38d20ef615d5233dffc1c9db29d248d8c1215d23c6fc89454
   .claude/skills/data-visualisation/references/ch09-arrange-networks-trees/s09-05-containment-hierarchy-marks.md: sha256:2c72db48086c16d4649f7c1b9a375d40915027f7ac0d82c2711155249bc2967a
   .claude/skills/data-visualisation/references/ch09-arrange-networks-trees/s09-06-further-reading.md: sha256:449c89604edda7079350806df62b177785d6d917060dcc76299ac39caeae7fce
-  .claude/skills/data-visualisation/references/ch10-map-color-other-channels/node.md: sha256:8aa851acaacf2d0ae8e85bd7cb155b9a3312e2e81b0f3e87debaed9b3910f73e
+  .claude/skills/data-visualisation/references/ch10-map-color-other-channels/node.md: sha256:afd331cefd78c025367478809ba858a7ca549276a726f3e612764f6da00ba528
   .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-01-big-picture.md: sha256:68648c66f4612ce890b9ab4588e86f2ce0a1d9e8cb00df69e830b4d698ebc624
   .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-02-color-theory/node.md: sha256:4e4ba2ba696c407ad0f4553323a920dbefec77a9af18a3cae1bb2e36b03ce1c2
   .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-01-color-vision.md: sha256:156a0132b53d96cf1f8030ae44afc1ce48fd9a9d757ec57f9e86677c6b1c4f9e
@@ -10883,7 +10883,7 @@ local_deployed_file_hashes:
   ? .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-03-luminance-saturation-hue.md
   : sha256:94d01e49342407716c804c58863533ef28c00ea5353aac10b97ce9fe3b87ae47
   .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-04-transparency.md: sha256:30c5f3701edb9483e3cf3a3547d5bb4fa1dc7c643d00a98b3eb845f3a9f75cf7
-  .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/node.md: sha256:84b08931e483c9f5e0b9351719fc0543abd9c59ecc495ec3b38c4f5623f6f609
+  .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/node.md: sha256:0de83365c615029b4f29b1b571244b0fe601fba6efe22b2c3b5c287ef829fd87
   ? .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md
   : sha256:9f67dfed3a1809958d07bbed96d6b9bea9d6342ed409cf09b4263bc02aef7319
   .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-02-ordered-colormaps.md: sha256:380e72d8fbf2c4da9eaeab541b50137df2de1e3ab87466ae374d7e288594d5ab
@@ -10893,11 +10893,11 @@ local_deployed_file_hashes:
   : sha256:ae23fa58348dbb55ed46d1051c961a3bbd2607e57dca3a148c52f289b99a645a
   .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-04-other-channels.md: sha256:710cd77bbddb791de6af940fb9cb4be6e084d0563b92145ded2807fe256c3330
   .claude/skills/data-visualisation/references/ch10-map-color-other-channels/s10-05-further-reading.md: sha256:3f522a3038dba608403b630ea45380b502e0d3cdee7162dcc28939dcc7052089
-  .claude/skills/data-visualisation/references/ch11-manipulate-view/node.md: sha256:1a8dfa42f6734b954913faa7d6d694e534ad25c610c9d459c209cfd3995c7fa6
+  .claude/skills/data-visualisation/references/ch11-manipulate-view/node.md: sha256:1c5656e1489f2d4fc54b9c07e991144de6d36b61e2dc18991ee6793c931b098d
   .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-01-big-picture.md: sha256:b982f0a5df07bf1c90c735244370142d9f5c7474d0bfb13ae19033de54a42320
   .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-02-why-change.md: sha256:b80425f49479047e4592825a5f474980a4da125bd35eac2865e7faeeaf6ea811
   .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-03-change-view-over-time.md: sha256:17c0eae3e24419507e43a246bfa4a1051bf2ec0da88e704cc0af296971ef17f5
-  .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/node.md: sha256:24f2fdc652a178ed896b134bd60bea4868a7e52f67112dfe56f4c490e3d546e4
+  .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/node.md: sha256:349c20ca9682026bb3fc269883bd7d0303f0daa4e523124486a29a4f1a33c9c0
   ? .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/s11-04-01-selection-design-choices.md
   : sha256:51d9106e1ae65e8366b34b30df460aa6a5ee7e67c161ebbefa726794d65ad41c
   .claude/skills/data-visualisation/references/ch11-manipulate-view/s11-04-select-elements/s11-04-02-highlighting.md: sha256:54829acfbfe611c1aa38eb742cbf93284b2f3c77b92132a891b50d6d85e3f2ac
@@ -11043,9 +11043,9 @@ local_deployed_file_hashes:
   .claude/skills/data-visualisation/references/idioms/topographic-terrain-map.md: sha256:0d20ac1d8f57e3add85b86f17febdfe313bd71bee8b7af87b158aa4c0db39730
   .claude/skills/data-visualisation/references/idioms/treemaps.md: sha256:b369f0ed97f5f178683aed270ce4fa9e4742b80f73dff8a622bbf7dd5b460d63
   .claude/skills/data-visualisation/references/idioms/trellis.md: sha256:d5068d81ad14909dd40900519ec31b8bae3cfef00feffafe35c292defb13668c
-  .claude/skills/data-visualisation/references/jobs/j1-choose-idiom.md: sha256:9333e4df37348226259b578f7eb3e72f705839a78dcdd9a490cce7b5d5879432
+  .claude/skills/data-visualisation/references/jobs/j1-choose-idiom.md: sha256:8cb050fc76f415007faf9d09a9131a3d90b4b239c1d76d5a8f794caa9853c442
   .claude/skills/data-visualisation/references/jobs/j2-encoding-checks.md: sha256:e019536d22afac619e656323fb112a8aa563c975ee82fa9cc7b9cf1388badf8b
-  .claude/skills/data-visualisation/references/jobs/j2-write-plotting-code.md: sha256:0c96cbf77ead3da531781d2c3297f7bff43758210660f4a673d52558db7a5902
+  .claude/skills/data-visualisation/references/jobs/j2-write-plotting-code.md: sha256:292d223d1827ac9e7a96a034795ca031b5c7b82746a2b93aa826f4e66e1e7904
   .claude/skills/data-visualisation/references/jobs/j3-critique.md: sha256:fd984167425fb5cc1d22b57353e7190013354345a9389fdcb5b4591d1324e359
-  .claude/skills/data-visualisation/references/jobs/j4-dashboards.md: sha256:35fc4cd8cf1816a5b8402cd4f76575cc7a7fd909963363388730db05017572b0
+  .claude/skills/data-visualisation/references/jobs/j4-dashboards.md: sha256:6372e2b801b8db89c8af7e801ce40a665d3c1c896e186a316164228592628675
   .claude/skills/data-visualisation/references/lookup.md: sha256:dcab2042d0ba56b7ce1df7706534a01f8b31fc94d4b5b6a51d59d82a55d1d272

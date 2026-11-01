@@ -1,0 +1,52 @@
+gate	file:line	finding	action
+C6	references/ch15-analysis-case-studies/node.md:13	Scope added "which makes these worked examples for critiquing a design or composing a multi-view system", which p.367 does not say	fixed
+C6	references/ch15-analysis-case-studies/s15-04-visdb.md:38	"because" made the glyph-element size the cause of the 100,000-item limit; p.374 states the two facts side by side	fixed
+C6	references/ch15-analysis-case-studies/s15-05-hierarchical-clustering-explorer.md:15	Dropped "originally" from "originally designed for the genomics domain" (p.376)	fixed
+C6	references/ch15-analysis-case-studies/s15-08-constellation.md:43	"either ... or" made Figure 15.18(a) and (b) mutually exclusive; p.387 shows the path word's own definition in tan and other definitions in green boxes	fixed
+C6	references/idioms/pivotgraph.md:49	"Further attributes can be added" generalised p.381's single additional quantitative attribute	fixed
+C6	references/idioms/pivotgraph.md:53	"difficult with node–link and matrix views" resolved the book's "difficult with previous approaches" (p.383)	fixed
+C6	references/idioms/pivotgraph.md:54	Scalability description (p.382) turned into advice "Use when the network is very large"	fixed
+C6	references/idioms/pivotgraph.md:55	"could serve as one of several linked multiform views" (pp.382-383) turned into "Use as"	fixed
+C6	references/idioms/pivotgraph.md:66	"choose them when topology is the question" turned p.383's description into advice	fixed
+C6	references/idioms/pivotgraph.md:67	Same "previous approaches" resolution as line 53, applied to matrix views	fixed
+C6	references/ch13-reduce-items-attributes/node.md:13	Hedges dropped: users "tend to" forget filtered elements, aggregation "can be somewhat safer" (pp.324-325)	fixed
+C6	references/ch13-reduce-items-attributes/s13-02-why-reduce.md:35	"The book recommends" overstated "It's useful to consider" (p.324)	fixed
+C6	references/ch13-reduce-items-attributes/s13-03-filter/node.md:13	"usually by letting the user select ranges" overstated "A straightforward approach" (p.325)	fixed
+C6	references/ch13-reduce-items-attributes/s13-04-aggregate/node.md:13	"where the choice is most powerful" overstated "particularly when used within interactive idioms" (p.330)	fixed
+C6	references/ch13-reduce-items-attributes/s13-04-aggregate/node.md:31	"standard boxplots assume unimodal data" restated as "are designed for unimodal data" (p.334); "hundreds" given its "roughly"	fixed
+C6	references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-01-item-aggregation.md:63	"is an item reduction idiom" dropped the hedge "can be considered" (p.333)	fixed
+C6	references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-02-spatial-aggregation.md:23	"depending only on the region boundaries" added "only" to p.338	fixed
+C6	references/ch13-reduce-items-attributes/s13-05-further-reading.md:16	Attributed the proposal of information foraging to Xerox PARC; p.345 says information scent was proposed within that theory from Xerox PARC	fixed
+C6	references/idioms/histograms.md:37	"since" linked concise representation causally to bin-count independence; p.331 states them separately	fixed
+C6	references/idioms/histograms.md:38	The book's two "possible solutions" for bin count (p.331) restated as imperatives	fixed
+C6	references/idioms/continuous-scatterplots.md:45	"Use for continuous data" turned the idiom's origin (pp.332-333) into a use condition	fixed
+C6	references/idioms/boxplot-charts.md:54	"Avoid standard boxplots for multimodal data" turned "designed to handle unimodal data" (p.334) into advice	fixed
+C6	references/idioms/boxplot-charts.md:65	"multimodal distributions that standard boxplots hide" added a claim; p.334 says the vase plot allows a visual check	fixed
+C6	references/idioms/solarplot.md:53	"where aggregation is most powerful" overstated p.330	fixed
+C6	references/idioms/solarplot.md:54	Figure 13.8's single example generalised into a use condition	fixed
+C6	references/idioms/hierarchical-parallel-coordinates.md:51	"Rely on the proximity-based colouring" turned p.337's description into advice	fixed
+C6	references/idioms/dosfa.md:48	"Use with many visual encodings" restated as the book's "can be used with many visual encoding approaches" (p.329)	fixed
+C6	references/idioms/hierarchical-parallel-coordinates.md:53	Box scale (10,000-100,000 items, one dozen clusters) conflicts with text and Figure 13.9; the card already flags the conflict without resolving it	kept: correctly reports a source ambiguity
+C6	references/idioms/boxplot-charts.md:56	"roughly hundreds" categorical values (p.334) vs box "Attributes: dozens" (p.335); already flagged as unreconciled	kept: correctly reports a source ambiguity
+C6	references/idioms/pivotgraph.md:5	Frontmatter pdf_pages [365, 383] is wider than plan.json's [380, 383]; filmfinder.md [324, 328] is wider than plan [326, 328]; check.py passes	handoff: integration or plan owner to decide whether card ranges should match plan.json
+C6	all other leaves and cards in ch13 and ch15 (31 files)	Every remaining summary claim checked against build/pages 0323-0346 and 0365-0393; no other failures	kept: supported by cited pages
+B1	references/ch15-analysis-case-studies/node.md:23	15.6 PivotGraph use-when matched the card's query ("network with categorical node attributes ... how groups compare"), so one query hit both	fixed: leaf now routes critique and walkthrough queries
+B1	references/ch15-analysis-case-studies/node.md:26	PivotGraph card use-when listed its contents rather than the decision; rewritten around the data, task and choose-or-build situation	fixed
+B1	references/ch13-reduce-items-attributes/s13-03-filter/node.md:19	DOSFA use-when said "hundreds of attributes" and tied the idiom to star glyphs; the book has one 215-attribute example and says it works with many encodings	fixed
+B1	references/ch13-reduce-items-attributes/s13-04-aggregate/node.md:26	SolarPlot use-when restricted it to time-ordered items; the box's data is one quantitative attribute, and the decision criterion is direct control of the aggregation level	fixed
+B1	ch13 node, 13.3 node, 13.4 node, ch15 node (25 other children)	Remaining use-when lines are decision criteria, not title restatements	kept: pass
+B4	references/ch15-analysis-case-studies/node.md:35	"15.6 PivotGraph vs PivotGraph" described what each file holds, not how to choose between them	fixed: card for choosing or building a roll-up view, 15.6 for following the book's reasoning
+B4	references/ch15-analysis-case-studies/node.md:36	"InterRing vs Constellation" said both use containment-style layouts; p.383 describes InterRing as radial space-filling, not containment	fixed
+B4	references/ch13-reduce-items-attributes/s13-03-filter/node.md:25	"Item Filtering vs FilmFinder" described how they relate, not how to choose	fixed
+B4	references/ch13-reduce-items-attributes/s13-03-filter/node.md:26	"Attribute Filtering vs DOSFA" described how they relate, not how to choose	fixed
+B4	references/ch13-reduce-items-attributes/s13-04-aggregate/node.md:35	"Item Aggregation vs Hierarchical Parallel Coordinates" was a chaining note and ignored the leaf's overlap with its other four item-aggregation cards	fixed: one group note for the leaf and its five cards
+B4	references/ch13-reduce-items-attributes/s13-04-aggregate/node.md:36	Missing note: SolarPlot and Hierarchical Parallel Coordinates both answer "let the user change aggregation level interactively"	fixed: note added
+B4	ch13 node, 13.3 node, 13.4 node, ch15 node (11 other groups)	Remaining notes state what separates the siblings	kept: pass
+B6	references/ch13-reduce-items-attributes/node.md	Queries: "my scatterplot of 1M points is a blob"; "let users drop movies by year with sliders"; "how to read a t-SNE/MDS plot". Picked 13.4, 13.3 and 13.4 from the node alone	kept: pass
+B6	references/ch13-reduce-items-attributes/s13-03-filter/node.md	Queries: "range slider UI for a table"; "too many columns in a star-plot grid"; "show data in the slider itself". Picked 13.3.1 or FilmFinder, DOSFA, and 13.3.1	kept: pass
+B6	references/ch13-reduce-items-attributes/s13-04-aggregate/node.md	Queries: "compare distributions of 40 groups"; "parallel coordinates with 200k rows"; "regional stats differ when boundaries change". Picked Boxplot Charts, Hierarchical Parallel Coordinates, 13.4.2	kept: pass
+B6	references/ch15-analysis-case-studies/node.md	Queries: "find interesting pairs among 50 attributes"; "critique a gene-expression dashboard"; "summarise a social network by department and gender". Picked 15.3, 15.5, PivotGraph card (or 15.6 for critique)	kept: pass after the B1 and B4 fixes
+Hints	references/idioms/continuous-scatterplots.md:83	D3 hint fed zero counts to d3.scaleSequentialLog, which is undefined at 0	fixed: colour non-zero pixels only, domain [1, maxCount]
+Hints	references/idioms/boxplot-charts.md:87	boxplot(tick_labels=...) needs matplotlib 3.9 or later (older releases use labels=)	kept: run_hints passes on the pinned venv; the current keyword is idiomatic
+Hints	references/idioms/pivotgraph.md:102	D3 prose uses an undefined key() helper for the group key	kept: a prose sketch whose intent is clear
+Hints	10 cards in chapters 13 and 15	All other matplotlib and D3 hints checked for idiom fit (sequential maps on density, count operators, radial bins, weighted boxplots, classical MDS)	kept: correct

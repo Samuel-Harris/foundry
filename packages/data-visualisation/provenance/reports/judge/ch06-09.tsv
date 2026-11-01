@@ -1,0 +1,42 @@
+gate	file:line	finding	action
+C6	references/ch06-rules-thumb/node.md:13	Scope said most rules say what a design must justify or avoid and that their reasons are the arguments for critique; an interpretive framing the pages do not state	fixed
+C6	references/ch06-rules-thumb/s06-02-why-when-follow-rules.md:25	Claimed the rules themselves carry their exceptions; p.142 says nothing about exceptions, so this resolved an open point	fixed
+C6	references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-01-power-plane.md:21	Book says benefits of depth could outweigh costs; summary said can	fixed
+C6	references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-03-occlusion-hides-information.md:33	Hedge dropped: book says there can be appreciable cognitive load; summary said it imposes it	fixed
+C6	references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-03-occlusion-hides-information.md:35	Book says sophisticated interaction idioms have been proposed to speed synthesis; summary asserted they can	fixed
+C6	references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-07-benefits-3d-shape-perception.md:27	Book calls 3D rotation a good strategy to help users; summary stated it helps	fixed
+C6	references/ch06-rules-thumb/s06-05-eyes-beat-memory.md:50	Added a causal because between many changes being hard to track and change blindness; the book juxtaposes them	fixed
+C6	references/ch06-rules-thumb/s06-05-eyes-beat-memory.md:70	Dropped typically from we do not typically notice eye motion	fixed
+C6	references/ch06-rules-thumb/s06-07-overview-first-zoom-filter.md:39	Heading When the mantra fails overstated may not be feasible for enormous datasets	fixed
+C6	references/ch06-rules-thumb/s06-11-further-reading.md:17	Tversky meta-review argues results are confounded; summary said it found them confounded	fixed
+C6	references/ch06-rules-thumb/s06-01-big-picture.md:32	Notes Figure 6.1 wording differs from headings (Detail/Details, Legible/Legibile); verified on pp.141, 149, 160	kept: accurate and flags a book inconsistency
+C6	references/idioms/cluster-calendar-time-series-vis.md:40	Use instead of 3D turned the book's comparison into a directive	fixed
+C6	references/idioms/cluster-calendar-time-series-vis.md:41	Turned the description few enough curves to superimpose into a use condition	fixed
+C6	references/idioms/layer-oriented-time-series-vis.md:41	Use 3D only with constraints like these added an only the book does not state	fixed
+C6	references/ch09-arrange-networks-trees/s09-02-connection-link-marks.md:55	Hedge dropped: book says some clumps may simply be artifacts	fixed
+C6	references/ch09-arrange-networks-trees/s09-02-connection-link-marks.md:73	Flags that the text (N > 4L) inverts the box (L < 4N); verified on p.231	kept: correctly reports an ambiguity without resolving it
+C6	references/ch09-arrange-networks-trees/s09-05-containment-hierarchy-marks.md:44	Flags that the text and Figure 9.9 caption assign the indented outline's link relationships differently; verified pp.239-240	kept: correctly reports a book inconsistency
+C6	references/idioms/force-directed-placement.md:44	Hedge dropped: some clumps are artifacts versus may simply be artifacts	fixed
+C6	references/idioms/force-directed-placement.md:45	Nondeterminism, a weakness in the book, was phrased as Avoid where spatial memory across runs matters	fixed
+C6	references/idioms/force-directed-placement.md:46	Scalability weakness phrased as Avoid at scale; reworded to the book's weakness framing	fixed
+C6	references/idioms/force-directed-placement.md:47	Prefer algorithms that stop added advice; book only says more sophisticated algorithms stop automatically	fixed
+C6	references/idioms/force-directed-placement.md:65	Related link to Adjacency Matrix View cited p.232, which does not mention matrices	fixed
+C6	references/idioms/multilevel-force-directed-placement-sfdp.md:39	Note that the box says What: Encode where other ch9 boxes say How: Encode; verified against pp.231, 234, 239	kept: accurate
+C6	references/idioms/multilevel-force-directed-placement-sfdp.md:49	Avoid for huge networks turned the book's limit into advice	fixed
+C6	references/idioms/multilevel-force-directed-placement-sfdp.md:50	Book says the hierarchy was not shown directly to the user; summary dropped directly and generalised beyond the example	fixed
+C6	references/idioms/adjacency-matrix-view.md:49	Avoid for untrained audiences turned the unfamiliarity weakness into advice	fixed
+C6	references/idioms/grouseflocks.md:42	Use when the user must compare candidate hierarchies; book says users can investigate multiple possible hierarchies	fixed
+B1	references/ch06-rules-thumb/node.md:27	6.11 use-when only said looking for the primary sources; now names which source serves which question and which rules have none	fixed
+B1	references/ch09-arrange-networks-trees/node.md:22	9.6 use-when only said looking for primary sources on topics; now names which source serves which question	fixed
+B1	references/ch06-rules-thumb/node.md:17	Remaining 10 ch06 node use-when lines checked; each names data, task or situation	kept: decision criteria
+B1	references/ch06-rules-thumb/s06-03-no-unjustified-3d/node.md:19	All 11 use-when lines checked	kept: decision criteria
+B1	references/ch09-arrange-networks-trees/node.md:17	Remaining 10 ch09 node use-when lines checked	kept: decision criteria
+B4	references/ch09-arrange-networks-trees/node.md:33	9.3 Matrix Views and the Adjacency Matrix View card overlap for any matrix query and had no note	fixed
+B4	references/ch06-rules-thumb/node.md:31	Five ch06 notes checked; each says how to choose	kept: separating notes
+B4	references/ch06-rules-thumb/s06-03-no-unjustified-3d/node.md:33	Four 6.3 notes checked; each says how to choose	kept: separating notes
+B6	references/ch06-rules-thumb/node.md:15	Queries: 3D pie chart critique -> 6.3; animate vs small multiples -> 6.5; tooltip vs side pane -> 6.8	kept: picked without opening children
+B6	references/ch06-rules-thumb/s06-03-no-unjustified-3d/node.md:17	Queries: 3D bar chart -> 6.3.4; rotated 3D labels -> 6.3.6; evidence 3D scatter helps -> 6.3.9	kept: picked without opening children
+B6	references/ch09-arrange-networks-trees/node.md:15	Queries: file sizes in a directory tree -> Treemaps; 5000-node network communities -> sfdp or matrix via notes; shortest path -> 9.2/Force-Directed	kept: picked without opening children
+Hints	references/idioms/cluster-calendar-time-series-vis.md:88	Calendar used ISO week numbers, so late-December days (ISO week 1) overplotted January squares	fixed
+Hints	references/idioms/grouseflocks.md:74	Coarse cluster circles were fitted to member points, not to child circles, so containment could fail to nest and mislead	fixed
+Hints	references/idioms/adjacency-matrix-view.md:74	Sequential Greys on weighted adjacency with a reordering; idiomatic	kept: correct

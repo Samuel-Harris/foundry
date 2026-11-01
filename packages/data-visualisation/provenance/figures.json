@@ -1,0 +1,2682 @@
+{
+  "figures": [
+    {
+      "caption": "The Variant View vis tool supports biologists in assessing the impact of genetic variants by speeding up the exploratory analysis process. From [Ferstay et al. 13, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-01-01.png",
+      "id": "fig-01-01",
+      "method": "embedded",
+      "number": "1.1",
+      "pdf_page": 29,
+      "reason": null,
+      "referenced_by": [
+        "references/ch01-whats-vis-why/s01-02-why-have-human-loop.md"
+      ]
+    },
+    {
+      "caption": "The Cerebral vis tool captures the style of hand-drawn diagrams in biology textbooks with vertical layers that correspond to places within a cell where interactions between genes occur. (a) A small network of 57 nodes and 74 edges might be possible to lay out by hand with enough patience. (b) Automatic layout handles this large network of 760 nodes and 1269 edges and provides a substrate for interactive exploration: the user has moved the mouse over the MSK1 gene, so all of its immmediate neighbors in the network are highlighted in red. From [Barsky et al. 07, Figures 1 and 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-01-02.png",
+      "id": "fig-01-02",
+      "method": "crop",
+      "number": "1.2",
+      "pdf_page": 30,
+      "reason": null,
+      "referenced_by": [
+        "references/ch01-whats-vis-why/s01-03-why-have-computer-loop.md"
+      ]
+    },
+    {
+      "caption": "Anscombe’s Quartet is four datasets with identical simple statistical properties: mean, variance, correlation, and linear regression line. However, visual inspection immediately shows how their structures are quite different. After [Anscombe 73, Figures 1–4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-01-03.png",
+      "id": "fig-01-03",
+      "method": "crop",
+      "number": "1.3",
+      "pdf_page": 33,
+      "reason": null,
+      "referenced_by": [
+        "references/ch01-whats-vis-why/s01-06-why-show-data-detail.md"
+      ]
+    },
+    {
+      "caption": "The Grouse vis tool features a complex idiom that combines visual encoding and interaction, supporting incremental layout of a network through interactive navigation. From [Archambault et al. 07a, Figure 5].",
+      "dpi": 150,
+      "file": "assets/figures/fig-01-04.png",
+      "id": "fig-01-04",
+      "method": "embedded",
+      "number": "1.4",
+      "pdf_page": 35,
+      "reason": null,
+      "referenced_by": [
+        "references/ch01-whats-vis-why/s01-08-why-vis-idiom-design.md"
+      ]
+    },
+    {
+      "caption": "A search space metaphor for vis design.",
+      "dpi": 150,
+      "file": "assets/figures/fig-01-05.png",
+      "id": "fig-01-05",
+      "method": "crop",
+      "number": "1.5",
+      "pdf_page": 38,
+      "reason": null,
+      "referenced_by": [
+        "references/ch01-whats-vis-why/s01-11-why-most-designs-ineffective.md"
+      ]
+    },
+    {
+      "caption": "Low and high information density visual encodings of the same small tree dataset; nodes are the same size in each. (a) Low information density. (b) Higher information density, but depth in tree cannot be read from spatial position. (c) High information density, while maintaining property that depth is encoded with position. From [McGufﬁn and Robert 10, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-01-06.png",
+      "id": "fig-01-06",
+      "method": "crop",
+      "number": "1.6",
+      "pdf_page": 41,
+      "reason": null,
+      "referenced_by": [
+        "references/ch01-whats-vis-why/s01-13-why-there-resource-limitations.md"
+      ]
+    },
+    {
+      "caption": "Three-part analysis framework for a vis instance: why is the task being performed, what data is shown in the views, and how is the vis idiom constructed in terms of design choices.",
+      "dpi": 150,
+      "file": "assets/figures/fig-01-07.png",
+      "id": "fig-01-07",
+      "method": "crop",
+      "number": "1.7",
+      "pdf_page": 42,
+      "reason": null,
+      "referenced_by": [
+        "references/ch01-whats-vis-why/s01-14-why-analyze.md"
+      ]
+    },
+    {
+      "caption": "Analyzing vis usage as chained sequences of instances, where the output of one instance is the input to another.",
+      "dpi": 150,
+      "file": "assets/figures/fig-01-08.png",
+      "id": "fig-01-08",
+      "method": "crop",
+      "number": "1.8",
+      "pdf_page": 43,
+      "reason": null,
+      "referenced_by": [
+        "references/ch01-whats-vis-why/s01-14-why-analyze.md"
+      ]
+    },
+    {
+      "caption": "What can be visualized: data, datasets, and attributes.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-01.png",
+      "id": "fig-02-01",
+      "method": "crop",
+      "number": "2.1",
+      "pdf_page": 45,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "The ﬁve basic data types: items, attributes, links, positions, and grids.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-02.png",
+      "id": "fig-02-02",
+      "method": "crop",
+      "number": "2.2",
+      "pdf_page": 48,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-03-data-types.md"
+      ]
+    },
+    {
+      "caption": "The four basic dataset types are tables, networks, ﬁelds, and geometry; other possible collections of items are clusters, sets, and lists. These datasets are made up of ﬁve core data types: items, attributes, links, positions, and grids.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-03.png",
+      "id": "fig-02-03",
+      "method": "crop",
+      "number": "2.3",
+      "pdf_page": 49,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-01-tables.md"
+      ]
+    },
+    {
+      "caption": "The detailed structure of the four basic dataset types.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-04.png",
+      "id": "fig-02-04",
+      "method": "crop",
+      "number": "2.4",
+      "pdf_page": 50,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-01-tables.md"
+      ]
+    },
+    {
+      "caption": "In a simple table of orders, a row represents an item, a column represents an attribute, and their intersection is the cell containing the value for that pairwise combination.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-05.png",
+      "id": "fig-02-05",
+      "method": "crop",
+      "number": "2.5",
+      "pdf_page": 51,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-01-tables.md",
+        "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md"
+      ]
+    },
+    {
+      "caption": "Dataset availability can be either static or dynamic, for any dataset type.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-06.png",
+      "id": "fig-02-06",
+      "method": "crop",
+      "number": "2.6",
+      "pdf_page": 56,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-06-dataset-availability.md"
+      ]
+    },
+    {
+      "caption": "Attribute types are categorical, ordinal, or quantitative. The direction of attribute ordering can be sequential, diverging, or cyclic.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-07.png",
+      "id": "fig-02-07",
+      "method": "crop",
+      "number": "2.7",
+      "pdf_page": 57,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-05-attribute-types.md"
+      ]
+    },
+    {
+      "caption": "Key and value semantics for tables and ﬁelds.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-08.png",
+      "id": "fig-02-08",
+      "method": "crop",
+      "number": "2.8",
+      "pdf_page": 60,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md"
+      ]
+    },
+    {
+      "caption": "The order table with the attribute columns colored by their type; none of them is a key.",
+      "dpi": 150,
+      "file": "assets/figures/fig-02-09.png",
+      "id": "fig-02-09",
+      "method": "crop",
+      "number": "2.9",
+      "pdf_page": 61,
+      "reason": null,
+      "referenced_by": [
+        "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md"
+      ]
+    },
+    {
+      "caption": "Why people are using vis in terms of actions and targets.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-01.png",
+      "id": "fig-03-01",
+      "method": "crop",
+      "number": "3.1",
+      "pdf_page": 67,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Three levels of actions: analyze, search, and query.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-02.png",
+      "id": "fig-03-02",
+      "method": "crop",
+      "number": "3.2",
+      "pdf_page": 71,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-04-actions/s03-04-01-analyze.md"
+      ]
+    },
+    {
+      "caption": "Name Voyager, a vis tool originally intended for parents focused deciding on what to name their expected baby, ended up being used by many nonparents to analyze historical trends for their own enjoyment. Left: Names starting with ‘O’ had a notable dip in popularity in the middle of the century. Right: Names starting with ‘LAT’ show a trend of the 1970s. After [Wattenberg 05, Figures 2 and 3], using http://www.babynamewizard.com.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-03.png",
+      "id": "fig-03-03",
+      "method": "crop",
+      "number": "3.3",
+      "pdf_page": 74,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-04-actions/s03-04-01-analyze.md"
+      ]
+    },
+    {
+      "caption": "Graphical history recorded during an analysis session with Tableau. From [Heer et al. 08, Figure 1].",
+      "dpi": 115,
+      "file": "assets/figures/fig-03-04.png",
+      "id": "fig-03-04",
+      "method": "embedded",
+      "number": "3.4",
+      "pdf_page": 75,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-04-actions/s03-04-02-produce.md"
+      ]
+    },
+    {
+      "caption": "Derived attributes can be directly visually encoded. (a) Two original data attributes are plotted, imports and exports. (b) The quantitative derived attribute of trade balance, the difference between the two originals, can be plotted directly.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-05.png",
+      "id": "fig-03-05",
+      "method": "crop",
+      "number": "3.5",
+      "pdf_page": 77,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-04-actions/s03-04-02-produce.md"
+      ]
+    },
+    {
+      "caption": "The goals of the user might be to ﬁnd or understand speciﬁc aspects of the data: trends and outliers for all kinds of data; individual values, the minimum or maximum extremes of the range, or the entire distribution of a single attribute; or the dependencies, correlations, or similarities between multiple attributes; topology or paths for network data, and shape for spatial data.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-06.png",
+      "id": "fig-03-06",
+      "method": "crop",
+      "number": "3.6",
+      "pdf_page": 81,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-05-targets.md"
+      ]
+    },
+    {
+      "caption": "How to design vis idioms: encode, manipulate, facet, and reduce.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-07.png",
+      "id": "fig-03-07",
+      "method": "crop",
+      "number": "3.7",
+      "pdf_page": 83,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-06-how-preview.md"
+      ]
+    },
+    {
+      "caption": "Comparing two idioms. (a) SpaceTree [Plaisant et al. 02]. (b) TreeJuxtaposer. From http://www.cs.umd. edu/hcil/spacetree and [Munzner et al. 03, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-08.png",
+      "id": "fig-03-08",
+      "method": "crop",
+      "number": "3.8",
+      "pdf_page": 84,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-01-comparing-two-idioms.md"
+      ]
+    },
+    {
+      "caption": "Analyzing what–why–how comparatively for the SpaceTree and TreeJuxtaposer idioms.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-09.png",
+      "id": "fig-03-09",
+      "method": "crop",
+      "number": "3.9",
+      "pdf_page": 85,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-01-comparing-two-idioms.md"
+      ]
+    },
+    {
+      "caption": "The derived quantitative attribute of Strahler numbers is used to ﬁlter the tree in order to create a recognizable summary. (a) The important skeleton of a large tree is visible when only 5000 of the highest-ranked nodes are drawn. (b) The full tree has over a half million nodes. From [Auber 02, Figures 10 and 13].",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-10.png",
+      "id": "fig-03-10",
+      "method": "crop",
+      "number": "3.10",
+      "pdf_page": 86,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-02-deriving-one-attribute.md"
+      ]
+    },
+    {
+      "caption": "Analyzing a chained sequence of two instances where an attribute is derived in order to summarize a tree by ﬁltering away the unimportant parts.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-11.png",
+      "id": "fig-03-11",
+      "method": "crop",
+      "number": "3.11",
+      "pdf_page": 87,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-02-deriving-one-attribute.md"
+      ]
+    },
+    {
+      "caption": "Computational ﬂuid dynamics vis showing the list of many derived attributes (top left), one view of the original spatial ﬁeld (top right), and four other views showing pairs of selected derived attributes. The multiple juxtaposed views are coordinated with shared colored highlights. From [Henze 98, Figure 5].",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-12.png",
+      "id": "fig-03-12",
+      "method": "embedded",
+      "number": "3.12",
+      "pdf_page": 88,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-03-deriving-many-new-attributes.md"
+      ]
+    },
+    {
+      "caption": "Analyzing a chained sequence, where many attributes are derived and visually encoded.",
+      "dpi": 150,
+      "file": "assets/figures/fig-03-13.png",
+      "id": "fig-03-13",
+      "method": "crop",
+      "number": "3.13",
+      "pdf_page": 89,
+      "reason": null,
+      "referenced_by": [
+        "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-03-deriving-many-new-attributes.md"
+      ]
+    },
+    {
+      "caption": "The four nested levels of vis design have different threats to validity at each level, and validation approaches should be chosen accordingly.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-01.png",
+      "id": "fig-04-01",
+      "method": "crop",
+      "number": "4.1",
+      "pdf_page": 91,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "The four nested levels of vis design.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-02.png",
+      "id": "fig-04-02",
+      "method": "crop",
+      "number": "4.2",
+      "pdf_page": 93,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-03-four-levels-design/s04-03-01-domain-situation.md"
+      ]
+    },
+    {
+      "caption": "Word Tree combines the visual encoding idiom of a hierarchical tree of keywords laid out horizontally and the interaction idiom of navigation based on keyword selection. From [Wattenberg and Viegas 08, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-03.png",
+      "id": "fig-04-03",
+      "method": "embedded",
+      "number": "4.3",
+      "pdf_page": 97,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-03-four-levels-design/s04-03-03-visual-encoding-interaction-idiom.md"
+      ]
+    },
+    {
+      "caption": "The four nested levels of vis design have different threats to validity at each level.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-04.png",
+      "id": "fig-04-04",
+      "method": "crop",
+      "number": "4.4",
+      "pdf_page": 100,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-05-threats-validity.md"
+      ]
+    },
+    {
+      "caption": "Threats and validation at each of the four levels. Many threats at the outer levels require downstream validation, which cannot be carried out until the inner levels within them are addressed, as shown by the red lines. Any single project would only address a subset of these levels, not all of them at once.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-05.png",
+      "id": "fig-04-05",
+      "method": "crop",
+      "number": "4.5",
+      "pdf_page": 101,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-06-validation-approaches/s04-06-01-domain-validation.md",
+        "references/ch04-analysis-four-levels-validation/s04-06-validation-approaches/s04-06-03-idiom-validation.md"
+      ]
+    },
+    {
+      "caption": "Genealogical graphs. (a) Three layouts for the dual-tree: classical node–link top-to-bottom at the top, classical left-to-right on the left, and the new indented outline algorithm on the right. (b) Widget for subtree collapsing and expanding with ballistic drags. From [McGufﬁn and Balakrishnan 05, Figures 13 and 14].",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-06.png",
+      "id": "fig-04-06",
+      "method": "crop",
+      "number": "4.6",
+      "pdf_page": 107,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-01-genealogical-graphs.md"
+      ]
+    },
+    {
+      "caption": "Genealogical graphs [McGufﬁn and Balakrishnan 05] validation levels.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-07.png",
+      "id": "fig-04-07",
+      "method": "crop",
+      "number": "4.7",
+      "pdf_page": 108,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-01-genealogical-graphs.md"
+      ]
+    },
+    {
+      "caption": "MatrixExplorer features both node–link and matrix representations in an interface designed for sociolo-gists and historians to explore social networks. From [Henry and Fekete 06, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-08.png",
+      "id": "fig-04-08",
+      "method": "embedded",
+      "number": "4.8",
+      "pdf_page": 109,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-02-matrixexplorer.md"
+      ]
+    },
+    {
+      "caption": "MatrixExplorer [Henry and Fekete 06] validation methods.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-09.png",
+      "id": "fig-04-09",
+      "method": "crop",
+      "number": "4.9",
+      "pdf_page": 110,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-02-matrixexplorer.md"
+      ]
+    },
+    {
+      "caption": "Flow maps showing migration patterns from 1995 to 2000 US Census data. (a) Migration from California. (b) The top ten states that sent migrants to California shown in green, and to New York in blue. From [Phan et al. 05, Figures 1c and 10].",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-10.png",
+      "id": "fig-04-10",
+      "method": "crop",
+      "number": "4.10",
+      "pdf_page": 111,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-03-flow-maps.md"
+      ]
+    },
+    {
+      "caption": "Flow map [Phan et al. 05] validation methods.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-11.png",
+      "id": "fig-04-11",
+      "method": "crop",
+      "number": "4.11",
+      "pdf_page": 111,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-03-flow-maps.md"
+      ]
+    },
+    {
+      "caption": "LiveRAC supports exploration of system management time-series data with a reorderable matrix and semantic zooming. (a) The ﬁrst several dozen rows have been stretched out to show sparklines for the devices. (b) The top three rows have been enlarged more, so the charts appear in full detail. From [McLachlan et al. 08, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-12.png",
+      "id": "fig-04-12",
+      "method": "crop",
+      "number": "4.12",
+      "pdf_page": 112,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-04-liverac.md"
+      ]
+    },
+    {
+      "caption": "LiveRAC [McLachlan et al. 08] validation methods.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-13.png",
+      "id": "fig-04-13",
+      "method": "crop",
+      "number": "4.13",
+      "pdf_page": 113,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-04-liverac.md"
+      ]
+    },
+    {
+      "caption": "The LinLog energy model reveals clusters in node–link graphs. (a) LinLog clearly shows clusters with spatial separation. (b) The popular Fructerman-Reingold model for force-directed placement does not separate the clusters. From [Noack 03, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-14.png",
+      "id": "fig-04-14",
+      "method": "crop",
+      "number": "4.14",
+      "pdf_page": 114,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-05-linlog.md"
+      ]
+    },
+    {
+      "caption": "LinLog [Noack 03] validation methods.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-15.png",
+      "id": "fig-04-15",
+      "method": "crop",
+      "number": "4.15",
+      "pdf_page": 115,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-05-linlog.md"
+      ]
+    },
+    {
+      "caption": "Experiment 2 of Sizing the Horizon compared ﬁlled line charts, one-band horizon graphs, and two-band horizon graphs of different sizes to ﬁnd transition points where reducing chart height results in major drops in estimation accuracy across chart types. From [Heer et al. 09, Figure 7].",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-16.png",
+      "id": "fig-04-16",
+      "method": "embedded",
+      "number": "4.16",
+      "pdf_page": 116,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-06-sizing-horizon.md"
+      ]
+    },
+    {
+      "caption": "Lab studies as a validation method.",
+      "dpi": 150,
+      "file": "assets/figures/fig-04-17.png",
+      "id": "fig-04-17",
+      "method": "crop",
+      "number": "4.17",
+      "pdf_page": 116,
+      "reason": null,
+      "referenced_by": [
+        "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-06-sizing-horizon.md"
+      ]
+    },
+    {
+      "caption": "The effectiveness of channels that modify the appearance of marks depends on matching the expressiveness of channels with the attributes being encoded.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-01.png",
+      "id": "fig-05-01",
+      "method": "crop",
+      "number": "5.1",
+      "pdf_page": 119,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Marks are geometric primitives.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-02.png",
+      "id": "fig-05-02",
+      "method": "crop",
+      "number": "5.2",
+      "pdf_page": 121,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-03-defining-marks-channels.md"
+      ]
+    },
+    {
+      "caption": "Visual channels control the appearance of marks.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-03.png",
+      "id": "fig-05-03",
+      "method": "crop",
+      "number": "5.3",
+      "pdf_page": 121,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-03-defining-marks-channels.md"
+      ]
+    },
+    {
+      "caption": "Using marks and channels. (a) Bar charts encode two attributes using a line mark with the vertical spatial position channel for the quantitative attribute, and the horizontal spatial position channel for the categorical attribute. (b) Scatterplots encode two quantitative attributes using point marks and both vertical and horizontal spatial position. (c) A third categorical attribute is encoded by adding color to the scatterplot. (d) Adding the visual channel of size encodes a fourth quantitative attribute as well.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-04.png",
+      "id": "fig-05-04",
+      "method": "crop",
+      "number": "5.4",
+      "pdf_page": 122,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-03-defining-marks-channels.md"
+      ]
+    },
+    {
+      "caption": "Marks can represent individual items, or links between them.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-05.png",
+      "id": "fig-05-05",
+      "method": "crop",
+      "number": "5.5",
+      "pdf_page": 125,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-03-defining-marks-channels.md",
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-05-grouping.md"
+      ]
+    },
+    {
+      "caption": "Channels ranked by effectiveness according to data and channel type. Ordered data should be shown with the magnitude channels, and categorical data with the identity channels.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-06.png",
+      "id": "fig-05-06",
+      "method": "crop",
+      "number": "5.6",
+      "pdf_page": 127,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-04-using-marks-channels.md",
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-01-accuracy.md",
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-04-popout.md",
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-05-grouping.md"
+      ]
+    },
+    {
+      "caption": "Stevens showed that the apparent magnitude of all sensory channels follows a power law S = In, where some sensations are perceptually magniﬁed compared with their objective intensity (when n > 1) and some compressed (when n < 1). Length perception is completely accurate, whereas area is compressed and saturation is magniﬁed. Data from Stevens [Stevens 75, p. 15].",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-07.png",
+      "id": "fig-05-07",
+      "method": "crop",
+      "number": "5.7",
+      "pdf_page": 129,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-01-accuracy.md"
+      ]
+    },
+    {
+      "caption": "Error rates across visual channels, with recent crowdsourced results replicating and extending seminal work from Cleveland and McGill [Cleveland and McGill 84a]. After [Heer and Bostock 10, Figure 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-08.png",
+      "id": "fig-05-08",
+      "method": "crop",
+      "number": "5.8",
+      "pdf_page": 130,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-01-accuracy.md"
+      ]
+    },
+    {
+      "caption": "Linewidth has a limited number of discriminable bins.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-09.png",
+      "id": "fig-05-09",
+      "method": "embedded",
+      "number": "5.9",
+      "pdf_page": 132,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-02-discriminability.md"
+      ]
+    },
+    {
+      "caption": "Pairs of visual channels fall along a continuum from fully separable to intrinsically integral. Color and location are separable channels well suited to encode different data attributes for two different groupings that can be selectively attended to. However, size interacts with hue, which is harder to perceive for small objects. The horizontal size and and vertical size channels are automatically fused into an integrated perception of area, yielding three groups. Attempts to code separate information along the red and green axes of the RGB color space fail, because we simply perceive four different hues. After [Ware 13, Figure 5.23].",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-10.png",
+      "id": "fig-05-10",
+      "method": "crop",
+      "number": "5.10",
+      "pdf_page": 133,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-03-separability.md"
+      ]
+    },
+    {
+      "caption": "Visual popout. (a) The red circle pops out from a small set of blue circles. (b) The red circle pops out from a large set of blue circles just as quickly. (c) The red circle also pops out from a small set of square shapes, although a bit slower than with color. (d) The red circle also pops out of a large set of red squares. (e) The red circle does not take long to ﬁnd from a small set of mixed shapes and colors. (f) The red circle does not pop out from a large set of red squares and blue circles, and it can only be found by searching one by one through all the objects. After http://www.csc.ncsu.edu/faculty/healey/PP by Christopher G. Healey.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-11.png",
+      "id": "fig-05-11",
+      "method": "crop",
+      "number": "5.11",
+      "pdf_page": 134,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-04-popout.md"
+      ]
+    },
+    {
+      "caption": "Many channels support visual popout, including (a) tilt, (b) size, (c) shape, (d) proximity, and (e) shadow direction. (f) However, parallel line pairs do not pop out from a sea of slightly tilted distractor object pairs and can only be detected through serial search. After http://www.csc.ncsu.edu/faculty/healey/PP by Christopher G. Healey.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-12.png",
+      "id": "fig-05-12",
+      "method": "crop",
+      "number": "5.12",
+      "pdf_page": 135,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-04-popout.md"
+      ]
+    },
+    {
+      "caption": "Weber’s Law states that we judge based on relative, not absolute differences. (a) The lengths of unframed, unaligned rectangles of slightly different sizes are hard to compare. (b) Adding a frame allows us to compare the very different sizes of the unﬁlled rectangles between the bar and frame tops. (c) Aligning the bars also makes the judgement easy. Redrawn and extended after [Cleveland and McGill 84a, Figure 12].",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-13.png",
+      "id": "fig-05-13",
+      "method": "crop",
+      "number": "5.13",
+      "pdf_page": 138,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-06-relative-absolute-judgements.md"
+      ]
+    },
+    {
+      "caption": "Luminance perception is based on relative, not absolute, judgements. (a) The two squares A and B appear quite different. (b) Superimposing a gray mask on the image shows that they are in fact identical.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-14.png",
+      "id": "fig-05-14",
+      "method": "crop",
+      "number": "5.14",
+      "pdf_page": 138,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-06-relative-absolute-judgements.md"
+      ]
+    },
+    {
+      "caption": "Color perception is also relative to surrounding colors and depends on context. (a) Both cubes have tiles that appear to be red. (b) Masking the intervening context shows that the colors are very different: with yellow apparent lighting, they are orange; with blue apparent lighting, they are purple.",
+      "dpi": 150,
+      "file": "assets/figures/fig-05-15.png",
+      "id": "fig-05-15",
+      "method": "crop",
+      "number": "5.15",
+      "pdf_page": 139,
+      "reason": null,
+      "referenced_by": [
+        "references/ch05-marks-channels/s05-06-relative-absolute-judgements.md"
+      ]
+    },
+    {
+      "caption": "Eight rules of thumb.",
+      "dpi": 150,
+      "file": "assets/figures/fig-06-01.png",
+      "id": "fig-06-01",
+      "method": "crop",
+      "number": "6.1",
+      "pdf_page": 141,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Seeing planar position versus depth. (a) The sideways and up–down axes are fundamentally different from the toward–away depth axis. (b) Along the depth axis we can see only one point for each ray, as opposed to millions of rays for the other two axes. After [Ware 08, page 44].",
+      "dpi": 150,
+      "file": "assets/figures/fig-06-02.png",
+      "id": "fig-06-02",
+      "method": "crop",
+      "number": "6.2",
+      "pdf_page": 144,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-02-disparity-depth.md"
+      ]
+    },
+    {
+      "caption": "Resolving the 3D structure of the occluded parts of the scene is possible with interactive navigation, but that takes time and imposes cognitive load, even when sophisticated interaction idioms are used, as in this example of a node–link graph laid out in 3D space. From [Carpendale et al. 96, Figure 21].",
+      "dpi": 134,
+      "file": "assets/figures/fig-06-03.png",
+      "id": "fig-06-03",
+      "method": "embedded",
+      "number": "6.3",
+      "pdf_page": 146,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-03-occlusion-hides-information.md"
+      ]
+    },
+    {
+      "caption": "3D bar charts are more difﬁcult than 2D bar charts because of both perspective distortion and occlusion. From [Few 07, Question 7].",
+      "dpi": 150,
+      "file": "assets/figures/fig-06-04.png",
+      "id": "fig-06-04",
+      "method": "embedded",
+      "number": "6.4",
+      "pdf_page": 147,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-04-perspective-distortion-dangers.md"
+      ]
+    },
+    {
+      "caption": "With perspective distortion, the power of the planar spatial position channel is lost, as is the size channel. From [Mukherjea et al. 96, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-06-05.png",
+      "id": "fig-06-05",
+      "method": "crop",
+      "number": "6.5",
+      "pdf_page": 147,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-04-perspective-distortion-dangers.md"
+      ]
+    },
+    {
+      "caption": "The use of 3D is well justiﬁed when the central task is shape understanding, as in this example of 3D streamline showing the patterns of ﬂuid ﬂow through a volume. From [Li and Shen 07, Figure 9].",
+      "dpi": 150,
+      "file": "assets/figures/fig-06-06.png",
+      "id": "fig-06-06",
+      "method": "embedded",
+      "number": "6.6",
+      "pdf_page": 150,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-07-benefits-3d-shape-perception.md"
+      ]
+    },
+    {
+      "caption": "3D versus 2D. (a) A 3D representation of this time-series dataset introduces the problems of occlusion and perspective distortion. (b) The linked 2D views of derived aggregate curves and the calendar allow direct comparison and show more ﬁne-grained patterns. From [van Wijk and van Selow 99, Figures 1 and 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-06-07.png",
+      "id": "fig-06-07",
+      "method": "crop",
+      "number": "6.7",
+      "pdf_page": 151,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-08-justification-alternatives.md",
+        "references/idioms/cluster-calendar-time-series-vis.md"
+      ]
+    },
+    {
+      "caption": "Careful use of 3D. (a) The user can evolve the view from the traditional overlapping eye diagram with the metaphor of opening a drawer. (b) The interaction is carefully designed to avoid the difﬁculties of unconstrained 3D navigation. From [Lopez-Hernandez et al. 10, Figures 3 and 7].",
+      "dpi": 150,
+      "file": "assets/figures/fig-06-08.png",
+      "id": "fig-06-08",
+      "method": "crop",
+      "number": "6.8",
+      "pdf_page": 153,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-08-justification-alternatives.md",
+        "references/idioms/layer-oriented-time-series-vis.md"
+      ]
+    },
+    {
+      "caption": "Point-based displays were found to outperform information landscapes in an empirical study of visual encodings for dimensionally reduced data. (a) Colored points. (b) Grayscale points. (c) Colored 2D landscape. (d) Grayscale 2D landscape. (e) Colored 3D landscape. (f) Grayscale 3D landscape. (g) Height only. From [Tory et al. 07, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-06-09.png",
+      "id": "fig-06-09",
+      "method": "crop",
+      "number": "6.9",
+      "pdf_page": 155,
+      "reason": null,
+      "referenced_by": [
+        "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-09-empirical-evidence.md"
+      ]
+    },
+    {
+      "caption": "Design choices for arranging tables.",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-01.png",
+      "id": "fig-07-01",
+      "method": "crop",
+      "number": "7.1",
+      "pdf_page": 169,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Scatterplot. Each point mark represents a country, with horizontal and vertical spatial position encoding the primary quantitative attributes of life expectancy and infant mortality. The color channel is used for the categorical country attribute and the size channel for quantitative population attribute. From [Robertson et al. 08, Figure 1c].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-02.png",
+      "id": "fig-07-02",
+      "method": "embedded",
+      "number": "7.2",
+      "pdf_page": 172,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-04-express-quantitative-values.md",
+        "references/idioms/scatterplots.md"
+      ]
+    },
+    {
+      "caption": "Scatterplots. (a) Original diamond price/carat data. (b) Derived log-scale attributes are highly positively correlated. From [Wickham 10, Figure 10].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-03.png",
+      "id": "fig-07-03",
+      "method": "crop",
+      "number": "7.3",
+      "pdf_page": 173,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-04-express-quantitative-values.md",
+        "references/idioms/scatterplots.md"
+      ]
+    },
+    {
+      "caption": "Bar chart. The key attribute, species, separates the marks along the horizontal spatial axis. The value attribute, weight, expresses the value with aligned vertical spatial position and line marks. (a) Marks ordered alphabetically according to species name. (b) Marks ordered by the weight attribute used for bar heights.",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-04.png",
+      "id": "fig-07-04",
+      "method": "crop",
+      "number": "7.4",
+      "pdf_page": 175,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-01-list-alignment-one-key.md",
+        "references/idioms/bar-charts.md"
+      ]
+    },
+    {
+      "caption": "Stacked bar chart. The Thor memory proﬁler shows cache misses stacked and colored by miss type. From [Bosch 01, Figure 4.1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-05.png",
+      "id": "fig-07-05",
+      "method": "embedded",
+      "number": "7.5",
+      "pdf_page": 177,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-01-list-alignment-one-key.md",
+        "references/idioms/stacked-bar-charts.md"
+      ]
+    },
+    {
+      "caption": "Streamgraph of music listening history. From [Byron and Wattenberg 08, Figure 0].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-06.png",
+      "id": "fig-07-06",
+      "method": "embedded",
+      "number": "7.6",
+      "pdf_page": 178,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-01-list-alignment-one-key.md",
+        "references/idioms/streamgraphs.md"
+      ]
+    },
+    {
+      "caption": "Streamgraphs with layers ordered by different derived attributes. (a) Volatility of artist’s popularity. (b) Onset time when artist’s music of ﬁrst gained attention. From [Byron and Wattenberg 08, Figure 15].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-07.png",
+      "id": "fig-07-07",
+      "method": "crop",
+      "number": "7.7",
+      "pdf_page": 179,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-01-list-alignment-one-key.md",
+        "references/idioms/streamgraphs.md"
+      ]
+    },
+    {
+      "caption": "Line charts versus dot charts. (a) Dot charts use a point mark to show the value for each item. (b) Line charts use point marks connected by lines between them.",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-08.png",
+      "id": "fig-07-08",
+      "method": "crop",
+      "number": "7.8",
+      "pdf_page": 180,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-01-list-alignment-one-key.md",
+        "references/idioms/dot-charts.md",
+        "references/idioms/line-charts.md"
+      ]
+    },
+    {
+      "caption": "Bar charts and line charts both encode a single attribute. Bar charts encourage discrete comparisons, while line graphs encourage trend assessments. Line charts should not be used for categorical data, as in the upper right, because their implications are misleading. After [Zacks and Tversky 99, Figure 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-09.png",
+      "id": "fig-07-09",
+      "method": "crop",
+      "number": "7.9",
+      "pdf_page": 182,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-01-list-alignment-one-key.md",
+        "references/idioms/bar-charts.md",
+        "references/idioms/line-charts.md"
+      ]
+    },
+    {
+      "caption": "Sunspot cycles. The multiscale banking to 45◦idiom exploits our orientation resolution accuracy at the diagonal. (a) An aspect ratio close to 4 emphasizes low-frequency structure. (b) An aspect ratio close to 22 shows higher-frequency structure: cycle onset is mostly steeper than the decay. From [Heer and Agrawala 06, Figure 5].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-10.png",
+      "id": "fig-07-10",
+      "method": "crop",
+      "number": "7.10",
+      "pdf_page": 183,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-01-list-alignment-one-key.md",
+        "references/idioms/line-charts.md"
+      ]
+    },
+    {
+      "caption": "Cluster heatmap. A heatmap provides a compact summary of a quantitative value attribute with 2D matrix alignment by two key attributes and small area marks colored with a diverging colormap. The cluster heatmap includes trees drawn on the periphery showing how the matrix is ordered according to the derived data of hierarchical clusterings on its rows and columns.",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-11.png",
+      "id": "fig-07-11",
+      "method": "crop",
+      "number": "7.11",
+      "pdf_page": 184,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-02-matrix-alignment-two-keys.md",
+        "references/idioms/cluster-heatmaps.md",
+        "references/idioms/heatmaps.md"
+      ]
+    },
+    {
+      "caption": "Comparison of scatterplot matrix and parallel coordinate idioms for a small data table. After [McGufﬁn 14].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-12.png",
+      "id": "fig-07-12",
+      "method": "crop",
+      "number": "7.12",
+      "pdf_page": 188,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-02-parallel-layouts.md",
+        "references/idioms/parallel-coordinates.md",
+        "references/idioms/scatterplot-matrix-splom.md"
+      ]
+    },
+    {
+      "caption": "Parallel coordinates were designed to show correlation between neighboring axes. At the top, parallel lines show perfect positive correlation. At the bottom, all of the lines cross over each other at a single spot in between the two axes, showing perfect negative correlation. In the middle, the mix of crossings shows uncorrelated data. From [Wegman 90, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-13.png",
+      "id": "fig-07-13",
+      "method": "embedded",
+      "number": "7.13",
+      "pdf_page": 189,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-02-parallel-layouts.md",
+        "references/idioms/parallel-coordinates.md"
+      ]
+    },
+    {
+      "caption": "Parallel coordinates scale to dozens of attributes and hundreds of items, but not to thousands of items. (a) Effective use with 13 items and 7 attributes. (b) Ineffective use with over 16,000 items and 5 attributes. From [Fua et al. 99, Figures 1 and 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-14.png",
+      "id": "fig-07-14",
+      "method": "crop",
+      "number": "7.14",
+      "pdf_page": 190,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-02-parallel-layouts.md",
+        "references/idioms/parallel-coordinates.md"
+      ]
+    },
+    {
+      "caption": "Layout coordinate systems. (a) Radial layouts use polar coordinates, with one spatial position and one angle channel. (b) Rectlinear layouts use two perpendicular spatial position channels. After [Wickham 10, Figure 8]. (c) Transforming rectilinear to radial layouts maps two parallel bounding lines to a point at the center and a circle at the perimeter.",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-15.png",
+      "id": "fig-07-15",
+      "method": "crop",
+      "number": "7.15",
+      "pdf_page": 192,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-03-radial-layouts.md",
+        "references/idioms/radial-bar-charts.md"
+      ]
+    },
+    {
+      "caption": "Radial versus rectilinear layouts. (a) Rectilinear bar chart. (b) Radial bar chart. After [Booshehrian et al. 11, Figure 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-16.png",
+      "id": "fig-07-16",
+      "method": "crop",
+      "number": "7.16",
+      "pdf_page": 192,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-03-radial-layouts.md",
+        "references/idioms/bar-charts.md",
+        "references/idioms/radial-bar-charts.md"
+      ]
+    },
+    {
+      "caption": "Pie chart versus bar chart accuracy. (a) Pie charts require angle and area judgements. (b) Bar charts require only high-accuracy length judgements for individual items. (c) Polar area charts are a more direct equivalent of bar charts, where the length of each wedge varies like the length of each bar. From [Wickham 10, Figures 15 and 16].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-17.png",
+      "id": "fig-07-17",
+      "method": "crop",
+      "number": "7.17",
+      "pdf_page": 193,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-03-radial-layouts.md",
+        "references/idioms/bar-charts.md",
+        "references/idioms/pie-charts.md",
+        "references/idioms/polar-area-charts.md"
+      ]
+    },
+    {
+      "caption": "Relative contributions of parts to a whole. (a) A single pie chart shows the relative contributions of parts to a whole, such as percentages, using area judgements. (b) Each bar in a normalized stacked bar chart also shows the relative contributions of parts to a whole, with a higher-accuracy length encoding. (c) A stacked bar chart shows the absolute counts in each bar, in contrast to the percentages when each bar is normalized to the same vertical length. From http://bl.ocks.org/mbostock/3887235, http://bl.ocks.org/mbostock/3886208, http://bl.ocks. org/mbostock/3886394.",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-18.png",
+      "id": "fig-07-18",
+      "method": "crop",
+      "number": "7.18",
+      "pdf_page": 194,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-03-radial-layouts.md",
+        "references/idioms/normalized-stacked-bar-charts.md",
+        "references/idioms/pie-charts.md",
+        "references/idioms/stacked-bar-charts.md"
+      ]
+    },
+    {
+      "caption": "Glyphmaps. (a) Rectilinear layouts are more effective at showing the differences between linear and nonlinear trends. (b) Radial layouts are more effective at showing cyclic patterns. From [Wickham et al. 12, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-19.png",
+      "id": "fig-07-19",
+      "method": "crop",
+      "number": "7.19",
+      "pdf_page": 196,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-03-radial-layouts.md"
+      ]
+    },
+    {
+      "caption": "Tarantula shows a dense overview of source code with lines color coded by execution status of a software test suite. From [Jones et al. 02, Figure 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-07-20.png",
+      "id": "fig-07-20",
+      "method": "embedded",
+      "number": "7.20",
+      "pdf_page": 198,
+      "reason": null,
+      "referenced_by": [
+        "references/ch07-arrange-tables/s07-07-spatial-layout-density.md",
+        "references/idioms/dense-software-overviews.md"
+      ]
+    },
+    {
+      "caption": "Design choices for using given spatial data: geometry or spatial ﬁelds.",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-01.png",
+      "id": "fig-08-01",
+      "method": "crop",
+      "number": "8.1",
+      "pdf_page": 203,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Choropleth map showing regions as area marks using given geometry, where a quantitative attribute is encoded with color. From http://bl.ocks.org/ mbostock/4060606.",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-02.png",
+      "id": "fig-08-02",
+      "method": "crop",
+      "number": "8.2",
+      "pdf_page": 206,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-03-geometry.md",
+        "references/idioms/choropleth-map.md"
+      ]
+    },
+    {
+      "caption": "Spatial scalar ﬁelds shown with three different idioms. (a) A single 2D slice of a turbine blade dataset. (b) Multiple semitransparent isosurfaces of a 3D tooth dataset. (c) Direct volume rendering of the entire 3D turbine dataset. From [Kniss 02, Figures 1.2 and 2.1b].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-03.png",
+      "id": "fig-08-03",
+      "method": "crop",
+      "number": "8.3",
+      "pdf_page": 207,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-01-isocontours.md"
+      ]
+    },
+    {
+      "caption": "Topographic terrain map, with isolines in blue. From https://data.linz.govt.nz/layer/768-nz-mainland -contours-topo-150k.",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-04.png",
+      "id": "fig-08-04",
+      "method": "embedded",
+      "number": "8.4",
+      "pdf_page": 209,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-01-isocontours.md",
+        "references/idioms/topographic-terrain-map.md"
+      ]
+    },
+    {
+      "caption": "A full contour tree with over 1.5 million edges does not help the user explore isosurfaces. From [Carr et al. 04, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-05.png",
+      "id": "fig-08-05",
+      "method": "embedded",
+      "number": "8.5",
+      "pdf_page": 210,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-01-isocontours.md",
+        "references/idioms/flexible-isosurfaces.md"
+      ]
+    },
+    {
+      "caption": "The ﬂexible isosurfaces idiom uses the simpliﬁed contour tree of under 100 edges to help users identify meaningful structure. From [Carr et al. 04, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-06.png",
+      "id": "fig-08-06",
+      "method": "embedded",
+      "number": "8.6",
+      "pdf_page": 211,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-01-isocontours.md",
+        "references/idioms/flexible-isosurfaces.md"
+      ]
+    },
+    {
+      "caption": "Simian allows users to construct multidimensional transfer functions for direct volume rendering using a derived space. (a) The standard 1D histogram can show the three basic materials: (A) air, (B) soft tissue, and (C) bone. (b) The full 2D derived space allows material boundaries to be distinguished as well. (c) Volume rendering of head dataset using the resulting 2D transfer function, showing material boundaries of (D) air–tissue, (E) tissue– bone, and (F) air–bone. From [Kniss et al. 05, Figure 9.1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-06b.png",
+      "id": "fig-08-06b",
+      "method": "crop",
+      "number": "8.6",
+      "pdf_page": 213,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-02-direct-volume-rendering.md",
+        "references/idioms/multidimensional-transfer-functions.md"
+      ]
+    },
+    {
+      "caption": "The main types of critical points in a ﬂow ﬁeld: saddle, circulating sinks, circulating sources, noncirculating sinks, and noncirculating sources. From [Tricoche et al. 02, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-07.png",
+      "id": "fig-08-07",
+      "method": "crop",
+      "number": "8.7",
+      "pdf_page": 214,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-01-flow-glyphs.md"
+      ]
+    },
+    {
+      "caption": "An empirical study compared human response to six different 2D ﬂow vis idioms. (a) arrow glyphs on a regular grid. (b) arrow glyphs on a jittered grid. (c) triangular wedge glyphs inspired by oil painting strokes. (d) dense texture-based Line Integral Convolution (LIC). (e) curved arrow glyphs with image-guided streamline seeding. (f) curved arrow glyphs with regular grid streamline seeding. From [Laidlaw et al. 05, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-08.png",
+      "id": "fig-08-08",
+      "method": "crop",
+      "number": "8.8",
+      "pdf_page": 215,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-01-flow-glyphs.md",
+        "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-03-texture-flow.md"
+      ]
+    },
+    {
+      "caption": "Geometric ﬂow vis idioms showing a sparse set of particle trajectories, with seeding and coloring according to similarity. (a) Streamlines: all clusters equally opaque; purple cluster emphasized; red cluster emphasized. (b) Pathlines, colored by three clusters. From [McLoughlin et al. 13, Figures 7 and 11c].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-09.png",
+      "id": "fig-08-09",
+      "method": "crop",
+      "number": "8.9",
+      "pdf_page": 217,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-02-geometric-flow.md",
+        "references/idioms/similarity-clustered-streamlines.md"
+      ]
+    },
+    {
+      "caption": "2D diffusion illustrated with ink and paper. (a) Isotropic Kleenex. (b) Anisotropic newspaper.",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-10.png",
+      "id": "fig-08-10",
+      "method": "crop",
+      "number": "8.10",
+      "pdf_page": 220,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-06-tensor-fields-many-values.md"
+      ]
+    },
+    {
+      "caption": "Ellipsoid glyphs can show three basic shapes. (a) Isotropic: sphere. (b) Partially anisotropic: planar. (c) Fully anisotropic: linear. From [Kindlmann 04, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-11.png",
+      "id": "fig-08-11",
+      "method": "crop",
+      "number": "8.11",
+      "pdf_page": 220,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-06-tensor-fields-many-values.md",
+        "references/idioms/ellipsoid-tensor-glyphs.md"
+      ]
+    },
+    {
+      "caption": "Ellipsoid glyphs show shape and orientation of tensors at each cell in a ﬁeld. (a) 2D slice. (b) 3D ﬁeld, with isotropic glyphs ﬁltered out. From [Kindlmann 04, Figures 10a and 11a].",
+      "dpi": 150,
+      "file": "assets/figures/fig-08-12.png",
+      "id": "fig-08-12",
+      "method": "crop",
+      "number": "8.12",
+      "pdf_page": 221,
+      "reason": null,
+      "referenced_by": [
+        "references/ch08-arrange-spatial-data/s08-06-tensor-fields-many-values.md",
+        "references/idioms/ellipsoid-tensor-glyphs.md"
+      ]
+    },
+    {
+      "caption": "Design choices for arranging networks.",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-01.png",
+      "id": "fig-09-01",
+      "method": "crop",
+      "number": "9.1",
+      "pdf_page": 225,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Node–link layouts of small trees. (a) Triangular vertical for tiny tree. From [Buchheim et al. 02, Figure 2d]. (b) Spline radial layout for small tree. From http://mbostock.github.com/d3/ex/tree.html.",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-02.png",
+      "id": "fig-09-02",
+      "method": "crop",
+      "number": "9.2",
+      "pdf_page": 227,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-02-connection-link-marks.md"
+      ]
+    },
+    {
+      "caption": "Two layouts of a 5161-node tree. (a) Rectangular horizontal node–link layout. (b) BubbleTree node–link layout.",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-03.png",
+      "id": "fig-09-03",
+      "method": "crop",
+      "number": "9.3",
+      "pdf_page": 228,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-02-connection-link-marks.md",
+        "references/ch09-arrange-networks-trees/s09-05-containment-hierarchy-marks.md"
+      ]
+    },
+    {
+      "caption": "Node–link layouts of small networks. (a) Force-directed placement of small network of 75 nodes, with size coding for link attributes. (b) Larger network, with size coding for node attributes. From http://bl.ocks.org/ mbostock/4062045 and http://bl.ocks.org/1062288.",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-04.png",
+      "id": "fig-09-04",
+      "method": "crop",
+      "number": "9.4",
+      "pdf_page": 230,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-02-connection-link-marks.md",
+        "references/idioms/force-directed-placement.md"
+      ]
+    },
+    {
+      "caption": "Multilevel graph drawing with sfdp [Hu 05]. (a) Cluster structure is visible for a large network of 7220 nodes and 13,800 edges. (b) A huge graph of 26,028 nodes and 100,290 edges is a “hairball” without much visible structure. From [Hu 14].",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-05.png",
+      "id": "fig-09-05",
+      "method": "crop",
+      "number": "9.5",
+      "pdf_page": 232,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-02-connection-link-marks.md",
+        "references/idioms/multilevel-force-directed-placement-sfdp.md"
+      ]
+    },
+    {
+      "caption": "Comparing node–link matrix and matrix views of a network. (a) Node–link and matrix views of small network. (b) Matrix view of larger network. (c) Node–link view of larger network. From [Gehlenborg and Wong 12, Figures 1 and 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-06.png",
+      "id": "fig-09-06",
+      "method": "crop",
+      "number": "9.6",
+      "pdf_page": 234,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-03-matrix-views.md",
+        "references/idioms/adjacency-matrix-view.md"
+      ]
+    },
+    {
+      "caption": "Characteristic patterns in matrix views and node–link views: both can show cliques and clusters clearly. From [McGufﬁn 12, Figure 6].",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-07.png",
+      "id": "fig-09-07",
+      "method": "embedded",
+      "number": "9.7",
+      "pdf_page": 237,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-04-costs-benefits-connection-matrix.md",
+        "references/idioms/adjacency-matrix-view.md"
+      ]
+    },
+    {
+      "caption": "Treemap layout showing hierarchical structure with containment rather than connection, in contrast to the node–link diagrams of the same 5161-node tree in Figure 9.3.",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-08.png",
+      "id": "fig-09-08",
+      "method": "embedded",
+      "number": "9.8",
+      "pdf_page": 238,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-05-containment-hierarchy-marks.md",
+        "references/idioms/treemaps.md"
+      ]
+    },
+    {
+      "caption": "Seven visual encoding idioms showing the same tree dataset, using different combinations of visual channels. (a) Rectilinear vertical node–link, using connection to show link relationships, with vertical spatial position showing tree depth and horizontal spatial position showing sibling order. (b) Icicle, with vertical spatial position and size showing tree depth, and horizontal spatial position showing link relationships and sibling order. (c) Radial node– link, using connection to show link relationships, with radial depth spatial position showing tree depth and radial angular position showing sibling order. (d) Concentric circles, with radial depth spatial position and size showing tree depth and radial angular spatial position showing link relationships and sibling order. (e) Nested circles, using radial containment, with nesting level and size showing tree depth. (f) Treemap, using rectilinear containment, with nesting level and size showing tree depth. (g) Indented outline, with horizontal spatial position showing tree depth and link relationships and vertical spatial position showing sibling order. From [McGufﬁn and Robert 10, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-09.png",
+      "id": "fig-09-09",
+      "method": "crop",
+      "number": "9.9",
+      "pdf_page": 239,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-05-containment-hierarchy-marks.md",
+        "references/idioms/treemaps.md"
+      ]
+    },
+    {
+      "caption": "GrouseFlocks uses containment to show graph hierarchy structure. (a) Original graph. (b) Cluster hierarchy built atop the graph, shown with a node– link layout. (c) Network encoded using connection, with hierarchy encoded using containment. From [Archambault et al. 08, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-09-10.png",
+      "id": "fig-09-10",
+      "method": "crop",
+      "number": "9.10",
+      "pdf_page": 240,
+      "reason": null,
+      "referenced_by": [
+        "references/ch09-arrange-networks-trees/s09-05-containment-hierarchy-marks.md",
+        "references/idioms/grouseflocks.md"
+      ]
+    },
+    {
+      "caption": "Design choices for mapping color and other visual encoding channels.",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-01.png",
+      "id": "fig-10-01",
+      "method": "crop",
+      "number": "10.1",
+      "pdf_page": 243,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "A common HSL/HSV colorpicker design, as in this example from Mac OS X, is to show a color wheel with fully saturated color around the outside and white at the center of the circle, and a separate control for the darkness.",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-02.png",
+      "id": "fig-10-02",
+      "method": "crop",
+      "number": "10.2",
+      "pdf_page": 246,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-02-color-spaces.md"
+      ]
+    },
+    {
+      "caption": "Comparing HSL lightness, true luminance, and perceptually linear luminance L∗for six colors. The computed HSL lightness L is the same for all of these colors, showing the limitations of that color system. The true luminance values of these same six colors, as could be measured with an instrument. The computed perceptually linear luminance L∗of these colors is the best match with what we see. After [Stone 06].",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-03.png",
+      "id": "fig-10-03",
+      "method": "crop",
+      "number": "10.3",
+      "pdf_page": 246,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-02-color-spaces.md"
+      ]
+    },
+    {
+      "caption": "The spectral sensitivity of our eyes to luminance depends on the wavelength of the incoming light. After [Kaiser 96], http://www.yorku.ca/eye/ photopik.htm.",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-04.png",
+      "id": "fig-10-04",
+      "method": "crop",
+      "number": "10.4",
+      "pdf_page": 247,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-02-color-spaces.md"
+      ]
+    },
+    {
+      "caption": "The luminance and saturation channels are automatically interpreted as ordered by our perceptual system, but the hue channel is not.",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-05.png",
+      "id": "fig-10-05",
+      "method": "crop",
+      "number": "10.5",
+      "pdf_page": 249,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-03-luminance-saturation-hue.md"
+      ]
+    },
+    {
+      "caption": "The colormap categorization partially mirrors the data types: categorical versus ordered, and sequential and diverging within ordered. Bivariate encodings of two separate attributes at once is safe if one has only two levels, but they can be difﬁcult to interpret when both attributes have multiple levels. After [Brewer 99].",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-06.png",
+      "id": "fig-10-06",
+      "method": "crop",
+      "number": "10.6",
+      "pdf_page": 251,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md",
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-03-bivariate-colormaps.md",
+        "references/idioms/bivariate-colormaps.md",
+        "references/idioms/categorical-colormaps.md",
+        "references/idioms/ordered-colormaps.md"
+      ]
+    },
+    {
+      "caption": "Saturation and area. (a) The ten-element low-saturation map works well with large areas. (b) The eight-element high-saturation map would be better suited for small regions and works poorly for these large areas. Made with ColorBrewer, http://www.colorbrewer2.org.",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-07.png",
+      "id": "fig-10-07",
+      "method": "crop",
+      "number": "10.7",
+      "pdf_page": 252,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md",
+        "references/idioms/categorical-colormaps.md"
+      ]
+    },
+    {
+      "caption": "Ineffective categorical colormap use. (a) The 21 colors used as an index for each mouse chromosome can indeed be distinguished in large regions next to each other. (b) In noncontiguous small regions only about 12 bins of color can be distinguished from each other, so a lot of information about how regions in the mouse genome map to the human genome is lost. From [Sinha and Meller 07, Figure 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-08.png",
+      "id": "fig-10-08",
+      "method": "crop",
+      "number": "10.8",
+      "pdf_page": 253,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md",
+        "references/idioms/categorical-colormaps.md"
+      ]
+    },
+    {
+      "caption": "Effective categorical colormap use: A large space of visual encoding possibilities for 27 categories was considered systematically in addition to the color channel, including size and shape channels and more complex glyphs. From [Maguire et al. 12, Figure 5].",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-09.png",
+      "id": "fig-10-09",
+      "method": "crop",
+      "number": "10.9",
+      "pdf_page": 255,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md",
+        "references/idioms/categorical-colormaps.md",
+        "references/idioms/shape-channel.md",
+        "references/idioms/size-channels.md"
+      ]
+    },
+    {
+      "caption": "Effective categorical colormap use: The ﬁnal design uses the color channel for only four of the categories. From [Maguire et al. 12, Figure 6].",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-10.png",
+      "id": "fig-10-10",
+      "method": "crop",
+      "number": "10.10",
+      "pdf_page": 256,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md",
+        "references/idioms/categorical-colormaps.md"
+      ]
+    },
+    {
+      "caption": "Rainbow versus two-hue continuous colormap. (a) Using many hues, as in this rainbow colormap, emphasizes mid-scale structure. (b) Using only two hues, the blue–yellow colormap emphasizes large-scale structure. From [Bergman et al. 95, Figures 1 and 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-11.png",
+      "id": "fig-10-11",
+      "method": "crop",
+      "number": "10.11",
+      "pdf_page": 257,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-02-ordered-colormaps.md",
+        "references/idioms/ordered-colormaps.md"
+      ]
+    },
+    {
+      "caption": "Rainbow versus multiple-hue continuous colormap with monotonically increasing luminance. (a) Three major problems with the common continuous rainbow colormap are perceptual nonlinearity, the expres-sivity mismatch of using hue for ordering, and the accuracy mismatch of using hue for ﬁne-grained detail. (b) A colormap that combines monotonically increasing luminance with multiple hues for semantic categories, with a clear segmentation at the zero point, succeeds in showing high-level, mid-level, and low-level structure. From [Rogowitz and Treinish 98, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-12.png",
+      "id": "fig-10-12",
+      "method": "crop",
+      "number": "10.12",
+      "pdf_page": 258,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-02-ordered-colormaps.md",
+        "references/idioms/ordered-colormaps.md"
+      ]
+    },
+    {
+      "caption": "Appropriate use of rainbows. (a) The standard rainbow colormap is perceptually nonlinear. (b) Perceptually linear rainbows are possible [Kindlmann 02], but they are less bright with a decreased dynamic range. (c) Segmented rainbows work well for categorical data when the number of categories is small.",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-13.png",
+      "id": "fig-10-13",
+      "method": "crop",
+      "number": "10.13",
+      "pdf_page": 259,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-02-ordered-colormaps.md",
+        "references/idioms/ordered-colormaps.md"
+      ]
+    },
+    {
+      "caption": "Tiltmaps using the angle channel to show three different types of ordered data. (a) A sequential attribute can be shown with either a line mark or an arrow glyph in one quadrant. (b) A diverging attribute can be shown with two quadrants and an arrow glyph. (c) A cyclic attribute can be shown with all four quadrants and arrow glyphs.",
+      "dpi": 150,
+      "file": "assets/figures/fig-10-14.png",
+      "id": "fig-10-14",
+      "method": "crop",
+      "number": "10.14",
+      "pdf_page": 262,
+      "reason": null,
+      "referenced_by": [
+        "references/ch10-map-color-other-channels/s10-04-other-channels.md",
+        "references/idioms/angle-channel.md"
+      ]
+    },
+    {
+      "caption": "Design choices for idioms that change a view.",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-01.png",
+      "id": "fig-11-01",
+      "method": "crop",
+      "number": "11.1",
+      "pdf_page": 267,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Tableau supports ﬂuid changes between visual encoding idioms with drag and drop interaction. (a) Data encoded with bars. (b) Data encoded with stacked bars. (c) The user selects a completely different visual encoding. (d) Data encoded using geographic positions.",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-02.png",
+      "id": "fig-11-02",
+      "method": "crop",
+      "number": "11.2",
+      "pdf_page": 270,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-03-change-view-over-time.md",
+        "references/idioms/change-view-over-time.md"
+      ]
+    },
+    {
+      "caption": "The LineUp system for comparing multiattribute rankings with reordering and realignment. From [Gratzl et al. 13, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-03.png",
+      "id": "fig-11-03",
+      "method": "embedded",
+      "number": "11.3",
+      "pdf_page": 271,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-03-change-view-over-time.md",
+        "references/idioms/change-view-over-time.md",
+        "references/idioms/lineup.md"
+      ]
+    },
+    {
+      "caption": "Changing the alignment in Lineup. (a) Classical stacked bars. (b) Diverging stacked bars. (c) Ordered stacked bars. (d) Separately aligned bars: small multiple bar charts. From [Gratzl et al. 13, Figure 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-04.png",
+      "id": "fig-11-04",
+      "method": "crop",
+      "number": "11.4",
+      "pdf_page": 272,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-03-change-view-over-time.md",
+        "references/idioms/change-view-over-time.md",
+        "references/idioms/lineup.md"
+      ]
+    },
+    {
+      "caption": "Frames from an animated transition showing zoom between levels in a compound network arranged as an adjacency matrix. From [van Ham 03, Figure 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-05.png",
+      "id": "fig-11-05",
+      "method": "crop",
+      "number": "11.5",
+      "pdf_page": 274,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-03-change-view-over-time.md",
+        "references/idioms/animated-transitions.md",
+        "references/idioms/change-view-over-time.md"
+      ]
+    },
+    {
+      "caption": "The context-preserving visual links idiom is an example of the design choice to coordinate betweeen views by explicitly drawing links as connection marks between items and regions of interest. From [Steinberger et al. 11, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-06.png",
+      "id": "fig-11-06",
+      "method": "embedded",
+      "number": "11.6",
+      "pdf_page": 278,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-04-select-elements/s11-04-02-highlighting.md",
+        "references/idioms/context-preserving-visual-links.md",
+        "references/idioms/highlighting.md"
+      ]
+    },
+    {
+      "caption": "LiveRAC uses semantic zooming within a stretchable grid of time-series line charts. From [McLachlan et al. 08, Figure 2b].",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-07.png",
+      "id": "fig-11-07",
+      "method": "embedded",
+      "number": "11.7",
+      "pdf_page": 281,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-05-navigate-changing-viewpoint.md",
+        "references/idioms/semantic-zooming.md"
+      ]
+    },
+    {
+      "caption": "The slice choice eliminates a dimension/attribute by extracting only the items with a chosen value in that dimension. The cut choice eliminates all data on one side of a spatial cutting plane. (a) Axis-aligned slice. (b) Axis-aligned cut. From [Rieder et al. 08, Figures 7c and 0].",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-08.png",
+      "id": "fig-11-08",
+      "method": "crop",
+      "number": "11.8",
+      "pdf_page": 284,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-06-navigate-reducing-attributes.md",
+        "references/idioms/cut.md",
+        "references/idioms/slice.md"
+      ]
+    },
+    {
+      "caption": "The HyperSlice system uses extracting only the items with a chosen value in that dimension. (a) Three 3D planes that intersect at right angles. (b) Four-dimensional dataset where function value is encoded with luminance. From [van Wijk and van Liere 93, Figures 1 and 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-11-09.png",
+      "id": "fig-11-09",
+      "method": "crop",
+      "number": "11.9",
+      "pdf_page": 285,
+      "reason": null,
+      "referenced_by": [
+        "references/ch11-manipulate-view/s11-06-navigate-reducing-attributes.md",
+        "references/idioms/hyperslice.md",
+        "references/idioms/slice.md"
+      ]
+    },
+    {
+      "caption": "Design choices of how to facet information between multiple views.",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-01.png",
+      "id": "fig-12-01",
+      "method": "crop",
+      "number": "12.1",
+      "pdf_page": 289,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Linked highlighting between views shows how regions that are contiguous in one view are distributed within another. (a) Selecting the high salaries in the upper right window shows different distributions in the other views. (b) Selecting the bottom group in the Assists-PutOuts window shows that the clump corresponds to speciﬁc positions played. From [Wills 95, Figures 4 and 5].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-02.png",
+      "id": "fig-12-02",
+      "method": "crop",
+      "number": "12.2",
+      "pdf_page": 293,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-01-share-encoding-same-different.md",
+        "references/idioms/exploratory-data-visualizer-edv.md"
+      ]
+    },
+    {
+      "caption": "Overview–detail example with geographic maps, where the views have the same encoding and dataset; they differ in viewpoint and size. Made with Google Maps, http://maps.google.com.",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-03.png",
+      "id": "fig-12-03",
+      "method": "embedded",
+      "number": "12.3",
+      "pdf_page": 295,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-02-share-data-all-subset.md",
+        "references/idioms/birds-eye-maps.md"
+      ]
+    },
+    {
+      "caption": "Multiform overview–detail vis tool for microarray exploration features a central scatterplot linked with the graph view in the upper left. From [Craig and Kennedy 03, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-04.png",
+      "id": "fig-12-04",
+      "method": "embedded",
+      "number": "12.4",
+      "pdf_page": 297,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-02-share-data-all-subset.md",
+        "references/idioms/multiform-overview-detail-microarrays.md"
+      ]
+    },
+    {
+      "caption": "Cerebral uses small-multiple views to show the same base graph of gene interactions colored according to microarray measurements made at different times. The coloring in the main view uses the derived attribute of the difference in values between the two chosen views. From [Barsky et al. 08, Figure 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-05.png",
+      "id": "fig-12-05",
+      "method": "embedded",
+      "number": "12.5",
+      "pdf_page": 300,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-02-share-data-all-subset.md",
+        "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-03-dynamic-layers.md",
+        "references/idioms/cerebral.md"
+      ]
+    },
+    {
+      "caption": "Design choices for how to coordinate between views relating to sharing encoding and data.",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-06.png",
+      "id": "fig-12-06",
+      "method": "crop",
+      "number": "12.6",
+      "pdf_page": 301,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-04-combinations.md"
+      ]
+    },
+    {
+      "caption": "The Improvise toolkit [Weaver 04] was used to create this census vis that has many forms of coordination between views. It has many multiform views, some of which use small multiples, and some of which provide additional detail information. From http://www.cs.ou.edu/∼weaver/improvise/examples/census.",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-07.png",
+      "id": "fig-12-07",
+      "method": "embedded",
+      "number": "12.7",
+      "pdf_page": 302,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-04-combinations.md",
+        "references/idioms/improvise.md"
+      ]
+    },
+    {
+      "caption": "Partitioning and bar charts. (a) Single bar chart with grouped bars: separated by state key into regions, using seven-mark glyphs within each region. (b) Four aligned small-multiple bar chart views: separated by group key into vertically aligned list of regions, with a full bar chart in each region. From http://bl.ocks.org/mbostock/3887051, after http://bl.ocks.org/mbostock/4679202.",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-08.png",
+      "id": "fig-12-08",
+      "method": "crop",
+      "number": "12.8",
+      "pdf_page": 306,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-02-list-alignments.md"
+      ]
+    },
+    {
+      "caption": "Trellis facets the data into a matrix of dot chart views, allowing the user control of partitioning and orderering. (a) With main-effects ordering, the plots are ordered by median values within the plots for the sites, and the shared vertical axis within each plot is ordered by median values within the varieties. The Morris site in the third row is a visible outlier that does not ﬁt the general trends. (b) With a simple alphabetical ordering of plots and axes, no trends are visible, so no outliers can be detected. From [Becker et al. 96, Figures 1 and 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-09.png",
+      "id": "fig-12-09",
+      "method": "crop",
+      "number": "12.9",
+      "pdf_page": 308,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-03-matrix-alignments.md",
+        "references/idioms/trellis.md"
+      ]
+    },
+    {
+      "caption": "A second Trellis plot combines the years into a single plot with year encoded by color, showing strong evidence of an anomaly in the data. From [Becker et al. 96, Figure 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-10.png",
+      "id": "fig-12-10",
+      "method": "embedded",
+      "number": "12.10",
+      "pdf_page": 309,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-03-matrix-alignments.md",
+        "references/idioms/trellis.md"
+      ]
+    },
+    {
+      "caption": "The HiVE system supports exploration through different partitioning choices. (a) Recursive matrix alignment where the ﬁrst split is by the house type attribute, and the second by neighborhood. The lowest levels show time with years as rows and months as columns. (b) Switching the order of the ﬁrst and second splits shows radically different patterns. From [Slingsby et al. 09, Figures 7b and 2c].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-11.png",
+      "id": "fig-12-11",
+      "method": "crop",
+      "number": "12.11",
+      "pdf_page": 311,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-04-recursive-subdivision.md"
+      ]
+    },
+    {
+      "caption": "HiVE with different arrangements. (a) Sizing regions according to sale counts yields a treemap. (b) Arranging the second-level regions as choropleth maps. From [Slingsby et al. 09, Figures 7a and 7c].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-12.png",
+      "id": "fig-12-12",
+      "method": "crop",
+      "number": "12.12",
+      "pdf_page": 312,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-04-recursive-subdivision.md"
+      ]
+    },
+    {
+      "caption": "Static visual layering in maps. (a) The map layers are created by differences in the hue, saturation, luminance, and size channels on both area and line marks. (b) The grayscale view shows that each layer uses a different range in the luminance channel, providing luminance contrast. From [Stone 10].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-13.png",
+      "id": "fig-12-13",
+      "method": "crop",
+      "number": "12.13",
+      "pdf_page": 315,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-02-static-layers.md",
+        "references/idioms/cartographic-layering.md"
+      ]
+    },
+    {
+      "caption": "Multiple line charts can be superimposed within the same global frame. (a) A small number of items is easily readable. (b) Up to a few dozen lines can still be understood. (c) This technique does not scale to hundreds of items.",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-14.png",
+      "id": "fig-12-14",
+      "method": "crop",
+      "number": "12.14",
+      "pdf_page": 316,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-02-static-layers.md",
+        "references/idioms/superimposed-line-charts.md"
+      ]
+    },
+    {
+      "caption": "Empirical study comparing superimposed line charts to juxtaposed ﬁlled-area line charts. (a) Superimposed line charts performed best for tasks carried out within a local visual span. (b) Juxtaposed ﬁlled area charts were best for global tasks, especially as the number of time series increased. From [Javed et al. 10, Figures 1 and 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-15.png",
+      "id": "fig-12-15",
+      "method": "crop",
+      "number": "12.15",
+      "pdf_page": 317,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-02-static-layers.md",
+        "references/idioms/superimposed-line-charts.md"
+      ]
+    },
+    {
+      "caption": "The hierarchical edge bundles idiom shows a compound network in three layers: the tree structure in back with containment circle marks, the red– green graph edges with connection marks in a middle layer, and the graph nodes in a front layer. From [Holten 06, Figure 13].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-16.png",
+      "id": "fig-12-16",
+      "method": "embedded",
+      "number": "12.16",
+      "pdf_page": 318,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-02-static-layers.md",
+        "references/idioms/hierarchical-edge-bundles.md"
+      ]
+    },
+    {
+      "caption": "Cerebral dynamically creates a foreground visual layer of all nodes one topological hop away in the network from the node underneath the cursor. From [Barsky et al. 07, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-12-17.png",
+      "id": "fig-12-17",
+      "method": "embedded",
+      "number": "12.17",
+      "pdf_page": 320,
+      "reason": null,
+      "referenced_by": [
+        "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-03-dynamic-layers.md",
+        "references/idioms/cerebral.md"
+      ]
+    },
+    {
+      "caption": "Design choices for reducing (or increasing) the amount of data items and attributes to show.",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-01.png",
+      "id": "fig-13-01",
+      "method": "crop",
+      "number": "13.1",
+      "pdf_page": 323,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "FilmFinder features tightly coupled interactive ﬁltering, where the result of moving sliders and pressing buttons is immediately reﬂected in the visual encoding. (a) Exploration begins with an overview of all movies in the dataset. (b) Moving the actor slider to select Sean Connery ﬁlters out most of the other movies, leaving enough room to draw labels. (c) Clicking on the mark representing a movie brings up a detail view. From [Ahlberg and Shneiderman 94, Color Plates 1, 2, and 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-02.png",
+      "id": "fig-13-02",
+      "method": "crop",
+      "number": "13.2",
+      "pdf_page": 327,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-03-filter/s13-03-01-item-filtering.md",
+        "references/idioms/filmfinder.md"
+      ]
+    },
+    {
+      "caption": "The scented widget idiom adds visual encoding information directly to standard graphical widgets to make ﬁltering possible with high information density displays. From [Willett et al. 07, Figure 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-03.png",
+      "id": "fig-13-03",
+      "method": "embedded",
+      "number": "13.3",
+      "pdf_page": 328,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-03-filter/s13-03-01-item-filtering.md"
+      ]
+    },
+    {
+      "caption": "The DOSFA idiom shown on star glyphs with a medical records dataset of 215 dimensions and 298 points. (a) The full dataset is so dense that patterns cannot be seen. (b) After ordering on similarity and ﬁltering on both similarity and importance, the star glyphs show structure. From [Yang et al. 03a, Figures 3a and 3d].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-04.png",
+      "id": "fig-13-04",
+      "method": "crop",
+      "number": "13.4",
+      "pdf_page": 329,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-03-filter/s13-03-02-attribute-filtering.md",
+        "references/idioms/dosfa.md"
+      ]
+    },
+    {
+      "caption": "The histogram idiom aggregates an arbitrary number of items into a concise representation of their distribution.",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-05.png",
+      "id": "fig-13-05",
+      "method": "crop",
+      "number": "13.5",
+      "pdf_page": 331,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-01-item-aggregation.md",
+        "references/idioms/histograms.md"
+      ]
+    },
+    {
+      "caption": "The continuous scatterplot idiom uses color to show the density at each location, solving the problem of occlusion from overplotting and allowing scalability to large datasets. From [Bachthaler and Weiskopf 08, Figure 9].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-06.png",
+      "id": "fig-13-06",
+      "method": "embedded",
+      "number": "13.6",
+      "pdf_page": 332,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-01-item-aggregation.md",
+        "references/idioms/continuous-scatterplots.md"
+      ]
+    },
+    {
+      "caption": "The boxplot is an idiom presenting summary statistics for the distribution of a quantitative attribute, using ﬁve derived values. These plots illustrate four kinds of distributions: normal (n), skewed (s), peaked (k), and multimodal (mm). (a) Standard box plots. (b) Vase plots, which use horizontal spatial position to show density directly. From [Wickham and Stryjewski 12, Figure 5].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-07.png",
+      "id": "fig-13-07",
+      "method": "crop",
+      "number": "13.7",
+      "pdf_page": 334,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-01-item-aggregation.md",
+        "references/idioms/boxplot-charts.md"
+      ]
+    },
+    {
+      "caption": "The SolarPlot circular histogram idiom provides indirect control of aggregation level by changing the circle size. (a) The small circle shows the increase in ticket sales over time. (b) Enlarging the circle shows seasonal patterns in addition to the gradual increase. From [Chuah 98, Figures 1 and 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-08.png",
+      "id": "fig-13-08",
+      "method": "crop",
+      "number": "13.8",
+      "pdf_page": 336,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-01-item-aggregation.md",
+        "references/idioms/histograms.md",
+        "references/idioms/solarplot.md"
+      ]
+    },
+    {
+      "caption": "Hierarchical parallel coordinates provide multiple levels of detail. (a) The single top cluster has large extent. (b) When several clusters are shown, each has a smaller extent. (c) When many clusters are shown, the proximity-based coloring helps them remain distinguishable from each other. From [Fua et al. 99, Figure 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-09.png",
+      "id": "fig-13-09",
+      "method": "crop",
+      "number": "13.9",
+      "pdf_page": 337,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-01-item-aggregation.md",
+        "references/idioms/hierarchical-parallel-coordinates.md"
+      ]
+    },
+    {
+      "caption": "Modiﬁable Areal Unit Problem (MAUP) example, showing how different boundaries for aggregation regions lead to very different visual patterns on choropleth maps. (a) Central region is high density. (b) Central region is medium density. (c) Central region is low density. From http://www.e-education.psu.edu/geog486/l4 p7.html, Figure 4.cg.6.",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-10.png",
+      "id": "fig-13-10",
+      "method": "crop",
+      "number": "13.10",
+      "pdf_page": 338,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-02-spatial-aggregation.md"
+      ]
+    },
+    {
+      "caption": "Geowigs are geographically weighted interactive graphics. (a) A choropleth map showing attribute x1. (b) The set of gw-boxplots for all six attributes at two scales. (c) Weighting maps showing the scales: local and larger. (d) A gw-mean map at the larger scale. From [Dykes and Brunsdon 07, Figures 7a and 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-11.png",
+      "id": "fig-13-11",
+      "method": "crop",
+      "number": "13.11",
+      "pdf_page": 339,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-02-spatial-aggregation.md",
+        "references/idioms/geographically-weighted-boxplots.md"
+      ]
+    },
+    {
+      "caption": "Dimensionality reduction of a large document collection using Glimmer for multidimensional scaling. The results are laid out in a single 2D scatterplot, allowing the user to verify that the conjectured clustering shown with color coding is partially supported by the spatial layout. From [Ingram et al. 09, Figure 8].",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-12.png",
+      "id": "fig-13-12",
+      "method": "embedded",
+      "number": "13.12",
+      "pdf_page": 343,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-03-attribute-aggregation-dimensionality-reduction.md",
+        "references/idioms/dimensionality-reduction-for-document-collections.md"
+      ]
+    },
+    {
+      "caption": "A chained sequence of what–why–how analysis instances for the scenario of dimensionality reduction of document collection data.",
+      "dpi": 150,
+      "file": "assets/figures/fig-13-13.png",
+      "id": "fig-13-13",
+      "method": "crop",
+      "number": "13.13",
+      "pdf_page": 343,
+      "reason": null,
+      "referenced_by": [
+        "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-03-attribute-aggregation-dimensionality-reduction.md",
+        "references/idioms/dimensionality-reduction-for-document-collections.md"
+      ]
+    },
+    {
+      "caption": "Design choices for embedding focus information within context.",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-01.png",
+      "id": "fig-14-01",
+      "method": "crop",
+      "number": "14.1",
+      "pdf_page": 347,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "DOITrees Revisited uses elision to show multiple focus nodes within context in a 600,000 node tree. From [Heer and Card 04, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-02.png",
+      "id": "fig-14-02",
+      "method": "embedded",
+      "number": "14.2",
+      "pdf_page": 350,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-03-elide.md",
+        "references/idioms/doitrees-revisited.md"
+      ]
+    },
+    {
+      "caption": "The Toolglass and Magic Lenses idiom provides focus and context through a superimposed local layer: the see-through lens color codes the patch-work sphere with Gaussian curvature information and provides a numeric value for the point at the center. From [Bier et al. 93, Figure 12].",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-03.png",
+      "id": "fig-14-03",
+      "method": "crop",
+      "number": "14.3",
+      "pdf_page": 351,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-04-superimpose.md",
+        "references/idioms/toolglass-and-magic-lenses.md"
+      ]
+    },
+    {
+      "caption": "The Cone Tree system used 3D perspective for focus+context, providing a global distortion region with a single focus point, and using standard geometric navigation for interaction. From [Card and Mackinlay 99, Figure 10].",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-04.png",
+      "id": "fig-14-04",
+      "method": "embedded",
+      "number": "14.4",
+      "pdf_page": 352,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-05-distort.md",
+        "references/idioms/3d-perspective.md"
+      ]
+    },
+    {
+      "caption": "Focus+context with interactive ﬁsheye lens, with poker player dataset. (a) Scatterplot showing correlation between two strategies. (b) Dense matrix view showing correlation between a speciﬁc complex strategy and the player’s winning rate, encoded by color.",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-05.png",
+      "id": "fig-14-05",
+      "method": "crop",
+      "number": "14.5",
+      "pdf_page": 354,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-05-distort.md",
+        "references/idioms/fisheye-lens.md"
+      ]
+    },
+    {
+      "caption": "Animated transition showing navigation through 3D hyperbolic geometry for a ﬁle system tree laid out with the H3 idiom, where the ﬁrst three frames show hyperbolic translation changing the focus point and the last three show standard 3D rotation spinning the structure around. From [Munzner 98, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-06.png",
+      "id": "fig-14-06",
+      "method": "crop",
+      "number": "14.6",
+      "pdf_page": 355,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-05-distort.md",
+        "references/idioms/hyperbolic-geometry.md"
+      ]
+    },
+    {
+      "caption": "TreeJuxtaposer uses stretch and squish navigation with multiple rectangular foci for exploring phylogenetic trees. (a) Stretching a single region when comparing two small trees. (b) Stretching multiple regions within a large tree. From [Munzner et al. 03, Figures 5 and 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-07.png",
+      "id": "fig-14-07",
+      "method": "crop",
+      "number": "14.7",
+      "pdf_page": 357,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-05-distort.md",
+        "references/idioms/stretch-and-squish-navigation.md"
+      ]
+    },
+    {
+      "caption": "PRISequenceJuxtaposer supports comparing gene sequences using the stretch and squish navigation idiom with the guaranteed visibility of marks representing items with a high importance value, via a rendering algorithm with custom subpixel aggregation. From [Slack et al. 06, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-08.png",
+      "id": "fig-14-08",
+      "method": "embedded",
+      "number": "14.8",
+      "pdf_page": 357,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-05-distort.md",
+        "references/idioms/stretch-and-squish-navigation.md"
+      ]
+    },
+    {
+      "caption": "General frameworks calculate the magniﬁcation and minimization ﬁelds needed to achieve desired transformations in the image. (a) Desired transformations. (b) Calculated magniﬁcation ﬁelds. From [Keahey 98, Figure 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-09.png",
+      "id": "fig-14-09",
+      "method": "crop",
+      "number": "14.9",
+      "pdf_page": 358,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-05-distort.md",
+        "references/idioms/nonlinear-magnification-fields.md"
+      ]
+    },
+    {
+      "caption": "Four approaches to graph exploration. (a) Fisheye lens. (b) Magnifying lens. (c) Neighborhood highlighting with layering. (d) Neighborhood highlighting with both layering and Bring and Go interaction. From [Lambert et al. 10, Figures 2a, 2b, 3b, and 4b].",
+      "dpi": 150,
+      "file": "assets/figures/fig-14-10.png",
+      "id": "fig-14-10",
+      "method": "crop",
+      "number": "14.10",
+      "pdf_page": 361,
+      "reason": null,
+      "referenced_by": [
+        "references/ch14-embed-focus-context/s14-06-costs-benefits-distortion.md",
+        "references/idioms/fisheye-lens.md"
+      ]
+    },
+    {
+      "caption": "Six case studies of full vis systems. (a) Scagnostics, from [Wilkinson et al. 05, Figure 5]. (b) VisDB, from [Keim and Kriegel 94, Figure 6]. (c) Hierarchical Clustering Explorer, from [Seo and Shneiderman 05, Figure 1]. (d) PivotGraph, from [Wattenberg 06, Figure 5]. (e) InterRing, from [Yang et al. 02, Figure 4]. (f) Constellation, from [Munzner 00, Figure 5.5].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-01.png",
+      "id": "fig-15-01",
+      "method": "crop",
+      "number": "15.1",
+      "pdf_page": 365,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-01-big-picture.md"
+      ]
+    },
+    {
+      "caption": "Scatterplot matrices (SPLOM) showing abalone data. From [Wilkinson et al. 05, Figure 1].",
+      "dpi": 111,
+      "file": "assets/figures/fig-15-02.png",
+      "id": "fig-15-02",
+      "method": "embedded",
+      "number": "15.2",
+      "pdf_page": 368,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-03-graph-theoretic-scagnostics.md"
+      ]
+    },
+    {
+      "caption": "The nine scagnostics measures that describe scatterplot shape, with examples of real-world datasets rated low, medium, and high for each of the nine measures. From [Wilkinson and Wills 08, Figure 6].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-03.png",
+      "id": "fig-15-03",
+      "method": "crop",
+      "number": "15.3",
+      "pdf_page": 370,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-03-graph-theoretic-scagnostics.md"
+      ]
+    },
+    {
+      "caption": "Scagnostics SPLOM for the abalone dataset, where each point represents an entire scatterplot in the original matrix. The selected point is highlighed in red in each view, and the scatterplot corresponding to it is shown in a popup detail view. From [Wilkinson et al. 05, Figure 5].",
+      "dpi": 115,
+      "file": "assets/figures/fig-15-04.png",
+      "id": "fig-15-04",
+      "method": "embedded",
+      "number": "15.4",
+      "pdf_page": 371,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-03-graph-theoretic-scagnostics.md"
+      ]
+    },
+    {
+      "caption": "VisDB layouts schematically, for a dataset with ﬁve attributes. (a) Each attribute is shown in a separate small-multiple view. (b) In an alternate VisDB layout, each item is shown with a glyph with per-attribute sections in a single combined view. From [Keim and Kriegel 94, Figures 2 and 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-05.png",
+      "id": "fig-15-05",
+      "method": "crop",
+      "number": "15.5",
+      "pdf_page": 373,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-04-visdb.md"
+      ]
+    },
+    {
+      "caption": "VisDB screenshots with a dataset of eight attributes and 1000 items. (a) Attribute-based grouping with one small-multiple view for each attribute. (b) Item-based grouping has a single combined view with multiattribute glyph. From [Keim and Kriegel 94, Figure 6].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-06.png",
+      "id": "fig-15-06",
+      "method": "crop",
+      "number": "15.6",
+      "pdf_page": 374,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-04-visdb.md"
+      ]
+    },
+    {
+      "caption": "VisDB layout orientation and colors. (a) Layouts are are ordered internally in a spiral emanating from the center. (b) The VisDB sequential colormap uses multiple hues with monotonically increasing luminance. From [Keim and Kriegel 94, Figures 2 and 3].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-07.png",
+      "id": "fig-15-07",
+      "method": "crop",
+      "number": "15.7",
+      "pdf_page": 375,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-04-visdb.md"
+      ]
+    },
+    {
+      "caption": "Hierachical Clustering Explorer uses interactive aggregation and ﬁltering for the scalable display of a multidimensional table showing gene activity in different conditions using multiple overview+detail cluster heatmap views. From [Seo and Shneiderman 02, Figure 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-08.png",
+      "id": "fig-15-08",
+      "method": "embedded",
+      "number": "15.8",
+      "pdf_page": 377,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-05-hierarchical-clustering-explorer.md"
+      ]
+    },
+    {
+      "caption": "HCE on a demographics dataset showing the rank-by-feature idiom for systematic exploration of pairwise combinations of attributes using a matrix overview and scatterplot. From [Seo and Shneiderman 05, Figure 1].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-09.png",
+      "id": "fig-15-09",
+      "method": "embedded",
+      "number": "15.9",
+      "pdf_page": 378,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-05-hierarchical-clustering-explorer.md"
+      ]
+    },
+    {
+      "caption": "Detail of HCE rank-by-feature views for ranking individual attributes using a list overview and histogram/boxplot. From [Seo and Shneiderman 05, Figure 2].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-10.png",
+      "id": "fig-15-10",
+      "method": "embedded",
+      "number": "15.10",
+      "pdf_page": 379,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-05-hierarchical-clustering-explorer.md"
+      ]
+    },
+    {
+      "caption": "The PivotGraph idiom. (a) Node–link view of small network with two attributes on nodes: gender (M/F) is encoded by node shape, and company division (1/2) is encoded by grayscale value. (b) The schematic PivotGraph roll-up of the same simple network where size of nodes and links of the derived graph shows the number of items in these aggregated groups. From [Wattenberg 06, Figure 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-11.png",
+      "id": "fig-15-11",
+      "method": "crop",
+      "number": "15.11",
+      "pdf_page": 381,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-06-pivotgraph.md",
+        "references/idioms/pivotgraph.md"
+      ]
+    },
+    {
+      "caption": "PivotGraph on graph rolled up by gender and location, showing most cross-gender communication occurs in location B. From [Wattenberg 06, Figure 5].",
+      "dpi": 144,
+      "file": "assets/figures/fig-15-12.png",
+      "id": "fig-15-12",
+      "method": "embedded",
+      "number": "15.12",
+      "pdf_page": 382,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-06-pivotgraph.md",
+        "references/idioms/pivotgraph.md"
+      ]
+    },
+    {
+      "caption": "The InterRing hierarchy vis idiom uses a space-ﬁlling radial visual encoding and distortion-based focus+context interaction. (a) The hierarchy before distortion. (b) The blue selected subtree is enlarged. (c) A second tan region is enlarged. From [Yang et al. 02, Figure 4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-13.png",
+      "id": "fig-15-13",
+      "method": "crop",
+      "number": "15.13",
+      "pdf_page": 384,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-07-interring.md"
+      ]
+    },
+    {
+      "caption": "The Constellation high-level layout bases horizontal spatial position on the plausibility attribute, where more room is allocated to deﬁnitions on highly plausible and usually short paths on the left, and less room to those on less plausible and typically longer paths on the right. From [Munzner 00, Figure 5.4].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-14.png",
+      "id": "fig-15-14",
+      "method": "embedded",
+      "number": "15.14",
+      "pdf_page": 386,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-08-constellation.md"
+      ]
+    },
+    {
+      "caption": "Resizing grid cells to increase information density. (a) Base curvilinear grid. (b) After eliminating the empty columns. (c) After eliminating empty cell rows in each column. From [Munzner 00, Figure 5.13].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-15.png",
+      "id": "fig-15-15",
+      "method": "crop",
+      "number": "15.15",
+      "pdf_page": 388,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-08-constellation.md"
+      ]
+    },
+    {
+      "caption": "Constellation uses the design choice of dynamic superimposed layers. (a) Edges in the background layer are not obtrusive. (b) The newly selected foreground layer is distinguished from the background with changes of the size, luminance, and saturation channels. From [Munzner 00, Figure 5.5].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-16.png",
+      "id": "fig-15-16",
+      "method": "crop",
+      "number": "15.16",
+      "pdf_page": 389,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-08-constellation.md"
+      ]
+    },
+    {
+      "caption": "The constellation showing all relations of type Part is highlighted. From [Munzner 00, Figure 5.16a].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-17.png",
+      "id": "fig-15-17",
+      "method": "embedded",
+      "number": "15.17",
+      "pdf_page": 389,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-08-constellation.md"
+      ]
+    },
+    {
+      "caption": "Mid-level Constellation path segment layout, using containment to show hierarchical relationship between path word in tan and its associated deﬁnitions in green. (a) One of the deﬁnitions is for the path word itself. (b) Path word that is not itself deﬁned, but only appears within other deﬁnitions. From [Munzner 00, Figure 5.9].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-18.png",
+      "id": "fig-15-18",
+      "method": "crop",
+      "number": "15.18",
+      "pdf_page": 390,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-08-constellation.md"
+      ]
+    },
+    {
+      "caption": "Low-level Constellation deﬁnition layout, using rectilinear links and spatial position. (a) The base layout, with horizontal lines color-coded for link type. (b) Long-distance links are drawn between the master version of the word and all of its duplicated proxies. From [Munzner 00, Figure 5.10].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-19.png",
+      "id": "fig-15-19",
+      "method": "crop",
+      "number": "15.19",
+      "pdf_page": 390,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-08-constellation.md"
+      ]
+    },
+    {
+      "caption": "Constellation uses a subtle version of the semantic zooming design choice, where the space allocated for the ﬁrst word versus the rest of the deﬁnition changes according to the zoom level. From [Munzner 00, Figure 5.19].",
+      "dpi": 150,
+      "file": "assets/figures/fig-15-20.png",
+      "id": "fig-15-20",
+      "method": "crop",
+      "number": "15.20",
+      "pdf_page": 391,
+      "reason": null,
+      "referenced_by": [
+        "references/ch15-analysis-case-studies/s15-08-constellation.md",
+        "references/idioms/constrained-navigation.md",
+        "references/idioms/semantic-zooming.md"
+      ]
+    }
+  ]
+}

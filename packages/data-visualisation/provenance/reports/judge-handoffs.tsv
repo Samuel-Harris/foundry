@@ -1,0 +1,5 @@
+gate	file:line	resolution
+C6	references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-01-accuracy.md:60	fixed at the root: extract.py captions now continue through rows opening with Computer Modern maths; only fig-05-07 changed; figure line regenerated
+C3	references/idioms/pivotgraph.md, references/idioms/filmfinder.md	kept: WRITER.md lets a file widen pdf_pages to the span it cites; check.py C3 passes
+C6	tools/build_lookup.py (lookup Analysis Case Studies vs Arrange Tables)	fixed: dropped the unsupported [p.96]; lookup regenerated
+C6	references/lookup.md:61 and plan.json name for idiom:change-view-over-time	fixed for readers: lookup reads card titles and shows Change over Time; plan name kept because it derives the card's file slug

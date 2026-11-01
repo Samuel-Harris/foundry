@@ -1,0 +1,35 @@
+gate	file:line	finding	action
+C6	references/idioms/categorical-colormaps.md:38	'survive black-and-white reproduction' adds 'reproduction'; p.252 says distinguishable even in black and white	fixed
+C6	references/idioms/categorical-colormaps.md:53	'ordinal data may take a segmented map when its discreteness matters' turns p.250 description into advice	fixed
+C6	references/idioms/categorical-colormaps.md:55	shape and texture bin counts dropped hedges ('might', 'with careful design', 'or even hundreds', 'at least') from pp.263-265	fixed
+C6	references/idioms/ordered-colormaps.md:19	dropped 'especially': p.250 says continuous maps are used for quantitative attributes, especially of spatial fields	fixed
+C6	references/idioms/ordered-colormaps.md:37	'set segment boundaries at semantically meaningful points' turns the Fig 10.12 example (p.258) into a general rule	fixed
+C6	references/idioms/ordered-colormaps.md:41	attached 'non-uniform background' to Ware's two-to-four-bin grayscale advice; p.248 attaches it to the fewer-than-five-steps claim	fixed
+C6	references/idioms/ordered-colormaps.md:54	segmented rainbow for ordered data dropped the book's 'while not ideal' hedge (p.259)	fixed
+C6	references/idioms/colorblind-safe-colormaps.md:37	'avoid relying on hue alone to separate red from black...' is advice the book does not give; p.260 only lists these as confused pairs	fixed
+C6	references/idioms/size-channels.md:42	claimed colour encodings 'cannot be seen' on small marks; p.261 says that of shape and orientation, pp.248-249 only say hue and saturation are harder	fixed
+C6	references/idioms/size-channels.md:52	'fewer than five and about three' unlabelled; fewer than five is luminance on a non-uniform background (p.248)	fixed
+C6	references/idioms/angle-channel.md:36	'Use when accuracy between length and area is enough' converts the p.262 ranking into a use rule	fixed
+C6	references/idioms/curvature-channel.md:48	'the better magnitude channel for line marks' is not stated; p.262 ranks angle above area, p.263 puts curvature at the bottom	fixed
+C6	references/idioms/shape-channel.md:40	'only about a dozen are distinguishable' at 10x10 inverts p.263's hedged 'with careful design it might be possible to create roughly a dozen'	fixed
+C6	references/idioms/motion-channels.md:41	'Avoid when viewers must attend to static channels' hardens p.264's 'may be difficult'	fixed
+C6	references/ch10-map-color-other-channels/node.md:33	'only angle also suits diverging and cyclic data' claims exclusivity the book (p.262) never states	fixed
+C6	references/ch10-map-color-other-channels/node.md:25	shape use-when 'about a dozen at 10x10 pixels' dropped the careful-design hedge (p.263)	fixed
+C6	references/idioms/topographic-terrain-map.md:55	'a single or few levels at a time' contradicts the Flexible Isosurfaces box Scale 'One dozen contour levels' (p.211)	fixed
+C6	references/idioms/similarity-clustered-streamlines.md:61	'Use a seeding strategy like this one because...' recommends this idiom where p.216 only says seeding is the crucial choice	fixed
+C6	references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-04-feature-flow.md:26	'critical points, the canonical feature' overstates p.214 'one of the features of interest'	fixed
+C6	references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-01-flow-glyphs.md:60	'sparse-seed trajectories, which avoid per-cell glyphs' adds an unsourced contrast	fixed
+C6	references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-01-flow-glyphs.md:25	[NOT FROM BOOK] note flags the book's 'attracting sources, repelling sinks' (p.214) as reversed from standard usage	kept: marked non-book, quotes the book as printed and does not rewrite it
+C6	references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-01-isocontours.md:50	text cites tooth isosurfaces as Fig 8.3(c), caption labels them (b) (pp.207-209)	kept: leaf already states the mismatch without resolving it
+C6	references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-02-direct-volume-rendering.md:38	text calls the Simian panels Fig 8.7, printed caption is the second Fig 8.6 (pp.212-213)	kept: leaf and card already flag the numbering clash
+C6	references/ch08-arrange-spatial-data/s08-02-why-use-given.md:25	margin note names expressiveness where body names effectiveness (p.205)	kept: flagged as unreconciled, not resolved
+C6	references/idioms/ellipsoid-tensor-glyphs.md:29	box How: Encode says 'according to cluster' with no clustering in the text (p.221)	kept: card flags the oddity without explaining it away
+C6	references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-02-ordered-colormaps.md:37	Fig 10.11(b) ends called purple and yellow in text, blue-yellow in caption (pp.256-257)	kept: leaf flags both
+C6	references/idioms/*.md (ch10 unboxed cards)	every number checked against its page: 6-12 bins, 21 to ~12, 27 levels, 8 Constellation bins, <5 and 2-4 luminance, ~3 saturation, 6-7 hue, 10:1 and 3:1, 2 transparency steps, 8% and 0.5%, exponent 0.7, 90/180/360 deg tiltmaps, 89/90 44/45 1/0 37/38, 2-3 curvature, dozens-hundreds and ~12 at 10x10 shape, 1-2 dozen, 3-4 and ~12 texture	kept: all match pp.248-265
+Hints	references/idioms/categorical-colormaps.md:73	category labels 'red','blue','green','orange','purple' paired with Set1 order red, blue, green, purple, orange, so 'orange' drew purple and vice versa	fixed
+Hints	references/idioms/ellipsoid-tensor-glyphs.md:85	cyclic 'twilight' map applied to |cos(angle)|, a folded non-cyclic value that merges mirror orientations; now maps angle mod 180 with clim 0-180	fixed
+Hints	references/idioms/similarity-clustered-streamlines.md:96	ax.collections[-1].set_alpha dimmed lines but left streamplot arrows opaque; now passes an RGBA colour so lines and arrows share the cluster alpha	fixed
+Hints	references/idioms/*.md (16 cards)	colormap class checked against snippet data: Set1/Pastel1 categorical, viridis sequential, RdBu+TwoSlopeNorm diverging on signed data, Blues 9-level segmented for choropleth, Greys sequential for joint histogram, Tableau10 for clusters	kept: classes match the data
+B1	references/ch08-arrange-spatial-data/node.md:17	42 use-when lines across 6 nodes checked; none restate the title	kept: all are decision criteria
+B4	references/ch10-map-color-other-channels/s10-03-colormaps/node.md:28	10.3.x leaves and same-named cards overlap; note separates reasoning (leaf) from rules and code (card)	kept: note says how to choose
+B6	references/ch10-map-color-other-channels/node.md:15	3 queries per node on 6 nodes (eg palette for 5 categories; temperature anomaly map; wind velocity field; county unemployment map) each resolved to one child	kept: nodes self-sufficient

@@ -1,0 +1,3919 @@
+{
+  "entries": [
+    {
+      "entry": "ch01",
+      "level": "chapter",
+      "number": "1",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/node.md",
+      "pdf_pages": [
+        26,
+        44
+      ],
+      "title": "What’s Vis, and Why Do It?"
+    },
+    {
+      "entry": "s01.01",
+      "level": "section",
+      "number": "1.1",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-01-big-picture.md",
+      "pdf_pages": [
+        26,
+        27
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s01.02",
+      "level": "section",
+      "number": "1.2",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-02-why-have-human-loop.md",
+      "pdf_pages": [
+        27,
+        29
+      ],
+      "title": "Why Have a Human in the Loop?"
+    },
+    {
+      "entry": "s01.03",
+      "level": "section",
+      "number": "1.3",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-03-why-have-computer-loop.md",
+      "pdf_pages": [
+        29,
+        31
+      ],
+      "title": "Why Have a Computer in the Loop?"
+    },
+    {
+      "entry": "s01.04",
+      "level": "section",
+      "number": "1.4",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-04-why-use-external-representation.md",
+      "pdf_pages": [
+        31,
+        31
+      ],
+      "title": "Why Use an External Representation?"
+    },
+    {
+      "entry": "s01.05",
+      "level": "section",
+      "number": "1.5",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-05-why-depend-vision.md",
+      "pdf_pages": [
+        31,
+        32
+      ],
+      "title": "Why Depend on Vision?"
+    },
+    {
+      "entry": "s01.06",
+      "level": "section",
+      "number": "1.6",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-06-why-show-data-detail.md",
+      "pdf_pages": [
+        32,
+        34
+      ],
+      "title": "Why Show the Data in Detail?"
+    },
+    {
+      "entry": "s01.07",
+      "level": "section",
+      "number": "1.7",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-07-why-use-interactivity.md",
+      "pdf_pages": [
+        34,
+        34
+      ],
+      "title": "Why Use Interactivity?"
+    },
+    {
+      "entry": "s01.08",
+      "level": "section",
+      "number": "1.8",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-08-why-vis-idiom-design.md",
+      "pdf_pages": [
+        35,
+        36
+      ],
+      "title": "Why Is the Vis Idiom Design Space Huge?"
+    },
+    {
+      "entry": "s01.09",
+      "level": "section",
+      "number": "1.9",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-09-why-focus-tasks.md",
+      "pdf_pages": [
+        36,
+        36
+      ],
+      "title": "Why Focus on Tasks?"
+    },
+    {
+      "entry": "s01.10",
+      "level": "section",
+      "number": "1.10",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-10-why-focus-effectiveness.md",
+      "pdf_pages": [
+        36,
+        37
+      ],
+      "title": "Why Focus on Effectiveness?"
+    },
+    {
+      "entry": "s01.11",
+      "level": "section",
+      "number": "1.11",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-11-why-most-designs-ineffective.md",
+      "pdf_pages": [
+        37,
+        39
+      ],
+      "title": "Why Are Most Designs Ineffective?"
+    },
+    {
+      "entry": "s01.12",
+      "level": "section",
+      "number": "1.12",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-12-why-validation-difficult.md",
+      "pdf_pages": [
+        39,
+        39
+      ],
+      "title": "Why Is Validation Difﬁcult?"
+    },
+    {
+      "entry": "s01.13",
+      "level": "section",
+      "number": "1.13",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-13-why-there-resource-limitations.md",
+      "pdf_pages": [
+        39,
+        41
+      ],
+      "title": "Why Are There Resource Limitations?"
+    },
+    {
+      "entry": "s01.14",
+      "level": "section",
+      "number": "1.14",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-14-why-analyze.md",
+      "pdf_pages": [
+        41,
+        43
+      ],
+      "title": "Why Analyze?"
+    },
+    {
+      "entry": "s01.15",
+      "level": "section",
+      "number": "1.15",
+      "other_paths": [],
+      "path": "references/ch01-whats-vis-why/s01-15-further-reading.md",
+      "pdf_pages": [
+        43,
+        44
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch02",
+      "level": "chapter",
+      "number": "2",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/node.md",
+      "pdf_pages": [
+        45,
+        66
+      ],
+      "title": "What: Data Abstraction"
+    },
+    {
+      "entry": "s02.01",
+      "level": "section",
+      "number": "2.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-01-big-picture.md",
+      "pdf_pages": [
+        46,
+        46
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s02.02",
+      "level": "section",
+      "number": "2.2",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-02-why-data-semantics-types.md",
+      "pdf_pages": [
+        46,
+        48
+      ],
+      "title": "Why Do Data Semantics and Types Matter?"
+    },
+    {
+      "entry": "s02.03",
+      "level": "section",
+      "number": "2.3",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-03-data-types.md",
+      "pdf_pages": [
+        48,
+        49
+      ],
+      "title": "Data Types"
+    },
+    {
+      "entry": "s02.04",
+      "level": "section",
+      "number": "2.4",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/node.md",
+      "pdf_pages": [
+        49,
+        56
+      ],
+      "title": "Dataset Types"
+    },
+    {
+      "entry": "s02.04.01",
+      "level": "subsection",
+      "number": "2.4.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-01-tables.md",
+      "pdf_pages": [
+        50,
+        51
+      ],
+      "title": "Tables"
+    },
+    {
+      "entry": "s02.04.02",
+      "level": "subsection",
+      "number": "2.4.2",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-02-networks-trees.md",
+      "pdf_pages": [
+        51,
+        52
+      ],
+      "title": "Networks and Trees"
+    },
+    {
+      "entry": "s02.04.02.01",
+      "level": "subsubsection",
+      "number": "2.4.2.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-02-networks-trees.md#s02.04.02.01",
+      "pdf_pages": [
+        52,
+        52
+      ],
+      "title": "Trees"
+    },
+    {
+      "entry": "s02.04.03",
+      "level": "subsection",
+      "number": "2.4.3",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-03-fields.md",
+      "pdf_pages": [
+        52,
+        54
+      ],
+      "title": "Fields"
+    },
+    {
+      "entry": "s02.04.03.01",
+      "level": "subsubsection",
+      "number": "2.4.3.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-03-fields.md#s02.04.03.01",
+      "pdf_pages": [
+        53,
+        54
+      ],
+      "title": "Spatial Fields"
+    },
+    {
+      "entry": "s02.04.03.02",
+      "level": "subsubsection",
+      "number": "2.4.3.2",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-03-fields.md#s02.04.03.02",
+      "pdf_pages": [
+        54,
+        54
+      ],
+      "title": "Grid Types"
+    },
+    {
+      "entry": "s02.04.04",
+      "level": "subsection",
+      "number": "2.4.4",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-04-geometry.md",
+      "pdf_pages": [
+        54,
+        55
+      ],
+      "title": "Geometry"
+    },
+    {
+      "entry": "s02.04.05",
+      "level": "subsection",
+      "number": "2.4.5",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-05-other-combinations.md",
+      "pdf_pages": [
+        55,
+        56
+      ],
+      "title": "Other Combinations"
+    },
+    {
+      "entry": "s02.04.06",
+      "level": "subsection",
+      "number": "2.4.6",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-04-dataset-types/s02-04-06-dataset-availability.md",
+      "pdf_pages": [
+        56,
+        56
+      ],
+      "title": "Dataset Availability"
+    },
+    {
+      "entry": "s02.05",
+      "level": "section",
+      "number": "2.5",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-05-attribute-types.md",
+      "pdf_pages": [
+        56,
+        59
+      ],
+      "title": "Attribute Types"
+    },
+    {
+      "entry": "s02.05.01",
+      "level": "subsection",
+      "number": "2.5.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-05-attribute-types.md#s02.05.01",
+      "pdf_pages": [
+        57,
+        57
+      ],
+      "title": "Categorical"
+    },
+    {
+      "entry": "s02.05.02",
+      "level": "subsection",
+      "number": "2.5.2",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-05-attribute-types.md#s02.05.02",
+      "pdf_pages": [
+        57,
+        58
+      ],
+      "title": "Ordered: Ordinal and Quantitative"
+    },
+    {
+      "entry": "s02.05.02.01",
+      "level": "subsubsection",
+      "number": "2.5.2.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-05-attribute-types.md#s02.05.02.01",
+      "pdf_pages": [
+        58,
+        58
+      ],
+      "title": "Sequential versus Diverging"
+    },
+    {
+      "entry": "s02.05.02.02",
+      "level": "subsubsection",
+      "number": "2.5.2.2",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-05-attribute-types.md#s02.05.02.02",
+      "pdf_pages": [
+        58,
+        58
+      ],
+      "title": "Cyclic"
+    },
+    {
+      "entry": "s02.05.03",
+      "level": "subsection",
+      "number": "2.5.3",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-05-attribute-types.md#s02.05.03",
+      "pdf_pages": [
+        58,
+        59
+      ],
+      "title": "Hierarchical Attributes"
+    },
+    {
+      "entry": "s02.06",
+      "level": "section",
+      "number": "2.6",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/node.md",
+      "pdf_pages": [
+        59,
+        65
+      ],
+      "title": "Semantics"
+    },
+    {
+      "entry": "s02.06.01",
+      "level": "subsection",
+      "number": "2.6.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md",
+      "pdf_pages": [
+        59,
+        63
+      ],
+      "title": "Key versus Value Semantics"
+    },
+    {
+      "entry": "s02.06.01.01",
+      "level": "subsubsection",
+      "number": "2.6.1.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md#s02.06.01.01",
+      "pdf_pages": [
+        59,
+        61
+      ],
+      "title": "Flat Tables"
+    },
+    {
+      "entry": "s02.06.01.02",
+      "level": "subsubsection",
+      "number": "2.6.1.2",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md#s02.06.01.02",
+      "pdf_pages": [
+        61,
+        62
+      ],
+      "title": "Multidimensional Tables"
+    },
+    {
+      "entry": "s02.06.01.03",
+      "level": "subsubsection",
+      "number": "2.6.1.3",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md#s02.06.01.03",
+      "pdf_pages": [
+        62,
+        62
+      ],
+      "title": "Fields"
+    },
+    {
+      "entry": "s02.06.01.04",
+      "level": "subsubsection",
+      "number": "2.6.1.4",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md#s02.06.01.04",
+      "pdf_pages": [
+        62,
+        62
+      ],
+      "title": "Scalar Fields"
+    },
+    {
+      "entry": "s02.06.01.05",
+      "level": "subsubsection",
+      "number": "2.6.1.5",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md#s02.06.01.05",
+      "pdf_pages": [
+        62,
+        63
+      ],
+      "title": "Vector Fields"
+    },
+    {
+      "entry": "s02.06.01.06",
+      "level": "subsubsection",
+      "number": "2.6.1.6",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md#s02.06.01.06",
+      "pdf_pages": [
+        63,
+        63
+      ],
+      "title": "Tensor Fields"
+    },
+    {
+      "entry": "s02.06.01.07",
+      "level": "subsubsection",
+      "number": "2.6.1.7",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-01-key-value-semantics.md#s02.06.01.07",
+      "pdf_pages": [
+        63,
+        63
+      ],
+      "title": "Field Semantics"
+    },
+    {
+      "entry": "s02.06.02",
+      "level": "subsection",
+      "number": "2.6.2",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-02-temporal-semantics.md",
+      "pdf_pages": [
+        63,
+        65
+      ],
+      "title": "Temporal Semantics"
+    },
+    {
+      "entry": "s02.06.02.01",
+      "level": "subsubsection",
+      "number": "2.6.2.1",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-06-semantics/s02-06-02-temporal-semantics.md#s02.06.02.01",
+      "pdf_pages": [
+        64,
+        65
+      ],
+      "title": "Time-Varying Data"
+    },
+    {
+      "entry": "s02.07",
+      "level": "section",
+      "number": "2.7",
+      "other_paths": [],
+      "path": "references/ch02-what-data-abstraction/s02-07-further-reading.md",
+      "pdf_pages": [
+        65,
+        66
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch03",
+      "level": "chapter",
+      "number": "3",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/node.md",
+      "pdf_pages": [
+        67,
+        90
+      ],
+      "title": "Why: Task Abstraction"
+    },
+    {
+      "entry": "s03.01",
+      "level": "section",
+      "number": "3.1",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-01-big-picture.md",
+      "pdf_pages": [
+        68,
+        68
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s03.02",
+      "level": "section",
+      "number": "3.2",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-02-why-analyze-tasks-abstractly.md",
+      "pdf_pages": [
+        68,
+        69
+      ],
+      "title": "Why Analyze Tasks Abstractly?"
+    },
+    {
+      "entry": "s03.03",
+      "level": "section",
+      "number": "3.3",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-03-who-designer-user.md",
+      "pdf_pages": [
+        69,
+        70
+      ],
+      "title": "Who: Designer or User"
+    },
+    {
+      "entry": "s03.04",
+      "level": "section",
+      "number": "3.4",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/node.md",
+      "pdf_pages": [
+        70,
+        80
+      ],
+      "title": "Actions"
+    },
+    {
+      "entry": "s03.04.01",
+      "level": "subsection",
+      "number": "3.4.1",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-01-analyze.md",
+      "pdf_pages": [
+        70,
+        74
+      ],
+      "title": "Analyze"
+    },
+    {
+      "entry": "s03.04.01.01",
+      "level": "subsubsection",
+      "number": "3.4.1.1",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-01-analyze.md#s03.04.01.01",
+      "pdf_pages": [
+        72,
+        72
+      ],
+      "title": "Discover"
+    },
+    {
+      "entry": "s03.04.01.02",
+      "level": "subsubsection",
+      "number": "3.4.1.2",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-01-analyze.md#s03.04.01.02",
+      "pdf_pages": [
+        72,
+        73
+      ],
+      "title": "Present"
+    },
+    {
+      "entry": "s03.04.01.03",
+      "level": "subsubsection",
+      "number": "3.4.1.3",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-01-analyze.md#s03.04.01.03",
+      "pdf_pages": [
+        73,
+        74
+      ],
+      "title": "Enjoy"
+    },
+    {
+      "entry": "s03.04.02",
+      "level": "subsection",
+      "number": "3.4.2",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-02-produce.md",
+      "pdf_pages": [
+        74,
+        78
+      ],
+      "title": "Produce"
+    },
+    {
+      "entry": "s03.04.02.01",
+      "level": "subsubsection",
+      "number": "3.4.2.1",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-02-produce.md#s03.04.02.01",
+      "pdf_pages": [
+        74,
+        74
+      ],
+      "title": "Annotate"
+    },
+    {
+      "entry": "s03.04.02.02",
+      "level": "subsubsection",
+      "number": "3.4.2.2",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-02-produce.md#s03.04.02.02",
+      "pdf_pages": [
+        74,
+        75
+      ],
+      "title": "Record"
+    },
+    {
+      "entry": "s03.04.02.03",
+      "level": "subsubsection",
+      "number": "3.4.2.3",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-02-produce.md#s03.04.02.03",
+      "pdf_pages": [
+        75,
+        78
+      ],
+      "title": "Derive"
+    },
+    {
+      "entry": "s03.04.03",
+      "level": "subsection",
+      "number": "3.4.3",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-03-search.md",
+      "pdf_pages": [
+        78,
+        79
+      ],
+      "title": "Search"
+    },
+    {
+      "entry": "s03.04.03.01",
+      "level": "subsubsection",
+      "number": "3.4.3.1",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-03-search.md#s03.04.03.01",
+      "pdf_pages": [
+        78,
+        78
+      ],
+      "title": "Lookup"
+    },
+    {
+      "entry": "s03.04.03.02",
+      "level": "subsubsection",
+      "number": "3.4.3.2",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-03-search.md#s03.04.03.02",
+      "pdf_pages": [
+        78,
+        78
+      ],
+      "title": "Locate"
+    },
+    {
+      "entry": "s03.04.03.03",
+      "level": "subsubsection",
+      "number": "3.4.3.3",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-03-search.md#s03.04.03.03",
+      "pdf_pages": [
+        78,
+        79
+      ],
+      "title": "Browse"
+    },
+    {
+      "entry": "s03.04.03.04",
+      "level": "subsubsection",
+      "number": "3.4.3.4",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-03-search.md#s03.04.03.04",
+      "pdf_pages": [
+        79,
+        79
+      ],
+      "title": "Explore"
+    },
+    {
+      "entry": "s03.04.04",
+      "level": "subsection",
+      "number": "3.4.4",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-04-query.md",
+      "pdf_pages": [
+        79,
+        80
+      ],
+      "title": "Query"
+    },
+    {
+      "entry": "s03.04.04.01",
+      "level": "subsubsection",
+      "number": "3.4.4.1",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-04-query.md#s03.04.04.01",
+      "pdf_pages": [
+        79,
+        80
+      ],
+      "title": "Identify"
+    },
+    {
+      "entry": "s03.04.04.02",
+      "level": "subsubsection",
+      "number": "3.4.4.2",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-04-query.md#s03.04.04.02",
+      "pdf_pages": [
+        80,
+        80
+      ],
+      "title": "Compare"
+    },
+    {
+      "entry": "s03.04.04.03",
+      "level": "subsubsection",
+      "number": "3.4.4.3",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-04-actions/s03-04-04-query.md#s03.04.04.03",
+      "pdf_pages": [
+        80,
+        80
+      ],
+      "title": "Summarize"
+    },
+    {
+      "entry": "s03.05",
+      "level": "section",
+      "number": "3.5",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-05-targets.md",
+      "pdf_pages": [
+        80,
+        82
+      ],
+      "title": "Targets"
+    },
+    {
+      "entry": "s03.06",
+      "level": "section",
+      "number": "3.6",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-06-how-preview.md",
+      "pdf_pages": [
+        82,
+        83
+      ],
+      "title": "How: A Preview"
+    },
+    {
+      "entry": "s03.07",
+      "level": "section",
+      "number": "3.7",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/node.md",
+      "pdf_pages": [
+        84,
+        89
+      ],
+      "title": "Analyzing and Deriving: Examples"
+    },
+    {
+      "entry": "s03.07.01",
+      "level": "subsection",
+      "number": "3.7.1",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-01-comparing-two-idioms.md",
+      "pdf_pages": [
+        84,
+        85
+      ],
+      "title": "Comparing Two Idioms"
+    },
+    {
+      "entry": "s03.07.02",
+      "level": "subsection",
+      "number": "3.7.2",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-02-deriving-one-attribute.md",
+      "pdf_pages": [
+        85,
+        87
+      ],
+      "title": "Deriving One Attribute"
+    },
+    {
+      "entry": "s03.07.03",
+      "level": "subsection",
+      "number": "3.7.3",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-07-analyzing-deriving-examples/s03-07-03-deriving-many-new-attributes.md",
+      "pdf_pages": [
+        87,
+        89
+      ],
+      "title": "Deriving Many New Attributes"
+    },
+    {
+      "entry": "s03.08",
+      "level": "section",
+      "number": "3.8",
+      "other_paths": [],
+      "path": "references/ch03-why-task-abstraction/s03-08-further-reading.md",
+      "pdf_pages": [
+        89,
+        90
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch04",
+      "level": "chapter",
+      "number": "4",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/node.md",
+      "pdf_pages": [
+        91,
+        118
+      ],
+      "title": "Analysis: Four Levels for Validation"
+    },
+    {
+      "entry": "s04.01",
+      "level": "section",
+      "number": "4.1",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-01-big-picture.md",
+      "pdf_pages": [
+        92,
+        92
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s04.02",
+      "level": "section",
+      "number": "4.2",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-02-why-validate.md",
+      "pdf_pages": [
+        92,
+        92
+      ],
+      "title": "Why Validate?"
+    },
+    {
+      "entry": "s04.03",
+      "level": "section",
+      "number": "4.3",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-03-four-levels-design/node.md",
+      "pdf_pages": [
+        92,
+        98
+      ],
+      "title": "Four Levels of Design"
+    },
+    {
+      "entry": "s04.03.01",
+      "level": "subsection",
+      "number": "4.3.1",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-03-four-levels-design/s04-03-01-domain-situation.md",
+      "pdf_pages": [
+        94,
+        95
+      ],
+      "title": "Domain Situation"
+    },
+    {
+      "entry": "s04.03.02",
+      "level": "subsection",
+      "number": "4.3.2",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-03-four-levels-design/s04-03-02-task-data-abstraction.md",
+      "pdf_pages": [
+        95,
+        96
+      ],
+      "title": "Task and Data Abstraction"
+    },
+    {
+      "entry": "s04.03.03",
+      "level": "subsection",
+      "number": "4.3.3",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-03-four-levels-design/s04-03-03-visual-encoding-interaction-idiom.md",
+      "pdf_pages": [
+        96,
+        97
+      ],
+      "title": "Visual Encoding and Interaction Idiom"
+    },
+    {
+      "entry": "s04.03.04",
+      "level": "subsection",
+      "number": "4.3.4",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-03-four-levels-design/s04-03-04-algorithm.md",
+      "pdf_pages": [
+        97,
+        98
+      ],
+      "title": "Algorithm"
+    },
+    {
+      "entry": "s04.04",
+      "level": "section",
+      "number": "4.4",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-04-angles-attack.md",
+      "pdf_pages": [
+        98,
+        99
+      ],
+      "title": "Angles of Attack"
+    },
+    {
+      "entry": "s04.05",
+      "level": "section",
+      "number": "4.5",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-05-threats-validity.md",
+      "pdf_pages": [
+        99,
+        100
+      ],
+      "title": "Threats to Validity"
+    },
+    {
+      "entry": "s04.06",
+      "level": "section",
+      "number": "4.6",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-06-validation-approaches/node.md",
+      "pdf_pages": [
+        100,
+        106
+      ],
+      "title": "Validation Approaches"
+    },
+    {
+      "entry": "s04.06.01",
+      "level": "subsection",
+      "number": "4.6.1",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-06-validation-approaches/s04-06-01-domain-validation.md",
+      "pdf_pages": [
+        102,
+        103
+      ],
+      "title": "Domain Validation"
+    },
+    {
+      "entry": "s04.06.02",
+      "level": "subsection",
+      "number": "4.6.2",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-06-validation-approaches/s04-06-02-abstraction-validation.md",
+      "pdf_pages": [
+        103,
+        103
+      ],
+      "title": "Abstraction Validation"
+    },
+    {
+      "entry": "s04.06.03",
+      "level": "subsection",
+      "number": "4.6.3",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-06-validation-approaches/s04-06-03-idiom-validation.md",
+      "pdf_pages": [
+        103,
+        105
+      ],
+      "title": "Idiom Validation"
+    },
+    {
+      "entry": "s04.06.04",
+      "level": "subsection",
+      "number": "4.6.4",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-06-validation-approaches/s04-06-04-algorithm-validation.md",
+      "pdf_pages": [
+        105,
+        106
+      ],
+      "title": "Algorithm Validation"
+    },
+    {
+      "entry": "s04.06.05",
+      "level": "subsection",
+      "number": "4.6.5",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-06-validation-approaches/s04-06-05-mismatches.md",
+      "pdf_pages": [
+        106,
+        106
+      ],
+      "title": "Mismatches"
+    },
+    {
+      "entry": "s04.07",
+      "level": "section",
+      "number": "4.7",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/node.md",
+      "pdf_pages": [
+        106,
+        116
+      ],
+      "title": "Validation Examples"
+    },
+    {
+      "entry": "s04.07.01",
+      "level": "subsection",
+      "number": "4.7.1",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-01-genealogical-graphs.md",
+      "pdf_pages": [
+        106,
+        108
+      ],
+      "title": "Genealogical Graphs"
+    },
+    {
+      "entry": "s04.07.02",
+      "level": "subsection",
+      "number": "4.7.2",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-02-matrixexplorer.md",
+      "pdf_pages": [
+        108,
+        110
+      ],
+      "title": "MatrixExplorer"
+    },
+    {
+      "entry": "s04.07.03",
+      "level": "subsection",
+      "number": "4.7.3",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-03-flow-maps.md",
+      "pdf_pages": [
+        110,
+        112
+      ],
+      "title": "Flow Maps"
+    },
+    {
+      "entry": "s04.07.04",
+      "level": "subsection",
+      "number": "4.7.4",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-04-liverac.md",
+      "pdf_pages": [
+        112,
+        114
+      ],
+      "title": "LiveRAC"
+    },
+    {
+      "entry": "s04.07.05",
+      "level": "subsection",
+      "number": "4.7.5",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-05-linlog.md",
+      "pdf_pages": [
+        114,
+        115
+      ],
+      "title": "LinLog"
+    },
+    {
+      "entry": "s04.07.06",
+      "level": "subsection",
+      "number": "4.7.6",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-07-validation-examples/s04-07-06-sizing-horizon.md",
+      "pdf_pages": [
+        115,
+        116
+      ],
+      "title": "Sizing the Horizon"
+    },
+    {
+      "entry": "s04.08",
+      "level": "section",
+      "number": "4.8",
+      "other_paths": [],
+      "path": "references/ch04-analysis-four-levels-validation/s04-08-further-reading.md",
+      "pdf_pages": [
+        116,
+        118
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch05",
+      "level": "chapter",
+      "number": "5",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/node.md",
+      "pdf_pages": [
+        119,
+        140
+      ],
+      "title": "Marks and Channels"
+    },
+    {
+      "entry": "s05.01",
+      "level": "section",
+      "number": "5.1",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-01-big-picture.md",
+      "pdf_pages": [
+        120,
+        120
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s05.02",
+      "level": "section",
+      "number": "5.2",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-02-why-marks-channels.md",
+      "pdf_pages": [
+        120,
+        120
+      ],
+      "title": "Why Marks and Channels?"
+    },
+    {
+      "entry": "s05.03",
+      "level": "section",
+      "number": "5.3",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-03-defining-marks-channels.md",
+      "pdf_pages": [
+        120,
+        124
+      ],
+      "title": "Deﬁning Marks and Channels"
+    },
+    {
+      "entry": "s05.03.01",
+      "level": "subsection",
+      "number": "5.3.1",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-03-defining-marks-channels.md#s05.03.01",
+      "pdf_pages": [
+        124,
+        124
+      ],
+      "title": "Channel Types"
+    },
+    {
+      "entry": "s05.03.02",
+      "level": "subsection",
+      "number": "5.3.2",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-03-defining-marks-channels.md#s05.03.02",
+      "pdf_pages": [
+        124,
+        124
+      ],
+      "title": "Mark Types"
+    },
+    {
+      "entry": "s05.04",
+      "level": "section",
+      "number": "5.4",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-04-using-marks-channels.md",
+      "pdf_pages": [
+        124,
+        128
+      ],
+      "title": "Using Marks and Channels"
+    },
+    {
+      "entry": "s05.04.01",
+      "level": "subsection",
+      "number": "5.4.1",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-04-using-marks-channels.md#s05.04.01",
+      "pdf_pages": [
+        125,
+        126
+      ],
+      "title": "Expressiveness and Effectiveness"
+    },
+    {
+      "entry": "s05.04.02",
+      "level": "subsection",
+      "number": "5.4.2",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-04-using-marks-channels.md#s05.04.02",
+      "pdf_pages": [
+        126,
+        128
+      ],
+      "title": "Channel Rankings"
+    },
+    {
+      "entry": "s05.05",
+      "level": "section",
+      "number": "5.5",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-05-channel-effectiveness/node.md",
+      "pdf_pages": [
+        128,
+        137
+      ],
+      "title": "Channel Effectiveness"
+    },
+    {
+      "entry": "s05.05.01",
+      "level": "subsection",
+      "number": "5.5.1",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-01-accuracy.md",
+      "pdf_pages": [
+        128,
+        131
+      ],
+      "title": "Accuracy"
+    },
+    {
+      "entry": "s05.05.02",
+      "level": "subsection",
+      "number": "5.5.2",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-02-discriminability.md",
+      "pdf_pages": [
+        131,
+        131
+      ],
+      "title": "Discriminability"
+    },
+    {
+      "entry": "s05.05.03",
+      "level": "subsection",
+      "number": "5.5.3",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-03-separability.md",
+      "pdf_pages": [
+        131,
+        134
+      ],
+      "title": "Separability"
+    },
+    {
+      "entry": "s05.05.04",
+      "level": "subsection",
+      "number": "5.5.4",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-04-popout.md",
+      "pdf_pages": [
+        134,
+        136
+      ],
+      "title": "Popout"
+    },
+    {
+      "entry": "s05.05.05",
+      "level": "subsection",
+      "number": "5.5.5",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-05-channel-effectiveness/s05-05-05-grouping.md",
+      "pdf_pages": [
+        136,
+        137
+      ],
+      "title": "Grouping"
+    },
+    {
+      "entry": "s05.06",
+      "level": "section",
+      "number": "5.6",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-06-relative-absolute-judgements.md",
+      "pdf_pages": [
+        137,
+        139
+      ],
+      "title": "Relative versus Absolute Judgements"
+    },
+    {
+      "entry": "s05.07",
+      "level": "section",
+      "number": "5.7",
+      "other_paths": [],
+      "path": "references/ch05-marks-channels/s05-07-further-reading.md",
+      "pdf_pages": [
+        139,
+        140
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch06",
+      "level": "chapter",
+      "number": "6",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/node.md",
+      "pdf_pages": [
+        141,
+        168
+      ],
+      "title": "Rules of Thumb"
+    },
+    {
+      "entry": "s06.01",
+      "level": "section",
+      "number": "6.1",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-01-big-picture.md",
+      "pdf_pages": [
+        142,
+        142
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s06.02",
+      "level": "section",
+      "number": "6.2",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-02-why-when-follow-rules.md",
+      "pdf_pages": [
+        142,
+        142
+      ],
+      "title": "Why and When to Follow Rules of Thumb?"
+    },
+    {
+      "entry": "s06.03",
+      "level": "section",
+      "number": "6.3",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/node.md",
+      "pdf_pages": [
+        142,
+        155
+      ],
+      "title": "No Unjustiﬁed 3D"
+    },
+    {
+      "entry": "s06.03.01",
+      "level": "subsection",
+      "number": "6.3.1",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-01-power-plane.md",
+      "pdf_pages": [
+        143,
+        143
+      ],
+      "title": "The Power of the Plane"
+    },
+    {
+      "entry": "s06.03.02",
+      "level": "subsection",
+      "number": "6.3.2",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-02-disparity-depth.md",
+      "pdf_pages": [
+        143,
+        145
+      ],
+      "title": "The Disparity of Depth"
+    },
+    {
+      "entry": "s06.03.03",
+      "level": "subsection",
+      "number": "6.3.3",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-03-occlusion-hides-information.md",
+      "pdf_pages": [
+        145,
+        146
+      ],
+      "title": "Occlusion Hides Information"
+    },
+    {
+      "entry": "s06.03.04",
+      "level": "subsection",
+      "number": "6.3.4",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-04-perspective-distortion-dangers.md",
+      "pdf_pages": [
+        146,
+        147
+      ],
+      "title": "Perspective Distortion Dangers"
+    },
+    {
+      "entry": "s06.03.05",
+      "level": "subsection",
+      "number": "6.3.5",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-05-other-depth-cues.md",
+      "pdf_pages": [
+        148,
+        149
+      ],
+      "title": "Other Depth Cues"
+    },
+    {
+      "entry": "s06.03.06",
+      "level": "subsection",
+      "number": "6.3.6",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-06-tilted-text-legibile.md",
+      "pdf_pages": [
+        149,
+        149
+      ],
+      "title": "Tilted Text Isn’t Legibile"
+    },
+    {
+      "entry": "s06.03.07",
+      "level": "subsection",
+      "number": "6.3.7",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-07-benefits-3d-shape-perception.md",
+      "pdf_pages": [
+        149,
+        150
+      ],
+      "title": "Beneﬁts of 3D: Shape Perception"
+    },
+    {
+      "entry": "s06.03.08",
+      "level": "subsection",
+      "number": "6.3.8",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-08-justification-alternatives.md",
+      "pdf_pages": [
+        150,
+        153
+      ],
+      "title": "Justiﬁcation and Alternatives"
+    },
+    {
+      "entry": "idiom:cluster-calendar-time-series-vis",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/cluster-calendar-time-series-vis.md",
+      "pdf_pages": [
+        150,
+        152
+      ],
+      "title": "Cluster–Calendar Time-Series Vis"
+    },
+    {
+      "entry": "idiom:layer-oriented-time-series-vis",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/layer-oriented-time-series-vis.md",
+      "pdf_pages": [
+        153,
+        153
+      ],
+      "title": "Layer-Oriented Time-Series Vis"
+    },
+    {
+      "entry": "s06.03.09",
+      "level": "subsection",
+      "number": "6.3.9",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-03-no-unjustified-3d/s06-03-09-empirical-evidence.md",
+      "pdf_pages": [
+        154,
+        155
+      ],
+      "title": "Empirical Evidence"
+    },
+    {
+      "entry": "s06.04",
+      "level": "section",
+      "number": "6.4",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-04-no-unjustified-2d.md",
+      "pdf_pages": [
+        156,
+        156
+      ],
+      "title": "No Unjustiﬁed 2D"
+    },
+    {
+      "entry": "s06.05",
+      "level": "section",
+      "number": "6.5",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-05-eyes-beat-memory.md",
+      "pdf_pages": [
+        156,
+        159
+      ],
+      "title": "Eyes Beat Memory"
+    },
+    {
+      "entry": "s06.05.01",
+      "level": "subsection",
+      "number": "6.5.1",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-05-eyes-beat-memory.md#s06.05.01",
+      "pdf_pages": [
+        157,
+        157
+      ],
+      "title": "Memory and Attention"
+    },
+    {
+      "entry": "s06.05.02",
+      "level": "subsection",
+      "number": "6.5.2",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-05-eyes-beat-memory.md#s06.05.02",
+      "pdf_pages": [
+        157,
+        158
+      ],
+      "title": "Animation versus Side-by-Side Views"
+    },
+    {
+      "entry": "s06.05.03",
+      "level": "subsection",
+      "number": "6.5.3",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-05-eyes-beat-memory.md#s06.05.03",
+      "pdf_pages": [
+        158,
+        159
+      ],
+      "title": "Change Blindness"
+    },
+    {
+      "entry": "s06.06",
+      "level": "section",
+      "number": "6.6",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-06-resolution-over-immersion.md",
+      "pdf_pages": [
+        159,
+        160
+      ],
+      "title": "Resolution over Immersion"
+    },
+    {
+      "entry": "s06.07",
+      "level": "section",
+      "number": "6.7",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-07-overview-first-zoom-filter.md",
+      "pdf_pages": [
+        160,
+        162
+      ],
+      "title": "Overview First, Zoom and Filter, Details on Demand"
+    },
+    {
+      "entry": "s06.08",
+      "level": "section",
+      "number": "6.8",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-08-responsiveness-required.md",
+      "pdf_pages": [
+        162,
+        165
+      ],
+      "title": "Responsiveness Is Required"
+    },
+    {
+      "entry": "s06.08.01",
+      "level": "subsection",
+      "number": "6.8.1",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-08-responsiveness-required.md#s06.08.01",
+      "pdf_pages": [
+        163,
+        163
+      ],
+      "title": "Visual Feedback"
+    },
+    {
+      "entry": "s06.08.02",
+      "level": "subsection",
+      "number": "6.8.2",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-08-responsiveness-required.md#s06.08.02",
+      "pdf_pages": [
+        163,
+        164
+      ],
+      "title": "Latency and Interaction Design"
+    },
+    {
+      "entry": "s06.08.03",
+      "level": "subsection",
+      "number": "6.8.3",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-08-responsiveness-required.md#s06.08.03",
+      "pdf_pages": [
+        165,
+        165
+      ],
+      "title": "Interactivity Costs"
+    },
+    {
+      "entry": "s06.09",
+      "level": "section",
+      "number": "6.9",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-09-get-right-black-white.md",
+      "pdf_pages": [
+        165,
+        165
+      ],
+      "title": "Get It Right in Black and White"
+    },
+    {
+      "entry": "s06.10",
+      "level": "section",
+      "number": "6.10",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-10-function-first-form-next.md",
+      "pdf_pages": [
+        165,
+        166
+      ],
+      "title": "Function First, Form Next"
+    },
+    {
+      "entry": "s06.11",
+      "level": "section",
+      "number": "6.11",
+      "other_paths": [],
+      "path": "references/ch06-rules-thumb/s06-11-further-reading.md",
+      "pdf_pages": [
+        166,
+        168
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch07",
+      "level": "chapter",
+      "number": "7",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/node.md",
+      "pdf_pages": [
+        169,
+        202
+      ],
+      "title": "Arrange Tables"
+    },
+    {
+      "entry": "s07.01",
+      "level": "section",
+      "number": "7.1",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-01-big-picture.md",
+      "pdf_pages": [
+        170,
+        170
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s07.02",
+      "level": "section",
+      "number": "7.2",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-02-why-arrange.md",
+      "pdf_pages": [
+        170,
+        170
+      ],
+      "title": "Why Arrange?"
+    },
+    {
+      "entry": "s07.03",
+      "level": "section",
+      "number": "7.3",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-03-arrange-keys-values.md",
+      "pdf_pages": [
+        170,
+        171
+      ],
+      "title": "Arrange by Keys and Values"
+    },
+    {
+      "entry": "s07.04",
+      "level": "section",
+      "number": "7.4",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-04-express-quantitative-values.md",
+      "pdf_pages": [
+        171,
+        173
+      ],
+      "title": "Express: Quantitative Values"
+    },
+    {
+      "entry": "idiom:scatterplots",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/scatterplots.md",
+      "pdf_pages": [
+        171,
+        173
+      ],
+      "title": "Scatterplots"
+    },
+    {
+      "entry": "s07.05",
+      "level": "section",
+      "number": "7.5",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/node.md",
+      "pdf_pages": [
+        174,
+        186
+      ],
+      "title": "Separate, Order, and Align: Categorical Regions"
+    },
+    {
+      "entry": "s07.05.01",
+      "level": "subsection",
+      "number": "7.5.1",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-01-list-alignment-one-key.md",
+      "pdf_pages": [
+        174,
+        182
+      ],
+      "title": "List Alignment: One Key"
+    },
+    {
+      "entry": "idiom:bar-charts",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/bar-charts.md",
+      "pdf_pages": [
+        175,
+        176
+      ],
+      "title": "Bar Charts"
+    },
+    {
+      "entry": "idiom:stacked-bar-charts",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/stacked-bar-charts.md",
+      "pdf_pages": [
+        176,
+        178
+      ],
+      "title": "Stacked Bar Charts"
+    },
+    {
+      "entry": "idiom:streamgraphs",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/streamgraphs.md",
+      "pdf_pages": [
+        178,
+        179
+      ],
+      "title": "Streamgraphs"
+    },
+    {
+      "entry": "idiom:dot-and-line-charts",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/dot-charts.md#idiom:dot-and-line-charts",
+      "pdf_pages": [
+        180,
+        182
+      ],
+      "title": "Dot and Line Charts"
+    },
+    {
+      "entry": "s07.05.02",
+      "level": "subsection",
+      "number": "7.5.2",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-02-matrix-alignment-two-keys.md",
+      "pdf_pages": [
+        182,
+        186
+      ],
+      "title": "Matrix Alignment: Two Keys"
+    },
+    {
+      "entry": "idiom:cluster-heatmaps",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/cluster-heatmaps.md",
+      "pdf_pages": [
+        183,
+        185
+      ],
+      "title": "Cluster Heatmaps"
+    },
+    {
+      "entry": "idiom:scatterplot-matrix",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/scatterplot-matrix-splom.md#idiom:scatterplot-matrix",
+      "pdf_pages": [
+        185,
+        186
+      ],
+      "title": "Scatterplot Matrix"
+    },
+    {
+      "entry": "s07.05.03",
+      "level": "subsection",
+      "number": "7.5.3",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-03-volumetric-grid-three-keys.md",
+      "pdf_pages": [
+        186,
+        186
+      ],
+      "title": "Volumetric Grid: Three Keys"
+    },
+    {
+      "entry": "s07.05.04",
+      "level": "subsection",
+      "number": "7.5.4",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-04-recursive-subdivision-multiple-keys.md",
+      "pdf_pages": [
+        186,
+        186
+      ],
+      "title": "Recursive Subdivision: Multiple Keys"
+    },
+    {
+      "entry": "s07.06",
+      "level": "section",
+      "number": "7.6",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/node.md",
+      "pdf_pages": [
+        187,
+        196
+      ],
+      "title": "Spatial Axis Orientation"
+    },
+    {
+      "entry": "s07.06.01",
+      "level": "subsection",
+      "number": "7.6.1",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-01-rectilinear-layouts.md",
+      "pdf_pages": [
+        187,
+        187
+      ],
+      "title": "Rectilinear Layouts"
+    },
+    {
+      "entry": "s07.06.02",
+      "level": "subsection",
+      "number": "7.6.2",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-02-parallel-layouts.md",
+      "pdf_pages": [
+        187,
+        191
+      ],
+      "title": "Parallel Layouts"
+    },
+    {
+      "entry": "idiom:parallel-coordinates",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/parallel-coordinates.md",
+      "pdf_pages": [
+        187,
+        191
+      ],
+      "title": "Parallel Coordinates"
+    },
+    {
+      "entry": "s07.06.03",
+      "level": "subsection",
+      "number": "7.6.3",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-06-spatial-axis-orientation/s07-06-03-radial-layouts.md",
+      "pdf_pages": [
+        191,
+        196
+      ],
+      "title": "Radial Layouts"
+    },
+    {
+      "entry": "idiom:radial-bar-charts",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/radial-bar-charts.md",
+      "pdf_pages": [
+        192,
+        193
+      ],
+      "title": "Radial Bar Charts"
+    },
+    {
+      "entry": "idiom:pie-charts",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/pie-charts.md",
+      "pdf_pages": [
+        193,
+        196
+      ],
+      "title": "Pie Charts"
+    },
+    {
+      "entry": "s07.07",
+      "level": "section",
+      "number": "7.7",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-07-spatial-layout-density.md",
+      "pdf_pages": [
+        196,
+        200
+      ],
+      "title": "Spatial Layout Density"
+    },
+    {
+      "entry": "s07.07.01",
+      "level": "subsection",
+      "number": "7.7.1",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-07-spatial-layout-density.md#s07.07.01",
+      "pdf_pages": [
+        197,
+        199
+      ],
+      "title": "Dense"
+    },
+    {
+      "entry": "idiom:dense-software-overviews",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/dense-software-overviews.md",
+      "pdf_pages": [
+        197,
+        199
+      ],
+      "title": "Dense Software Overviews"
+    },
+    {
+      "entry": "s07.07.02",
+      "level": "subsection",
+      "number": "7.7.2",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-07-spatial-layout-density.md#s07.07.02",
+      "pdf_pages": [
+        199,
+        200
+      ],
+      "title": "Space-Filling"
+    },
+    {
+      "entry": "s07.08",
+      "level": "section",
+      "number": "7.8",
+      "other_paths": [],
+      "path": "references/ch07-arrange-tables/s07-08-further-reading.md",
+      "pdf_pages": [
+        200,
+        202
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch08",
+      "level": "chapter",
+      "number": "8",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/node.md",
+      "pdf_pages": [
+        203,
+        224
+      ],
+      "title": "Arrange Spatial Data"
+    },
+    {
+      "entry": "s08.01",
+      "level": "section",
+      "number": "8.1",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-01-big-picture.md",
+      "pdf_pages": [
+        204,
+        204
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s08.02",
+      "level": "section",
+      "number": "8.2",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-02-why-use-given.md",
+      "pdf_pages": [
+        204,
+        205
+      ],
+      "title": "Why Use Given?"
+    },
+    {
+      "entry": "s08.03",
+      "level": "section",
+      "number": "8.3",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-03-geometry.md",
+      "pdf_pages": [
+        205,
+        207
+      ],
+      "title": "Geometry"
+    },
+    {
+      "entry": "s08.03.01",
+      "level": "subsection",
+      "number": "8.3.1",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-03-geometry.md#s08.03.01",
+      "pdf_pages": [
+        205,
+        206
+      ],
+      "title": "Geographic Data"
+    },
+    {
+      "entry": "idiom:choropleth-maps",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/choropleth-map.md#idiom:choropleth-maps",
+      "pdf_pages": [
+        206,
+        206
+      ],
+      "title": "Choropleth Maps"
+    },
+    {
+      "entry": "s08.03.02",
+      "level": "subsection",
+      "number": "8.3.2",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-03-geometry.md#s08.03.02",
+      "pdf_pages": [
+        207,
+        207
+      ],
+      "title": "Other Derived Geometry"
+    },
+    {
+      "entry": "s08.04",
+      "level": "section",
+      "number": "8.4",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/node.md",
+      "pdf_pages": [
+        207,
+        214
+      ],
+      "title": "Scalar Fields: One Value"
+    },
+    {
+      "entry": "s08.04.01",
+      "level": "subsection",
+      "number": "8.4.1",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-01-isocontours.md",
+      "pdf_pages": [
+        208,
+        211
+      ],
+      "title": "Isocontours"
+    },
+    {
+      "entry": "idiom:topographic-terrain-maps",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/topographic-terrain-map.md#idiom:topographic-terrain-maps",
+      "pdf_pages": [
+        208,
+        209
+      ],
+      "title": "Topographic Terrain Maps"
+    },
+    {
+      "entry": "idiom:flexible-isosurfaces",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/flexible-isosurfaces.md",
+      "pdf_pages": [
+        210,
+        211
+      ],
+      "title": "Flexible Isosurfaces"
+    },
+    {
+      "entry": "s08.04.02",
+      "level": "subsection",
+      "number": "8.4.2",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-04-scalar-fields-one-value/s08-04-02-direct-volume-rendering.md",
+      "pdf_pages": [
+        211,
+        214
+      ],
+      "title": "Direct Volume Rendering"
+    },
+    {
+      "entry": "idiom:multidimensional-transfer-functions",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/multidimensional-transfer-functions.md",
+      "pdf_pages": [
+        212,
+        214
+      ],
+      "title": "Multidimensional Transfer Functions"
+    },
+    {
+      "entry": "s08.05",
+      "level": "section",
+      "number": "8.5",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/node.md",
+      "pdf_pages": [
+        214,
+        219
+      ],
+      "title": "Vector Fields: Multiple Values"
+    },
+    {
+      "entry": "s08.05.01",
+      "level": "subsection",
+      "number": "8.5.1",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-01-flow-glyphs.md",
+      "pdf_pages": [
+        216,
+        216
+      ],
+      "title": "Flow Glyphs"
+    },
+    {
+      "entry": "s08.05.02",
+      "level": "subsection",
+      "number": "8.5.2",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-02-geometric-flow.md",
+      "pdf_pages": [
+        216,
+        218
+      ],
+      "title": "Geometric Flow"
+    },
+    {
+      "entry": "idiom:similarity-clustered-streamlines",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/similarity-clustered-streamlines.md",
+      "pdf_pages": [
+        217,
+        218
+      ],
+      "title": "Similarity-Clustered Streamlines"
+    },
+    {
+      "entry": "s08.05.03",
+      "level": "subsection",
+      "number": "8.5.3",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-03-texture-flow.md",
+      "pdf_pages": [
+        218,
+        218
+      ],
+      "title": "Texture Flow"
+    },
+    {
+      "entry": "s08.05.04",
+      "level": "subsection",
+      "number": "8.5.4",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-05-vector-fields-multiple-values/s08-05-04-feature-flow.md",
+      "pdf_pages": [
+        218,
+        219
+      ],
+      "title": "Feature Flow"
+    },
+    {
+      "entry": "s08.06",
+      "level": "section",
+      "number": "8.6",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-06-tensor-fields-many-values.md",
+      "pdf_pages": [
+        219,
+        222
+      ],
+      "title": "Tensor Fields: Many Values"
+    },
+    {
+      "entry": "idiom:ellipsoid-tensor-glyphs",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/ellipsoid-tensor-glyphs.md",
+      "pdf_pages": [
+        219,
+        222
+      ],
+      "title": "Ellipsoid Tensor Glyphs"
+    },
+    {
+      "entry": "s08.07",
+      "level": "section",
+      "number": "8.7",
+      "other_paths": [],
+      "path": "references/ch08-arrange-spatial-data/s08-07-further-reading.md",
+      "pdf_pages": [
+        222,
+        224
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch09",
+      "level": "chapter",
+      "number": "9",
+      "other_paths": [],
+      "path": "references/ch09-arrange-networks-trees/node.md",
+      "pdf_pages": [
+        225,
+        242
+      ],
+      "title": "Arrange Networks and Trees"
+    },
+    {
+      "entry": "s09.01",
+      "level": "section",
+      "number": "9.1",
+      "other_paths": [],
+      "path": "references/ch09-arrange-networks-trees/s09-01-big-picture.md",
+      "pdf_pages": [
+        226,
+        226
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s09.02",
+      "level": "section",
+      "number": "9.2",
+      "other_paths": [],
+      "path": "references/ch09-arrange-networks-trees/s09-02-connection-link-marks.md",
+      "pdf_pages": [
+        226,
+        233
+      ],
+      "title": "Connection: Link Marks"
+    },
+    {
+      "entry": "idiom:force-directed-placement",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/force-directed-placement.md",
+      "pdf_pages": [
+        229,
+        232
+      ],
+      "title": "Force-Directed Placement"
+    },
+    {
+      "entry": "idiom:sfdp",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/multilevel-force-directed-placement-sfdp.md#idiom:sfdp",
+      "pdf_pages": [
+        232,
+        233
+      ],
+      "title": "sfdp"
+    },
+    {
+      "entry": "s09.03",
+      "level": "section",
+      "number": "9.3",
+      "other_paths": [],
+      "path": "references/ch09-arrange-networks-trees/s09-03-matrix-views.md",
+      "pdf_pages": [
+        233,
+        234
+      ],
+      "title": "Matrix Views"
+    },
+    {
+      "entry": "idiom:adjacency-matrix-view",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/adjacency-matrix-view.md",
+      "pdf_pages": [
+        233,
+        234
+      ],
+      "title": "Adjacency Matrix View"
+    },
+    {
+      "entry": "s09.04",
+      "level": "section",
+      "number": "9.4",
+      "other_paths": [],
+      "path": "references/ch09-arrange-networks-trees/s09-04-costs-benefits-connection-matrix.md",
+      "pdf_pages": [
+        234,
+        238
+      ],
+      "title": "Costs and Beneﬁts: Connection versus Matrix"
+    },
+    {
+      "entry": "s09.05",
+      "level": "section",
+      "number": "9.5",
+      "other_paths": [],
+      "path": "references/ch09-arrange-networks-trees/s09-05-containment-hierarchy-marks.md",
+      "pdf_pages": [
+        238,
+        241
+      ],
+      "title": "Containment: Hierarchy Marks"
+    },
+    {
+      "entry": "idiom:treemaps",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/treemaps.md",
+      "pdf_pages": [
+        238,
+        240
+      ],
+      "title": "Treemaps"
+    },
+    {
+      "entry": "idiom:grouseflocks",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/grouseflocks.md",
+      "pdf_pages": [
+        240,
+        241
+      ],
+      "title": "GrouseFlocks"
+    },
+    {
+      "entry": "s09.06",
+      "level": "section",
+      "number": "9.6",
+      "other_paths": [],
+      "path": "references/ch09-arrange-networks-trees/s09-06-further-reading.md",
+      "pdf_pages": [
+        241,
+        242
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch10",
+      "level": "chapter",
+      "number": "10",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/node.md",
+      "pdf_pages": [
+        243,
+        266
+      ],
+      "title": "Map Color and Other Channels"
+    },
+    {
+      "entry": "s10.01",
+      "level": "section",
+      "number": "10.1",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-01-big-picture.md",
+      "pdf_pages": [
+        244,
+        244
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s10.02",
+      "level": "section",
+      "number": "10.2",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-02-color-theory/node.md",
+      "pdf_pages": [
+        244,
+        250
+      ],
+      "title": "Color Theory"
+    },
+    {
+      "entry": "s10.02.01",
+      "level": "subsection",
+      "number": "10.2.1",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-01-color-vision.md",
+      "pdf_pages": [
+        244,
+        245
+      ],
+      "title": "Color Vision"
+    },
+    {
+      "entry": "s10.02.02",
+      "level": "subsection",
+      "number": "10.2.2",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-02-color-spaces.md",
+      "pdf_pages": [
+        245,
+        248
+      ],
+      "title": "Color Spaces"
+    },
+    {
+      "entry": "s10.02.03",
+      "level": "subsection",
+      "number": "10.2.3",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-03-luminance-saturation-hue.md",
+      "pdf_pages": [
+        248,
+        249
+      ],
+      "title": "Luminance, Saturation, and Hue"
+    },
+    {
+      "entry": "s10.02.04",
+      "level": "subsection",
+      "number": "10.2.4",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-02-color-theory/s10-02-04-transparency.md",
+      "pdf_pages": [
+        250,
+        250
+      ],
+      "title": "Transparency"
+    },
+    {
+      "entry": "s10.03",
+      "level": "section",
+      "number": "10.3",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-03-colormaps/node.md",
+      "pdf_pages": [
+        250,
+        260
+      ],
+      "title": "Colormaps"
+    },
+    {
+      "entry": "s10.03.01",
+      "level": "subsection",
+      "number": "10.3.1",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-01-categorical-colormaps.md",
+      "pdf_pages": [
+        251,
+        254
+      ],
+      "title": "Categorical Colormaps"
+    },
+    {
+      "entry": "s10.03.02",
+      "level": "subsection",
+      "number": "10.3.2",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-02-ordered-colormaps.md",
+      "pdf_pages": [
+        254,
+        259
+      ],
+      "title": "Ordered Colormaps"
+    },
+    {
+      "entry": "s10.03.03",
+      "level": "subsection",
+      "number": "10.3.3",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-03-bivariate-colormaps.md",
+      "pdf_pages": [
+        259,
+        260
+      ],
+      "title": "Bivariate Colormaps"
+    },
+    {
+      "entry": "s10.03.04",
+      "level": "subsection",
+      "number": "10.3.4",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-03-colormaps/s10-03-04-colorblind-safe-colormap-design.md",
+      "pdf_pages": [
+        260,
+        260
+      ],
+      "title": "Colorblind-Safe Colormap Design"
+    },
+    {
+      "entry": "s10.04",
+      "level": "section",
+      "number": "10.4",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-04-other-channels.md",
+      "pdf_pages": [
+        261,
+        265
+      ],
+      "title": "Other Channels"
+    },
+    {
+      "entry": "s10.04.01",
+      "level": "subsection",
+      "number": "10.4.1",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-04-other-channels.md#s10.04.01",
+      "pdf_pages": [
+        261,
+        262
+      ],
+      "title": "Size Channels"
+    },
+    {
+      "entry": "s10.04.02",
+      "level": "subsection",
+      "number": "10.4.2",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-04-other-channels.md#s10.04.02",
+      "pdf_pages": [
+        262,
+        262
+      ],
+      "title": "Angle Channel"
+    },
+    {
+      "entry": "s10.04.03",
+      "level": "subsection",
+      "number": "10.4.3",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-04-other-channels.md#s10.04.03",
+      "pdf_pages": [
+        263,
+        263
+      ],
+      "title": "Curvature Channel"
+    },
+    {
+      "entry": "s10.04.04",
+      "level": "subsection",
+      "number": "10.4.4",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-04-other-channels.md#s10.04.04",
+      "pdf_pages": [
+        263,
+        263
+      ],
+      "title": "Shape Channel"
+    },
+    {
+      "entry": "s10.04.05",
+      "level": "subsection",
+      "number": "10.4.5",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-04-other-channels.md#s10.04.05",
+      "pdf_pages": [
+        263,
+        264
+      ],
+      "title": "Motion Channels"
+    },
+    {
+      "entry": "s10.04.06",
+      "level": "subsection",
+      "number": "10.4.6",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-04-other-channels.md#s10.04.06",
+      "pdf_pages": [
+        264,
+        265
+      ],
+      "title": "Texture and Stippling"
+    },
+    {
+      "entry": "s10.05",
+      "level": "section",
+      "number": "10.5",
+      "other_paths": [],
+      "path": "references/ch10-map-color-other-channels/s10-05-further-reading.md",
+      "pdf_pages": [
+        265,
+        266
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch11",
+      "level": "chapter",
+      "number": "11",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/node.md",
+      "pdf_pages": [
+        267,
+        288
+      ],
+      "title": "Manipulate View"
+    },
+    {
+      "entry": "s11.01",
+      "level": "section",
+      "number": "11.1",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-01-big-picture.md",
+      "pdf_pages": [
+        268,
+        269
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s11.02",
+      "level": "section",
+      "number": "11.2",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-02-why-change.md",
+      "pdf_pages": [
+        269,
+        269
+      ],
+      "title": "Why Change?"
+    },
+    {
+      "entry": "s11.03",
+      "level": "section",
+      "number": "11.3",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-03-change-view-over-time.md",
+      "pdf_pages": [
+        269,
+        274
+      ],
+      "title": "Change View over Time"
+    },
+    {
+      "entry": "idiom:lineup",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/lineup.md",
+      "pdf_pages": [
+        271,
+        273
+      ],
+      "title": "LineUp"
+    },
+    {
+      "entry": "idiom:animated-transitions",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/animated-transitions.md",
+      "pdf_pages": [
+        273,
+        274
+      ],
+      "title": "Animated Transitions"
+    },
+    {
+      "entry": "s11.04",
+      "level": "section",
+      "number": "11.4",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-04-select-elements/node.md",
+      "pdf_pages": [
+        274,
+        279
+      ],
+      "title": "Select Elements"
+    },
+    {
+      "entry": "s11.04.01",
+      "level": "subsection",
+      "number": "11.4.1",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-04-select-elements/s11-04-01-selection-design-choices.md",
+      "pdf_pages": [
+        275,
+        276
+      ],
+      "title": "Selection Design Choices"
+    },
+    {
+      "entry": "s11.04.02",
+      "level": "subsection",
+      "number": "11.4.2",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-04-select-elements/s11-04-02-highlighting.md",
+      "pdf_pages": [
+        276,
+        278
+      ],
+      "title": "Highlighting"
+    },
+    {
+      "entry": "idiom:context-preserving-visual-links",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/context-preserving-visual-links.md",
+      "pdf_pages": [
+        278,
+        278
+      ],
+      "title": "Context-Preserving Visual Links"
+    },
+    {
+      "entry": "s11.04.03",
+      "level": "subsection",
+      "number": "11.4.3",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-04-select-elements/s11-04-03-selection-outcomes.md",
+      "pdf_pages": [
+        279,
+        279
+      ],
+      "title": "Selection Outcomes"
+    },
+    {
+      "entry": "s11.05",
+      "level": "section",
+      "number": "11.5",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-05-navigate-changing-viewpoint.md",
+      "pdf_pages": [
+        279,
+        283
+      ],
+      "title": "Navigate: Changing Viewpoint"
+    },
+    {
+      "entry": "s11.05.01",
+      "level": "subsection",
+      "number": "11.5.1",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-05-navigate-changing-viewpoint.md#s11.05.01",
+      "pdf_pages": [
+        280,
+        280
+      ],
+      "title": "Geometric Zooming"
+    },
+    {
+      "entry": "s11.05.02",
+      "level": "subsection",
+      "number": "11.5.2",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-05-navigate-changing-viewpoint.md#s11.05.02",
+      "pdf_pages": [
+        280,
+        281
+      ],
+      "title": "Semantic Zooming"
+    },
+    {
+      "entry": "s11.05.03",
+      "level": "subsection",
+      "number": "11.5.3",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-05-navigate-changing-viewpoint.md#s11.05.03",
+      "pdf_pages": [
+        281,
+        283
+      ],
+      "title": "Constrained Navigation"
+    },
+    {
+      "entry": "s11.06",
+      "level": "section",
+      "number": "11.6",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-06-navigate-reducing-attributes.md",
+      "pdf_pages": [
+        283,
+        286
+      ],
+      "title": "Navigate: Reducing Attributes"
+    },
+    {
+      "entry": "s11.06.01",
+      "level": "subsection",
+      "number": "11.6.1",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-06-navigate-reducing-attributes.md#s11.06.01",
+      "pdf_pages": [
+        283,
+        285
+      ],
+      "title": "Slice"
+    },
+    {
+      "entry": "idiom:hyperslice",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/hyperslice.md",
+      "pdf_pages": [
+        284,
+        285
+      ],
+      "title": "HyperSlice"
+    },
+    {
+      "entry": "s11.06.02",
+      "level": "subsection",
+      "number": "11.6.2",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-06-navigate-reducing-attributes.md#s11.06.02",
+      "pdf_pages": [
+        285,
+        285
+      ],
+      "title": "Cut"
+    },
+    {
+      "entry": "s11.06.03",
+      "level": "subsection",
+      "number": "11.6.3",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-06-navigate-reducing-attributes.md#s11.06.03",
+      "pdf_pages": [
+        286,
+        286
+      ],
+      "title": "Project"
+    },
+    {
+      "entry": "s11.07",
+      "level": "section",
+      "number": "11.7",
+      "other_paths": [],
+      "path": "references/ch11-manipulate-view/s11-07-further-reading.md",
+      "pdf_pages": [
+        286,
+        288
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch12",
+      "level": "chapter",
+      "number": "12",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/node.md",
+      "pdf_pages": [
+        289,
+        322
+      ],
+      "title": "Facet into Multiple Views"
+    },
+    {
+      "entry": "s12.01",
+      "level": "section",
+      "number": "12.1",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-01-big-picture.md",
+      "pdf_pages": [
+        290,
+        290
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s12.02",
+      "level": "section",
+      "number": "12.2",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-02-why-facet.md",
+      "pdf_pages": [
+        290,
+        292
+      ],
+      "title": "Why Facet?"
+    },
+    {
+      "entry": "s12.03",
+      "level": "section",
+      "number": "12.3",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/node.md",
+      "pdf_pages": [
+        292,
+        304
+      ],
+      "title": "Juxtapose and Coordinate Views"
+    },
+    {
+      "entry": "s12.03.01",
+      "level": "subsection",
+      "number": "12.3.1",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-01-share-encoding-same-different.md",
+      "pdf_pages": [
+        292,
+        294
+      ],
+      "title": "Share Encoding: Same/Different"
+    },
+    {
+      "entry": "idiom:exploratory-data-visualizer-edv",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/exploratory-data-visualizer-edv.md",
+      "pdf_pages": [
+        293,
+        294
+      ],
+      "title": "Exploratory Data Visualizer (EDV)"
+    },
+    {
+      "entry": "s12.03.02",
+      "level": "subsection",
+      "number": "12.3.2",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-02-share-data-all-subset.md",
+      "pdf_pages": [
+        294,
+        301
+      ],
+      "title": "Share Data: All, Subset, None"
+    },
+    {
+      "entry": "idiom:birds-eye-maps",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/birds-eye-maps.md",
+      "pdf_pages": [
+        295,
+        296
+      ],
+      "title": "Bird’s-Eye Maps"
+    },
+    {
+      "entry": "idiom:multiform-overview-detail-microarrays",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/multiform-overview-detail-microarrays.md",
+      "pdf_pages": [
+        296,
+        299
+      ],
+      "title": "Multiform Overview–Detail Microarrays"
+    },
+    {
+      "entry": "idiom:cerebral",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/cerebral.md",
+      "pdf_pages": [
+        299,
+        301
+      ],
+      "title": "Cerebral"
+    },
+    {
+      "entry": "s12.03.03",
+      "level": "subsection",
+      "number": "12.3.3",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-03-share-navigation-synchronize.md",
+      "pdf_pages": [
+        301,
+        301
+      ],
+      "title": "Share Navigation: Synchronize"
+    },
+    {
+      "entry": "s12.03.04",
+      "level": "subsection",
+      "number": "12.3.4",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-04-combinations.md",
+      "pdf_pages": [
+        301,
+        303
+      ],
+      "title": "Combinations"
+    },
+    {
+      "entry": "idiom:improvise",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/improvise.md",
+      "pdf_pages": [
+        302,
+        303
+      ],
+      "title": "Improvise"
+    },
+    {
+      "entry": "s12.03.05",
+      "level": "subsection",
+      "number": "12.3.5",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-03-juxtapose-coordinate-views/s12-03-05-juxtapose-views.md",
+      "pdf_pages": [
+        303,
+        304
+      ],
+      "title": "Juxtapose Views"
+    },
+    {
+      "entry": "s12.04",
+      "level": "section",
+      "number": "12.4",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/node.md",
+      "pdf_pages": [
+        304,
+        313
+      ],
+      "title": "Partition into Views"
+    },
+    {
+      "entry": "s12.04.01",
+      "level": "subsection",
+      "number": "12.4.1",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-01-regions-glyphs-views.md",
+      "pdf_pages": [
+        304,
+        306
+      ],
+      "title": "Regions, Glyphs, and Views"
+    },
+    {
+      "entry": "s12.04.02",
+      "level": "subsection",
+      "number": "12.4.2",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-02-list-alignments.md",
+      "pdf_pages": [
+        306,
+        307
+      ],
+      "title": "List Alignments"
+    },
+    {
+      "entry": "s12.04.03",
+      "level": "subsection",
+      "number": "12.4.3",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-03-matrix-alignments.md",
+      "pdf_pages": [
+        307,
+        309
+      ],
+      "title": "Matrix Alignments"
+    },
+    {
+      "entry": "idiom:trellis",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/trellis.md",
+      "pdf_pages": [
+        307,
+        309
+      ],
+      "title": "Trellis"
+    },
+    {
+      "entry": "s12.04.04",
+      "level": "subsection",
+      "number": "12.4.4",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-04-partition-into-views/s12-04-04-recursive-subdivision.md",
+      "pdf_pages": [
+        310,
+        313
+      ],
+      "title": "Recursive Subdivision"
+    },
+    {
+      "entry": "s12.05",
+      "level": "section",
+      "number": "12.5",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/node.md",
+      "pdf_pages": [
+        313,
+        320
+      ],
+      "title": "Superimpose Layers"
+    },
+    {
+      "entry": "s12.05.01",
+      "level": "subsection",
+      "number": "12.5.1",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-01-visually-distinguishable-layers.md",
+      "pdf_pages": [
+        314,
+        314
+      ],
+      "title": "Visually Distinguishable Layers"
+    },
+    {
+      "entry": "s12.05.02",
+      "level": "subsection",
+      "number": "12.5.2",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-02-static-layers.md",
+      "pdf_pages": [
+        314,
+        319
+      ],
+      "title": "Static Layers"
+    },
+    {
+      "entry": "idiom:cartographic-layering",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/cartographic-layering.md",
+      "pdf_pages": [
+        314,
+        315
+      ],
+      "title": "Cartographic Layering"
+    },
+    {
+      "entry": "idiom:superimposed-line-charts",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/superimposed-line-charts.md",
+      "pdf_pages": [
+        315,
+        317
+      ],
+      "title": "Superimposed Line Charts"
+    },
+    {
+      "entry": "idiom:hierarchical-edge-bundles",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/hierarchical-edge-bundles.md",
+      "pdf_pages": [
+        317,
+        319
+      ],
+      "title": "Hierarchical Edge Bundles"
+    },
+    {
+      "entry": "s12.05.03",
+      "level": "subsection",
+      "number": "12.5.3",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-05-superimpose-layers/s12-05-03-dynamic-layers.md",
+      "pdf_pages": [
+        319,
+        320
+      ],
+      "title": "Dynamic Layers"
+    },
+    {
+      "entry": "s12.06",
+      "level": "section",
+      "number": "12.6",
+      "other_paths": [],
+      "path": "references/ch12-facet-into-multiple-views/s12-06-further-reading.md",
+      "pdf_pages": [
+        320,
+        322
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch13",
+      "level": "chapter",
+      "number": "13",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/node.md",
+      "pdf_pages": [
+        323,
+        346
+      ],
+      "title": "Reduce Items and Attributes"
+    },
+    {
+      "entry": "s13.01",
+      "level": "section",
+      "number": "13.1",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-01-big-picture.md",
+      "pdf_pages": [
+        324,
+        324
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s13.02",
+      "level": "section",
+      "number": "13.2",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-02-why-reduce.md",
+      "pdf_pages": [
+        324,
+        325
+      ],
+      "title": "Why Reduce?"
+    },
+    {
+      "entry": "s13.03",
+      "level": "section",
+      "number": "13.3",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-03-filter/node.md",
+      "pdf_pages": [
+        325,
+        330
+      ],
+      "title": "Filter"
+    },
+    {
+      "entry": "s13.03.01",
+      "level": "subsection",
+      "number": "13.3.1",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-03-filter/s13-03-01-item-filtering.md",
+      "pdf_pages": [
+        326,
+        328
+      ],
+      "title": "Item Filtering"
+    },
+    {
+      "entry": "idiom:filmfinder",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/filmfinder.md",
+      "pdf_pages": [
+        326,
+        328
+      ],
+      "title": "FilmFinder"
+    },
+    {
+      "entry": "s13.03.02",
+      "level": "subsection",
+      "number": "13.3.2",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-03-filter/s13-03-02-attribute-filtering.md",
+      "pdf_pages": [
+        328,
+        330
+      ],
+      "title": "Attribute Filtering"
+    },
+    {
+      "entry": "idiom:dosfa",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/dosfa.md",
+      "pdf_pages": [
+        329,
+        330
+      ],
+      "title": "DOSFA"
+    },
+    {
+      "entry": "s13.04",
+      "level": "section",
+      "number": "13.4",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-04-aggregate/node.md",
+      "pdf_pages": [
+        330,
+        345
+      ],
+      "title": "Aggregate"
+    },
+    {
+      "entry": "s13.04.01",
+      "level": "subsection",
+      "number": "13.4.1",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-01-item-aggregation.md",
+      "pdf_pages": [
+        330,
+        338
+      ],
+      "title": "Item Aggregation"
+    },
+    {
+      "entry": "idiom:histograms",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/histograms.md",
+      "pdf_pages": [
+        331,
+        331
+      ],
+      "title": "Histograms"
+    },
+    {
+      "entry": "idiom:continuous-scatterplots",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/continuous-scatterplots.md",
+      "pdf_pages": [
+        332,
+        333
+      ],
+      "title": "Continuous Scatterplots"
+    },
+    {
+      "entry": "idiom:boxplot-charts",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/boxplot-charts.md",
+      "pdf_pages": [
+        333,
+        335
+      ],
+      "title": "Boxplot Charts"
+    },
+    {
+      "entry": "idiom:solarplot",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/solarplot.md",
+      "pdf_pages": [
+        335,
+        336
+      ],
+      "title": "SolarPlot"
+    },
+    {
+      "entry": "idiom:hierarchical-parallel-coordinates",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/hierarchical-parallel-coordinates.md",
+      "pdf_pages": [
+        336,
+        338
+      ],
+      "title": "Hierarchical Parallel Coordinates"
+    },
+    {
+      "entry": "s13.04.02",
+      "level": "subsection",
+      "number": "13.4.2",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-02-spatial-aggregation.md",
+      "pdf_pages": [
+        338,
+        340
+      ],
+      "title": "Spatial Aggregation"
+    },
+    {
+      "entry": "idiom:geographically-weighted-boxplots",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/geographically-weighted-boxplots.md",
+      "pdf_pages": [
+        338,
+        340
+      ],
+      "title": "Geographically Weighted Boxplots"
+    },
+    {
+      "entry": "s13.04.03",
+      "level": "subsection",
+      "number": "13.4.3",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-03-attribute-aggregation-dimensionality-reduction.md",
+      "pdf_pages": [
+        340,
+        345
+      ],
+      "title": "Attribute Aggregation: Dimensionality Reduction"
+    },
+    {
+      "entry": "s13.04.03.01",
+      "level": "subsubsection",
+      "number": "13.4.3.1",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-03-attribute-aggregation-dimensionality-reduction.md#s13.04.03.01",
+      "pdf_pages": [
+        341,
+        344
+      ],
+      "title": "Why and When to Use DR?"
+    },
+    {
+      "entry": "idiom:dimensionality-reduction-for-document-collections",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/dimensionality-reduction-for-document-collections.md",
+      "pdf_pages": [
+        341,
+        344
+      ],
+      "title": "Dimensionality Reduction for Document Collections"
+    },
+    {
+      "entry": "s13.04.03.02",
+      "level": "subsubsection",
+      "number": "13.4.3.2",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-04-aggregate/s13-04-03-attribute-aggregation-dimensionality-reduction.md#s13.04.03.02",
+      "pdf_pages": [
+        344,
+        345
+      ],
+      "title": "How to Show DR Data?"
+    },
+    {
+      "entry": "s13.05",
+      "level": "section",
+      "number": "13.5",
+      "other_paths": [],
+      "path": "references/ch13-reduce-items-attributes/s13-05-further-reading.md",
+      "pdf_pages": [
+        345,
+        346
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch14",
+      "level": "chapter",
+      "number": "14",
+      "other_paths": [],
+      "path": "references/ch14-embed-focus-context/node.md",
+      "pdf_pages": [
+        347,
+        364
+      ],
+      "title": "Embed: Focus+Context"
+    },
+    {
+      "entry": "s14.01",
+      "level": "section",
+      "number": "14.1",
+      "other_paths": [],
+      "path": "references/ch14-embed-focus-context/s14-01-big-picture.md",
+      "pdf_pages": [
+        348,
+        348
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s14.02",
+      "level": "section",
+      "number": "14.2",
+      "other_paths": [],
+      "path": "references/ch14-embed-focus-context/s14-02-why-embed.md",
+      "pdf_pages": [
+        348,
+        349
+      ],
+      "title": "Why Embed?"
+    },
+    {
+      "entry": "s14.03",
+      "level": "section",
+      "number": "14.3",
+      "other_paths": [],
+      "path": "references/ch14-embed-focus-context/s14-03-elide.md",
+      "pdf_pages": [
+        349,
+        351
+      ],
+      "title": "Elide"
+    },
+    {
+      "entry": "idiom:doitrees-revisited",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/doitrees-revisited.md",
+      "pdf_pages": [
+        350,
+        351
+      ],
+      "title": "DOITrees Revisited"
+    },
+    {
+      "entry": "s14.04",
+      "level": "section",
+      "number": "14.4",
+      "other_paths": [],
+      "path": "references/ch14-embed-focus-context/s14-04-superimpose.md",
+      "pdf_pages": [
+        351,
+        351
+      ],
+      "title": "Superimpose"
+    },
+    {
+      "entry": "idiom:toolglass-and-magic-lenses",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/toolglass-and-magic-lenses.md",
+      "pdf_pages": [
+        351,
+        351
+      ],
+      "title": "Toolglass and Magic Lenses"
+    },
+    {
+      "entry": "s14.05",
+      "level": "section",
+      "number": "14.5",
+      "other_paths": [],
+      "path": "references/ch14-embed-focus-context/s14-05-distort.md",
+      "pdf_pages": [
+        352,
+        359
+      ],
+      "title": "Distort"
+    },
+    {
+      "entry": "idiom:3d-perspective",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/3d-perspective.md",
+      "pdf_pages": [
+        352,
+        353
+      ],
+      "title": "3D Perspective"
+    },
+    {
+      "entry": "idiom:fisheye-lens",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/fisheye-lens.md",
+      "pdf_pages": [
+        353,
+        354
+      ],
+      "title": "Fisheye Lens"
+    },
+    {
+      "entry": "idiom:hyperbolic-geometry",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/hyperbolic-geometry.md",
+      "pdf_pages": [
+        354,
+        356
+      ],
+      "title": "Hyperbolic Geometry"
+    },
+    {
+      "entry": "idiom:stretch-and-squish-navigation",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/stretch-and-squish-navigation.md",
+      "pdf_pages": [
+        356,
+        358
+      ],
+      "title": "Stretch and Squish Navigation"
+    },
+    {
+      "entry": "idiom:nonlinear-magnification-fields",
+      "level": "idiom",
+      "number": null,
+      "other_paths": [],
+      "path": "references/idioms/nonlinear-magnification-fields.md",
+      "pdf_pages": [
+        358,
+        359
+      ],
+      "title": "Nonlinear Magniﬁcation Fields"
+    },
+    {
+      "entry": "s14.06",
+      "level": "section",
+      "number": "14.6",
+      "other_paths": [],
+      "path": "references/ch14-embed-focus-context/s14-06-costs-benefits-distortion.md",
+      "pdf_pages": [
+        359,
+        362
+      ],
+      "title": "Costs and Beneﬁts: Distortion"
+    },
+    {
+      "entry": "s14.07",
+      "level": "section",
+      "number": "14.7",
+      "other_paths": [],
+      "path": "references/ch14-embed-focus-context/s14-07-further-reading.md",
+      "pdf_pages": [
+        362,
+        364
+      ],
+      "title": "Further Reading"
+    },
+    {
+      "entry": "ch15",
+      "level": "chapter",
+      "number": "15",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/node.md",
+      "pdf_pages": [
+        365,
+        393
+      ],
+      "title": "Analysis Case Studies"
+    },
+    {
+      "entry": "s15.01",
+      "level": "section",
+      "number": "15.1",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-01-big-picture.md",
+      "pdf_pages": [
+        366,
+        366
+      ],
+      "title": "The Big Picture"
+    },
+    {
+      "entry": "s15.02",
+      "level": "section",
+      "number": "15.2",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-02-why-analyze-case-studies.md",
+      "pdf_pages": [
+        366,
+        367
+      ],
+      "title": "Why Analyze Case Studies?"
+    },
+    {
+      "entry": "s15.03",
+      "level": "section",
+      "number": "15.3",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-03-graph-theoretic-scagnostics.md",
+      "pdf_pages": [
+        367,
+        371
+      ],
+      "title": "Graph-Theoretic Scagnostics"
+    },
+    {
+      "entry": "s15.04",
+      "level": "section",
+      "number": "15.4",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-04-visdb.md",
+      "pdf_pages": [
+        372,
+        375
+      ],
+      "title": "VisDB"
+    },
+    {
+      "entry": "s15.05",
+      "level": "section",
+      "number": "15.5",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-05-hierarchical-clustering-explorer.md",
+      "pdf_pages": [
+        376,
+        380
+      ],
+      "title": "Hierarchical Clustering Explorer"
+    },
+    {
+      "entry": "s15.06",
+      "level": "section",
+      "number": "15.6",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-06-pivotgraph.md",
+      "pdf_pages": [
+        380,
+        383
+      ],
+      "title": "PivotGraph"
+    },
+    {
+      "entry": "s15.07",
+      "level": "section",
+      "number": "15.7",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-07-interring.md",
+      "pdf_pages": [
+        383,
+        384
+      ],
+      "title": "InterRing"
+    },
+    {
+      "entry": "s15.08",
+      "level": "section",
+      "number": "15.8",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-08-constellation.md",
+      "pdf_pages": [
+        385,
+        391
+      ],
+      "title": "Constellation"
+    },
+    {
+      "entry": "s15.09",
+      "level": "section",
+      "number": "15.9",
+      "other_paths": [],
+      "path": "references/ch15-analysis-case-studies/s15-09-further-reading.md",
+      "pdf_pages": [
+        391,
+        393
+      ],
+      "title": "Further Reading"
+    }
+  ],
+  "files_not_in_plan": [],
+  "plan_files_missing": [],
+  "problems": []
+}

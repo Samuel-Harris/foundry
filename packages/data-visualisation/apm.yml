@@ -1,0 +1,14 @@
+name: data-visualisation
+version: "0.1.0"
+description: "Munzner's Visualization Analysis and Design as a page-cited reference for choosing, coding, critiquing and designing visualisations."
+author: sam
+license: "SEE LICENSE IN README.md"
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies: {}
+scripts:
+  check: apm audit --ci

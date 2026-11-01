@@ -69,6 +69,8 @@ async def send_welcome_email(user):
 
 **Dead flexibility.** Interfaces with one implementation. Abstract base classes with one child. Generic type parameters that are only ever instantiated with one type. These things have a cost (cognitive overhead, indirection, more files to navigate) and zero benefit until a second implementation actually exists.
 
+**Files over 1,000 lines.** Keep every file at or under 1,000 lines. If your change would push a file past that, split it first: extract helpers, submodules, or components along a seam the code already has. Exceed the limit only for a concrete reason, such as generated output, a lockfile, a data fixture, or one cohesive unit that splitting would scatter, and state that reason in the PR description. A file that is already over the limit is not yours to split unasked, but do not grow it without the same kind of reason.
+
 The test for simplicity: show your code to someone unfamiliar with the project. If they have to ask "why is this abstracted like this?" and the answer is "in case we need to..." then you've over-engineered it. "In case we need to" is not a requirement. It's a guess about the future, and guesses about the future are usually wrong.
 
 ## 4. Surgical Changes

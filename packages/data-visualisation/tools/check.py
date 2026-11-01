@@ -62,6 +62,7 @@ SIZE_LIMITS = {
 LOOKUP_LIMIT = 4000
 JOB_IDS = ("j1", "j2", "j3", "j4")
 JOB_REACH = {"j1": (2, 3), "j3": (4, 6), "j4": (11, 12)}
+JOB_CARDS = ("j1", "j2")
 UNBOXED_CHAPTERS = (10, 11)
 CARD_SECTIONS = (
     "Idiom box",
@@ -75,7 +76,9 @@ CARD_SECTIONS = (
 NODE_SECTIONS = ("Children", "Disambiguation", "Related")
 FIGURE_KEYS = ("caption", "dpi", "file", "id", "method", "number", "pdf_page", "reason", "referenced_by")
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
-LEDGER_LEVELS = ("router", "chapter", "section", "lea", "idiom")
+LEDGER_HEADER = ["level", "choice", "reason"]
+LEDGER_KEYWORDS = {"router": ("router",), "job": ("job-node",), "lookup": ("index-node",),
+                   "chapter": ("chapter-node",), "section": ("section-node",)}
 COUNTS_START = "<!-- measured-counts:start (written by tools/check.py) -->"
 COUNTS_END = "<!-- measured-counts:end -->"
 EVIDENCE_CAP = 60
@@ -86,6 +89,10 @@ STOPWORDS = frozenset(
 )
 
 CITATION = re.compile(r"\[(pp?)\.(\d+)(?:-(\d+))?\]")
+PAGE_REFERENCE = re.compile(r"\bpp?\.\s*\d+")
+PLOTTING_LIBRARY = re.compile(r"\b(?:matplotlib|pyplot|seaborn|plotly|d3|vega(?:-lite)?|ggplot2?)\b|\bplt\.\w", re.I)
+CONCEPTS = "Concepts"
+BOX_KEY_SUFFIX = re.compile(r"\s*\(\d+\)$")  # book.json numbers a repeated field label, e.g. "What: Derived (2)"
 LINK = re.compile(r"(!?)\[([^\]]*)\]\(([^)\s]+)\)")
 INLINE_CODE = re.compile(r"(`+).+?\1")
 ANCHOR = re.compile(r'<a id="([^"]+)"></a>')
@@ -696,6 +703,8 @@ class Resource:
             return f"no closing {VERBATIM_CLOSE}"
         if block.pages is None:
             return "opening comment has no p.N or pp.N-M"
+        if block.pages[0] > block.pages[1]:
+            return f"opening comment cites reversed range {fmt_range(block.pages)}"
         span = doc.pdf_pages
         if span is None or block.pages[0] < span[0] or block.pages[1] > span[1]:
             return f"cites {fmt_range(block.pages)}, outside the file's pdf_pages {fmt_range(span)}"
@@ -775,9 +784,37 @@ def gate_a3(r: Resource) -> Result:
             continue
         if card.frontmatter.get("boxed") is not True:
             problems.append(f"{card.path}: the book boxes this idiom but frontmatter boxed is not true")
-        if not any(v.h2 == "Idiom box" for v in card.verbatims):
+        blocks = [v for v in card.verbatims if v.h2 == "Idiom box"]
+        if not blocks:
             problems.append(f"{card.path}: ## Idiom box holds no verbatim block")
-    return verdict(problems, [f"{len(boxes)} idiom boxes, each with a boxed card"])
+            continue
+        problems += box_problems(card, box, blocks)
+    return verdict(problems, [
+        f"{len(boxes)} idiom boxes, each with a boxed card quoting every field of its own box and nothing else",
+    ])
+
+
+def squash(text: str) -> str:
+    return normalise(text.replace("*", "")).replace("-", "")
+
+
+def box_problems(card: Doc, box: dict, blocks: list[Verbatim]) -> list[str]:
+    """Each book field must appear across the card's box blocks, and each block must quote the box's own
+    fields from its page (or the next, where a box breaks across a page)."""
+    raw = box.get("fields") if isinstance(box.get("fields"), dict) else {}
+    fields = [f"{BOX_KEY_SUFFIX.sub('', str(key))} {value}" for key, value in raw.items()]
+    quoted = squash(" ".join(b.text for b in blocks))
+    problems = [
+        f"{card.path}: ## Idiom box lacks the field {normalise(f, source=True)[:60]!r}"
+        for f in fields if squash(normalise(f, source=True)) not in quoted
+    ]
+    page = box.get("pdf_page")
+    for block in blocks:
+        if not verbatim_matches(block.text, "\n\n".join(fields)):
+            problems.append(f"{card.path}:{block.line}: ## Idiom box block is not from the {box.get('name')} box")
+        elif isinstance(page, int) and block.pages and not (page <= block.pages[0] and block.pages[1] <= page + 1):
+            problems.append(f"{card.path}:{block.line}: box block cites {fmt_range(block.pages)}, the box is on p.{page}")
+    return problems
 
 
 def card_structure_problems(doc: Doc) -> list[str]:
@@ -826,7 +863,21 @@ def gate_a5(r: Resource) -> Result:
             problems.append(f"{LOOKUP_PATH}: no link to {row['entry']} at {row['path']}")
     cards = sorted({d.path for d in r.of_kind(CARD)} | {c["path"] for c in r.plan_cards})
     problems += [f"{LOOKUP_PATH}: no link to idiom card {p}" for p in cards if p not in linked]
-    return verdict(problems, [f"lookup links {len(wanted)} chapters and sections and {len(cards)} idiom cards"])
+    concepts = [u for u in lookup.section(CONCEPTS) if u.kind == "row" and not u.hint]
+    if not concepts:
+        problems.append(f"{LOOKUP_PATH}: no ## {CONCEPTS} table with concept rows")
+    for unit in concepts:
+        links = [l for l in unit.links if not l.image]
+        if not links:
+            problems.append(f"{LOOKUP_PATH}:{unit.line}: concept row links no file")
+        for link in links:
+            reason = r.dead_reason(link) if link.path else "external link"
+            if reason:
+                problems.append(f"{LOOKUP_PATH}:{unit.line}: concept link {link.target} ({reason})")
+    return verdict(problems, [
+        f"lookup links {len(wanted)} chapters and sections and {len(cards)} idiom cards, "
+        f"and {len(concepts)} concept rows to files that exist",
+    ])
 
 
 def gate_b1(r: Resource) -> Result:
@@ -1064,6 +1115,14 @@ def gate_c3(r: Resource) -> Result:
         span = doc.pdf_pages
         if span is None or span[0] < 1 or (r.book_pages and span[1] > r.book_pages):
             problems.append(f"{doc.path}: pdf_pages {fm.get('pdf_pages')!r} is not an in-book [first, last] range")
+        chapter_spans = [r.book_chapters[c] for c in sorted(r.chapters(doc)) if c in r.book_chapters]
+        if span and doc.kind not in WIDE_KINDS and chapter_spans:
+            first, last = min(s[0] for s in chapter_spans), max(s[1] for s in chapter_spans)
+            if span[0] < first or span[1] > last:
+                problems.append(
+                    f"{doc.path}: pdf_pages {list(span)} outside chapter "
+                    f"{', '.join(str(c) for c in sorted(r.chapters(doc)))} ({fmt_range((first, last))})"
+                )
         if not isinstance(fm.get("toc"), list):
             problems.append(f"{doc.path}: toc is not a list")
         if fm.get("fidelity") not in ("summary", "mixed"):
@@ -1091,7 +1150,9 @@ def gate_c3(r: Resource) -> Result:
             elif r.book and printed_span != (printed(r, span[0]), printed(r, span[1])):
                 problems.append(f"{doc.path}: printed_pages {list(printed_span)} disagree with page_map for {list(span)}")
     problems += [f"id {i!r} is used by {', '.join(paths)}" for i, paths in ids.items() if len(paths) > 1]
-    return verdict(problems, [f"{len(r.docs)} files carry valid metadata and leaf page ranges"] + notes)
+    return verdict(problems, [
+        f"{len(r.docs)} files carry valid metadata; every chapter-bound file's pdf_pages lies within its chapter",
+    ] + notes)
 
 
 def gate_c4(r: Resource) -> Result:
@@ -1103,36 +1164,88 @@ def gate_c4(r: Resource) -> Result:
         for unit in doc.units:
             if unit.kind == "code" and not unit.hint:
                 problems.append(f"{doc.path}:{unit.line}: code block outside a {HINT} section")
-    return verdict(problems, [f"markers are well placed; unmarked text is traced by C1 and C2"])
+            library = None if unit.hint or unit.figure_line else PLOTTING_LIBRARY.search(unit.text)
+            if library:
+                problems.append(f"{doc.path}:{unit.line}: names {library.group(0)!r} outside {HINT} text")
+    return verdict(problems, [
+        f"{HINT} ends only ## headings; no code block or plotting-library name outside {HINT} text "
+        "(figure lines and verbatim blocks are book text)",
+    ])
 
 
-def ledger_problems(r: Resource) -> list[str]:
+def ledger_table(text: str) -> list[list[str]]:
+    """The data rows of the ledger's Level | Choice | Reason table, ignoring every other table."""
+    rows, inside = [], False
+    for line in text.splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")] if line.startswith("|") else None
+        if cells is None:
+            inside = False
+        elif [c.lower() for c in cells] == LEDGER_HEADER:
+            inside = True
+        elif inside and not TABLE_SEPARATOR.match(line.strip()):
+            rows.append(cells)
+    return rows
+
+
+def ledger_kinds(level: str) -> tuple[str, ...]:
+    level = level.lower()
+    if "lea" in level:
+        return LEAF_KINDS
+    if "idiom" in level:
+        return (CARD,)
+    return tuple(kind for word, kinds in LEDGER_KEYWORDS.items() if word in level for kind in kinds)
+
+
+def ledger_levels(r: Resource) -> tuple[list[tuple[str, str, tuple[str, ...]]], list[str]]:
+    """(level, declared fidelity, kinds) per ledger row, and what is wrong with the ledger itself."""
     path = r.paths.provenance / "fidelity-ledger.md"
     if not path.is_file():
-        return ["provenance/fidelity-ledger.md is missing"]
-    rows = [line for line in path.read_text(encoding="utf-8").splitlines() if line.startswith("|")]
-    problems = []
-    for level in LEDGER_LEVELS:
-        row = next((line for line in rows if level in line.split("|")[1].lower()), None) if rows else None
-        cells = [c.strip() for c in row.strip("|").split("|")] if row else []
+        return [], ["provenance/fidelity-ledger.md is missing"]
+    text = path.read_text(encoding="utf-8")
+    levels, problems = [], []
+    for cells in ledger_table(text):
         if len(cells) < 3 or not all(cells[:3]):
-            problems.append(f"fidelity-ledger.md: no complete Level | Choice | Reason row for '{level}'")
-    if COUNTS_START not in path.read_text(encoding="utf-8"):
+            problems.append(f"fidelity-ledger.md: incomplete Level | Choice | Reason row {' | '.join(cells)!r}")
+            continue
+        declared = next((f for f in ("summary", "mixed") if cells[1].lower().startswith(f)), None)
+        if declared is None:
+            problems.append(f"fidelity-ledger.md: choice for '{cells[0]}' starts with neither Summary nor Mixed")
+            continue
+        levels.append((cells[0], declared, ledger_kinds(cells[0])))
+    for kind in ALL_KINDS:
+        owners = [level for level, _, kinds in levels if kind in kinds]
+        if len(owners) != 1:
+            problems.append(f"fidelity-ledger.md: {len(owners)} Level | Choice | Reason rows cover {kind}, needs 1")
+    if COUNTS_START not in text:
         problems.append("fidelity-ledger.md: measured counts were not written")
-    return problems
+    return levels, problems
 
 
 def gate_c5(r: Resource) -> Result:
-    problems = ledger_problems(r) + need_docs(r, list(r.docs.values()), "markdown files")
+    levels, problems = ledger_levels(r)
+    problems += need_docs(r, list(r.docs.values()), "markdown files")
     for doc in r.docs.values():
         fidelity = doc.frontmatter.get("fidelity")
-        if doc.kind in NODE_KINDS and (fidelity != "summary" or doc.verbatims):
-            problems.append(f"{doc.path}: the ledger makes nodes summary-only, found fidelity {fidelity} with {len(doc.verbatims)} verbatim blocks")
-        elif fidelity == "summary" and doc.verbatims:
+        if fidelity == "summary" and doc.verbatims:
             problems.append(f"{doc.path}: fidelity summary but {len(doc.verbatims)} verbatim blocks")
         elif fidelity == "mixed" and not doc.verbatims:
             problems.append(f"{doc.path}: fidelity mixed but no verbatim blocks")
-    return verdict(problems, ["ledger documents every level and each file's fidelity matches it"])
+    counts = r.kind_counts()
+    for level, declared, kinds in levels:
+        if not any(kind in counts for kind in kinds):
+            continue
+        verbatim = sum(counts[kind]["verbatim"] for kind in kinds if kind in counts)
+        summary = sum(counts[kind]["summary"] for kind in kinds if kind in counts)
+        if declared == "summary" and verbatim:
+            problems.append(f"fidelity-ledger.md: '{level}' declares Summary but has {verbatim:,} verbatim words")
+        if declared == "mixed" and not (verbatim and summary):
+            problems.append(
+                f"fidelity-ledger.md: '{level}' declares Mixed but has {verbatim:,} verbatim and {summary:,} summary words"
+            )
+    return verdict(problems, [
+        "the Level | Choice | Reason table covers every file kind once; each level's measured verbatim and "
+        "summary words fit its declared Summary or Mixed choice; each file's fidelity fits its verbatim blocks",
+    ])
 
 
 def gate_c6(r: Resource) -> Result:
@@ -1291,7 +1404,7 @@ def gate_e1(r: Resource) -> Result:
         for chapter in JOB_REACH.get(job, ()):
             if chapter in r.book_chapters and chapter not in chapters:
                 problems.append(f"{doc.path}: ## Children never leads to chapter {chapter}")
-        if job == "j2" and not any(d.kind == CARD for d in reached):
+        if job in JOB_CARDS and not any(d.kind == CARD for d in reached):
             problems.append(f"{doc.path}: ## Children never leads to an idiom card")
         if not reached:
             problems.append(f"{doc.path}: leads nowhere")
@@ -1321,12 +1434,12 @@ def gate_e3(r: Resource) -> Result:
         for unit in doc.units:
             if unit.hint:
                 hint_units += 1
-                if unit.citations:
-                    problems.append(f"{doc.path}:{unit.line}: hint carries a page citation")
+                if PAGE_REFERENCE.search(unit.text):
+                    problems.append(f"{doc.path}:{unit.line}: hint carries a page reference")
         for heading in doc.headings:
-            if heading.hint and citations_in(heading.title):
-                problems.append(f"{doc.path}:{heading.line}: hint heading carries a page citation")
-    return verdict(problems, [f"{hint_units} hint units, none cited"])
+            if heading.hint and PAGE_REFERENCE.search(heading.title):
+                problems.append(f"{doc.path}:{heading.line}: hint heading carries a page reference")
+    return verdict(problems, [f"{hint_units} hint units, none with a p.N or pp.N-M page reference"])
 
 
 def gate_e4(r: Resource) -> Result:

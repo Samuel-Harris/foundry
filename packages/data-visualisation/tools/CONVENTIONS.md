@@ -77,6 +77,8 @@ fidelity: summary          # summary | mixed (summary plus verbatim blocks)
 
 `SKILL.md` additionally carries `name: data-visualisation` and `description:`.
 Idiom cards additionally carry `boxed: true|false` and `figures: [fig-07-03]`.
+Every file except the router, job nodes and lookup keeps `pdf_pages` inside its
+chapter's PDF span in `book.json` (C3).
 
 ## Citations (C2)
 
@@ -107,7 +109,10 @@ pages' extracted text. One block per contiguous quote. Never put hints inside.
   until the next `##` heading.
 - Outside such sections, a non-book sentence must sit in its own paragraph or
   list item that begins with `[NOT FROM BOOK]`.
-- Hint text never carries a page citation.
+- Hint text never carries a page reference, bracketed or bare: no `p.N` or
+  `pp.N-M` with any dash.
+- Plotting libraries and their APIs (matplotlib, D3, seaborn, plotly, Vega,
+  ggplot) are never from the book. Name them only in hint text (C4).
 - Deleting every hint section and `[NOT FROM BOOK]` item must leave a complete
   file.
 
@@ -147,7 +152,8 @@ as nodes).
 ```markdown
 # <Idiom name>
 ## Idiom box
-(boxed) one verbatim block per field, e.g. What: Data / Why: Tasks / How: Encode / Scale.
+(boxed) one verbatim block per field, e.g. What: Data / Why: Tasks / How: Encode / Scale;
+        every field of this idiom's box in book.json, and nothing from another box (A3).
 (unboxed) "No idiom box in the book." then a cited summary of the same fields.
 ## What it is            cited summary
 ## Use when / avoid when cited, book claims only
@@ -185,6 +191,11 @@ budget is a plan problem: report it, do not truncate content.
 | Idiom cards | Mixed: verbatim idiom-box fields, cited summary for the rest, marked hints | The box is the book's own compact schema; hints are required by E2 |
 
 `provenance/fidelity-ledger.md` carries this table plus the measured counts.
+C5 reads only the table headed `| Level | Choice | Reason |`. Each file kind
+falls under exactly one row, by the words in its Level cell: router, job,
+lookup, chapter, section, leaf or leaves, idiom. Each Choice starts with
+`Summary` (no verbatim words at that level) or `Mixed` (both verbatim and
+summary words at that level; a single file may still be summary only).
 
 ## Data files (shared by every tool)
 
@@ -251,6 +262,8 @@ outgoing crossrefs resolved to planned paths.
   exempt.
 - **Empty figure sections.** A card or leaf with no figures keeps an empty
   `## Figures` section.
+- **Lookup concepts (A5).** `lookup.md` carries a `## Concepts` table. Every
+  row links at least one file, and every link resolves.
 - **Job reach (E1).** j1 reaches chapters 2 and 3 and idiom cards. j2 reaches
   idiom cards. j3 reaches chapters 4 and 6. j4 reaches chapters 11 and 12.
 - **Duplicate figure labels.** The book prints "Figure 8.6" twice (pp.211 and

@@ -61,7 +61,7 @@ FILES = {
         ## Children
 
         - [J1 Choose an idiom](references/jobs/j1-choose-idiom.md) · ~? words. **Use when** someone hands you a dataset plus question and wants a chart type picked [p.10]
-        - [J2 Write plotting code](references/jobs/j2-write-code.md) · ~? words. **Use when** the encoding is already decided and matplotlib or D3 source must be produced [p.11]
+        - [J2 Write plotting code](references/jobs/j2-write-code.md) · ~? words. **Use when** the encoding is already decided and chart source must be produced in a plotting library [p.11]
         - [J3 Critique a visualisation](references/jobs/j3-critique.md) · ~? words. **Use when** an existing figure needs review against perceptual rules and validation levels [p.10]
         - [J4 Design dashboards](references/jobs/j4-dashboards.md) · ~? words. **Use when** several linked views, filtering or navigation must be planned together [p.10]
         - [1 Arrange Tables](references/ch01-arrange-tables/node.md) · ~? words. **Use when** your data is a table of keys and values that needs a spatial layout [pp.10-12]
@@ -91,7 +91,9 @@ FILES = {
         ("1 Arrange Tables", "ch01-arrange-tables/node.md", "the question concerns spatial layout of keys and values in tables", "pp.10-12"),
         ("1.1 Why Arrange?", "ch01-arrange-tables/s01-01-why-arrange.md", "deciding how spatial position expresses keys versus values", "pp.10-12"),
         ("Scatterplots", "idioms/scatterplots.md", "plotting two quantitative attributes to reveal correlation, clusters and outliers", "pp.11-12"),
-    ], "- [Scatterplots](idioms/scatterplots.md): the chapter's main idiom for two attributes [p.12]\n"),
+    ], "- [Scatterplots](idioms/scatterplots.md): the chapter's main idiom for two attributes [p.12]\n",
+        extra="\n## Concepts\n\n| Concept | File | Pages |\n| --- | --- | --- |\n"
+              "| Keys versus values | [1.1.1 Keys](ch01-arrange-tables/s01-01-why-arrange.md#s01.01.01) | [p.12] |\n"),
     NODE: node("ch01", "chapter-node", "1 Arrange Tables", [
         ("1.1 Why Arrange?", "s01-01-why-arrange.md", "deciding how spatial position expresses keys versus values", "pp.10-12"),
         ("Scatterplots", "../idioms/scatterplots.md", "plotting two quantitative attributes to reveal correlation, clusters and outliers", "pp.11-12"),
@@ -296,6 +298,24 @@ class CheckTest(unittest.TestCase):
         (self.skill / CARD).unlink()
         self.assert_fails("A3")
 
+    def test_card_box_missing_a_field_fails_a3(self) -> None:
+        box = dict(BOOK["idiom_boxes"][0], fields={**BOOK["idiom_boxes"][0]["fields"], "Why: Task": "Find correlation."})
+        (self.provenance / "book.json").write_text(json.dumps(dict(BOOK, idiom_boxes=[box])))
+        self.assert_fails("A3")
+
+    def test_card_box_quoting_other_text_fails_a3(self) -> None:
+        self.edit(CARD, "<!-- verbatim p.12 -->\n> What: Data Two quantitative value attributes.",
+                  "<!-- verbatim p.11 -->\n> Arrange tables by expressing values on aligned axes.")
+        self.assert_fails("A3")
+
+    def test_lookup_without_concepts_fails_a5(self) -> None:
+        self.edit("references/lookup.md", "## Concepts", "## Glossary")
+        self.assert_fails("A5")
+
+    def test_concept_row_without_a_link_fails_a5(self) -> None:
+        self.edit("references/lookup.md", "[1.1.1 Keys](ch01-arrange-tables/s01-01-why-arrange.md#s01.01.01)", "1.1.1 Keys")
+        self.assert_fails("A5")
+
     def test_missing_anchor_fails_a1(self) -> None:
         self.edit(LEAF, '<a id="s01.01.01"></a>', "")
         self.assert_fails("A1")
@@ -330,6 +350,11 @@ class CheckTest(unittest.TestCase):
         self.edit(LEAF, "<!-- verbatim p.12 -->", "<!-- verbatim pp.11-12 -->")
         self.assert_fails("C1")
 
+    def test_reversed_verbatim_range_fails_c1_without_crashing(self) -> None:
+        self.edit(LEAF, "<!-- verbatim p.11 -->", "<!-- verbatim pp.12-11 -->")
+        self.assert_fails("C1")
+        self.assertIn("reversed", self.output)
+
     def test_uncited_paragraph_fails_c2(self) -> None:
         self.edit(LEAF, "the index of a table. [p.12]", "the index of a table.")
         self.assert_fails("C2")
@@ -337,6 +362,33 @@ class CheckTest(unittest.TestCase):
     def test_citation_outside_file_range_fails_c2(self) -> None:
         self.edit(CARD, "two quantitative attributes. [p.11]", "two quantitative attributes. [p.10]")
         self.assert_fails("C2")
+
+    def test_file_range_outside_its_chapter_fails_c3(self) -> None:
+        self.edit(LEAF, "pdf_pages: [10, 12]", "pdf_pages: [1, 12]")
+        self.edit(LEAF, "printed_pages: [1, 3]", "printed_pages: [0, 3]")
+        self.edit(LEAF, "the index of a table. [p.12]", "the index of a table. [p.5]")
+        self.assert_fails("C3")
+        self.assertIn("outside chapter 1", self.output)
+
+    def test_unmarked_plotting_library_advice_fails_c4(self) -> None:
+        self.edit(LEAF, "the index of a table. [p.12]", "the index of a table. [p.12]\n\nIn matplotlib, pass c= and s= "
+                  "to plt.scatter, and prefer seaborn for regression lines [p.11].")
+        self.assert_fails("C4")
+
+    def test_empty_ledger_fails_c5(self) -> None:
+        (self.provenance / "fidelity-ledger.md").write_text("# Fidelity ledger\n")
+        self.assert_fails("C5")
+
+    def test_ledger_missing_a_level_fails_c5(self) -> None:
+        (self.provenance / "fidelity-ledger.md").write_text(
+            LEDGER.replace("| Idiom cards | Mixed | The box is the book's own schema |\n", ""))
+        self.assert_fails("C5")
+
+    def test_level_contradicting_its_ledger_choice_fails_c5(self) -> None:
+        self.edit(LEAF, "<!-- verbatim p.11 -->\n> Arrange tables by expressing values on aligned axes.\n<!-- /verbatim -->\n",
+                  "Arrange tables by expressing values on aligned axes. [p.11]\n")
+        self.edit(LEAF, 'fidelity: "mixed"', 'fidelity: "summary"')
+        self.assert_fails("C5")
 
     def test_figure_caption_mismatch_fails_d1(self) -> None:
         self.edit(LEAF, f"[p.11]. {CAPTION}", "[p.11]. A different caption.")
@@ -368,6 +420,17 @@ class CheckTest(unittest.TestCase):
     def test_citation_inside_hint_fails_e3(self) -> None:
         self.edit(CARD, "one point per item.", "one point per item. [p.11]")
         self.assert_fails("E3")
+
+    def test_unbracketed_or_dashed_page_in_hint_fails_e3(self) -> None:
+        self.edit(CARD, "one point per item.", "one point per item, as on [pp.11\u201312].")
+        self.assert_fails("E3")
+        self.edit(CARD, "as on [pp.11\u201312].", "as on p.11.")
+        self.assert_fails("E3")
+
+    def test_j1_without_an_idiom_card_fails_e1(self) -> None:
+        self.edit("references/jobs/j1-choose-idiom.md", "](../ch01-arrange-tables/node.md)",
+                  "](../ch01-arrange-tables/s01-01-why-arrange.md)")
+        self.assert_fails("E1")
 
     def test_hint_marker_inside_verbatim_fails_e4(self) -> None:
         self.edit(LEAF, "> Arrange tables", "> [NOT FROM BOOK] Arrange tables")

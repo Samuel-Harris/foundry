@@ -13,7 +13,7 @@ import re
 import sys
 
 from extract import BOOK_JSON, BUILD_PAGES, PACKAGE, dump_json, slugify
-from check import LIGATURES
+from checker.model import LIGATURES
 
 PLAN_JSON = PACKAGE / "provenance" / "plan.json"
 FIGURES_JSON = PACKAGE / "provenance" / "figures.json"

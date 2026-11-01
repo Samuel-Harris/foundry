@@ -15,7 +15,9 @@ import sys
 import tempfile
 from pathlib import Path
 
-from check import FAIL, PACKAGE, Paths, run
+from check import PACKAGE, run
+from checker.model import FAIL
+from checker.resource import Paths
 
 
 def chapter_paths(provenance: Path, chapter: int) -> list[str]:

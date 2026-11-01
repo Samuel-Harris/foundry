@@ -22,7 +22,7 @@ from extract import (  # noqa: E402
     printed_to_pdf,
     resolve_section_refs,
 )
-from check import AUTOLINK, FIGURE_ITEM  # noqa: E402
+from checker.gates_figures import AUTOLINK, FIGURE_ITEM  # noqa: E402
 from figure_lines import figure_line  # noqa: E402
 from figures import Box, figure_region, page_blocks, page_graphics, single_raster  # noqa: E402
 from plan import build_plan, match_toc_idioms  # noqa: E402

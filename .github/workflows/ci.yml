@@ -57,6 +57,9 @@ jobs:
       - name: Run versioning tests
         run: python3 -m unittest discover -s tests/versioning
 
+      - name: Run pstack upstream tests
+        run: python3 -m unittest discover -s tests/pstack_upstream
+
       # On a push, checking against the previous tip catches two PRs that
       # merged the same bump.
       - name: Check changed packages are bumped

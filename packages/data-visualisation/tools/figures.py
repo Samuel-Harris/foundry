@@ -4,7 +4,8 @@ Usage: python tools/figures.py --pdf PATH   (or set $VIZ_PDF); run tools/extract
 
 A figure sits above its caption, between the caption and the nearest text-flow line
 above it. The crop is the union of the images, vector drawings and figure-label text in
-that band. When one embedded raster covers the whole band, that raster is used instead.
+that band. When one embedded raster covers the whole band and nothing else is drawn in it,
+that raster is used instead.
 """
 
 from __future__ import annotations
@@ -177,10 +178,12 @@ def single_raster(region: Box, inside: list[Graphic]) -> Graphic | None:
     if len(images) != 1 or images[0].xref == 0:
         return None
     image = images[0]
-    others_outside = [g for g in inside if g is not image and not (
-        g.box.x0 >= image.box.x0 - 1 and g.box.x1 <= image.box.x1 + 1
-        and g.box.y0 >= image.box.y0 - 1 and g.box.y1 <= image.box.y1 + 1)]
-    if others_outside or image.box.area < EMBEDDED_COVERAGE * region.area:
+    # Labels and arrows drawn on top of the raster are not in its file. A box the raster's
+    # own size is its backdrop or frame, as under Figure 6.3, and adds nothing.
+    others = [g for g in inside if g is not image and not (
+        abs(g.box.x0 - image.box.x0) <= 1 and abs(g.box.x1 - image.box.x1) <= 1
+        and abs(g.box.y0 - image.box.y0) <= 1 and abs(g.box.y1 - image.box.y1) <= 1)]
+    if others or image.box.area < EMBEDDED_COVERAGE * region.area:
         return None
     return image
 

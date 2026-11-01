@@ -1,4 +1,4 @@
-"""Behaviour of the pure parsing functions in tools/extract.py and tools/plan.py."""
+"""Behaviour of the pure parsing functions in tools/extract.py, tools/figures.py and tools/plan.py."""
 
 from __future__ import annotations
 
@@ -24,6 +24,7 @@ from extract import (  # noqa: E402
 )
 from check import AUTOLINK, FIGURE_ITEM  # noqa: E402
 from figure_lines import figure_line  # noqa: E402
+from figures import Box, figure_region, page_blocks, page_graphics, single_raster  # noqa: E402
 from plan import build_plan, match_toc_idioms  # noqa: E402
 
 
@@ -287,6 +288,39 @@ class FigureLineTest(unittest.TestCase):
         caption = FIGURE_ITEM.match(figure_line("references/idioms/treemaps.md", fig)[2:]).group("caption")
         self.assertIn("<http://www.example.org/tree>.", caption)
         self.assertEqual(AUTOLINK.sub(r"\1", caption), fig["caption"])
+
+
+class EmbeddedRasterTest(unittest.TestCase):
+    """A figure is saved as its embedded raster only when nothing else is drawn in it."""
+
+    raster = (60, 80, 360, 280)
+
+    def method(self, under=lambda page: None, over=lambda page: None) -> str:
+        import pymupdf
+
+        page = pymupdf.open().new_page(width=540, height=648)
+        under(page)
+        pix = pymupdf.Pixmap(pymupdf.csRGB, pymupdf.IRect(0, 0, 60, 40), 0)
+        pix.clear_with(200)
+        page.insert_image(pymupdf.Rect(*self.raster), pixmap=pix)
+        over(page)
+        labels = [l for block in page_blocks(page) for l in block]
+        caption = Box(43, 300, 400, 311)
+        region, inside = figure_region(caption, [caption], page_graphics(page, [], labels), Box(0, 0, 540, 648))
+        return "embedded" if single_raster(region, inside) else "crop"
+
+    def test_plain_raster_is_embedded(self) -> None:
+        self.assertEqual(self.method(), "embedded")
+
+    def test_backdrop_under_the_raster_keeps_it_embedded(self) -> None:
+        self.assertEqual(self.method(under=lambda page: page.draw_rect(self.raster, color=None, fill=(1, 1, 1))),
+                         "embedded")
+
+    def test_text_drawn_on_the_raster_falls_back_to_a_crop(self) -> None:
+        self.assertEqual(self.method(over=lambda page: page.insert_text((100, 150), "eye socket")), "crop")
+
+    def test_arrow_drawn_on_the_raster_falls_back_to_a_crop(self) -> None:
+        self.assertEqual(self.method(over=lambda page: page.draw_line((100, 150), (200, 200))), "crop")
 
 
 if __name__ == "__main__":

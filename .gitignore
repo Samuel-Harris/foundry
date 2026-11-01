@@ -45,3 +45,6 @@ __pycache__/
 **/.github/copilot-instructions.md
 **/.github/plugin/
 **/.claude-plugin/
+
+# uv workspace virtual environment
+.venv/

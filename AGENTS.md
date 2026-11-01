@@ -423,6 +423,17 @@ scratch-consumer installs fail, none of which reflects a repository defect. The
 sandbox also blocks the CLI's lifecycle lock at `$HOME/.apm/`, so point `HOME` at
 a writable directory when the real one is read-only.
 
+## Python tooling
+
+The repository is one [uv](https://docs.astral.sh/uv/) workspace. The root
+`pyproject.toml` declares it with the member glob `packages/*/tools`, and the
+root `uv.lock` pins every member's dependencies. A package that ships Python
+build tools keeps them in `packages/<name>/tools/` with their own
+`pyproject.toml`. Run those tools and their tests with `uv run` from anywhere in
+the repository; it syncs the shared `.venv/` at the root first. After changing a
+member's dependencies, run `uv lock` and commit `uv.lock`. The repository-level
+scripts under `scripts/` and `tests/` are not members and run with `python3`.
+
 ## British English
 
 Write prose and documentation in British English.

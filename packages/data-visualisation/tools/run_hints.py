@@ -1,7 +1,7 @@
 """Run the code in idiom cards' implementation hints and report pass or fail per card.
 
-    python tools/run_hints.py                                 # every idiom card
-    python tools/run_hints.py references/idioms/treemaps.md   # paths relative to the skill
+    uv run tools/run_hints.py                                 # every idiom card
+    uv run tools/run_hints.py references/idioms/treemaps.md   # paths relative to the skill
 
 Each python block under `### matplotlib` runs in a fresh interpreter with
 MPLBACKEND=Agg, inside a temporary directory, so nothing is written into the skill.

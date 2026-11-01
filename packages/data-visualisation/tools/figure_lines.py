@@ -1,7 +1,7 @@
 """Print the exact `## Figures` list line for figures, as seen from one file of the skill.
 
-    python tools/figure_lines.py references/idioms/treemaps.md fig-09-08 fig-09-09
-    python tools/figure_lines.py --file references/idioms/treemaps.md
+    uv run tools/figure_lines.py references/idioms/treemaps.md fig-09-08 fig-09-09
+    uv run tools/figure_lines.py --file references/idioms/treemaps.md
 
 Paths are relative to the skill directory. `--file` prints a line for every figure
 plan.json homes in that file. Captions come verbatim from provenance/figures.json.

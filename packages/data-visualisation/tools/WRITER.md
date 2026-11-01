@@ -52,7 +52,7 @@ report.
   per library.
 - Put each figure line in every file the plan homes it in. Never type a
   figure line. Generate it with
-  `../../../.venv-viz/bin/python figure_lines.py --file <path-relative-to-skill>`
+  `uv run figure_lines.py --file <path-relative-to-skill>`
   and paste the output. Captions keep extraction quirks on purpose.
 - Use `~? words` for child sizes. The size tool fills them later.
 - **Page ranges.** Set each file's `pdf_pages` to the span of pages it actually
@@ -69,7 +69,7 @@ report.
 - **Hints must run.** Each `### matplotlib` hint is one self-contained python
   block with inline toy data, ending at the figure (no `plt.show()` needed).
   Each `### D3` hint is a D3 v7 JavaScript block, or a few API names when a
-  snippet would mislead. Run `../../../.venv-viz/bin/python run_hints.py
+  snippet would mislead. Run `uv run run_hints.py
   <your card paths>` and fix every failure.
 
 ## Check your work
@@ -77,7 +77,7 @@ report.
 From `packages/data-visualisation/tools`:
 
 ```bash
-../../../.venv-viz/bin/python scope_report.py NN
+uv run scope_report.py NN
 ```
 
 It prints only the failing evidence about your files. It never writes shared

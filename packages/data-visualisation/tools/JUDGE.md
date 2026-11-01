@@ -34,8 +34,8 @@ already pass (`tools/check.py`: 0 FAIL). Keep them passing.
 - Keep every citation within the file's `pdf_pages`, and keep `~N words` sizes
   as they are. The size tool rewrites them after you.
 - After your edits, from `packages/data-visualisation/tools`, run
-  `../../../.venv-viz/bin/python scope_report.py NN` for each of your chapters
-  and `../../../.venv-viz/bin/python run_hints.py <your cards>`. The only
+  `uv run scope_report.py NN` for each of your chapters
+  and `uv run run_hints.py <your cards>`. The only
   allowed scope_report lines are B2 size mismatches.
 
 ## Record

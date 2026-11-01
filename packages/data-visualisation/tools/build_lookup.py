@@ -1,6 +1,6 @@
 """Build references/lookup.md from plan.json, coverage.json, book.json, SKILL.md and tools/lookup_concepts.md.
 
-Run from anywhere: python tools/build_lookup.py. The chapter Children lines are copied from
+Run from anywhere: uv run tools/build_lookup.py. The chapter Children lines are copied from
 SKILL.md so the router stays their single owner; concepts.md holds the hand-written concept rows.
 """
 import json

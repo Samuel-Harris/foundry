@@ -3,7 +3,7 @@
 Chapter writers run this in parallel, so it never writes to the shared
 provenance directory: the checker runs against a temporary copy of it.
 
-    python tools/scope_report.py 7
+    uv run tools/scope_report.py 7
 """
 
 from __future__ import annotations

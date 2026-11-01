@@ -1,6 +1,6 @@
 """Extract every figure in provenance/book.json to assets/figures/ and write provenance/figures.json.
 
-Usage: python tools/figures.py --pdf PATH   (or set $VIZ_PDF); run tools/extract.py first.
+Usage: uv run tools/figures.py --pdf PATH   (or set $VIS_PDF); run tools/extract.py first.
 
 A figure sits above its caption, between the caption and the nearest text-flow line
 above it. The crop is the union of the images, vector drawings and figure-label text in
@@ -242,7 +242,7 @@ def main(argv: list[str] | None = None) -> int:
     import pymupdf
 
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--pdf", default=os.environ.get("VIZ_PDF"), required=os.environ.get("VIZ_PDF") is None)
+    ap.add_argument("--pdf", default=os.environ.get("VIS_PDF"), required=os.environ.get("VIS_PDF") is None)
     args = ap.parse_args(argv)
     doc = pymupdf.open(args.pdf)
     book = json.loads(BOOK_JSON.read_text(encoding="utf-8"))

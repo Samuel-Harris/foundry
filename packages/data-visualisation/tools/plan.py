@@ -1,6 +1,6 @@
 """Plan every file of the resource from provenance/book.json.
 
-Usage: python tools/plan.py   (run tools/extract.py first; reads build/pages for sizes)
+Usage: uv run tools/plan.py   (run tools/extract.py first; reads build/pages for sizes)
 
 Writes provenance/plan.json and build/packets/chNN.json, and prints the leaves whose
 source text is too large to summarise within the leaf budget.

@@ -1,6 +1,6 @@
 """Extract page text and the book model (provenance/book.json) from the source PDF.
 
-Usage: python tools/extract.py --pdf PATH   (or set $VIZ_PDF)
+Usage: uv run tools/extract.py --pdf PATH   (or set $VIS_PDF)
 """
 
 from __future__ import annotations
@@ -519,7 +519,7 @@ def main(argv: list[str] | None = None) -> int:
     import pymupdf
 
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--pdf", default=os.environ.get("VIZ_PDF"), required=os.environ.get("VIZ_PDF") is None)
+    ap.add_argument("--pdf", default=os.environ.get("VIS_PDF"), required=os.environ.get("VIS_PDF") is None)
     args = ap.parse_args(argv)
     pdf_path = Path(args.pdf)
     doc = pymupdf.open(pdf_path)

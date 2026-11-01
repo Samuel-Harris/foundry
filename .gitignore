@@ -48,3 +48,9 @@ __pycache__/
 
 # uv workspace virtual environment
 .venv/
+
+# Local Python toolchain for the data-visualisation build tools
+.venv-viz/
+
+# Data-visualisation build scratch (one-off scripts, smoke-test transcripts)
+packages/data-visualisation/scratch/

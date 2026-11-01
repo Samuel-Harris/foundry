@@ -1,8 +1,7 @@
 # Build conventions for the data-visualisation resource
 
-The contract every build tool and every writing agent follows. Source rubric:
-`viz-resource-build-rubric.md` at the repository root. Writing agents must not
-edit this file, `tools/`, or `build/`.
+The contract every build tool and every writing agent follows. Writing agents
+must not edit this file, `tools/`, or `build/`.
 
 Source PDF: passed as `--pdf` or `$VIZ_PDF`. Never copy it into the repository.
 "Page" always means **PDF page** (1-based) unless it says printed page.
@@ -175,7 +174,7 @@ A figure reference is one list item under `## Figures`:
 
 The caption must equal the `caption` field in `provenance/figures.json`.
 
-## Size limits (section 6 of the rubric, gated)
+## Size limits (gated)
 
 Measured in words, frontmatter excluded: router 2,500; job, index, chapter and
 section nodes 1,500 (lookup 4,000); leaves 2,000; idiom cards 1,500. A leaf over

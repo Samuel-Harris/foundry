@@ -335,6 +335,18 @@ change merged without a bump never reaches them.
   APM 0.32.0's resolver ignores peeled `^{}` refs and records the SHA of the
   tag ref itself, which for an annotated tag is the tag object, not the commit.
 
+## Updating pstack from upstream
+
+`packages/pstack` is an adapted port of
+[cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack), and
+`packages/pstack/upstream.json` pins the upstream commit it is based on. Run
+`uv run scripts/pstack_upstream.py status`, then `sync`, which three-way merges
+each upstream change since the pin into the mapped local file and moves the pin.
+Resolve the conflict markers it leaves, re-applying the British English and
+target-neutral adaptations, then bump and test as for any package change. The
+path mapping, and the lists of upstream-only and local-only files, live in the
+script; `status` reports drift when a file falls outside them, and exits `1`.
+
 ## CI
 
 `.github/workflows/ci.yml` runs `pre-commit` plus a job for each of pstack's
@@ -350,8 +362,8 @@ the push's previous tip to `HEAD`. A manual run, or a push that creates a
 branch, sets `FOUNDRY_CHECK_ALL=1` and checks every package. The Tier 1 suite
 is local: `bash tests/structural/run-tier1.sh`.
 
-`versions` runs the `tests/versioning` unit tests and
-`scripts/versioning.py check` over the same range. On a push to `main`, `tag`
+`versions` runs the `tests/versioning` and `tests/pstack_upstream` unit tests
+and `scripts/versioning.py check` over the same range. On a push to `main`, `tag`
 runs after every other job passes and pushes the new `<name>--v<version>` tags
 with the job's `contents: write` token. Tags pushed with `GITHUB_TOKEN` start no
 further workflow runs.
@@ -399,9 +411,11 @@ lockfile half first, so the install cannot mix them into the lockfile. CI runs
 this script; it does not stage a commit, and instead sets `FOUNDRY_DIFF_RANGE`
 or `FOUNDRY_CHECK_ALL=1` (the latter lints the whole markdown set and every
 package). Set `FOUNDRY_SKIP_LOCKFILE_HOOK=1` to skip the lockfile half.
-Markdown lint still runs. `APM`, `APM_TIMEOUT`, `APM_TARGETS` and
-`MARKDOWNLINT_CLI2_VERSION` override the CLI, the per-call bound, the target
-list and the linter pin.
+Markdown lint still runs, as does a check in every mode that refuses any
+`<<<<<<<` or `>>>>>>>` conflict marker in the index, because
+`scripts/pstack_upstream.py sync` moves the pin even when it leaves markers.
+`APM`, `APM_TIMEOUT`, `APM_TARGETS` and `MARKDOWNLINT_CLI2_VERSION` override the
+CLI, the per-call bound, the target list and the linter pin.
 
 ## Local Tier 1 suite
 
@@ -432,7 +446,11 @@ build tools keeps them in `packages/<name>/tools/` with their own
 `pyproject.toml`. Run those tools and their tests with `uv run` from anywhere in
 the repository; it syncs the shared `.venv/` at the root first. After changing a
 member's dependencies, run `uv lock` and commit `uv.lock`. The repository-level
-scripts under `scripts/` and `tests/` are not members and run with `python3`.
+scripts under `scripts/` and `tests/` are not members. Most run with `python3`;
+`scripts/pstack_upstream.py` and its tests declare their interpreter in inline
+[PEP 723](https://peps.python.org/pep-0723/) metadata and run with `uv run`,
+which builds an isolated environment from that block rather than syncing the
+workspace.
 
 ## British English
 

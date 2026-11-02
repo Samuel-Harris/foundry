@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Refuse a commit that leaves markdown unlinted, the root apm.yml missing a
-# package, or a package lockfile stale.
+# package, a package lockfile stale, or a merge conflict marker anywhere in the
+# index.
 #
 # Markdown: markdownlint-cli2 0.14.0, the version the previous CI action pinned,
 # over README.md, CHANGELOG.md, AGENTS.md and markdown under packages/, docs/
@@ -18,7 +19,8 @@
 # pure Python and needs no APM.
 #
 # The lockfile half needs apm-cli 0.32.0. Prefer .venv-apm/bin/apm. Bypass that
-# half with FOUNDRY_SKIP_LOCKFILE_HOOK=1. Markdown lint still runs.
+# half with FOUNDRY_SKIP_LOCKFILE_HOOK=1. Markdown lint and the conflict-marker
+# check still run.
 set -euo pipefail
 
 repo_root="$(git rev-parse --show-toplevel)"
@@ -103,6 +105,20 @@ else
 fi
 
 python3 tests/structural/check_root_manifest.py >&2 || lint_status=1
+
+# scripts/pstack_upstream.py sync moves the pin even on conflict, so leftover
+# markers are the only record of an unresolved merge. `=======` is left out
+# because it is also a markdown setext heading.
+marker_status=0
+markers="$(git grep --cached -nE '^(<<<<<<<|>>>>>>>) ')" || marker_status=$?
+if (( marker_status == 0 )); then
+  echo "pre-commit: unresolved merge conflict markers; resolve them before committing:" >&2
+  printf '  %s\n' "$markers" >&2
+  lint_status=1
+elif (( marker_status > 1 )); then
+  echo "pre-commit: conflict-marker scan failed (git grep exited ${marker_status})" >&2
+  lint_status=1
+fi
 
 if [[ "${FOUNDRY_SKIP_LOCKFILE_HOOK:-}" == "1" ]]; then
   echo "pre-commit: skipping lockfile check (FOUNDRY_SKIP_LOCKFILE_HOOK=1)" >&2

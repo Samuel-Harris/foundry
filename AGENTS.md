@@ -345,7 +345,7 @@ each upstream change since the pin into the mapped local file and moves the pin.
 Resolve the conflict markers it leaves, re-applying the British English and
 target-neutral adaptations, then bump and test as for any package change. The
 path mapping, and the lists of upstream-only and local-only files, live in the
-script; `status` reports drift when a file falls outside them.
+script; `status` reports drift when a file falls outside them, and exits `1`.
 
 ## CI
 
@@ -411,9 +411,11 @@ lockfile half first, so the install cannot mix them into the lockfile. CI runs
 this script; it does not stage a commit, and instead sets `FOUNDRY_DIFF_RANGE`
 or `FOUNDRY_CHECK_ALL=1` (the latter lints the whole markdown set and every
 package). Set `FOUNDRY_SKIP_LOCKFILE_HOOK=1` to skip the lockfile half.
-Markdown lint still runs. `APM`, `APM_TIMEOUT`, `APM_TARGETS` and
-`MARKDOWNLINT_CLI2_VERSION` override the CLI, the per-call bound, the target
-list and the linter pin.
+Markdown lint still runs, as does a check in every mode that refuses any
+`<<<<<<<` or `>>>>>>>` conflict marker in the index, because
+`scripts/pstack_upstream.py sync` moves the pin even when it leaves markers.
+`APM`, `APM_TIMEOUT`, `APM_TARGETS` and `MARKDOWNLINT_CLI2_VERSION` override the
+CLI, the per-call bound, the target list and the linter pin.
 
 ## Local Tier 1 suite
 

@@ -262,7 +262,7 @@ def status(up: Upstream, package: Path) -> int:
     print(f"\nMapping drift at the pinned commit: {len(problems) or 'none'}")
     for problem in problems:
         print(f"  {problem}")
-    return 0
+    return 1 if problems else 0
 
 
 def sync(up: Upstream, package: Path) -> int:

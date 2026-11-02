@@ -146,6 +146,14 @@ class PstackUpstreamTest(unittest.TestCase):
         self.assertIn("Mapping drift at the pinned commit: none", result.stdout)
         self.assertEqual(git(self.package, "status", "--porcelain"), "")
 
+    def test_status_fails_on_a_local_file_outside_the_mapping(self) -> None:
+        write_tree(self.package, {"stray.txt": "stray\n"})
+
+        result = self.run_script("status")
+
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("local file with no upstream counterpart: stray.txt", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -104,9 +104,11 @@ The difference between code that works and code you think works is testing. You 
 - The file exists, is non-empty, or contains a heading. Asserting every `AGENTS.md` still has text after `strip()` does not check that the guide is accurate or that anything follows it. Version control already records that the file is there.
 - A config or build file contains a fixed string. Asserting `.bazelrc` contains `--aspects=//tools/boundaries:enforcer.bzl%import_enforcer` does not run the aspect and does not show that a forbidden import fails the build. A comment with the same text would pass.
 - The assertion is a second copy of a constant, flag, or source line you control in both places.
-- It parses a CI workflow file (GitHub Actions YAML and similar) or pins a list of jobs, paths, or config keys. These are restatements too: do not write them. Test the behavior of the script the workflow calls, and use real CI runs as the evidence for trigger, condition, and job-graph changes.
+- It parses a CI workflow file (GitHub Actions YAML and similar) or pins a list of jobs, paths, or config keys. These are restatements too: do not write them. Test the behavior of the script the workflow calls, and use real CI runs as the evidence for trigger, condition, and job-graph changes. The exception is a test that pins the permissions granted to a CI or service identity against a mocked permission system. A widened grant is a security change, so a test that fails on it earns its place.
 
 If you cannot name a behavior that fails the test while the files stay well formed, do not add the test. Say that, and why. The import enforcer is worth a test when you hand it source and assert that an allowed import passes and a forbidden one exits non-zero. An empty-file check is not a stand-in for that.
+
+**Run the change before you call it done.** Before reporting a change done, exercise the changed path itself: manually verify the changes on the local stack for UI or full-stack changes, the script or job for tooling, the reproduction for a bug fix. Say what you ran. Unit tests and lint alone are not verification.
 
 **If you can't write a test, say why.** Sometimes the architecture makes testing hard. That's useful information. "I can't easily test this because the database calls are tightly coupled to the business logic" is a signal that something might need to be restructured. Don't just skip testing and hope.
 
@@ -189,7 +191,7 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 
 **The Kitchen Sink.** Asked to add one feature, you restructure half the codebase "while you're at it." Don't. Do the one thing.
 
-**The Wrong Abstraction.** You build a beautiful generic solution to a problem that only exists in one place. Duplication is far cheaper than the wrong abstraction. Copy-paste twice before you abstract.
+**The Wrong Abstraction.** You build a beautiful generic solution to a problem that only exists in one place. Do not invent an abstraction for a single use. When an existing helper already owns the behavior, reuse it rather than writing a second copy.
 
 **The Invisible Decision.** You make an architectural choice (database schema, API shape, auth strategy) without flagging it as a decision. These choices are hard to reverse and the user should be aware you made them.
 
@@ -212,6 +214,8 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 A pull request must not exceed **2,500 changed lines**, measured as additions plus deletions against the PR's base branch. This is a hard limit, not a target, and includes application code, tests, migrations, generated files, lockfiles, and formatting changes. Staying under it does not make a multi-purpose PR acceptable.
 
 Before creating or updating a PR, check that it does one thing and measure its full diff against its intended base branch. If it does more than one thing or would exceed 2,500 changed lines, split the work before handoff; never create a mixed or oversized PR with a promise to split it later.
+
+Split along vertical slices one reviewer can own. Keep supporting edits (comments, renames the change needs) in the PR they support. Check the line count against the real 2,500 limit before handing off.
 
 Split independent changes into separate PRs against the base branch. Split dependent changes, and any single change over the limit, into a real GitHub PR stack:
 

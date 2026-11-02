@@ -1,5 +1,5 @@
 name: coding-style
-version: "0.1.1"
+version: "0.1.2"
 description: "Core engineering rules, compatibility guardrails and Python style for agent-written code."
 author: sam
 license: MIT

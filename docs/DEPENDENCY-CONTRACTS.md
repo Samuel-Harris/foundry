@@ -274,3 +274,5 @@ Two levels are not enough: `meta → {base, mid → base}` alone audits clean. T
 ### Delivery is not a safety statement
 
 `apm audit --ci` reports content integrity and drift. It is not a security certification, and APM does not sandbox MCP servers.
+
+Throwaway probe for PR 59.

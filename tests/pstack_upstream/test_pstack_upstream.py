@@ -1,3 +1,7 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = []
+# ///
 """Behaviour of scripts/pstack_upstream.py against a throwaway upstream repository."""
 
 from __future__ import annotations
@@ -74,7 +78,7 @@ class PstackUpstreamTest(unittest.TestCase):
 
     def run_script(self, command: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            ["python3", str(SCRIPT), command, "--package", str(self.package)],
+            ["uv", "run", "--script", str(SCRIPT), command, "--package", str(self.package)],
             env=GIT_ENV,
             capture_output=True,
             text=True,

@@ -57,8 +57,12 @@ jobs:
       - name: Run versioning tests
         run: python3 -m unittest discover -s tests/versioning
 
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version: "0.13.5"
+
       - name: Run pstack upstream tests
-        run: python3 -m unittest discover -s tests/pstack_upstream
+        run: uv run --script tests/pstack_upstream/test_pstack_upstream.py
 
       # On a push, checking against the previous tip catches two PRs that
       # merged the same bump.

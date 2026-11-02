@@ -340,7 +340,7 @@ change merged without a bump never reaches them.
 `packages/pstack` is an adapted port of
 [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack), and
 `packages/pstack/upstream.json` pins the upstream commit it is based on. Run
-`python3 scripts/pstack_upstream.py status`, then `sync`, which three-way merges
+`uv run scripts/pstack_upstream.py status`, then `sync`, which three-way merges
 each upstream change since the pin into the mapped local file and moves the pin.
 Resolve the conflict markers it leaves, re-applying the British English and
 target-neutral adaptations, then bump and test as for any package change. The
@@ -446,7 +446,11 @@ build tools keeps them in `packages/<name>/tools/` with their own
 `pyproject.toml`. Run those tools and their tests with `uv run` from anywhere in
 the repository; it syncs the shared `.venv/` at the root first. After changing a
 member's dependencies, run `uv lock` and commit `uv.lock`. The repository-level
-scripts under `scripts/` and `tests/` are not members and run with `python3`.
+scripts under `scripts/` and `tests/` are not members. Most run with `python3`;
+`scripts/pstack_upstream.py` and its tests declare their interpreter in inline
+[PEP 723](https://peps.python.org/pep-0723/) metadata and run with `uv run`,
+which builds an isolated environment from that block rather than syncing the
+workspace.
 
 ## British English
 

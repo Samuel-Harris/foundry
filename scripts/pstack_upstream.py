@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = []
+# ///
 """Report and apply upstream pstack changes since the pinned commit.
 
 `packages/pstack/upstream.json` records the upstream repository, the

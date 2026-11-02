@@ -13,6 +13,7 @@ dependencies:
   apm:
     - path: ./packages/coding-style
     - path: ./packages/cursor-usage
+    - path: ./packages/data-visualisation
     - path: ./packages/execution
     - path: ./packages/git-diff
     - path: ./packages/handoff

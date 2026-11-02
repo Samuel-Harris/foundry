@@ -5,6 +5,11 @@
 # APM working directories
 apm_modules/
 
+# Lockfile of the root development manifest. It records every package's version
+# and file hashes, so it would go stale on any package change; the per-package
+# lockfiles are the committed contract.
+/apm.lock.yaml
+
 # Local APM toolchain
 .venv-apm/
 

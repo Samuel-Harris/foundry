@@ -147,6 +147,8 @@ echo
 echo "Primitive contract"
 bounded python3 "$REPO_ROOT/tests/structural/validate_primitives.py"
 report $? "validate_primitives.py"
+bounded python3 "$REPO_ROOT/tests/structural/check_root_manifest.py"
+report $? "check_root_manifest.py"
 
 # APM records transitive sibling dependencies by absolute checkout path, so every
 # install rewrites those lines. The committed form is relative to the package,

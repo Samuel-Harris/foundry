@@ -13,6 +13,48 @@ env:
   APM_VERSION: "0.32.0"
 
 jobs:
+  # Pushes and manual runs skip the filter, so every job runs and tag keeps
+  # its full gate.
+  changes:
+    name: Detect changed paths
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      versions: ${{ steps.filter.outputs.versions }}
+      statechart: ${{ steps.filter.outputs.statechart }}
+      poteto-mode: ${{ steps.filter.outputs.poteto-mode }}
+    steps:
+      - uses: dorny/paths-filter@v3.0.2
+        if: github.event_name == 'pull_request'
+        id: filter
+        with:
+          filters: |
+            versions:
+              - .github/workflows/ci.yml
+              - scripts/versioning.py
+              - scripts/relativise_lockfiles.py
+              - scripts/pstack_upstream.py
+              - tests/versioning/**
+              - tests/pstack_upstream/**
+              - packages/*/apm.yml
+              - packages/*/apm.lock.yaml
+              - packages/*/.apm/**
+            statechart:
+              - .github/workflows/ci.yml
+              - packages/pstack/tests/statechart/**
+              - packages/pstack/.apm/skills/statechart/**
+            poteto-mode:
+              - .github/workflows/ci.yml
+              - packages/pstack/package.json
+              - packages/pstack/bun.lock
+              - packages/pstack/tsconfig.poteto-mode.json
+              - packages/pstack/tests/poteto-mode/**
+              - packages/pstack/.apm/skills/poteto-mode/**
+
+  # Unfiltered: the hook scopes itself to the diff, and its conflict-marker
+  # scan covers every tracked file.
   pre-commit:
     name: Pre-commit checks
     runs-on: ubuntu-latest
@@ -48,6 +90,8 @@ jobs:
 
   versions:
     name: Package versions
+    needs: changes
+    if: github.event_name != 'pull_request' || needs.changes.outputs.versions == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -112,6 +156,8 @@ jobs:
 
   statechart-tests:
     name: pstack statechart tests
+    needs: changes
+    if: github.event_name != 'pull_request' || needs.changes.outputs.statechart == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -148,6 +194,8 @@ jobs:
 
   poteto-mode-tests:
     name: pstack poteto-mode tests
+    needs: changes
+    if: github.event_name != 'pull_request' || needs.changes.outputs.poteto-mode == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:

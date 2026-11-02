@@ -3,7 +3,7 @@
 The contract every build tool and every writing agent follows. Writing agents
 must not edit this file, `tools/`, or `build/`.
 
-Source PDF: passed as `--pdf` or `$VIZ_PDF`. Never copy it into the repository.
+Source PDF: passed as `--pdf` or `$VIS_PDF`. Never copy it into the repository.
 "Page" always means **PDF page** (1-based) unless it says printed page.
 
 ## Layout

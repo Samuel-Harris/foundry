@@ -138,6 +138,7 @@ deployed_path() {
 
 packages=()
 for dir in "$REPO_ROOT"/packages/*/; do
+  [[ -f "$dir/apm.yml" ]] || continue
   packages+=("$(basename "$dir")")
 done
 

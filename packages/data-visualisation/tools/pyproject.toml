@@ -1,0 +1,14 @@
+[project]
+name = "data-visualisation-tools"
+version = "0.1.0"
+description = "Build and check tools for the data-visualisation skill."
+requires-python = ">=3.12"
+dependencies = [
+    "pymupdf==2.0",
+    "pillow==13.0.0",
+    "pyyaml==6.0.3",
+    "matplotlib==3.11.2",
+    "numpy==2.5.4",
+    "pandas==3.1.0",
+    "networkx==3.7",
+]

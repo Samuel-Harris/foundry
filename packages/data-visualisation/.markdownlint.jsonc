@@ -1,0 +1,8 @@
+{
+  // This package's markdown carries structure tools/CONVENTIONS.md requires:
+  // frontmatter `title` metadata beside the `#` heading, and `<a id>` anchors
+  // that coverage.json maps TOC entries to. Everything else follows the repo.
+  "extends": "../../.markdownlint.json",
+  "MD025": { "front_matter_title": "" },
+  "MD033": { "allowed_elements": ["a"] }
+}

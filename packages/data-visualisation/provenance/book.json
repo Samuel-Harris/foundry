@@ -1,0 +1,6057 @@
+{
+  "crossrefs": [
+    {
+      "from": "s01.08",
+      "pdf_page": 36,
+      "target": "s09.05",
+      "target_number": "9.5"
+    },
+    {
+      "from": "s01.13",
+      "pdf_page": 40,
+      "target": "s06.05",
+      "target_number": "6.5"
+    },
+    {
+      "from": "s02.02",
+      "pdf_page": 48,
+      "target": "s03.04.02.03",
+      "target_number": "3.4.2.3"
+    },
+    {
+      "from": "s02.03",
+      "pdf_page": 48,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s02.04.01",
+      "pdf_page": 50,
+      "target": "s02.06.01",
+      "target_number": "2.6.1"
+    },
+    {
+      "from": "s02.04.04",
+      "pdf_page": 55,
+      "target": "s03.04.02.03",
+      "target_number": "3.4.2.3"
+    },
+    {
+      "from": "s02.04.04",
+      "pdf_page": 55,
+      "target": "s08.04",
+      "target_number": "8.4"
+    },
+    {
+      "from": "s02.05.03",
+      "pdf_page": 59,
+      "target": "s13.04",
+      "target_number": "13.4"
+    },
+    {
+      "from": "s02.05.03",
+      "pdf_page": 59,
+      "target": "s07.05",
+      "target_number": "7.5"
+    },
+    {
+      "from": "s02.06.02",
+      "pdf_page": 64,
+      "target": "s03.04.02.03",
+      "target_number": "3.4.2.3"
+    },
+    {
+      "from": "s02.06.02",
+      "pdf_page": 64,
+      "target": "s13.04",
+      "target_number": "13.4"
+    },
+    {
+      "from": "s02.06.02",
+      "pdf_page": 64,
+      "target": "s06.05",
+      "target_number": "6.5"
+    },
+    {
+      "from": "s02.06.02.01",
+      "pdf_page": 65,
+      "target": "s02.04.06",
+      "target_number": "2.4.6"
+    },
+    {
+      "from": "s03.03",
+      "pdf_page": 70,
+      "target": "s02.04",
+      "target_number": "2.4"
+    },
+    {
+      "from": "s03.04.04.03",
+      "pdf_page": 80,
+      "target": "s06.07",
+      "target_number": "6.7"
+    },
+    {
+      "from": "s03.05",
+      "pdf_page": 82,
+      "target": "s02.04.02",
+      "target_number": "2.4.2"
+    },
+    {
+      "from": "s03.05",
+      "pdf_page": 82,
+      "target": "s02.04.03.01",
+      "target_number": "2.4.3.1"
+    },
+    {
+      "from": "s03.05",
+      "pdf_page": 82,
+      "target": "s02.04.04",
+      "target_number": "2.4.4"
+    },
+    {
+      "from": "s04.03.02",
+      "pdf_page": 96,
+      "target": "s03.04.02.03",
+      "target_number": "3.4.2.3"
+    },
+    {
+      "from": "s04.05",
+      "pdf_page": 99,
+      "target": "s01.12",
+      "target_number": "1.12"
+    },
+    {
+      "from": "s04.06.04",
+      "pdf_page": 105,
+      "target": "s06.08",
+      "target_number": "6.8"
+    },
+    {
+      "from": "s04.07.02",
+      "pdf_page": 109,
+      "target": "s09.04",
+      "target_number": "9.4"
+    },
+    {
+      "from": "s04.07.03",
+      "pdf_page": 110,
+      "target": "s08.03.01",
+      "target_number": "8.3.1"
+    },
+    {
+      "from": "s04.07.04",
+      "pdf_page": 112,
+      "target": "s07.05.02",
+      "target_number": "7.5.2"
+    },
+    {
+      "from": "s04.07.04",
+      "pdf_page": 112,
+      "target": "s11.05.02",
+      "target_number": "11.5.2"
+    },
+    {
+      "from": "s04.07.04",
+      "pdf_page": 112,
+      "target": "s14.05",
+      "target_number": "14.5"
+    },
+    {
+      "from": "s04.07.04",
+      "pdf_page": 113,
+      "target": "s04.03",
+      "target_number": "4.3"
+    },
+    {
+      "from": "s04.07.05",
+      "pdf_page": 114,
+      "target": "s09.02",
+      "target_number": "9.2"
+    },
+    {
+      "from": "s04.07.06",
+      "pdf_page": 115,
+      "target": "s09.02",
+      "target_number": "9.2"
+    },
+    {
+      "from": "s05.04.02",
+      "pdf_page": 127,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s05.05.03",
+      "pdf_page": 133,
+      "target": "s10.02",
+      "target_number": "10.2"
+    },
+    {
+      "from": "s06.03.04",
+      "pdf_page": 146,
+      "target": "s06.03.02",
+      "target_number": "6.3.2"
+    },
+    {
+      "from": "s06.03.07",
+      "pdf_page": 150,
+      "target": "s08.05",
+      "target_number": "8.5"
+    },
+    {
+      "from": "s06.03.07",
+      "pdf_page": 150,
+      "target": "s11.05",
+      "target_number": "11.5"
+    },
+    {
+      "from": "s06.03.09",
+      "pdf_page": 154,
+      "target": "s08.04.01",
+      "target_number": "8.4.1"
+    },
+    {
+      "from": "s06.03.09",
+      "pdf_page": 155,
+      "target": "s13.04.03",
+      "target_number": "13.4.3"
+    },
+    {
+      "from": "s06.05.02",
+      "pdf_page": 158,
+      "target": "s06.05.03",
+      "target_number": "6.5.3"
+    },
+    {
+      "from": "s06.05.02",
+      "pdf_page": 158,
+      "target": "s12.03.02",
+      "target_number": "12.3.2"
+    },
+    {
+      "from": "s06.06",
+      "pdf_page": 159,
+      "target": "s01.13",
+      "target_number": "1.13"
+    },
+    {
+      "from": "s06.06",
+      "pdf_page": 160,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s06.07",
+      "pdf_page": 161,
+      "target": "s13.04",
+      "target_number": "13.4"
+    },
+    {
+      "from": "s06.07",
+      "pdf_page": 161,
+      "target": "s11.05",
+      "target_number": "11.5"
+    },
+    {
+      "from": "s06.09",
+      "pdf_page": 165,
+      "target": "s10.02",
+      "target_number": "10.2"
+    },
+    {
+      "from": "s07.03",
+      "pdf_page": 170,
+      "target": "s02.06.01",
+      "target_number": "2.6.1"
+    },
+    {
+      "from": "s07.04",
+      "pdf_page": 171,
+      "target": "s12.04",
+      "target_number": "12.4"
+    },
+    {
+      "from": "s07.05.01",
+      "pdf_page": 177,
+      "target": "s07.06.03",
+      "target_number": "7.6.3"
+    },
+    {
+      "from": "s07.05.01",
+      "pdf_page": 180,
+      "target": "s13.04.01",
+      "target_number": "13.4.1"
+    },
+    {
+      "from": "s07.05.02",
+      "pdf_page": 183,
+      "target": "s10.03",
+      "target_number": "10.3"
+    },
+    {
+      "from": "s07.05.02",
+      "pdf_page": 183,
+      "target": "s10.03.04",
+      "target_number": "10.3.4"
+    },
+    {
+      "from": "s07.05.02",
+      "pdf_page": 185,
+      "target": "s13.04.01",
+      "target_number": "13.4.1"
+    },
+    {
+      "from": "s07.05.02",
+      "pdf_page": 185,
+      "target": "s12.03.02",
+      "target_number": "12.3.2"
+    },
+    {
+      "from": "s07.05.02",
+      "pdf_page": 186,
+      "target": "s15.03",
+      "target_number": "15.3"
+    },
+    {
+      "from": "s07.05.02",
+      "pdf_page": 186,
+      "target": "s15.05",
+      "target_number": "15.5"
+    },
+    {
+      "from": "s07.05.03",
+      "pdf_page": 186,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s07.05.04",
+      "pdf_page": 186,
+      "target": "s12.04",
+      "target_number": "12.4"
+    },
+    {
+      "from": "s07.06.02",
+      "pdf_page": 187,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s07.06.02",
+      "pdf_page": 187,
+      "target": "s05.05.03",
+      "target_number": "5.5.3"
+    },
+    {
+      "from": "s07.06.02",
+      "pdf_page": 189,
+      "target": "s13.04.01",
+      "target_number": "13.4.1"
+    },
+    {
+      "from": "s07.06.02",
+      "pdf_page": 190,
+      "target": "s12.03",
+      "target_number": "12.3"
+    },
+    {
+      "from": "s07.06.02",
+      "pdf_page": 190,
+      "target": "s12.04",
+      "target_number": "12.4"
+    },
+    {
+      "from": "s07.06.03",
+      "pdf_page": 193,
+      "target": "s05.05",
+      "target_number": "5.5"
+    },
+    {
+      "from": "s07.06.03",
+      "pdf_page": 194,
+      "target": "s07.05.01",
+      "target_number": "7.5.1"
+    },
+    {
+      "from": "s07.07.01",
+      "pdf_page": 197,
+      "target": "s15.04",
+      "target_number": "15.4"
+    },
+    {
+      "from": "s07.07.01",
+      "pdf_page": 198,
+      "target": "s12.03",
+      "target_number": "12.3"
+    },
+    {
+      "from": "s08.02",
+      "pdf_page": 205,
+      "target": "s05.04.01",
+      "target_number": "5.4.1"
+    },
+    {
+      "from": "s08.03.01",
+      "pdf_page": 206,
+      "target": "s10.03.02",
+      "target_number": "10.3.2"
+    },
+    {
+      "from": "s08.03.01",
+      "pdf_page": 206,
+      "target": "s13.04.02",
+      "target_number": "13.4.2"
+    },
+    {
+      "from": "s08.04",
+      "pdf_page": 208,
+      "target": "s11.06.01",
+      "target_number": "11.6.1"
+    },
+    {
+      "from": "s08.04",
+      "pdf_page": 208,
+      "target": "s11.05",
+      "target_number": "11.5"
+    },
+    {
+      "from": "s08.04.01",
+      "pdf_page": 209,
+      "target": "s11.05",
+      "target_number": "11.5"
+    },
+    {
+      "from": "s08.04.01",
+      "pdf_page": 210,
+      "target": "s13.03.02",
+      "target_number": "13.3.2"
+    },
+    {
+      "from": "s08.04.01",
+      "pdf_page": 210,
+      "target": "s12.03",
+      "target_number": "12.3"
+    },
+    {
+      "from": "s08.04.02",
+      "pdf_page": 212,
+      "target": "s13.04.01",
+      "target_number": "13.4.1"
+    },
+    {
+      "from": "s08.04.02",
+      "pdf_page": 212,
+      "target": "s11.06.02",
+      "target_number": "11.6.2"
+    },
+    {
+      "from": "s08.05.02",
+      "pdf_page": 218,
+      "target": "s13.03",
+      "target_number": "13.3"
+    },
+    {
+      "from": "s08.05.02",
+      "pdf_page": 218,
+      "target": "s12.05",
+      "target_number": "12.5"
+    },
+    {
+      "from": "s09.02",
+      "pdf_page": 227,
+      "target": "s03.07.02",
+      "target_number": "3.7.2"
+    },
+    {
+      "from": "s09.02",
+      "pdf_page": 229,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s09.02",
+      "pdf_page": 231,
+      "target": "s09.05",
+      "target_number": "9.5"
+    },
+    {
+      "from": "s09.02",
+      "pdf_page": 231,
+      "target": "s13.04.01",
+      "target_number": "13.4.1"
+    },
+    {
+      "from": "s09.04",
+      "pdf_page": 234,
+      "target": "s09.02",
+      "target_number": "9.2"
+    },
+    {
+      "from": "s09.04",
+      "pdf_page": 236,
+      "target": "s07.05.02",
+      "target_number": "7.5.2"
+    },
+    {
+      "from": "s09.04",
+      "pdf_page": 236,
+      "target": "s13.04.01",
+      "target_number": "13.4.1"
+    },
+    {
+      "from": "s09.04",
+      "pdf_page": 236,
+      "target": "s07.05",
+      "target_number": "7.5"
+    },
+    {
+      "from": "s09.05",
+      "pdf_page": 240,
+      "target": "s07.05.02",
+      "target_number": "7.5.2"
+    },
+    {
+      "from": "s10.02.02",
+      "pdf_page": 247,
+      "target": "s05.05.01",
+      "target_number": "5.5.1"
+    },
+    {
+      "from": "s10.02.04",
+      "pdf_page": 250,
+      "target": "s12.05",
+      "target_number": "12.5"
+    },
+    {
+      "from": "s10.03",
+      "pdf_page": 250,
+      "target": "s05.04.01",
+      "target_number": "5.4.1"
+    },
+    {
+      "from": "s10.03",
+      "pdf_page": 250,
+      "target": "s02.04.03",
+      "target_number": "2.4.3"
+    },
+    {
+      "from": "s10.03.01",
+      "pdf_page": 254,
+      "target": "s15.08",
+      "target_number": "15.8"
+    },
+    {
+      "from": "s10.03.04",
+      "pdf_page": 260,
+      "target": "s10.02",
+      "target_number": "10.2"
+    },
+    {
+      "from": "s10.03.04",
+      "pdf_page": 260,
+      "target": "s07.05.02",
+      "target_number": "7.5.2"
+    },
+    {
+      "from": "s10.04.05",
+      "pdf_page": 264,
+      "target": "s11.04.02",
+      "target_number": "11.4.2"
+    },
+    {
+      "from": "s11.03",
+      "pdf_page": 271,
+      "target": "s07.05",
+      "target_number": "7.5"
+    },
+    {
+      "from": "s11.03",
+      "pdf_page": 272,
+      "target": "s13.03.01",
+      "target_number": "13.3.1"
+    },
+    {
+      "from": "s11.03",
+      "pdf_page": 272,
+      "target": "s12.04",
+      "target_number": "12.4"
+    },
+    {
+      "from": "s11.03",
+      "pdf_page": 273,
+      "target": "s06.05",
+      "target_number": "6.5"
+    },
+    {
+      "from": "s11.03",
+      "pdf_page": 273,
+      "target": "s11.05",
+      "target_number": "11.5"
+    },
+    {
+      "from": "s11.03",
+      "pdf_page": 274,
+      "target": "s09.03",
+      "target_number": "9.3"
+    },
+    {
+      "from": "s11.03",
+      "pdf_page": 274,
+      "target": "s09.05",
+      "target_number": "9.5"
+    },
+    {
+      "from": "s11.03",
+      "pdf_page": 274,
+      "target": "s13.04.01",
+      "target_number": "13.4.1"
+    },
+    {
+      "from": "s11.04.02",
+      "pdf_page": 276,
+      "target": "s06.08",
+      "target_number": "6.8"
+    },
+    {
+      "from": "s11.04.02",
+      "pdf_page": 277,
+      "target": "s05.05.04",
+      "target_number": "5.5.4"
+    },
+    {
+      "from": "s11.04.02",
+      "pdf_page": 278,
+      "target": "s12.05.02",
+      "target_number": "12.5.2"
+    },
+    {
+      "from": "s11.04.03",
+      "pdf_page": 279,
+      "target": "s01.14",
+      "target_number": "1.14"
+    },
+    {
+      "from": "s11.04.03",
+      "pdf_page": 279,
+      "target": "s03.07",
+      "target_number": "3.7"
+    },
+    {
+      "from": "s11.06.01",
+      "pdf_page": 283,
+      "target": "s08.04",
+      "target_number": "8.4"
+    },
+    {
+      "from": "s12.02",
+      "pdf_page": 291,
+      "target": "s06.05",
+      "target_number": "6.5"
+    },
+    {
+      "from": "s12.03.02",
+      "pdf_page": 294,
+      "target": "s11.05",
+      "target_number": "11.5"
+    },
+    {
+      "from": "s12.03.02",
+      "pdf_page": 297,
+      "target": "s12.05.02",
+      "target_number": "12.5.2"
+    },
+    {
+      "from": "s12.03.02",
+      "pdf_page": 298,
+      "target": "s12.04",
+      "target_number": "12.4"
+    },
+    {
+      "from": "s12.03.02",
+      "pdf_page": 298,
+      "target": "s07.05",
+      "target_number": "7.5"
+    },
+    {
+      "from": "s12.03.02",
+      "pdf_page": 299,
+      "target": "s06.05",
+      "target_number": "6.5"
+    },
+    {
+      "from": "s12.03.02",
+      "pdf_page": 299,
+      "target": "s07.05.02",
+      "target_number": "7.5.2"
+    },
+    {
+      "from": "s12.03.03",
+      "pdf_page": 301,
+      "target": "s11.05",
+      "target_number": "11.5"
+    },
+    {
+      "from": "s12.03.04",
+      "pdf_page": 302,
+      "target": "s10.03.03",
+      "target_number": "10.3.3"
+    },
+    {
+      "from": "s12.04.01",
+      "pdf_page": 304,
+      "target": "s07.05",
+      "target_number": "7.5"
+    },
+    {
+      "from": "s12.04.03",
+      "pdf_page": 307,
+      "target": "s07.05.01",
+      "target_number": "7.5.1"
+    },
+    {
+      "from": "s12.04.04",
+      "pdf_page": 313,
+      "target": "s09.05",
+      "target_number": "9.5"
+    },
+    {
+      "from": "s12.04.04",
+      "pdf_page": 313,
+      "target": "s08.03.01",
+      "target_number": "8.3.1"
+    },
+    {
+      "from": "s12.05.02",
+      "pdf_page": 314,
+      "target": "s06.09",
+      "target_number": "6.9"
+    },
+    {
+      "from": "s12.05.02",
+      "pdf_page": 317,
+      "target": "s09.05",
+      "target_number": "9.5"
+    },
+    {
+      "from": "s13.03.02",
+      "pdf_page": 329,
+      "target": "s07.06.03",
+      "target_number": "7.6.3"
+    },
+    {
+      "from": "s13.04",
+      "pdf_page": 330,
+      "target": "s08.03.01",
+      "target_number": "8.3.1"
+    },
+    {
+      "from": "s13.04.02",
+      "pdf_page": 340,
+      "target": "s08.03.01",
+      "target_number": "8.3.1"
+    },
+    {
+      "from": "s13.04.02",
+      "pdf_page": 340,
+      "target": "s13.04.01",
+      "target_number": "13.4.1"
+    },
+    {
+      "from": "s13.04.03.01",
+      "pdf_page": 341,
+      "target": "s03.04.02.03",
+      "target_number": "3.4.2.3"
+    },
+    {
+      "from": "s13.04.03.02",
+      "pdf_page": 345,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s13.04.03.02",
+      "pdf_page": 345,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s14.02",
+      "pdf_page": 348,
+      "target": "s11.05.01",
+      "target_number": "11.5.1"
+    },
+    {
+      "from": "s14.04",
+      "pdf_page": 351,
+      "target": "s12.05",
+      "target_number": "12.5"
+    },
+    {
+      "from": "s14.05",
+      "pdf_page": 353,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s14.05",
+      "pdf_page": 356,
+      "target": "s06.03",
+      "target_number": "6.3"
+    },
+    {
+      "from": "s15.03",
+      "pdf_page": 367,
+      "target": "s07.04",
+      "target_number": "7.4"
+    },
+    {
+      "from": "s15.03",
+      "pdf_page": 367,
+      "target": "s07.05.02",
+      "target_number": "7.5.2"
+    },
+    {
+      "from": "s15.03",
+      "pdf_page": 367,
+      "target": "s12.03.02",
+      "target_number": "12.3.2"
+    },
+    {
+      "from": "s15.05",
+      "pdf_page": 376,
+      "target": "s07.05.02",
+      "target_number": "7.5.2"
+    },
+    {
+      "from": "s15.06",
+      "pdf_page": 383,
+      "target": "s09.04",
+      "target_number": "9.4"
+    }
+  ],
+  "figures": [
+    {
+      "caption": "The Variant View vis tool supports biologists in assessing the impact of genetic variants by speeding up the exploratory analysis process. From [Ferstay et al. 13, Figure 1].",
+      "chapter": 1,
+      "id": "fig-01-01",
+      "number": "1.1",
+      "pdf_page": 29
+    },
+    {
+      "caption": "The Cerebral vis tool captures the style of hand-drawn diagrams in biology textbooks with vertical layers that correspond to places within a cell where interactions between genes occur. (a) A small network of 57 nodes and 74 edges might be possible to lay out by hand with enough patience. (b) Automatic layout handles this large network of 760 nodes and 1269 edges and provides a substrate for interactive exploration: the user has moved the mouse over the MSK1 gene, so all of its immmediate neighbors in the network are highlighted in red. From [Barsky et al. 07, Figures 1 and 2].",
+      "chapter": 1,
+      "id": "fig-01-02",
+      "number": "1.2",
+      "pdf_page": 30
+    },
+    {
+      "caption": "Anscombe’s Quartet is four datasets with identical simple statistical properties: mean, variance, correlation, and linear regression line. However, visual inspection immediately shows how their structures are quite different. After [Anscombe 73, Figures 1–4].",
+      "chapter": 1,
+      "id": "fig-01-03",
+      "number": "1.3",
+      "pdf_page": 33
+    },
+    {
+      "caption": "The Grouse vis tool features a complex idiom that combines visual encoding and interaction, supporting incremental layout of a network through interactive navigation. From [Archambault et al. 07a, Figure 5].",
+      "chapter": 1,
+      "id": "fig-01-04",
+      "number": "1.4",
+      "pdf_page": 35
+    },
+    {
+      "caption": "A search space metaphor for vis design.",
+      "chapter": 1,
+      "id": "fig-01-05",
+      "number": "1.5",
+      "pdf_page": 38
+    },
+    {
+      "caption": "Low and high information density visual encodings of the same small tree dataset; nodes are the same size in each. (a) Low information density. (b) Higher information density, but depth in tree cannot be read from spatial position. (c) High information density, while maintaining property that depth is encoded with position. From [McGufﬁn and Robert 10, Figure 3].",
+      "chapter": 1,
+      "id": "fig-01-06",
+      "number": "1.6",
+      "pdf_page": 41
+    },
+    {
+      "caption": "Three-part analysis framework for a vis instance: why is the task being performed, what data is shown in the views, and how is the vis idiom constructed in terms of design choices.",
+      "chapter": 1,
+      "id": "fig-01-07",
+      "number": "1.7",
+      "pdf_page": 42
+    },
+    {
+      "caption": "Analyzing vis usage as chained sequences of instances, where the output of one instance is the input to another.",
+      "chapter": 1,
+      "id": "fig-01-08",
+      "number": "1.8",
+      "pdf_page": 43
+    },
+    {
+      "caption": "What can be visualized: data, datasets, and attributes.",
+      "chapter": 2,
+      "id": "fig-02-01",
+      "number": "2.1",
+      "pdf_page": 45
+    },
+    {
+      "caption": "The ﬁve basic data types: items, attributes, links, positions, and grids.",
+      "chapter": 2,
+      "id": "fig-02-02",
+      "number": "2.2",
+      "pdf_page": 48
+    },
+    {
+      "caption": "The four basic dataset types are tables, networks, ﬁelds, and geometry; other possible collections of items are clusters, sets, and lists. These datasets are made up of ﬁve core data types: items, attributes, links, positions, and grids.",
+      "chapter": 2,
+      "id": "fig-02-03",
+      "number": "2.3",
+      "pdf_page": 49
+    },
+    {
+      "caption": "The detailed structure of the four basic dataset types.",
+      "chapter": 2,
+      "id": "fig-02-04",
+      "number": "2.4",
+      "pdf_page": 50
+    },
+    {
+      "caption": "In a simple table of orders, a row represents an item, a column represents an attribute, and their intersection is the cell containing the value for that pairwise combination.",
+      "chapter": 2,
+      "id": "fig-02-05",
+      "number": "2.5",
+      "pdf_page": 51
+    },
+    {
+      "caption": "Dataset availability can be either static or dynamic, for any dataset type.",
+      "chapter": 2,
+      "id": "fig-02-06",
+      "number": "2.6",
+      "pdf_page": 56
+    },
+    {
+      "caption": "Attribute types are categorical, ordinal, or quantitative. The direction of attribute ordering can be sequential, diverging, or cyclic.",
+      "chapter": 2,
+      "id": "fig-02-07",
+      "number": "2.7",
+      "pdf_page": 57
+    },
+    {
+      "caption": "Key and value semantics for tables and ﬁelds.",
+      "chapter": 2,
+      "id": "fig-02-08",
+      "number": "2.8",
+      "pdf_page": 60
+    },
+    {
+      "caption": "The order table with the attribute columns colored by their type; none of them is a key.",
+      "chapter": 2,
+      "id": "fig-02-09",
+      "number": "2.9",
+      "pdf_page": 61
+    },
+    {
+      "caption": "Why people are using vis in terms of actions and targets.",
+      "chapter": 3,
+      "id": "fig-03-01",
+      "number": "3.1",
+      "pdf_page": 67
+    },
+    {
+      "caption": "Three levels of actions: analyze, search, and query.",
+      "chapter": 3,
+      "id": "fig-03-02",
+      "number": "3.2",
+      "pdf_page": 71
+    },
+    {
+      "caption": "Name Voyager, a vis tool originally intended for parents focused deciding on what to name their expected baby, ended up being used by many nonparents to analyze historical trends for their own enjoyment. Left: Names starting with ‘O’ had a notable dip in popularity in the middle of the century. Right: Names starting with ‘LAT’ show a trend of the 1970s. After [Wattenberg 05, Figures 2 and 3], using http://www.babynamewizard.com.",
+      "chapter": 3,
+      "id": "fig-03-03",
+      "number": "3.3",
+      "pdf_page": 74
+    },
+    {
+      "caption": "Graphical history recorded during an analysis session with Tableau. From [Heer et al. 08, Figure 1].",
+      "chapter": 3,
+      "id": "fig-03-04",
+      "number": "3.4",
+      "pdf_page": 75
+    },
+    {
+      "caption": "Derived attributes can be directly visually encoded. (a) Two original data attributes are plotted, imports and exports. (b) The quantitative derived attribute of trade balance, the difference between the two originals, can be plotted directly.",
+      "chapter": 3,
+      "id": "fig-03-05",
+      "number": "3.5",
+      "pdf_page": 77
+    },
+    {
+      "caption": "The goals of the user might be to ﬁnd or understand speciﬁc aspects of the data: trends and outliers for all kinds of data; individual values, the minimum or maximum extremes of the range, or the entire distribution of a single attribute; or the dependencies, correlations, or similarities between multiple attributes; topology or paths for network data, and shape for spatial data.",
+      "chapter": 3,
+      "id": "fig-03-06",
+      "number": "3.6",
+      "pdf_page": 81
+    },
+    {
+      "caption": "How to design vis idioms: encode, manipulate, facet, and reduce.",
+      "chapter": 3,
+      "id": "fig-03-07",
+      "number": "3.7",
+      "pdf_page": 83
+    },
+    {
+      "caption": "Comparing two idioms. (a) SpaceTree [Plaisant et al. 02]. (b) TreeJuxtaposer. From http://www.cs.umd. edu/hcil/spacetree and [Munzner et al. 03, Figure 1].",
+      "chapter": 3,
+      "id": "fig-03-08",
+      "number": "3.8",
+      "pdf_page": 84
+    },
+    {
+      "caption": "Analyzing what–why–how comparatively for the SpaceTree and TreeJuxtaposer idioms.",
+      "chapter": 3,
+      "id": "fig-03-09",
+      "number": "3.9",
+      "pdf_page": 85
+    },
+    {
+      "caption": "The derived quantitative attribute of Strahler numbers is used to ﬁlter the tree in order to create a recognizable summary. (a) The important skeleton of a large tree is visible when only 5000 of the highest-ranked nodes are drawn. (b) The full tree has over a half million nodes. From [Auber 02, Figures 10 and 13].",
+      "chapter": 3,
+      "id": "fig-03-10",
+      "number": "3.10",
+      "pdf_page": 86
+    },
+    {
+      "caption": "Analyzing a chained sequence of two instances where an attribute is derived in order to summarize a tree by ﬁltering away the unimportant parts.",
+      "chapter": 3,
+      "id": "fig-03-11",
+      "number": "3.11",
+      "pdf_page": 87
+    },
+    {
+      "caption": "Computational ﬂuid dynamics vis showing the list of many derived attributes (top left), one view of the original spatial ﬁeld (top right), and four other views showing pairs of selected derived attributes. The multiple juxtaposed views are coordinated with shared colored highlights. From [Henze 98, Figure 5].",
+      "chapter": 3,
+      "id": "fig-03-12",
+      "number": "3.12",
+      "pdf_page": 88
+    },
+    {
+      "caption": "Analyzing a chained sequence, where many attributes are derived and visually encoded.",
+      "chapter": 3,
+      "id": "fig-03-13",
+      "number": "3.13",
+      "pdf_page": 89
+    },
+    {
+      "caption": "The four nested levels of vis design have different threats to validity at each level, and validation approaches should be chosen accordingly.",
+      "chapter": 4,
+      "id": "fig-04-01",
+      "number": "4.1",
+      "pdf_page": 91
+    },
+    {
+      "caption": "The four nested levels of vis design.",
+      "chapter": 4,
+      "id": "fig-04-02",
+      "number": "4.2",
+      "pdf_page": 93
+    },
+    {
+      "caption": "Word Tree combines the visual encoding idiom of a hierarchical tree of keywords laid out horizontally and the interaction idiom of navigation based on keyword selection. From [Wattenberg and Viegas 08, Figure 3].",
+      "chapter": 4,
+      "id": "fig-04-03",
+      "number": "4.3",
+      "pdf_page": 97
+    },
+    {
+      "caption": "The four nested levels of vis design have different threats to validity at each level.",
+      "chapter": 4,
+      "id": "fig-04-04",
+      "number": "4.4",
+      "pdf_page": 100
+    },
+    {
+      "caption": "Threats and validation at each of the four levels. Many threats at the outer levels require downstream validation, which cannot be carried out until the inner levels within them are addressed, as shown by the red lines. Any single project would only address a subset of these levels, not all of them at once.",
+      "chapter": 4,
+      "id": "fig-04-05",
+      "number": "4.5",
+      "pdf_page": 101
+    },
+    {
+      "caption": "Genealogical graphs. (a) Three layouts for the dual-tree: classical node–link top-to-bottom at the top, classical left-to-right on the left, and the new indented outline algorithm on the right. (b) Widget for subtree collapsing and expanding with ballistic drags. From [McGufﬁn and Balakrishnan 05, Figures 13 and 14].",
+      "chapter": 4,
+      "id": "fig-04-06",
+      "number": "4.6",
+      "pdf_page": 107
+    },
+    {
+      "caption": "Genealogical graphs [McGufﬁn and Balakrishnan 05] validation levels.",
+      "chapter": 4,
+      "id": "fig-04-07",
+      "number": "4.7",
+      "pdf_page": 108
+    },
+    {
+      "caption": "MatrixExplorer features both node–link and matrix representations in an interface designed for sociolo-gists and historians to explore social networks. From [Henry and Fekete 06, Figure 1].",
+      "chapter": 4,
+      "id": "fig-04-08",
+      "number": "4.8",
+      "pdf_page": 109
+    },
+    {
+      "caption": "MatrixExplorer [Henry and Fekete 06] validation methods.",
+      "chapter": 4,
+      "id": "fig-04-09",
+      "number": "4.9",
+      "pdf_page": 110
+    },
+    {
+      "caption": "Flow maps showing migration patterns from 1995 to 2000 US Census data. (a) Migration from California. (b) The top ten states that sent migrants to California shown in green, and to New York in blue. From [Phan et al. 05, Figures 1c and 10].",
+      "chapter": 4,
+      "id": "fig-04-10",
+      "number": "4.10",
+      "pdf_page": 111
+    },
+    {
+      "caption": "Flow map [Phan et al. 05] validation methods.",
+      "chapter": 4,
+      "id": "fig-04-11",
+      "number": "4.11",
+      "pdf_page": 111
+    },
+    {
+      "caption": "LiveRAC supports exploration of system management time-series data with a reorderable matrix and semantic zooming. (a) The ﬁrst several dozen rows have been stretched out to show sparklines for the devices. (b) The top three rows have been enlarged more, so the charts appear in full detail. From [McLachlan et al. 08, Figure 3].",
+      "chapter": 4,
+      "id": "fig-04-12",
+      "number": "4.12",
+      "pdf_page": 112
+    },
+    {
+      "caption": "LiveRAC [McLachlan et al. 08] validation methods.",
+      "chapter": 4,
+      "id": "fig-04-13",
+      "number": "4.13",
+      "pdf_page": 113
+    },
+    {
+      "caption": "The LinLog energy model reveals clusters in node–link graphs. (a) LinLog clearly shows clusters with spatial separation. (b) The popular Fructerman-Reingold model for force-directed placement does not separate the clusters. From [Noack 03, Figure 1].",
+      "chapter": 4,
+      "id": "fig-04-14",
+      "number": "4.14",
+      "pdf_page": 114
+    },
+    {
+      "caption": "LinLog [Noack 03] validation methods.",
+      "chapter": 4,
+      "id": "fig-04-15",
+      "number": "4.15",
+      "pdf_page": 115
+    },
+    {
+      "caption": "Experiment 2 of Sizing the Horizon compared ﬁlled line charts, one-band horizon graphs, and two-band horizon graphs of different sizes to ﬁnd transition points where reducing chart height results in major drops in estimation accuracy across chart types. From [Heer et al. 09, Figure 7].",
+      "chapter": 4,
+      "id": "fig-04-16",
+      "number": "4.16",
+      "pdf_page": 116
+    },
+    {
+      "caption": "Lab studies as a validation method.",
+      "chapter": 4,
+      "id": "fig-04-17",
+      "number": "4.17",
+      "pdf_page": 116
+    },
+    {
+      "caption": "The effectiveness of channels that modify the appearance of marks depends on matching the expressiveness of channels with the attributes being encoded.",
+      "chapter": 5,
+      "id": "fig-05-01",
+      "number": "5.1",
+      "pdf_page": 119
+    },
+    {
+      "caption": "Marks are geometric primitives.",
+      "chapter": 5,
+      "id": "fig-05-02",
+      "number": "5.2",
+      "pdf_page": 121
+    },
+    {
+      "caption": "Visual channels control the appearance of marks.",
+      "chapter": 5,
+      "id": "fig-05-03",
+      "number": "5.3",
+      "pdf_page": 121
+    },
+    {
+      "caption": "Using marks and channels. (a) Bar charts encode two attributes using a line mark with the vertical spatial position channel for the quantitative attribute, and the horizontal spatial position channel for the categorical attribute. (b) Scatterplots encode two quantitative attributes using point marks and both vertical and horizontal spatial position. (c) A third categorical attribute is encoded by adding color to the scatterplot. (d) Adding the visual channel of size encodes a fourth quantitative attribute as well.",
+      "chapter": 5,
+      "id": "fig-05-04",
+      "number": "5.4",
+      "pdf_page": 122
+    },
+    {
+      "caption": "Marks can represent individual items, or links between them.",
+      "chapter": 5,
+      "id": "fig-05-05",
+      "number": "5.5",
+      "pdf_page": 125
+    },
+    {
+      "caption": "Channels ranked by effectiveness according to data and channel type. Ordered data should be shown with the magnitude channels, and categorical data with the identity channels.",
+      "chapter": 5,
+      "id": "fig-05-06",
+      "number": "5.6",
+      "pdf_page": 127
+    },
+    {
+      "caption": "Stevens showed that the apparent magnitude of all sensory channels follows a power law S = In, where some sensations are perceptually magniﬁed compared with their objective intensity (when n > 1) and some compressed (when n < 1). Length perception is completely accurate, whereas area is compressed and saturation is magniﬁed. Data from Stevens [Stevens 75, p. 15].",
+      "chapter": 5,
+      "id": "fig-05-07",
+      "number": "5.7",
+      "pdf_page": 129
+    },
+    {
+      "caption": "Error rates across visual channels, with recent crowdsourced results replicating and extending seminal work from Cleveland and McGill [Cleveland and McGill 84a]. After [Heer and Bostock 10, Figure 4].",
+      "chapter": 5,
+      "id": "fig-05-08",
+      "number": "5.8",
+      "pdf_page": 130
+    },
+    {
+      "caption": "Linewidth has a limited number of discriminable bins.",
+      "chapter": 5,
+      "id": "fig-05-09",
+      "number": "5.9",
+      "pdf_page": 132
+    },
+    {
+      "caption": "Pairs of visual channels fall along a continuum from fully separable to intrinsically integral. Color and location are separable channels well suited to encode different data attributes for two different groupings that can be selectively attended to. However, size interacts with hue, which is harder to perceive for small objects. The horizontal size and and vertical size channels are automatically fused into an integrated perception of area, yielding three groups. Attempts to code separate information along the red and green axes of the RGB color space fail, because we simply perceive four different hues. After [Ware 13, Figure 5.23].",
+      "chapter": 5,
+      "id": "fig-05-10",
+      "number": "5.10",
+      "pdf_page": 133
+    },
+    {
+      "caption": "Visual popout. (a) The red circle pops out from a small set of blue circles. (b) The red circle pops out from a large set of blue circles just as quickly. (c) The red circle also pops out from a small set of square shapes, although a bit slower than with color. (d) The red circle also pops out of a large set of red squares. (e) The red circle does not take long to ﬁnd from a small set of mixed shapes and colors. (f) The red circle does not pop out from a large set of red squares and blue circles, and it can only be found by searching one by one through all the objects. After http://www.csc.ncsu.edu/faculty/healey/PP by Christopher G. Healey.",
+      "chapter": 5,
+      "id": "fig-05-11",
+      "number": "5.11",
+      "pdf_page": 134
+    },
+    {
+      "caption": "Many channels support visual popout, including (a) tilt, (b) size, (c) shape, (d) proximity, and (e) shadow direction. (f) However, parallel line pairs do not pop out from a sea of slightly tilted distractor object pairs and can only be detected through serial search. After http://www.csc.ncsu.edu/faculty/healey/PP by Christopher G. Healey.",
+      "chapter": 5,
+      "id": "fig-05-12",
+      "number": "5.12",
+      "pdf_page": 135
+    },
+    {
+      "caption": "Weber’s Law states that we judge based on relative, not absolute differences. (a) The lengths of unframed, unaligned rectangles of slightly different sizes are hard to compare. (b) Adding a frame allows us to compare the very different sizes of the unﬁlled rectangles between the bar and frame tops. (c) Aligning the bars also makes the judgement easy. Redrawn and extended after [Cleveland and McGill 84a, Figure 12].",
+      "chapter": 5,
+      "id": "fig-05-13",
+      "number": "5.13",
+      "pdf_page": 138
+    },
+    {
+      "caption": "Luminance perception is based on relative, not absolute, judgements. (a) The two squares A and B appear quite different. (b) Superimposing a gray mask on the image shows that they are in fact identical.",
+      "chapter": 5,
+      "id": "fig-05-14",
+      "number": "5.14",
+      "pdf_page": 138
+    },
+    {
+      "caption": "Color perception is also relative to surrounding colors and depends on context. (a) Both cubes have tiles that appear to be red. (b) Masking the intervening context shows that the colors are very different: with yellow apparent lighting, they are orange; with blue apparent lighting, they are purple.",
+      "chapter": 5,
+      "id": "fig-05-15",
+      "number": "5.15",
+      "pdf_page": 139
+    },
+    {
+      "caption": "Eight rules of thumb.",
+      "chapter": 6,
+      "id": "fig-06-01",
+      "number": "6.1",
+      "pdf_page": 141
+    },
+    {
+      "caption": "Seeing planar position versus depth. (a) The sideways and up–down axes are fundamentally different from the toward–away depth axis. (b) Along the depth axis we can see only one point for each ray, as opposed to millions of rays for the other two axes. After [Ware 08, page 44].",
+      "chapter": 6,
+      "id": "fig-06-02",
+      "number": "6.2",
+      "pdf_page": 144
+    },
+    {
+      "caption": "Resolving the 3D structure of the occluded parts of the scene is possible with interactive navigation, but that takes time and imposes cognitive load, even when sophisticated interaction idioms are used, as in this example of a node–link graph laid out in 3D space. From [Carpendale et al. 96, Figure 21].",
+      "chapter": 6,
+      "id": "fig-06-03",
+      "number": "6.3",
+      "pdf_page": 146
+    },
+    {
+      "caption": "3D bar charts are more difﬁcult than 2D bar charts because of both perspective distortion and occlusion. From [Few 07, Question 7].",
+      "chapter": 6,
+      "id": "fig-06-04",
+      "number": "6.4",
+      "pdf_page": 147
+    },
+    {
+      "caption": "With perspective distortion, the power of the planar spatial position channel is lost, as is the size channel. From [Mukherjea et al. 96, Figure 1].",
+      "chapter": 6,
+      "id": "fig-06-05",
+      "number": "6.5",
+      "pdf_page": 147
+    },
+    {
+      "caption": "The use of 3D is well justiﬁed when the central task is shape understanding, as in this example of 3D streamline showing the patterns of ﬂuid ﬂow through a volume. From [Li and Shen 07, Figure 9].",
+      "chapter": 6,
+      "id": "fig-06-06",
+      "number": "6.6",
+      "pdf_page": 150
+    },
+    {
+      "caption": "3D versus 2D. (a) A 3D representation of this time-series dataset introduces the problems of occlusion and perspective distortion. (b) The linked 2D views of derived aggregate curves and the calendar allow direct comparison and show more ﬁne-grained patterns. From [van Wijk and van Selow 99, Figures 1 and 4].",
+      "chapter": 6,
+      "id": "fig-06-07",
+      "number": "6.7",
+      "pdf_page": 151
+    },
+    {
+      "caption": "Careful use of 3D. (a) The user can evolve the view from the traditional overlapping eye diagram with the metaphor of opening a drawer. (b) The interaction is carefully designed to avoid the difﬁculties of unconstrained 3D navigation. From [Lopez-Hernandez et al. 10, Figures 3 and 7].",
+      "chapter": 6,
+      "id": "fig-06-08",
+      "number": "6.8",
+      "pdf_page": 153
+    },
+    {
+      "caption": "Point-based displays were found to outperform information landscapes in an empirical study of visual encodings for dimensionally reduced data. (a) Colored points. (b) Grayscale points. (c) Colored 2D landscape. (d) Grayscale 2D landscape. (e) Colored 3D landscape. (f) Grayscale 3D landscape. (g) Height only. From [Tory et al. 07, Figure 1].",
+      "chapter": 6,
+      "id": "fig-06-09",
+      "number": "6.9",
+      "pdf_page": 155
+    },
+    {
+      "caption": "Design choices for arranging tables.",
+      "chapter": 7,
+      "id": "fig-07-01",
+      "number": "7.1",
+      "pdf_page": 169
+    },
+    {
+      "caption": "Scatterplot. Each point mark represents a country, with horizontal and vertical spatial position encoding the primary quantitative attributes of life expectancy and infant mortality. The color channel is used for the categorical country attribute and the size channel for quantitative population attribute. From [Robertson et al. 08, Figure 1c].",
+      "chapter": 7,
+      "id": "fig-07-02",
+      "number": "7.2",
+      "pdf_page": 172
+    },
+    {
+      "caption": "Scatterplots. (a) Original diamond price/carat data. (b) Derived log-scale attributes are highly positively correlated. From [Wickham 10, Figure 10].",
+      "chapter": 7,
+      "id": "fig-07-03",
+      "number": "7.3",
+      "pdf_page": 173
+    },
+    {
+      "caption": "Bar chart. The key attribute, species, separates the marks along the horizontal spatial axis. The value attribute, weight, expresses the value with aligned vertical spatial position and line marks. (a) Marks ordered alphabetically according to species name. (b) Marks ordered by the weight attribute used for bar heights.",
+      "chapter": 7,
+      "id": "fig-07-04",
+      "number": "7.4",
+      "pdf_page": 175
+    },
+    {
+      "caption": "Stacked bar chart. The Thor memory proﬁler shows cache misses stacked and colored by miss type. From [Bosch 01, Figure 4.1].",
+      "chapter": 7,
+      "id": "fig-07-05",
+      "number": "7.5",
+      "pdf_page": 177
+    },
+    {
+      "caption": "Streamgraph of music listening history. From [Byron and Wattenberg 08, Figure 0].",
+      "chapter": 7,
+      "id": "fig-07-06",
+      "number": "7.6",
+      "pdf_page": 178
+    },
+    {
+      "caption": "Streamgraphs with layers ordered by different derived attributes. (a) Volatility of artist’s popularity. (b) Onset time when artist’s music of ﬁrst gained attention. From [Byron and Wattenberg 08, Figure 15].",
+      "chapter": 7,
+      "id": "fig-07-07",
+      "number": "7.7",
+      "pdf_page": 179
+    },
+    {
+      "caption": "Line charts versus dot charts. (a) Dot charts use a point mark to show the value for each item. (b) Line charts use point marks connected by lines between them.",
+      "chapter": 7,
+      "id": "fig-07-08",
+      "number": "7.8",
+      "pdf_page": 180
+    },
+    {
+      "caption": "Bar charts and line charts both encode a single attribute. Bar charts encourage discrete comparisons, while line graphs encourage trend assessments. Line charts should not be used for categorical data, as in the upper right, because their implications are misleading. After [Zacks and Tversky 99, Figure 2].",
+      "chapter": 7,
+      "id": "fig-07-09",
+      "number": "7.9",
+      "pdf_page": 182
+    },
+    {
+      "caption": "Sunspot cycles. The multiscale banking to 45◦idiom exploits our orientation resolution accuracy at the diagonal. (a) An aspect ratio close to 4 emphasizes low-frequency structure. (b) An aspect ratio close to 22 shows higher-frequency structure: cycle onset is mostly steeper than the decay. From [Heer and Agrawala 06, Figure 5].",
+      "chapter": 7,
+      "id": "fig-07-10",
+      "number": "7.10",
+      "pdf_page": 183
+    },
+    {
+      "caption": "Cluster heatmap. A heatmap provides a compact summary of a quantitative value attribute with 2D matrix alignment by two key attributes and small area marks colored with a diverging colormap. The cluster heatmap includes trees drawn on the periphery showing how the matrix is ordered according to the derived data of hierarchical clusterings on its rows and columns.",
+      "chapter": 7,
+      "id": "fig-07-11",
+      "number": "7.11",
+      "pdf_page": 184
+    },
+    {
+      "caption": "Comparison of scatterplot matrix and parallel coordinate idioms for a small data table. After [McGufﬁn 14].",
+      "chapter": 7,
+      "id": "fig-07-12",
+      "number": "7.12",
+      "pdf_page": 188
+    },
+    {
+      "caption": "Parallel coordinates were designed to show correlation between neighboring axes. At the top, parallel lines show perfect positive correlation. At the bottom, all of the lines cross over each other at a single spot in between the two axes, showing perfect negative correlation. In the middle, the mix of crossings shows uncorrelated data. From [Wegman 90, Figure 3].",
+      "chapter": 7,
+      "id": "fig-07-13",
+      "number": "7.13",
+      "pdf_page": 189
+    },
+    {
+      "caption": "Parallel coordinates scale to dozens of attributes and hundreds of items, but not to thousands of items. (a) Effective use with 13 items and 7 attributes. (b) Ineffective use with over 16,000 items and 5 attributes. From [Fua et al. 99, Figures 1 and 2].",
+      "chapter": 7,
+      "id": "fig-07-14",
+      "number": "7.14",
+      "pdf_page": 190
+    },
+    {
+      "caption": "Layout coordinate systems. (a) Radial layouts use polar coordinates, with one spatial position and one angle channel. (b) Rectlinear layouts use two perpendicular spatial position channels. After [Wickham 10, Figure 8]. (c) Transforming rectilinear to radial layouts maps two parallel bounding lines to a point at the center and a circle at the perimeter.",
+      "chapter": 7,
+      "id": "fig-07-15",
+      "number": "7.15",
+      "pdf_page": 192
+    },
+    {
+      "caption": "Radial versus rectilinear layouts. (a) Rectilinear bar chart. (b) Radial bar chart. After [Booshehrian et al. 11, Figure 4].",
+      "chapter": 7,
+      "id": "fig-07-16",
+      "number": "7.16",
+      "pdf_page": 192
+    },
+    {
+      "caption": "Pie chart versus bar chart accuracy. (a) Pie charts require angle and area judgements. (b) Bar charts require only high-accuracy length judgements for individual items. (c) Polar area charts are a more direct equivalent of bar charts, where the length of each wedge varies like the length of each bar. From [Wickham 10, Figures 15 and 16].",
+      "chapter": 7,
+      "id": "fig-07-17",
+      "number": "7.17",
+      "pdf_page": 193
+    },
+    {
+      "caption": "Relative contributions of parts to a whole. (a) A single pie chart shows the relative contributions of parts to a whole, such as percentages, using area judgements. (b) Each bar in a normalized stacked bar chart also shows the relative contributions of parts to a whole, with a higher-accuracy length encoding. (c) A stacked bar chart shows the absolute counts in each bar, in contrast to the percentages when each bar is normalized to the same vertical length. From http://bl.ocks.org/mbostock/3887235, http://bl.ocks.org/mbostock/3886208, http://bl.ocks. org/mbostock/3886394.",
+      "chapter": 7,
+      "id": "fig-07-18",
+      "number": "7.18",
+      "pdf_page": 194
+    },
+    {
+      "caption": "Glyphmaps. (a) Rectilinear layouts are more effective at showing the differences between linear and nonlinear trends. (b) Radial layouts are more effective at showing cyclic patterns. From [Wickham et al. 12, Figure 3].",
+      "chapter": 7,
+      "id": "fig-07-19",
+      "number": "7.19",
+      "pdf_page": 196
+    },
+    {
+      "caption": "Tarantula shows a dense overview of source code with lines color coded by execution status of a software test suite. From [Jones et al. 02, Figure 4].",
+      "chapter": 7,
+      "id": "fig-07-20",
+      "number": "7.20",
+      "pdf_page": 198
+    },
+    {
+      "caption": "Design choices for using given spatial data: geometry or spatial ﬁelds.",
+      "chapter": 8,
+      "id": "fig-08-01",
+      "number": "8.1",
+      "pdf_page": 203
+    },
+    {
+      "caption": "Choropleth map showing regions as area marks using given geometry, where a quantitative attribute is encoded with color. From http://bl.ocks.org/ mbostock/4060606.",
+      "chapter": 8,
+      "id": "fig-08-02",
+      "number": "8.2",
+      "pdf_page": 206
+    },
+    {
+      "caption": "Spatial scalar ﬁelds shown with three different idioms. (a) A single 2D slice of a turbine blade dataset. (b) Multiple semitransparent isosurfaces of a 3D tooth dataset. (c) Direct volume rendering of the entire 3D turbine dataset. From [Kniss 02, Figures 1.2 and 2.1b].",
+      "chapter": 8,
+      "id": "fig-08-03",
+      "number": "8.3",
+      "pdf_page": 207
+    },
+    {
+      "caption": "Topographic terrain map, with isolines in blue. From https://data.linz.govt.nz/layer/768-nz-mainland -contours-topo-150k.",
+      "chapter": 8,
+      "id": "fig-08-04",
+      "number": "8.4",
+      "pdf_page": 209
+    },
+    {
+      "caption": "A full contour tree with over 1.5 million edges does not help the user explore isosurfaces. From [Carr et al. 04, Figure 1].",
+      "chapter": 8,
+      "id": "fig-08-05",
+      "number": "8.5",
+      "pdf_page": 210
+    },
+    {
+      "caption": "The ﬂexible isosurfaces idiom uses the simpliﬁed contour tree of under 100 edges to help users identify meaningful structure. From [Carr et al. 04, Figure 1].",
+      "chapter": 8,
+      "id": "fig-08-06",
+      "number": "8.6",
+      "pdf_page": 211
+    },
+    {
+      "caption": "Simian allows users to construct multidimensional transfer functions for direct volume rendering using a derived space. (a) The standard 1D histogram can show the three basic materials: (A) air, (B) soft tissue, and (C) bone. (b) The full 2D derived space allows material boundaries to be distinguished as well. (c) Volume rendering of head dataset using the resulting 2D transfer function, showing material boundaries of (D) air–tissue, (E) tissue– bone, and (F) air–bone. From [Kniss et al. 05, Figure 9.1].",
+      "chapter": 8,
+      "id": "fig-08-06b",
+      "number": "8.6",
+      "pdf_page": 213
+    },
+    {
+      "caption": "The main types of critical points in a ﬂow ﬁeld: saddle, circulating sinks, circulating sources, noncirculating sinks, and noncirculating sources. From [Tricoche et al. 02, Figure 1].",
+      "chapter": 8,
+      "id": "fig-08-07",
+      "number": "8.7",
+      "pdf_page": 214
+    },
+    {
+      "caption": "An empirical study compared human response to six different 2D ﬂow vis idioms. (a) arrow glyphs on a regular grid. (b) arrow glyphs on a jittered grid. (c) triangular wedge glyphs inspired by oil painting strokes. (d) dense texture-based Line Integral Convolution (LIC). (e) curved arrow glyphs with image-guided streamline seeding. (f) curved arrow glyphs with regular grid streamline seeding. From [Laidlaw et al. 05, Figure 1].",
+      "chapter": 8,
+      "id": "fig-08-08",
+      "number": "8.8",
+      "pdf_page": 215
+    },
+    {
+      "caption": "Geometric ﬂow vis idioms showing a sparse set of particle trajectories, with seeding and coloring according to similarity. (a) Streamlines: all clusters equally opaque; purple cluster emphasized; red cluster emphasized. (b) Pathlines, colored by three clusters. From [McLoughlin et al. 13, Figures 7 and 11c].",
+      "chapter": 8,
+      "id": "fig-08-09",
+      "number": "8.9",
+      "pdf_page": 217
+    },
+    {
+      "caption": "2D diffusion illustrated with ink and paper. (a) Isotropic Kleenex. (b) Anisotropic newspaper.",
+      "chapter": 8,
+      "id": "fig-08-10",
+      "number": "8.10",
+      "pdf_page": 220
+    },
+    {
+      "caption": "Ellipsoid glyphs can show three basic shapes. (a) Isotropic: sphere. (b) Partially anisotropic: planar. (c) Fully anisotropic: linear. From [Kindlmann 04, Figure 1].",
+      "chapter": 8,
+      "id": "fig-08-11",
+      "number": "8.11",
+      "pdf_page": 220
+    },
+    {
+      "caption": "Ellipsoid glyphs show shape and orientation of tensors at each cell in a ﬁeld. (a) 2D slice. (b) 3D ﬁeld, with isotropic glyphs ﬁltered out. From [Kindlmann 04, Figures 10a and 11a].",
+      "chapter": 8,
+      "id": "fig-08-12",
+      "number": "8.12",
+      "pdf_page": 221
+    },
+    {
+      "caption": "Design choices for arranging networks.",
+      "chapter": 9,
+      "id": "fig-09-01",
+      "number": "9.1",
+      "pdf_page": 225
+    },
+    {
+      "caption": "Node–link layouts of small trees. (a) Triangular vertical for tiny tree. From [Buchheim et al. 02, Figure 2d]. (b) Spline radial layout for small tree. From http://mbostock.github.com/d3/ex/tree.html.",
+      "chapter": 9,
+      "id": "fig-09-02",
+      "number": "9.2",
+      "pdf_page": 227
+    },
+    {
+      "caption": "Two layouts of a 5161-node tree. (a) Rectangular horizontal node–link layout. (b) BubbleTree node–link layout.",
+      "chapter": 9,
+      "id": "fig-09-03",
+      "number": "9.3",
+      "pdf_page": 228
+    },
+    {
+      "caption": "Node–link layouts of small networks. (a) Force-directed placement of small network of 75 nodes, with size coding for link attributes. (b) Larger network, with size coding for node attributes. From http://bl.ocks.org/ mbostock/4062045 and http://bl.ocks.org/1062288.",
+      "chapter": 9,
+      "id": "fig-09-04",
+      "number": "9.4",
+      "pdf_page": 230
+    },
+    {
+      "caption": "Multilevel graph drawing with sfdp [Hu 05]. (a) Cluster structure is visible for a large network of 7220 nodes and 13,800 edges. (b) A huge graph of 26,028 nodes and 100,290 edges is a “hairball” without much visible structure. From [Hu 14].",
+      "chapter": 9,
+      "id": "fig-09-05",
+      "number": "9.5",
+      "pdf_page": 232
+    },
+    {
+      "caption": "Comparing node–link matrix and matrix views of a network. (a) Node–link and matrix views of small network. (b) Matrix view of larger network. (c) Node–link view of larger network. From [Gehlenborg and Wong 12, Figures 1 and 2].",
+      "chapter": 9,
+      "id": "fig-09-06",
+      "number": "9.6",
+      "pdf_page": 234
+    },
+    {
+      "caption": "Characteristic patterns in matrix views and node–link views: both can show cliques and clusters clearly. From [McGufﬁn 12, Figure 6].",
+      "chapter": 9,
+      "id": "fig-09-07",
+      "number": "9.7",
+      "pdf_page": 237
+    },
+    {
+      "caption": "Treemap layout showing hierarchical structure with containment rather than connection, in contrast to the node–link diagrams of the same 5161-node tree in Figure 9.3.",
+      "chapter": 9,
+      "id": "fig-09-08",
+      "number": "9.8",
+      "pdf_page": 238
+    },
+    {
+      "caption": "Seven visual encoding idioms showing the same tree dataset, using different combinations of visual channels. (a) Rectilinear vertical node–link, using connection to show link relationships, with vertical spatial position showing tree depth and horizontal spatial position showing sibling order. (b) Icicle, with vertical spatial position and size showing tree depth, and horizontal spatial position showing link relationships and sibling order. (c) Radial node– link, using connection to show link relationships, with radial depth spatial position showing tree depth and radial angular position showing sibling order. (d) Concentric circles, with radial depth spatial position and size showing tree depth and radial angular spatial position showing link relationships and sibling order. (e) Nested circles, using radial containment, with nesting level and size showing tree depth. (f) Treemap, using rectilinear containment, with nesting level and size showing tree depth. (g) Indented outline, with horizontal spatial position showing tree depth and link relationships and vertical spatial position showing sibling order. From [McGufﬁn and Robert 10, Figure 1].",
+      "chapter": 9,
+      "id": "fig-09-09",
+      "number": "9.9",
+      "pdf_page": 239
+    },
+    {
+      "caption": "GrouseFlocks uses containment to show graph hierarchy structure. (a) Original graph. (b) Cluster hierarchy built atop the graph, shown with a node– link layout. (c) Network encoded using connection, with hierarchy encoded using containment. From [Archambault et al. 08, Figure 3].",
+      "chapter": 9,
+      "id": "fig-09-10",
+      "number": "9.10",
+      "pdf_page": 240
+    },
+    {
+      "caption": "Design choices for mapping color and other visual encoding channels.",
+      "chapter": 10,
+      "id": "fig-10-01",
+      "number": "10.1",
+      "pdf_page": 243
+    },
+    {
+      "caption": "A common HSL/HSV colorpicker design, as in this example from Mac OS X, is to show a color wheel with fully saturated color around the outside and white at the center of the circle, and a separate control for the darkness.",
+      "chapter": 10,
+      "id": "fig-10-02",
+      "number": "10.2",
+      "pdf_page": 246
+    },
+    {
+      "caption": "Comparing HSL lightness, true luminance, and perceptually linear luminance L∗for six colors. The computed HSL lightness L is the same for all of these colors, showing the limitations of that color system. The true luminance values of these same six colors, as could be measured with an instrument. The computed perceptually linear luminance L∗of these colors is the best match with what we see. After [Stone 06].",
+      "chapter": 10,
+      "id": "fig-10-03",
+      "number": "10.3",
+      "pdf_page": 246
+    },
+    {
+      "caption": "The spectral sensitivity of our eyes to luminance depends on the wavelength of the incoming light. After [Kaiser 96], http://www.yorku.ca/eye/ photopik.htm.",
+      "chapter": 10,
+      "id": "fig-10-04",
+      "number": "10.4",
+      "pdf_page": 247
+    },
+    {
+      "caption": "The luminance and saturation channels are automatically interpreted as ordered by our perceptual system, but the hue channel is not.",
+      "chapter": 10,
+      "id": "fig-10-05",
+      "number": "10.5",
+      "pdf_page": 249
+    },
+    {
+      "caption": "The colormap categorization partially mirrors the data types: categorical versus ordered, and sequential and diverging within ordered. Bivariate encodings of two separate attributes at once is safe if one has only two levels, but they can be difﬁcult to interpret when both attributes have multiple levels. After [Brewer 99].",
+      "chapter": 10,
+      "id": "fig-10-06",
+      "number": "10.6",
+      "pdf_page": 251
+    },
+    {
+      "caption": "Saturation and area. (a) The ten-element low-saturation map works well with large areas. (b) The eight-element high-saturation map would be better suited for small regions and works poorly for these large areas. Made with ColorBrewer, http://www.colorbrewer2.org.",
+      "chapter": 10,
+      "id": "fig-10-07",
+      "number": "10.7",
+      "pdf_page": 252
+    },
+    {
+      "caption": "Ineffective categorical colormap use. (a) The 21 colors used as an index for each mouse chromosome can indeed be distinguished in large regions next to each other. (b) In noncontiguous small regions only about 12 bins of color can be distinguished from each other, so a lot of information about how regions in the mouse genome map to the human genome is lost. From [Sinha and Meller 07, Figure 2].",
+      "chapter": 10,
+      "id": "fig-10-08",
+      "number": "10.8",
+      "pdf_page": 253
+    },
+    {
+      "caption": "Effective categorical colormap use: A large space of visual encoding possibilities for 27 categories was considered systematically in addition to the color channel, including size and shape channels and more complex glyphs. From [Maguire et al. 12, Figure 5].",
+      "chapter": 10,
+      "id": "fig-10-09",
+      "number": "10.9",
+      "pdf_page": 255
+    },
+    {
+      "caption": "Effective categorical colormap use: The ﬁnal design uses the color channel for only four of the categories. From [Maguire et al. 12, Figure 6].",
+      "chapter": 10,
+      "id": "fig-10-10",
+      "number": "10.10",
+      "pdf_page": 256
+    },
+    {
+      "caption": "Rainbow versus two-hue continuous colormap. (a) Using many hues, as in this rainbow colormap, emphasizes mid-scale structure. (b) Using only two hues, the blue–yellow colormap emphasizes large-scale structure. From [Bergman et al. 95, Figures 1 and 2].",
+      "chapter": 10,
+      "id": "fig-10-11",
+      "number": "10.11",
+      "pdf_page": 257
+    },
+    {
+      "caption": "Rainbow versus multiple-hue continuous colormap with monotonically increasing luminance. (a) Three major problems with the common continuous rainbow colormap are perceptual nonlinearity, the expres-sivity mismatch of using hue for ordering, and the accuracy mismatch of using hue for ﬁne-grained detail. (b) A colormap that combines monotonically increasing luminance with multiple hues for semantic categories, with a clear segmentation at the zero point, succeeds in showing high-level, mid-level, and low-level structure. From [Rogowitz and Treinish 98, Figure 1].",
+      "chapter": 10,
+      "id": "fig-10-12",
+      "number": "10.12",
+      "pdf_page": 258
+    },
+    {
+      "caption": "Appropriate use of rainbows. (a) The standard rainbow colormap is perceptually nonlinear. (b) Perceptually linear rainbows are possible [Kindlmann 02], but they are less bright with a decreased dynamic range. (c) Segmented rainbows work well for categorical data when the number of categories is small.",
+      "chapter": 10,
+      "id": "fig-10-13",
+      "number": "10.13",
+      "pdf_page": 259
+    },
+    {
+      "caption": "Tiltmaps using the angle channel to show three different types of ordered data. (a) A sequential attribute can be shown with either a line mark or an arrow glyph in one quadrant. (b) A diverging attribute can be shown with two quadrants and an arrow glyph. (c) A cyclic attribute can be shown with all four quadrants and arrow glyphs.",
+      "chapter": 10,
+      "id": "fig-10-14",
+      "number": "10.14",
+      "pdf_page": 262
+    },
+    {
+      "caption": "Design choices for idioms that change a view.",
+      "chapter": 11,
+      "id": "fig-11-01",
+      "number": "11.1",
+      "pdf_page": 267
+    },
+    {
+      "caption": "Tableau supports ﬂuid changes between visual encoding idioms with drag and drop interaction. (a) Data encoded with bars. (b) Data encoded with stacked bars. (c) The user selects a completely different visual encoding. (d) Data encoded using geographic positions.",
+      "chapter": 11,
+      "id": "fig-11-02",
+      "number": "11.2",
+      "pdf_page": 270
+    },
+    {
+      "caption": "The LineUp system for comparing multiattribute rankings with reordering and realignment. From [Gratzl et al. 13, Figure 1].",
+      "chapter": 11,
+      "id": "fig-11-03",
+      "number": "11.3",
+      "pdf_page": 271
+    },
+    {
+      "caption": "Changing the alignment in Lineup. (a) Classical stacked bars. (b) Diverging stacked bars. (c) Ordered stacked bars. (d) Separately aligned bars: small multiple bar charts. From [Gratzl et al. 13, Figure 4].",
+      "chapter": 11,
+      "id": "fig-11-04",
+      "number": "11.4",
+      "pdf_page": 272
+    },
+    {
+      "caption": "Frames from an animated transition showing zoom between levels in a compound network arranged as an adjacency matrix. From [van Ham 03, Figure 4].",
+      "chapter": 11,
+      "id": "fig-11-05",
+      "number": "11.5",
+      "pdf_page": 274
+    },
+    {
+      "caption": "The context-preserving visual links idiom is an example of the design choice to coordinate betweeen views by explicitly drawing links as connection marks between items and regions of interest. From [Steinberger et al. 11, Figure 1].",
+      "chapter": 11,
+      "id": "fig-11-06",
+      "number": "11.6",
+      "pdf_page": 278
+    },
+    {
+      "caption": "LiveRAC uses semantic zooming within a stretchable grid of time-series line charts. From [McLachlan et al. 08, Figure 2b].",
+      "chapter": 11,
+      "id": "fig-11-07",
+      "number": "11.7",
+      "pdf_page": 281
+    },
+    {
+      "caption": "The slice choice eliminates a dimension/attribute by extracting only the items with a chosen value in that dimension. The cut choice eliminates all data on one side of a spatial cutting plane. (a) Axis-aligned slice. (b) Axis-aligned cut. From [Rieder et al. 08, Figures 7c and 0].",
+      "chapter": 11,
+      "id": "fig-11-08",
+      "number": "11.8",
+      "pdf_page": 284
+    },
+    {
+      "caption": "The HyperSlice system uses extracting only the items with a chosen value in that dimension. (a) Three 3D planes that intersect at right angles. (b) Four-dimensional dataset where function value is encoded with luminance. From [van Wijk and van Liere 93, Figures 1 and 4].",
+      "chapter": 11,
+      "id": "fig-11-09",
+      "number": "11.9",
+      "pdf_page": 285
+    },
+    {
+      "caption": "Design choices of how to facet information between multiple views.",
+      "chapter": 12,
+      "id": "fig-12-01",
+      "number": "12.1",
+      "pdf_page": 289
+    },
+    {
+      "caption": "Linked highlighting between views shows how regions that are contiguous in one view are distributed within another. (a) Selecting the high salaries in the upper right window shows different distributions in the other views. (b) Selecting the bottom group in the Assists-PutOuts window shows that the clump corresponds to speciﬁc positions played. From [Wills 95, Figures 4 and 5].",
+      "chapter": 12,
+      "id": "fig-12-02",
+      "number": "12.2",
+      "pdf_page": 293
+    },
+    {
+      "caption": "Overview–detail example with geographic maps, where the views have the same encoding and dataset; they differ in viewpoint and size. Made with Google Maps, http://maps.google.com.",
+      "chapter": 12,
+      "id": "fig-12-03",
+      "number": "12.3",
+      "pdf_page": 295
+    },
+    {
+      "caption": "Multiform overview–detail vis tool for microarray exploration features a central scatterplot linked with the graph view in the upper left. From [Craig and Kennedy 03, Figure 3].",
+      "chapter": 12,
+      "id": "fig-12-04",
+      "number": "12.4",
+      "pdf_page": 297
+    },
+    {
+      "caption": "Cerebral uses small-multiple views to show the same base graph of gene interactions colored according to microarray measurements made at different times. The coloring in the main view uses the derived attribute of the difference in values between the two chosen views. From [Barsky et al. 08, Figure 2].",
+      "chapter": 12,
+      "id": "fig-12-05",
+      "number": "12.5",
+      "pdf_page": 300
+    },
+    {
+      "caption": "Design choices for how to coordinate between views relating to sharing encoding and data.",
+      "chapter": 12,
+      "id": "fig-12-06",
+      "number": "12.6",
+      "pdf_page": 301
+    },
+    {
+      "caption": "The Improvise toolkit [Weaver 04] was used to create this census vis that has many forms of coordination between views. It has many multiform views, some of which use small multiples, and some of which provide additional detail information. From http://www.cs.ou.edu/∼weaver/improvise/examples/census.",
+      "chapter": 12,
+      "id": "fig-12-07",
+      "number": "12.7",
+      "pdf_page": 302
+    },
+    {
+      "caption": "Partitioning and bar charts. (a) Single bar chart with grouped bars: separated by state key into regions, using seven-mark glyphs within each region. (b) Four aligned small-multiple bar chart views: separated by group key into vertically aligned list of regions, with a full bar chart in each region. From http://bl.ocks.org/mbostock/3887051, after http://bl.ocks.org/mbostock/4679202.",
+      "chapter": 12,
+      "id": "fig-12-08",
+      "number": "12.8",
+      "pdf_page": 306
+    },
+    {
+      "caption": "Trellis facets the data into a matrix of dot chart views, allowing the user control of partitioning and orderering. (a) With main-effects ordering, the plots are ordered by median values within the plots for the sites, and the shared vertical axis within each plot is ordered by median values within the varieties. The Morris site in the third row is a visible outlier that does not ﬁt the general trends. (b) With a simple alphabetical ordering of plots and axes, no trends are visible, so no outliers can be detected. From [Becker et al. 96, Figures 1 and 3].",
+      "chapter": 12,
+      "id": "fig-12-09",
+      "number": "12.9",
+      "pdf_page": 308
+    },
+    {
+      "caption": "A second Trellis plot combines the years into a single plot with year encoded by color, showing strong evidence of an anomaly in the data. From [Becker et al. 96, Figure 2].",
+      "chapter": 12,
+      "id": "fig-12-10",
+      "number": "12.10",
+      "pdf_page": 309
+    },
+    {
+      "caption": "The HiVE system supports exploration through different partitioning choices. (a) Recursive matrix alignment where the ﬁrst split is by the house type attribute, and the second by neighborhood. The lowest levels show time with years as rows and months as columns. (b) Switching the order of the ﬁrst and second splits shows radically different patterns. From [Slingsby et al. 09, Figures 7b and 2c].",
+      "chapter": 12,
+      "id": "fig-12-11",
+      "number": "12.11",
+      "pdf_page": 311
+    },
+    {
+      "caption": "HiVE with different arrangements. (a) Sizing regions according to sale counts yields a treemap. (b) Arranging the second-level regions as choropleth maps. From [Slingsby et al. 09, Figures 7a and 7c].",
+      "chapter": 12,
+      "id": "fig-12-12",
+      "number": "12.12",
+      "pdf_page": 312
+    },
+    {
+      "caption": "Static visual layering in maps. (a) The map layers are created by differences in the hue, saturation, luminance, and size channels on both area and line marks. (b) The grayscale view shows that each layer uses a different range in the luminance channel, providing luminance contrast. From [Stone 10].",
+      "chapter": 12,
+      "id": "fig-12-13",
+      "number": "12.13",
+      "pdf_page": 315
+    },
+    {
+      "caption": "Multiple line charts can be superimposed within the same global frame. (a) A small number of items is easily readable. (b) Up to a few dozen lines can still be understood. (c) This technique does not scale to hundreds of items.",
+      "chapter": 12,
+      "id": "fig-12-14",
+      "number": "12.14",
+      "pdf_page": 316
+    },
+    {
+      "caption": "Empirical study comparing superimposed line charts to juxtaposed ﬁlled-area line charts. (a) Superimposed line charts performed best for tasks carried out within a local visual span. (b) Juxtaposed ﬁlled area charts were best for global tasks, especially as the number of time series increased. From [Javed et al. 10, Figures 1 and 2].",
+      "chapter": 12,
+      "id": "fig-12-15",
+      "number": "12.15",
+      "pdf_page": 317
+    },
+    {
+      "caption": "The hierarchical edge bundles idiom shows a compound network in three layers: the tree structure in back with containment circle marks, the red– green graph edges with connection marks in a middle layer, and the graph nodes in a front layer. From [Holten 06, Figure 13].",
+      "chapter": 12,
+      "id": "fig-12-16",
+      "number": "12.16",
+      "pdf_page": 318
+    },
+    {
+      "caption": "Cerebral dynamically creates a foreground visual layer of all nodes one topological hop away in the network from the node underneath the cursor. From [Barsky et al. 07, Figure 1].",
+      "chapter": 12,
+      "id": "fig-12-17",
+      "number": "12.17",
+      "pdf_page": 320
+    },
+    {
+      "caption": "Design choices for reducing (or increasing) the amount of data items and attributes to show.",
+      "chapter": 13,
+      "id": "fig-13-01",
+      "number": "13.1",
+      "pdf_page": 323
+    },
+    {
+      "caption": "FilmFinder features tightly coupled interactive ﬁltering, where the result of moving sliders and pressing buttons is immediately reﬂected in the visual encoding. (a) Exploration begins with an overview of all movies in the dataset. (b) Moving the actor slider to select Sean Connery ﬁlters out most of the other movies, leaving enough room to draw labels. (c) Clicking on the mark representing a movie brings up a detail view. From [Ahlberg and Shneiderman 94, Color Plates 1, 2, and 3].",
+      "chapter": 13,
+      "id": "fig-13-02",
+      "number": "13.2",
+      "pdf_page": 327
+    },
+    {
+      "caption": "The scented widget idiom adds visual encoding information directly to standard graphical widgets to make ﬁltering possible with high information density displays. From [Willett et al. 07, Figure 2].",
+      "chapter": 13,
+      "id": "fig-13-03",
+      "number": "13.3",
+      "pdf_page": 328
+    },
+    {
+      "caption": "The DOSFA idiom shown on star glyphs with a medical records dataset of 215 dimensions and 298 points. (a) The full dataset is so dense that patterns cannot be seen. (b) After ordering on similarity and ﬁltering on both similarity and importance, the star glyphs show structure. From [Yang et al. 03a, Figures 3a and 3d].",
+      "chapter": 13,
+      "id": "fig-13-04",
+      "number": "13.4",
+      "pdf_page": 329
+    },
+    {
+      "caption": "The histogram idiom aggregates an arbitrary number of items into a concise representation of their distribution.",
+      "chapter": 13,
+      "id": "fig-13-05",
+      "number": "13.5",
+      "pdf_page": 331
+    },
+    {
+      "caption": "The continuous scatterplot idiom uses color to show the density at each location, solving the problem of occlusion from overplotting and allowing scalability to large datasets. From [Bachthaler and Weiskopf 08, Figure 9].",
+      "chapter": 13,
+      "id": "fig-13-06",
+      "number": "13.6",
+      "pdf_page": 332
+    },
+    {
+      "caption": "The boxplot is an idiom presenting summary statistics for the distribution of a quantitative attribute, using ﬁve derived values. These plots illustrate four kinds of distributions: normal (n), skewed (s), peaked (k), and multimodal (mm). (a) Standard box plots. (b) Vase plots, which use horizontal spatial position to show density directly. From [Wickham and Stryjewski 12, Figure 5].",
+      "chapter": 13,
+      "id": "fig-13-07",
+      "number": "13.7",
+      "pdf_page": 334
+    },
+    {
+      "caption": "The SolarPlot circular histogram idiom provides indirect control of aggregation level by changing the circle size. (a) The small circle shows the increase in ticket sales over time. (b) Enlarging the circle shows seasonal patterns in addition to the gradual increase. From [Chuah 98, Figures 1 and 2].",
+      "chapter": 13,
+      "id": "fig-13-08",
+      "number": "13.8",
+      "pdf_page": 336
+    },
+    {
+      "caption": "Hierarchical parallel coordinates provide multiple levels of detail. (a) The single top cluster has large extent. (b) When several clusters are shown, each has a smaller extent. (c) When many clusters are shown, the proximity-based coloring helps them remain distinguishable from each other. From [Fua et al. 99, Figure 4].",
+      "chapter": 13,
+      "id": "fig-13-09",
+      "number": "13.9",
+      "pdf_page": 337
+    },
+    {
+      "caption": "Modiﬁable Areal Unit Problem (MAUP) example, showing how different boundaries for aggregation regions lead to very different visual patterns on choropleth maps. (a) Central region is high density. (b) Central region is medium density. (c) Central region is low density. From http://www.e-education.psu.edu/geog486/l4 p7.html, Figure 4.cg.6.",
+      "chapter": 13,
+      "id": "fig-13-10",
+      "number": "13.10",
+      "pdf_page": 338
+    },
+    {
+      "caption": "Geowigs are geographically weighted interactive graphics. (a) A choropleth map showing attribute x1. (b) The set of gw-boxplots for all six attributes at two scales. (c) Weighting maps showing the scales: local and larger. (d) A gw-mean map at the larger scale. From [Dykes and Brunsdon 07, Figures 7a and 2].",
+      "chapter": 13,
+      "id": "fig-13-11",
+      "number": "13.11",
+      "pdf_page": 339
+    },
+    {
+      "caption": "Dimensionality reduction of a large document collection using Glimmer for multidimensional scaling. The results are laid out in a single 2D scatterplot, allowing the user to verify that the conjectured clustering shown with color coding is partially supported by the spatial layout. From [Ingram et al. 09, Figure 8].",
+      "chapter": 13,
+      "id": "fig-13-12",
+      "number": "13.12",
+      "pdf_page": 343
+    },
+    {
+      "caption": "A chained sequence of what–why–how analysis instances for the scenario of dimensionality reduction of document collection data.",
+      "chapter": 13,
+      "id": "fig-13-13",
+      "number": "13.13",
+      "pdf_page": 343
+    },
+    {
+      "caption": "Design choices for embedding focus information within context.",
+      "chapter": 14,
+      "id": "fig-14-01",
+      "number": "14.1",
+      "pdf_page": 347
+    },
+    {
+      "caption": "DOITrees Revisited uses elision to show multiple focus nodes within context in a 600,000 node tree. From [Heer and Card 04, Figure 1].",
+      "chapter": 14,
+      "id": "fig-14-02",
+      "number": "14.2",
+      "pdf_page": 350
+    },
+    {
+      "caption": "The Toolglass and Magic Lenses idiom provides focus and context through a superimposed local layer: the see-through lens color codes the patch-work sphere with Gaussian curvature information and provides a numeric value for the point at the center. From [Bier et al. 93, Figure 12].",
+      "chapter": 14,
+      "id": "fig-14-03",
+      "number": "14.3",
+      "pdf_page": 351
+    },
+    {
+      "caption": "The Cone Tree system used 3D perspective for focus+context, providing a global distortion region with a single focus point, and using standard geometric navigation for interaction. From [Card and Mackinlay 99, Figure 10].",
+      "chapter": 14,
+      "id": "fig-14-04",
+      "number": "14.4",
+      "pdf_page": 352
+    },
+    {
+      "caption": "Focus+context with interactive ﬁsheye lens, with poker player dataset. (a) Scatterplot showing correlation between two strategies. (b) Dense matrix view showing correlation between a speciﬁc complex strategy and the player’s winning rate, encoded by color.",
+      "chapter": 14,
+      "id": "fig-14-05",
+      "number": "14.5",
+      "pdf_page": 354
+    },
+    {
+      "caption": "Animated transition showing navigation through 3D hyperbolic geometry for a ﬁle system tree laid out with the H3 idiom, where the ﬁrst three frames show hyperbolic translation changing the focus point and the last three show standard 3D rotation spinning the structure around. From [Munzner 98, Figure 3].",
+      "chapter": 14,
+      "id": "fig-14-06",
+      "number": "14.6",
+      "pdf_page": 355
+    },
+    {
+      "caption": "TreeJuxtaposer uses stretch and squish navigation with multiple rectangular foci for exploring phylogenetic trees. (a) Stretching a single region when comparing two small trees. (b) Stretching multiple regions within a large tree. From [Munzner et al. 03, Figures 5 and 1].",
+      "chapter": 14,
+      "id": "fig-14-07",
+      "number": "14.7",
+      "pdf_page": 357
+    },
+    {
+      "caption": "PRISequenceJuxtaposer supports comparing gene sequences using the stretch and squish navigation idiom with the guaranteed visibility of marks representing items with a high importance value, via a rendering algorithm with custom subpixel aggregation. From [Slack et al. 06, Figure 3].",
+      "chapter": 14,
+      "id": "fig-14-08",
+      "number": "14.8",
+      "pdf_page": 357
+    },
+    {
+      "caption": "General frameworks calculate the magniﬁcation and minimization ﬁelds needed to achieve desired transformations in the image. (a) Desired transformations. (b) Calculated magniﬁcation ﬁelds. From [Keahey 98, Figure 3].",
+      "chapter": 14,
+      "id": "fig-14-09",
+      "number": "14.9",
+      "pdf_page": 358
+    },
+    {
+      "caption": "Four approaches to graph exploration. (a) Fisheye lens. (b) Magnifying lens. (c) Neighborhood highlighting with layering. (d) Neighborhood highlighting with both layering and Bring and Go interaction. From [Lambert et al. 10, Figures 2a, 2b, 3b, and 4b].",
+      "chapter": 14,
+      "id": "fig-14-10",
+      "number": "14.10",
+      "pdf_page": 361
+    },
+    {
+      "caption": "Six case studies of full vis systems. (a) Scagnostics, from [Wilkinson et al. 05, Figure 5]. (b) VisDB, from [Keim and Kriegel 94, Figure 6]. (c) Hierarchical Clustering Explorer, from [Seo and Shneiderman 05, Figure 1]. (d) PivotGraph, from [Wattenberg 06, Figure 5]. (e) InterRing, from [Yang et al. 02, Figure 4]. (f) Constellation, from [Munzner 00, Figure 5.5].",
+      "chapter": 15,
+      "id": "fig-15-01",
+      "number": "15.1",
+      "pdf_page": 365
+    },
+    {
+      "caption": "Scatterplot matrices (SPLOM) showing abalone data. From [Wilkinson et al. 05, Figure 1].",
+      "chapter": 15,
+      "id": "fig-15-02",
+      "number": "15.2",
+      "pdf_page": 368
+    },
+    {
+      "caption": "The nine scagnostics measures that describe scatterplot shape, with examples of real-world datasets rated low, medium, and high for each of the nine measures. From [Wilkinson and Wills 08, Figure 6].",
+      "chapter": 15,
+      "id": "fig-15-03",
+      "number": "15.3",
+      "pdf_page": 370
+    },
+    {
+      "caption": "Scagnostics SPLOM for the abalone dataset, where each point represents an entire scatterplot in the original matrix. The selected point is highlighed in red in each view, and the scatterplot corresponding to it is shown in a popup detail view. From [Wilkinson et al. 05, Figure 5].",
+      "chapter": 15,
+      "id": "fig-15-04",
+      "number": "15.4",
+      "pdf_page": 371
+    },
+    {
+      "caption": "VisDB layouts schematically, for a dataset with ﬁve attributes. (a) Each attribute is shown in a separate small-multiple view. (b) In an alternate VisDB layout, each item is shown with a glyph with per-attribute sections in a single combined view. From [Keim and Kriegel 94, Figures 2 and 4].",
+      "chapter": 15,
+      "id": "fig-15-05",
+      "number": "15.5",
+      "pdf_page": 373
+    },
+    {
+      "caption": "VisDB screenshots with a dataset of eight attributes and 1000 items. (a) Attribute-based grouping with one small-multiple view for each attribute. (b) Item-based grouping has a single combined view with multiattribute glyph. From [Keim and Kriegel 94, Figure 6].",
+      "chapter": 15,
+      "id": "fig-15-06",
+      "number": "15.6",
+      "pdf_page": 374
+    },
+    {
+      "caption": "VisDB layout orientation and colors. (a) Layouts are are ordered internally in a spiral emanating from the center. (b) The VisDB sequential colormap uses multiple hues with monotonically increasing luminance. From [Keim and Kriegel 94, Figures 2 and 3].",
+      "chapter": 15,
+      "id": "fig-15-07",
+      "number": "15.7",
+      "pdf_page": 375
+    },
+    {
+      "caption": "Hierachical Clustering Explorer uses interactive aggregation and ﬁltering for the scalable display of a multidimensional table showing gene activity in different conditions using multiple overview+detail cluster heatmap views. From [Seo and Shneiderman 02, Figure 2].",
+      "chapter": 15,
+      "id": "fig-15-08",
+      "number": "15.8",
+      "pdf_page": 377
+    },
+    {
+      "caption": "HCE on a demographics dataset showing the rank-by-feature idiom for systematic exploration of pairwise combinations of attributes using a matrix overview and scatterplot. From [Seo and Shneiderman 05, Figure 1].",
+      "chapter": 15,
+      "id": "fig-15-09",
+      "number": "15.9",
+      "pdf_page": 378
+    },
+    {
+      "caption": "Detail of HCE rank-by-feature views for ranking individual attributes using a list overview and histogram/boxplot. From [Seo and Shneiderman 05, Figure 2].",
+      "chapter": 15,
+      "id": "fig-15-10",
+      "number": "15.10",
+      "pdf_page": 379
+    },
+    {
+      "caption": "The PivotGraph idiom. (a) Node–link view of small network with two attributes on nodes: gender (M/F) is encoded by node shape, and company division (1/2) is encoded by grayscale value. (b) The schematic PivotGraph roll-up of the same simple network where size of nodes and links of the derived graph shows the number of items in these aggregated groups. From [Wattenberg 06, Figure 4].",
+      "chapter": 15,
+      "id": "fig-15-11",
+      "number": "15.11",
+      "pdf_page": 381
+    },
+    {
+      "caption": "PivotGraph on graph rolled up by gender and location, showing most cross-gender communication occurs in location B. From [Wattenberg 06, Figure 5].",
+      "chapter": 15,
+      "id": "fig-15-12",
+      "number": "15.12",
+      "pdf_page": 382
+    },
+    {
+      "caption": "The InterRing hierarchy vis idiom uses a space-ﬁlling radial visual encoding and distortion-based focus+context interaction. (a) The hierarchy before distortion. (b) The blue selected subtree is enlarged. (c) A second tan region is enlarged. From [Yang et al. 02, Figure 4].",
+      "chapter": 15,
+      "id": "fig-15-13",
+      "number": "15.13",
+      "pdf_page": 384
+    },
+    {
+      "caption": "The Constellation high-level layout bases horizontal spatial position on the plausibility attribute, where more room is allocated to deﬁnitions on highly plausible and usually short paths on the left, and less room to those on less plausible and typically longer paths on the right. From [Munzner 00, Figure 5.4].",
+      "chapter": 15,
+      "id": "fig-15-14",
+      "number": "15.14",
+      "pdf_page": 386
+    },
+    {
+      "caption": "Resizing grid cells to increase information density. (a) Base curvilinear grid. (b) After eliminating the empty columns. (c) After eliminating empty cell rows in each column. From [Munzner 00, Figure 5.13].",
+      "chapter": 15,
+      "id": "fig-15-15",
+      "number": "15.15",
+      "pdf_page": 388
+    },
+    {
+      "caption": "Constellation uses the design choice of dynamic superimposed layers. (a) Edges in the background layer are not obtrusive. (b) The newly selected foreground layer is distinguished from the background with changes of the size, luminance, and saturation channels. From [Munzner 00, Figure 5.5].",
+      "chapter": 15,
+      "id": "fig-15-16",
+      "number": "15.16",
+      "pdf_page": 389
+    },
+    {
+      "caption": "The constellation showing all relations of type Part is highlighted. From [Munzner 00, Figure 5.16a].",
+      "chapter": 15,
+      "id": "fig-15-17",
+      "number": "15.17",
+      "pdf_page": 389
+    },
+    {
+      "caption": "Mid-level Constellation path segment layout, using containment to show hierarchical relationship between path word in tan and its associated deﬁnitions in green. (a) One of the deﬁnitions is for the path word itself. (b) Path word that is not itself deﬁned, but only appears within other deﬁnitions. From [Munzner 00, Figure 5.9].",
+      "chapter": 15,
+      "id": "fig-15-18",
+      "number": "15.18",
+      "pdf_page": 390
+    },
+    {
+      "caption": "Low-level Constellation deﬁnition layout, using rectilinear links and spatial position. (a) The base layout, with horizontal lines color-coded for link type. (b) Long-distance links are drawn between the master version of the word and all of its duplicated proxies. From [Munzner 00, Figure 5.10].",
+      "chapter": 15,
+      "id": "fig-15-19",
+      "number": "15.19",
+      "pdf_page": 390
+    },
+    {
+      "caption": "Constellation uses a subtle version of the semantic zooming design choice, where the space allocated for the ﬁrst word versus the rest of the deﬁnition changes according to the zoom level. From [Munzner 00, Figure 5.19].",
+      "chapter": 15,
+      "id": "fig-15-20",
+      "number": "15.20",
+      "pdf_page": 391
+    }
+  ],
+  "idiom_boxes": [
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Express values with horizontal and vertical spatial\nposition and point marks.",
+        "Scale": "Items: hundreds.",
+        "What: Data": "Table: two quantitative value attributes.",
+        "Why: Task": "Find trends, outliers, distribution, correlation; locate\nclusters."
+      },
+      "name": "Scatterplots",
+      "pdf_page": 173,
+      "section": "s07.04",
+      "slug": "scatterplots"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Line marks, express value attribute with aligned ver-\ntical position, separate key attribute with horizontal\nposition.",
+        "Scale": "Key attribute: dozens to hundreds of levels.",
+        "What: Data": "Table: one quantitative value attribute, one categori-\ncal key attribute.",
+        "Why: Task": "Lookup and compare values."
+      },
+      "name": "Bar Charts",
+      "pdf_page": 176,
+      "section": "s07.05.01",
+      "slug": "bar-charts"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Bar glyph with length-coded subcomponents of\nvalue attribute for each category of secondary key\nattribute. Separate bars by category of primary key\nattribute.",
+        "Scale": "Key attribute (main axis): dozens to hundreds of lev-\nels. Key attribute (stacked glyph axis): several to one\ndozen",
+        "What: Data": "Multidimensional table: one quantitative value at-\ntribute, two categorical key attributes.",
+        "Why: Task": "Part-to-whole relationship, lookup values, ﬁnd\ntrends."
+      },
+      "name": "Stacked Bar Charts",
+      "pdf_page": 178,
+      "section": "s07.05.01",
+      "slug": "stacked-bar-charts"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Use derived geometry showing artist layers across\ntime, layer height encodes counts.",
+        "Scale": "Key attributes (time, main axis): hundreds of time\npoints. Key attributes (artists, short axis): dozens to\nhundreds",
+        "What: Data": "Multidimensional table:\none quantitative value attribute (counts), one or-\ndered key attribute (time), one categorical key at-\ntribute (artist).",
+        "What: Derived": "One quantitative attribute (for layer ordering)."
+      },
+      "name": "Streamgraphs",
+      "pdf_page": 179,
+      "section": "s07.05.01",
+      "slug": "streamgraphs"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Express value attribute with aligned vertical position\nand point marks. Separate/order into horizontal re-\ngions by key attribute.",
+        "What: Data": "Table: one quantitative value attribute, one ordered\nkey attribute."
+      },
+      "name": "Dot Charts",
+      "pdf_page": 180,
+      "section": "s07.05.01",
+      "slug": "dot-charts"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Dot chart with connection marks between dots.",
+        "Scale": "Key attribute: hundreds of levels.",
+        "What: Data": "Table: one quantitative value attribute, one ordered\nkey attribute.",
+        "Why": "Show trend."
+      },
+      "name": "Line Charts",
+      "pdf_page": 181,
+      "section": "s07.05.01",
+      "slug": "line-charts"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "2D matrix alignment of area marks, diverging color-\nmap.",
+        "Scale": "Items: one million. Categorical attribute levels: hun-\ndreds. Quantitative attribute levels: 3–11.",
+        "What: Data": "Table: two categorical key attributes (genes, condi-\ntions), one quantitative value attribute (activity level\nfor gene in condition).",
+        "Why: Task": "Find clusters, outliers; summarize."
+      },
+      "name": "Heatmaps",
+      "pdf_page": 185,
+      "section": "s07.05.02",
+      "slug": "heatmaps"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Heatmap: 2D matrix alignment, ordered by both\ncluster hierarchies. Dendrogram: connection line\nmarks for parent–child relationships in tree.",
+        "What: Derived": "Two cluster hierarchies for table rows and columns."
+      },
+      "name": "Cluster Heatmaps",
+      "pdf_page": 185,
+      "section": "s07.05.02",
+      "slug": "cluster-heatmaps"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Scatterplots in 2D matrix alignment.",
+        "Scale": "Attributes: one dozen.\nItems: dozens to hundreds.",
+        "What: Data": "Table.",
+        "What: Derived": "Ordered key attribute: list of original attributes.",
+        "Why: Task": "Find correlation, trends, outliers."
+      },
+      "name": "Scatterplot Matrix (SPLOM)",
+      "pdf_page": 186,
+      "section": "s07.05.02",
+      "slug": "scatterplot-matrix-splom"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Parallel layout: horizontal spatial position used to\nseparate axes, vertical spatial position used to ex-\npress value along each aligned axis with connection\nline marks as segments between them.",
+        "Scale": "Attributes: dozens along secondary axis.\nItems: hundreds.",
+        "What: Data": "Table: many value attributes.",
+        "Why: Tasks": "Find trends, outliers, extremes, correlation."
+      },
+      "name": "Parallel Coordinates",
+      "pdf_page": 191,
+      "section": "s07.06.02",
+      "slug": "parallel-coordinates"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Length coding of line marks; radial layout.",
+        "What: Data": "Table: one quantitative attribute, one categorical at-\ntribute."
+      },
+      "name": "Radial Bar Charts",
+      "pdf_page": 193,
+      "section": "s07.06.03",
+      "slug": "radial-bar-charts"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Area marks (wedges) with angle channel; radial lay-\nout.",
+        "Scale": "One dozen categories.",
+        "What: Data": "Table: one quantitative attribute, one categorical at-\ntribute.",
+        "Why: Task": "Part–whole relationship."
+      },
+      "name": "Pie Charts",
+      "pdf_page": 195,
+      "section": "s07.06.03",
+      "slug": "pie-charts"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Area marks (wedges) with length channel; radial lay-\nout.",
+        "Scale": "One dozen categories.",
+        "What: Data": "Table: one quantitative attribute, one categorical at-\ntribute.",
+        "Why: Task": "Part–whole relationship."
+      },
+      "name": "Polar Area Charts",
+      "pdf_page": 195,
+      "section": "s07.06.03",
+      "slug": "polar-area-charts"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "How: Encode": "Line marks with length channel; rectilinear layout.",
+        "Scale": "One dozen categories for stacked attribute. Several\ndozen categories for axis attribute.",
+        "What: Data": "Multidimensional table: one quantitative value at-\ntribute, two categorical key attributes.",
+        "What: Derived": "One quantitative value attribute (normalized version\nof original attribute).",
+        "Why: Task": "Part–whole relationship."
+      },
+      "name": "Normalized Stacked Bar Charts",
+      "pdf_page": 195,
+      "section": "s07.06.03",
+      "slug": "normalized-stacked-bar-charts"
+    },
+    {
+      "chapter": 7,
+      "fields": {
+        "(How: Facet)": "Same encoding, same dataset, global overview with\ndetail showing subset of data, different resolutions,\nlinking with color.",
+        "(How: Reduce)": "Detail: ﬁlter to local neighborhood of selection",
+        "How: Encode": "Dense layout. Spatial position and line length from\ntext ordering. Color channels of hue and brightness.",
+        "Scale": "Lines of text: ten thousand.",
+        "What: Data": "Text with numbered lines (source code, test results\nlog).",
+        "What: Derived": "Two quantitative attributes (test execution results).",
+        "Why: Task": "Locate faults, summarize results and coverage."
+      },
+      "name": "Dense Software Overviews",
+      "pdf_page": 199,
+      "section": "s07.07.01",
+      "slug": "dense-software-overviews"
+    },
+    {
+      "chapter": 8,
+      "fields": {
+        "How: Encode": "Space: use given geometry for area mark bound-\naries. Color: sequential segmented colormap.",
+        "What: Data": "Geographic geometry data. Table with one quantita-\ntive attribute per region."
+      },
+      "name": "Choropleth Map",
+      "pdf_page": 206,
+      "section": "s08.03.01",
+      "slug": "choropleth-map"
+    },
+    {
+      "chapter": 8,
+      "fields": {
+        "How: Encode": "Use given geographic data geometry of points, lines,\nand region marks. Use derived geometry as line\nmarks (blue).",
+        "Scale": "Dozens of contour levels.",
+        "What: Data": "2D spatial ﬁeld; geographic data.",
+        "What: Derived": "Geometry: set of isolines computed from ﬁeld.",
+        "Why: Tasks": "Query shape."
+      },
+      "name": "Topographic Terrain Map",
+      "pdf_page": 208,
+      "section": "s08.04.01",
+      "slug": "topographic-terrain-map"
+    },
+    {
+      "chapter": 8,
+      "fields": {
+        "How: Encode": "Surfaces: use given. Tree: line marks, vertical spa-\ntial position encodes isovalue.",
+        "Scale": "One dozen contour levels.",
+        "What: Data": "Spatial ﬁeld.",
+        "What: Derived": "Geometry: surfaces. Tree: simpliﬁed contour tree.",
+        "Why: Tasks": "Query shape."
+      },
+      "name": "Flexible Isosurfaces",
+      "pdf_page": 211,
+      "section": "s08.04.01",
+      "slug": "flexible-isosurfaces"
+    },
+    {
+      "chapter": 8,
+      "fields": {
+        "How: Encode": "3D view: use given spatial ﬁeld data, color and opac-\nity from multidimensional transfer function. Joint his-\ntogram view: area marks in 2D matrix alignment,\ngrayscale sequential colormap.",
+        "What: Data": "3D spatial ﬁeld.",
+        "What: Derived": "3D spatial ﬁeld: gradient of original ﬁeld.",
+        "What: Derived (2)": "Table: two key attributes, values binned from min to\nmax for both data and derived data. One derived\nquantitative value attribute (item count per bin)."
+      },
+      "name": "Multidimensional Transfer Functions",
+      "pdf_page": 212,
+      "section": "s08.04.02",
+      "slug": "multidimensional-transfer-functions"
+    },
+    {
+      "chapter": 8,
+      "fields": {
+        "How: Encode": "Use derived geometry of lines, color, and opacity ac-\ncording to cluster.",
+        "Scale": "Field: millions of samples. Geometry: hundreds of\nstreamlines.",
+        "What: Data": "Spatial ﬁeld: 3D vector ﬁeld.",
+        "What: Derived": "Geometry: streamlines or pathlines.",
+        "What: Derived (2)": "One attribute per streamline/pathline (signature).",
+        "What: Derived (3)": "Cluster hierarchy of streamlines/pathlines.",
+        "Why: Tasks": "Find features, query shape."
+      },
+      "name": "Similarity-Clustered Streamlines",
+      "pdf_page": 218,
+      "section": "s08.05.02",
+      "slug": "similarity-clustered-streamlines"
+    },
+    {
+      "chapter": 8,
+      "fields": {
+        "How: Encode": "Glyph showing six derived attributes, color and opac-\nity according to cluster.",
+        "What: Data": "Spatial ﬁeld: 3D tensor ﬁeld.",
+        "What: Derived": "Three quantitative attributes: tensor shape. Three\nvectors: tensor orientation."
+      },
+      "name": "Ellipsoid Tensor Glyphs",
+      "pdf_page": 221,
+      "section": "s08.06",
+      "slug": "ellipsoid-tensor-glyphs"
+    },
+    {
+      "chapter": 9,
+      "fields": {
+        "How: Encode": "Point marks for nodes, connection marks for links.",
+        "Scale": "Nodes: dozens/hundreds. Links: hundreds.\nNode/link density: L < 4N",
+        "What: Data": "Network.",
+        "Why: Tasks": "Explore topology, locate paths."
+      },
+      "name": "Force-Directed Placement",
+      "pdf_page": 231,
+      "section": "s09.02",
+      "slug": "force-directed-placement"
+    },
+    {
+      "chapter": 9,
+      "fields": {
+        "Scale": "Nodes: 1000–10,000. Links: 1000–10,000.\nNode/link density: L < 4N.",
+        "What: Data": "Network.",
+        "What: Derived": "Cluster hierarchy atop original network.",
+        "What: Encode": "Point marks for nodes, connection marks for links.",
+        "Why: Tasks": "Explore topology, locate paths and clusters."
+      },
+      "name": "Multilevel Force-Directed Placement (sfdp)",
+      "pdf_page": 233,
+      "section": "s09.02",
+      "slug": "multilevel-force-directed-placement-sfdp"
+    },
+    {
+      "chapter": 9,
+      "fields": {
+        "How: Encode": "Area marks in 2D matrix alignment.",
+        "Scale": "Nodes: 1000. Links: one milllion.",
+        "What: Data": "Network.",
+        "What: Derived": "Table: network nodes as keys, link status between\ntwo nodes as values."
+      },
+      "name": "Adjacency Matrix View",
+      "pdf_page": 234,
+      "section": "s09.03",
+      "slug": "adjacency-matrix-view"
+    },
+    {
+      "chapter": 9,
+      "fields": {
+        "How: Encode": "Area marks and containment, with rectilinear layout.",
+        "Scale": "Leaf nodes: one million. Links: one million.",
+        "What: Data": "Tree.",
+        "Why: Tasks": "Query attributes at leaf nodes."
+      },
+      "name": "Treemaps",
+      "pdf_page": 239,
+      "section": "s09.05",
+      "slug": "treemaps"
+    },
+    {
+      "chapter": 11,
+      "fields": {
+        "How: Manipulate": "Change with animated transition. Navigate between\naggregation levels.",
+        "What: Data": "Compound network."
+      },
+      "name": "Animated Transitions",
+      "pdf_page": 274,
+      "section": "s11.03",
+      "slug": "animated-transitions"
+    },
+    {
+      "chapter": 11,
+      "fields": {
+        "(How: Coordinate)": "Juxtaposed multiple views.",
+        "How: Encode": "Any encoding. Highlight with link marks connecting\nitems across views.",
+        "How: Manipulate": "Select any element.",
+        "What: Data": "Any data."
+      },
+      "name": "Context-Preserving Visual Links",
+      "pdf_page": 278,
+      "section": "s11.04.02",
+      "slug": "context-preserving-visual-links"
+    },
+    {
+      "chapter": 12,
+      "fields": {
+        "(How: Reduce)": "Navigate.",
+        "How: Encode": "Use given.",
+        "How: Facet": "Partition into two views with same encoding,\noverview–detail.",
+        "What: Data": "Geographic."
+      },
+      "name": "Bird’s-Eye Maps",
+      "pdf_page": 296,
+      "section": "s12.03.02",
+      "slug": "birds-eye-maps"
+    },
+    {
+      "chapter": 12,
+      "fields": {
+        "How: Encode": "Area marks for regions (water, parks, other land),\nline marks for roads, categorical colormap.",
+        "How: Facet": "Superimpose: static layers distinguished with color\nsaturation, color luminance, and size channels.",
+        "What: Data": "Geographic"
+      },
+      "name": "Cartographic Layering",
+      "pdf_page": 315,
+      "section": "s12.05.02",
+      "slug": "cartographic-layering"
+    },
+    {
+      "chapter": 12,
+      "fields": {
+        "How: Encode": "Line charts, colored by machine attribute.",
+        "How: Facet": "Superimpose: static layers, distinguished with color.",
+        "Scale": "Ordered key attribute: hundreds. Categorical key at-\ntribute: one dozen.",
+        "What: Data": "Multidimensional table: one ordered key attribute\n(time), one categorical key attribute (machine), one\nquantitative value attribute (CPU utilization)."
+      },
+      "name": "Superimposed Line Charts",
+      "pdf_page": 316,
+      "section": "s12.05.02",
+      "slug": "superimposed-line-charts"
+    },
+    {
+      "chapter": 12,
+      "fields": {
+        "How: Encode": "Back layer shows hierarchy with containment marks\ncolored gray, middle layer shows network links col-\nored red–green, front layer shows nodes colored\ngray.",
+        "How: Facet": "Superimpose static layers, distinguished with color.",
+        "What: Data": "Compound graph: network, hierarchy whose leaves\nare nodes in network."
+      },
+      "name": "Hierarchical Edge Bundles",
+      "pdf_page": 319,
+      "section": "s12.05.02",
+      "slug": "hierarchical-edge-bundles"
+    },
+    {
+      "chapter": 13,
+      "fields": {
+        "How: Encode": "Rectilinear layout. Line mark with aligned position\nto express derived value attribute. Position: key at-\ntribute.",
+        "What: Data": "Table: one quantitative value attribute.",
+        "What: Derived": "Derived table: one derived ordered key attribute\n(bin), one derived quantitative value attribute (item\ncount per bin)."
+      },
+      "name": "Histograms",
+      "pdf_page": 331,
+      "section": "s13.04.01",
+      "slug": "histograms"
+    },
+    {
+      "chapter": 13,
+      "fields": {
+        "How: Encode": "Dense space-ﬁlling 2D matrix alignment, sequential\ncategorical hue + ordered luminance colormap.",
+        "How: Reduce": "Item aggregation.",
+        "What: Data": "Table: two quantitative value attributes.",
+        "What: Derived": "Derived table: two ordered key attributes (x, y pixel\nlocations), one quantitative attribute (overplot den-\nsity)."
+      },
+      "name": "Continuous Scatterplots",
+      "pdf_page": 333,
+      "section": "s13.04.01",
+      "slug": "continuous-scatterplots"
+    },
+    {
+      "chapter": 13,
+      "fields": {
+        "How: Encode": "One glyph per original attribute expressing derived\nattribute values using vertical spatial position, with\n1D list alignment of glyphs into separated with hori-\nzontal spatial position.",
+        "How: Reduce": "Item aggregation.",
+        "Scale": "Items: unlimited. Attributes: dozens.",
+        "What: Data": "Table: many quantitative value attributes.",
+        "What: Derived": "Five quantitative attributes for each original attribute,\nrepresenting its distribution.",
+        "Why: Tasks": "Characterize distribution; ﬁnd outliers, extremes, av-\nerages; identify skew."
+      },
+      "name": "Boxplot Charts",
+      "pdf_page": 335,
+      "section": "s13.04.01",
+      "slug": "boxplot-charts"
+    },
+    {
+      "chapter": 13,
+      "fields": {
+        "How: Encode": "Radial layout, line marks. Line length: express de-\nrived value attribute; angle: key attribute.",
+        "How: Reduce": "Item aggregation.",
+        "Scale": "Original items: unlimited. Derived bins: proportional\nto screen space allocated.",
+        "What: Data": "Table: one quantitative attribute.",
+        "What: Derived": "Derived table: one derived ordered key attribute\n(bin), one derived quantitative value attribute (item\ncount per bin). Number of bins interactively con-\ntrolled."
+      },
+      "name": "SolarPlot",
+      "pdf_page": 335,
+      "section": "s13.04.01",
+      "slug": "solarplot"
+    },
+    {
+      "chapter": 13,
+      "fields": {
+        "How: Encode": "Parallel coordinates. Color clusters by proximity in\nhierarchy.",
+        "How: Reduce": "Interactive item aggregation to change level of detail.",
+        "Scale": "Items: 10,000–100,000. Clusters: one dozen.",
+        "What: Data": "Table.",
+        "What: Derived": "Cluster hierarchy atop original table of items. Five\nper-cluster attributes: count, mean, min, max, depth."
+      },
+      "name": "Hierarchical Parallel Coordinates",
+      "pdf_page": 337,
+      "section": "s13.04.01",
+      "slug": "hierarchical-parallel-coordinates"
+    },
+    {
+      "chapter": 13,
+      "fields": {
+        "How: Encode": "Boxplot.",
+        "How: Facet": "Superimposed layers: global boxplot as gray back-\nground, current-scale boxplot as green foreground.",
+        "How: Reduce": "Spatial aggregation.",
+        "What: Data": "Geographic geometry with area boundaries. Table:\nKey attribute (area), several quantitative value at-\ntributes. Table: Five-number statistical summary dis-\ntributions for each original attribute.",
+        "What: Derived": "Multidimensional table: key attribute (area), key at-\ntribute (scale), quantitative value attributes (geo-\ngraphically weighted statistical summaries for each\narea at multiple scales)."
+      },
+      "name": "Geographically Weighted Boxplots",
+      "pdf_page": 340,
+      "section": "s13.04.02",
+      "slug": "geographically-weighted-boxplots"
+    },
+    {
+      "chapter": 13,
+      "fields": {
+        "How: Encode": "Scatterplot, colored by conjectured clustering.",
+        "How: Reduce": "Attribute aggregation (dimensionality reduction) with\nMDS.",
+        "Scale": "Original attributes: 10,000. Derived attributes: two.\nItems: 100,000.",
+        "What: Data": "Text document collection.",
+        "What: Derived": "Table with 10,000 attributes.",
+        "What: Derived (2)": "Table with two attributes."
+      },
+      "name": "Dimensionality Reduction for Document Collections",
+      "pdf_page": 344,
+      "section": "s13.04.03.01",
+      "slug": "dimensionality-reduction-for-document-collections"
+    },
+    {
+      "chapter": 14,
+      "fields": {
+        "How: Encode": "Any layout.",
+        "How: Reduce": "Embed: distort with ﬁsheye; single focus, local radial\nregion, moveable lens interaction metaphor.",
+        "What: Data": "Any data."
+      },
+      "name": "Fisheye Lens",
+      "pdf_page": 354,
+      "section": "s14.05",
+      "slug": "fisheye-lens"
+    },
+    {
+      "chapter": 14,
+      "fields": {
+        "How: Encode": "Hyperbolic layout.",
+        "How: Reduce": "Embed: distort by projecting from hyperbolic to Eu-\nclidean space; single global radial focus; hyperbolic\ntranslation interaction metaphor.",
+        "What: Data": "Tree or network."
+      },
+      "name": "Hyperbolic Geometry",
+      "pdf_page": 356,
+      "section": "s14.05",
+      "slug": "hyperbolic-geometry"
+    },
+    {
+      "chapter": 14,
+      "fields": {
+        "How: Encode": "Any layout.",
+        "How: Reduce": "Embed: distort with stretch and squish; multiple foci,\nglobal rectangular regions, stretch and squish navi-\ngation interaction metaphor.",
+        "What: Data": "Any data."
+      },
+      "name": "Stretch and Squish Navigation",
+      "pdf_page": 358,
+      "section": "s14.05",
+      "slug": "stretch-and-squish-navigation"
+    },
+    {
+      "chapter": 14,
+      "fields": {
+        "How: Encode": "Any layout.",
+        "How: Reduce": "Embed: distort with magniﬁcation ﬁelds; multiple\nfoci, local arbitrary regions, lens or stretch or data-\ndriven interaction metaphors.",
+        "What: Data": "Any data."
+      },
+      "name": "Nonlinear Magniﬁcation Fields",
+      "pdf_page": 359,
+      "section": "s14.05",
+      "slug": "nonlinear-magnification-fields"
+    },
+    {
+      "chapter": 15,
+      "fields": {
+        "How: Encode": "Nodes linked with connection marks, size.",
+        "How: Manipulate": "Change: animated transitions.",
+        "How: Reduce": "Aggregation, ﬁltering.",
+        "Scale": "Nodes/links in original network: unlimited. Roll-\nup attributes: 2. Levels per roll-up attribute:\nseveral, up to one dozen.",
+        "What: Data": "Network.",
+        "What: Derived": "Derived network of aggregate nodes and links\nby roll-up into two chosen attributes.",
+        "Why: Tasks": "Cross-attribute comparison of node groups."
+      },
+      "name": "PivotGraph",
+      "pdf_page": 383,
+      "section": "s15.06",
+      "slug": "pivotgraph"
+    }
+  ],
+  "page_map": [
+    {
+      "from_pdf": 1,
+      "offset": 1,
+      "style": "roman",
+      "to_pdf": 25
+    },
+    {
+      "from_pdf": 26,
+      "offset": 25,
+      "style": "arabic",
+      "to_pdf": 422
+    }
+  ],
+  "pdf": {
+    "pages": 422,
+    "sha256": "d3ae2ca097e16d773e44832883775c79bca35373367ab7f2d17d3750a79063b3"
+  },
+  "toc": [
+    {
+      "id": "ch01",
+      "level": "chapter",
+      "number": "1",
+      "parent": null,
+      "pdf_end": 44,
+      "pdf_start": 26,
+      "printed_page": 1,
+      "title": "What’s Vis, and Why Do It?"
+    },
+    {
+      "id": "s01.01",
+      "level": "section",
+      "number": "1.1",
+      "parent": "ch01",
+      "pdf_end": 27,
+      "pdf_start": 26,
+      "printed_page": 1,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s01.02",
+      "level": "section",
+      "number": "1.2",
+      "parent": "ch01",
+      "pdf_end": 29,
+      "pdf_start": 27,
+      "printed_page": 2,
+      "title": "Why Have a Human in the Loop?"
+    },
+    {
+      "id": "s01.03",
+      "level": "section",
+      "number": "1.3",
+      "parent": "ch01",
+      "pdf_end": 31,
+      "pdf_start": 29,
+      "printed_page": 4,
+      "title": "Why Have a Computer in the Loop?"
+    },
+    {
+      "id": "s01.04",
+      "level": "section",
+      "number": "1.4",
+      "parent": "ch01",
+      "pdf_end": 31,
+      "pdf_start": 31,
+      "printed_page": 6,
+      "title": "Why Use an External Representation?"
+    },
+    {
+      "id": "s01.05",
+      "level": "section",
+      "number": "1.5",
+      "parent": "ch01",
+      "pdf_end": 32,
+      "pdf_start": 31,
+      "printed_page": 6,
+      "title": "Why Depend on Vision?"
+    },
+    {
+      "id": "s01.06",
+      "level": "section",
+      "number": "1.6",
+      "parent": "ch01",
+      "pdf_end": 34,
+      "pdf_start": 32,
+      "printed_page": 7,
+      "title": "Why Show the Data in Detail?"
+    },
+    {
+      "id": "s01.07",
+      "level": "section",
+      "number": "1.7",
+      "parent": "ch01",
+      "pdf_end": 34,
+      "pdf_start": 34,
+      "printed_page": 9,
+      "title": "Why Use Interactivity?"
+    },
+    {
+      "id": "s01.08",
+      "level": "section",
+      "number": "1.8",
+      "parent": "ch01",
+      "pdf_end": 36,
+      "pdf_start": 35,
+      "printed_page": 10,
+      "title": "Why Is the Vis Idiom Design Space Huge?"
+    },
+    {
+      "id": "s01.09",
+      "level": "section",
+      "number": "1.9",
+      "parent": "ch01",
+      "pdf_end": 36,
+      "pdf_start": 36,
+      "printed_page": 11,
+      "title": "Why Focus on Tasks?"
+    },
+    {
+      "id": "s01.10",
+      "level": "section",
+      "number": "1.10",
+      "parent": "ch01",
+      "pdf_end": 37,
+      "pdf_start": 36,
+      "printed_page": 11,
+      "title": "Why Focus on Effectiveness?"
+    },
+    {
+      "id": "s01.11",
+      "level": "section",
+      "number": "1.11",
+      "parent": "ch01",
+      "pdf_end": 39,
+      "pdf_start": 37,
+      "printed_page": 12,
+      "title": "Why Are Most Designs Ineffective?"
+    },
+    {
+      "id": "s01.12",
+      "level": "section",
+      "number": "1.12",
+      "parent": "ch01",
+      "pdf_end": 39,
+      "pdf_start": 39,
+      "printed_page": 14,
+      "title": "Why Is Validation Difﬁcult?"
+    },
+    {
+      "id": "s01.13",
+      "level": "section",
+      "number": "1.13",
+      "parent": "ch01",
+      "pdf_end": 41,
+      "pdf_start": 39,
+      "printed_page": 14,
+      "title": "Why Are There Resource Limitations?"
+    },
+    {
+      "id": "s01.14",
+      "level": "section",
+      "number": "1.14",
+      "parent": "ch01",
+      "pdf_end": 43,
+      "pdf_start": 41,
+      "printed_page": 16,
+      "title": "Why Analyze?"
+    },
+    {
+      "id": "s01.15",
+      "level": "section",
+      "number": "1.15",
+      "parent": "ch01",
+      "pdf_end": 44,
+      "pdf_start": 43,
+      "printed_page": 18,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch02",
+      "level": "chapter",
+      "number": "2",
+      "parent": null,
+      "pdf_end": 66,
+      "pdf_start": 45,
+      "printed_page": 20,
+      "title": "What: Data Abstraction"
+    },
+    {
+      "id": "s02.01",
+      "level": "section",
+      "number": "2.1",
+      "parent": "ch02",
+      "pdf_end": 46,
+      "pdf_start": 46,
+      "printed_page": 21,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s02.02",
+      "level": "section",
+      "number": "2.2",
+      "parent": "ch02",
+      "pdf_end": 48,
+      "pdf_start": 46,
+      "printed_page": 21,
+      "title": "Why Do Data Semantics and Types Matter?"
+    },
+    {
+      "id": "s02.03",
+      "level": "section",
+      "number": "2.3",
+      "parent": "ch02",
+      "pdf_end": 49,
+      "pdf_start": 48,
+      "printed_page": 23,
+      "title": "Data Types"
+    },
+    {
+      "id": "s02.04",
+      "level": "section",
+      "number": "2.4",
+      "parent": "ch02",
+      "pdf_end": 56,
+      "pdf_start": 49,
+      "printed_page": 24,
+      "title": "Dataset Types"
+    },
+    {
+      "id": "s02.04.01",
+      "level": "subsection",
+      "number": "2.4.1",
+      "parent": "s02.04",
+      "pdf_end": 51,
+      "pdf_start": 50,
+      "printed_page": 25,
+      "title": "Tables"
+    },
+    {
+      "id": "s02.04.02",
+      "level": "subsection",
+      "number": "2.4.2",
+      "parent": "s02.04",
+      "pdf_end": 52,
+      "pdf_start": 51,
+      "printed_page": 26,
+      "title": "Networks and Trees"
+    },
+    {
+      "id": "s02.04.02.01",
+      "level": "subsubsection",
+      "number": "2.4.2.1",
+      "parent": "s02.04.02",
+      "pdf_end": 52,
+      "pdf_start": 52,
+      "printed_page": 27,
+      "title": "Trees"
+    },
+    {
+      "id": "s02.04.03",
+      "level": "subsection",
+      "number": "2.4.3",
+      "parent": "s02.04",
+      "pdf_end": 54,
+      "pdf_start": 52,
+      "printed_page": 27,
+      "title": "Fields"
+    },
+    {
+      "id": "s02.04.03.01",
+      "level": "subsubsection",
+      "number": "2.4.3.1",
+      "parent": "s02.04.03",
+      "pdf_end": 54,
+      "pdf_start": 53,
+      "printed_page": 28,
+      "title": "Spatial Fields"
+    },
+    {
+      "id": "s02.04.03.02",
+      "level": "subsubsection",
+      "number": "2.4.3.2",
+      "parent": "s02.04.03",
+      "pdf_end": 54,
+      "pdf_start": 54,
+      "printed_page": 29,
+      "title": "Grid Types"
+    },
+    {
+      "id": "s02.04.04",
+      "level": "subsection",
+      "number": "2.4.4",
+      "parent": "s02.04",
+      "pdf_end": 55,
+      "pdf_start": 54,
+      "printed_page": 29,
+      "title": "Geometry"
+    },
+    {
+      "id": "s02.04.05",
+      "level": "subsection",
+      "number": "2.4.5",
+      "parent": "s02.04",
+      "pdf_end": 56,
+      "pdf_start": 55,
+      "printed_page": 30,
+      "title": "Other Combinations"
+    },
+    {
+      "id": "s02.04.06",
+      "level": "subsection",
+      "number": "2.4.6",
+      "parent": "s02.04",
+      "pdf_end": 56,
+      "pdf_start": 56,
+      "printed_page": 31,
+      "title": "Dataset Availability"
+    },
+    {
+      "id": "s02.05",
+      "level": "section",
+      "number": "2.5",
+      "parent": "ch02",
+      "pdf_end": 59,
+      "pdf_start": 56,
+      "printed_page": 31,
+      "title": "Attribute Types"
+    },
+    {
+      "id": "s02.05.01",
+      "level": "subsection",
+      "number": "2.5.1",
+      "parent": "s02.05",
+      "pdf_end": 57,
+      "pdf_start": 57,
+      "printed_page": 32,
+      "title": "Categorical"
+    },
+    {
+      "id": "s02.05.02",
+      "level": "subsection",
+      "number": "2.5.2",
+      "parent": "s02.05",
+      "pdf_end": 58,
+      "pdf_start": 57,
+      "printed_page": 32,
+      "title": "Ordered: Ordinal and Quantitative"
+    },
+    {
+      "id": "s02.05.02.01",
+      "level": "subsubsection",
+      "number": "2.5.2.1",
+      "parent": "s02.05.02",
+      "pdf_end": 58,
+      "pdf_start": 58,
+      "printed_page": 33,
+      "title": "Sequential versus Diverging"
+    },
+    {
+      "id": "s02.05.02.02",
+      "level": "subsubsection",
+      "number": "2.5.2.2",
+      "parent": "s02.05.02",
+      "pdf_end": 58,
+      "pdf_start": 58,
+      "printed_page": 33,
+      "title": "Cyclic"
+    },
+    {
+      "id": "s02.05.03",
+      "level": "subsection",
+      "number": "2.5.3",
+      "parent": "s02.05",
+      "pdf_end": 59,
+      "pdf_start": 58,
+      "printed_page": 33,
+      "title": "Hierarchical Attributes"
+    },
+    {
+      "id": "s02.06",
+      "level": "section",
+      "number": "2.6",
+      "parent": "ch02",
+      "pdf_end": 65,
+      "pdf_start": 59,
+      "printed_page": 34,
+      "title": "Semantics"
+    },
+    {
+      "id": "s02.06.01",
+      "level": "subsection",
+      "number": "2.6.1",
+      "parent": "s02.06",
+      "pdf_end": 63,
+      "pdf_start": 59,
+      "printed_page": 34,
+      "title": "Key versus Value Semantics"
+    },
+    {
+      "id": "s02.06.01.01",
+      "level": "subsubsection",
+      "number": "2.6.1.1",
+      "parent": "s02.06.01",
+      "pdf_end": 61,
+      "pdf_start": 59,
+      "printed_page": 34,
+      "title": "Flat Tables"
+    },
+    {
+      "id": "s02.06.01.02",
+      "level": "subsubsection",
+      "number": "2.6.1.2",
+      "parent": "s02.06.01",
+      "pdf_end": 62,
+      "pdf_start": 61,
+      "printed_page": 36,
+      "title": "Multidimensional Tables"
+    },
+    {
+      "id": "s02.06.01.03",
+      "level": "subsubsection",
+      "number": "2.6.1.3",
+      "parent": "s02.06.01",
+      "pdf_end": 62,
+      "pdf_start": 62,
+      "printed_page": 37,
+      "title": "Fields"
+    },
+    {
+      "id": "s02.06.01.04",
+      "level": "subsubsection",
+      "number": "2.6.1.4",
+      "parent": "s02.06.01",
+      "pdf_end": 62,
+      "pdf_start": 62,
+      "printed_page": 37,
+      "title": "Scalar Fields"
+    },
+    {
+      "id": "s02.06.01.05",
+      "level": "subsubsection",
+      "number": "2.6.1.5",
+      "parent": "s02.06.01",
+      "pdf_end": 63,
+      "pdf_start": 62,
+      "printed_page": 37,
+      "title": "Vector Fields"
+    },
+    {
+      "id": "s02.06.01.06",
+      "level": "subsubsection",
+      "number": "2.6.1.6",
+      "parent": "s02.06.01",
+      "pdf_end": 63,
+      "pdf_start": 63,
+      "printed_page": 38,
+      "title": "Tensor Fields"
+    },
+    {
+      "id": "s02.06.01.07",
+      "level": "subsubsection",
+      "number": "2.6.1.7",
+      "parent": "s02.06.01",
+      "pdf_end": 63,
+      "pdf_start": 63,
+      "printed_page": 38,
+      "title": "Field Semantics"
+    },
+    {
+      "id": "s02.06.02",
+      "level": "subsection",
+      "number": "2.6.2",
+      "parent": "s02.06",
+      "pdf_end": 65,
+      "pdf_start": 63,
+      "printed_page": 38,
+      "title": "Temporal Semantics"
+    },
+    {
+      "id": "s02.06.02.01",
+      "level": "subsubsection",
+      "number": "2.6.2.1",
+      "parent": "s02.06.02",
+      "pdf_end": 65,
+      "pdf_start": 64,
+      "printed_page": 39,
+      "title": "Time-Varying Data"
+    },
+    {
+      "id": "s02.07",
+      "level": "section",
+      "number": "2.7",
+      "parent": "ch02",
+      "pdf_end": 66,
+      "pdf_start": 65,
+      "printed_page": 40,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch03",
+      "level": "chapter",
+      "number": "3",
+      "parent": null,
+      "pdf_end": 90,
+      "pdf_start": 67,
+      "printed_page": 42,
+      "title": "Why: Task Abstraction"
+    },
+    {
+      "id": "s03.01",
+      "level": "section",
+      "number": "3.1",
+      "parent": "ch03",
+      "pdf_end": 68,
+      "pdf_start": 68,
+      "printed_page": 43,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s03.02",
+      "level": "section",
+      "number": "3.2",
+      "parent": "ch03",
+      "pdf_end": 69,
+      "pdf_start": 68,
+      "printed_page": 43,
+      "title": "Why Analyze Tasks Abstractly?"
+    },
+    {
+      "id": "s03.03",
+      "level": "section",
+      "number": "3.3",
+      "parent": "ch03",
+      "pdf_end": 70,
+      "pdf_start": 69,
+      "printed_page": 44,
+      "title": "Who: Designer or User"
+    },
+    {
+      "id": "s03.04",
+      "level": "section",
+      "number": "3.4",
+      "parent": "ch03",
+      "pdf_end": 80,
+      "pdf_start": 70,
+      "printed_page": 45,
+      "title": "Actions"
+    },
+    {
+      "id": "s03.04.01",
+      "level": "subsection",
+      "number": "3.4.1",
+      "parent": "s03.04",
+      "pdf_end": 74,
+      "pdf_start": 70,
+      "printed_page": 45,
+      "title": "Analyze"
+    },
+    {
+      "id": "s03.04.01.01",
+      "level": "subsubsection",
+      "number": "3.4.1.1",
+      "parent": "s03.04.01",
+      "pdf_end": 72,
+      "pdf_start": 72,
+      "printed_page": 47,
+      "title": "Discover"
+    },
+    {
+      "id": "s03.04.01.02",
+      "level": "subsubsection",
+      "number": "3.4.1.2",
+      "parent": "s03.04.01",
+      "pdf_end": 73,
+      "pdf_start": 72,
+      "printed_page": 47,
+      "title": "Present"
+    },
+    {
+      "id": "s03.04.01.03",
+      "level": "subsubsection",
+      "number": "3.4.1.3",
+      "parent": "s03.04.01",
+      "pdf_end": 74,
+      "pdf_start": 73,
+      "printed_page": 48,
+      "title": "Enjoy"
+    },
+    {
+      "id": "s03.04.02",
+      "level": "subsection",
+      "number": "3.4.2",
+      "parent": "s03.04",
+      "pdf_end": 78,
+      "pdf_start": 74,
+      "printed_page": 49,
+      "title": "Produce"
+    },
+    {
+      "id": "s03.04.02.01",
+      "level": "subsubsection",
+      "number": "3.4.2.1",
+      "parent": "s03.04.02",
+      "pdf_end": 74,
+      "pdf_start": 74,
+      "printed_page": 49,
+      "title": "Annotate"
+    },
+    {
+      "id": "s03.04.02.02",
+      "level": "subsubsection",
+      "number": "3.4.2.2",
+      "parent": "s03.04.02",
+      "pdf_end": 75,
+      "pdf_start": 74,
+      "printed_page": 49,
+      "title": "Record"
+    },
+    {
+      "id": "s03.04.02.03",
+      "level": "subsubsection",
+      "number": "3.4.2.3",
+      "parent": "s03.04.02",
+      "pdf_end": 78,
+      "pdf_start": 75,
+      "printed_page": 50,
+      "title": "Derive"
+    },
+    {
+      "id": "s03.04.03",
+      "level": "subsection",
+      "number": "3.4.3",
+      "parent": "s03.04",
+      "pdf_end": 79,
+      "pdf_start": 78,
+      "printed_page": 53,
+      "title": "Search"
+    },
+    {
+      "id": "s03.04.03.01",
+      "level": "subsubsection",
+      "number": "3.4.3.1",
+      "parent": "s03.04.03",
+      "pdf_end": 78,
+      "pdf_start": 78,
+      "printed_page": 53,
+      "title": "Lookup"
+    },
+    {
+      "id": "s03.04.03.02",
+      "level": "subsubsection",
+      "number": "3.4.3.2",
+      "parent": "s03.04.03",
+      "pdf_end": 78,
+      "pdf_start": 78,
+      "printed_page": 53,
+      "title": "Locate"
+    },
+    {
+      "id": "s03.04.03.03",
+      "level": "subsubsection",
+      "number": "3.4.3.3",
+      "parent": "s03.04.03",
+      "pdf_end": 79,
+      "pdf_start": 78,
+      "printed_page": 53,
+      "title": "Browse"
+    },
+    {
+      "id": "s03.04.03.04",
+      "level": "subsubsection",
+      "number": "3.4.3.4",
+      "parent": "s03.04.03",
+      "pdf_end": 79,
+      "pdf_start": 79,
+      "printed_page": 54,
+      "title": "Explore"
+    },
+    {
+      "id": "s03.04.04",
+      "level": "subsection",
+      "number": "3.4.4",
+      "parent": "s03.04",
+      "pdf_end": 80,
+      "pdf_start": 79,
+      "printed_page": 54,
+      "title": "Query"
+    },
+    {
+      "id": "s03.04.04.01",
+      "level": "subsubsection",
+      "number": "3.4.4.1",
+      "parent": "s03.04.04",
+      "pdf_end": 80,
+      "pdf_start": 79,
+      "printed_page": 54,
+      "title": "Identify"
+    },
+    {
+      "id": "s03.04.04.02",
+      "level": "subsubsection",
+      "number": "3.4.4.2",
+      "parent": "s03.04.04",
+      "pdf_end": 80,
+      "pdf_start": 80,
+      "printed_page": 55,
+      "title": "Compare"
+    },
+    {
+      "id": "s03.04.04.03",
+      "level": "subsubsection",
+      "number": "3.4.4.3",
+      "parent": "s03.04.04",
+      "pdf_end": 80,
+      "pdf_start": 80,
+      "printed_page": 55,
+      "title": "Summarize"
+    },
+    {
+      "id": "s03.05",
+      "level": "section",
+      "number": "3.5",
+      "parent": "ch03",
+      "pdf_end": 82,
+      "pdf_start": 80,
+      "printed_page": 55,
+      "title": "Targets"
+    },
+    {
+      "id": "s03.06",
+      "level": "section",
+      "number": "3.6",
+      "parent": "ch03",
+      "pdf_end": 83,
+      "pdf_start": 82,
+      "printed_page": 57,
+      "title": "How: A Preview"
+    },
+    {
+      "id": "s03.07",
+      "level": "section",
+      "number": "3.7",
+      "parent": "ch03",
+      "pdf_end": 89,
+      "pdf_start": 84,
+      "printed_page": 59,
+      "title": "Analyzing and Deriving: Examples"
+    },
+    {
+      "id": "s03.07.01",
+      "level": "subsection",
+      "number": "3.7.1",
+      "parent": "s03.07",
+      "pdf_end": 85,
+      "pdf_start": 84,
+      "printed_page": 59,
+      "title": "Comparing Two Idioms"
+    },
+    {
+      "id": "s03.07.02",
+      "level": "subsection",
+      "number": "3.7.2",
+      "parent": "s03.07",
+      "pdf_end": 87,
+      "pdf_start": 85,
+      "printed_page": 60,
+      "title": "Deriving One Attribute"
+    },
+    {
+      "id": "s03.07.03",
+      "level": "subsection",
+      "number": "3.7.3",
+      "parent": "s03.07",
+      "pdf_end": 89,
+      "pdf_start": 87,
+      "printed_page": 62,
+      "title": "Deriving Many New Attributes"
+    },
+    {
+      "id": "s03.08",
+      "level": "section",
+      "number": "3.8",
+      "parent": "ch03",
+      "pdf_end": 90,
+      "pdf_start": 89,
+      "printed_page": 64,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch04",
+      "level": "chapter",
+      "number": "4",
+      "parent": null,
+      "pdf_end": 118,
+      "pdf_start": 91,
+      "printed_page": 66,
+      "title": "Analysis: Four Levels for Validation"
+    },
+    {
+      "id": "s04.01",
+      "level": "section",
+      "number": "4.1",
+      "parent": "ch04",
+      "pdf_end": 92,
+      "pdf_start": 92,
+      "printed_page": 67,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s04.02",
+      "level": "section",
+      "number": "4.2",
+      "parent": "ch04",
+      "pdf_end": 92,
+      "pdf_start": 92,
+      "printed_page": 67,
+      "title": "Why Validate?"
+    },
+    {
+      "id": "s04.03",
+      "level": "section",
+      "number": "4.3",
+      "parent": "ch04",
+      "pdf_end": 98,
+      "pdf_start": 92,
+      "printed_page": 67,
+      "title": "Four Levels of Design"
+    },
+    {
+      "id": "s04.03.01",
+      "level": "subsection",
+      "number": "4.3.1",
+      "parent": "s04.03",
+      "pdf_end": 95,
+      "pdf_start": 94,
+      "printed_page": 69,
+      "title": "Domain Situation"
+    },
+    {
+      "id": "s04.03.02",
+      "level": "subsection",
+      "number": "4.3.2",
+      "parent": "s04.03",
+      "pdf_end": 96,
+      "pdf_start": 95,
+      "printed_page": 70,
+      "title": "Task and Data Abstraction"
+    },
+    {
+      "id": "s04.03.03",
+      "level": "subsection",
+      "number": "4.3.3",
+      "parent": "s04.03",
+      "pdf_end": 97,
+      "pdf_start": 96,
+      "printed_page": 71,
+      "title": "Visual Encoding and Interaction Idiom"
+    },
+    {
+      "id": "s04.03.04",
+      "level": "subsection",
+      "number": "4.3.4",
+      "parent": "s04.03",
+      "pdf_end": 98,
+      "pdf_start": 97,
+      "printed_page": 72,
+      "title": "Algorithm"
+    },
+    {
+      "id": "s04.04",
+      "level": "section",
+      "number": "4.4",
+      "parent": "ch04",
+      "pdf_end": 99,
+      "pdf_start": 98,
+      "printed_page": 73,
+      "title": "Angles of Attack"
+    },
+    {
+      "id": "s04.05",
+      "level": "section",
+      "number": "4.5",
+      "parent": "ch04",
+      "pdf_end": 100,
+      "pdf_start": 99,
+      "printed_page": 74,
+      "title": "Threats to Validity"
+    },
+    {
+      "id": "s04.06",
+      "level": "section",
+      "number": "4.6",
+      "parent": "ch04",
+      "pdf_end": 106,
+      "pdf_start": 100,
+      "printed_page": 75,
+      "title": "Validation Approaches"
+    },
+    {
+      "id": "s04.06.01",
+      "level": "subsection",
+      "number": "4.6.1",
+      "parent": "s04.06",
+      "pdf_end": 103,
+      "pdf_start": 102,
+      "printed_page": 77,
+      "title": "Domain Validation"
+    },
+    {
+      "id": "s04.06.02",
+      "level": "subsection",
+      "number": "4.6.2",
+      "parent": "s04.06",
+      "pdf_end": 103,
+      "pdf_start": 103,
+      "printed_page": 78,
+      "title": "Abstraction Validation"
+    },
+    {
+      "id": "s04.06.03",
+      "level": "subsection",
+      "number": "4.6.3",
+      "parent": "s04.06",
+      "pdf_end": 105,
+      "pdf_start": 103,
+      "printed_page": 78,
+      "title": "Idiom Validation"
+    },
+    {
+      "id": "s04.06.04",
+      "level": "subsection",
+      "number": "4.6.4",
+      "parent": "s04.06",
+      "pdf_end": 106,
+      "pdf_start": 105,
+      "printed_page": 80,
+      "title": "Algorithm Validation"
+    },
+    {
+      "id": "s04.06.05",
+      "level": "subsection",
+      "number": "4.6.5",
+      "parent": "s04.06",
+      "pdf_end": 106,
+      "pdf_start": 106,
+      "printed_page": 81,
+      "title": "Mismatches"
+    },
+    {
+      "id": "s04.07",
+      "level": "section",
+      "number": "4.7",
+      "parent": "ch04",
+      "pdf_end": 116,
+      "pdf_start": 106,
+      "printed_page": 81,
+      "title": "Validation Examples"
+    },
+    {
+      "id": "s04.07.01",
+      "level": "subsection",
+      "number": "4.7.1",
+      "parent": "s04.07",
+      "pdf_end": 108,
+      "pdf_start": 106,
+      "printed_page": 81,
+      "title": "Genealogical Graphs"
+    },
+    {
+      "id": "s04.07.02",
+      "level": "subsection",
+      "number": "4.7.2",
+      "parent": "s04.07",
+      "pdf_end": 110,
+      "pdf_start": 108,
+      "printed_page": 83,
+      "title": "MatrixExplorer"
+    },
+    {
+      "id": "s04.07.03",
+      "level": "subsection",
+      "number": "4.7.3",
+      "parent": "s04.07",
+      "pdf_end": 112,
+      "pdf_start": 110,
+      "printed_page": 85,
+      "title": "Flow Maps"
+    },
+    {
+      "id": "s04.07.04",
+      "level": "subsection",
+      "number": "4.7.4",
+      "parent": "s04.07",
+      "pdf_end": 114,
+      "pdf_start": 112,
+      "printed_page": 87,
+      "title": "LiveRAC"
+    },
+    {
+      "id": "s04.07.05",
+      "level": "subsection",
+      "number": "4.7.5",
+      "parent": "s04.07",
+      "pdf_end": 115,
+      "pdf_start": 114,
+      "printed_page": 89,
+      "title": "LinLog"
+    },
+    {
+      "id": "s04.07.06",
+      "level": "subsection",
+      "number": "4.7.6",
+      "parent": "s04.07",
+      "pdf_end": 116,
+      "pdf_start": 115,
+      "printed_page": 90,
+      "title": "Sizing the Horizon"
+    },
+    {
+      "id": "s04.08",
+      "level": "section",
+      "number": "4.8",
+      "parent": "ch04",
+      "pdf_end": 118,
+      "pdf_start": 116,
+      "printed_page": 91,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch05",
+      "level": "chapter",
+      "number": "5",
+      "parent": null,
+      "pdf_end": 140,
+      "pdf_start": 119,
+      "printed_page": 94,
+      "title": "Marks and Channels"
+    },
+    {
+      "id": "s05.01",
+      "level": "section",
+      "number": "5.1",
+      "parent": "ch05",
+      "pdf_end": 120,
+      "pdf_start": 120,
+      "printed_page": 95,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s05.02",
+      "level": "section",
+      "number": "5.2",
+      "parent": "ch05",
+      "pdf_end": 120,
+      "pdf_start": 120,
+      "printed_page": 95,
+      "title": "Why Marks and Channels?"
+    },
+    {
+      "id": "s05.03",
+      "level": "section",
+      "number": "5.3",
+      "parent": "ch05",
+      "pdf_end": 124,
+      "pdf_start": 120,
+      "printed_page": 95,
+      "title": "Deﬁning Marks and Channels"
+    },
+    {
+      "id": "s05.03.01",
+      "level": "subsection",
+      "number": "5.3.1",
+      "parent": "s05.03",
+      "pdf_end": 124,
+      "pdf_start": 124,
+      "printed_page": 99,
+      "title": "Channel Types"
+    },
+    {
+      "id": "s05.03.02",
+      "level": "subsection",
+      "number": "5.3.2",
+      "parent": "s05.03",
+      "pdf_end": 124,
+      "pdf_start": 124,
+      "printed_page": 99,
+      "title": "Mark Types"
+    },
+    {
+      "id": "s05.04",
+      "level": "section",
+      "number": "5.4",
+      "parent": "ch05",
+      "pdf_end": 128,
+      "pdf_start": 124,
+      "printed_page": 99,
+      "title": "Using Marks and Channels"
+    },
+    {
+      "id": "s05.04.01",
+      "level": "subsection",
+      "number": "5.4.1",
+      "parent": "s05.04",
+      "pdf_end": 126,
+      "pdf_start": 125,
+      "printed_page": 100,
+      "title": "Expressiveness and Effectiveness"
+    },
+    {
+      "id": "s05.04.02",
+      "level": "subsection",
+      "number": "5.4.2",
+      "parent": "s05.04",
+      "pdf_end": 128,
+      "pdf_start": 126,
+      "printed_page": 101,
+      "title": "Channel Rankings"
+    },
+    {
+      "id": "s05.05",
+      "level": "section",
+      "number": "5.5",
+      "parent": "ch05",
+      "pdf_end": 137,
+      "pdf_start": 128,
+      "printed_page": 103,
+      "title": "Channel Effectiveness"
+    },
+    {
+      "id": "s05.05.01",
+      "level": "subsection",
+      "number": "5.5.1",
+      "parent": "s05.05",
+      "pdf_end": 131,
+      "pdf_start": 128,
+      "printed_page": 103,
+      "title": "Accuracy"
+    },
+    {
+      "id": "s05.05.02",
+      "level": "subsection",
+      "number": "5.5.2",
+      "parent": "s05.05",
+      "pdf_end": 131,
+      "pdf_start": 131,
+      "printed_page": 106,
+      "title": "Discriminability"
+    },
+    {
+      "id": "s05.05.03",
+      "level": "subsection",
+      "number": "5.5.3",
+      "parent": "s05.05",
+      "pdf_end": 134,
+      "pdf_start": 131,
+      "printed_page": 106,
+      "title": "Separability"
+    },
+    {
+      "id": "s05.05.04",
+      "level": "subsection",
+      "number": "5.5.4",
+      "parent": "s05.05",
+      "pdf_end": 136,
+      "pdf_start": 134,
+      "printed_page": 109,
+      "title": "Popout"
+    },
+    {
+      "id": "s05.05.05",
+      "level": "subsection",
+      "number": "5.5.5",
+      "parent": "s05.05",
+      "pdf_end": 137,
+      "pdf_start": 136,
+      "printed_page": 111,
+      "title": "Grouping"
+    },
+    {
+      "id": "s05.06",
+      "level": "section",
+      "number": "5.6",
+      "parent": "ch05",
+      "pdf_end": 139,
+      "pdf_start": 137,
+      "printed_page": 112,
+      "title": "Relative versus Absolute Judgements"
+    },
+    {
+      "id": "s05.07",
+      "level": "section",
+      "number": "5.7",
+      "parent": "ch05",
+      "pdf_end": 140,
+      "pdf_start": 139,
+      "printed_page": 114,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch06",
+      "level": "chapter",
+      "number": "6",
+      "parent": null,
+      "pdf_end": 168,
+      "pdf_start": 141,
+      "printed_page": 116,
+      "title": "Rules of Thumb"
+    },
+    {
+      "id": "s06.01",
+      "level": "section",
+      "number": "6.1",
+      "parent": "ch06",
+      "pdf_end": 142,
+      "pdf_start": 142,
+      "printed_page": 117,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s06.02",
+      "level": "section",
+      "number": "6.2",
+      "parent": "ch06",
+      "pdf_end": 142,
+      "pdf_start": 142,
+      "printed_page": 117,
+      "title": "Why and When to Follow Rules of Thumb?"
+    },
+    {
+      "id": "s06.03",
+      "level": "section",
+      "number": "6.3",
+      "parent": "ch06",
+      "pdf_end": 155,
+      "pdf_start": 142,
+      "printed_page": 117,
+      "title": "No Unjustiﬁed 3D"
+    },
+    {
+      "id": "s06.03.01",
+      "level": "subsection",
+      "number": "6.3.1",
+      "parent": "s06.03",
+      "pdf_end": 143,
+      "pdf_start": 143,
+      "printed_page": 118,
+      "title": "The Power of the Plane"
+    },
+    {
+      "id": "s06.03.02",
+      "level": "subsection",
+      "number": "6.3.2",
+      "parent": "s06.03",
+      "pdf_end": 145,
+      "pdf_start": 143,
+      "printed_page": 118,
+      "title": "The Disparity of Depth"
+    },
+    {
+      "id": "s06.03.03",
+      "level": "subsection",
+      "number": "6.3.3",
+      "parent": "s06.03",
+      "pdf_end": 146,
+      "pdf_start": 145,
+      "printed_page": 120,
+      "title": "Occlusion Hides Information"
+    },
+    {
+      "id": "s06.03.04",
+      "level": "subsection",
+      "number": "6.3.4",
+      "parent": "s06.03",
+      "pdf_end": 147,
+      "pdf_start": 146,
+      "printed_page": 121,
+      "title": "Perspective Distortion Dangers"
+    },
+    {
+      "id": "s06.03.05",
+      "level": "subsection",
+      "number": "6.3.5",
+      "parent": "s06.03",
+      "pdf_end": 149,
+      "pdf_start": 148,
+      "printed_page": 123,
+      "title": "Other Depth Cues"
+    },
+    {
+      "id": "s06.03.06",
+      "level": "subsection",
+      "number": "6.3.6",
+      "parent": "s06.03",
+      "pdf_end": 149,
+      "pdf_start": 149,
+      "printed_page": 124,
+      "title": "Tilted Text Isn’t Legibile"
+    },
+    {
+      "id": "s06.03.07",
+      "level": "subsection",
+      "number": "6.3.7",
+      "parent": "s06.03",
+      "pdf_end": 150,
+      "pdf_start": 149,
+      "printed_page": 124,
+      "title": "Beneﬁts of 3D: Shape Perception"
+    },
+    {
+      "id": "s06.03.08",
+      "level": "subsection",
+      "number": "6.3.8",
+      "parent": "s06.03",
+      "pdf_end": 153,
+      "pdf_start": 150,
+      "printed_page": 125,
+      "title": "Justiﬁcation and Alternatives"
+    },
+    {
+      "id": "idiom:cluster-calendar-time-series-vis",
+      "level": "idiom",
+      "number": null,
+      "parent": "s06.03.08",
+      "pdf_end": 152,
+      "pdf_start": 150,
+      "printed_page": 125,
+      "title": "Cluster–Calendar Time-Series Vis"
+    },
+    {
+      "id": "idiom:layer-oriented-time-series-vis",
+      "level": "idiom",
+      "number": null,
+      "parent": "s06.03.08",
+      "pdf_end": 153,
+      "pdf_start": 153,
+      "printed_page": 128,
+      "title": "Layer-Oriented Time-Series Vis"
+    },
+    {
+      "id": "s06.03.09",
+      "level": "subsection",
+      "number": "6.3.9",
+      "parent": "s06.03",
+      "pdf_end": 155,
+      "pdf_start": 154,
+      "printed_page": 129,
+      "title": "Empirical Evidence"
+    },
+    {
+      "id": "s06.04",
+      "level": "section",
+      "number": "6.4",
+      "parent": "ch06",
+      "pdf_end": 156,
+      "pdf_start": 156,
+      "printed_page": 131,
+      "title": "No Unjustiﬁed 2D"
+    },
+    {
+      "id": "s06.05",
+      "level": "section",
+      "number": "6.5",
+      "parent": "ch06",
+      "pdf_end": 159,
+      "pdf_start": 156,
+      "printed_page": 131,
+      "title": "Eyes Beat Memory"
+    },
+    {
+      "id": "s06.05.01",
+      "level": "subsection",
+      "number": "6.5.1",
+      "parent": "s06.05",
+      "pdf_end": 157,
+      "pdf_start": 157,
+      "printed_page": 132,
+      "title": "Memory and Attention"
+    },
+    {
+      "id": "s06.05.02",
+      "level": "subsection",
+      "number": "6.5.2",
+      "parent": "s06.05",
+      "pdf_end": 158,
+      "pdf_start": 157,
+      "printed_page": 132,
+      "title": "Animation versus Side-by-Side Views"
+    },
+    {
+      "id": "s06.05.03",
+      "level": "subsection",
+      "number": "6.5.3",
+      "parent": "s06.05",
+      "pdf_end": 159,
+      "pdf_start": 158,
+      "printed_page": 133,
+      "title": "Change Blindness"
+    },
+    {
+      "id": "s06.06",
+      "level": "section",
+      "number": "6.6",
+      "parent": "ch06",
+      "pdf_end": 160,
+      "pdf_start": 159,
+      "printed_page": 134,
+      "title": "Resolution over Immersion"
+    },
+    {
+      "id": "s06.07",
+      "level": "section",
+      "number": "6.7",
+      "parent": "ch06",
+      "pdf_end": 162,
+      "pdf_start": 160,
+      "printed_page": 135,
+      "title": "Overview First, Zoom and Filter, Details on Demand"
+    },
+    {
+      "id": "s06.08",
+      "level": "section",
+      "number": "6.8",
+      "parent": "ch06",
+      "pdf_end": 165,
+      "pdf_start": 162,
+      "printed_page": 137,
+      "title": "Responsiveness Is Required"
+    },
+    {
+      "id": "s06.08.01",
+      "level": "subsection",
+      "number": "6.8.1",
+      "parent": "s06.08",
+      "pdf_end": 163,
+      "pdf_start": 163,
+      "printed_page": 138,
+      "title": "Visual Feedback"
+    },
+    {
+      "id": "s06.08.02",
+      "level": "subsection",
+      "number": "6.8.2",
+      "parent": "s06.08",
+      "pdf_end": 164,
+      "pdf_start": 163,
+      "printed_page": 138,
+      "title": "Latency and Interaction Design"
+    },
+    {
+      "id": "s06.08.03",
+      "level": "subsection",
+      "number": "6.8.3",
+      "parent": "s06.08",
+      "pdf_end": 165,
+      "pdf_start": 165,
+      "printed_page": 140,
+      "title": "Interactivity Costs"
+    },
+    {
+      "id": "s06.09",
+      "level": "section",
+      "number": "6.9",
+      "parent": "ch06",
+      "pdf_end": 165,
+      "pdf_start": 165,
+      "printed_page": 140,
+      "title": "Get It Right in Black and White"
+    },
+    {
+      "id": "s06.10",
+      "level": "section",
+      "number": "6.10",
+      "parent": "ch06",
+      "pdf_end": 166,
+      "pdf_start": 165,
+      "printed_page": 140,
+      "title": "Function First, Form Next"
+    },
+    {
+      "id": "s06.11",
+      "level": "section",
+      "number": "6.11",
+      "parent": "ch06",
+      "pdf_end": 168,
+      "pdf_start": 166,
+      "printed_page": 141,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch07",
+      "level": "chapter",
+      "number": "7",
+      "parent": null,
+      "pdf_end": 202,
+      "pdf_start": 169,
+      "printed_page": 144,
+      "title": "Arrange Tables"
+    },
+    {
+      "id": "s07.01",
+      "level": "section",
+      "number": "7.1",
+      "parent": "ch07",
+      "pdf_end": 170,
+      "pdf_start": 170,
+      "printed_page": 145,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s07.02",
+      "level": "section",
+      "number": "7.2",
+      "parent": "ch07",
+      "pdf_end": 170,
+      "pdf_start": 170,
+      "printed_page": 145,
+      "title": "Why Arrange?"
+    },
+    {
+      "id": "s07.03",
+      "level": "section",
+      "number": "7.3",
+      "parent": "ch07",
+      "pdf_end": 171,
+      "pdf_start": 170,
+      "printed_page": 145,
+      "title": "Arrange by Keys and Values"
+    },
+    {
+      "id": "s07.04",
+      "level": "section",
+      "number": "7.4",
+      "parent": "ch07",
+      "pdf_end": 173,
+      "pdf_start": 171,
+      "printed_page": 146,
+      "title": "Express: Quantitative Values"
+    },
+    {
+      "id": "idiom:scatterplots",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.04",
+      "pdf_end": 173,
+      "pdf_start": 171,
+      "printed_page": 146,
+      "title": "Scatterplots"
+    },
+    {
+      "id": "s07.05",
+      "level": "section",
+      "number": "7.5",
+      "parent": "ch07",
+      "pdf_end": 186,
+      "pdf_start": 174,
+      "printed_page": 149,
+      "title": "Separate, Order, and Align: Categorical Regions"
+    },
+    {
+      "id": "s07.05.01",
+      "level": "subsection",
+      "number": "7.5.1",
+      "parent": "s07.05",
+      "pdf_end": 182,
+      "pdf_start": 174,
+      "printed_page": 149,
+      "title": "List Alignment: One Key"
+    },
+    {
+      "id": "idiom:bar-charts",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.05.01",
+      "pdf_end": 176,
+      "pdf_start": 175,
+      "printed_page": 150,
+      "title": "Bar Charts"
+    },
+    {
+      "id": "idiom:stacked-bar-charts",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.05.01",
+      "pdf_end": 178,
+      "pdf_start": 176,
+      "printed_page": 151,
+      "title": "Stacked Bar Charts"
+    },
+    {
+      "id": "idiom:streamgraphs",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.05.01",
+      "pdf_end": 179,
+      "pdf_start": 178,
+      "printed_page": 153,
+      "title": "Streamgraphs"
+    },
+    {
+      "id": "idiom:dot-and-line-charts",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.05.01",
+      "pdf_end": 182,
+      "pdf_start": 180,
+      "printed_page": 155,
+      "title": "Dot and Line Charts"
+    },
+    {
+      "id": "s07.05.02",
+      "level": "subsection",
+      "number": "7.5.2",
+      "parent": "s07.05",
+      "pdf_end": 186,
+      "pdf_start": 182,
+      "printed_page": 157,
+      "title": "Matrix Alignment: Two Keys"
+    },
+    {
+      "id": "idiom:cluster-heatmaps",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.05.02",
+      "pdf_end": 185,
+      "pdf_start": 183,
+      "printed_page": 158,
+      "title": "Cluster Heatmaps"
+    },
+    {
+      "id": "idiom:scatterplot-matrix",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.05.02",
+      "pdf_end": 186,
+      "pdf_start": 185,
+      "printed_page": 160,
+      "title": "Scatterplot Matrix"
+    },
+    {
+      "id": "s07.05.03",
+      "level": "subsection",
+      "number": "7.5.3",
+      "parent": "s07.05",
+      "pdf_end": 186,
+      "pdf_start": 186,
+      "printed_page": 161,
+      "title": "Volumetric Grid: Three Keys"
+    },
+    {
+      "id": "s07.05.04",
+      "level": "subsection",
+      "number": "7.5.4",
+      "parent": "s07.05",
+      "pdf_end": 186,
+      "pdf_start": 186,
+      "printed_page": 161,
+      "title": "Recursive Subdivision: Multiple Keys"
+    },
+    {
+      "id": "s07.06",
+      "level": "section",
+      "number": "7.6",
+      "parent": "ch07",
+      "pdf_end": 196,
+      "pdf_start": 187,
+      "printed_page": 162,
+      "title": "Spatial Axis Orientation"
+    },
+    {
+      "id": "s07.06.01",
+      "level": "subsection",
+      "number": "7.6.1",
+      "parent": "s07.06",
+      "pdf_end": 187,
+      "pdf_start": 187,
+      "printed_page": 162,
+      "title": "Rectilinear Layouts"
+    },
+    {
+      "id": "s07.06.02",
+      "level": "subsection",
+      "number": "7.6.2",
+      "parent": "s07.06",
+      "pdf_end": 191,
+      "pdf_start": 187,
+      "printed_page": 162,
+      "title": "Parallel Layouts"
+    },
+    {
+      "id": "idiom:parallel-coordinates",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.06.02",
+      "pdf_end": 191,
+      "pdf_start": 187,
+      "printed_page": 162,
+      "title": "Parallel Coordinates"
+    },
+    {
+      "id": "s07.06.03",
+      "level": "subsection",
+      "number": "7.6.3",
+      "parent": "s07.06",
+      "pdf_end": 196,
+      "pdf_start": 191,
+      "printed_page": 166,
+      "title": "Radial Layouts"
+    },
+    {
+      "id": "idiom:radial-bar-charts",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.06.03",
+      "pdf_end": 193,
+      "pdf_start": 192,
+      "printed_page": 167,
+      "title": "Radial Bar Charts"
+    },
+    {
+      "id": "idiom:pie-charts",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.06.03",
+      "pdf_end": 196,
+      "pdf_start": 193,
+      "printed_page": 168,
+      "title": "Pie Charts"
+    },
+    {
+      "id": "s07.07",
+      "level": "section",
+      "number": "7.7",
+      "parent": "ch07",
+      "pdf_end": 200,
+      "pdf_start": 196,
+      "printed_page": 171,
+      "title": "Spatial Layout Density"
+    },
+    {
+      "id": "s07.07.01",
+      "level": "subsection",
+      "number": "7.7.1",
+      "parent": "s07.07",
+      "pdf_end": 199,
+      "pdf_start": 197,
+      "printed_page": 172,
+      "title": "Dense"
+    },
+    {
+      "id": "idiom:dense-software-overviews",
+      "level": "idiom",
+      "number": null,
+      "parent": "s07.07.01",
+      "pdf_end": 199,
+      "pdf_start": 197,
+      "printed_page": 172,
+      "title": "Dense Software Overviews"
+    },
+    {
+      "id": "s07.07.02",
+      "level": "subsection",
+      "number": "7.7.2",
+      "parent": "s07.07",
+      "pdf_end": 200,
+      "pdf_start": 199,
+      "printed_page": 174,
+      "title": "Space-Filling"
+    },
+    {
+      "id": "s07.08",
+      "level": "section",
+      "number": "7.8",
+      "parent": "ch07",
+      "pdf_end": 202,
+      "pdf_start": 200,
+      "printed_page": 175,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch08",
+      "level": "chapter",
+      "number": "8",
+      "parent": null,
+      "pdf_end": 224,
+      "pdf_start": 203,
+      "printed_page": 178,
+      "title": "Arrange Spatial Data"
+    },
+    {
+      "id": "s08.01",
+      "level": "section",
+      "number": "8.1",
+      "parent": "ch08",
+      "pdf_end": 204,
+      "pdf_start": 204,
+      "printed_page": 179,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s08.02",
+      "level": "section",
+      "number": "8.2",
+      "parent": "ch08",
+      "pdf_end": 205,
+      "pdf_start": 204,
+      "printed_page": 179,
+      "title": "Why Use Given?"
+    },
+    {
+      "id": "s08.03",
+      "level": "section",
+      "number": "8.3",
+      "parent": "ch08",
+      "pdf_end": 207,
+      "pdf_start": 205,
+      "printed_page": 180,
+      "title": "Geometry"
+    },
+    {
+      "id": "s08.03.01",
+      "level": "subsection",
+      "number": "8.3.1",
+      "parent": "s08.03",
+      "pdf_end": 206,
+      "pdf_start": 205,
+      "printed_page": 180,
+      "title": "Geographic Data"
+    },
+    {
+      "id": "idiom:choropleth-maps",
+      "level": "idiom",
+      "number": null,
+      "parent": "s08.03.01",
+      "pdf_end": 206,
+      "pdf_start": 206,
+      "printed_page": 181,
+      "title": "Choropleth Maps"
+    },
+    {
+      "id": "s08.03.02",
+      "level": "subsection",
+      "number": "8.3.2",
+      "parent": "s08.03",
+      "pdf_end": 207,
+      "pdf_start": 207,
+      "printed_page": 182,
+      "title": "Other Derived Geometry"
+    },
+    {
+      "id": "s08.04",
+      "level": "section",
+      "number": "8.4",
+      "parent": "ch08",
+      "pdf_end": 214,
+      "pdf_start": 207,
+      "printed_page": 182,
+      "title": "Scalar Fields: One Value"
+    },
+    {
+      "id": "s08.04.01",
+      "level": "subsection",
+      "number": "8.4.1",
+      "parent": "s08.04",
+      "pdf_end": 211,
+      "pdf_start": 208,
+      "printed_page": 183,
+      "title": "Isocontours"
+    },
+    {
+      "id": "idiom:topographic-terrain-maps",
+      "level": "idiom",
+      "number": null,
+      "parent": "s08.04.01",
+      "pdf_end": 209,
+      "pdf_start": 208,
+      "printed_page": 183,
+      "title": "Topographic Terrain Maps"
+    },
+    {
+      "id": "idiom:flexible-isosurfaces",
+      "level": "idiom",
+      "number": null,
+      "parent": "s08.04.01",
+      "pdf_end": 211,
+      "pdf_start": 210,
+      "printed_page": 185,
+      "title": "Flexible Isosurfaces"
+    },
+    {
+      "id": "s08.04.02",
+      "level": "subsection",
+      "number": "8.4.2",
+      "parent": "s08.04",
+      "pdf_end": 214,
+      "pdf_start": 211,
+      "printed_page": 186,
+      "title": "Direct Volume Rendering"
+    },
+    {
+      "id": "idiom:multidimensional-transfer-functions",
+      "level": "idiom",
+      "number": null,
+      "parent": "s08.04.02",
+      "pdf_end": 214,
+      "pdf_start": 212,
+      "printed_page": 187,
+      "title": "Multidimensional Transfer Functions"
+    },
+    {
+      "id": "s08.05",
+      "level": "section",
+      "number": "8.5",
+      "parent": "ch08",
+      "pdf_end": 219,
+      "pdf_start": 214,
+      "printed_page": 189,
+      "title": "Vector Fields: Multiple Values"
+    },
+    {
+      "id": "s08.05.01",
+      "level": "subsection",
+      "number": "8.5.1",
+      "parent": "s08.05",
+      "pdf_end": 216,
+      "pdf_start": 216,
+      "printed_page": 191,
+      "title": "Flow Glyphs"
+    },
+    {
+      "id": "s08.05.02",
+      "level": "subsection",
+      "number": "8.5.2",
+      "parent": "s08.05",
+      "pdf_end": 218,
+      "pdf_start": 216,
+      "printed_page": 191,
+      "title": "Geometric Flow"
+    },
+    {
+      "id": "idiom:similarity-clustered-streamlines",
+      "level": "idiom",
+      "number": null,
+      "parent": "s08.05.02",
+      "pdf_end": 218,
+      "pdf_start": 217,
+      "printed_page": 192,
+      "title": "Similarity-Clustered Streamlines"
+    },
+    {
+      "id": "s08.05.03",
+      "level": "subsection",
+      "number": "8.5.3",
+      "parent": "s08.05",
+      "pdf_end": 218,
+      "pdf_start": 218,
+      "printed_page": 193,
+      "title": "Texture Flow"
+    },
+    {
+      "id": "s08.05.04",
+      "level": "subsection",
+      "number": "8.5.4",
+      "parent": "s08.05",
+      "pdf_end": 219,
+      "pdf_start": 218,
+      "printed_page": 193,
+      "title": "Feature Flow"
+    },
+    {
+      "id": "s08.06",
+      "level": "section",
+      "number": "8.6",
+      "parent": "ch08",
+      "pdf_end": 222,
+      "pdf_start": 219,
+      "printed_page": 194,
+      "title": "Tensor Fields: Many Values"
+    },
+    {
+      "id": "idiom:ellipsoid-tensor-glyphs",
+      "level": "idiom",
+      "number": null,
+      "parent": "s08.06",
+      "pdf_end": 222,
+      "pdf_start": 219,
+      "printed_page": 194,
+      "title": "Ellipsoid Tensor Glyphs"
+    },
+    {
+      "id": "s08.07",
+      "level": "section",
+      "number": "8.7",
+      "parent": "ch08",
+      "pdf_end": 224,
+      "pdf_start": 222,
+      "printed_page": 197,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch09",
+      "level": "chapter",
+      "number": "9",
+      "parent": null,
+      "pdf_end": 242,
+      "pdf_start": 225,
+      "printed_page": 200,
+      "title": "Arrange Networks and Trees"
+    },
+    {
+      "id": "s09.01",
+      "level": "section",
+      "number": "9.1",
+      "parent": "ch09",
+      "pdf_end": 226,
+      "pdf_start": 226,
+      "printed_page": 201,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s09.02",
+      "level": "section",
+      "number": "9.2",
+      "parent": "ch09",
+      "pdf_end": 233,
+      "pdf_start": 226,
+      "printed_page": 201,
+      "title": "Connection: Link Marks"
+    },
+    {
+      "id": "idiom:force-directed-placement",
+      "level": "idiom",
+      "number": null,
+      "parent": "s09.02",
+      "pdf_end": 232,
+      "pdf_start": 229,
+      "printed_page": 204,
+      "title": "Force-Directed Placement"
+    },
+    {
+      "id": "idiom:sfdp",
+      "level": "idiom",
+      "number": null,
+      "parent": "s09.02",
+      "pdf_end": 233,
+      "pdf_start": 232,
+      "printed_page": 207,
+      "title": "sfdp"
+    },
+    {
+      "id": "s09.03",
+      "level": "section",
+      "number": "9.3",
+      "parent": "ch09",
+      "pdf_end": 234,
+      "pdf_start": 233,
+      "printed_page": 208,
+      "title": "Matrix Views"
+    },
+    {
+      "id": "idiom:adjacency-matrix-view",
+      "level": "idiom",
+      "number": null,
+      "parent": "s09.03",
+      "pdf_end": 234,
+      "pdf_start": 233,
+      "printed_page": 208,
+      "title": "Adjacency Matrix View"
+    },
+    {
+      "id": "s09.04",
+      "level": "section",
+      "number": "9.4",
+      "parent": "ch09",
+      "pdf_end": 238,
+      "pdf_start": 234,
+      "printed_page": 209,
+      "title": "Costs and Beneﬁts: Connection versus Matrix"
+    },
+    {
+      "id": "s09.05",
+      "level": "section",
+      "number": "9.5",
+      "parent": "ch09",
+      "pdf_end": 241,
+      "pdf_start": 238,
+      "printed_page": 213,
+      "title": "Containment: Hierarchy Marks"
+    },
+    {
+      "id": "idiom:treemaps",
+      "level": "idiom",
+      "number": null,
+      "parent": "s09.05",
+      "pdf_end": 240,
+      "pdf_start": 238,
+      "printed_page": 213,
+      "title": "Treemaps"
+    },
+    {
+      "id": "idiom:grouseflocks",
+      "level": "idiom",
+      "number": null,
+      "parent": "s09.05",
+      "pdf_end": 241,
+      "pdf_start": 240,
+      "printed_page": 215,
+      "title": "GrouseFlocks"
+    },
+    {
+      "id": "s09.06",
+      "level": "section",
+      "number": "9.6",
+      "parent": "ch09",
+      "pdf_end": 242,
+      "pdf_start": 241,
+      "printed_page": 216,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch10",
+      "level": "chapter",
+      "number": "10",
+      "parent": null,
+      "pdf_end": 266,
+      "pdf_start": 243,
+      "printed_page": 218,
+      "title": "Map Color and Other Channels"
+    },
+    {
+      "id": "s10.01",
+      "level": "section",
+      "number": "10.1",
+      "parent": "ch10",
+      "pdf_end": 244,
+      "pdf_start": 244,
+      "printed_page": 219,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s10.02",
+      "level": "section",
+      "number": "10.2",
+      "parent": "ch10",
+      "pdf_end": 250,
+      "pdf_start": 244,
+      "printed_page": 219,
+      "title": "Color Theory"
+    },
+    {
+      "id": "s10.02.01",
+      "level": "subsection",
+      "number": "10.2.1",
+      "parent": "s10.02",
+      "pdf_end": 245,
+      "pdf_start": 244,
+      "printed_page": 219,
+      "title": "Color Vision"
+    },
+    {
+      "id": "s10.02.02",
+      "level": "subsection",
+      "number": "10.2.2",
+      "parent": "s10.02",
+      "pdf_end": 248,
+      "pdf_start": 245,
+      "printed_page": 220,
+      "title": "Color Spaces"
+    },
+    {
+      "id": "s10.02.03",
+      "level": "subsection",
+      "number": "10.2.3",
+      "parent": "s10.02",
+      "pdf_end": 249,
+      "pdf_start": 248,
+      "printed_page": 223,
+      "title": "Luminance, Saturation, and Hue"
+    },
+    {
+      "id": "s10.02.04",
+      "level": "subsection",
+      "number": "10.2.4",
+      "parent": "s10.02",
+      "pdf_end": 250,
+      "pdf_start": 250,
+      "printed_page": 225,
+      "title": "Transparency"
+    },
+    {
+      "id": "s10.03",
+      "level": "section",
+      "number": "10.3",
+      "parent": "ch10",
+      "pdf_end": 260,
+      "pdf_start": 250,
+      "printed_page": 225,
+      "title": "Colormaps"
+    },
+    {
+      "id": "s10.03.01",
+      "level": "subsection",
+      "number": "10.3.1",
+      "parent": "s10.03",
+      "pdf_end": 254,
+      "pdf_start": 251,
+      "printed_page": 226,
+      "title": "Categorical Colormaps"
+    },
+    {
+      "id": "s10.03.02",
+      "level": "subsection",
+      "number": "10.3.2",
+      "parent": "s10.03",
+      "pdf_end": 259,
+      "pdf_start": 254,
+      "printed_page": 229,
+      "title": "Ordered Colormaps"
+    },
+    {
+      "id": "s10.03.03",
+      "level": "subsection",
+      "number": "10.3.3",
+      "parent": "s10.03",
+      "pdf_end": 260,
+      "pdf_start": 259,
+      "printed_page": 234,
+      "title": "Bivariate Colormaps"
+    },
+    {
+      "id": "s10.03.04",
+      "level": "subsection",
+      "number": "10.3.4",
+      "parent": "s10.03",
+      "pdf_end": 260,
+      "pdf_start": 260,
+      "printed_page": 235,
+      "title": "Colorblind-Safe Colormap Design"
+    },
+    {
+      "id": "s10.04",
+      "level": "section",
+      "number": "10.4",
+      "parent": "ch10",
+      "pdf_end": 265,
+      "pdf_start": 261,
+      "printed_page": 236,
+      "title": "Other Channels"
+    },
+    {
+      "id": "s10.04.01",
+      "level": "subsection",
+      "number": "10.4.1",
+      "parent": "s10.04",
+      "pdf_end": 262,
+      "pdf_start": 261,
+      "printed_page": 236,
+      "title": "Size Channels"
+    },
+    {
+      "id": "s10.04.02",
+      "level": "subsection",
+      "number": "10.4.2",
+      "parent": "s10.04",
+      "pdf_end": 262,
+      "pdf_start": 262,
+      "printed_page": 237,
+      "title": "Angle Channel"
+    },
+    {
+      "id": "s10.04.03",
+      "level": "subsection",
+      "number": "10.4.3",
+      "parent": "s10.04",
+      "pdf_end": 263,
+      "pdf_start": 263,
+      "printed_page": 238,
+      "title": "Curvature Channel"
+    },
+    {
+      "id": "s10.04.04",
+      "level": "subsection",
+      "number": "10.4.4",
+      "parent": "s10.04",
+      "pdf_end": 263,
+      "pdf_start": 263,
+      "printed_page": 238,
+      "title": "Shape Channel"
+    },
+    {
+      "id": "s10.04.05",
+      "level": "subsection",
+      "number": "10.4.5",
+      "parent": "s10.04",
+      "pdf_end": 264,
+      "pdf_start": 263,
+      "printed_page": 238,
+      "title": "Motion Channels"
+    },
+    {
+      "id": "s10.04.06",
+      "level": "subsection",
+      "number": "10.4.6",
+      "parent": "s10.04",
+      "pdf_end": 265,
+      "pdf_start": 264,
+      "printed_page": 239,
+      "title": "Texture and Stippling"
+    },
+    {
+      "id": "s10.05",
+      "level": "section",
+      "number": "10.5",
+      "parent": "ch10",
+      "pdf_end": 266,
+      "pdf_start": 265,
+      "printed_page": 240,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch11",
+      "level": "chapter",
+      "number": "11",
+      "parent": null,
+      "pdf_end": 288,
+      "pdf_start": 267,
+      "printed_page": 242,
+      "title": "Manipulate View"
+    },
+    {
+      "id": "s11.01",
+      "level": "section",
+      "number": "11.1",
+      "parent": "ch11",
+      "pdf_end": 269,
+      "pdf_start": 268,
+      "printed_page": 243,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s11.02",
+      "level": "section",
+      "number": "11.2",
+      "parent": "ch11",
+      "pdf_end": 269,
+      "pdf_start": 269,
+      "printed_page": 244,
+      "title": "Why Change?"
+    },
+    {
+      "id": "s11.03",
+      "level": "section",
+      "number": "11.3",
+      "parent": "ch11",
+      "pdf_end": 274,
+      "pdf_start": 269,
+      "printed_page": 244,
+      "title": "Change View over Time"
+    },
+    {
+      "id": "idiom:lineup",
+      "level": "idiom",
+      "number": null,
+      "parent": "s11.03",
+      "pdf_end": 273,
+      "pdf_start": 271,
+      "printed_page": 246,
+      "title": "LineUp"
+    },
+    {
+      "id": "idiom:animated-transitions",
+      "level": "idiom",
+      "number": null,
+      "parent": "s11.03",
+      "pdf_end": 274,
+      "pdf_start": 273,
+      "printed_page": 248,
+      "title": "Animated Transitions"
+    },
+    {
+      "id": "s11.04",
+      "level": "section",
+      "number": "11.4",
+      "parent": "ch11",
+      "pdf_end": 279,
+      "pdf_start": 274,
+      "printed_page": 249,
+      "title": "Select Elements"
+    },
+    {
+      "id": "s11.04.01",
+      "level": "subsection",
+      "number": "11.4.1",
+      "parent": "s11.04",
+      "pdf_end": 276,
+      "pdf_start": 275,
+      "printed_page": 250,
+      "title": "Selection Design Choices"
+    },
+    {
+      "id": "s11.04.02",
+      "level": "subsection",
+      "number": "11.4.2",
+      "parent": "s11.04",
+      "pdf_end": 278,
+      "pdf_start": 276,
+      "printed_page": 251,
+      "title": "Highlighting"
+    },
+    {
+      "id": "idiom:context-preserving-visual-links",
+      "level": "idiom",
+      "number": null,
+      "parent": "s11.04.02",
+      "pdf_end": 278,
+      "pdf_start": 278,
+      "printed_page": 253,
+      "title": "Context-Preserving Visual Links"
+    },
+    {
+      "id": "s11.04.03",
+      "level": "subsection",
+      "number": "11.4.3",
+      "parent": "s11.04",
+      "pdf_end": 279,
+      "pdf_start": 279,
+      "printed_page": 254,
+      "title": "Selection Outcomes"
+    },
+    {
+      "id": "s11.05",
+      "level": "section",
+      "number": "11.5",
+      "parent": "ch11",
+      "pdf_end": 283,
+      "pdf_start": 279,
+      "printed_page": 254,
+      "title": "Navigate: Changing Viewpoint"
+    },
+    {
+      "id": "s11.05.01",
+      "level": "subsection",
+      "number": "11.5.1",
+      "parent": "s11.05",
+      "pdf_end": 280,
+      "pdf_start": 280,
+      "printed_page": 255,
+      "title": "Geometric Zooming"
+    },
+    {
+      "id": "s11.05.02",
+      "level": "subsection",
+      "number": "11.5.2",
+      "parent": "s11.05",
+      "pdf_end": 281,
+      "pdf_start": 280,
+      "printed_page": 255,
+      "title": "Semantic Zooming"
+    },
+    {
+      "id": "s11.05.03",
+      "level": "subsection",
+      "number": "11.5.3",
+      "parent": "s11.05",
+      "pdf_end": 283,
+      "pdf_start": 281,
+      "printed_page": 256,
+      "title": "Constrained Navigation"
+    },
+    {
+      "id": "s11.06",
+      "level": "section",
+      "number": "11.6",
+      "parent": "ch11",
+      "pdf_end": 286,
+      "pdf_start": 283,
+      "printed_page": 258,
+      "title": "Navigate: Reducing Attributes"
+    },
+    {
+      "id": "s11.06.01",
+      "level": "subsection",
+      "number": "11.6.1",
+      "parent": "s11.06",
+      "pdf_end": 285,
+      "pdf_start": 283,
+      "printed_page": 258,
+      "title": "Slice"
+    },
+    {
+      "id": "idiom:hyperslice",
+      "level": "idiom",
+      "number": null,
+      "parent": "s11.06.01",
+      "pdf_end": 285,
+      "pdf_start": 284,
+      "printed_page": 259,
+      "title": "HyperSlice"
+    },
+    {
+      "id": "s11.06.02",
+      "level": "subsection",
+      "number": "11.6.2",
+      "parent": "s11.06",
+      "pdf_end": 285,
+      "pdf_start": 285,
+      "printed_page": 260,
+      "title": "Cut"
+    },
+    {
+      "id": "s11.06.03",
+      "level": "subsection",
+      "number": "11.6.3",
+      "parent": "s11.06",
+      "pdf_end": 286,
+      "pdf_start": 286,
+      "printed_page": 261,
+      "title": "Project"
+    },
+    {
+      "id": "s11.07",
+      "level": "section",
+      "number": "11.7",
+      "parent": "ch11",
+      "pdf_end": 288,
+      "pdf_start": 286,
+      "printed_page": 261,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch12",
+      "level": "chapter",
+      "number": "12",
+      "parent": null,
+      "pdf_end": 322,
+      "pdf_start": 289,
+      "printed_page": 264,
+      "title": "Facet into Multiple Views"
+    },
+    {
+      "id": "s12.01",
+      "level": "section",
+      "number": "12.1",
+      "parent": "ch12",
+      "pdf_end": 290,
+      "pdf_start": 290,
+      "printed_page": 265,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s12.02",
+      "level": "section",
+      "number": "12.2",
+      "parent": "ch12",
+      "pdf_end": 292,
+      "pdf_start": 290,
+      "printed_page": 265,
+      "title": "Why Facet?"
+    },
+    {
+      "id": "s12.03",
+      "level": "section",
+      "number": "12.3",
+      "parent": "ch12",
+      "pdf_end": 304,
+      "pdf_start": 292,
+      "printed_page": 267,
+      "title": "Juxtapose and Coordinate Views"
+    },
+    {
+      "id": "s12.03.01",
+      "level": "subsection",
+      "number": "12.3.1",
+      "parent": "s12.03",
+      "pdf_end": 294,
+      "pdf_start": 292,
+      "printed_page": 267,
+      "title": "Share Encoding: Same/Different"
+    },
+    {
+      "id": "idiom:exploratory-data-visualizer-edv",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.03.01",
+      "pdf_end": 294,
+      "pdf_start": 293,
+      "printed_page": 268,
+      "title": "Exploratory Data Visualizer (EDV)"
+    },
+    {
+      "id": "s12.03.02",
+      "level": "subsection",
+      "number": "12.3.2",
+      "parent": "s12.03",
+      "pdf_end": 301,
+      "pdf_start": 294,
+      "printed_page": 269,
+      "title": "Share Data: All, Subset, None"
+    },
+    {
+      "id": "idiom:birds-eye-maps",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.03.02",
+      "pdf_end": 296,
+      "pdf_start": 295,
+      "printed_page": 270,
+      "title": "Bird’s-Eye Maps"
+    },
+    {
+      "id": "idiom:multiform-overview-detail-microarrays",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.03.02",
+      "pdf_end": 299,
+      "pdf_start": 296,
+      "printed_page": 271,
+      "title": "Multiform Overview–Detail Microarrays"
+    },
+    {
+      "id": "idiom:cerebral",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.03.02",
+      "pdf_end": 301,
+      "pdf_start": 299,
+      "printed_page": 274,
+      "title": "Cerebral"
+    },
+    {
+      "id": "s12.03.03",
+      "level": "subsection",
+      "number": "12.3.3",
+      "parent": "s12.03",
+      "pdf_end": 301,
+      "pdf_start": 301,
+      "printed_page": 276,
+      "title": "Share Navigation: Synchronize"
+    },
+    {
+      "id": "s12.03.04",
+      "level": "subsection",
+      "number": "12.3.4",
+      "parent": "s12.03",
+      "pdf_end": 303,
+      "pdf_start": 301,
+      "printed_page": 276,
+      "title": "Combinations"
+    },
+    {
+      "id": "idiom:improvise",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.03.04",
+      "pdf_end": 303,
+      "pdf_start": 302,
+      "printed_page": 277,
+      "title": "Improvise"
+    },
+    {
+      "id": "s12.03.05",
+      "level": "subsection",
+      "number": "12.3.5",
+      "parent": "s12.03",
+      "pdf_end": 304,
+      "pdf_start": 303,
+      "printed_page": 278,
+      "title": "Juxtapose Views"
+    },
+    {
+      "id": "s12.04",
+      "level": "section",
+      "number": "12.4",
+      "parent": "ch12",
+      "pdf_end": 313,
+      "pdf_start": 304,
+      "printed_page": 279,
+      "title": "Partition into Views"
+    },
+    {
+      "id": "s12.04.01",
+      "level": "subsection",
+      "number": "12.4.1",
+      "parent": "s12.04",
+      "pdf_end": 306,
+      "pdf_start": 304,
+      "printed_page": 279,
+      "title": "Regions, Glyphs, and Views"
+    },
+    {
+      "id": "s12.04.02",
+      "level": "subsection",
+      "number": "12.4.2",
+      "parent": "s12.04",
+      "pdf_end": 307,
+      "pdf_start": 306,
+      "printed_page": 281,
+      "title": "List Alignments"
+    },
+    {
+      "id": "s12.04.03",
+      "level": "subsection",
+      "number": "12.4.3",
+      "parent": "s12.04",
+      "pdf_end": 309,
+      "pdf_start": 307,
+      "printed_page": 282,
+      "title": "Matrix Alignments"
+    },
+    {
+      "id": "idiom:trellis",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.04.03",
+      "pdf_end": 309,
+      "pdf_start": 307,
+      "printed_page": 282,
+      "title": "Trellis"
+    },
+    {
+      "id": "s12.04.04",
+      "level": "subsection",
+      "number": "12.4.4",
+      "parent": "s12.04",
+      "pdf_end": 313,
+      "pdf_start": 310,
+      "printed_page": 285,
+      "title": "Recursive Subdivision"
+    },
+    {
+      "id": "s12.05",
+      "level": "section",
+      "number": "12.5",
+      "parent": "ch12",
+      "pdf_end": 320,
+      "pdf_start": 313,
+      "printed_page": 288,
+      "title": "Superimpose Layers"
+    },
+    {
+      "id": "s12.05.01",
+      "level": "subsection",
+      "number": "12.5.1",
+      "parent": "s12.05",
+      "pdf_end": 314,
+      "pdf_start": 314,
+      "printed_page": 289,
+      "title": "Visually Distinguishable Layers"
+    },
+    {
+      "id": "s12.05.02",
+      "level": "subsection",
+      "number": "12.5.2",
+      "parent": "s12.05",
+      "pdf_end": 319,
+      "pdf_start": 314,
+      "printed_page": 289,
+      "title": "Static Layers"
+    },
+    {
+      "id": "idiom:cartographic-layering",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.05.02",
+      "pdf_end": 315,
+      "pdf_start": 314,
+      "printed_page": 289,
+      "title": "Cartographic Layering"
+    },
+    {
+      "id": "idiom:superimposed-line-charts",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.05.02",
+      "pdf_end": 317,
+      "pdf_start": 315,
+      "printed_page": 290,
+      "title": "Superimposed Line Charts"
+    },
+    {
+      "id": "idiom:hierarchical-edge-bundles",
+      "level": "idiom",
+      "number": null,
+      "parent": "s12.05.02",
+      "pdf_end": 319,
+      "pdf_start": 317,
+      "printed_page": 292,
+      "title": "Hierarchical Edge Bundles"
+    },
+    {
+      "id": "s12.05.03",
+      "level": "subsection",
+      "number": "12.5.3",
+      "parent": "s12.05",
+      "pdf_end": 320,
+      "pdf_start": 319,
+      "printed_page": 294,
+      "title": "Dynamic Layers"
+    },
+    {
+      "id": "s12.06",
+      "level": "section",
+      "number": "12.6",
+      "parent": "ch12",
+      "pdf_end": 322,
+      "pdf_start": 320,
+      "printed_page": 295,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch13",
+      "level": "chapter",
+      "number": "13",
+      "parent": null,
+      "pdf_end": 346,
+      "pdf_start": 323,
+      "printed_page": 298,
+      "title": "Reduce Items and Attributes"
+    },
+    {
+      "id": "s13.01",
+      "level": "section",
+      "number": "13.1",
+      "parent": "ch13",
+      "pdf_end": 324,
+      "pdf_start": 324,
+      "printed_page": 299,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s13.02",
+      "level": "section",
+      "number": "13.2",
+      "parent": "ch13",
+      "pdf_end": 325,
+      "pdf_start": 324,
+      "printed_page": 299,
+      "title": "Why Reduce?"
+    },
+    {
+      "id": "s13.03",
+      "level": "section",
+      "number": "13.3",
+      "parent": "ch13",
+      "pdf_end": 330,
+      "pdf_start": 325,
+      "printed_page": 300,
+      "title": "Filter"
+    },
+    {
+      "id": "s13.03.01",
+      "level": "subsection",
+      "number": "13.3.1",
+      "parent": "s13.03",
+      "pdf_end": 328,
+      "pdf_start": 326,
+      "printed_page": 301,
+      "title": "Item Filtering"
+    },
+    {
+      "id": "idiom:filmfinder",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.03.01",
+      "pdf_end": 328,
+      "pdf_start": 326,
+      "printed_page": 301,
+      "title": "FilmFinder"
+    },
+    {
+      "id": "s13.03.02",
+      "level": "subsection",
+      "number": "13.3.2",
+      "parent": "s13.03",
+      "pdf_end": 330,
+      "pdf_start": 328,
+      "printed_page": 303,
+      "title": "Attribute Filtering"
+    },
+    {
+      "id": "idiom:dosfa",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.03.02",
+      "pdf_end": 330,
+      "pdf_start": 329,
+      "printed_page": 304,
+      "title": "DOSFA"
+    },
+    {
+      "id": "s13.04",
+      "level": "section",
+      "number": "13.4",
+      "parent": "ch13",
+      "pdf_end": 345,
+      "pdf_start": 330,
+      "printed_page": 305,
+      "title": "Aggregate"
+    },
+    {
+      "id": "s13.04.01",
+      "level": "subsection",
+      "number": "13.4.1",
+      "parent": "s13.04",
+      "pdf_end": 338,
+      "pdf_start": 330,
+      "printed_page": 305,
+      "title": "Item Aggregation"
+    },
+    {
+      "id": "idiom:histograms",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.04.01",
+      "pdf_end": 331,
+      "pdf_start": 331,
+      "printed_page": 306,
+      "title": "Histograms"
+    },
+    {
+      "id": "idiom:continuous-scatterplots",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.04.01",
+      "pdf_end": 333,
+      "pdf_start": 332,
+      "printed_page": 307,
+      "title": "Continuous Scatterplots"
+    },
+    {
+      "id": "idiom:boxplot-charts",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.04.01",
+      "pdf_end": 335,
+      "pdf_start": 333,
+      "printed_page": 308,
+      "title": "Boxplot Charts"
+    },
+    {
+      "id": "idiom:solarplot",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.04.01",
+      "pdf_end": 336,
+      "pdf_start": 335,
+      "printed_page": 310,
+      "title": "SolarPlot"
+    },
+    {
+      "id": "idiom:hierarchical-parallel-coordinates",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.04.01",
+      "pdf_end": 338,
+      "pdf_start": 336,
+      "printed_page": 311,
+      "title": "Hierarchical Parallel Coordinates"
+    },
+    {
+      "id": "s13.04.02",
+      "level": "subsection",
+      "number": "13.4.2",
+      "parent": "s13.04",
+      "pdf_end": 340,
+      "pdf_start": 338,
+      "printed_page": 313,
+      "title": "Spatial Aggregation"
+    },
+    {
+      "id": "idiom:geographically-weighted-boxplots",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.04.02",
+      "pdf_end": 340,
+      "pdf_start": 338,
+      "printed_page": 313,
+      "title": "Geographically Weighted Boxplots"
+    },
+    {
+      "id": "s13.04.03",
+      "level": "subsection",
+      "number": "13.4.3",
+      "parent": "s13.04",
+      "pdf_end": 345,
+      "pdf_start": 340,
+      "printed_page": 315,
+      "title": "Attribute Aggregation: Dimensionality Reduction"
+    },
+    {
+      "id": "s13.04.03.01",
+      "level": "subsubsection",
+      "number": "13.4.3.1",
+      "parent": "s13.04.03",
+      "pdf_end": 344,
+      "pdf_start": 341,
+      "printed_page": 316,
+      "title": "Why and When to Use DR?"
+    },
+    {
+      "id": "idiom:dimensionality-reduction-for-document-collections",
+      "level": "idiom",
+      "number": null,
+      "parent": "s13.04.03.01",
+      "pdf_end": 344,
+      "pdf_start": 341,
+      "printed_page": 316,
+      "title": "Dimensionality Reduction for Document Collections"
+    },
+    {
+      "id": "s13.04.03.02",
+      "level": "subsubsection",
+      "number": "13.4.3.2",
+      "parent": "s13.04.03",
+      "pdf_end": 345,
+      "pdf_start": 344,
+      "printed_page": 319,
+      "title": "How to Show DR Data?"
+    },
+    {
+      "id": "s13.05",
+      "level": "section",
+      "number": "13.5",
+      "parent": "ch13",
+      "pdf_end": 346,
+      "pdf_start": 345,
+      "printed_page": 320,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch14",
+      "level": "chapter",
+      "number": "14",
+      "parent": null,
+      "pdf_end": 364,
+      "pdf_start": 347,
+      "printed_page": 322,
+      "title": "Embed: Focus+Context"
+    },
+    {
+      "id": "s14.01",
+      "level": "section",
+      "number": "14.1",
+      "parent": "ch14",
+      "pdf_end": 348,
+      "pdf_start": 348,
+      "printed_page": 323,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s14.02",
+      "level": "section",
+      "number": "14.2",
+      "parent": "ch14",
+      "pdf_end": 349,
+      "pdf_start": 348,
+      "printed_page": 323,
+      "title": "Why Embed?"
+    },
+    {
+      "id": "s14.03",
+      "level": "section",
+      "number": "14.3",
+      "parent": "ch14",
+      "pdf_end": 351,
+      "pdf_start": 349,
+      "printed_page": 324,
+      "title": "Elide"
+    },
+    {
+      "id": "idiom:doitrees-revisited",
+      "level": "idiom",
+      "number": null,
+      "parent": "s14.03",
+      "pdf_end": 351,
+      "pdf_start": 350,
+      "printed_page": 325,
+      "title": "DOITrees Revisited"
+    },
+    {
+      "id": "s14.04",
+      "level": "section",
+      "number": "14.4",
+      "parent": "ch14",
+      "pdf_end": 351,
+      "pdf_start": 351,
+      "printed_page": 326,
+      "title": "Superimpose"
+    },
+    {
+      "id": "idiom:toolglass-and-magic-lenses",
+      "level": "idiom",
+      "number": null,
+      "parent": "s14.04",
+      "pdf_end": 351,
+      "pdf_start": 351,
+      "printed_page": 326,
+      "title": "Toolglass and Magic Lenses"
+    },
+    {
+      "id": "s14.05",
+      "level": "section",
+      "number": "14.5",
+      "parent": "ch14",
+      "pdf_end": 359,
+      "pdf_start": 352,
+      "printed_page": 327,
+      "title": "Distort"
+    },
+    {
+      "id": "idiom:3d-perspective",
+      "level": "idiom",
+      "number": null,
+      "parent": "s14.05",
+      "pdf_end": 353,
+      "pdf_start": 352,
+      "printed_page": 327,
+      "title": "3D Perspective"
+    },
+    {
+      "id": "idiom:fisheye-lens",
+      "level": "idiom",
+      "number": null,
+      "parent": "s14.05",
+      "pdf_end": 354,
+      "pdf_start": 353,
+      "printed_page": 328,
+      "title": "Fisheye Lens"
+    },
+    {
+      "id": "idiom:hyperbolic-geometry",
+      "level": "idiom",
+      "number": null,
+      "parent": "s14.05",
+      "pdf_end": 356,
+      "pdf_start": 354,
+      "printed_page": 329,
+      "title": "Hyperbolic Geometry"
+    },
+    {
+      "id": "idiom:stretch-and-squish-navigation",
+      "level": "idiom",
+      "number": null,
+      "parent": "s14.05",
+      "pdf_end": 358,
+      "pdf_start": 356,
+      "printed_page": 331,
+      "title": "Stretch and Squish Navigation"
+    },
+    {
+      "id": "idiom:nonlinear-magnification-fields",
+      "level": "idiom",
+      "number": null,
+      "parent": "s14.05",
+      "pdf_end": 359,
+      "pdf_start": 358,
+      "printed_page": 333,
+      "title": "Nonlinear Magniﬁcation Fields"
+    },
+    {
+      "id": "s14.06",
+      "level": "section",
+      "number": "14.6",
+      "parent": "ch14",
+      "pdf_end": 362,
+      "pdf_start": 359,
+      "printed_page": 334,
+      "title": "Costs and Beneﬁts: Distortion"
+    },
+    {
+      "id": "s14.07",
+      "level": "section",
+      "number": "14.7",
+      "parent": "ch14",
+      "pdf_end": 364,
+      "pdf_start": 362,
+      "printed_page": 337,
+      "title": "Further Reading"
+    },
+    {
+      "id": "ch15",
+      "level": "chapter",
+      "number": "15",
+      "parent": null,
+      "pdf_end": 393,
+      "pdf_start": 365,
+      "printed_page": 340,
+      "title": "Analysis Case Studies"
+    },
+    {
+      "id": "s15.01",
+      "level": "section",
+      "number": "15.1",
+      "parent": "ch15",
+      "pdf_end": 366,
+      "pdf_start": 366,
+      "printed_page": 341,
+      "title": "The Big Picture"
+    },
+    {
+      "id": "s15.02",
+      "level": "section",
+      "number": "15.2",
+      "parent": "ch15",
+      "pdf_end": 367,
+      "pdf_start": 366,
+      "printed_page": 341,
+      "title": "Why Analyze Case Studies?"
+    },
+    {
+      "id": "s15.03",
+      "level": "section",
+      "number": "15.3",
+      "parent": "ch15",
+      "pdf_end": 371,
+      "pdf_start": 367,
+      "printed_page": 342,
+      "title": "Graph-Theoretic Scagnostics"
+    },
+    {
+      "id": "s15.04",
+      "level": "section",
+      "number": "15.4",
+      "parent": "ch15",
+      "pdf_end": 375,
+      "pdf_start": 372,
+      "printed_page": 347,
+      "title": "VisDB"
+    },
+    {
+      "id": "s15.05",
+      "level": "section",
+      "number": "15.5",
+      "parent": "ch15",
+      "pdf_end": 380,
+      "pdf_start": 376,
+      "printed_page": 351,
+      "title": "Hierarchical Clustering Explorer"
+    },
+    {
+      "id": "s15.06",
+      "level": "section",
+      "number": "15.6",
+      "parent": "ch15",
+      "pdf_end": 383,
+      "pdf_start": 380,
+      "printed_page": 355,
+      "title": "PivotGraph"
+    },
+    {
+      "id": "s15.07",
+      "level": "section",
+      "number": "15.7",
+      "parent": "ch15",
+      "pdf_end": 384,
+      "pdf_start": 383,
+      "printed_page": 358,
+      "title": "InterRing"
+    },
+    {
+      "id": "s15.08",
+      "level": "section",
+      "number": "15.8",
+      "parent": "ch15",
+      "pdf_end": 391,
+      "pdf_start": 385,
+      "printed_page": 360,
+      "title": "Constellation"
+    },
+    {
+      "id": "s15.09",
+      "level": "section",
+      "number": "15.9",
+      "parent": "ch15",
+      "pdf_end": 393,
+      "pdf_start": 391,
+      "printed_page": 366,
+      "title": "Further Reading"
+    }
+  ]
+}

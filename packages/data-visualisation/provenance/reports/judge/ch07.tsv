@@ -1,0 +1,40 @@
+gate	file:line	finding	action
+B1	references/ch07-arrange-tables/node.md:21	7.5 child line listed stacked bars and streamgraphs under 'one key', but both boxes give two keys (pp.178-179); a key-counting agent could take the wrong branch	fixed: groups idioms by the key count each box gives and says the book places stacked bars and streamgraphs under 7.5.1 list alignment
+B4	references/ch07-arrange-tables/node.md:34	7.5 vs 7.6 note grouped stacked bar with one-key idioms	fixed: splits one-key (bar, dot, line) from two-key (stacked bar, streamgraph, heatmap)
+B6	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/node.md:13	Scope said 'one key gives a list', so a two-key stacked-bar query had no path to 7.5.1	fixed: children split by alignment, with a sentence that stacked bars and streamgraphs take two keys but use list alignment [pp.176-179]
+B1	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/node.md:17	7.5.1 use-when began 'a table has one key' though half its idioms take two	fixed: list alignment along one key, one-key idioms and the two stacked idioms named separately
+B1	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/node.md:22	Stacked bar use-when said 'trends in absolute values' (absolute is a typical-use note on p.177, not in the box) and did not explain why it sits under a one-key subsection	fixed: box tasks only, plus the list-along-the-primary-key reason [pp.176-178]
+B1	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/node.md:23	Streamgraph use-when did not state the two keys	fixed: names the ordered time key and the categorical key from the box [pp.178-179]
+C6	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/node.md:32	Line charts 'must not be used for a categorical key'; p.181 says 'should be used for ordered keys but not categorical keys'	fixed: 'should not'
+B4	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/node.md:35	No note separated the three two-key idioms (stacked bar, streamgraph, heatmap) that one two-key query could hit	fixed: added Stacked Bar Charts vs Streamgraphs vs Heatmaps note (stacking vs matrix, colour vs length, level limits) [pp.176-185]
+C6	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/node.md:41	'the book recommends recursive subdivision over a 3D grid'; p.186 calls 3D typically not recommended and recursive subdivision 'an alternative choice'	fixed: reworded to the book's terms
+C6	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-03-volumetric-grid-three-keys.md:25	'the recommended alternative'; p.186 says 'an alternative choice'	fixed
+C6	references/ch07-arrange-tables/s07-05-separate-order-align-categorical/s07-05-04-recursive-subdivision-multiple-keys.md:27	'the 3D alignment this replaces'; book offers it only as an alternative	fixed
+C6	references/ch07-arrange-tables/s07-06-spatial-axis-orientation/node.md:13	Angle channel 'suits periodic patterns and attributes of unequal importance'; p.191 says 'may be more effective' and p.192 that radial layouts imply asymmetry	fixed: hedged to the book's wording
+C6	references/ch07-arrange-tables/s07-06-spatial-axis-orientation/node.md:30	'Rectilinear layouts are generally faster and more accurate' generalised Diehl et al.'s position-memorisation study (pp.195-196) to all tasks	fixed: scoped to that study
+C6	references/ch07-arrange-tables/s07-07-spatial-layout-density.md:34	'which justifies a dense overview'; p.198 says the choice 'is thus reasonable'	fixed
+C2	references/ch07-arrange-tables/s07-01-big-picture.md:36	Related cite [p.171] outside file pdf_pages [169,170]	fixed: reworded to the p.170 key/value claim and cited p.170
+C6	references/idioms/stacked-bar-charts.md:42	'Use for absolute data' turned p.177's 'typically used for absolute data' into advice	fixed: 'Typically used'
+C6	references/idioms/stacked-bar-charts.md:44	'Avoid relying on comparisons' turned 'more difficult to compare' into advice	fixed: 'Harder to compare'
+C6	references/idioms/bar-charts.md:56	Line charts 'for ordered keys only, never categorical ones' overstated 'should ... not'	fixed
+C6	references/idioms/line-charts.md:50	'Use multiscale banking' turned the book's description into advice	fixed: describes what multiscale banking does
+Hints	references/idioms/line-charts.md:100	D3 y domain [0, max] clips negative values and forces a zero baseline a line chart does not need	fixed: d3.extent
+C6	references/idioms/heatmaps.md:43	'Avoid needing more than a few value levels' recast the 3-11 bins limit as advice	fixed: states the limit and its cause
+Hints	references/idioms/heatmaps.md:101	scaleQuantize with schemeRdBu[9] maps high values to blue, the reverse of the continuous example above	fixed: reversed scheme with explicit domain
+C6	references/idioms/cluster-heatmaps.md:42	Applied Heatmaps scale limits to cluster heatmaps, resolving an ambiguity the card itself flags (no Scale field)	fixed: states the box has no Scale field and the book does not say whether heatmap limits carry over
+C6	references/idioms/cluster-heatmaps.md:50	'Heatmaps without reordering keep rows and columns in their given order' is not on the cited pages	fixed: reworded to what p.185 says
+C6	references/idioms/cluster-heatmaps.md:51	Attributed single-attribute reordering to bar charts with only a p.185 cite, which does not mention bar charts	fixed: reworded to p.185's general claim
+C6	references/idioms/dense-software-overviews.md:57	'suits that'; p.198 says 'is thus reasonable'	fixed
+C6	references/idioms/radial-bar-charts.md:37	'Use a radial layout to show periodic patterns' firmed up 'may be more effective'	fixed
+C6	references/idioms/radial-bar-charts.md:38	'Avoid for nonperiodic data' firmed up 'may be misleading'	fixed
+C6	references/idioms/pie-charts.md:48	'Prefer a normalized stacked bar' and 'Prefer a bar chart' added advice the book states only as accuracy comparisons	fixed: both lines describe the comparison
+Hints	references/idioms/pie-charts.md:77	Sorted ordinal age bands by size, breaking their natural order	fixed: keeps age order; note says sort only unordered categories; D3 .sort(null) to match
+Hints	references/idioms/polar-area-charts.md:63	Hint text claimed the book's figure uses linear radius (a book claim inside a hint, unverifiable) and referred to undefined 'values'	fixed: drops the book claim, explains area grows with radius squared, names 'counts'
+C6	references/idioms/normalized-stacked-bar-charts.md:46	'Use when screen area is tight' turned an area comparison into advice	fixed
+C6	references/ch07-arrange-tables (16 nodes and leaves)	All summary claims in 7.1-7.8 checked against pp.169-201; remainder supported	kept: no other failure found
+C6	references/idioms (15 ch07 cards)	All card claims checked against cited pages; dot-chart key ambiguity (prose categorical, box ordered) already flagged, not resolved	kept: correct handling of an ambiguity
+Hints	references/idioms/streamgraphs.md:69	Checked weighted_wiggle/sym baselines, inside-out onset ordering and d3.stackOffsetWiggle with stackOrderInsideOut	kept: correct and idiomatic
+Hints	references/idioms/line-charts.md:64	Checked median-absolute-slope banking maths: set_box_aspect = range_y / (range_x * median|slope|) makes the median segment 45 degrees	kept: correct
+Hints	references/idioms/cluster-heatmaps.md:66	Checked dendrogram leaf positions align with imshow pixel centres under sharex/sharey and the inverted row axis	kept: correct
+Hints	references/idioms (other 9 cards)	bar, dot, scatterplot, SPLOM, parallel coordinates, dense overview, radial bar, stacked bar and normalized stacked bar hints checked for idiom fit and library use	kept: correct; all 30 blocks pass run_hints
+B6	references/ch07-arrange-tables/node.md, s07-05 node, s07-06 node	Three queries per node (e.g. weekly listens per artist; age shares per state; 30 attributes and 200 items; gene x condition; cyclic weekly data) each resolved to one child without opening it	kept: pass after the fixes above

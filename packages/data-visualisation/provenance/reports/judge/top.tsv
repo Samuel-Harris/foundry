@@ -1,0 +1,50 @@
+gate	file:line	finding	action
+C6	SKILL.md:15	Scope said chapters 5 and 6 give "the perceptual principles and rules of thumb behind every choice", cited to pp.82-83 and pp.92-93, which say nothing about chapters 5 and 6; "every choice" overstated. Reworded to p.103 (perceptual and cognitive principles covered in chapters 5 and 6) and p.42 (chapter map).	fixed
+C6	SKILL.md:56	Routing-table intro paired actions with "their usual targets", a pairing the book never makes; added that field rows place idioms by what they show because the book states mostly query-shape tasks for field idioms (pp.82, 208, 218).	fixed
+C6	SKILL.md:60	Two-value table, summarize cell gave only Continuous Scatterplots; p.171 says scatterplots themselves serve overviews and distributions. Added Scatterplots for the base case.	fixed
+C6	SKILL.md:60	Two-value table, lookup cell routes to FilmFinder, which pp.326 frames as browsing rather than search; identify-one via click-for-detail popup is supported.	kept: cell now says identify one via the popup detail view, which p.326 states
+C6	SKILL.md:60	Two-value table, compare cell implied colour separates compared groups; p.173 says colour adds a further attribute. Reworded.	fixed
+C6	SKILL.md:61	One-key table, compare cell offered "sorted bars or Dot Charts"; the bar-chart box task is lookup and compare values (p.176), dot charts carry no task. Now Bar Charts, with Dot Charts as points in place of bars (p.180).	fixed
+C6	SKILL.md:61	One-key table, explore cell said "extremes by sorting"; p.175 says value ordering makes trends easier to see. Reworded to trends.	fixed
+C6	SKILL.md:62	Time-series lookup cell routes to Dot Charts; the book gives dot charts no task, only likeness to bar charts (p.180).	kept: nearest book idiom for ordered-key values without trend implication; no better-supported target exists
+C6	SKILL.md:62	Time-series compare cell: reworded to the p.317 guideline (superimpose for local comparisons, juxtapose for dispersed tasks and more series) rather than a bare series count.	fixed
+C6	SKILL.md:63	Two-key table, lookup cell routed to 12.4.2 grouped bars; the book says stacked bar charts support lookup by either key (p.176) and 12.4.2 is about comparison between or within attributes (p.307). Swapped lookup to Stacked Bar Charts and compare to 12.4.2; Heatmaps added to summarize (box task: summarize, p.185).	fixed
+C6	SKILL.md:64	Three-key table: lookup cell linked 12.4.1 with no lookup support; summarize and explore cells were unsupported labels. Now: partition down to one item per region (p.304), group statistics coloured in nested regions (HiVE, pp.311-312), trends and outliers by main-effects ordering (p.307).	fixed
+C6	SKILL.md:65	Row label "many quantitative attributes (multidimensional)" contradicts the book, where a multidimensional table means multiple keys (pp.50, 61). Relabelled "many quantitative value attributes".	fixed
+C6	SKILL.md:65	Lookup cell for many-attribute and distribution rows routes to 13.3.1 Item Filtering; the book frames filtering as browsing (p.326).	kept: reworded to "items within attribute ranges", which is what item filtering does (p.326)
+C6	SKILL.md:66	Distribution explore cell linked only 13.4.1; the boxplot box task lists outliers, extremes and skew (p.335). Added Boxplot Charts.	fixed
+C6	SKILL.md:67	Network summarize cell "large: sfdp" lacked bounds; sfdp scale is 1,000-10,000 nodes and matrix views are best for large networks (pp.233-237). Reworded with bounds and the matrix fallback; lookup cell now names node-by-label and link-between-two-nodes lookups (p.236).	fixed
+C6	SKILL.md:68	Tree row: lookup linked 9.5 with no lookup support; compare used GrouseFlocks, which investigates candidate hierarchies over a network rather than comparing trees (p.240); "huge" for Hyperbolic Geometry is unstated. Now Treemaps (query attributes at leaves, p.239) and 3.7.1 (locate paths, p.85); TreeJuxtaposer's two linked trees via Stretch and Squish Navigation (p.356); 3.7.2 Strahler summarisation (p.85); exponentially growing trees (p.354).	fixed
+C6	SKILL.md:69	Geographic lookup cell: Bird's-Eye Maps reworded to the overview-marks-detail-region behaviour p.296 states.	fixed
+C6	SKILL.md:70	Scalar-field cells assign tasks the book does not state (terrain map and isosurfaces are query shape only). Cells now describe what each idiom shows (p.207 for slice and direct volume rendering) under the intro caveat.	fixed
+C6	SKILL.md:71	Vector-field cells reworded to what each family shows: local cells, seeded trajectories, dense coverage, features (pp.216-218).	fixed
+C6	SKILL.md:43	J3 disambiguation said J3 spans chapters 4, 5, 6 and 10; J3 also routes to 7.6.3 and 14.6.	fixed
+C6	SKILL.md:44	J4 disambiguation said J4 spans chapters 11 to 15; J4 also routes to chapter 6.	fixed
+B1	SKILL.md:19	Router children (19 use-when lines) checked; all state a data type, task or situation rather than restating the title.	kept: pass
+C6	SKILL.md:3	Description checked against J1-J4: names choosing a chart, writing matplotlib/D3 code, critiquing charts or dashboards, and multi-view dashboards; names no unrelated domain. A monitoring-dashboard configuration request could match "dashboard".	kept: the dashboard phrase is qualified by "interactive and multiple-view", which matches J4
+C6	jobs/j1-choose-idiom.md:13	Scope claimed "the order the book builds a design", but p.93 says design is iterative and not finalised level by level; it also cited pp.41-43, outside the file's pdf_pages. Reworded to the what-why-how analysis with the iterative caveat [pp.82-83] [p.69] [p.93].	fixed
+C6	jobs/j1-choose-idiom.md:19	2.6.1 use-when said the key and value count "picks the table idiom family", cited only to pp.59-63, which do not say it. Reworded to p.171's "core choice for encoding a table" and cited p.171.	fixed
+C6	jobs/j1-choose-idiom.md:31	9.5 use-when listed icicles as a nesting encoding; p.240 says the icicle uses position, and only treemaps and nested circles use containment.	fixed
+C6	jobs/j1-choose-idiom.md:42	"Every task needs a verb from 3.4 and a noun from 3.5" overstated p.80, which says actions refer to targets.	fixed
+C6	jobs/j1-choose-idiom.md:46	"7.5 sorts by number of keys on perpendicular axes" misdescribed 7.5. Reworded to separating keys into regions on rectilinear axes.	fixed
+C6	jobs/j1-choose-idiom.md:48	"Colour suits categories up to about a dozen" rounded p.251's six to twelve bins; shape and texture bins restated per pp.263-265.	fixed
+B4	jobs/j1-choose-idiom.md:49	9.4 and 9.5 both match a network with a cluster hierarchy; no note separated them. Added.	fixed
+B6	jobs/j1-choose-idiom.md:34	Hop order put faceting (12.4, 12.5) between table arrangement and spatial arrangement, out of the book's encode, facet, reduce order (p.83). Moved after 10.4.	fixed
+C6	jobs/j2-write-plotting-code.md:13	Scope said the rules are those "code most often breaks", a claim the book does not make.	fixed
+C6	jobs/j2-write-plotting-code.md:32	5.6 use-when said unaligned bars "are not" judged accurately; p.138 says aligned or framed bars allow much more precise judgements.	fixed
+B4	jobs/j2-write-plotting-code.md:48	Categorical Colormaps and Shape Channel both serve a categorical column; no note. Added bin counts from pp.251 and 263.	fixed
+B4	jobs/j2-write-plotting-code.md:49	Colorblind-Safe Colormaps and 6.9 both check palette legibility; no note. Added.	fixed
+C6	jobs/j3-critique.md:13	Scope called rules of thumb, channels and colour "the book's grounds for justifying or rejecting an idiom"; p.103 names perceptual and cognitive principles covered in chapters 5 and 6. Reworded and cited colour pages separately.	fixed
+C6	jobs/j3-critique.md:29	6.9 use-when added colour-deficient viewers, which p.165 does not mention.	fixed
+C6	jobs/j3-critique.md:44	"4.7 shows real papers doing both" unsupported; p.106 says 4.7 analyses papers by level targeted and validation method.	fixed
+B4	jobs/j3-critique.md:47	6.3.4 and 14.6 both concern distorted length judgements; no note. Added.	fixed
+C6	jobs/j4-dashboards.md:13	Scope said a dashboard "usually combines several" of the five choices; p.269 says they are not mutually exclusive and can be combined. Scope also omitted the chapter 6 children from its order.	fixed
+C6	jobs/j4-dashboards.md:45	Juxtaposed views "scale to several views" understated pp.291-292 (several straightforward, a few dozen with care); layer limits restated as two, three with care.	fixed
+B4	jobs/j4-dashboards.md:48	11.4 Select Elements and 12.3.1 both cover highlighting a selection; no note. Added.	fixed
+B4	jobs/j4-dashboards.md:49	13.3 Filter and the FilmFinder card both match a slider-filtering query; no note. Added.	fixed
+C6	jobs/j4-dashboards.md:60	3.4.2 related line attributed deriving to the five choices on p.269, which does not name chapter 3; p.290 does. Added [p.290].	fixed
+B6	jobs/*.md	Three realistic queries per job node: each picked a child without opening one after the B4 additions.	kept: pass
+C6	tools/lookup_concepts.md:42	Latency classes linked to the 6.8.2 anchor at pp.163-164; Table 6.1 and the classes are in the 6.8 introduction at pp.162-163.	fixed
+C6	tools/lookup_concepts.md:27	Immediate versus downstream validation cited pp.102-103; the distinction is introduced at pp.101-102.	fixed
+C6	tools/lookup_concepts.md:1	All 72 concept rows checked for target file and page span; others correct.	kept: pass
+C6	references/lookup.md (tools/build_lookup.py)	Lookup Disambiguation "Analysis Case Studies vs Arrange Tables" cites [p.96], which is about chapter 4 validation and does not support the claim; [pp.365-367] alone does.	handoff

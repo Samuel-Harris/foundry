@@ -1,0 +1,48 @@
+gate	file:line	finding	action
+B4	references/ch11-manipulate-view/node.md:43	11.4 Select Elements vs Animated Transitions vs Constrained Navigation note described how they chain, not how to choose	fixed
+B1	references/ch11-manipulate-view/node.md:19	11.3 leaf and the Change View over Time card had near-identical use-when lines; leaf now names the worked examples it holds	fixed
+B1	references/ch11-manipulate-view/node.md:24	card shared the 11.3 leaf title and criterion; retitled Change over Time (Figure 11.1's choice, p.268-269) and use-when now names the quick decision and data fit	fixed
+B4	references/ch11-manipulate-view/node.md:37	leaf-vs-card note named format only; now says which question each answers	fixed
+handoff	references/lookup.md:61	card idiom:change-view-over-time retitled to Change over Time; lookup row still shows the old title; plan.json idiom_cards name also still Change View over Time	handoff
+B1	references/ch11-manipulate-view/node.md:21	11.5 child gave no guidance on semantic zooming versus Chapter 14 distortion; added what separates them and that the book does not rank them (LiveRAC uses both)	fixed
+B1	references/ch11-manipulate-view/node.md:28	Semantic Zooming child lacked the decision criterion (illegible when shrunk) and its relation to distortion	fixed
+B6	references/ch11-manipulate-view/node.md:17	query 'let users sort a table' could not pick between 11.3 leaf and the change card without opening both	fixed
+B1	references/ch11-manipulate-view/s11-04-select-elements/node.md:20	Highlighting card use-when said 'as a card'; now a selection-to-highlight decision criterion	fixed
+B4	references/ch11-manipulate-view/s11-04-select-elements/node.md:26	no note separated 11.4.2 Highlighting leaf from the Highlighting card; leaf-vs-card text was buried in the visual-links note	fixed
+B1	references/ch14-embed-focus-context/node.md:22	14.6 child did not route the semantic-zooming-versus-distortion question; added non-distorting options	fixed
+B6	references/ch14-embed-focus-context/node.md:13	chapter 14 node did not say when to prefer semantic zooming over distortion; scope now states the book gives no ranking plus the task conditions (pp.349, 356, 359, 360)	fixed
+B4	references/ch14-embed-focus-context/node.md:41	Fisheye Lens card and 14.6 overlap on 'should I use a fisheye'; added note	fixed
+C6	references/ch11-manipulate-view/s11-05-navigate-changing-viewpoint.md:50	leaf had nothing on semantic zooming versus distortion; added cited bullet and 14.6 related link	fixed
+C6	references/idioms/change-view-over-time.md:41	'Use user control of the encoding' turned the book's description ('particularly common') into advice	fixed
+C6	references/idioms/change-view-over-time.md:44	'Avoid animating many changes casually' overstated the book's 'think carefully about cognitive load'	fixed
+C6	references/idioms/lineup.md:65	'base encoding; LineUp adds weighting' not stated by book; reworded to the System box	fixed
+C6	references/idioms/animated-transitions.md:39	'staged transitions for more complex changes' added a condition the book does not give	fixed
+C6	references/idioms/highlighting.md:43	'Always trigger highlighting' hardened the book's 'should'	fixed
+C6	references/idioms/highlighting.md:56	'size suits links' not in book; book says size enlarges items or widens links	fixed
+C6	references/idioms/context-preserving-visual-links.md:53	'Use when existing marks should stay unchanged' turned a contrast into a use condition	fixed
+C6	references/idioms/geometric-zooming.md:31	'usually paired with panning' not in book	fixed
+C6	references/idioms/geometric-zooming.md:37	'Avoid' geometric zooming not in book; reworded as the illegibility limitation p.280 implies	fixed
+C6	references/idioms/geometric-zooming.md:38	'limiting the zoom range is a simple fix' overstated 'one of the simplest approaches'	fixed
+C6	references/idioms/semantic-zooming.md:36	'Use in a stretchable grid' turned the LiveRAC example into advice	fixed
+C6	references/idioms/semantic-zooming.md:48	added semantic zooming versus distortion bullet, cited pp.280-281	fixed
+C6	references/idioms/constrained-navigation.md:38	'Use to prevent the camera passing inside solid objects' claimed a fix the book does not attribute to constrained navigation	fixed
+C6	references/idioms/slice.md:38	'Use axis-aligned slices when viewers know' hardened 'may correspond to familiar views'	fixed
+C6	references/idioms/slice.md:40	'Avoid a slice alone' turned the cut comparison into advice	fixed
+C6	references/idioms/hyperslice.md:33	use condition misdescribed the matrix of orthogonal slices	fixed
+C6	references/idioms/project.md:38	'Use orthographic projections in multiple views' turned 'often used' into advice and duplicated line 31	deleted
+C6	references/idioms/3d-perspective.md:48	dropped the book's 'in most cases' hedge	fixed
+C6	references/idioms/doitrees-revisited.md:41	'instantiates the DOI function' not stated; now 'the book's worked example for'	fixed
+C6	references/idioms/doitrees-revisited.md:46	'Use when focus is set by clicking' turned description into a use condition	fixed
+C6	references/idioms/fisheye-lens.md:38	'Use with familiar shapes' overstated 'less problematic'	fixed
+C6	references/idioms/fisheye-lens.md:41	'Avoid with unfamiliar structures' overstated 'difficult to reconstruct'	fixed
+C6	references/idioms/toolglass-and-magic-lenses.md:40	'Use across data types' turned a description into advice	fixed
+C6	references/idioms/hyperbolic-geometry.md:37	'would not fit Euclidean space' overstated 'only a polynomial amount of space'	fixed
+C6	references/idioms/nonlinear-magnification-fields.md:47	'fixed lens metaphor' misleads: the fisheye lens is draggable	fixed
+C6	references/idioms/nonlinear-magnification-fields.md:52	related link cited p.358 for the vector-field metaphor, which is on p.352 outside the card's range	fixed
+C6	references/idioms/stretch-and-squish-navigation.md:39	'Use for comparing large trees or long sequences' turned examples into advice	fixed
+C6	references/idioms/stretch-and-squish-navigation.md:52	cited pp.357-358 for LiveRAC combining semantic zooming, which those pages do not say	fixed
+hints	references/idioms/toolglass-and-magic-lenses.md:74	diverging RdBu on signed curvature was not centred on zero and images ignored extent orientation; added vmin/vmax=±max and origin=lower	fixed
+C6	references/ch11-manipulate-view (11.1, 11.2, 11.4.1-11.4.3, 11.6, 11.7 leaves)	checked every claim against pp.267-288; no failures	kept: faithful
+C6	references/ch14-embed-focus-context (14.1-14.7 leaves)	checked every claim against pp.347-363; no failures	kept: faithful
+hints	references/idioms/*.md (19 cards)	read all matplotlib and D3 hints; run_hints 0 failing blocks	kept: correct for idiom and library
+C6	references/idioms/change-view-over-time.md:21	'often animated' paraphrases 'many kinds of changes fall into the general category of animation'	kept: supported by p.273

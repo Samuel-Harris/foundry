@@ -48,3 +48,6 @@ __pycache__/
 
 # uv workspace virtual environment
 .venv/
+
+# Data-visualisation build scratch (one-off scripts, smoke-test transcripts)
+packages/data-visualisation/scratch/

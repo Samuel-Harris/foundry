@@ -639,7 +639,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
+  content_hash: sha256:6efd8c2d5181f313e7d6832611e4f0f06bb64f397a5fbfcc1633f31007dc2537
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/authoring-a-skill.md
@@ -657,7 +657,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
+  content_hash: sha256:e11f76fd6f07e0b29b33845257666547f4d7fb1a6e65b7d2fd5604a404b1d1d9
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/autopilot-full.md
@@ -738,7 +738,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9bbd71cd2973830c2bd1e8da614be2b182b23679f29ae7d1685bad78a0c132b4
+  content_hash: sha256:88f504d048a235d0e9922d097680a0f73810924c67bdddbb8c412462b5eb28bd
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/opening-a-pr.md
@@ -2718,7 +2718,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
+  content_hash: sha256:6efd8c2d5181f313e7d6832611e4f0f06bb64f397a5fbfcc1633f31007dc2537
 - kind: project-relative
   target: legacy
   value: .agents/skills/poteto-mode/playbooks/authoring-a-skill.md
@@ -2736,7 +2736,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
+  content_hash: sha256:e11f76fd6f07e0b29b33845257666547f4d7fb1a6e65b7d2fd5604a404b1d1d9
 - kind: project-relative
   target: legacy
   value: .agents/skills/poteto-mode/playbooks/autopilot-full.md
@@ -2817,7 +2817,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9bbd71cd2973830c2bd1e8da614be2b182b23679f29ae7d1685bad78a0c132b4
+  content_hash: sha256:88f504d048a235d0e9922d097680a0f73810924c67bdddbb8c412462b5eb28bd
 - kind: project-relative
   target: legacy
   value: .agents/skills/poteto-mode/playbooks/opening-a-pr.md
@@ -4650,9 +4650,9 @@ local_deployed_file_hashes:
   .agents/skills/poteto-help/references/guide/images/verification.jpg: sha256:2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a
   .agents/skills/poteto-help/references/prompting.md: sha256:da55d284628a3c84e8e38cb5331775583e517bbde93797fd264be49e523c738a
   .agents/skills/poteto-help/references/recipes.md: sha256:5323aca73a39a3b607c2bb22cd33551fe893563dfd4b104df838da010e9fc702
-  .agents/skills/poteto-mode/SKILL.md: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
+  .agents/skills/poteto-mode/SKILL.md: sha256:6efd8c2d5181f313e7d6832611e4f0f06bb64f397a5fbfcc1633f31007dc2537
   .agents/skills/poteto-mode/playbooks/authoring-a-skill.md: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
-  .agents/skills/poteto-mode/playbooks/autonomous-run.md: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
+  .agents/skills/poteto-mode/playbooks/autonomous-run.md: sha256:e11f76fd6f07e0b29b33845257666547f4d7fb1a6e65b7d2fd5604a404b1d1d9
   .agents/skills/poteto-mode/playbooks/autopilot-full.md: sha256:fa02e68ba0d4baeace2573f34154239405ef256dec6b99fdfff211d3ca79fff5
   .agents/skills/poteto-mode/playbooks/autopilot-stack.md: sha256:34de4bb101dd56524d8067c73bba5988ead6f93d3ab8f96ac13a6adcb43696cb
   .agents/skills/poteto-mode/playbooks/babysit.md: sha256:d5806054d462aed575587fb1f6605378abeb65b95fcedaf526e0cbcc1bd94074
@@ -4661,7 +4661,7 @@ local_deployed_file_hashes:
   .agents/skills/poteto-mode/playbooks/feature.md: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
   .agents/skills/poteto-mode/playbooks/hillclimb.md: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
   .agents/skills/poteto-mode/playbooks/investigation.md: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
-  .agents/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:9bbd71cd2973830c2bd1e8da614be2b182b23679f29ae7d1685bad78a0c132b4
+  .agents/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:88f504d048a235d0e9922d097680a0f73810924c67bdddbb8c412462b5eb28bd
   .agents/skills/poteto-mode/playbooks/opening-a-pr.md: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
   .agents/skills/poteto-mode/playbooks/orchestrate.md: sha256:4764ff66eda2a2bcfa37bde781490baccde7177149d7dfd012ecdae9bb01139a
   .agents/skills/poteto-mode/playbooks/pause-safely.md: sha256:77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d
@@ -4821,9 +4821,9 @@ local_deployed_file_hashes:
   .claude/skills/poteto-help/references/guide/images/verification.jpg: sha256:2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a
   .claude/skills/poteto-help/references/prompting.md: sha256:da55d284628a3c84e8e38cb5331775583e517bbde93797fd264be49e523c738a
   .claude/skills/poteto-help/references/recipes.md: sha256:5323aca73a39a3b607c2bb22cd33551fe893563dfd4b104df838da010e9fc702
-  .claude/skills/poteto-mode/SKILL.md: sha256:a2c24f9e7dcf30e3b1c925f5d28d7645913e2dda8ad3d7b0ed0b4f84c0fa3c63
+  .claude/skills/poteto-mode/SKILL.md: sha256:6efd8c2d5181f313e7d6832611e4f0f06bb64f397a5fbfcc1633f31007dc2537
   .claude/skills/poteto-mode/playbooks/authoring-a-skill.md: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
-  .claude/skills/poteto-mode/playbooks/autonomous-run.md: sha256:45a7ea91a9a760ff4656a09169d81e428de059b15ee6841a85a141e5012afa16
+  .claude/skills/poteto-mode/playbooks/autonomous-run.md: sha256:e11f76fd6f07e0b29b33845257666547f4d7fb1a6e65b7d2fd5604a404b1d1d9
   .claude/skills/poteto-mode/playbooks/autopilot-full.md: sha256:fa02e68ba0d4baeace2573f34154239405ef256dec6b99fdfff211d3ca79fff5
   .claude/skills/poteto-mode/playbooks/autopilot-stack.md: sha256:34de4bb101dd56524d8067c73bba5988ead6f93d3ab8f96ac13a6adcb43696cb
   .claude/skills/poteto-mode/playbooks/babysit.md: sha256:d5806054d462aed575587fb1f6605378abeb65b95fcedaf526e0cbcc1bd94074
@@ -4832,7 +4832,7 @@ local_deployed_file_hashes:
   .claude/skills/poteto-mode/playbooks/feature.md: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
   .claude/skills/poteto-mode/playbooks/hillclimb.md: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
   .claude/skills/poteto-mode/playbooks/investigation.md: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
-  .claude/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:9bbd71cd2973830c2bd1e8da614be2b182b23679f29ae7d1685bad78a0c132b4
+  .claude/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:88f504d048a235d0e9922d097680a0f73810924c67bdddbb8c412462b5eb28bd
   .claude/skills/poteto-mode/playbooks/opening-a-pr.md: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
   .claude/skills/poteto-mode/playbooks/orchestrate.md: sha256:4764ff66eda2a2bcfa37bde781490baccde7177149d7dfd012ecdae9bb01139a
   .claude/skills/poteto-mode/playbooks/pause-safely.md: sha256:77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d

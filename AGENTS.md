@@ -8,6 +8,10 @@ restatement of the design. For what each package contains, see `README.md`; for
 the dependency graph and the CLI defects it works around, see
 `docs/DEPENDENCY-CONTRACTS.md`.
 
+Claude Code mods live under `mods/`, outside APM, and nothing in this file
+applies to them. No version bump, lockfile or Tier 1 check covers them. Each mod's
+`README.md` says how to validate and test it.
+
 ## Caveat: this describes apm-cli 0.32.0
 
 The repository pins **apm-cli 0.32.0**. APM is **pre-1.0** (0.32.0 < 1.0.0), so
@@ -381,7 +385,8 @@ further workflow runs.
 - Never commit deploy output. `.gitignore` excludes `apm_modules/`, `dist/`,
   `build/`, `.claude/`, `.agents/`, `.cursor/rules/`, `.cursor/agents/`,
   `.github/agents/`, `.github/instructions/`, `.github/plugin/` and
-  `.claude-plugin/`.
+  `.claude-plugin/`, except the root marketplace and each mod's manifest under
+  `mods/*/.claude-plugin/`.
 - `.github/workflows/` must stay tracked, so `.github/` is never ignored
   wholesale.
 - `.cursor/settings.json`, `.vscode/`, `assets/`, `LICENSE`,

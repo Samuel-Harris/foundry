@@ -46,6 +46,12 @@ __pycache__/
 **/.github/plugin/
 **/.claude-plugin/
 
+# Claude Code mods are hand-written, not build output: keep their manifests and
+# the root marketplace, but not the types the engine writes when it loads a mod.
+!/.claude-plugin/
+!/mods/*/.claude-plugin/
+/mods/*/.claude-plugin/types/
+
 # uv workspace virtual environment
 .venv/
 

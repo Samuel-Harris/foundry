@@ -78,6 +78,20 @@ Each package has its own version and its own tags, named `<package>--v<version>`
 
 Each package declares its sibling dependencies in `apm.yml`, so installing one package pulls in the primitives it references. See `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the dependency graph.
 
+## Mods
+
+Claude Code mods change Claude Code's own interface. APM cannot package them, so they live under `mods/`, outside the APM packages. The repository root is a Claude Code plugin marketplace that lists them.
+
+| Mod            | Purpose                                                                                            |
+| -------------- | -------------------------------------------------------------------------------------------------- |
+| `mermaid-pane` | Draws the Mermaid diagrams Claude writes, such as `/statechart` charts, in a pane beside the chat. |
+
+Install one at the prompt of a Claude Code terminal session:
+
+```text
+/plugin install <mod> --marketplace Samuel-Harris/foundry
+```
+
 ## Skills
 
 | Skill                                | Package            | Trigger                                                                                                                                                           |

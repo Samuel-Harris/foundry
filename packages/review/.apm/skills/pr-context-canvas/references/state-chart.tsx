@@ -1,7 +1,3 @@
-/**
- * Paste this into a canvas. A canvas is one file, so this cannot be imported.
- * Merge the import below into the canvas's own `cursor/canvas` import.
- */
 import { useHostTheme } from "cursor/canvas";
 
 type Side = "t" | "b" | "l" | "r";

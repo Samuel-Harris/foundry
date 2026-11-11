@@ -277,7 +277,7 @@ dependencies:
   - .github/agents/thermo-nuclear-review-subagent.agent.md
   deployed_file_hashes:
     .agents/skills/pr-context-canvas/SKILL.md: sha256:c60f5acaac5871763f4c75864d8f8af03c84c754a565181d2ffbd8a83d5620f9
-    .agents/skills/pr-context-canvas/references/state-chart.tsx: sha256:73895fe8db6eaa7d0669f96a2a21f58290b7652b9e9ffa9fe0f12290e11f88e0
+    .agents/skills/pr-context-canvas/references/state-chart.tsx: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
     .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
     .agents/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
     .agents/skills/thermos/SKILL.md: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
@@ -979,7 +979,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:73895fe8db6eaa7d0669f96a2a21f58290b7652b9e9ffa9fe0f12290e11f88e0
+  content_hash: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
 - kind: project-relative
   target: copilot
   value: .agents/skills/summarise-pr

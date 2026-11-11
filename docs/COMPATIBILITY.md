@@ -67,7 +67,7 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 | `pstack`           | 58 skills, 2 agents                                        | verified   | untested            | untested           |
 | `repo-init`        | 2 skills                                                   | verified   | untested            | untested           |
 | `repo-maintenance` | 3 skills, 1 instruction                                    | verified   | untested            | untested           |
-| `review`           | 3 skills, 2 agents                                         | verified   | untested            | untested           |
+| `review`           | 4 skills, 2 agents                                         | verified   | untested            | untested           |
 | `search`           | 1 skill                                                    | verified   | untested            | untested           |
 | `skill-creation`   | 1 skill                                                    | verified   | untested            | untested           |
 | `ui`               | 1 skill                                                    | verified   | untested            | untested           |

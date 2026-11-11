@@ -30,9 +30,12 @@ dependencies:
   declared_license: MIT
 - repo_url: _local/review
   name: review
-  version: 0.1.0
+  version: 0.1.1
   package_type: apm_package
   deployed_files:
+  - .agents/skills/pr-context-canvas
+  - .agents/skills/pr-context-canvas/SKILL.md
+  - .agents/skills/pr-context-canvas/references/state-chart.tsx
   - .agents/skills/thermo-nuclear-code-quality-review
   - .agents/skills/thermo-nuclear-code-quality-review/SKILL.md
   - .agents/skills/thermo-nuclear-review
@@ -41,6 +44,9 @@ dependencies:
   - .agents/skills/thermos/SKILL.md
   - .claude/agents/thermo-nuclear-code-quality-review-subagent.md
   - .claude/agents/thermo-nuclear-review-subagent.md
+  - .claude/skills/pr-context-canvas
+  - .claude/skills/pr-context-canvas/SKILL.md
+  - .claude/skills/pr-context-canvas/references/state-chart.tsx
   - .claude/skills/thermo-nuclear-code-quality-review
   - .claude/skills/thermo-nuclear-code-quality-review/SKILL.md
   - .claude/skills/thermo-nuclear-review
@@ -52,11 +58,15 @@ dependencies:
   - .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md
   - .github/agents/thermo-nuclear-review-subagent.agent.md
   deployed_file_hashes:
+    .agents/skills/pr-context-canvas/SKILL.md: sha256:c60f5acaac5871763f4c75864d8f8af03c84c754a565181d2ffbd8a83d5620f9
+    .agents/skills/pr-context-canvas/references/state-chart.tsx: sha256:73895fe8db6eaa7d0669f96a2a21f58290b7652b9e9ffa9fe0f12290e11f88e0
     .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
     .agents/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
     .agents/skills/thermos/SKILL.md: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
     .claude/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
     .claude/agents/thermo-nuclear-review-subagent.md: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+    .claude/skills/pr-context-canvas/SKILL.md: sha256:c60f5acaac5871763f4c75864d8f8af03c84c754a565181d2ffbd8a83d5620f9
+    .claude/skills/pr-context-canvas/references/state-chart.tsx: sha256:73895fe8db6eaa7d0669f96a2a21f58290b7652b9e9ffa9fe0f12290e11f88e0
     .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
     .claude/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
     .claude/skills/thermos/SKILL.md: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
@@ -170,6 +180,33 @@ deployments:
   content_hash: sha256:18e03c060280613eb4dc125deb126f0083640bf7996d541613461153453b6ae6
 - kind: project-relative
   target: claude
+  value: .claude/skills/pr-context-canvas
+  runtime: null
+  scope: project
+  owners:
+  - ../review
+  active_owner: ../review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/pr-context-canvas/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../review
+  active_owner: ../review
+  content_hash: sha256:c60f5acaac5871763f4c75864d8f8af03c84c754a565181d2ffbd8a83d5620f9
+- kind: project-relative
+  target: claude
+  value: .claude/skills/pr-context-canvas/references/state-chart.tsx
+  runtime: null
+  scope: project
+  owners:
+  - ../review
+  active_owner: ../review
+  content_hash: sha256:73895fe8db6eaa7d0669f96a2a21f58290b7652b9e9ffa9fe0f12290e11f88e0
+- kind: project-relative
+  target: claude
   value: .claude/skills/summarise-pr
   runtime: null
   scope: project
@@ -276,6 +313,33 @@ deployments:
   - ../pr
   active_owner: ../pr
   content_hash: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/pr-context-canvas
+  runtime: null
+  scope: project
+  owners:
+  - ../review
+  active_owner: ../review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/pr-context-canvas/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - ../review
+  active_owner: ../review
+  content_hash: sha256:c60f5acaac5871763f4c75864d8f8af03c84c754a565181d2ffbd8a83d5620f9
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/pr-context-canvas/references/state-chart.tsx
+  runtime: null
+  scope: project
+  owners:
+  - ../review
+  active_owner: ../review
+  content_hash: sha256:73895fe8db6eaa7d0669f96a2a21f58290b7652b9e9ffa9fe0f12290e11f88e0
 - kind: project-relative
   target: copilot
   value: .agents/skills/summarise-pr

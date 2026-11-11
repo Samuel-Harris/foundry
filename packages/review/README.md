@@ -1,11 +1,12 @@
 # review
 
-Branch-level correctness, security and maintainability audits.
+Branch-level correctness, security and maintainability audits, plus a pull-request context canvas.
 
 ## What it installs
 
 | Primitive | Name | Purpose |
 | --- | --- | --- |
+| Skill | `pr-context-canvas` | Build a state-chart canvas of a pull request and the system around it, without reviewing the diff. |
 | Skill | `thermo-nuclear-code-quality-review` | Run an extremely strict maintainability review for abstraction quality, giant files, and spaghetti-condition growth. |
 | Skill | `thermo-nuclear-review` | Comprehensive security and correctness audit of a branch's changes. |
 | Skill | `thermos` | Launch both thermo-nuclear review subagents in parallel, then synthesise their findings. |
@@ -15,7 +16,7 @@ Branch-level correctness, security and maintainability audits.
 ## Install
 
 ```bash
-apm install Samuel-Harris/foundry/packages/review#v0.1.0 --target cursor,claude,copilot
+apm install Samuel-Harris/foundry/packages/review#^0.1.0 --target cursor,claude,copilot
 ```
 
 ## Targets

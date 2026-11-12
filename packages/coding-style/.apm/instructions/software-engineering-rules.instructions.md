@@ -38,6 +38,8 @@ What this looks like in practice:
 
 **If something is confusing, stop.** Don't fill confusion with plausible-sounding code. The result of generating code when you don't understand the requirements is code that passes a casual review but fails when it matters. Just say what's confusing and ask.
 
+**Justify every moving part.** Each concurrent actor, guard, cap, or recovery path needs a requirement or a measurement behind it. If you cannot cite one, ship the simpler design and say what would make you add the part later. Do not optimize a path you have not measured.
+
 ## 3. Simplicity
 
 Write the minimum amount of code that solves the problem. Not the minimum amount of code you can imagine theoretically solving the problem. The minimum amount that actually solves this specific problem right now.
@@ -69,6 +71,10 @@ async def send_welcome_email(user):
 
 **Dead flexibility.** Interfaces with one implementation. Abstract base classes with one child. Generic type parameters that are only ever instantiated with one type. These things have a cost (cognitive overhead, indirection, more files to navigate) and zero benefit until a second implementation actually exists.
 
+**Thin wrappers and one-value options.** A function that only forwards to another function, wraps one constructor, or has a single caller and adds nothing earns no place; inline it. A flag whose every production caller passes the same value is not an option; delete it and the dead branch. When porting code, drop intermediate shapes the new home does not need.
+
+**Test-only parameters.** Do not add a production parameter that only tests pass. If production code never supplies a value other than the default, the parameter is test scaffolding in the production signature. Test through the real interface instead.
+
 **Files over 1,000 lines.** Keep every file at or under 1,000 lines. If your change would push a file past that, split it first: extract helpers, submodules, or components along a seam the code already has. Exceed the limit only for a concrete reason, such as generated output, a lockfile, a data fixture, or one cohesive unit that splitting would scatter, and state that reason in the PR description. A file that is already over the limit is not yours to split unasked, but do not grow it without the same kind of reason.
 
 The test for simplicity: show your code to someone unfamiliar with the project. If they have to ask "why is this abstracted like this?" and the answer is "in case we need to..." then you've over-engineered it. "In case we need to" is not a requirement. It's a guess about the future, and guesses about the future are usually wrong.
@@ -85,6 +91,10 @@ Rules:
 
 **Clean up after yourself, not after others.** If your change makes an import unused, remove that import. If your change makes a variable unused, remove that variable. If your change makes a function unused, remove that function. But only if YOUR change caused it. Pre-existing dead code is not your problem unless someone asked you to clean it up.
 
+**Update what describes the behavior you changed.** When you change behavior or replace a design, fix every docstring, name, test name, and doc that still describes the old one. Search for the old term before you hand off.
+
+**Comments explain why, never what.** Do not narrate the implementation, restate a parameter, or describe a constant. If a comment explains what a block does, extract the block into a function whose name says it. If a comment explains a constant or a magic number, give the constant a better name. Never write a comment about the PR or the stack ("moved in the next layer"). Keep a comment only for a reason the code cannot show.
+
 **Don't reformat.** Don't run prettier on a file that wasn't formatted with prettier. Don't change indentation from 4 spaces to 2. Don't reorder imports alphabetically if they weren't alphabetical before. Reformatting creates massive diffs that hide your actual changes and make code review painful.
 
 The test: look at your diff. Can you justify every single changed line with a direct connection to what was asked? If any line is there because "while I was in there I thought I'd..." then revert it.
@@ -98,6 +108,14 @@ The difference between code that works and code you think works is testing. You 
 **Run existing tests before and after your changes.** If tests passed before your change and fail after, you broke something. This is obvious. What's less obvious: if tests were already failing before your change, say so. Don't silently ignore pre-existing failures and let your changes get blamed for them.
 
 **Don't write tests for the sake of writing tests.** A test earns its place only when it can fail because behavior is wrong. A test that checks whether a constructor sets properties is worthless. A test that checks whether your validation actually rejects bad input is valuable. Test behavior, not implementation. Test the interesting cases, not the trivial ones.
+
+**One test per behavior, at the layer that owns it.** Before adding a test, name the failure that only this test catches. If a lower-layer test already catches it, do not repeat it higher up.
+
+**Test your code, not the library.** A test that passes whenever the framework works is not coverage.
+
+**Do not pin tests to data that is meant to change.** Derive expected values from the fixture, or freeze a copy of the data under the tests directory. A test that asserts the contents of a live baseline breaks on the next legitimate refresh.
+
+**Tests run wherever the suite runs.** A test that needs one operating system or one environment is skipped elsewhere with a stated reason, not left to fail on a colleague's machine.
 
 **Don't add a test that only restates a file.** It passes until someone edits the file for a real reason, and it never catches a broken feature:
 
@@ -179,6 +197,8 @@ How you communicate about code matters as much as the code itself.
 
 **Cite what you read before stating facts about the codebase.** In plans, reviews, and PR comments, every claim about existing code, config, infrastructure, or a commit hash must come from a file, command, or API you read in this session. Cite it, or label the claim unverified. A job name, engine version, or hash recalled from memory is a guess until you have looked it up.
 
+**Fix the class of problem, not the instance.** When a review comment names a pattern, search the rest of the diff and every PR in the stack for the same pattern and fix all of them in the same round. Before replying "done", check the claim against the pushed diff and cite the commit.
+
 **Write final summaries the reader can act on.** End every summary that follows a PR change with the PR link. Do not refer back to items by labels you invented earlier in the session; say what you mean in place. Describe user-visible behavior concretely: what the user does and what they now see, not an abstraction of it.
 
 **Don't explain things the user already knows.** If they asked you to add a REST endpoint, don't explain what REST is. If they asked for a database index, don't explain what indexes do. Match your explanation level to the user's demonstrated knowledge.
@@ -191,7 +211,7 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 
 **The Kitchen Sink.** Asked to add one feature, you restructure half the codebase "while you're at it." Don't. Do the one thing.
 
-**The Wrong Abstraction.** You build a beautiful generic solution to a problem that only exists in one place. Do not invent an abstraction for a single use. When an existing helper already owns the behavior, reuse it rather than writing a second copy.
+**The Wrong Abstraction.** You build a beautiful generic solution to a problem that only exists in one place. Do not invent an abstraction for a single use. When an existing helper already owns the behavior, reuse it rather than writing a second copy. A rule decided in two places drifts; decide it once and have every caller use that.
 
 **The Invisible Decision.** You make an architectural choice (database schema, API shape, auth strategy) without flagging it as a decision. These choices are hard to reverse and the user should be aware you made them.
 
@@ -226,6 +246,10 @@ Split independent changes into separate PRs against the base branch. Split depen
 - Every PR must be independently mergeable in stack order. Once its predecessors have merged, it must leave the base branch working, tested, and safe to deploy without requiring any later PR in the stack.
 - Design schema, API, configuration, and rollout changes so a partially merged stack remains correct. Earlier PRs must remain safe indefinitely if later PRs are delayed or never merged.
 - Do not hide an oversized change by moving files between layers, excluding generated output from the count, or using a cumulative diff different from the PR's actual base.
+- Never put code in one layer that a later layer in the same stack deletes or rewrites. Restack so the final shape lands once.
+- Do not move or add groundwork "for a later PR" unless you can name the PR and the call site that uses it.
+
+Check every factual sentence in a PR description ("only X uses this", "the next PR reuses these") against the code at the head you are describing, defaults included.
 
 If the work cannot be split safely while preserving correctness, stop and ask the user how to proceed. Do not silently exceed the limit.
 

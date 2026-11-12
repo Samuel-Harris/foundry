@@ -12,13 +12,22 @@ deployments:
   content_hash: sha256:cdc543d23abf987209ff3906f86f79d45f50f64f515c4d69879073511c57138b
 - kind: project-relative
   target: claude
+  value: .claude/rules/python-rules.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fd0df55ae224155ce1afb7723d57cba79b41961805d259fe452d578571cecccc
+- kind: project-relative
+  target: claude
   value: .claude/rules/software-engineering-rules.md
   runtime: null
   scope: project
   owners:
   - .
   active_owner: .
-  content_hash: sha256:7c1d8672ae54072128b4043181bff7ff635647acfe5828a384ccf7f6b118e0a1
+  content_hash: sha256:06e82259d653c2d9772d63f5ef6b7557a9c78a910e51c98815c8a123d2b20974
 - kind: project-relative
   target: copilot
   value: .github/instructions/compatibility-surface-gate.instructions.md
@@ -30,13 +39,22 @@ deployments:
   content_hash: sha256:a8d022e4582efae6e046f400f4d07647fe9678bae97c9f06179e0f8609b38551
 - kind: project-relative
   target: copilot
+  value: .github/instructions/python-rules.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5e37834dd9b250c69d1a8f2d199e8b193f514cd4441feaf24f898aeb8053458d
+- kind: project-relative
+  target: copilot
   value: .github/instructions/software-engineering-rules.instructions.md
   runtime: null
   scope: project
   owners:
   - .
   active_owner: .
-  content_hash: sha256:c37105b48ee206ac64c5db0239fb01fee236bda0f784f8f89c12b2bbe3a23449
+  content_hash: sha256:945f6db0e3e49420975f61aa5c84ca5a1be4477b20f8b533318b5e48fe41dcf8
 - kind: project-relative
   target: cursor
   value: .cursor/rules/compatibility-surface-gate.mdc
@@ -48,24 +66,39 @@ deployments:
   content_hash: sha256:b75411139bd161bcc3c82083ddf91a8407ca9987fb8d344a7e54e46f5f78c588
 - kind: project-relative
   target: cursor
+  value: .cursor/rules/python-rules.mdc
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:a7bb04830f9ab7f5dcae5d3e49ef49c20291b3ed7b59e36d68953100b316d601
+- kind: project-relative
+  target: cursor
   value: .cursor/rules/software-engineering-rules.mdc
   runtime: null
   scope: project
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9439d25b40993cefc8f2e8e24911fcf834094ed945e416527df9d1d2588ddb9c
+  content_hash: sha256:919cf7760e53ac57c42c4115b4d8ffbbb86bf04815ffb667b54c04cc1d107e38
 local_deployed_files:
 - .claude/rules/compatibility-surface-gate.md
+- .claude/rules/python-rules.md
 - .claude/rules/software-engineering-rules.md
 - .cursor/rules/compatibility-surface-gate.mdc
+- .cursor/rules/python-rules.mdc
 - .cursor/rules/software-engineering-rules.mdc
 - .github/instructions/compatibility-surface-gate.instructions.md
+- .github/instructions/python-rules.instructions.md
 - .github/instructions/software-engineering-rules.instructions.md
 local_deployed_file_hashes:
   .claude/rules/compatibility-surface-gate.md: sha256:cdc543d23abf987209ff3906f86f79d45f50f64f515c4d69879073511c57138b
-  .claude/rules/software-engineering-rules.md: sha256:7c1d8672ae54072128b4043181bff7ff635647acfe5828a384ccf7f6b118e0a1
+  .claude/rules/python-rules.md: sha256:fd0df55ae224155ce1afb7723d57cba79b41961805d259fe452d578571cecccc
+  .claude/rules/software-engineering-rules.md: sha256:06e82259d653c2d9772d63f5ef6b7557a9c78a910e51c98815c8a123d2b20974
   .cursor/rules/compatibility-surface-gate.mdc: sha256:b75411139bd161bcc3c82083ddf91a8407ca9987fb8d344a7e54e46f5f78c588
-  .cursor/rules/software-engineering-rules.mdc: sha256:9439d25b40993cefc8f2e8e24911fcf834094ed945e416527df9d1d2588ddb9c
+  .cursor/rules/python-rules.mdc: sha256:a7bb04830f9ab7f5dcae5d3e49ef49c20291b3ed7b59e36d68953100b316d601
+  .cursor/rules/software-engineering-rules.mdc: sha256:919cf7760e53ac57c42c4115b4d8ffbbb86bf04815ffb667b54c04cc1d107e38
   .github/instructions/compatibility-surface-gate.instructions.md: sha256:a8d022e4582efae6e046f400f4d07647fe9678bae97c9f06179e0f8609b38551
-  .github/instructions/software-engineering-rules.instructions.md: sha256:c37105b48ee206ac64c5db0239fb01fee236bda0f784f8f89c12b2bbe3a23449
+  .github/instructions/python-rules.instructions.md: sha256:5e37834dd9b250c69d1a8f2d199e8b193f514cd4441feaf24f898aeb8053458d
+  .github/instructions/software-engineering-rules.instructions.md: sha256:945f6db0e3e49420975f61aa5c84ca5a1be4477b20f8b533318b5e48fe41dcf8

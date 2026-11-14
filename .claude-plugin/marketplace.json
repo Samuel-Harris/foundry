@@ -1,0 +1,6 @@
+{
+  "name": "foundry",
+  "owner": { "name": "Sam Harris" },
+  "description": "Claude Code mods from Foundry, kept outside its APM packages",
+  "plugins": [{ "name": "mermaid-pane", "source": "./mods/mermaid-pane" }]
+}

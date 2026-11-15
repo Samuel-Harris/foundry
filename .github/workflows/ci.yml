@@ -129,7 +129,7 @@ jobs:
   tag:
     name: Tag package versions
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests]
+    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -216,3 +216,19 @@ jobs:
 
       - name: Run tests
         run: bun run test:poteto-mode
+
+  data-visualisation-tools-tests:
+    name: data-visualisation tools tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.3.3
+        with:
+          version: "0.13.5"
+          python-version: "3.12"
+
+      # --frozen fails on a drifted uv.lock instead of quietly re-locking.
+      - name: Run tests
+        run: uv run --frozen --package data-visualisation-tools python -m unittest discover -s packages/data-visualisation/tools/tests

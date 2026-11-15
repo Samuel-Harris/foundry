@@ -51,7 +51,7 @@ The build tools under `tools/` and the `[NOT FROM BOOK]` implementation hints ar
 
 The source PDF is not in the repository. Pass it to the extraction tools with `--pdf` or the `VIS_PDF` environment variable.
 
-The tools under `tools/` extract the book model and figures, plan every file, build the lookup and check the result against the build rubric. They are a member of the repository's uv workspace: `tools/pyproject.toml` declares their Python dependencies, the root `uv.lock` pins them, and `uv run` runs each tool. `tools/CONVENTIONS.md` is the contract for layout, identifiers, frontmatter, citations, hints and figures, and each tool's docstring gives its usage.
+The tools under `tools/` extract the book model and figures, plan every file, build the lookup and check the result against the build rubric. They are a member of the repository's uv workspace: `tools/pyproject.toml` declares their Python dependencies, the root `uv.lock` pins them, and `uv run` runs each tool. `tools/CONVENTIONS.md` is the contract for layout, identifiers, frontmatter, citations, hints and figures, and each tool's docstring gives its usage. CI runs their unit tests from the repository root with `uv run --frozen --package data-visualisation-tools python -m unittest discover -s packages/data-visualisation/tools/tests`.
 
 `tools/check.py` writes the gate results to `provenance/reports/`. Read `self-check.md` for the per-gate status, and `links.md`, `orphans.md` and `provenance.md` for the evidence behind them. `provenance/fidelity-ledger.md` records the measured fidelity counts.
 

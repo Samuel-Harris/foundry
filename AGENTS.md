@@ -350,7 +350,9 @@ script; `status` reports drift when a file falls outside them, and exits `1`.
 ## CI
 
 `.github/workflows/ci.yml` runs `pre-commit` plus a job for each of pstack's
-script test suites, which `packages/pstack/README.md` describes. `pre-commit`
+script test suites, which `packages/pstack/README.md` describes, and a
+`data-visualisation-tools-tests` job that runs the data-visualisation tools'
+unit tests with `uv run --frozen`. `pre-commit`
 checks out the full history, installs the CLI with `microsoft/apm-action@v1` and
 `setup-only: true`, then runs `.githooks/pre-commit`. `setup-only` matters: the action must not
 install packages itself, or it would rewrite lockfiles before the hook could

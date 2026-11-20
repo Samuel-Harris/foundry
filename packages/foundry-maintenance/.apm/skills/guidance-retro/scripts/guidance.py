@@ -9,11 +9,13 @@ Run from the root of a Foundry checkout.
         names.
 
     guidance.py route RUN
-        Validates every line of RUN/obs/*.jsonl and splits the valid ones into
+        Validates every line of RUN/obs/t-<n>.jsonl and RUN/obs/r-<n>.jsonl
+        (any other file there is a miner's scratch and is ignored) and splits the valid ones into
         RUN/routed/<package>.jsonl by the package that owns the named guidance,
         or RUN/routed/_unowned.jsonl when no guidance is named or the name is
-        unknown. Writes RUN/routed/summary.json with the counts and every
-        rejected line.
+        unknown. Writes RUN/routed/summary.json with the counts, every
+        rejected line and every slice in the collectors' summaries that has no
+        RUN/obs/t-<n>.jsonl or RUN/obs/r-<n>.jsonl, so a lost miner is rerun.
 """
 
 from __future__ import annotations
@@ -35,6 +37,8 @@ FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 OBSERVATION_KINDS = {"defect", "friction", "gap", "override", "unprompted"}
 OBSERVATION_SOURCES = {"transcript", "review"}
 UNOWNED = "_unowned"
+MINED_DIGESTS = (("t", "transcripts"), ("r", "reviews"))
+MINER_OUTPUT = re.compile(r"[tr]-\d+\.jsonl")
 
 
 @dataclass(frozen=True)
@@ -108,7 +112,7 @@ def observation_error(raw: Any) -> str | None:
             return f"{key}: expected a non-empty string"
     ref = raw.get("ref")
     if not (isinstance(ref, int) and not isinstance(ref, bool)) and not (isinstance(ref, str) and ref.strip()):
-        return "ref: expected a session id or a PR number"
+        return "ref: expected a session id or a PR ref"
     if raw.get("kind") not in OBSERVATION_KINDS:
         return f"kind: expected one of {sorted(OBSERVATION_KINDS)}"
     if raw.get("source") not in OBSERVATION_SOURCES:
@@ -118,12 +122,20 @@ def observation_error(raw: Any) -> str | None:
     return None
 
 
+def missing_slices(run: Path) -> list[str]:
+    missing = []
+    for prefix, collector in MINED_DIGESTS:
+        slices = json.loads((run / collector / "summary.json").read_text(encoding="utf-8"))["slices"]
+        missing += [f"{prefix}-{index}" for index in range(len(slices)) if not (run / "obs" / f"{prefix}-{index}.jsonl").is_file()]
+    return missing
+
+
 def route(root: Path, run: Path) -> dict[str, Any]:
     owners = {item.name: item.package for item in inventory(root)}
     routed: dict[str, list[str]] = {}
     rejected: list[dict[str, str]] = []
     unknown_guidance: set[str] = set()
-    for path in sorted((run / "obs").glob("*.jsonl")):
+    for path in sorted(path for path in (run / "obs").glob("*.jsonl") if MINER_OUTPUT.fullmatch(path.name)):
         for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
             if not line.strip():
                 continue
@@ -153,6 +165,7 @@ def route(root: Path, run: Path) -> dict[str, Any]:
         "observations": {package: len(lines) for package, lines in sorted(routed.items())},
         "unknown_guidance": sorted(unknown_guidance),
         "rejected": rejected,
+        "missing_slices": missing_slices(run),
     }
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     return summary

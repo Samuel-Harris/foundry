@@ -57,7 +57,7 @@ class CollectTranscriptsTests(unittest.TestCase):
         self.out = self.tmp / "out"
 
     def run_collect(self) -> dict:
-        return collect(self.claude, self.cursor, WINDOW, self.out, 250_000)
+        return collect(self.claude, self.cursor, WINDOW, self.out, 250_000, ())
 
     def test_claude_digest_keeps_human_and_assistant_text_and_drops_tool_output(self) -> None:
         session = self.claude / "proj-a" / "s1.jsonl"
@@ -109,6 +109,32 @@ class CollectTranscriptsTests(unittest.TestCase):
 
         self.assertEqual(summary["sessions"], 0)
         self.assertEqual(summary["slices"], [])
+
+
+    def test_project_filter_keeps_the_checkout_and_its_worktrees_in_both_hosts_naming(self) -> None:
+        for folder in (
+            "-Users-me-code-app",
+            "-Users-me-code-app--worktrees-fix-bug",
+            "-Users-me-code-app-worktrees-Worker1",
+            "-Users-me-code-app--claude-worktrees-agent-1",
+            "-Users-me-code-application",
+            "-Users-me-code-other",
+        ):
+            write_jsonl(self.claude / folder / f"{folder}.jsonl", claude_records("work"))
+        write_jsonl(self.cursor / "Users-me-code-app-worktrees-sam-eng-1" / "agent-transcripts" / "c1" / "c1.jsonl", [
+            {"role": "user", "message": {"content": [{"type": "text", "text": "<user_query>go</user_query>"}]}},
+        ])
+
+        summary = collect(self.claude, self.cursor, WINDOW, self.out, 250_000, (Path("/Users/me/code/app"),))
+
+        self.assertEqual(summary["projects"], [
+            "-Users-me-code-app",
+            "-Users-me-code-app--claude-worktrees-agent-1",
+            "-Users-me-code-app--worktrees-fix-bug",
+            "-Users-me-code-app-worktrees-Worker1",
+            "Users-me-code-app-worktrees-sam-eng-1",
+        ])
+        self.assertEqual(summary["by_host"], {"claude-code": 4, "cursor": 1})
 
 
 class PackSlicesTests(unittest.TestCase):

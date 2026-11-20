@@ -28,7 +28,7 @@ deploy and CI bots, and the PR author's replies that only say a comment was fixe
 One JSON object per line:
 
 ```json
-{"kind": "defect", "pattern": "Agent adds a fallback for a state that cannot happen", "guidance": "thermo-nuclear-code-quality-review", "source": "review", "ref": "1234", "url": "<comment URL>", "quote": "under 300 characters, verbatim"}
+{"kind": "defect", "pattern": "Agent adds a fallback for a state that cannot happen", "guidance": "thermo-nuclear-code-quality-review", "source": "review", "ref": "owner/name#1234", "url": "<comment URL>", "quote": "under 300 characters, verbatim"}
 ```
 
 - `pattern` names the general behaviour, not the instance, so the same pattern
@@ -37,7 +37,8 @@ One JSON object per line:
   that a new rule would join (a review skill when a reviewer caught what the
   author's own review should have, a coding-style instruction for a style
   problem). Use `null` when no Foundry guidance owns it.
-- `ref` is the PR number. One line per pattern per PR.
+- `ref` is the `ref` line of the PR's digest, `owner/name#number`. One line per
+  pattern per PR.
 - Never quote a secret, token, customer name or personal data. Paraphrase instead.
 
 Reply with only the number of lines written.

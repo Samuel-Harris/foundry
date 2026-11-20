@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""Digest the review comments left on a GitHub repository's pull requests in a window.
+"""Digest the review comments left on one or more GitHub repositories' pull requests in a window.
 
 Searches every PR updated in the window through `gh api graphql`, splitting the
 window until each search stays under GitHub's 1,000-result cap, and keeps the
 conversation comments, review bodies and inline review comments created inside
-it. Writes one Markdown digest per PR with comments to OUT/prs/ and
+it. A PR is identified everywhere by its ref, `owner/name#number`. Writes one
+Markdown digest per PR with comments to OUT/prs/<owner>/<name>/<number>.md and
 OUT/summary.json, whose `slices` list batches the digests for miner subagents.
 
 Usage:
-    collect_reviews.py --repo owner/name --since 2026-10-21 --out RUN/reviews
+    collect_reviews.py --repo owner/name [--repo owner/other ...] --since 2026-10-21 --out RUN/reviews
 """
 
 from __future__ import annotations
@@ -38,6 +39,7 @@ HTML_NOISE = re.compile(
     re.DOTALL | re.IGNORECASE,
 )
 BLANK_RUN = re.compile(r"\n{3,}")
+REPO = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+")
 
 COUNT_QUERY = """
 query($q: String!) { search(query: $q, type: ISSUE, first: 1) { issueCount } }
@@ -156,9 +158,16 @@ def comments_in(pr: dict[str, Any], window: Window) -> tuple[list[Comment], bool
     return comments, truncated
 
 
-def render_pr(pr: dict[str, Any], comments: list[Comment]) -> str:
+def pr_ref(repo: str, number: int) -> str:
+    return f"{repo}#{number}"
+
+
+def render_pr(repo: str, pr: dict[str, Any], comments: list[Comment]) -> str:
     author, _ = author_of(pr)
-    header = f"# PR #{pr['number']}: {pr['title']}\n\n- url: {pr['url']}\n- author: {author}\n- state: {pr['state'].lower()}\n"
+    header = (
+        f"# PR #{pr['number']}: {pr['title']}\n\n- ref: {pr_ref(repo, pr['number'])}\n"
+        f"- url: {pr['url']}\n- author: {author}\n- state: {pr['state'].lower()}\n"
+    )
     return "\n".join([header, *(comment.render() for comment in comments)])
 
 
@@ -178,28 +187,30 @@ def fetch_prs(repo: str, window: Window, graphql: GraphQL) -> list[dict[str, Any
     return [prs[number] for number in sorted(prs)]
 
 
-def collect(repo: str, window: Window, out: Path, slice_chars: int, graphql: GraphQL) -> dict[str, Any]:
-    prs_dir = out / "prs"
-    prs_dir.mkdir(parents=True, exist_ok=True)
-    prs = fetch_prs(repo, window, graphql)
+def collect(repos: list[str], window: Window, out: Path, slice_chars: int, graphql: GraphQL) -> dict[str, Any]:
     digests: list[tuple[str, int]] = []
+    scanned = 0
     comment_count = 0
-    truncated: list[int] = []
-    for pr in prs:
-        comments, cut_short = comments_in(pr, window)
-        if cut_short:
-            truncated.append(pr["number"])
-        if not comments:
-            continue
-        text = truncate(render_pr(pr, comments), slice_chars)
-        relative = f"prs/{pr['number']}.md"
-        (out / relative).write_text(text + "\n", encoding="utf-8")
-        digests.append((relative, len(text)))
-        comment_count += len(comments)
+    truncated: list[str] = []
+    for repo in repos:
+        prs = fetch_prs(repo, window, graphql)
+        scanned += len(prs)
+        (out / "prs" / repo).mkdir(parents=True, exist_ok=True)
+        for pr in prs:
+            comments, cut_short = comments_in(pr, window)
+            if cut_short:
+                truncated.append(pr_ref(repo, pr["number"]))
+            if not comments:
+                continue
+            text = truncate(render_pr(repo, pr, comments), slice_chars)
+            relative = f"prs/{repo}/{pr['number']}.md"
+            (out / relative).write_text(text + "\n", encoding="utf-8")
+            digests.append((relative, len(text)))
+            comment_count += len(comments)
     summary = {
-        "repo": repo,
+        "repos": repos,
         "window": window.to_dict(),
-        "pull_requests_scanned": len(prs),
+        "pull_requests_scanned": scanned,
         "pull_requests_with_comments": len(digests),
         "comments": comment_count,
         "truncated_pull_requests": truncated,
@@ -209,12 +220,18 @@ def collect(repo: str, window: Window, out: Path, slice_chars: int, graphql: Gra
     return summary
 
 
+def repo_name(value: str) -> str:
+    if not REPO.fullmatch(value) or ".." in value:
+        raise argparse.ArgumentTypeError(f"expected owner/name, got {value!r}")
+    return value
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--repo", required=True, help="owner/name")
+    parser.add_argument("--repo", dest="repos", action="append", required=True, type=repo_name, help="owner/name; repeat for more repositories")
     add_window_args(parser)
     args = parser.parse_args(argv)
-    summary = collect(args.repo, Window.parse(args.since, args.until), args.out, args.slice_chars, gh_graphql)
+    summary = collect(args.repos, Window.parse(args.since, args.until), args.out, args.slice_chars, gh_graphql)
     print_summary(summary)
     return 0
 

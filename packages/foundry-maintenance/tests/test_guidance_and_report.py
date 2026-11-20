@@ -70,7 +70,10 @@ class GuidanceTests(unittest.TestCase):
             {"kind": "friction", "pattern": "p", "guidance": "no-such-skill", "source": "transcript", "ref": "s2", "url": None, "quote": "q"},
             {"kind": "vibes", "pattern": "p", "guidance": None, "source": "transcript", "ref": "s3", "url": None, "quote": "q"},
         ]
+        write_json(run / "transcripts/summary.json", {"slices": [["a"], ["b"], ["c"]]})
+        write_json(run / "reviews/summary.json", {"slices": [["d"]]})
         (run / "obs").mkdir(parents=True)
+        (run / "obs" / "_scratch.jsonl").write_text("not json\n")
         (run / "obs" / "t-1.jsonl").write_text("\n".join(json.dumps(line) for line in lines) + "\nnot json\n")
 
         summary = route(self.root, run)
@@ -79,6 +82,7 @@ class GuidanceTests(unittest.TestCase):
         self.assertEqual(summary["unknown_guidance"], ["no-such-skill"])
         self.assertEqual([item["line"] for item in summary["rejected"]], ["t-1.jsonl:4", "t-1.jsonl:5"])
         self.assertEqual(len((run / "routed" / "_unowned.jsonl").read_text().splitlines()), 2)
+        self.assertEqual(summary["missing_slices"], ["t-0", "t-2", "r-0"])
 
     def test_require_foundry_rejects_another_repository(self) -> None:
         other = Path(tempfile.mkdtemp())
@@ -98,16 +102,16 @@ class BuildReportTests(unittest.TestCase):
             "by_host": {"claude-code": 9}, "sessions_per_model": {"claude-opus-5-5": 9}, "unreadable_lines": 0, "slices": [],
         })
         write_json(self.run / "reviews/summary.json", {
-            "repo": "o/r", "window": {"start": "2026-11-01", "end": "2026-11-08"}, "pull_requests_scanned": 5,
-            "pull_requests_with_comments": 4, "comments": 20, "truncated_pull_requests": [7], "slices": [],
+            "repos": ["o/r"], "window": {"start": "2026-11-01", "end": "2026-11-08"}, "pull_requests_scanned": 5,
+            "pull_requests_with_comments": 4, "comments": 20, "truncated_pull_requests": ["o/r#7"], "slices": [],
         })
-        write_json(self.run / "routed/summary.json", {"observations": {}, "unknown_guidance": [], "rejected": []})
+        write_json(self.run / "routed/summary.json", {"observations": {}, "unknown_guidance": [], "rejected": [], "missing_slices": []})
         for session in ("s1", "s9", "0123456789abcdef"):
             (self.run / f"transcripts/sessions/claude-code-{session}.md").parent.mkdir(parents=True, exist_ok=True)
             (self.run / f"transcripts/sessions/claude-code-{session}.md").write_text("digest")
         for number in (1, 2, 3, 4, 5):
-            (self.run / f"reviews/prs/{number}.md").parent.mkdir(parents=True, exist_ok=True)
-            (self.run / f"reviews/prs/{number}.md").write_text("digest")
+            (self.run / f"reviews/prs/o/r/{number}.md").parent.mkdir(parents=True, exist_ok=True)
+            (self.run / f"reviews/prs/o/r/{number}.md").write_text("digest")
 
     def report(self, *candidates: dict[str, Any]) -> dict[str, Any]:
         write_json(self.run / "candidates/review.json", list(candidates))
@@ -139,17 +143,40 @@ class BuildReportTests(unittest.TestCase):
         self.assertEqual(self.titles(report["obsolete"]), ["never seen"])
         self.assertEqual(sorted(self.titles(report["watching"])), ["delete with one session", "static add", "update with one PR counted twice"])
         self.assertEqual(report["counts"], {"add": 1, "update": 2, "delete": 2})
-        self.assertEqual(report["coverage"], ["Comments on #7 were cut at GitHub's per-page limit."])
+        self.assertEqual(report["coverage"], ["Comments on o/r#7 were cut at GitHub's per-page limit."])
 
     def test_refs_count_once_per_digest_and_unread_refs_are_dropped(self) -> None:
         report = self.report(
-            candidate(title="one PR written three ways", items=[evidence("review", 4), evidence("review", "#4"), evidence("review", "PR 4")]),
+            candidate(title="one PR written four ways", items=[evidence("review", 4), evidence("review", "#4"), evidence("review", "PR 4"), evidence("review", "o/r#4")]),
             candidate(title="prefix and full id of one session plus a PR", items=[evidence("transcript", "01234567"), evidence("transcript", "0123456789abcdef"), evidence("review", 5)]),
             candidate(title="cites sessions nobody read", items=[evidence("transcript", "s1"), evidence("transcript", "ghost-1"), evidence("review", 99)]),
         )
 
-        self.assertEqual(sorted(self.titles(report["watching"])), ["cites sessions nobody read", "one PR written three ways", "prefix and full id of one session plus a PR"])
+        self.assertEqual(sorted(self.titles(report["watching"])), ["cites sessions nobody read", "one PR written four ways", "prefix and full id of one session plus a PR"])
         self.assertIn("2 evidence items cited a session or PR no collector read, and were dropped.", report["coverage"])
+
+    def test_a_bare_number_resolves_only_when_one_repository_has_that_pr(self) -> None:
+        write_json(self.run / "reviews/summary.json", {
+            "repos": ["o/r", "o/s"], "window": {"start": "2026-11-01", "end": "2026-11-08"}, "pull_requests_scanned": 6,
+            "pull_requests_with_comments": 6, "comments": 20, "truncated_pull_requests": [], "slices": [],
+        })
+        for ref in ("o/s/4", "o/s/9"):
+            (self.run / f"reviews/prs/{ref}.md").parent.mkdir(parents=True, exist_ok=True)
+            (self.run / f"reviews/prs/{ref}.md").write_text("digest")
+
+        report = self.report(candidate(title="three PRs across two repositories", items=[
+            evidence("review", "o/r#4"), evidence("review", "o/s#4"), evidence("review", 9), evidence("review", 4), evidence("review", "x/y#1"),
+        ]))
+
+        item = report["recommendations"][0]["files"][0]["items"][0]
+        self.assertEqual([cited["ref"] for cited in item["evidence"]], ["o/r#4", "o/s#4", "o/s#9"])
+        self.assertIn("2 evidence items cited a session or PR no collector read, and were dropped.", report["coverage"])
+        self.assertEqual(render(report, "html").count("<title>r and s guidance retro</title>"), 1)
+
+    def test_names_slices_no_miner_covered(self) -> None:
+        write_json(self.run / "routed/summary.json", {"observations": {}, "unknown_guidance": [], "rejected": [], "missing_slices": ["t-3", "r-0"]})
+
+        self.assertIn("No miner output for slices t-3, r-0, so their digests are not in this report.", self.report()["coverage"])
 
     def test_rejects_paths_outside_foundry_or_missing_for_update(self) -> None:
         for bad in (
@@ -176,7 +203,7 @@ class BuildReportTests(unittest.TestCase):
         self.assertNotIn("</script><script>alert", html)
         self.assertNotIn("__REPORT_JSON__", html)
         self.assertIn('const TITLE = "r guidance retro";', canvas)
-        self.assertIn('"repo": "o/r"', canvas)
+        self.assertIn('"repos": [\n    "o/r"\n  ]', canvas)
 
 
 if __name__ == "__main__":

@@ -21,4 +21,4 @@ You are a **review subagent**. The parent agent already collected git output and
 
 ## Parent orchestration
 
-Dispatched by `thermos` after it has gathered the packet. Do not re-gather. Do not invoke this agent as the review parent.
+Dispatched by `quick-review` after it has gathered the packet. Do not re-gather. Do not invoke this agent as the review parent.

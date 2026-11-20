@@ -18,6 +18,6 @@
     "**/.github/plugin/**",
     "**/node_modules/**",
     // Generated statechart output that the tests compare byte for byte.
-    "packages/pstack/tests/statechart/corpus/**",
+    "packages/p-stack/tests/statechart/corpus/**",
   ],
 }

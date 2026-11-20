@@ -1,4 +1,4 @@
-# pstack
+# p-stack
 
 poteto's agent workflow: a playbook router, review and design skills, and one-rule engineering principles.
 
@@ -70,7 +70,7 @@ poteto's agent workflow: a playbook router, review and design skills, and one-ru
 ## Install
 
 ```bash
-apm install Samuel-Harris/foundry/packages/pstack#v0.1.0 --target cursor,claude,copilot
+apm install Samuel-Harris/foundry/packages/p-stack#v0.1.0 --target cursor,claude,copilot
 ```
 
 ## Getting started
@@ -92,7 +92,7 @@ The script test suites live under `tests/`, outside `.apm/`, so they are not dep
 - `tests/statechart/` tests the `statechart` skill's `scripts/`. Run them with Node.js 22.18 or later:
 
   ```bash
-  cd packages/pstack/tests/statechart
+  cd packages/p-stack/tests/statechart
   npm ci
   npm test
   ```
@@ -102,7 +102,7 @@ The script test suites live under `tests/`, outside `.apm/`, so they are not dep
 - `tests/poteto-mode/` tests the `poteto-mode` skill's `scripts/` (the `watch-pr` CLI and `check-plan.mjs`). The test package is `package.json` at the package root, beside `.apm/`, because Bun resolves the runtime's `commander` import by walking up from `.apm/skills/poteto-mode/scripts/`; installing it here keeps `node_modules/` out of the deployed skill directory. Run them with Bun 1.3.5 or later:
 
   ```bash
-  cd packages/pstack
+  cd packages/p-stack
   bun install --frozen-lockfile
   bun run typecheck:poteto-mode
   bun run test:poteto-mode

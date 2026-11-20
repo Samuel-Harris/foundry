@@ -1,19 +1,19 @@
 ---
 name: implement-linear-ticket
-description: Take a Linear ticket to a merge-ready draft GitHub pull request. Resolve the issue, branch from origin/$BASE, plan, implement, run thermos, open a draft PR, then babysit until merge-ready. Use when the user asks to implement a Linear ticket, take a ticket to a PR, or run the Linear-to-draft-PR workflow.
+description: Take a Linear ticket to a merge-ready draft GitHub pull request. Resolve the issue, branch from origin/$BASE, plan, implement, run quick-review, open a draft PR, then babysit until merge-ready. Use when the user asks to implement a Linear ticket, take a ticket to a PR, or run the Linear-to-draft-PR workflow.
 ---
 
 # Implement Linear Ticket
 
 ## Purpose
 
-Use this skill when the user asks you to take a Linear ticket all the way to a merge-ready implementation on a **draft** GitHub pull request. The workflow is intentionally end-to-end: resolve the ticket, create the Linear branch from `origin/$BASE`, plan the implementation, implement it, run `thermos`, refactor from that feedback, then commit, push, and open a draft PR, then load `babysit` until the PR is mergeable, comments are triaged, and CI/CD passes. Leave the GitHub PR as a draft unless the user explicitly asks to mark it ready for review.
+Use this skill when the user asks you to take a Linear ticket all the way to a merge-ready implementation on a **draft** GitHub pull request. The workflow is intentionally end-to-end: resolve the ticket, create the Linear branch from `origin/$BASE`, plan the implementation, implement it, run `quick-review`, refactor from that feedback, then commit, push, and open a draft PR, then load `babysit` until the PR is mergeable, comments are triaged, and CI/CD passes. Leave the GitHub PR as a draft unless the user explicitly asks to mark it ready for review.
 
 ## Required Input
 
 The user must provide a Linear issue ID or URL. If an argument was provided (`$ARGUMENTS`), use it as the Linear issue ID. If neither is present, ask for one before doing anything else.
 
-The target base `$BASE` is `main`. Use `$BASE` for branch creation, the thermos merge-base, and the pull request base.
+The target base `$BASE` is `main`. Use `$BASE` for branch creation, the quick-review merge-base, and the pull request base.
 
 ## Prerequisites
 
@@ -75,7 +75,7 @@ This skill requires the Linear MCP server. It is a runtime prerequisite and is n
    - Blast radius: affected files, APIs, schemas, database objects, generated artefacts, and tests.
    - Concrete execution order.
    - Verification evidence required before PR creation.
-   - A final review step that runs `thermos` and refactors from its feedback.
+   - A final review step that runs `quick-review` and refactors from its feedback.
 
 4. **Implement surgically**
 
@@ -87,9 +87,9 @@ This skill requires the Linear MCP server. It is a runtime prerequisite and is n
 
    Run focused tests and checks using the repo's normal commands. At minimum, run the narrowest relevant test or type/lint check that proves the edited behaviour. Record the exact commands and outcomes for the PR body.
 
-6. **Run thermos**
+6. **Run quick-review**
 
-   Load and follow the `thermos` skill, passing `$BASE`, the implementation plan, and verification evidence. That skill owns gathering the merge-base-to-working-tree packet (including untracked files), launching both review subagents in parallel, and synthesising their findings. Do not restate those steps here.
+   Load and follow the `quick-review` skill, passing `$BASE`, the implementation plan, and verification evidence. That skill owns gathering the merge-base-to-working-tree packet (including untracked files), launching both review subagents in parallel, and synthesising their findings. Do not restate those steps here.
 
    Apply the synthesised feedback that is correct and in scope. If a recommendation is intentionally rejected, state the reason in chat. Re-run the relevant tests and checks after refactoring. If the review finds serious unresolved issues, stop before committing.
 
@@ -118,7 +118,7 @@ This skill requires the Linear MCP server. It is a runtime prerequisite and is n
    )"
    ```
 
-   Include the Linear issue identifier in the title or body. Put the recorded verification commands and the thermos review outcome in the test plan / summary so reviewers can see what was run and whether in-scope feedback was applied. Omit `--draft` only when the user explicitly asks for a ready-for-review PR. After creation, do not convert the PR to ready.
+   Include the Linear issue identifier in the title or body. Put the recorded verification commands and the `quick-review` outcome in the test plan / summary so reviewers can see what was run and whether in-scope feedback was applied. Omit `--draft` only when the user explicitly asks for a ready-for-review PR. After creation, do not convert the PR to ready.
 
 8. **Babysit the PR until merge-ready**
 
@@ -134,7 +134,7 @@ Stop and ask the user before continuing if:
 - The local or remote branch already exists.
 - The implementation requires a product, API, migration, rollout, or compatibility decision not resolved by the ticket.
 - Tests or required verification cannot be run.
-- The thermos review finds serious issues that cannot be fixed in scope.
+- The `quick-review` pass finds serious issues that cannot be fixed in scope.
 - Creating the PR would require updating an existing PR, force pushing, amending, or changing the base branch.
 - The babysit phase cannot make the PR merge-ready without weakening checks, making unrelated changes, or resolving an external blocker.
 
@@ -144,11 +144,11 @@ Pass when:
 
 - The Linear `gitBranchName` was created from `origin/$BASE` only after the worktree was clean and neither branch existed.
 - Focused checks for the ticket's changed behaviour were run and recorded.
-- `thermos` ran against the actual ticket edits (merge-base to working tree, including untracked files) and in-scope feedback was applied or explicitly rejected.
+- `quick-review` ran against the actual ticket edits (merge-base to working tree, including untracked files) and in-scope feedback was applied or explicitly rejected.
 - A **draft** PR was created from this branch, unless the user explicitly asked for a ready-for-review PR.
 
 Fail and stop when any stop condition above is hit.
 
 ## Final Response
 
-Keep the final response concise. Include the Linear issue key, branch name, final commit SHA, PR URL, whether the PR is still a GitHub draft, tests/checks run, whether thermos feedback was fully addressed, and the final mergeability, review-thread, and CI/CD status. Name any remaining external blocker precisely.
+Keep the final response concise. Include the Linear issue key, branch name, final commit SHA, PR URL, whether the PR is still a GitHub draft, tests/checks run, whether quick-review feedback was fully addressed, and the final mergeability, review-thread, and CI/CD status. Name any remaining external blocker precisely.

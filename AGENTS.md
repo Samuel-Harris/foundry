@@ -333,11 +333,11 @@ change merged without a bump never reaches them.
   APM 0.32.0's resolver ignores peeled `^{}` refs and records the SHA of the
   tag ref itself, which for an annotated tag is the tag object, not the commit.
 
-## Updating pstack from upstream
+## Updating p-stack from upstream
 
-`packages/pstack` is an adapted port of
+`packages/p-stack` is an adapted port of
 [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack), and
-`packages/pstack/upstream.json` pins the upstream commit it is based on. Run
+`packages/p-stack/upstream.json` pins the upstream commit it is based on. Run
 `uv run scripts/pstack_upstream.py status`, then `sync`, which three-way merges
 each upstream change since the pin into the mapped local file and moves the pin.
 Resolve the conflict markers it leaves, re-applying the British English and
@@ -347,8 +347,8 @@ script; `status` reports drift when a file falls outside them, and exits `1`.
 
 ## CI
 
-`.github/workflows/ci.yml` runs `pre-commit` plus a job for each of pstack's
-script test suites, which `packages/pstack/README.md` describes, and a
+`.github/workflows/ci.yml` runs `pre-commit` plus a job for each of p-stack's
+script test suites, which `packages/p-stack/README.md` describes, and a
 `data-visualisation-tools-tests` job that runs the data-visualisation tools'
 unit tests with `uv run --frozen`, and a `foundry-maintenance-tests` job for
 `packages/foundry-maintenance/tests`. `pre-commit`

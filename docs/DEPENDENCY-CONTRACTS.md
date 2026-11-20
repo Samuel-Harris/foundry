@@ -121,7 +121,7 @@ default-stack
 transitively added: deep-interview
 ```
 
-`cursor-usage`, `data-visualisation`, `foundry-maintenance`, `handoff`, `infrastructure`, `pstack`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
+`cursor-usage`, `data-visualisation`, `foundry-maintenance`, `handoff`, `infrastructure`, `p-stack`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
 
 There is deliberately **no `apm.yml` at the repository root**. Root-level compile and pack discovery walks the whole tree, so a root manifest would absorb the nested packages' `.apm/` trees into one package and destroy the per-package boundaries.
 
@@ -155,15 +155,15 @@ Every primitive that names a primitive shipped by another package is covered by 
 
 | Reference               | Declared in                                                      | Ships in           | Covering edge                     |
 | ----------------------- | ---------------------------------------------------------------- | ------------------ | --------------------------------- |
-| `thermos`               | `execution` — the `implement-linear-ticket` skill                | `review`           | execution → review                |
-| `thermos`               | `planning` — the `plan-handoff-standard` instruction             | `review`           | planning → review                 |
+| `quick-review`          | `execution` — the `implement-linear-ticket` skill                | `review`           | execution → review                |
+| `quick-review`          | `planning` — the `plan-handoff-standard` instruction             | `review`           | planning → review                 |
 | `babysit`               | `execution` — the `implement-linear-ticket` skill                | `pr`               | execution → pr                    |
 | `deep-interview`        | `planning` — `masterplan` and `plan-handoff-standard`            | `deep-interview`   | planning → deep-interview         |
 | `deep-interview`        | `skill-creation` — the `design-skill` skill                      | `deep-interview`   | skill-creation → deep-interview   |
 | `deep-interview`        | `repo-init` — the `terraform-monorepo-init` skill                | `deep-interview`   | repo-init → deep-interview        |
 | `optimise-agent-config` | `skill-creation` — the `design-skill` skill                      | `repo-maintenance` | skill-creation → repo-maintenance |
 
-`plan-handoff-standard` treats its `thermos` step as required; the `planning → review` edge above satisfies it, so a single-package install of `planning` carries the capability its own text names.
+`plan-handoff-standard` treats its `quick-review` step as required; the `planning → review` edge above satisfies it, so a single-package install of `planning` carries the capability its own text names.
 
 ### Why `deep-interview` exists
 

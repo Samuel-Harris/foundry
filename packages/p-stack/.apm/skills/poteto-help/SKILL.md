@@ -10,7 +10,7 @@ Answer the user's question about pstack, hand them a prompt they can send, and l
 
 A message that asks for work, such as "use pstack to fix this bug", is not a help question. Read [`poteto-mode`](../poteto-mode/SKILL.md), do the work under it, and mention once that a Custom Mode keeps it on where the host offers Custom Modes (Cursor does).
 
-This file maps questions to the skills and guide pages that hold the answers. Those files own the details. Read the file you route to before you quote it, and trust it when it disagrees with this map. The links here point into the deployed skills directory (`.agents/skills/` or `.claude/skills/`, or the user-level equivalent), which the user may not be able to open, so give the user the file's public copy: `https://github.com/Samuel-Harris/foundry/blob/main/packages/pstack/.apm/skills/` followed by its path from the skills directory, such as `poteto-help/references/guide/01-setup.md`.
+This file maps questions to the skills and guide pages that hold the answers. Those files own the details. Read the file you route to before you quote it, and trust it when it disagrees with this map. The links here point into the deployed skills directory (`.agents/skills/` or `.claude/skills/`, or the user-level equivalent), which the user may not be able to open, so give the user the file's public copy: `https://github.com/Samuel-Harris/foundry/blob/main/packages/p-stack/.apm/skills/` followed by its path from the skills directory, such as `poteto-help/references/guide/01-setup.md`.
 
 ## Find out what they need
 
@@ -35,7 +35,7 @@ When the model rule is missing and it matters, ask whether the user wants to pic
 
 ## Get set up
 
-1. Install with `apm install Samuel-Harris/foundry/packages/pstack#v0.1.0 --target cursor,claude,copilot` from the project root. APM deploys the skills to `.agents/skills/` (Cursor, Copilot) and `.claude/skills/` (Claude Code), and the `poteto-agent` and `comment-sicko` agents to each host's agents directory.
+1. Install with `apm install Samuel-Harris/foundry/packages/p-stack#v0.1.0 --target cursor,claude,copilot` from the project root. APM deploys the skills to `.agents/skills/` (Cursor, Copilot) and `.claude/skills/` (Claude Code), and the `poteto-agent` and `comment-sicko` agents to each host's agents directory.
 2. Run [`/setup-pstack`](../setup-pstack/SKILL.md). It asks for a reasoning budget, maps a model to each role, and writes a rule. The rule applies to new chats. Then it offers once each to generate a verification skill and a formal verification skill for the project, unless the project already has one.
 3. Start a real task with `/poteto-mode`, a goal, and a check that can pass or fail.
 

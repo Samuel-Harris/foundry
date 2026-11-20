@@ -20,7 +20,7 @@ dependencies:
     - path: ./packages/handoff
     - path: ./packages/infrastructure
     - path: ./packages/planning
-    - path: ./packages/pstack
+    - path: ./packages/p-stack
     - path: ./packages/repo-init
     - path: ./packages/search
     - path: ./packages/skill-creation

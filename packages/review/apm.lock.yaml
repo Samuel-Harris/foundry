@@ -9,7 +9,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+  content_hash: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
 - kind: project-relative
   target: claude
   value: .claude/agents/thermo-nuclear-review-subagent.md
@@ -18,7 +18,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
 - kind: project-relative
   target: claude
   value: .claude/skills/pr-context-canvas
@@ -46,6 +46,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
+- kind: project-relative
+  target: claude
+  value: .claude/skills/quick-review
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/quick-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
 - kind: project-relative
   target: claude
   value: .claude/skills/thermo-nuclear-code-quality-review
@@ -83,24 +101,6 @@ deployments:
   active_owner: .
   content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
 - kind: project-relative
-  target: claude
-  value: .claude/skills/thermos
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: null
-- kind: project-relative
-  target: claude
-  value: .claude/skills/thermos/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - .
-  active_owner: .
-  content_hash: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
-- kind: project-relative
   target: copilot
   value: .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md
   runtime: null
@@ -108,7 +108,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+  content_hash: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
 - kind: project-relative
   target: copilot
   value: .github/agents/thermo-nuclear-review-subagent.agent.md
@@ -117,7 +117,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
 - kind: project-relative
   target: cursor
   value: .cursor/agents/thermo-nuclear-code-quality-review-subagent.md
@@ -126,7 +126,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
+  content_hash: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
 - kind: project-relative
   target: cursor
   value: .cursor/agents/thermo-nuclear-review-subagent.md
@@ -135,7 +135,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
 - kind: project-relative
   target: legacy
   value: .agents/skills/pr-context-canvas
@@ -163,6 +163,24 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/quick-review
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/quick-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
 - kind: project-relative
   target: legacy
   value: .agents/skills/thermo-nuclear-code-quality-review
@@ -221,6 +239,8 @@ local_deployed_files:
 - .agents/skills/pr-context-canvas
 - .agents/skills/pr-context-canvas/SKILL.md
 - .agents/skills/pr-context-canvas/references/state-chart.tsx
+- .agents/skills/quick-review
+- .agents/skills/quick-review/SKILL.md
 - .agents/skills/thermo-nuclear-code-quality-review
 - .agents/skills/thermo-nuclear-code-quality-review/SKILL.md
 - .agents/skills/thermo-nuclear-review
@@ -232,12 +252,12 @@ local_deployed_files:
 - .claude/skills/pr-context-canvas
 - .claude/skills/pr-context-canvas/SKILL.md
 - .claude/skills/pr-context-canvas/references/state-chart.tsx
+- .claude/skills/quick-review
+- .claude/skills/quick-review/SKILL.md
 - .claude/skills/thermo-nuclear-code-quality-review
 - .claude/skills/thermo-nuclear-code-quality-review/SKILL.md
 - .claude/skills/thermo-nuclear-review
 - .claude/skills/thermo-nuclear-review/SKILL.md
-- .claude/skills/thermos
-- .claude/skills/thermos/SKILL.md
 - .cursor/agents/thermo-nuclear-code-quality-review-subagent.md
 - .cursor/agents/thermo-nuclear-review-subagent.md
 - .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md
@@ -245,17 +265,18 @@ local_deployed_files:
 local_deployed_file_hashes:
   .agents/skills/pr-context-canvas/SKILL.md: sha256:c60f5acaac5871763f4c75864d8f8af03c84c754a565181d2ffbd8a83d5620f9
   .agents/skills/pr-context-canvas/references/state-chart.tsx: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
+  .agents/skills/quick-review/SKILL.md: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
   .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
   .agents/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
   .agents/skills/thermos/SKILL.md: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
-  .claude/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
-  .claude/agents/thermo-nuclear-review-subagent.md: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+  .claude/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
+  .claude/agents/thermo-nuclear-review-subagent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
   .claude/skills/pr-context-canvas/SKILL.md: sha256:c60f5acaac5871763f4c75864d8f8af03c84c754a565181d2ffbd8a83d5620f9
   .claude/skills/pr-context-canvas/references/state-chart.tsx: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
+  .claude/skills/quick-review/SKILL.md: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
   .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
   .claude/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
-  .claude/skills/thermos/SKILL.md: sha256:081f1a795e8e45d80791ffc9f371852663c28ab55753a0fdcf111970f6481e3e
-  .cursor/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
-  .cursor/agents/thermo-nuclear-review-subagent.md: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
-  .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md: sha256:f9739d1a72829ff6b92be6b05e0cc7851beaa65d1249889442e33f84f38c57bc
-  .github/agents/thermo-nuclear-review-subagent.agent.md: sha256:21aaa66fe941ace64c3ebc8c4073bfa5e32dba7e1b2a35fb9b6ea54c861a7f1d
+  .cursor/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
+  .cursor/agents/thermo-nuclear-review-subagent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+  .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
+  .github/agents/thermo-nuclear-review-subagent.agent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c

@@ -28,7 +28,7 @@ When writing a plan, assume a different agent will execute it later. The plan mu
 - The blast radius: known callers, affected files, schemas, APIs, database objects, generated artefacts, and tests.
 - A concrete execution order that another agent can follow directly.
 - Verification: tests, manual checks, downgrade or rollback checks where relevant, and the exact evidence that will prove the work is correct.
-- A final step that runs `thermos` on the changes done, then refactors the written code based on the synthesised review feedback.
+- A final step that runs `quick-review` on the changes done, then refactors the written code based on the synthesised review feedback.
 
 ## Required Level Of Detail
 

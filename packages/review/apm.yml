@@ -1,5 +1,5 @@
 name: review
-version: "0.1.1"
+version: "0.1.2"
 description: "Branch-level correctness, security and maintainability audits, plus a pull-request context canvas."
 author: sam
 license: MIT

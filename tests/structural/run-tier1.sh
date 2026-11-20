@@ -314,7 +314,7 @@ if [[ -n "$archive" ]]; then
   report $? "archive install + audit in a clean consumer"
 
   archive_inventory_missing=0
-  archive_expected=(".agents/skills/thermos/SKILL.md")
+  archive_expected=(".agents/skills/quick-review/SKILL.md")
   has_target cursor && archive_expected+=(".cursor/agents/thermo-nuclear-review-subagent.md")
   has_target claude && archive_expected+=(".claude/agents/thermo-nuclear-review-subagent.md")
   has_target copilot && archive_expected+=(".github/agents/thermo-nuclear-review-subagent.agent.md")

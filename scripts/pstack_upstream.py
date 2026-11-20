@@ -5,7 +5,7 @@
 # ///
 """Report and apply upstream pstack changes since the pinned commit.
 
-`packages/pstack/upstream.json` records the upstream repository, the
+`packages/p-stack/upstream.json` records the upstream repository, the
 directory pstack lives in, and the commit the port is based on. The port is
 adapted (British English, target-neutral names, a different layout), so an
 update is a three-way merge per file: base is the pinned upstream commit,
@@ -286,7 +286,7 @@ def sync(up: Upstream, package: Path) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("command", choices=("status", "sync"))
-    parser.add_argument("--package", type=Path, default=REPO_ROOT / "packages" / "pstack")
+    parser.add_argument("--package", type=Path, default=REPO_ROOT / "packages" / "p-stack")
     parser.add_argument("--ref")
     args = parser.parse_args()
     package = args.package.resolve()

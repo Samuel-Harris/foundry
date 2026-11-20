@@ -1,7 +1,7 @@
 # Working in this repository
 
-Operational notes for agents editing Foundry. This repository publishes nineteen
-[APM](https://microsoft.github.io/apm/) packages — eighteen content packages plus
+Operational notes for agents editing Foundry. This repository publishes twenty
+[APM](https://microsoft.github.io/apm/) packages — nineteen content packages plus
 a meta-package. Almost everything surprising about it comes from the pinned CLI,
 so this file records **empirically verified APM 0.32.0 behaviour**, not a
 restatement of the design. For what each package contains, see `README.md`; for
@@ -352,7 +352,8 @@ script; `status` reports drift when a file falls outside them, and exits `1`.
 `.github/workflows/ci.yml` runs `pre-commit` plus a job for each of pstack's
 script test suites, which `packages/pstack/README.md` describes, and a
 `data-visualisation-tools-tests` job that runs the data-visualisation tools'
-unit tests with `uv run --frozen`. `pre-commit`
+unit tests with `uv run --frozen`, and a `foundry-maintenance-tests` job for
+`packages/foundry-maintenance/tests`. `pre-commit`
 checks out the full history, installs the CLI with `microsoft/apm-action@v1` and
 `setup-only: true`, then runs `.githooks/pre-commit`. `setup-only` matters: the action must not
 install packages itself, or it would rewrite lockfiles before the hook could
@@ -378,7 +379,7 @@ further workflow runs.
   `.gitignore` already ignores `apm_modules/`. `apm install` appends
   `# APM dependencies` and `apm_modules/` to the `.gitignore` in its working
   directory whenever that exact line is absent there, so a package without one
-  grows an untracked file on the next install and dirties the tree. Nineteen
+  grows an untracked file on the next install and dirties the tree. Twenty
   byte-identical 33-byte files are the expected end state.
 - Never commit deploy output. `.gitignore` excludes `apm_modules/`, `dist/`,
   `build/`, `.claude/`, `.agents/`, `.cursor/rules/`, `.cursor/agents/`,

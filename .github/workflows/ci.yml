@@ -129,7 +129,7 @@ jobs:
   tag:
     name: Tag package versions
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests]
+    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests, foundry-maintenance-tests]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -232,3 +232,12 @@ jobs:
       # --frozen fails on a drifted uv.lock instead of quietly re-locking.
       - name: Run tests
         run: uv run --frozen --package data-visualisation-tools python -m unittest discover -s packages/data-visualisation/tools/tests
+
+  foundry-maintenance-tests:
+    name: foundry-maintenance script tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run tests
+        run: python3 -m unittest discover -s packages/foundry-maintenance/tests

@@ -1,31 +1,7 @@
 lockfile_version: '1'
 apm_version: 0.32.0
-dependencies:
-- repo_url: _local/explore
-  name: explore
-  version: 0.1.0
-  package_type: apm_package
-  deployed_files:
-  - .claude/agents/explore.md
-  - .cursor/agents/explore.md
-  - .github/agents/explore.agent.md
-  deployed_file_hashes:
-    .claude/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
-    .cursor/agents/explore.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
-    .github/agents/explore.agent.md: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
-  source: local
-  local_path: ../explore
-  declared_license: MIT
+dependencies: []
 deployments:
-- kind: project-relative
-  target: claude
-  value: .claude/agents/explore.md
-  runtime: null
-  scope: project
-  owners:
-  - ../explore
-  active_owner: ../explore
-  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: claude
   value: .claude/skills/babysit
@@ -61,7 +37,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+  content_hash: sha256:63d778b539851c08a3e9b556701b7f9634e93ef6dc0f8324ba94ef832b4a1c46
 - kind: project-relative
   target: claude
   value: .claude/skills/summarise-pr
@@ -80,24 +56,6 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
-- kind: project-relative
-  target: copilot
-  value: .github/agents/explore.agent.md
-  runtime: null
-  scope: project
-  owners:
-  - ../explore
-  active_owner: ../explore
-  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
-- kind: project-relative
-  target: cursor
-  value: .cursor/agents/explore.md
-  runtime: null
-  scope: project
-  owners:
-  - ../explore
-  active_owner: ../explore
-  content_hash: sha256:15003d0abef5a72edfd22e5779249cacd0c217e0ae5d5ba2c6b16aff4cb1e0c1
 - kind: project-relative
   target: legacy
   value: .agents/skills/babysit
@@ -133,7 +91,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+  content_hash: sha256:63d778b539851c08a3e9b556701b7f9634e93ef6dc0f8324ba94ef832b4a1c46
 - kind: project-relative
   target: legacy
   value: .agents/skills/summarise-pr
@@ -167,8 +125,8 @@ local_deployed_files:
 - .claude/skills/summarise-pr/SKILL.md
 local_deployed_file_hashes:
   .agents/skills/babysit/SKILL.md: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
-  .agents/skills/code-tour/SKILL.md: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+  .agents/skills/code-tour/SKILL.md: sha256:63d778b539851c08a3e9b556701b7f9634e93ef6dc0f8324ba94ef832b4a1c46
   .agents/skills/summarise-pr/SKILL.md: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
   .claude/skills/babysit/SKILL.md: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
-  .claude/skills/code-tour/SKILL.md: sha256:932c346d2df1b31520519042b90dafdc0b5090d9c91848dd40a7435b629b4382
+  .claude/skills/code-tour/SKILL.md: sha256:63d778b539851c08a3e9b556701b7f9634e93ef6dc0f8324ba94ef832b4a1c46
   .claude/skills/summarise-pr/SKILL.md: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196

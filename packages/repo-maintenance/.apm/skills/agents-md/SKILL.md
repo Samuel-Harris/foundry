@@ -96,7 +96,8 @@ This creates a navigable hierarchy:
 **CRITICAL**: DO NOT generate documentation for any directory that is ignored by `.gitignore` or the host's ignore file (e.g. `.cursorignore`), if one exists.
 
 ```text
-Dispatch the `explore` agent as a subagent with the prompt:
+Dispatch a read-only exploration subagent (the host's built-in explore agent where one exists) with the
+prompt below. Where the host has no subagents, equivalent direct read-only inspection is fine:
 "List all directories recursively. STRICTLY EXCLUDE any directories that are ignored by .gitignore or the host's ignore file. Also exclude common dependency, build, cache, and VCS directories (e.g. node_modules, .git, dist, build, __pycache__, .venv, coverage, .next, .nuxt) and any other project-specific directories that are clearly generated or tooling-only."
 ```
 
@@ -164,7 +165,7 @@ grep -r "<!-- Parent:" --include="AGENTS.md" .
 
 | Task               | Agent                   |
 | ------------------ | ----------------------- |
-| Directory mapping  | `explore`               |
+| Directory mapping  | a read-only explorer    |
 | File analysis      | a general-purpose agent |
 | Content generation | a general-purpose agent |
 | AGENTS.md writes   | a general-purpose agent |

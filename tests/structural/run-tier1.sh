@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tier 1 structural acceptance suite.
 #
-# Proves structural packaging and deployment for all nineteen packages: manifests
+# Proves structural packaging and deployment for all eighteen packages: manifests
 # resolve, installs succeed, deployed inventory matches the promised primitives,
 # and the pinned CLI's documented limitations are asserted rather than hidden.
 #
@@ -33,25 +33,13 @@ APM_TIMEOUT="${APM_TIMEOUT:-180}"
 # Manifests that declare a sibling `path:` dependency. APM 0.32.0 refuses to
 # pack such a manifest in every bundle format. See docs/DEPENDENCY-CONTRACTS.md;
 # this suite asserts that refusal rather than skipping these packages silently.
-PACK_BLOCKED=" default-stack deep-interview execution planning pr repo-init repo-maintenance skill-creation "
+PACK_BLOCKED=" default-stack execution planning repo-init skill-creation "
 
-# `apm audit --ci` cannot replay `default-stack`'s own lockfile: the
-# meta-package reaches `pr` both directly and transitively (via `execution`),
-# so `apm install` writes two `_local/pr` entries, and the drift replay then
-# cannot tell which one parents `explore`. That is an APM 0.32.0
-# lockfile-writer defect, reproduced without Foundry in
-# docs/DEPENDENCY-CONTRACTS.md. The consumer-side audit of the same manifest
-# passes, and that is asserted below by the scratch-consumer checks, so this
-# package's own audit is asserted as a known failure rather than treated as a
-# pass.
-AUDIT_KNOWN_BROKEN=" default-stack "
-AUDIT_KNOWN_BROKEN_SIGNATURE="ambiguous resolved_by parent"
-
-# Direct dependencies of the meta-package, plus the two packages they pull in
-# transitively (`explore` and `deep-interview`). A default-stack install
-# therefore deploys ten of the nineteen packages,
+# Direct dependencies of the meta-package, plus the one package they pull in
+# transitively (`deep-interview`). A default-stack install
+# therefore deploys nine of the eighteen packages,
 # which is what the scratch-consumer inventory check covers.
-DEFAULT_STACK_DEPLOYED="coding-style deep-interview execution explore git-diff planning pr repo-maintenance review skill-creation"
+DEFAULT_STACK_DEPLOYED="coding-style deep-interview execution git-diff planning pr repo-maintenance review skill-creation"
 
 # Primitives that no longer ship. `design-skill` is deliberately absent: it moved
 # to `skill-creation` and is still deployed.
@@ -177,12 +165,8 @@ for package in "${packages[@]}"; do
   dry_status=$?
   ( cd "$work_dir" && run_apm install --frozen --target "$TARGETS" ) >/dev/null 2>&1
   frozen_status=$?
-  audit_output="$( cd "$work_dir" && run_apm audit --ci 2>&1 )"
+  ( cd "$work_dir" && run_apm audit --ci ) >/dev/null 2>&1
   audit_status=$?
-  audit_display="$audit_status"
-  if [[ "$AUDIT_KNOWN_BROKEN" == *" $package "* && "$audit_status" != "0" && "$audit_output" == *"$AUDIT_KNOWN_BROKEN_SIGNATURE"* ]]; then
-    audit_display="known"
-  fi
   ( cd "$work_dir" && run_apm compile --validate ) >/dev/null 2>&1
   validate_status=$?
 
@@ -193,15 +177,11 @@ for package in "${packages[@]}"; do
   fi
 
   printf '  %-26s %-8s %-8s %-6s %-9s %-10s\n' \
-    "$package" "$dry_status" "$frozen_status" "$audit_display" "$validate_status" "$pack_status"
+    "$package" "$dry_status" "$frozen_status" "$audit_status" "$validate_status" "$pack_status"
 
   report "$dry_status" "$package install --dry-run"
   report "$frozen_status" "$package install --frozen"
-  if [[ "$audit_display" == "known" ]]; then
-    echo "  [+] $package audit --ci blocked by the duplicated-resolved_by bug (documented)"
-  else
-    report "$audit_status" "$package audit --ci"
-  fi
+  report "$audit_status" "$package audit --ci"
   report "$validate_status" "$package compile --validate"
   if [[ "$pack_status" == "0" ]]; then
     echo "  [+] $package pack --dry-run"
@@ -243,7 +223,7 @@ for target in "${target_list[@]}"; do
   done
   failures=$((failures + inventory_missing))
   if (( inventory_missing == 0 )); then
-    echo "  [+] $target deployed every skill, agent and instruction file for the ten default-stack packages"
+    echo "  [+] $target deployed every skill, agent and instruction file for the nine default-stack packages"
   fi
 
   retired_hits=0

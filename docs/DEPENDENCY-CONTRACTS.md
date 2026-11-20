@@ -105,7 +105,7 @@ APM resolves the range against the `planning--v<version>` tags that CI creates o
 
 `packages/default-stack/apm.yml` lists eight sibling packages as `- path: ../<name>` entries and therefore omits `dependencies: {}`, which is non-empty. Installing `packages/default-stack` is the one-command route to the default stack.
 
-Those eight direct dependencies pull in two more transitively, so a single meta-package install resolves ten packages:
+Those eight direct dependencies pull in one more transitively, so a single meta-package install resolves nine packages:
 
 ```text
 default-stack
@@ -113,12 +113,12 @@ default-stack
 ├── execution        -> pr, review
 ├── git-diff
 ├── planning         -> deep-interview, review
-├── pr               -> explore
-├── repo-maintenance -> explore
+├── pr
+├── repo-maintenance
 ├── review
 └── skill-creation   -> deep-interview, repo-maintenance
 
-transitively added: deep-interview, explore
+transitively added: deep-interview
 ```
 
 `cursor-usage`, `data-visualisation`, `handoff`, `infrastructure`, `pstack`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
@@ -131,10 +131,10 @@ There is deliberately **no `apm.yml` at the repository root**. Root-level compil
 - Never hand-author or hand-edit hashes or pins. Regenerate with `apm lock` or `apm install`.
 - `apm install --frozen` does **not** reject a stale lockfile when the dependencies are local. It fails only when the lockfile is missing; otherwise it re-resolves `apm.yml`, rewrites the lockfile and exits `0` with `Lockfile presence verified`. Verified with 0.32.0: adding `- path: ../review` to `packages/swarm/apm.yml` passed `--frozen` and `apm audit --ci`, and the rewritten lockfile gained a `_local/review` entry. A rewrite after install is therefore the staleness signal. `.githooks/pre-commit`, which CI runs as its only job, runs `git diff` on `apm.lock.yaml` after installing, ignoring the absolute-path lines described below; that catches both a manifest change and a primitive content change committed without regenerating the lockfile. Locally, `run-tier1.sh` catches the same rewrite with its tracked-file stability check.
 - `apm audit --ci` is the release gate.
-- **APM writes a transitive sibling dependency's path as an absolute path; the committed lockfile records it relative to the package.** Direct local dependencies are pinned as `local_path: ../<name>`, which is portable, but a local dependency reached transitively (for example `explore` via `pr`) additionally records `anchored_local_path`, and its deployment entries record `owners` and `active_owner` as `local:<path>`. APM writes both as `/absolute/path/to/packages/<name>`.
+- **APM writes a transitive sibling dependency's path as an absolute path; the committed lockfile records it relative to the package.** Direct local dependencies are pinned as `local_path: ../<name>`, which is portable, but a local dependency reached transitively (for example `deep-interview` via `planning` in `default-stack`) additionally records `anchored_local_path`, and its deployment entries record `owners` and `active_owner` as `local:<path>`. APM writes both as `/absolute/path/to/packages/<name>`.
   - Cause: APM's `_portable_anchor_identity` relativises the path against the project root with `Path.relative_to`, which only succeeds for paths inside it. Each lockfile's project root is `packages/<name>`, every sibling is outside it, so APM falls back to the absolute path. APM 0.35.0 behaves the same way.
   - Normalisation: `scripts/relativise_lockfiles.py` rewrites those absolute paths to `../<name>`, relative to the lockfile's directory, the same form APM itself writes for packages inside the project root. `.githooks/pre-commit` runs it after `apm install --frozen` and before diffing the lockfile, and `run-tier1.sh` runs it before its stability diff, so the committed lockfile is the normalised one. Run it after any `apm install` in a package with transitive siblings: `python3 scripts/relativise_lockfiles.py packages/<name>/apm.lock.yaml`.
-  - Both fields must change together. Verified with 0.32.0: with relative owners but an absolute `anchored_local_path`, `apm audit --ci` fails with `invalid owner(s) local:../explore`; with both relative, `apm audit --ci` passes in every package except `default-stack`'s documented failure below. Any later install rewrites both back to absolute paths, which the normaliser undoes.
+  - Both fields must change together. Verified with 0.32.0: with relative owners but an absolute `anchored_local_path`, `apm audit --ci` fails with `invalid owner(s) local:../explore` (the `explore` package has since been removed); with both relative, `apm audit --ci` passes in every package. Any later install rewrites both back to absolute paths, which the normaliser undoes.
 
 ## Generated-file policy
 
@@ -155,9 +155,6 @@ Every primitive that names a primitive shipped by another package is covered by 
 
 | Reference               | Declared in                                                      | Ships in           | Covering edge                     |
 | ----------------------- | ---------------------------------------------------------------- | ------------------ | --------------------------------- |
-| `explore`               | `deep-interview` — the `deep-interview` skill                    | `explore`          | deep-interview → explore          |
-| `explore`               | `pr` — the `code-tour` skill                                     | `explore`          | pr → explore                      |
-| `explore`               | `repo-maintenance` — the `agents-md` skill                       | `explore`          | repo-maintenance → explore        |
 | `thermos`               | `execution` — the `implement-linear-ticket` skill                | `review`           | execution → review                |
 | `thermos`               | `planning` — the `plan-handoff-standard` instruction             | `review`           | planning → review                 |
 | `babysit`               | `execution` — the `implement-linear-ticket` skill                | `pr`               | execution → pr                    |
@@ -168,23 +165,23 @@ Every primitive that names a primitive shipped by another package is covered by 
 
 `plan-handoff-standard` treats its `thermos` step as required; the `planning → review` edge above satisfies it, so a single-package install of `planning` carries the capability its own text names.
 
-### Why `explore` and `deep-interview` exist
+### Why `deep-interview` exists
 
-`deep-interview`, `pr` and `repo-maintenance` all dispatch the `explore` agent. Keeping that agent inside any one of them would force the others to depend on it, and therefore to receive skills they never name. `planning`, `skill-creation` and `repo-init` all name the `deep-interview` skill. Keeping that skill inside `planning` forced `skill-creation` to depend on `planning` for nothing else, and stopped `repo-init` from declaring the dependency at all, because `planning` would have dragged in `review`. `deep-interview` depends on `explore` because the skill dispatches that agent.
+`planning`, `skill-creation` and `repo-init` all name the `deep-interview` skill. Keeping that skill inside `planning` forced `skill-creation` to depend on `planning` for nothing else, and stopped `repo-init` from declaring the dependency at all, because `planning` would have dragged in `review`. `deep-interview`, `pr` and `repo-maintenance` ask for a read-only exploration subagent in host-neutral terms rather than naming one, so they need no dependency for it.
 
 That orientation is what keeps the graph acyclic:
 
 ```text
-repo-init --> deep-interview --> explore
+repo-init --> deep-interview
 skill-creation --> deep-interview
-skill-creation --> repo-maintenance --> explore
+skill-creation --> repo-maintenance
 planning --> deep-interview
 planning --> review
-execution --> pr --> explore
+execution --> pr
 execution --> review
 ```
 
-APM cannot express a dependency cycle, so any future reference that points backwards along `planning → deep-interview → explore` or `execution → pr → explore` must be reworded or extracted, not declared.
+APM cannot express a dependency cycle, so any future reference that points backwards along `planning → deep-interview` or `execution → pr` must be reworded or extracted, not declared.
 
 No test asserts that these references resolve inside a single-package install: `tests/structural/validate_primitives.py` checks that relative links resolve on disk **within this repository**, not across package boundaries. The edges above were derived by scanning every primitive for references to primitives owned by another package.
 
@@ -220,24 +217,21 @@ Error: Cannot pack — apm.yml contains local path dependency: ../planning
 Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
 ```
 
-This is the reason every package with a sibling `path:` dependency cannot be packed from its committed manifest: `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance` and `skill-creation`. The sibling section above records the full comparison, the tested remote fallback and the release-job rewrite that would produce their bundles.
+This is the reason every package with a sibling `path:` dependency cannot be packed from its committed manifest: `default-stack`, `execution`, `planning`, `repo-init` and `skill-creation`. The sibling section above records the full comparison, the tested remote fallback and the release-job rewrite that would produce their bundles.
 
 ### `apm audit --ci` cannot replay a lockfile with a duplicated local `resolved_by` parent
 
-This is an APM lockfile-writer defect, re-checked on the pinned 0.32.0 CLI. A clean `apm install` of `packages/default-stack` still writes the duplicate, and `apm audit --ci` still fails with the same signature. It makes that package the one whose own lockfile fails its own audit.
+This is an APM lockfile-writer defect in the pinned 0.32.0 CLI. No Foundry package triggers it today, but `default-stack` sits one edge away from it.
 
-**Trigger.** A local package is reachable by **two** paths from the same manifest (once directly, once transitively) **and** is itself the `resolved_by` parent of another local package. `apm install` then writes two entries with the same `repo_url`, and the drift replay cannot decide which one parents the grandchild. In `default-stack`, `pr` is both a direct dependency and a transitive one (via `execution`), and it parents `explore`. `repo-maintenance` is also reached both directly and via `skill-creation`, but the lockfile records `explore`'s parent as `pr`, so the failure that surfaces names `pr`:
+**Trigger.** A local package is reachable by **two** paths from the same manifest (once directly, once transitively) **and** is itself the `resolved_by` parent of another local package. `apm install` then writes two entries with the same `repo_url`, and the drift replay cannot decide which one parents the grandchild. `default-stack` reaches `pr` both directly and via `execution`, and `repo-maintenance` both directly and via `skill-creation`, so its lockfile records each of them twice. Neither has a sibling dependency, so the replay has no grandchild to resolve and the audit passes. Until the `explore` package was removed, `pr` parented `explore`, and `default-stack`'s own audit failed:
 
 ```text
-$ apm audit --ci          # in packages/default-stack
-config-consistency  | 1 MCP config inconsistenc(ies) -- run 'apm install' to reconcile
+$ apm audit --ci          # in packages/default-stack, while pr depended on explore
 drift               | drift replay failed: corrupt local dependency graph in the lockfile
                     | (ambiguous resolved_by parent '_local/pr' of
                     | '_local/explore': 2 local dependencies share that repo_url
                     | (['../pr', '../pr'])). Fix the
                     | resolved_by chain or re-run 'apm install'.
-
-[x] 2 of 8 check(s) failed
 ```
 
 Re-running `apm install` rewrites the identical duplicate, so the suggested remedy does not help.
@@ -255,9 +249,9 @@ config-consistency details:
 
 Two levels are not enough: `meta → {base, mid → base}` alone audits clean. The failure needs the duplicated package to have a child of its own.
 
-**Scope.** Only the package's own lockfile is affected. All ten packages still resolve and deploy — consumer-side installs of `default-stack` pass `apm audit --ci` on `cursor`, `claude` and `copilot`, and `apm install --frozen` succeeds in place. Both are asserted by `tests/structural/run-tier1.sh` and CI.
+**Scope.** Only the meta-package's own lockfile would be affected. Consumer-side installs of the same manifest audit cleanly, and `apm install --frozen` still succeeds in place.
 
-**Handling.** The manifest keeps its eight declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. Instead the defect is asserted: `tests/structural/run-tier1.sh` fails if `default-stack`'s audit *passes* or if it fails with a different message, so a fix in a later APM release is noticed rather than silently tolerated. CI does not run that audit.
+**Handling.** The manifest keeps its eight declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. The cost is that giving `pr` or `repo-maintenance` a sibling dependency would break `default-stack`'s own `apm audit --ci`, which `tests/structural/run-tier1.sh` now expects to pass.
 
 ### Plugin-format archives do not translate instruction frontmatter
 

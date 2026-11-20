@@ -11,7 +11,7 @@ Socratic questioning with mathematical ambiguity scoring. Replaces vague ideas w
 
 - Ask ONE question at a time — never batch multiple questions
 - Target the WEAKEST clarity dimension with each question
-- Gather codebase facts via `explore` subagents BEFORE asking the user about them
+- Gather codebase facts BEFORE asking the user about them, through a read-only exploration subagent (the host's built-in explore agent where one exists). Where the host has no subagents, equivalent direct read-only inspection is fine
 - Score ambiguity after every answer — display the score transparently
 - Do not proceed to execution until ambiguity ≤ threshold (default 0.2)
 - Allow early exit with a clear warning if ambiguity is still high
@@ -21,10 +21,10 @@ Socratic questioning with mathematical ambiguity scoring. Replaces vague ideas w
 
 1. Parse the user's idea from the conversation
 2. **Detect brownfield vs greenfield**:
-   - Dispatch the `explore` agent as a subagent to check if cwd has existing source code, package files, or git history
+   - Dispatch a read-only exploration subagent (the host's built-in explore agent where one exists) to check if cwd has existing source code, package files, or git history; without subagents, inspect it directly and read-only
    - If source files exist AND the user's idea references modifying/extending something: **brownfield**
    - Otherwise: **greenfield**
-3. **For brownfield**: Use the `explore` agent to map relevant codebase areas, store as `codebase_context`
+3. **For brownfield**: Use the same read-only exploration to map relevant codebase areas, store as `codebase_context`
 4. **Track interview progress** in a todo list (rounds, current phase)
 5. **Announce the interview** to the user:
 
@@ -170,7 +170,7 @@ When ambiguity ≤ threshold (or hard cap / early exit):
 
 ## Technical Context
 
-{brownfield: relevant codebase findings from the explore agent}
+{brownfield: relevant codebase findings from read-only exploration}
 {greenfield: technology choices and constraints}
 
 ## Ontology (Key Entities)

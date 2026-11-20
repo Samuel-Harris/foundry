@@ -16,9 +16,6 @@ You are a **review subagent**. The parent agent already collected git output and
 ## Work
 
 1. Perform the full audit against **only** the changed code in the diff. Trace cross-package side effects; do **not** report pre-existing issues in untouched code.
-2. Finish your **independent** audit first (fresh eyes).
-3. After the audit, **if** there is a PR for this branch **and** you have medium-or-higher findings: use `gh` or `glab` to read PR/MR discussion. Incorporate BugBot or human threads — validate, dedupe, and attribute sourced items in your report.
-4. **Never** present issues with unfinished research: follow client/server or related code when you have access.
 
 Calibrate severity honestly. Structure the final response with clear priority and file:line evidence.
 

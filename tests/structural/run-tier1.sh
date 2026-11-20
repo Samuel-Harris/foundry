@@ -251,7 +251,7 @@ scope_rows=(
   "compatibility-surface-gate|**/*"
   "python-rules|**/*.py"
   "plan-handoff-standard|.foundry/plans/**/*.md"
-  "keep-agent-mds-up-to-date|**/AGENTS.md"
+  "keep-agent-mds-up-to-date|**/*"
 )
 scope_failures=0
 for row in "${scope_rows[@]}"; do

@@ -15,6 +15,7 @@ Check the real thing, not a proxy:
 - Check process liveness directly, not indirectly through derived state
 - Read the actual value, not a cached or derived representation
 - When verification fails, suspect the observation method before suspecting the system
+- A verdict over a set (every column, file, source or account that can hold the answer) checks every member. Otherwise name the members you checked and say the verdict covers only those.
 
 ## Script the check when you can
 

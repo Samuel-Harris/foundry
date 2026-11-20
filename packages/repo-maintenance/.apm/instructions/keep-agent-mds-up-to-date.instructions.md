@@ -1,29 +1,14 @@
 ---
-description: Keep project documentation (AGENTS.md, agent rules, skills, commands and hooks) up to date when code changes make them stale.
-applyTo: "**/AGENTS.md"
+description: When a change renames, removes, moves or changes the behaviour of anything, find and fix every agent doc that still describes the old state.
+applyTo: "**/*"
 ---
 
-# Keep Documentation Current
+# Keep agent docs current
 
-If your change adds, removes, renames, or relocates something that appears in project documentation, update that documentation in the same change.
+Before you finish a change that renames, removes, moves or changes the behaviour of a file, symbol, command, config key, setting, permission, workflow job or test check:
 
-Documentation includes: `AGENTS.md` files, agent rules under `.cursor/rules/`, `.claude/rules/` or `.github/instructions/`, agent skills, agent commands, agent hooks configuration, and `CONTRIBUTING.md`.
+1. Search every doc for the old name and the old behaviour: `rg -n '<old name>' -g '*.md' -g '*.mdc'`, plus docstrings and tool descriptions in the files you touched.
+2. Fix every hit in the same change, including sibling and parent `AGENTS.md` files, rules, skills and routing tables, not only the nearest `AGENTS.md`.
+3. If you added a skill, contract rule or exception, add it wherever the repository says such things are listed.
 
-## When to update
-
-- Adding, removing, renaming, or moving files/directories referenced in an `AGENTS.md`
-- Changing CLI commands, environment variables, or setup steps
-- Adding or removing API endpoints, models, schemas, or CRUD modules listed in an `AGENTS.md`
-- Altering patterns or conventions described in rules or skills
-- Changing the project structure in a way that affects directory tables
-
-## When NOT to update
-
-- Bug fixes to internal implementation not referenced in any documentation
-- Changes to test files
-- Modifications within a file that don't alter its public interface or documented behaviour
-
-## How to update
-
-- Use the `agents-md` skill for guidance on how to update the `AGENTS.md` file.
-- Update only the nearest relevant `AGENTS.md` — don't walk up the hierarchy unless the parent explicitly references what changed.
+Internal changes that no doc mentions need no doc edit.

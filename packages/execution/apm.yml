@@ -1,5 +1,5 @@
 name: execution
-version: "0.1.3"
+version: "0.1.4"
 description: "Take a Linear ticket to a merge-ready draft pull request."
 author: sam
 license: MIT

@@ -1,5 +1,5 @@
 name: pr
-version: "0.1.1"
+version: "0.1.2"
 description: "Pull request comprehension and merge-readiness babysitting."
 author: sam
 license: MIT

@@ -1,7 +1,6 @@
 ---
 name: thermo-nuclear-review
 description: Comprehensive security and correctness audit of a branch's changes. Use for thermo nuclear, thermonuclear, or deep review requests, or branch/PR diff audits focused on bugs, breaking changes, security issues, devex regressions, and feature-gate leaks.
-disable-model-invocation: true
 ---
 
 # Thermo Nuclear Review
@@ -46,6 +45,17 @@ If you identify a high risk finding, but the intent of the branch is to introduc
 If you report issues as High priority when they are not in fact high priority / meaningful issues, devs will lose trust in you and stop listening to you over time.
 NEVER misreport the priority / importance of issues. Be extremely thorough in tracing issues end-to-end to gain complete, and total confidence before reporting.
 
+### Defect Classes To Trace
+
+Trace each of these through every changed path before you finish:
+
+- **Sibling paths.** For every guard, permission check, escape, validation, event or field the diff adds or changes, list the other routes, handlers, view modes and import or export halves that do the same job (`rg` for the old call or name). Report each sibling still on the old behaviour.
+- **Lifetime and failure.** For every session, lock, client, subprocess or listener the diff opens, check it is not held across slow external I/O or blocking work on an event loop, and that it closes on cancellation and exception. For every multi-step write, check a failure part-way leaves no half-applied state: nothing deleted before its replacement is accepted, nothing acted on after its own request failed.
+- **Authorisation.** For every new or changed read or write of a resource the caller names by id, confirm the check matches the operation (edit or share for writes, not read) and the owning workspace, project or organisation. Treat widened IAM, bucket, cookie, network or secret scope as a finding.
+- **Untrusted text.** Follow every value a user, PR author, document or external service controls to where it lands: a shell command, a model prompt, HTML, an error message, a path or a query. Report each sink that does not apply the escape or sanitiser the codebase uses for that sink elsewhere.
+- **Derived state.** For every write, name each cache, query result, mounted view or form default that reads the data, and confirm the change refreshes or invalidates it. Check that an async poll or retry cannot overwrite newer state with an older snapshot.
+- **Contracts.** When the diff renames or changes a prop, field, function, tool schema, stored format or validator, find every consumer: callers, tests that patch it by name, validators of saved data, tool descriptions and docs. Report each one that no longer agrees.
+
 ## Final Response
 
 IF you have medium-to-high priority / risk findings, and there is a PR for this branch, then check the PR/MR discussion using gh/glab cli to see if there are comments from BugBot or others present.
@@ -56,4 +66,3 @@ Flag issues found by BugBot or others in the PR/MR discussion that you include i
 
 - NEVER present issues with unfinished research. E.g. Never say something like, "The client has issue X, but if handled in the backend then this is ok." if you have access to the backend code and can check for yourself.
 - You MUST wait to check the PR/MR discussion until AFTER you have performed your audit. This way you have fresh eyes while you review.
-- Be EXTREMELY thorough, rigorous, careful, ambitious, and attentive. NOTHING can slip through.

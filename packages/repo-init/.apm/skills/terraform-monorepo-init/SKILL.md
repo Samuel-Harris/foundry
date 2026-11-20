@@ -21,7 +21,7 @@ Work through the phases in order and do not begin a later phase until the earlie
 
 ## Mandatory Reading Map
 
-This file is the entry point, not the whole skill. Read all five reference files before finalising the standalone plan, and re-read the applicable one before each phase. If a required reference file is missing or unreadable, report the missing prerequisite and stop; do not reconstruct its requirements from memory.
+This file is the entry point, not the whole skill. Read the four reference files other than sources.md before finalising the standalone plan, and re-read the applicable one before each phase. sources.md is provenance only: open it when you need a primary-documentation URL to re-verify. If a required reference file is missing or unreadable, report the missing prerequisite and stop; do not reconstruct its requirements from memory.
 
 - [references/discovery-and-planning.md](references/discovery-and-planning.md) — read-only discovery, mandatory deep-interview, time-sensitive verification, the decision schema, the authorisation matrix and prohibited operations, and standalone plan generation and approval (original Sections 3 to 6).
 - [references/architecture-and-contracts.md](references/architecture-and-contracts.md) — fixed monorepo conventions and directory grammar, repository metadata and ownership, agent documentation and command contracts (original Sections 2, 7 and 8).
@@ -48,10 +48,6 @@ These gates apply in full even before the reference files are read, and no refer
 This skill produces exactly two outputs for each real project: a standalone approved implementation plan at `docs/setup/<setup-id>/implementation-plan.md` with its decision and authorisation records at `docs/setup/<setup-id>/decisions.json` and `docs/setup/<setup-id>/authorisations.json`, and evidence at `docs/setup/<setup-id>/completion.md` of implementing only that plan. Using this skill does not itself create a GitHub repository, cloud account, backend, deployment identity or running service, and it is not authorisation to provision infrastructure.
 
 ## Purpose, Scope And Non-Goals
-
-Apply this skill with the available deep-interview skill and read access to the target repository. Its first mandatory phase is read-only discovery followed by deep-interview. The phase produces a complete, project-specific implementation plan and obtains explicit approval. No implementation starts merely because the interview ends.
-
-This skill is a procedure for producing an authorised plan, not itself authorisation and not a command to provision infrastructure. It has two outputs for each real project: a standalone approved implementation plan, then evidence of implementing only that plan. Following this skill does not create a generic template, GitHub repository, cloud account, backend, deployment identity or running service.
 
 Four labels distinguish statements: FIXED is a convention of this skill; DECISION is resolved for the specific project; DEFAULT is a proposed value that requires user confirmation; DOCUMENTED is product behaviour that must be checked against the selected version. A default is not implicit consent. References explain behaviour; the implementation instructions must stand alone.
 

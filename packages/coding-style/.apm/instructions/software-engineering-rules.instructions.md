@@ -5,10 +5,6 @@ applyTo: "**/*"
 
 # Software Engineering Rules
 
-This file exists because LLMs make predictable mistakes when writing code. Not random mistakes. The same ones, over and over. I've watched it happen enough times to write them down.
-
-These are not suggestions. These are rules. Follow them and you'll produce code that doesn't need to be rewritten. Ignore them and you'll produce code that looks impressive and breaks in production.
-
 ## 1. Read Before You Write
 
 The single biggest source of bad LLM code is not reading the existing codebase before writing new code. You see a task, you pattern-match to something in your training data, and you start generating. This is almost always wrong.
@@ -17,8 +13,11 @@ Before writing anything:
 
 - Read the files you're about to modify. Not skim. Read.
 - Look at how similar things are done elsewhere in the project. If there's a pattern for API routes, follow that pattern. If there's a utility function that does half of what you need, use it.
+- Diff your path against its siblings. When you add a route, query, export, copy flow, permission check or config resource beside existing ones, list every guard, option and setting the closest sibling applies (entitlement and permission checks, normalisation, fallbacks, cache or refetch options, redirect and timeout settings, declared variables) and carry each one over or say why not. When you change one path, search for the paths that do the same job and change them too, or name them as out of scope.
+- Before writing a helper, type, loader, retry loop, IAM role or table definition, search the repository for one that already does it (by behaviour, not only by name) and call it. If you still write a new one, say in the PR why the existing one does not fit.
 - Check the imports at the top of the file. They tell you what libraries this project actually uses. Don't introduce axios if the project uses fetch everywhere. Don't introduce lodash if the project uses native methods.
 - Look at the test files. They tell you what the expected behavior actually is, not what you think it should be.
+- Use the repository's own terms and naming conventions. A name says what the value is, in its unit; do not reuse one name for two meanings in a file.
 
 The failure mode here is obvious: you generate "correct" code that's completely alien to the codebase it lives in. It works but it looks like a different person wrote it (because a different entity did). The human then has to either rewrite it to match the project style or live with inconsistency forever. Both are bad.
 
@@ -75,9 +74,11 @@ async def send_welcome_email(user):
 
 **Test-only parameters.** Do not add a production parameter that only tests pass. If production code never supplies a value other than the default, the parameter is test scaffolding in the production signature. Test through the real interface instead.
 
-**Files over 1,000 lines.** Keep every file at or under 1,000 lines. If your change would push a file past that, split it first: extract helpers, submodules, or components along a seam the code already has. Exceed the limit only for a concrete reason, such as generated output, a lockfile, a data fixture, or one cohesive unit that splitting would scatter, and state that reason in the PR description. A file that is already over the limit is not yours to split unasked, but do not grow it without the same kind of reason.
+**Plain over clever.** Write index arithmetic, sort keys, parsing and shell as named steps a reader can follow. No nested ternaries.
 
-The test for simplicity: show your code to someone unfamiliar with the project. If they have to ask "why is this abstracted like this?" and the answer is "in case we need to..." then you've over-engineered it. "In case we need to" is not a requirement. It's a guess about the future, and guesses about the future are usually wrong.
+**Files over 1,000 lines.** Keep every file at or under 1,000 lines. If your change would push a file past that, split it first: extract helpers, submodules, or components along a seam the code already has, and put the cooperating files a split produces in a new folder named after the unit they implement, not as flat siblings in a folder that already holds unrelated files. Exceed the limit only for a concrete reason, such as generated output, a lockfile, a data fixture, or one cohesive unit that splitting would scatter, and state that reason in the PR description. A file that is already over the limit is not yours to split unasked, but do not grow it without the same kind of reason.
+
+The test for simplicity: for each function, class, parameter, flag, check and file your diff adds, name the caller or requirement that needs it now. If the answer is "in case we need to", delete it.
 
 ## 4. Surgical Changes
 
@@ -89,13 +90,15 @@ Rules:
 
 **Match the existing style.** If the file uses single quotes, use single quotes. If the file uses `snake_case`, use `snake_case`. If the file has no semicolons, don't add semicolons. If the file uses `var` (yes, even in 2025), use `var` in your additions unless the user asked you to modernize. Consistency within a file beats your personal preference.
 
-**Clean up after yourself, not after others.** If your change makes an import unused, remove that import. If your change makes a variable unused, remove that variable. If your change makes a function unused, remove that function. But only if YOUR change caused it. Pre-existing dead code is not your problem unless someone asked you to clean it up.
+**Clean up after yourself, not after others.** For every call, branch or flag your change removes, search for the symbol it used. Delete the function, parameter, field, endpoint, wrapper, import or scaffolding your change left with no caller. Pre-existing dead code is not your problem unless someone asked.
 
-**Update what describes the behavior you changed.** When you change behavior or replace a design, fix every docstring, name, test name, and doc that still describes the old one. Search for the old term before you hand off.
+**Update what describes the behavior you changed.** When you change behavior or replace a design, fix every docstring, name, test, test double, snapshot, golden, fixture, doc, model-facing prompt and tool description that still describes the old one. A prompt that names a tool, source, field or document the turn no longer has is a bug, not stale prose. Regenerate generated fixtures after the final rebase. Search for the old term before you hand off.
 
-**Comments explain why, never what.** Do not narrate the implementation, restate a parameter, or describe a constant. If a comment explains what a block does, extract the block into a function whose name says it. If a comment explains a constant or a magic number, give the constant a better name. Never write a comment about the PR or the stack ("moved in the next layer"). Keep a comment only for a reason the code cannot show.
+**Comments and docstrings explain why, never what.** Do not narrate the implementation, restate a parameter, or describe a constant. If a comment explains what a block does, extract the block into a function whose name says it. If a comment explains a constant or a magic number, give the constant a better name. Never write a comment about the PR or the stack ("moved in the next layer"). Keep a comment only for a reason the code cannot show.
 
-**Don't reformat.** Don't run prettier on a file that wasn't formatted with prettier. Don't change indentation from 4 spaces to 2. Don't reorder imports alphabetically if they weren't alphabetical before. Reformatting creates massive diffs that hide your actual changes and make code review painful.
+**Don't reformat.** Don't run prettier on a file that wasn't formatted with prettier. Don't change indentation from 4 spaces to 2. Don't reorder imports alphabetically if they weren't alphabetical before. Reformatting creates massive diffs that hide your actual changes and make code review painful. Run formatters and lint autofixes on the files you changed, then revert any hunk that touches lines you did not edit.
+
+**A refactor keeps every guard.** When you move, merge or swap the library under code, keep each timeout, exclusion, callback and error handler it had, or say in the PR why it goes. After a merge or rebase, diff each conflicted file against the new base so you do not revert an upstream change.
 
 The test: look at your diff. Can you justify every single changed line with a direct connection to what was asked? If any line is there because "while I was in there I thought I'd..." then revert it.
 
@@ -105,7 +108,7 @@ The difference between code that works and code you think works is testing. You 
 
 **Write the test first when fixing bugs.** Before you fix anything, write a test that reproduces the bug. Run it. Watch it fail. Then fix the bug. Run the test. Watch it pass. This is not optional and not TDD dogma. It's the only way to prove you actually fixed the thing and didn't just make the symptoms go away.
 
-**Run existing tests before and after your changes.** If tests passed before your change and fail after, you broke something. This is obvious. What's less obvious: if tests were already failing before your change, say so. Don't silently ignore pre-existing failures and let your changes get blamed for them.
+**Run existing tests before and after your changes.** If tests passed before your change and fail after, you broke something.
 
 **Don't write tests for the sake of writing tests.** A test earns its place only when it can fail because behavior is wrong. A test that checks whether a constructor sets properties is worthless. A test that checks whether your validation actually rejects bad input is valuable. Test behavior, not implementation. Test the interesting cases, not the trivial ones.
 
@@ -122,6 +125,7 @@ The difference between code that works and code you think works is testing. You 
 - The file exists, is non-empty, or contains a heading. Asserting every `AGENTS.md` still has text after `strip()` does not check that the guide is accurate or that anything follows it. Version control already records that the file is there.
 - A config or build file contains a fixed string. Asserting `.bazelrc` contains `--aspects=//tools/boundaries:enforcer.bzl%import_enforcer` does not run the aspect and does not show that a forbidden import fails the build. A comment with the same text would pass.
 - The assertion is a second copy of a constant, flag, or source line you control in both places.
+- It mocks every collaborator and asserts which mocks were called, in what order or with what arguments, or greps the source for text. That pins the implementation and passes while behaviour is broken. Assert an output or a side effect instead.
 - It parses a CI workflow file (GitHub Actions YAML and similar) or pins a list of jobs, paths, or config keys. These are restatements too: do not write them. Test the behavior of the script the workflow calls, and use real CI runs as the evidence for trigger, condition, and job-graph changes. The exception is a test that pins the permissions granted to a CI or service identity against a mocked permission system. A widened grant is a security change, so a test that fails on it earns its place.
 
 If you cannot name a behavior that fails the test while the files stay well formed, do not add the test. Say that, and why. The import enforcer is worth a test when you hand it source and assert that an allowed import passes and a forbidden one exits non-zero. An empty-file check is not a stand-in for that.
@@ -140,19 +144,7 @@ Transform vague tasks into verifiable ones:
 - "Fix the bug" becomes "write a test that reproduces the reported behavior, make the test pass, verify existing tests still pass"
 - "Improve performance" becomes "profile first, identify the bottleneck, fix that specific thing, measure again"
 
-For anything that takes more than one step, state the plan before executing:
-
-```
-Plan:
-1. Add the new database column with a migration
-2. Update the model to include the new field
-3. Modify the API endpoint to accept and return the field
-4. Add validation for the field
-5. Write tests for the new behavior
-6. Run full test suite to check for regressions
-```
-
-This does two things: it lets the user catch mistakes in your approach before you waste time implementing them, and it forces you to actually think through the steps instead of just diving in and figuring it out as you go.
+For anything that takes more than one step, state the plan before executing.
 
 ## 7. Debugging
 
@@ -185,6 +177,8 @@ Before adding a package:
 
 When you do add a dependency, say why. "I'm adding zod because this project needs runtime schema validation and there's nothing in the existing dependencies that does this" is fine. Silently adding packages to package.json is not.
 
+When you bump a dependency, bump the packages released with it (the same scope or monorepo, such as `@vitest/*`) to matching versions. Regenerate a lockfile with the package manager, never by hand, and do not regenerate a committed lockfile when you only meant to verify it. Then read the lockfile diff: every package resolved outside the registry must keep its source URL and integrity hash, and a new duplicate copy of a package or a version change you did not ask for is a defect to fix before you hand off.
+
 ## 9. Communication
 
 How you communicate about code matters as much as the code itself.
@@ -195,7 +189,7 @@ How you communicate about code matters as much as the code itself.
 
 **Be precise about what you're uncertain about.** "I'm not sure if this library supports streaming responses" is useful. "I think this should work" is not. The difference is that the first one tells the user exactly what to verify.
 
-**Cite what you read before stating facts about the codebase.** In plans, reviews, and PR comments, every claim about existing code, config, infrastructure, or a commit hash must come from a file, command, or API you read in this session. Cite it, or label the claim unverified. A job name, engine version, or hash recalled from memory is a guess until you have looked it up.
+**Cite what you read before stating a fact.** In plans, reviews, PR comments, replies and code comments, every claim about existing code, config, infrastructure, an external service's behaviour, unit or quota, or a commit hash must come from a file, command, doc or API response you read in this session. Cite it, or label the claim unverified. A job name, engine version, or hash recalled from memory is a guess until you have looked it up.
 
 **Fix the class of problem, not the instance.** When a review comment names a pattern, search the rest of the diff and every PR in the stack for the same pattern and fix all of them in the same round. Before replying "done", check the claim against the pushed diff and cite the commit.
 
@@ -211,7 +205,7 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 
 **The Kitchen Sink.** Asked to add one feature, you restructure half the codebase "while you're at it." Don't. Do the one thing.
 
-**The Wrong Abstraction.** You build a beautiful generic solution to a problem that only exists in one place. Do not invent an abstraction for a single use. When an existing helper already owns the behavior, reuse it rather than writing a second copy. A rule decided in two places drifts; decide it once and have every caller use that.
+**The Wrong Abstraction.** When an existing helper already owns the behavior, reuse it rather than writing a second copy. A rule decided in two places drifts; decide it once and have every caller use that.
 
 **The Invisible Decision.** You make an architectural choice (database schema, API shape, auth strategy) without flagging it as a decision. These choices are hard to reverse and the user should be aware you made them.
 
@@ -223,8 +217,6 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 
 **The Runaway Refactor.** You start fixing one thing. It touches another thing. That touches another. Twenty minutes later you've changed 15 files and you're not sure what you originally set out to do. If a fix is cascading, stop. Tell the user what's happening. Get buy-in before continuing.
 
-**The Ceremonial Test.** You add a test so the change looks verified. It reads a file and asserts the file is non-empty, or asserts a config line is still that config line. Delete it. A test that cannot fail for a behavioral reason is not coverage.
-
 **The Context Dump.** You learn something about a subsystem and append it to the nearest always-loaded file, because that is where you were looking. Every agent that touches any file below it now pays for that paragraph, whether or not it is relevant. Put the fact in the file that owns it (see section 12).
 
 ## 11. Pull Request Scope and Size
@@ -233,7 +225,7 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 
 A pull request must not exceed **2,500 changed lines**, measured as additions plus deletions against the PR's base branch. This is a hard limit, not a target, and includes application code, tests, migrations, generated files, lockfiles, and formatting changes. Staying under it does not make a multi-purpose PR acceptable.
 
-Before creating or updating a PR, check that it does one thing and measure its full diff against its intended base branch. If it does more than one thing or would exceed 2,500 changed lines, split the work before handoff; never create a mixed or oversized PR with a promise to split it later.
+Before creating or updating a PR, run `git fetch`, then `git log --oneline origin/<base>..HEAD` and `git diff --stat origin/<base>...HEAD` against its intended base branch. Read every file the diff lists and revert any file or hunk the change does not need, including formatter rewraps, lockfile churn and renames. Every commit and file must serve one change you can describe without "and also"; a file you did not touch, or a commit from another branch, means the base is wrong. Then check the total against 2,500 lines. If it does more than one thing or would exceed 2,500 changed lines, split the work before handoff; never create a mixed or oversized PR with a promise to split it later.
 
 Split along vertical slices one reviewer can own. Keep supporting edits (comments, renames the change needs) in the PR they support. Check the line count against the real 2,500 limit before handing off.
 

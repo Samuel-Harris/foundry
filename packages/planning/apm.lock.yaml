@@ -3,7 +3,7 @@ apm_version: 0.32.0
 dependencies:
 - repo_url: _local/deep-interview
   name: deep-interview
-  version: 0.1.1
+  version: 0.1.2
   package_type: apm_package
   deployed_files:
   - .agents/skills/deep-interview
@@ -11,14 +11,14 @@ dependencies:
   - .claude/skills/deep-interview
   - .claude/skills/deep-interview/SKILL.md
   deployed_file_hashes:
-    .agents/skills/deep-interview/SKILL.md: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
-    .claude/skills/deep-interview/SKILL.md: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+    .agents/skills/deep-interview/SKILL.md: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
+    .claude/skills/deep-interview/SKILL.md: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
   source: local
   local_path: ../deep-interview
   declared_license: MIT
 - repo_url: _local/review
   name: review
-  version: 0.1.2
+  version: 0.1.3
   package_type: apm_package
   deployed_files:
   - .agents/skills/pr-context
@@ -48,20 +48,20 @@ dependencies:
   deployed_file_hashes:
     .agents/skills/pr-context/SKILL.md: sha256:b3a77ef40aa97a30c5f929af114edd09f6d8c531860569a51b84d61054569716
     .agents/skills/pr-context/references/state-chart.tsx: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
-    .agents/skills/quick-review/SKILL.md: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
-    .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
-    .agents/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+    .agents/skills/quick-review/SKILL.md: sha256:ee896c3ae8ca23bb8718757de19622a4922b20d25b7f0c6ebf40e15d757b8796
+    .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:cba9808da0b4a4b72cf7760bdbe3b6bae133ff15170bcd0e83ba6a301564f13d
+    .agents/skills/thermo-nuclear-review/SKILL.md: sha256:eaa3d064e98eac24bd07c235aeded1436fbec7838cfa25a8e27c843417bfc751
     .claude/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
-    .claude/agents/thermo-nuclear-review-subagent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+    .claude/agents/thermo-nuclear-review-subagent.md: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
     .claude/skills/pr-context/SKILL.md: sha256:b3a77ef40aa97a30c5f929af114edd09f6d8c531860569a51b84d61054569716
     .claude/skills/pr-context/references/state-chart.tsx: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
-    .claude/skills/quick-review/SKILL.md: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
-    .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
-    .claude/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+    .claude/skills/quick-review/SKILL.md: sha256:ee896c3ae8ca23bb8718757de19622a4922b20d25b7f0c6ebf40e15d757b8796
+    .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:cba9808da0b4a4b72cf7760bdbe3b6bae133ff15170bcd0e83ba6a301564f13d
+    .claude/skills/thermo-nuclear-review/SKILL.md: sha256:eaa3d064e98eac24bd07c235aeded1436fbec7838cfa25a8e27c843417bfc751
     .cursor/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
-    .cursor/agents/thermo-nuclear-review-subagent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+    .cursor/agents/thermo-nuclear-review-subagent.md: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
     .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
-    .github/agents/thermo-nuclear-review-subagent.agent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+    .github/agents/thermo-nuclear-review-subagent.agent.md: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
   source: local
   local_path: ../review
   declared_license: MIT
@@ -83,7 +83,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+  content_hash: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
 - kind: project-relative
   target: claude
   value: .claude/rules/plan-handoff-standard.md
@@ -92,7 +92,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:85f4a5e6cd40dd458740e5bb7649b92903a9def127544379a2c554d18a1d9a75
+  content_hash: sha256:0a78fe57399936ed65dc268d8532d9ff6903312d0479d8014b54ef8b93ea1fa1
 - kind: project-relative
   target: claude
   value: .claude/skills/deep-interview
@@ -110,7 +110,7 @@ deployments:
   owners:
   - ../deep-interview
   active_owner: ../deep-interview
-  content_hash: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+  content_hash: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
 - kind: project-relative
   target: claude
   value: .claude/skills/masterplan
@@ -128,7 +128,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+  content_hash: sha256:49bb98451d8ade6dd6cbeb968ed6d8d2ca054f32ead09f66dd0642baf8f12524
 - kind: project-relative
   target: claude
   value: .claude/skills/masterplan/references/masterplan-template.md
@@ -182,7 +182,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
+  content_hash: sha256:ee896c3ae8ca23bb8718757de19622a4922b20d25b7f0c6ebf40e15d757b8796
 - kind: project-relative
   target: claude
   value: .claude/skills/thermo-nuclear-code-quality-review
@@ -200,7 +200,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+  content_hash: sha256:cba9808da0b4a4b72cf7760bdbe3b6bae133ff15170bcd0e83ba6a301564f13d
 - kind: project-relative
   target: claude
   value: .claude/skills/thermo-nuclear-review
@@ -218,7 +218,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+  content_hash: sha256:eaa3d064e98eac24bd07c235aeded1436fbec7838cfa25a8e27c843417bfc751
 - kind: project-relative
   target: copilot
   value: .agents/skills/deep-interview
@@ -236,7 +236,7 @@ deployments:
   owners:
   - ../deep-interview
   active_owner: ../deep-interview
-  content_hash: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+  content_hash: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
 - kind: project-relative
   target: copilot
   value: .agents/skills/pr-context
@@ -281,7 +281,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
+  content_hash: sha256:ee896c3ae8ca23bb8718757de19622a4922b20d25b7f0c6ebf40e15d757b8796
 - kind: project-relative
   target: copilot
   value: .agents/skills/thermo-nuclear-code-quality-review
@@ -299,7 +299,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+  content_hash: sha256:cba9808da0b4a4b72cf7760bdbe3b6bae133ff15170bcd0e83ba6a301564f13d
 - kind: project-relative
   target: copilot
   value: .agents/skills/thermo-nuclear-review
@@ -317,7 +317,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+  content_hash: sha256:eaa3d064e98eac24bd07c235aeded1436fbec7838cfa25a8e27c843417bfc751
 - kind: project-relative
   target: copilot
   value: .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md
@@ -335,7 +335,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+  content_hash: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
 - kind: project-relative
   target: copilot
   value: .github/instructions/plan-handoff-standard.instructions.md
@@ -344,7 +344,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:473af0b129a903d4ffa30339f0c5997c057e8ee1ce6181adb2c997dc29023638
+  content_hash: sha256:bba4492008beebd29f4c0467ccf619ca25f350e3eb743aaf67d713f2a610b8a6
 - kind: project-relative
   target: cursor
   value: .cursor/agents/thermo-nuclear-code-quality-review-subagent.md
@@ -362,7 +362,7 @@ deployments:
   owners:
   - ../review
   active_owner: ../review
-  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+  content_hash: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
 - kind: project-relative
   target: cursor
   value: .cursor/rules/plan-handoff-standard.mdc
@@ -371,7 +371,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:45630d969859ca60ad9fc601fd8afe09b690f29d2a761fb4c95e0c4d4e151bf2
+  content_hash: sha256:6a79ea7d0d55edac56b8a5b5c97067627f062a86c4c155dd7b1c892c2f5b6aee
 - kind: project-relative
   target: legacy
   value: .agents/skills/masterplan
@@ -389,7 +389,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+  content_hash: sha256:49bb98451d8ade6dd6cbeb968ed6d8d2ca054f32ead09f66dd0642baf8f12524
 - kind: project-relative
   target: legacy
   value: .agents/skills/masterplan/references/masterplan-template.md
@@ -410,10 +410,10 @@ local_deployed_files:
 - .cursor/rules/plan-handoff-standard.mdc
 - .github/instructions/plan-handoff-standard.instructions.md
 local_deployed_file_hashes:
-  .agents/skills/masterplan/SKILL.md: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+  .agents/skills/masterplan/SKILL.md: sha256:49bb98451d8ade6dd6cbeb968ed6d8d2ca054f32ead09f66dd0642baf8f12524
   .agents/skills/masterplan/references/masterplan-template.md: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
-  .claude/rules/plan-handoff-standard.md: sha256:85f4a5e6cd40dd458740e5bb7649b92903a9def127544379a2c554d18a1d9a75
-  .claude/skills/masterplan/SKILL.md: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+  .claude/rules/plan-handoff-standard.md: sha256:0a78fe57399936ed65dc268d8532d9ff6903312d0479d8014b54ef8b93ea1fa1
+  .claude/skills/masterplan/SKILL.md: sha256:49bb98451d8ade6dd6cbeb968ed6d8d2ca054f32ead09f66dd0642baf8f12524
   .claude/skills/masterplan/references/masterplan-template.md: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
-  .cursor/rules/plan-handoff-standard.mdc: sha256:45630d969859ca60ad9fc601fd8afe09b690f29d2a761fb4c95e0c4d4e151bf2
-  .github/instructions/plan-handoff-standard.instructions.md: sha256:473af0b129a903d4ffa30339f0c5997c057e8ee1ce6181adb2c997dc29023638
+  .cursor/rules/plan-handoff-standard.mdc: sha256:6a79ea7d0d55edac56b8a5b5c97067627f062a86c4c155dd7b1c892c2f5b6aee
+  .github/instructions/plan-handoff-standard.instructions.md: sha256:bba4492008beebd29f4c0467ccf619ca25f350e3eb743aaf67d713f2a610b8a6

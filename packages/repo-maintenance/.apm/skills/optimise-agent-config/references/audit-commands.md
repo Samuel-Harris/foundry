@@ -4,7 +4,7 @@ Bash commands for each audit area. Run these from the repository root to gather 
 
 Where a command is host-specific, the pattern is repeated per host. The portable source of truth is the APM primitives, which deploy to every target:
 
-- skills: `.apm/skills/<name>/SKILL.md` → `.cursor/skills/`, `.claude/skills/` and the shared `.agents/skills/`
+- skills: `.apm/skills/<name>/SKILL.md` → `.claude/skills/` (Claude Code) and the shared `.agents/skills/` (Cursor and GitHub Copilot)
 - agents: `.apm/agents/<name>.agent.md` → `.cursor/agents/`, `.claude/agents/`, `.github/agents/`
 - instructions: `.apm/instructions/<name>.instructions.md` → `.cursor/rules/`, `.claude/rules/`, `.github/instructions/`
 

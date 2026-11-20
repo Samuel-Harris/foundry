@@ -94,8 +94,6 @@ Round {n} complete.
 ### Step 2e: Check Soft Limits
 
 - **Round 3+**: Allow early exit if user says "enough", "let's go", "build it"
-- **Round 10**: Soft warning: "We're at 10 rounds. Current ambiguity: {score}%. Continue or proceed?"
-- **Round 20**: Hard cap: "Maximum rounds reached. Proceeding with current clarity ({score}%)."
 
 ## Phase 3: Challenge Modes
 
@@ -114,7 +112,7 @@ Track which modes have been used in the todo list to prevent repetition.
 When ambiguity ≤ threshold (or hard cap / early exit):
 
 1. Generate the specification from the full interview transcript
-2. Create the output directory with `mkdir -p .foundry/interviews`, then **run `date '+%Y-%m-%d_%H-%M-%S'` in the terminal** to get a sortable timestamp (POSIX `date`; the intent is a lexicographically sortable timestamp, not shell portability)
+2. Create the output directory with `mkdir -p .foundry/interviews`, then **run `date '+%Y-%m-%d_%H-%M-%S'` in the terminal** to get a sortable timestamp
 3. Write to `.foundry/interviews/{timestamp}_{slug}_interview.md` (e.g., `2026-03-04_14-22-10_auth-refactor_interview.md`)
 
 ### Spec Structure
@@ -202,16 +200,4 @@ When ambiguity ≤ threshold (or hard cap / early exit):
 - **Early exit (round 3+)**: Allow with warning if ambiguity > threshold
 - **User says "stop", "cancel", "abort"**: Stop immediately, save interview as-is
 - **Ambiguity stalls** (same score ±0.05 for 3 rounds): Activate Ontologist mode to reframe
-- **All dimensions at 0.9+**: Skip to spec generation even if not at round minimum
 - **Codebase exploration fails**: Proceed as greenfield, note the limitation
-
-## Ambiguity Score Interpretation
-
-| Score Range | Meaning              | Action                          |
-| ----------- | -------------------- | ------------------------------- |
-| 0.0–0.1     | Crystal clear        | Proceed immediately             |
-| 0.1–0.2     | Clear enough         | Proceed (default threshold)     |
-| 0.2–0.4     | Some gaps            | Continue interviewing           |
-| 0.4–0.6     | Significant gaps     | Focus on weakest dimensions     |
-| 0.6–0.8     | Very unclear         | May need reframing (Ontologist) |
-| 0.8–1.0     | Almost nothing known | Early stages, keep going        |

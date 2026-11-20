@@ -1,7 +1,6 @@
 ---
 name: thermo-nuclear-code-quality-review
 description: Run an extremely strict maintainability review for abstraction quality, giant files, and spaghetti-condition growth. Use for a thermo-nuclear code quality review, thermonuclear review, deep code quality audit, or especially harsh maintainability review.
-disable-model-invocation: true
 ---
 
 # Thermo-Nuclear Code Quality Review
@@ -56,35 +55,24 @@ Apply the baseline prompt above, plus these explicit review rules:
 5. **Push hard on type and boundary cleanliness when they affect maintainability.**
    - Question unnecessary optionality, `unknown`, `any`, or cast-heavy code when a clearer type boundary could exist.
    - Prefer explicit typed models or shared contracts over loosely-shaped ad-hoc objects.
-   - If a branch relies on silent fallback to paper over an unclear invariant, ask whether the boundary should be made explicit instead.
+   - Flag any fallback, default or `None` branch for a state the code's own types or callers cannot produce. Ask for it to be deleted, or for the invariant to be made explicit at the boundary.
 
 6. **Keep logic in the canonical layer and reuse existing helpers.**
    - Call out feature logic leaking into shared paths or implementation details leaking through APIs.
-   - Prefer existing canonical utilities/helpers over bespoke one-offs.
-   - Push code toward the right package, service, or module instead of normalizing architectural drift.
+   - For every helper, constant, type or route the diff adds, search the repository (`rg` for its key call or name) for one that already does the job. When you flag a duplicate, cite the existing one by path.
+   - For every new function or module, name the module or layer that owns its concept (for example, data-access modules own queries, domain services own policy, schemas own shape only). Flag code that lands anywhere else, including grab-bag `utils` folders.
 
 7. **Treat unnecessary sequential orchestration and non-atomic updates as design smells when the cleaner structure is obvious.**
    - If independent work is serialized for no good reason, ask whether the flow should run in parallel instead.
    - If related updates can leave state half-applied, push for a more atomic structure.
    - Do not over-index on micro-optimizations, but do flag avoidable orchestration complexity that makes the implementation more brittle.
 
-## Primary Review Questions
+8. **Leave nothing stale behind.**
+   - After a move, rename or migration, flag wrappers, parameters, constants and helpers that nothing calls any more.
+   - Flag comments and docstrings that describe the old behaviour.
 
-For every meaningful change, ask:
-
-- Is there a "code judo" move that would make this dramatically simpler?
-- Can this change be reframed so fewer concepts, branches, or helper layers are needed?
-- Does this improve or worsen the local architecture?
-- Did the diff add branching complexity where a better abstraction should exist?
-- Did a previously cohesive module become more coupled, more stateful, or harder to scan?
-- Is this logic living in the right file and layer?
-- Did this change enlarge a file or component past a healthy size boundary?
-- Are there repeated conditionals that signal a missing model or missing helper?
-- Is the implementation direct and legible, or does it rely on special cases and incidental control flow?
-- Is this abstraction actually earning its keep, or is it just a wrapper?
-- Did the diff introduce casts, optionality, or ad-hoc object shapes that obscure the real invariant?
-- Is this logic living in the canonical layer, or did the diff leak details across a boundary?
-- Is this orchestration more sequential or less atomic than it needs to be?
+9. **Names must say what the code does.**
+   - Flag a name that misdescribes its value, collides with another concept, or names shared infrastructure after one feature.
 
 ## What to Flag Aggressively
 
@@ -138,18 +126,6 @@ Be direct, serious, and demanding about quality.
 Do not be rude, but do not soften major maintainability issues into mild suggestions.
 If the code is making the codebase messier, say so clearly.
 If the implementation missed an opportunity for a dramatic simplification, say that clearly too.
-
-Good phrases:
-
-- `this pushes the file past 1k lines. can we decompose this first?`
-- `this adds another special-case branch into an already busy flow. can we move this behind its own abstraction?`
-- `this works, but it makes the surrounding code more spaghetti. let's keep the behavior and restructure the implementation.`
-- `this feels like feature logic leaking into a shared path. can we isolate it?`
-- `this abstraction seems unnecessary. can we just keep the direct flow?`
-- `why does this need a cast / optional here? can we make the boundary more explicit instead?`
-- `this looks like a bespoke helper for something we already have elsewhere. can we reuse the canonical one?`
-- `i think there's a code-judo move here that makes this much simpler. can we reframe this so these branches disappear?`
-- `this refactor moves complexity around, but doesn't really delete it. is there a way to make the model itself simpler?`
 
 ## Output Expectations
 

@@ -1,6 +1,6 @@
 ---
 name: generate-agent-docs
-description: Initialise comprehensive hierarchical AGENTS.md documentation across the entire codebase. Use when the user asks to generate or refresh AGENTS.md documentation, or to document a repository or directory for agent consumption.
+description: Initialise hierarchical AGENTS.md files that record each directory's rules and traps. Use when the user asks to generate or refresh AGENTS.md documentation, or to document a repository or directory for agent consumption.
 disable-model-invocation: true
 ---
 

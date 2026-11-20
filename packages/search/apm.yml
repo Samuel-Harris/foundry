@@ -1,5 +1,5 @@
 name: search
-version: "0.1.0"
+version: "0.1.1"
 description: "Search the codebase across git worktrees."
 author: sam
 license: MIT

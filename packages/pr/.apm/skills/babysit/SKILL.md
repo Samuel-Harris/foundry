@@ -23,6 +23,10 @@ ready or a genuine blocker requires the user.
   reviews, or weaken branch protections unless the user explicitly requests it.
 - Treat the current pull request as the scope boundary. Do not fix unrelated
   failures or change CI workflows merely to obtain a green result.
+- Never bypass a local hook or a CI check to make a push or a check pass: no
+  `--no-verify`, no `git update-index --skip-worktree` or `--assume-unchanged`,
+  and no bypass label unless the user explicitly asks. When a hook fails, fix
+  its cause or report it as a blocker.
 - Read only the GitHub fields needed for the next decision. Avoid dumping full
   API responses or logs into context; filter unresolved threads and failed job
   output before reading details.
@@ -83,8 +87,10 @@ Bugbot. For each thread:
    regression test when practical.
 4. If the finding is invalid, explain the concrete reason. If it exposes a
    product or architectural ambiguity, ask the user rather than guessing.
-5. Resolve a thread only after its fix or explanation is posted and any local
-   verification needed for that conclusion has passed.
+5. Before replying that a thread is fixed, confirm the fix is in the pushed PR
+   head: run `git log origin/<head-branch>` and read the changed lines at the PR
+   head. Cite the commit SHA in the reply. Never resolve a thread without a reply
+   that names the fix commit or the concrete reason no change is needed.
 
 Do not treat general discussion, praise, already-resolved threads, or outdated
 comments as change requests.
@@ -112,9 +118,13 @@ descriptive message and push normally to the PR branch. Never include unrelated
 worktree changes. Refresh the PR using its new head SHA, then continue the loop
 while checks are pending or new review activity is arriving.
 
+After each push, reread the PR description against the new diff and fix every
+line the push made false, such as a renamed function, a removed file or a
+changed scope. Edit only lines an agent wrote; when a line may be human-written,
+ask before rewriting it.
+
 Use bounded polling or the available wait mechanism so the user receives an
-update at least once per minute. Do not declare success from cached status or
-from a check run attached to an older commit.
+update at least once per minute.
 
 ## Stop conditions
 

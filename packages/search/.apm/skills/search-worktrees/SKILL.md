@@ -16,13 +16,15 @@ Each worktree usually contains heavyweight, gitignored dependency directories �
 From any worktree, `git worktree list` returns all paths:
 
 ```bash
-git worktree list --porcelain | grep '^worktree ' | sed 's/^worktree //'
+git worktree list --porcelain | sed -n 's/^worktree //p'
 ```
 
-Store these in a variable for subsequent steps:
+Loop over them line by line, so the loop works in both bash and zsh and with spaces in paths:
 
 ```bash
-worktrees=$(git worktree list --porcelain | grep '^worktree ' | sed 's/^worktree //')
+git worktree list --porcelain | sed -n 's/^worktree //p' | while IFS= read -r wt; do
+  # per-worktree command using "$wt"
+done
 ```
 
 ## Step 2 — Choose the right search strategy
@@ -32,7 +34,7 @@ worktrees=$(git worktree list --porcelain | grep '^worktree ' | sed 's/^worktree
 Use `find`, but **scope it to a specific subdirectory**. Never search a worktree root without pruning.
 
 ```bash
-for wt in $worktrees; do
+git worktree list --porcelain | sed -n 's/^worktree //p' | while IFS= read -r wt; do
   find "$wt/<subdir>" -type f -name '<pattern>' 2>/dev/null
 done
 ```
@@ -44,7 +46,7 @@ For source files, target the relevant top-level directories rather than the root
 `rg` respects `.gitignore` by default, which handles most of the bloat. Use it from each worktree root:
 
 ```bash
-for wt in $worktrees; do
+git worktree list --porcelain | sed -n 's/^worktree //p' | while IFS= read -r wt; do
   echo "=== $wt ==="
   rg -l '<pattern>' "$wt" 2>/dev/null
 done
@@ -53,7 +55,7 @@ done
 If `.gitignore` isn't enough — for example when searching a partially gitignored directory — add explicit globs:
 
 ```bash
-for wt in $worktrees; do
+git worktree list --porcelain | sed -n 's/^worktree //p' | while IFS= read -r wt; do
   rg -l '<pattern>' "$wt/<subdir>" --glob '*.md' 2>/dev/null
 done
 ```
@@ -64,6 +66,9 @@ Git history is shared across all worktrees (single `.git` object store), so run 
 
 ```bash
 # Commits that touched files matching a path pattern
+git log --all --oneline --name-only -- '<path pattern>'
+
+# Commits that added such a file
 git log --all --oneline --diff-filter=A --name-only -- '<path pattern>'
 
 # Commits whose message mentions a keyword
@@ -89,7 +94,7 @@ These are the common heavyweight directories that exist per worktree. When using
 ### `find` with pruning
 
 ```bash
-for wt in $worktrees; do
+git worktree list --porcelain | sed -n 's/^worktree //p' | while IFS= read -r wt; do
   find "$wt" \
     -path '*/node_modules' -prune -o \
     -path '*/.venv' -prune -o \
@@ -106,20 +111,10 @@ done
 
 ## Common search scenarios
 
-### Find a file you created recently but forgot where
-
-Combine `find` with `-newer` or `-mtime`:
-
-```bash
-for wt in $worktrees; do
-  find "$wt/<subdir>" -type f -mtime -3 2>/dev/null
-done
-```
-
 ### Find uncommitted changes across worktrees
 
 ```bash
-for wt in $worktrees; do
+git worktree list --porcelain | sed -n 's/^worktree //p' | while IFS= read -r wt; do
   echo "=== $(basename "$wt") ($(git -C "$wt" branch --show-current)) ==="
   git -C "$wt" status --short 2>/dev/null
 done
@@ -130,14 +125,12 @@ done
 Agent configuration directories are usually small and are sometimes partially gitignored. Search them directly with an explicit glob rather than relying on `.gitignore`:
 
 ```bash
-for wt in $worktrees; do
+git worktree list --porcelain | sed -n 's/^worktree //p' | while IFS= read -r wt; do
   rg -l '<pattern>' "$wt/.agents" "$wt/.cursor" "$wt/.claude" "$wt/.github" --glob '*.md' 2>/dev/null
 done
 ```
 
 ## Key principles
 
-1. **Never `find` from a worktree root without pruning.** The dependency directories will cause timeouts.
-2. **Prefer `rg` over `find | grep`.** Ripgrep respects `.gitignore` automatically, skipping most bloat.
-3. **Scope to the smallest subtree that could contain the result.** Searching one configuration directory is instant; searching the full worktree is not.
-4. **Git history is shared.** You only need to search it once from any worktree — all branches and commits are visible everywhere.
+1. **Prefer `rg` over `find | grep`.** Ripgrep respects `.gitignore` automatically, skipping most bloat.
+2. **Scope to the smallest subtree that could contain the result.** Searching one configuration directory is instant; searching the full worktree is not.

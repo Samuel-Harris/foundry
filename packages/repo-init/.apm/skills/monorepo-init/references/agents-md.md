@@ -14,14 +14,12 @@ Do not rely on AGENTS.md to hold structure. It points to executable checks and t
 2. Lead with commands and boundaries, not architecture essays. Cut "architecture overview" prose; keep any component description boundary-focused ("what, not why").
 3. Use imperative, verifiable instructions ("all functions must have explicit return types" beats "write clean code"). Back style rules with a linter; an unenforced prose rule is unreliable.
 4. Separate boundaries into Always, Ask first, and Never. The Never list is consistently the highest-value section.
-5. Keep the root file to the repository map, global conventions, and commands. Add one short file per top-level package. Split files near 150–200 lines. The closest file to the edited file wins; explicit prompts override everything.
+5. Keep the root file to the repository map, global conventions, and commands. Add one short file per top-level package. Split a file when it carries rules that apply to only one subtree: move those rules into that subtree's AGENTS.md. The closest file to the edited file wins; explicit prompts override everything.
 6. Point to `just boundaries` and `just check` rather than duplicating their flags and rules.
 
 Use AGENTS.md as the single shared source of truth. Add host-specific rule files (for example `.cursor/rules/*.mdc` for Cursor) only for guidance that cannot be expressed portably; never duplicate AGENTS.md content there.
 
 ## Tool bridging
-
-Maintain AGENTS.md as the single source of truth. Never maintain duplicate instruction files — they drift.
 
 - **Claude Code** reads `CLAUDE.md`, not AGENTS.md natively: bridge with a thin `CLAUDE.md` containing exactly `@AGENTS.md` (portable and Windows-safe) or a symlink (`ln -s AGENTS.md CLAUDE.md`).
 - **Cursor** reads AGENTS.md natively, plus any project-specific rules under `.cursor/rules/`.

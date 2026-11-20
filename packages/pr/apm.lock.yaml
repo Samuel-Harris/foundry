@@ -19,7 +19,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+  content_hash: sha256:6ca5cae9301652a60f6523561c197fa4ecbb9cef0f40deb51cf9f102f525e15d
 - kind: project-relative
   target: claude
   value: .claude/skills/code-tour
@@ -55,7 +55,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+  content_hash: sha256:1972bb2d9ba9f789dcf4a503f1b16ce175a6cb9138a8d668d8d3fdb5b2b80e3f
 - kind: project-relative
   target: legacy
   value: .agents/skills/babysit
@@ -73,7 +73,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+  content_hash: sha256:6ca5cae9301652a60f6523561c197fa4ecbb9cef0f40deb51cf9f102f525e15d
 - kind: project-relative
   target: legacy
   value: .agents/skills/code-tour
@@ -109,7 +109,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+  content_hash: sha256:1972bb2d9ba9f789dcf4a503f1b16ce175a6cb9138a8d668d8d3fdb5b2b80e3f
 local_deployed_files:
 - .agents/skills/babysit
 - .agents/skills/babysit/SKILL.md
@@ -124,9 +124,9 @@ local_deployed_files:
 - .claude/skills/summarise-pr
 - .claude/skills/summarise-pr/SKILL.md
 local_deployed_file_hashes:
-  .agents/skills/babysit/SKILL.md: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+  .agents/skills/babysit/SKILL.md: sha256:6ca5cae9301652a60f6523561c197fa4ecbb9cef0f40deb51cf9f102f525e15d
   .agents/skills/code-tour/SKILL.md: sha256:63d778b539851c08a3e9b556701b7f9634e93ef6dc0f8324ba94ef832b4a1c46
-  .agents/skills/summarise-pr/SKILL.md: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
-  .claude/skills/babysit/SKILL.md: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+  .agents/skills/summarise-pr/SKILL.md: sha256:1972bb2d9ba9f789dcf4a503f1b16ce175a6cb9138a8d668d8d3fdb5b2b80e3f
+  .claude/skills/babysit/SKILL.md: sha256:6ca5cae9301652a60f6523561c197fa4ecbb9cef0f40deb51cf9f102f525e15d
   .claude/skills/code-tour/SKILL.md: sha256:63d778b539851c08a3e9b556701b7f9634e93ef6dc0f8324ba94ef832b4a1c46
-  .claude/skills/summarise-pr/SKILL.md: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+  .claude/skills/summarise-pr/SKILL.md: sha256:1972bb2d9ba9f789dcf4a503f1b16ce175a6cb9138a8d668d8d3fdb5b2b80e3f

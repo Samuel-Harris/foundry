@@ -6,10 +6,10 @@ Branch-level correctness, security and maintainability audits, plus a pull-reque
 
 | Primitive | Name | Purpose |
 | --- | --- | --- |
-| Skill | `pr-context-canvas` | Build a state-chart canvas of a pull request and the system around it, without reviewing the diff. |
+| Skill | `pr-context` | Build a state-chart canvas of a pull request and the system around it, without reviewing the diff. |
 | Skill | `thermo-nuclear-code-quality-review` | Run an extremely strict maintainability review for abstraction quality, giant files, and spaghetti-condition growth. |
 | Skill | `thermo-nuclear-review` | Comprehensive security and correctness audit of a branch's changes. |
-| Skill | `thermos` | Launch both thermo-nuclear review subagents in parallel, then synthesise their findings. |
+| Skill | `quick-review` | Launch both thermo-nuclear review subagents in parallel, then synthesise their findings. |
 | Agent | `thermo-nuclear-code-quality-review-subagent` | Thermo-nuclear code quality audit (maintainability, structure, 1k-line rule, spaghetti, code-judo). |
 | Agent | `thermo-nuclear-review-subagent` | Thermo-nuclear branch audit (bugs, breaking changes, security, devex, feature-flag leaks) scoped to the diff. |
 

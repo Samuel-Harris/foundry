@@ -17,7 +17,7 @@ apm_modules/
 dist/
 build/
 
-# Node dependencies for the pstack script tests
+# Node dependencies for the p-stack script tests
 node_modules/
 
 # Python bytecode

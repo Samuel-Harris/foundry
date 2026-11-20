@@ -450,7 +450,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:7a6c3f92ad28ef7f8609011a799b413675647376b6d436b7d81a939aa4e960c5
+  content_hash: sha256:ff1c2f67fe9d43c75d222832dd35a47c6582c88a3561d604f46d86bbbd74f3ff
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-help/references/guide/01-setup.md
@@ -459,7 +459,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:dc65630088178e536f2c830a68f886809082fb85467379b3b8a1a7e585367faf
+  content_hash: sha256:c3818d476fceef70e91b643f81d29fc40941e681f5c8f4628a104cee91dd7d36
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-help/references/guide/02-poteto-mode.md
@@ -2529,7 +2529,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:7a6c3f92ad28ef7f8609011a799b413675647376b6d436b7d81a939aa4e960c5
+  content_hash: sha256:ff1c2f67fe9d43c75d222832dd35a47c6582c88a3561d604f46d86bbbd74f3ff
 - kind: project-relative
   target: legacy
   value: .agents/skills/poteto-help/references/guide/01-setup.md
@@ -2538,7 +2538,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:dc65630088178e536f2c830a68f886809082fb85467379b3b8a1a7e585367faf
+  content_hash: sha256:c3818d476fceef70e91b643f81d29fc40941e681f5c8f4628a104cee91dd7d36
 - kind: project-relative
   target: legacy
   value: .agents/skills/poteto-help/references/guide/02-poteto-mode.md
@@ -4630,8 +4630,8 @@ local_deployed_file_hashes:
   .agents/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
   .agents/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .agents/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
-  .agents/skills/poteto-help/SKILL.md: sha256:7a6c3f92ad28ef7f8609011a799b413675647376b6d436b7d81a939aa4e960c5
-  .agents/skills/poteto-help/references/guide/01-setup.md: sha256:dc65630088178e536f2c830a68f886809082fb85467379b3b8a1a7e585367faf
+  .agents/skills/poteto-help/SKILL.md: sha256:ff1c2f67fe9d43c75d222832dd35a47c6582c88a3561d604f46d86bbbd74f3ff
+  .agents/skills/poteto-help/references/guide/01-setup.md: sha256:c3818d476fceef70e91b643f81d29fc40941e681f5c8f4628a104cee91dd7d36
   .agents/skills/poteto-help/references/guide/02-poteto-mode.md: sha256:ead5cd0fb19a3f5a8bcf0321458e976cbe5f2a4242c7c8a2018772f219157cad
   .agents/skills/poteto-help/references/guide/03-understand.md: sha256:466420b8ccdb43cd0890fa448c852ff8828d52b0ea9c89051be4441179fa8723
   .agents/skills/poteto-help/references/guide/04-design.md: sha256:5805a921b9ea847fe99f57db1d0cd93aa8782c6bb2942d2b037f3a1ca1184047
@@ -4801,8 +4801,8 @@ local_deployed_file_hashes:
   .claude/skills/maintain-verification-skill/SKILL.md: sha256:162ee05a19dd2ef51d83996f6c7c7bc075d8f2fc8be8c40783fd4a79cff4794d
   .claude/skills/make-bot-ui/SKILL.md: sha256:c90a39889bbd56524c020f614059df9c024bf51f3d7344df7574a6683ed55ba2
   .claude/skills/no-comments/SKILL.md: sha256:7ba544adef66019cb6f346d2486e4a59f22fec284012b9007eeeea37a9dc478b
-  .claude/skills/poteto-help/SKILL.md: sha256:7a6c3f92ad28ef7f8609011a799b413675647376b6d436b7d81a939aa4e960c5
-  .claude/skills/poteto-help/references/guide/01-setup.md: sha256:dc65630088178e536f2c830a68f886809082fb85467379b3b8a1a7e585367faf
+  .claude/skills/poteto-help/SKILL.md: sha256:ff1c2f67fe9d43c75d222832dd35a47c6582c88a3561d604f46d86bbbd74f3ff
+  .claude/skills/poteto-help/references/guide/01-setup.md: sha256:c3818d476fceef70e91b643f81d29fc40941e681f5c8f4628a104cee91dd7d36
   .claude/skills/poteto-help/references/guide/02-poteto-mode.md: sha256:ead5cd0fb19a3f5a8bcf0321458e976cbe5f2a4242c7c8a2018772f219157cad
   .claude/skills/poteto-help/references/guide/03-understand.md: sha256:466420b8ccdb43cd0890fa448c852ff8828d52b0ea9c89051be4441179fa8723
   .claude/skills/poteto-help/references/guide/04-design.md: sha256:5805a921b9ea847fe99f57db1d0cd93aa8782c6bb2942d2b037f3a1ca1184047

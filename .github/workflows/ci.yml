@@ -43,15 +43,15 @@ jobs:
               - packages/*/.apm/**
             statechart:
               - .github/workflows/ci.yml
-              - packages/pstack/tests/statechart/**
-              - packages/pstack/.apm/skills/statechart/**
+              - packages/p-stack/tests/statechart/**
+              - packages/p-stack/.apm/skills/statechart/**
             poteto-mode:
               - .github/workflows/ci.yml
-              - packages/pstack/package.json
-              - packages/pstack/bun.lock
-              - packages/pstack/tsconfig.poteto-mode.json
-              - packages/pstack/tests/poteto-mode/**
-              - packages/pstack/.apm/skills/poteto-mode/**
+              - packages/p-stack/package.json
+              - packages/p-stack/bun.lock
+              - packages/p-stack/tsconfig.poteto-mode.json
+              - packages/p-stack/tests/poteto-mode/**
+              - packages/p-stack/.apm/skills/poteto-mode/**
 
   # Unfiltered: the hook scopes itself to the diff, and its conflict-marker
   # scan covers every tracked file.
@@ -155,13 +155,13 @@ jobs:
           git push --atomic origin "${refs[@]}"
 
   statechart-tests:
-    name: pstack statechart tests
+    name: p-stack statechart tests
     needs: changes
     if: github.event_name != 'pull_request' || needs.changes.outputs.statechart == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: packages/pstack/tests/statechart
+        working-directory: packages/p-stack/tests/statechart
     steps:
       - uses: actions/checkout@v4
 
@@ -193,13 +193,13 @@ jobs:
         run: npm test
 
   poteto-mode-tests:
-    name: pstack poteto-mode tests
+    name: p-stack poteto-mode tests
     needs: changes
     if: github.event_name != 'pull_request' || needs.changes.outputs.poteto-mode == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: packages/pstack
+        working-directory: packages/p-stack
     steps:
       - uses: actions/checkout@v4
 

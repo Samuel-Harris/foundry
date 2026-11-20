@@ -1,9 +1,9 @@
 ---
-name: pr-context-canvas
+name: pr-context
 description: "Build a Cursor canvas of state charts that gives a pull request's reviewer the high-level picture, covering the behaviour the PR introduces and the system it is introduced into. Not a code review and no walkthrough of the diff. Use when asked for state charts, a big-picture overview, a high-level map or review context for a PR."
 ---
 
-# PR Context Canvas
+# PR Context
 
 Build a Cursor canvas of state charts for one pull request, so its reviewer sees the
 behaviour the PR introduces and the system it is introduced into before reading the

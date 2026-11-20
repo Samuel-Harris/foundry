@@ -26,4 +26,4 @@ Do **not** spawn nested subagents unless the user or parent explicitly asks.
 
 ## Parent orchestration
 
-Dispatched by `thermos` after it has gathered the packet. Do not re-gather. Do not invoke this agent as the review parent.
+Dispatched by `quick-review` after it has gathered the packet. Do not re-gather. Do not invoke this agent as the review parent.

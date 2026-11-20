@@ -1,10 +1,10 @@
 ---
-name: thermos
-description: "Launch both thermo-nuclear review subagents in parallel, then synthesise their findings. Use for thermos, double thermo review, or combined bug/security and code-quality branch audits."
+name: quick-review
+description: "Launch both thermo-nuclear review subagents in parallel, then synthesise their findings. Use for a quick review, thermos, double thermo review, or combined bug/security and code-quality branch audits."
 disable-model-invocation: true
 ---
 
-# Thermos
+# Quick review
 
 Run the two thermo review passes as async background subagents in parallel, then synthesise their results.
 

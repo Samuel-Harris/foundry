@@ -7,7 +7,7 @@ In this page you install the package, pick which models pstack uses, and run you
 pstack installs with [APM](https://microsoft.github.io/apm/). From your project root, run:
 
 ```bash
-apm install Samuel-Harris/foundry/packages/pstack#v0.1.0 --target cursor,claude,copilot
+apm install Samuel-Harris/foundry/packages/p-stack#v0.1.0 --target cursor,claude,copilot
 ```
 
 APM deploys the skills to `.agents/skills/` (Cursor and GitHub Copilot) and `.claude/skills/` (Claude Code), and the `poteto-agent` and `comment-sicko` agents to each host's agents directory. Drop a target from `--target` if you don't use that host.

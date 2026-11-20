@@ -56,7 +56,7 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 | `cursor-usage`     | 1 skill                                                    | verified   | untested            | untested           |
 | `data-visualisation` | 1 skill | verified | untested | untested |
 | `deep-interview`   | 1 skill                                                    | verified   | untested            | untested           |
-| `default-stack`    | no primitives; resolves 8 direct and 1 transitive package  | verified   | untested            | untested           |
+| `default-stack`    | no primitives; resolves 9 direct and 1 transitive package  | verified   | untested            | untested           |
 | `execution`        | 1 skill                                                    | verified   | untested            | untested           |
 | `foundry-maintenance` | 1 skill | verified | untested | untested |
 | `git-diff`         | 3 skills                                                   | verified   | untested            | untested           |
@@ -72,7 +72,7 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 | `skill-creation`   | 1 skill                                                    | verified   | untested            | untested           |
 | `ui`               | 1 skill                                                    | verified   | untested            | untested           |
 
-Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place, `default-stack` included. A clean consumer install of `default-stack` resolves the same nine packages and passes `apm audit --ci` on all three targets. `docs/DEPENDENCY-CONTRACTS.md` records the APM 0.32.0 lockfile defect that would break `default-stack`'s own audit if `pr` or `repo-maintenance` gained a sibling dependency.
+Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place, `default-stack` included. A clean consumer install of `default-stack` resolves the same ten packages and passes `apm audit --ci` on all three targets. `docs/DEPENDENCY-CONTRACTS.md` records the APM 0.32.0 lockfile defect that would break `default-stack`'s own audit if `pr` or `repo-maintenance` gained a sibling dependency.
 
 `apm install --frozen` succeeds for all nineteen packages in place.
 

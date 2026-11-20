@@ -103,15 +103,16 @@ APM resolves the range against the `planning--v<version>` tags that CI creates o
 
 ## The meta-package
 
-`packages/default-stack/apm.yml` lists eight sibling packages as `- path: ../<name>` entries and therefore omits `dependencies: {}`, which is non-empty. Installing `packages/default-stack` is the one-command route to the default stack.
+`packages/default-stack/apm.yml` lists nine sibling packages as `- path: ../<name>` entries and therefore omits `dependencies: {}`, which is non-empty. Installing `packages/default-stack` is the one-command route to the default stack.
 
-Those eight direct dependencies pull in one more transitively, so a single meta-package install resolves nine packages:
+Those nine direct dependencies pull in one more transitively, so a single meta-package install resolves ten packages:
 
 ```text
 default-stack
 ├── coding-style
 ├── execution        -> pr, review
 ├── git-diff
+├── p-stack
 ├── planning         -> deep-interview, review
 ├── pr
 ├── repo-maintenance
@@ -121,7 +122,7 @@ default-stack
 transitively added: deep-interview
 ```
 
-`cursor-usage`, `data-visualisation`, `foundry-maintenance`, `handoff`, `infrastructure`, `p-stack`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
+`cursor-usage`, `data-visualisation`, `foundry-maintenance`, `handoff`, `infrastructure`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
 
 There is deliberately **no `apm.yml` at the repository root**. Root-level compile and pack discovery walks the whole tree, so a root manifest would absorb the nested packages' `.apm/` trees into one package and destroy the per-package boundaries.
 
@@ -251,7 +252,7 @@ Two levels are not enough: `meta → {base, mid → base}` alone audits clean. T
 
 **Scope.** Only the meta-package's own lockfile would be affected. Consumer-side installs of the same manifest audit cleanly, and `apm install --frozen` still succeeds in place.
 
-**Handling.** The manifest keeps its eight declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. The cost is that giving `pr` or `repo-maintenance` a sibling dependency would break `default-stack`'s own `apm audit --ci`, which `tests/structural/run-tier1.sh` now expects to pass.
+**Handling.** The manifest keeps its nine declared requirements rather than dropping the direct edges that duplicate a transitive path (`pr`, also reached via `execution`, and `repo-maintenance`, also reached via `skill-creation`). Dropping those direct edges would state the default stack's contents only indirectly, so its contract would silently change whenever a sibling's dependencies change. The cost is that giving `pr` or `repo-maintenance` a sibling dependency would break `default-stack`'s own `apm audit --ci`, which `tests/structural/run-tier1.sh` now expects to pass.
 
 ### Plugin-format archives do not translate instruction frontmatter
 

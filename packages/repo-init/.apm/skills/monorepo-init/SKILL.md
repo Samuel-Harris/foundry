@@ -66,8 +66,6 @@ Produce the complete scaffold:
 9. At least one fully worked sample module demonstrating every convention: src layout, colocated tests, public interface, workspace sources or tags, passing boundaries, and its own AGENTS.md. Include 2–3 small domain-flavoured functions and tests, but no unrequested application business logic.
 10. `docs/STRUCTURE.md` documenting the safe structure-change process.
 
-Recommend Bazel, Pants, or Buck2 only when the design has at least three languages, at least 100 targets or services, and a dedicated build engineer. Never scaffold those systems through this skill.
-
 Tool schemas change. Pin tool versions in the scaffold. If verification rejects an option, consult documentation for the installed version before changing the design.
 
 ## Phase 3 — Verify

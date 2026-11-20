@@ -118,11 +118,11 @@ This skill requires the Linear MCP server. It is a runtime prerequisite and is n
    )"
    ```
 
-   Include the Linear issue identifier in the title or body. Put the recorded verification commands and the `quick-review` outcome in the test plan / summary so reviewers can see what was run and whether in-scope feedback was applied. Omit `--draft` only when the user explicitly asks for a ready-for-review PR. After creation, do not convert the PR to ready.
+   Include the Linear issue identifier in the title or body. Put the recorded verification commands and the `quick-review` outcome in the test plan / summary so reviewers can see what was run and whether in-scope feedback was applied.
 
 8. **Babysit the PR until merge-ready**
 
-   Load and follow the `babysit` skill for the newly created PR, passing its number or URL. That skill owns the merge-conflict, comment, and CI loop. Do not declare completion while checks are pending or failing. Do not mark the draft ready, enable auto-merge, or merge. If permissions, an external service, an incompatible conflict, or an out-of-scope failure prevents a merge-ready result, stop and report the exact blocker and failed check or unresolved thread.
+   Load and follow the `babysit` skill for the newly created PR, passing its number or URL. That skill owns the merge-conflict, comment, and CI loop. Do not declare completion while checks are pending or failing. If permissions, an external service, an incompatible conflict, or an out-of-scope failure prevents a merge-ready result, stop and report the exact blocker and failed check or unresolved thread.
 
 ## Stop Conditions
 

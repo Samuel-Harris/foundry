@@ -1,5 +1,5 @@
 name: git-diff
-version: "0.1.0"
+version: "0.1.1"
 description: "Read-only git diff summaries measured against a repository's main branch."
 author: sam
 license: MIT

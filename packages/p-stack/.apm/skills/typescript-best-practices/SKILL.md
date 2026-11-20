@@ -20,7 +20,7 @@ Apply the **type-system-discipline** principle skill first.
 | No `as` casts | Every `as` is a runtime crash waiting. Cast only after validation. |
 | Narrowing hierarchy | Discriminant switch > `in` operator > `typeof`/`instanceof` > user-defined type guard > `as`. |
 | Type guards | Must verify the claim. A lying guard is worse than `as` because the bug hides behind a name that says it's safe. Name them `isX` or `hasX`. |
-| Exhaustiveness | Inline `const _exhaustive: never = x;` in default arms so the compiler errors when a new variant is added. |
+| Exhaustiveness | Every `switch` over a union or enum ends in `default: { const _exhaustive: never = x; throw ... }`, never a `default` that returns a fallback. Before you finish, search your diff for `switch (` and check each one. |
 | `satisfies` over `as` | Validates the value without widening literal types. |
 | Boundary validation | Parse where data crosses in, into a named domain type. `Record<string, unknown>` (however spelled) stops at that parse. Trust types inside. See the **boundary-discipline** principle skill. |
 | Schema-derived types | Reach for `Pick`/`Omit`/`Parameters`/`ReturnType`/`Awaited`/`typeof` before declaring a new interface. |

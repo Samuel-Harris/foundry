@@ -53,8 +53,8 @@ Optional:
 - Use one canonical contract for the skill unless the user explicitly requires compatibility with an existing public workflow.
 - Do not create a broad always-on instruction when directory-scoped `AGENTS.md` guidance or a skill is the correct artefact.
 - Do not add per-host skill wrapper directories unless the user explicitly chooses multi-target parity.
-- Preserve verbatim text the user asks to include.
 - Keep terminology consistent across the description, instructions, test case, and file names.
+- Write each instruction as when-then: the condition that triggers it and the exact action. Name the specific items it refers to, give one tool call per step, and do not write `consider`, `as appropriate` or an unconditional order that may not apply.
 
 ## Workflow
 
@@ -102,18 +102,17 @@ Do not draft the skill while material design decisions are unresolved.
 
 Create or update the skill according to the [skill-authoring standard](#skill-authoring-standard).
 
+Before editing, search the repository for every other skill, prompt, chart or template that names this skill, its outputs, its labels or the tools and paths it changes, and update each in the same change. When the new skill overlaps an existing one, decide which owns the behaviour and remove or point the other at it; never leave two skills that both own one prompt, save location or rule.
+
 ### 5. Validate the Draft
 
-Run the repo's artefact validator when one is available. For an APM package, run:
-
-```bash
-apm compile --validate
-```
-
-The `optimise-agent-config` skill documents the validator and audit commands it uses when the consumer repository has configured its own.
+Run the repository's own artefact validator when it has one. Otherwise run the `optimise-agent-config` skill's `scripts/validate-artefacts.sh` from the project root. Do not use `apm compile --validate` as a skill check: it inspects no skill.
 
 Also manually check that:
 
+- Every tool, argument, enum value, schema field, template, script and file the skill names exists in the form the skill uses. Open each one's definition (tool schema, model class, registry, script source, cited regulation) and confirm the name, the accepted values, list limits and what it can actually do. Fix or remove any instruction a tool or script cannot satisfy, and give a fallback for a tool the host may not attach.
+- After any edit, reread the whole skill, not only the changed lines. No two sections, and no rule and its worked example, disagree; one outcome has one label; no sentence appears twice; and every reference to a step or section by number or name still points at the right one after renumbering. Prefer referring to steps by name rather than number.
+- For each branch or condition, list the cases that can reach it. Every reachable case has exactly one branch; branches do not overlap through a catch-all `Otherwise`; a step runs only after the decision it depends on; each branch takes every later required step its siblings take; and no branch writes final state before the user confirms it.
 - The description is specific and includes trigger terms.
 - The skill body stays under 500 lines unless there is a deliberate reason.
 - File references are one level deep from `SKILL.md`.
@@ -145,17 +144,6 @@ When the user approves automated testing:
 7. Summarise the observed result to the user, including pass/fail, artefact paths, behavioural gaps, side effects, and recommended skill changes.
 
 Where the host cannot dispatch named agents or subagents, execute the test role inline instead and state that limitation in the summary.
-
-## 8. Iterate on Feedback
-
-If the user wants changes:
-
-1. Update the design summary and the skill draft.
-2. Re-run validation.
-3. Ask again whether to run a realistic subagent test and what test case to use.
-4. If testing is approved, use a different fresh subagent for the next test.
-
-Repeat until the user accepts the behaviour or asks to stop.
 
 ## Completion Criteria
 

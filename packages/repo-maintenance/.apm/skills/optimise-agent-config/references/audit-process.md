@@ -4,7 +4,7 @@ Detailed steps for running the audit, either in parallel with subagents or seque
 
 The APM primitives are the portable source of truth. Read them first, then the deployed copies per host:
 
-- skills: `.apm/skills/<name>/SKILL.md` → `.cursor/skills/`, `.claude/skills/`, `.agents/skills/`
+- skills: `.apm/skills/<name>/SKILL.md` → `.claude/skills/` (Claude Code) and the shared `.agents/skills/` (Cursor and GitHub Copilot)
 - agents: `.apm/agents/<name>.agent.md` → `.cursor/agents/`, `.claude/agents/`, `.github/agents/`
 - instructions: `.apm/instructions/<name>.instructions.md` → `.cursor/rules/`, `.claude/rules/`, `.github/instructions/`
 

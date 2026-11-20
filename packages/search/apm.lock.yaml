@@ -18,7 +18,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:2a1de74cd371dd6cf4281656e1cda98b5f5c13dd696fc4aff62fa4967f49bd8b
+  content_hash: sha256:60b164c239d936f2711e946e7ffe7d91190c3438049aa7994e05273abb491f35
 - kind: project-relative
   target: legacy
   value: .agents/skills/search-worktrees
@@ -36,12 +36,12 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:2a1de74cd371dd6cf4281656e1cda98b5f5c13dd696fc4aff62fa4967f49bd8b
+  content_hash: sha256:60b164c239d936f2711e946e7ffe7d91190c3438049aa7994e05273abb491f35
 local_deployed_files:
 - .agents/skills/search-worktrees
 - .agents/skills/search-worktrees/SKILL.md
 - .claude/skills/search-worktrees
 - .claude/skills/search-worktrees/SKILL.md
 local_deployed_file_hashes:
-  .agents/skills/search-worktrees/SKILL.md: sha256:2a1de74cd371dd6cf4281656e1cda98b5f5c13dd696fc4aff62fa4967f49bd8b
-  .claude/skills/search-worktrees/SKILL.md: sha256:2a1de74cd371dd6cf4281656e1cda98b5f5c13dd696fc4aff62fa4967f49bd8b
+  .agents/skills/search-worktrees/SKILL.md: sha256:60b164c239d936f2711e946e7ffe7d91190c3438049aa7994e05273abb491f35
+  .claude/skills/search-worktrees/SKILL.md: sha256:60b164c239d936f2711e946e7ffe7d91190c3438049aa7994e05273abb491f35

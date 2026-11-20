@@ -1,5 +1,5 @@
 name: ui
-version: "0.1.0"
+version: "0.1.1"
 description: "Remove machine-generated UI slop and restore visual quality."
 author: sam
 license: MIT

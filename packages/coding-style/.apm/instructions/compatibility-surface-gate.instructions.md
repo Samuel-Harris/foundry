@@ -22,6 +22,10 @@ Prefer **one canonical implementation** and **one contract**. Do **not** add a c
 
 You do **not** need to ask the user before **choosing not to add** compatibility. Omitting a compat path is the default.
 
+## Data that outlives the process is an obligation
+
+Persisted rows and JSON, pickled task payloads, queue messages, saved tool calls, and requests from a client bundle still open during a deploy are read by code you cannot update in the same change. Before changing or removing such a shape, field, discriminator value or pickled symbol, check that the previous release can still read the new shape and the new release can still read the old one. That compatibility is required; do not ask. In-process callers, data that is always re-parsed, and constructors for data never persisted are not obligations: change them and update the callers.
+
 ## Before adding a compatibility surface
 
 1. **Verify necessity** — not convenience, imagined callers, or fear of churn. Compat is for obligations you cannot move in the same change.

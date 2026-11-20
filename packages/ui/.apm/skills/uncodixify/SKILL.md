@@ -13,21 +13,21 @@ Break the default AI aesthetic. Build interfaces that feel human-designed, funct
 
 ## Keep It Normal
 
-| Element     | Rule                                                                                                    |
-| ----------- | ------------------------------------------------------------------------------------------------------- |
-| Sidebars    | 240–260px fixed, solid background, simple `border-right`. No floating shells, no rounded outer corners. |
-| Headers     | Plain `h1`/`h2`. No eyebrow labels, no uppercase, no gradient text.                                     |
-| Buttons     | Solid fill or simple border, 8–10px radius max. No pill shapes, no gradients.                           |
-| Cards       | 8–12px radius max, subtle borders, shadows max `0 2px 8px rgba(0,0,0,0.1)`. No floating, no glass.      |
-| Forms       | Labels above fields. No floating labels, no animated underlines.                                        |
-| Tabs        | Underline or border indicator. No pill backgrounds, no sliding animations.                              |
-| Tables      | Clean rows, subtle hover, left-aligned text. No zebra unless actually needed.                           |
-| Typography  | System sans or a simple single sans-serif. 14–16px body. No mixed serif/sans combos.                    |
-| Spacing     | 4/8/12/16/24/32px scale. No random gaps, no excessive padding.                                          |
-| Borders     | 1px solid, subtle colour. No thick decorative or gradient borders.                                      |
-| Shadows     | Max `0 2px 8px rgba(0,0,0,0.1)`. No dramatic or coloured shadows.                                       |
-| Transitions | 100–200ms ease. Opacity/colour only. No bouncy or transform effects.                                    |
-| Containers  | max-width 1200–1400px, centered, standard padding.                                                      |
+| Element     | Rule                                                                                                                               |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Sidebars    | Only when the IA needs one. Then 240–260px, solid background, simple `border-right`. No floating shells, no rounded outer corners. |
+| Headers     | Plain `h1`/`h2`. No eyebrow labels, no uppercase, no gradient text.                                                                |
+| Buttons     | Solid fill or simple border, 8–10px radius max. No pill shapes, no gradients.                                                      |
+| Cards       | 8–12px radius max, subtle borders, shadows max `0 2px 8px rgba(0,0,0,0.1)`. No floating, no glass.                                 |
+| Forms       | Labels above fields. No floating labels, no animated underlines.                                                                   |
+| Tabs        | Underline or border indicator. No pill backgrounds, no sliding animations.                                                         |
+| Tables      | Clean rows, subtle hover, left-aligned text. No zebra unless actually needed.                                                      |
+| Typography  | The product's existing font; otherwise one deliberately chosen sans-serif. 14–16px body. No mixed serif/sans combos.               |
+| Spacing     | 4/8/12/16/24/32px scale. No random gaps, no excessive padding.                                                                     |
+| Borders     | 1px solid, subtle colour. No thick decorative or gradient borders.                                                                 |
+| Shadows     | Max `0 2px 8px rgba(0,0,0,0.1)`. No dramatic or coloured shadows.                                                                  |
+| Transitions | 100–200ms ease. Opacity/colour only. No bouncy or transform effects.                                                               |
+| Containers  | max-width 1200–1400px, centered, standard padding.                                                                                 |
 
 Think Linear. Think Raycast. Think Stripe. Think GitHub. They don't try to grab attention. They just work.
 
@@ -57,7 +57,6 @@ Think Linear. Think Raycast. Think Stripe. Think GitHub. They don't try to grab 
 - Decorative copy like "Operational clarity without the clutter" as page headers
 - Section notes explaining what the UI does
 - Transform hover animations (`translateX(2px)` on nav links, etc.)
-- KPI card grids as the default dashboard layout
 - Tag badges on every table row status
 - Nav badges showing "Live" status
 - Footer lines with meta info about the page itself
@@ -80,9 +79,7 @@ Priority order — do not skip steps:
 | --------------- | ---------- | --------- | --------- | --------- | --------- | --------- |
 | Midnight Canvas | `#0a0e27`  | `#151b3d` | `#6c8eff` | `#a78bfa` | `#f472b6` | `#e2e8f0` |
 | Obsidian Depth  | `#0f0f0f`  | `#1a1a1a` | `#00d4aa` | `#00a3cc` | `#ff6b9d` | `#f5f5f5` |
-| Slate Noir      | `#0f172a`  | `#1e293b` | `#38bdf8` | `#818cf8` | `#fb923c` | `#f1f5f9` |
 | Carbon Elegance | `#121212`  | `#1e1e1e` | `#bb86fc` | `#03dac6` | `#cf6679` | `#e1e1e1` |
-| Deep Ocean      | `#001e3c`  | `#0a2744` | `#4fc3f7` | `#29b6f6` | `#ffa726` | `#eceff1` |
 | Charcoal Studio | `#1c1c1e`  | `#2c2c2e` | `#0a84ff` | `#5e5ce6` | `#ff375f` | `#f2f2f7` |
 | Graphite Pro    | `#18181b`  | `#27272a` | `#a855f7` | `#ec4899` | `#14b8a6` | `#fafafa` |
 | Void Space      | `#0d1117`  | `#161b22` | `#58a6ff` | `#79c0ff` | `#f78166` | `#c9d1d9` |
@@ -103,6 +100,18 @@ Priority order — do not skip steps:
 | Alabaster Pure  | `#fcfcfc`  | `#ffffff` | `#1d4ed8` | `#2563eb` | `#dc2626` | `#1e293b` |
 | Sand Warm       | `#faf8f5`  | `#ffffff` | `#b45309` | `#d97706` | `#059669` | `#451a03` |
 | Frost Bright    | `#f1f5f9`  | `#f8fafc` | `#0f766e` | `#14b8a6` | `#e11d48` | `#0f172a` |
+
+---
+
+## Accessibility Floor
+
+Check every control you add or change against these before you hand off:
+
+- A tooltip or hover card opens on keyboard focus too. Its trigger is a focusable element, never a `span`, `div` or natively `disabled` control; never use a native `title` for text a user needs.
+- Never remove a focus outline (`outline-none`, `ring-0`) without a visible `focus-visible` replacement, and keep focus on a sensible element when the control a user acted on re-renders or unmounts.
+- Loading, status and error text sits in a live region (`role="status"` or `role="alert"`), and field errors are tied to their input with `aria-describedby`.
+- Keep `aria-label` and `aria-expanded` when you swap an icon or component, and give every pointer interaction a keyboard path.
+- Alt text describes what the image shows, not the heading or control name; mark decorative images `alt=""`, and update alt text when you replace an image.
 
 ---
 

@@ -111,7 +111,7 @@ For issues that appear to be parent issues or epics, call `get_issue` with `incl
 
 ## Phase 5: Write
 
-1. Run `mkdir -p .foundry/masterplans` and `date '+%Y-%m-%d_%H-%M-%S'` to get a sortable timestamp (POSIX `date`; the intent is a lexicographically sortable timestamp, not shell portability).
+1. Run `mkdir -p .foundry/masterplans` and `date '+%Y-%m-%d_%H-%M-%S'` to get a sortable timestamp.
 2. Ask the user for a short description slug (2–4 words, kebab-case) or derive one from scope.
 3. Save to `.foundry/masterplans/{timestamp}_{description}_masterplan.md`
 

@@ -28,7 +28,7 @@ Where APM deploys the primitives, the APM documentation for the installed CLI ve
 
 This skill has two phases: **audit** then **implementation**. During the audit phase, do not make changes to the repository — present findings as a prioritised report. Implementation only happens after the user approves specific recommendations (see "After the Report").
 
-For AGENTS.md creation and updates, refer to the **generate-agent-docs** skill.
+For AGENTS.md creation and updates, use the **agents-md** skill.
 
 ---
 
@@ -148,7 +148,9 @@ For each active target, check the deployed instruction files and their frontmatt
 
 **Bloated signs:** >100 lines at root, detailed command references, area-specific conventions, procedural instructions.
 
-**Too thin signs:** No directory map, no tech stack, no build/test commands, no critical constraints.
+**Too thin signs:** No critical constraints, and no route to where build and test commands live.
+
+**Also bloated:** file or directory inventories, restated signatures or docstrings, walkthroughs of code stages, and rules a hook or linter already enforces.
 
 ### 4. Context Weight Optimisation
 
@@ -393,3 +395,9 @@ Once the prioritised report is complete:
    > Which of these would you like me to implement? You can specify by number (e.g. "1, 3, 5"), a priority level (e.g. "all P0 and P1"), or say "all".
 
 3. **Wait for the user's response**, then implement only the selected items.
+
+4. **When an implemented item moves, trims or merges guidance**, check before finishing:
+   - Every relative link and path in the moved text resolves from its new file (`ls` from that directory).
+   - The new location still loads for the files the rule governs (a rule under `a/` does not load for `b/`); a rule that governs several trees stays reachable from each.
+   - Each trap or rule you cut from a file under a line budget still exists somewhere the agent loads; a pointer that only says "read X" does not keep it.
+   - Shared content is linked or symlinked to one owner, not copied.

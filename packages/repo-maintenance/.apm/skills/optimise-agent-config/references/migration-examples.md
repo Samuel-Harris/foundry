@@ -2,7 +2,7 @@
 
 Detailed examples for migrating host artefacts to skills and for writing recommendations. Migrations target the APM primitives so the result deploys to every active target: **Cursor**, **Claude Code** and **GitHub Copilot**.
 
-- skills: `.apm/skills/<name>/SKILL.md` → `.cursor/skills/`, `.claude/skills/`, `.agents/skills/`
+- skills: `.apm/skills/<name>/SKILL.md` → `.claude/skills/` (Claude Code) and the shared `.agents/skills/` (Cursor and GitHub Copilot)
 - agents: `.apm/agents/<name>.agent.md` → `.cursor/agents/`, `.claude/agents/`, `.github/agents/`
 - instructions: `.apm/instructions/<name>.instructions.md` → `.cursor/rules/`, `.claude/rules/`, `.github/instructions/`
 

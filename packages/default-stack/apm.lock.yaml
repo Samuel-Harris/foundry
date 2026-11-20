@@ -3,7 +3,7 @@ apm_version: 0.32.0
 dependencies:
 - repo_url: _local/coding-style
   name: coding-style
-  version: 0.1.3
+  version: 0.1.4
   package_type: apm_package
   deployed_files:
   - .claude/rules/compatibility-surface-gate.md
@@ -16,21 +16,21 @@ dependencies:
   - .github/instructions/python-rules.instructions.md
   - .github/instructions/software-engineering-rules.instructions.md
   deployed_file_hashes:
-    .claude/rules/compatibility-surface-gate.md: sha256:cdc543d23abf987209ff3906f86f79d45f50f64f515c4d69879073511c57138b
-    .claude/rules/python-rules.md: sha256:fd0df55ae224155ce1afb7723d57cba79b41961805d259fe452d578571cecccc
-    .claude/rules/software-engineering-rules.md: sha256:06e82259d653c2d9772d63f5ef6b7557a9c78a910e51c98815c8a123d2b20974
-    .cursor/rules/compatibility-surface-gate.mdc: sha256:b75411139bd161bcc3c82083ddf91a8407ca9987fb8d344a7e54e46f5f78c588
-    .cursor/rules/python-rules.mdc: sha256:a7bb04830f9ab7f5dcae5d3e49ef49c20291b3ed7b59e36d68953100b316d601
-    .cursor/rules/software-engineering-rules.mdc: sha256:919cf7760e53ac57c42c4115b4d8ffbbb86bf04815ffb667b54c04cc1d107e38
-    .github/instructions/compatibility-surface-gate.instructions.md: sha256:a8d022e4582efae6e046f400f4d07647fe9678bae97c9f06179e0f8609b38551
-    .github/instructions/python-rules.instructions.md: sha256:5e37834dd9b250c69d1a8f2d199e8b193f514cd4441feaf24f898aeb8053458d
-    .github/instructions/software-engineering-rules.instructions.md: sha256:945f6db0e3e49420975f61aa5c84ca5a1be4477b20f8b533318b5e48fe41dcf8
+    .claude/rules/compatibility-surface-gate.md: sha256:f2bba27edc772115ef400549d6298ca5e9c8f7641896dae34a44f392f369dca0
+    .claude/rules/python-rules.md: sha256:8d1542d9e9959740f6a5de12cfc81c5c3ccba4a53196d0e282376cdbbae11747
+    .claude/rules/software-engineering-rules.md: sha256:98508001c0100d5111c4129f5e562d54f746083a7526206409dcd6136ad721e4
+    .cursor/rules/compatibility-surface-gate.mdc: sha256:365564aeb0a4d4f0c73b82306b17ef03eeac100840dc34a8cdd84b8955f5a6e3
+    .cursor/rules/python-rules.mdc: sha256:01e2558ffbc8451acfedc3012979822f0e96ba688a0697b86244805f0a825196
+    .cursor/rules/software-engineering-rules.mdc: sha256:ea833cb7c1d060a03afd8b33fb7659832fe6b24bbdfe8cca5f2e6512752b70f2
+    .github/instructions/compatibility-surface-gate.instructions.md: sha256:f530f6db676490358d5a200d450678c805afdcdede540cf9ad4937def6d45e16
+    .github/instructions/python-rules.instructions.md: sha256:038304df0337669b692a2a9620050a98af4ae245d80d5490631cfab7e89fa732
+    .github/instructions/software-engineering-rules.instructions.md: sha256:2adf982dd661a380a46d2c422138edd1a2ad0839cebb291f66b4e7c928ede6b5
   source: local
   local_path: ../coding-style
   declared_license: MIT
 - repo_url: _local/execution
   name: execution
-  version: 0.1.3
+  version: 0.1.4
   package_type: apm_package
   deployed_files:
   - .agents/skills/implement-linear-ticket
@@ -38,14 +38,14 @@ dependencies:
   - .claude/skills/implement-linear-ticket
   - .claude/skills/implement-linear-ticket/SKILL.md
   deployed_file_hashes:
-    .agents/skills/implement-linear-ticket/SKILL.md: sha256:5aa90f2c8bf8f107f53ff93e3fae4cf770dfe1be8f50decab278f61e14cd9d05
-    .claude/skills/implement-linear-ticket/SKILL.md: sha256:5aa90f2c8bf8f107f53ff93e3fae4cf770dfe1be8f50decab278f61e14cd9d05
+    .agents/skills/implement-linear-ticket/SKILL.md: sha256:09331626b8ccd6e5d3f88e508db74362f0dab08b6e829eef0db7b0b00f8a6efe
+    .claude/skills/implement-linear-ticket/SKILL.md: sha256:09331626b8ccd6e5d3f88e508db74362f0dab08b6e829eef0db7b0b00f8a6efe
   source: local
   local_path: ../execution
   declared_license: MIT
 - repo_url: _local/git-diff
   name: git-diff
-  version: 0.1.0
+  version: 0.1.1
   package_type: apm_package
   deployed_files:
   - .agents/skills/git-diff-all-changes-main
@@ -62,17 +62,17 @@ dependencies:
   - .claude/skills/git-diff-staged-changes-main/SKILL.md
   deployed_file_hashes:
     .agents/skills/git-diff-all-changes-main/SKILL.md: sha256:08dcd23ac6e29a0ac71080d560719bd8aad7103ace4a28a9d3cbd87495048882
-    .agents/skills/git-diff-committed-changes-main/SKILL.md: sha256:40a65f72bb3a0df5933a9d17457f414657658d41e59ea2f9fbcb8274c06e1b4c
-    .agents/skills/git-diff-staged-changes-main/SKILL.md: sha256:0ff5e0b8b3c5008696c7f01717f905835a335b5328b7f1a303dd95f0084d21b3
+    .agents/skills/git-diff-committed-changes-main/SKILL.md: sha256:a3be998fb877990f67087d19f590c58535727f0bb4a3b64e91dfb92a17d68a03
+    .agents/skills/git-diff-staged-changes-main/SKILL.md: sha256:0b954a6fc27709748d252d8b2f7032509e937ac763005dad444b195c199374f6
     .claude/skills/git-diff-all-changes-main/SKILL.md: sha256:08dcd23ac6e29a0ac71080d560719bd8aad7103ace4a28a9d3cbd87495048882
-    .claude/skills/git-diff-committed-changes-main/SKILL.md: sha256:40a65f72bb3a0df5933a9d17457f414657658d41e59ea2f9fbcb8274c06e1b4c
-    .claude/skills/git-diff-staged-changes-main/SKILL.md: sha256:0ff5e0b8b3c5008696c7f01717f905835a335b5328b7f1a303dd95f0084d21b3
+    .claude/skills/git-diff-committed-changes-main/SKILL.md: sha256:a3be998fb877990f67087d19f590c58535727f0bb4a3b64e91dfb92a17d68a03
+    .claude/skills/git-diff-staged-changes-main/SKILL.md: sha256:0b954a6fc27709748d252d8b2f7032509e937ac763005dad444b195c199374f6
   source: local
   local_path: ../git-diff
   declared_license: MIT
 - repo_url: _local/p-stack
   name: p-stack
-  version: 0.1.1
+  version: 0.1.2
   package_type: apm_package
   deployed_files:
   - .agents/skills/architect
@@ -542,7 +542,7 @@ dependencies:
     .agents/skills/architect/references/runner-prompt.md: sha256:10d5a91722b7f9eeef241b566b906b6283513f4367a64796676f801a1d386598
     .agents/skills/arena/SKILL.md: sha256:bd074c6c8d32300b6357019df82bc1c9c0db3bc866c7f00ff4060281e98606c2
     .agents/skills/automate-me/SKILL.md: sha256:827a372678f78cefed0d6a2dfb039fe0f0c5e1d2cf0047587076dc194f315fbb
-    .agents/skills/benchmark-checklist/SKILL.md: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+    .agents/skills/benchmark-checklist/SKILL.md: sha256:7a9cd411a66673c07c89a0d7cf73ea45919e429be371dbe352eb31a88b92bec1
     .agents/skills/blast-radius/SKILL.md: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
     .agents/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
     .agents/skills/correct/SKILL.md: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
@@ -552,7 +552,7 @@ dependencies:
     .agents/skills/create-verification-skill/references/feature-map-example/create-note.md: sha256:7dc91f1cca0c192f46eb9f6429f91fdd9b7dec1b8260bb482294dc6d637e6dab
     .agents/skills/create-verification-skill/references/feature-map-example/search.md: sha256:d3f6305189eddaa53d7e36606d3c92716aa34518383ab1f6f90fcdf1c1295e60
     .agents/skills/figure-it-out/SKILL.md: sha256:a7d081a18f00f2e3465e115d11690c37fc578242c3914b7ec686355888b42799
-    .agents/skills/how/SKILL.md: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
+    .agents/skills/how/SKILL.md: sha256:a6bb3cf4844e012b363b5e9677281a94ac506765e44fe780f63ce4002de9f82e
     .agents/skills/how/references/explainer-prompt.md: sha256:cd4791cdcf597ff09bc9262854af1269a49dd476e49a8653d12b34d135c48a3d
     .agents/skills/how/references/explorer-prompt.md: sha256:9d1e1c1255dab8b8e34e726974c508725e2338c995622d8ab1b4b23eb3f89b66
     .agents/skills/in-your-own-words/SKILL.md: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
@@ -583,7 +583,7 @@ dependencies:
     .agents/skills/poteto-help/references/guide/images/verification.jpg: sha256:2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a
     .agents/skills/poteto-help/references/prompting.md: sha256:da55d284628a3c84e8e38cb5331775583e517bbde93797fd264be49e523c738a
     .agents/skills/poteto-help/references/recipes.md: sha256:5323aca73a39a3b607c2bb22cd33551fe893563dfd4b104df838da010e9fc702
-    .agents/skills/poteto-mode/SKILL.md: sha256:6efd8c2d5181f313e7d6832611e4f0f06bb64f397a5fbfcc1633f31007dc2537
+    .agents/skills/poteto-mode/SKILL.md: sha256:a391d8c14a92feb4c6e41e24eacae900fee8c787b2d866b9b1b945dbdd981fe3
     .agents/skills/poteto-mode/playbooks/authoring-a-skill.md: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
     .agents/skills/poteto-mode/playbooks/autonomous-run.md: sha256:e11f76fd6f07e0b29b33845257666547f4d7fb1a6e65b7d2fd5604a404b1d1d9
     .agents/skills/poteto-mode/playbooks/autopilot-full.md: sha256:fa02e68ba0d4baeace2573f34154239405ef256dec6b99fdfff211d3ca79fff5
@@ -591,21 +591,21 @@ dependencies:
     .agents/skills/poteto-mode/playbooks/babysit.md: sha256:d5806054d462aed575587fb1f6605378abeb65b95fcedaf526e0cbcc1bd94074
     .agents/skills/poteto-mode/playbooks/bug-fix.md: sha256:a13682b618fc0c03aae5f0d2f5d54f1a28453154e35103f525894e5a99bcf5e2
     .agents/skills/poteto-mode/playbooks/eval.md: sha256:e01b1fd1f198911abd849cd151faeb70a08f63c379d0390e9eb3d2d1b4424599
-    .agents/skills/poteto-mode/playbooks/feature.md: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
-    .agents/skills/poteto-mode/playbooks/hillclimb.md: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
-    .agents/skills/poteto-mode/playbooks/investigation.md: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
-    .agents/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:88f504d048a235d0e9922d097680a0f73810924c67bdddbb8c412462b5eb28bd
-    .agents/skills/poteto-mode/playbooks/opening-a-pr.md: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
+    .agents/skills/poteto-mode/playbooks/feature.md: sha256:05966817530a366037e027d2e4021c361a5fb53fce1e8ecee0e9d519216f6f46
+    .agents/skills/poteto-mode/playbooks/hillclimb.md: sha256:78cf34e0f7559cf62936471cec9d0383a089817da3e00049a9816c6edb090388
+    .agents/skills/poteto-mode/playbooks/investigation.md: sha256:ad5d6f2d79e691808e707dd3fdd85181a8f97f77b0aeb920fdaed6cd8dc2da59
+    .agents/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:390ed6ccc45ccf0c5cbec674d97ce648ad37866cf7928bbb2c33bdee47040395
+    .agents/skills/poteto-mode/playbooks/opening-a-pr.md: sha256:50ab5c8824b8758222fe673ee0f234f20e83419f586e1f01cfcb5ae976b948f9
     .agents/skills/poteto-mode/playbooks/orchestrate.md: sha256:4764ff66eda2a2bcfa37bde781490baccde7177149d7dfd012ecdae9bb01139a
     .agents/skills/poteto-mode/playbooks/pause-safely.md: sha256:77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d
     .agents/skills/poteto-mode/playbooks/perf-issue.md: sha256:7f3ad73a9376087d39243ceb5dd826f299fa65c46955ca37dfc54a46b16d35ce
     .agents/skills/poteto-mode/playbooks/prototype.md: sha256:80ec27b9221654ee81df36b11e2f5fbda99dfd2f4a3e6b2c85605a3baa14a7dc
-    .agents/skills/poteto-mode/playbooks/refactoring.md: sha256:36b997a8a6da5e1e705085bbbbdda3b7ab4587d74102265ac746cd9b7b62d3fb
+    .agents/skills/poteto-mode/playbooks/refactoring.md: sha256:6d50c518c932ee9669a129be96c414c61df0e08cada252181b8bdccd68f67c54
     .agents/skills/poteto-mode/playbooks/runtime-forensics.md: sha256:066b6b7fd7a68c1e3e3f43c63dbcc6b9f1f90476b5ec4b42c9bdb5d31788af06
     .agents/skills/poteto-mode/playbooks/session-pickup.md: sha256:1d17b84a10109d31e4515cde4938bab220bc9944e58d695589622a08d0ce43a4
     .agents/skills/poteto-mode/playbooks/shipping.md: sha256:199aadda40d6b0ae82a28bee2f1c66fcc95af3a7b9dc3d3d366beeda5b45c836
     .agents/skills/poteto-mode/playbooks/trace-forensics.md: sha256:12d8dfde6e1b11dcb492317933d98f3ebe5e148287d8e428cb0191dd93154d3e
-    .agents/skills/poteto-mode/playbooks/visual-parity.md: sha256:70a79bb445e4c2f38a8f52c4579ed4e447ad8d7afd612034eee06a8992880334
+    .agents/skills/poteto-mode/playbooks/visual-parity.md: sha256:301d4c2ed2a4be3eb03a41e414e1ca54c8bed8cc1cfbcb84a7dc5b6ed36a637e
     .agents/skills/poteto-mode/playbooks/worktree-cleanup.md: sha256:382ebadbd1bf4361f98bb10ac00b6f630214b01a60b28c11c7b89ac9ebeb552e
     .agents/skills/poteto-mode/references/bugbot-triage.md: sha256:70b186faaa5c1abd2d5159093f1f7f4ef9def0ec882aef53718e0a6986ccd24e
     .agents/skills/poteto-mode/scripts/bootstrap.ts: sha256:ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361
@@ -634,15 +634,15 @@ dependencies:
     .agents/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md: sha256:9a02e9d50d1135e62069fbd496905956c291e22dd64f002c2cd8dfe0071201ab
     .agents/skills/principle-minimize-reader-load/SKILL.md: sha256:f56aa135963b21744b9d67d02b5579946a7be206db2c4e77b2586faf3bb9bd8c
     .agents/skills/principle-model-the-domain/SKILL.md: sha256:6cc287efaf809ab3b057a1ca630d62e22d1458070875f2f0d23beb6489b86713
-    .agents/skills/principle-never-block-on-the-human/SKILL.md: sha256:05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f
+    .agents/skills/principle-never-block-on-the-human/SKILL.md: sha256:ab820ce4700ed5d786df115101c236282d00f19140958fe8e8fcab87c06e9450
     .agents/skills/principle-outcome-oriented-execution/SKILL.md: sha256:415e6ca95f3cf061ce4f995f55144d2ecb8b6a4a20092da34c87d26da9a0a068
-    .agents/skills/principle-prove-it-works/SKILL.md: sha256:4fdb2904e713066ab28f33496b94974b364847849e5703c81fb74ee138e1aade
+    .agents/skills/principle-prove-it-works/SKILL.md: sha256:afae5d98361570a531cd5f65c50d94eff9f16cd6ad11feb07438a43dba39cf08
     .agents/skills/principle-redesign-from-first-principles/SKILL.md: sha256:170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034
     .agents/skills/principle-separate-before-serializing-shared-state/SKILL.md: sha256:50bac90c813a39c400fecd9c741638bcebe5529d845b57837d6b2ca1655600c9
     .agents/skills/principle-sequence-verifiable-units/SKILL.md: sha256:bed92e273291e16299ef086c0e6b53ca9df0d8c3d2a77955fad745e99aea2e56
     .agents/skills/principle-subtract-before-you-add/SKILL.md: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
     .agents/skills/principle-test-behavior-not-implementation/SKILL.md: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
-    .agents/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+    .agents/skills/principle-type-system-discipline/SKILL.md: sha256:7c36fd313a1ae592f956c25193f6274ac17a60701717c21d333038b4a34e84fe
     .agents/skills/recall/SKILL.md: sha256:86c0f20951c8e2e663c8c373f30a8b4d59ee20875b3a55a1b24c522bc83faff7
     .agents/skills/reflect/SKILL.md: sha256:fa0e90d10c9e2cf2b7fce0d31a2e66ea15ec42080ec3e34af1eef81a55984e00
     .agents/skills/reflect/references/divergent-reviewer.md: sha256:b8e12572a40bc742abb2bec5f2c4af9ed46e55a2606afb118dd0a34bdf99dbc7
@@ -689,7 +689,7 @@ dependencies:
     .agents/skills/tdd/SKILL.md: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
     .agents/skills/teach/SKILL.md: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
     .agents/skills/technical-writing/SKILL.md: sha256:7f7b005c20cfed77b5e10dc77a623eeae09fccccafc1089ac9614b7a4ee39ece
-    .agents/skills/typescript-best-practices/SKILL.md: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
+    .agents/skills/typescript-best-practices/SKILL.md: sha256:3a8ecdb6c108f413008965ed7b74143520df1c324960f01f0ab1b0cb0e73b1f6
     .agents/skills/typescript-best-practices/references/patterns.md: sha256:bf634afdadb0028c6d69c9ec7a160c766b36bd174e2221475d83e6e519fad72f
     .agents/skills/unslop/SKILL.md: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
     .agents/skills/why/SKILL.md: sha256:ee4e0732e2abf2e2b86ab07ffb500e7ec2ae0c478a622b6977f3e14b88236603
@@ -706,14 +706,14 @@ dependencies:
     .agents/skills/why/references/sources/slack.md: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
     .agents/skills/why/references/synthesizer-prompt.md: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
     .claude/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
-    .claude/agents/poteto-agent.md: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
+    .claude/agents/poteto-agent.md: sha256:bebe5e4dee3411d78950ad5eeeffc9fe2f327b28123ae6d5252688533b87b521
     .claude/skills/architect/SKILL.md: sha256:4df6693d760a991f470c2a9611d55ffcdece56cacfc15f7ce778266ed52a76a9
     .claude/skills/architect/references/design-red-flags.md: sha256:6851acb68728048a9a01038c68654612f184719c84d465500f596cafea48c627
     .claude/skills/architect/references/rationale-template.md: sha256:45f59a664c58ad69d5831c3d3885d70ae16988ccae910eed836dd1cf0058b73c
     .claude/skills/architect/references/runner-prompt.md: sha256:10d5a91722b7f9eeef241b566b906b6283513f4367a64796676f801a1d386598
     .claude/skills/arena/SKILL.md: sha256:bd074c6c8d32300b6357019df82bc1c9c0db3bc866c7f00ff4060281e98606c2
     .claude/skills/automate-me/SKILL.md: sha256:827a372678f78cefed0d6a2dfb039fe0f0c5e1d2cf0047587076dc194f315fbb
-    .claude/skills/benchmark-checklist/SKILL.md: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+    .claude/skills/benchmark-checklist/SKILL.md: sha256:7a9cd411a66673c07c89a0d7cf73ea45919e429be371dbe352eb31a88b92bec1
     .claude/skills/blast-radius/SKILL.md: sha256:2e10745b97f5862323dcda3b29ca60d56b5c3c98e37020085d26b48efbe0a436
     .claude/skills/bro/SKILL.md: sha256:aa329d0ceeeecb6822a7174ad76bb07a7826a3c52ceb6a588dec4138815084bb
     .claude/skills/correct/SKILL.md: sha256:6ff3f98e79ea83142d0ff01a07e145f128c9472da282a6f7e0e5d72b01fa1e8b
@@ -723,7 +723,7 @@ dependencies:
     .claude/skills/create-verification-skill/references/feature-map-example/create-note.md: sha256:7dc91f1cca0c192f46eb9f6429f91fdd9b7dec1b8260bb482294dc6d637e6dab
     .claude/skills/create-verification-skill/references/feature-map-example/search.md: sha256:d3f6305189eddaa53d7e36606d3c92716aa34518383ab1f6f90fcdf1c1295e60
     .claude/skills/figure-it-out/SKILL.md: sha256:a7d081a18f00f2e3465e115d11690c37fc578242c3914b7ec686355888b42799
-    .claude/skills/how/SKILL.md: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
+    .claude/skills/how/SKILL.md: sha256:a6bb3cf4844e012b363b5e9677281a94ac506765e44fe780f63ce4002de9f82e
     .claude/skills/how/references/explainer-prompt.md: sha256:cd4791cdcf597ff09bc9262854af1269a49dd476e49a8653d12b34d135c48a3d
     .claude/skills/how/references/explorer-prompt.md: sha256:9d1e1c1255dab8b8e34e726974c508725e2338c995622d8ab1b4b23eb3f89b66
     .claude/skills/in-your-own-words/SKILL.md: sha256:fa8ba74e27d7be371dc270ec78bbf816411477d0dfab185356c861ac8dd413ad
@@ -754,7 +754,7 @@ dependencies:
     .claude/skills/poteto-help/references/guide/images/verification.jpg: sha256:2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a
     .claude/skills/poteto-help/references/prompting.md: sha256:da55d284628a3c84e8e38cb5331775583e517bbde93797fd264be49e523c738a
     .claude/skills/poteto-help/references/recipes.md: sha256:5323aca73a39a3b607c2bb22cd33551fe893563dfd4b104df838da010e9fc702
-    .claude/skills/poteto-mode/SKILL.md: sha256:6efd8c2d5181f313e7d6832611e4f0f06bb64f397a5fbfcc1633f31007dc2537
+    .claude/skills/poteto-mode/SKILL.md: sha256:a391d8c14a92feb4c6e41e24eacae900fee8c787b2d866b9b1b945dbdd981fe3
     .claude/skills/poteto-mode/playbooks/authoring-a-skill.md: sha256:91aa29e2724a667861a7ce8e458ee3cbbbcaa620d832c4d0ad99654e850fb284
     .claude/skills/poteto-mode/playbooks/autonomous-run.md: sha256:e11f76fd6f07e0b29b33845257666547f4d7fb1a6e65b7d2fd5604a404b1d1d9
     .claude/skills/poteto-mode/playbooks/autopilot-full.md: sha256:fa02e68ba0d4baeace2573f34154239405ef256dec6b99fdfff211d3ca79fff5
@@ -762,21 +762,21 @@ dependencies:
     .claude/skills/poteto-mode/playbooks/babysit.md: sha256:d5806054d462aed575587fb1f6605378abeb65b95fcedaf526e0cbcc1bd94074
     .claude/skills/poteto-mode/playbooks/bug-fix.md: sha256:a13682b618fc0c03aae5f0d2f5d54f1a28453154e35103f525894e5a99bcf5e2
     .claude/skills/poteto-mode/playbooks/eval.md: sha256:e01b1fd1f198911abd849cd151faeb70a08f63c379d0390e9eb3d2d1b4424599
-    .claude/skills/poteto-mode/playbooks/feature.md: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
-    .claude/skills/poteto-mode/playbooks/hillclimb.md: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
-    .claude/skills/poteto-mode/playbooks/investigation.md: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
-    .claude/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:88f504d048a235d0e9922d097680a0f73810924c67bdddbb8c412462b5eb28bd
-    .claude/skills/poteto-mode/playbooks/opening-a-pr.md: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
+    .claude/skills/poteto-mode/playbooks/feature.md: sha256:05966817530a366037e027d2e4021c361a5fb53fce1e8ecee0e9d519216f6f46
+    .claude/skills/poteto-mode/playbooks/hillclimb.md: sha256:78cf34e0f7559cf62936471cec9d0383a089817da3e00049a9816c6edb090388
+    .claude/skills/poteto-mode/playbooks/investigation.md: sha256:ad5d6f2d79e691808e707dd3fdd85181a8f97f77b0aeb920fdaed6cd8dc2da59
+    .claude/skills/poteto-mode/playbooks/multi-phase-plan.md: sha256:390ed6ccc45ccf0c5cbec674d97ce648ad37866cf7928bbb2c33bdee47040395
+    .claude/skills/poteto-mode/playbooks/opening-a-pr.md: sha256:50ab5c8824b8758222fe673ee0f234f20e83419f586e1f01cfcb5ae976b948f9
     .claude/skills/poteto-mode/playbooks/orchestrate.md: sha256:4764ff66eda2a2bcfa37bde781490baccde7177149d7dfd012ecdae9bb01139a
     .claude/skills/poteto-mode/playbooks/pause-safely.md: sha256:77968cfe5f4a71a8cd33e0ae8ffcdbd88dd693a212c240457773e6c40c96c21d
     .claude/skills/poteto-mode/playbooks/perf-issue.md: sha256:7f3ad73a9376087d39243ceb5dd826f299fa65c46955ca37dfc54a46b16d35ce
     .claude/skills/poteto-mode/playbooks/prototype.md: sha256:80ec27b9221654ee81df36b11e2f5fbda99dfd2f4a3e6b2c85605a3baa14a7dc
-    .claude/skills/poteto-mode/playbooks/refactoring.md: sha256:36b997a8a6da5e1e705085bbbbdda3b7ab4587d74102265ac746cd9b7b62d3fb
+    .claude/skills/poteto-mode/playbooks/refactoring.md: sha256:6d50c518c932ee9669a129be96c414c61df0e08cada252181b8bdccd68f67c54
     .claude/skills/poteto-mode/playbooks/runtime-forensics.md: sha256:066b6b7fd7a68c1e3e3f43c63dbcc6b9f1f90476b5ec4b42c9bdb5d31788af06
     .claude/skills/poteto-mode/playbooks/session-pickup.md: sha256:1d17b84a10109d31e4515cde4938bab220bc9944e58d695589622a08d0ce43a4
     .claude/skills/poteto-mode/playbooks/shipping.md: sha256:199aadda40d6b0ae82a28bee2f1c66fcc95af3a7b9dc3d3d366beeda5b45c836
     .claude/skills/poteto-mode/playbooks/trace-forensics.md: sha256:12d8dfde6e1b11dcb492317933d98f3ebe5e148287d8e428cb0191dd93154d3e
-    .claude/skills/poteto-mode/playbooks/visual-parity.md: sha256:70a79bb445e4c2f38a8f52c4579ed4e447ad8d7afd612034eee06a8992880334
+    .claude/skills/poteto-mode/playbooks/visual-parity.md: sha256:301d4c2ed2a4be3eb03a41e414e1ca54c8bed8cc1cfbcb84a7dc5b6ed36a637e
     .claude/skills/poteto-mode/playbooks/worktree-cleanup.md: sha256:382ebadbd1bf4361f98bb10ac00b6f630214b01a60b28c11c7b89ac9ebeb552e
     .claude/skills/poteto-mode/references/bugbot-triage.md: sha256:70b186faaa5c1abd2d5159093f1f7f4ef9def0ec882aef53718e0a6986ccd24e
     .claude/skills/poteto-mode/scripts/bootstrap.ts: sha256:ccd2ed08fd9da9d0d942e5f2491cfc74bb92d8a08fa51755e0da1ac8de287361
@@ -805,15 +805,15 @@ dependencies:
     .claude/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md: sha256:9a02e9d50d1135e62069fbd496905956c291e22dd64f002c2cd8dfe0071201ab
     .claude/skills/principle-minimize-reader-load/SKILL.md: sha256:f56aa135963b21744b9d67d02b5579946a7be206db2c4e77b2586faf3bb9bd8c
     .claude/skills/principle-model-the-domain/SKILL.md: sha256:6cc287efaf809ab3b057a1ca630d62e22d1458070875f2f0d23beb6489b86713
-    .claude/skills/principle-never-block-on-the-human/SKILL.md: sha256:05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f
+    .claude/skills/principle-never-block-on-the-human/SKILL.md: sha256:ab820ce4700ed5d786df115101c236282d00f19140958fe8e8fcab87c06e9450
     .claude/skills/principle-outcome-oriented-execution/SKILL.md: sha256:415e6ca95f3cf061ce4f995f55144d2ecb8b6a4a20092da34c87d26da9a0a068
-    .claude/skills/principle-prove-it-works/SKILL.md: sha256:4fdb2904e713066ab28f33496b94974b364847849e5703c81fb74ee138e1aade
+    .claude/skills/principle-prove-it-works/SKILL.md: sha256:afae5d98361570a531cd5f65c50d94eff9f16cd6ad11feb07438a43dba39cf08
     .claude/skills/principle-redesign-from-first-principles/SKILL.md: sha256:170e0a658783e43fee8ec5a8c2422a4abb8f69cef621dd1819a95910b8207034
     .claude/skills/principle-separate-before-serializing-shared-state/SKILL.md: sha256:50bac90c813a39c400fecd9c741638bcebe5529d845b57837d6b2ca1655600c9
     .claude/skills/principle-sequence-verifiable-units/SKILL.md: sha256:bed92e273291e16299ef086c0e6b53ca9df0d8c3d2a77955fad745e99aea2e56
     .claude/skills/principle-subtract-before-you-add/SKILL.md: sha256:8c93bb9d1a7f38e2ef37655d93f0e790fa59903105af3d500cc8a663ebe45f3f
     .claude/skills/principle-test-behavior-not-implementation/SKILL.md: sha256:760e04a4e09049bb9eabe68c473f0b33fcedd3c64caefaa85c810a0a5fc308be
-    .claude/skills/principle-type-system-discipline/SKILL.md: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+    .claude/skills/principle-type-system-discipline/SKILL.md: sha256:7c36fd313a1ae592f956c25193f6274ac17a60701717c21d333038b4a34e84fe
     .claude/skills/recall/SKILL.md: sha256:86c0f20951c8e2e663c8c373f30a8b4d59ee20875b3a55a1b24c522bc83faff7
     .claude/skills/reflect/SKILL.md: sha256:fa0e90d10c9e2cf2b7fce0d31a2e66ea15ec42080ec3e34af1eef81a55984e00
     .claude/skills/reflect/references/divergent-reviewer.md: sha256:b8e12572a40bc742abb2bec5f2c4af9ed46e55a2606afb118dd0a34bdf99dbc7
@@ -860,7 +860,7 @@ dependencies:
     .claude/skills/tdd/SKILL.md: sha256:e65ccd6b1535850dff577e354cec4b59af978d2cfd147d59ed2c9a629fcce83e
     .claude/skills/teach/SKILL.md: sha256:0cd9af8a439ace1716c5bce6b6196e0d7925f74636d09f51ff4466dd1939666a
     .claude/skills/technical-writing/SKILL.md: sha256:7f7b005c20cfed77b5e10dc77a623eeae09fccccafc1089ac9614b7a4ee39ece
-    .claude/skills/typescript-best-practices/SKILL.md: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
+    .claude/skills/typescript-best-practices/SKILL.md: sha256:3a8ecdb6c108f413008965ed7b74143520df1c324960f01f0ab1b0cb0e73b1f6
     .claude/skills/typescript-best-practices/references/patterns.md: sha256:bf634afdadb0028c6d69c9ec7a160c766b36bd174e2221475d83e6e519fad72f
     .claude/skills/unslop/SKILL.md: sha256:1ab61a4651fba6385aa07f8da6d32397d3ba175c4ca0761bdef9f3e22dda5750
     .claude/skills/why/SKILL.md: sha256:ee4e0732e2abf2e2b86ab07ffb500e7ec2ae0c478a622b6977f3e14b88236603
@@ -877,15 +877,15 @@ dependencies:
     .claude/skills/why/references/sources/slack.md: sha256:7cc0c790e1cd4fc713db1fd47800548899c500d6f9856defbecc1a15e958a4ab
     .claude/skills/why/references/synthesizer-prompt.md: sha256:2c8c7e325d16fa0354520df52620bd02f063d0d1ce65f7d6548f93e06c5e1d06
     .cursor/agents/comment-sicko.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
-    .cursor/agents/poteto-agent.md: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
+    .cursor/agents/poteto-agent.md: sha256:bebe5e4dee3411d78950ad5eeeffc9fe2f327b28123ae6d5252688533b87b521
     .github/agents/comment-sicko.agent.md: sha256:e0c586713d8cddf24331422a50364531af0a8f9374be75f68fd46924c9cfbbf2
-    .github/agents/poteto-agent.agent.md: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
+    .github/agents/poteto-agent.agent.md: sha256:bebe5e4dee3411d78950ad5eeeffc9fe2f327b28123ae6d5252688533b87b521
   source: local
   local_path: ../p-stack
   declared_license: MIT
 - repo_url: _local/planning
   name: planning
-  version: 0.1.3
+  version: 0.1.4
   package_type: apm_package
   deployed_files:
   - .agents/skills/masterplan
@@ -898,40 +898,40 @@ dependencies:
   - .cursor/rules/plan-handoff-standard.mdc
   - .github/instructions/plan-handoff-standard.instructions.md
   deployed_file_hashes:
-    .agents/skills/masterplan/SKILL.md: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+    .agents/skills/masterplan/SKILL.md: sha256:49bb98451d8ade6dd6cbeb968ed6d8d2ca054f32ead09f66dd0642baf8f12524
     .agents/skills/masterplan/references/masterplan-template.md: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
-    .claude/rules/plan-handoff-standard.md: sha256:85f4a5e6cd40dd458740e5bb7649b92903a9def127544379a2c554d18a1d9a75
-    .claude/skills/masterplan/SKILL.md: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+    .claude/rules/plan-handoff-standard.md: sha256:0a78fe57399936ed65dc268d8532d9ff6903312d0479d8014b54ef8b93ea1fa1
+    .claude/skills/masterplan/SKILL.md: sha256:49bb98451d8ade6dd6cbeb968ed6d8d2ca054f32ead09f66dd0642baf8f12524
     .claude/skills/masterplan/references/masterplan-template.md: sha256:3dc6566cb0aa69930b815231fb7ab72d932a2f97d5c8d0c1fdb800aa634952cf
-    .cursor/rules/plan-handoff-standard.mdc: sha256:45630d969859ca60ad9fc601fd8afe09b690f29d2a761fb4c95e0c4d4e151bf2
-    .github/instructions/plan-handoff-standard.instructions.md: sha256:473af0b129a903d4ffa30339f0c5997c057e8ee1ce6181adb2c997dc29023638
+    .cursor/rules/plan-handoff-standard.mdc: sha256:6a79ea7d0d55edac56b8a5b5c97067627f062a86c4c155dd7b1c892c2f5b6aee
+    .github/instructions/plan-handoff-standard.instructions.md: sha256:bba4492008beebd29f4c0467ccf619ca25f350e3eb743aaf67d713f2a610b8a6
   source: local
   local_path: ../planning
   declared_license: MIT
 - repo_url: _local/pr
   name: pr
-  version: 0.1.1
+  version: 0.1.2
   package_type: apm_package
   source: local
   local_path: ../pr
   declared_license: MIT
 - repo_url: _local/repo-maintenance
   name: repo-maintenance
-  version: 0.1.1
+  version: 0.1.2
   package_type: apm_package
   source: local
   local_path: ../repo-maintenance
   declared_license: MIT
 - repo_url: _local/review
   name: review
-  version: 0.1.2
+  version: 0.1.3
   package_type: apm_package
   source: local
   local_path: ../review
   declared_license: MIT
 - repo_url: _local/skill-creation
   name: skill-creation
-  version: 0.1.1
+  version: 0.1.2
   package_type: apm_package
   deployed_files:
   - .agents/skills/design-skill
@@ -939,14 +939,14 @@ dependencies:
   - .claude/skills/design-skill
   - .claude/skills/design-skill/SKILL.md
   deployed_file_hashes:
-    .agents/skills/design-skill/SKILL.md: sha256:db81b70a44f49871541ababb5a23b44134c06624acd637bd70b369430cb40b49
-    .claude/skills/design-skill/SKILL.md: sha256:db81b70a44f49871541ababb5a23b44134c06624acd637bd70b369430cb40b49
+    .agents/skills/design-skill/SKILL.md: sha256:66dfd0081fea0da5664e45d54938ccd198dc4b31bdf1b7c3ce978b67b083711b
+    .claude/skills/design-skill/SKILL.md: sha256:66dfd0081fea0da5664e45d54938ccd198dc4b31bdf1b7c3ce978b67b083711b
   source: local
   local_path: ../skill-creation
   declared_license: MIT
 - repo_url: _local/deep-interview
   name: deep-interview
-  version: 0.1.1
+  version: 0.1.2
   depth: 2
   resolved_by: _local/planning
   package_type: apm_package
@@ -956,8 +956,8 @@ dependencies:
   - .claude/skills/deep-interview
   - .claude/skills/deep-interview/SKILL.md
   deployed_file_hashes:
-    .agents/skills/deep-interview/SKILL.md: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
-    .claude/skills/deep-interview/SKILL.md: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+    .agents/skills/deep-interview/SKILL.md: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
+    .claude/skills/deep-interview/SKILL.md: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
   source: local
   local_path: ../deep-interview
   declaring_parent: ../planning
@@ -965,7 +965,7 @@ dependencies:
   declared_license: MIT
 - repo_url: _local/pr
   name: pr
-  version: 0.1.1
+  version: 0.1.2
   depth: 2
   resolved_by: _local/execution
   package_type: apm_package
@@ -983,12 +983,12 @@ dependencies:
   - .claude/skills/summarise-pr
   - .claude/skills/summarise-pr/SKILL.md
   deployed_file_hashes:
-    .agents/skills/babysit/SKILL.md: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+    .agents/skills/babysit/SKILL.md: sha256:6ca5cae9301652a60f6523561c197fa4ecbb9cef0f40deb51cf9f102f525e15d
     .agents/skills/code-tour/SKILL.md: sha256:63d778b539851c08a3e9b556701b7f9634e93ef6dc0f8324ba94ef832b4a1c46
-    .agents/skills/summarise-pr/SKILL.md: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
-    .claude/skills/babysit/SKILL.md: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+    .agents/skills/summarise-pr/SKILL.md: sha256:1972bb2d9ba9f789dcf4a503f1b16ce175a6cb9138a8d668d8d3fdb5b2b80e3f
+    .claude/skills/babysit/SKILL.md: sha256:6ca5cae9301652a60f6523561c197fa4ecbb9cef0f40deb51cf9f102f525e15d
     .claude/skills/code-tour/SKILL.md: sha256:63d778b539851c08a3e9b556701b7f9634e93ef6dc0f8324ba94ef832b4a1c46
-    .claude/skills/summarise-pr/SKILL.md: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+    .claude/skills/summarise-pr/SKILL.md: sha256:1972bb2d9ba9f789dcf4a503f1b16ce175a6cb9138a8d668d8d3fdb5b2b80e3f
   source: local
   local_path: ../pr
   declaring_parent: ../execution
@@ -996,7 +996,7 @@ dependencies:
   declared_license: MIT
 - repo_url: _local/repo-maintenance
   name: repo-maintenance
-  version: 0.1.1
+  version: 0.1.2
   depth: 2
   resolved_by: _local/skill-creation
   package_type: apm_package
@@ -1025,23 +1025,23 @@ dependencies:
   - .cursor/rules/keep-agent-mds-up-to-date.mdc
   - .github/instructions/keep-agent-mds-up-to-date.instructions.md
   deployed_file_hashes:
-    .agents/skills/agents-md/SKILL.md: sha256:9dd461e1dae00c9b5a829a1e78b1060f7293c935f02f7e7034d6f7d70b8bc214
-    .agents/skills/generate-agent-docs/SKILL.md: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
-    .agents/skills/optimise-agent-config/SKILL.md: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
-    .agents/skills/optimise-agent-config/references/audit-commands.md: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
-    .agents/skills/optimise-agent-config/references/audit-process.md: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
-    .agents/skills/optimise-agent-config/references/migration-examples.md: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+    .agents/skills/agents-md/SKILL.md: sha256:a3345abc63961bb4e98a3efbf5d1af7ace707b9af86ce30ca4a05806e29e3807
+    .agents/skills/generate-agent-docs/SKILL.md: sha256:c67a2e97da2c47b45e02c8a3a5c22ad2647034594c46459e16f92ff406f5fddb
+    .agents/skills/optimise-agent-config/SKILL.md: sha256:7b03e8f2f22e05b9840242c617bb5580e1947ba5078e07e80af88a4e202b6651
+    .agents/skills/optimise-agent-config/references/audit-commands.md: sha256:36e95c7ff5379e536f2853543e16db9dd8e7914dfcc6c5ed37de1d0078afba3e
+    .agents/skills/optimise-agent-config/references/audit-process.md: sha256:18a7432580213e5c63d785f658fb2e1de687fffbf3315a4fffd4de2fca9c0ebb
+    .agents/skills/optimise-agent-config/references/migration-examples.md: sha256:e6e3d3e2f4d774191c191e8850f622605d731c6b1476e75150243f4a9efc59bd
     .agents/skills/optimise-agent-config/scripts/validate-artefacts.sh: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
-    .claude/rules/keep-agent-mds-up-to-date.md: sha256:506693270e51fb74c5c039fe3ce9747f71a556a0b06c07eedc8367ff7c4b5522
-    .claude/skills/agents-md/SKILL.md: sha256:9dd461e1dae00c9b5a829a1e78b1060f7293c935f02f7e7034d6f7d70b8bc214
-    .claude/skills/generate-agent-docs/SKILL.md: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
-    .claude/skills/optimise-agent-config/SKILL.md: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
-    .claude/skills/optimise-agent-config/references/audit-commands.md: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
-    .claude/skills/optimise-agent-config/references/audit-process.md: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
-    .claude/skills/optimise-agent-config/references/migration-examples.md: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+    .claude/rules/keep-agent-mds-up-to-date.md: sha256:0186cf9cb4de69a9439a1447c9e6f05f4db712e64eb703c0f4e847724598e121
+    .claude/skills/agents-md/SKILL.md: sha256:a3345abc63961bb4e98a3efbf5d1af7ace707b9af86ce30ca4a05806e29e3807
+    .claude/skills/generate-agent-docs/SKILL.md: sha256:c67a2e97da2c47b45e02c8a3a5c22ad2647034594c46459e16f92ff406f5fddb
+    .claude/skills/optimise-agent-config/SKILL.md: sha256:7b03e8f2f22e05b9840242c617bb5580e1947ba5078e07e80af88a4e202b6651
+    .claude/skills/optimise-agent-config/references/audit-commands.md: sha256:36e95c7ff5379e536f2853543e16db9dd8e7914dfcc6c5ed37de1d0078afba3e
+    .claude/skills/optimise-agent-config/references/audit-process.md: sha256:18a7432580213e5c63d785f658fb2e1de687fffbf3315a4fffd4de2fca9c0ebb
+    .claude/skills/optimise-agent-config/references/migration-examples.md: sha256:e6e3d3e2f4d774191c191e8850f622605d731c6b1476e75150243f4a9efc59bd
     .claude/skills/optimise-agent-config/scripts/validate-artefacts.sh: sha256:0eef0d85caf2f09391ff7a30b562eefdffe12d12f6eb6e9b9689d23c3292dc64
-    .cursor/rules/keep-agent-mds-up-to-date.mdc: sha256:06dc074873a6013eebf0e902454bd4ae2c75242dc358635aff56be2e0b2054d3
-    .github/instructions/keep-agent-mds-up-to-date.instructions.md: sha256:f398491aa52a5e95a89b1ade8dde133e4f44e6c855b38109c999ca34df2811db
+    .cursor/rules/keep-agent-mds-up-to-date.mdc: sha256:954e609b2dec62936d39477e5d2c922266b1de50c49e5eb8aec89b9cb6085f42
+    .github/instructions/keep-agent-mds-up-to-date.instructions.md: sha256:6c090c283307ed4a059bef6496bac757d4789cd75c8266d4dd3c1d9e13d8cfc4
   source: local
   local_path: ../repo-maintenance
   declaring_parent: ../skill-creation
@@ -1049,7 +1049,7 @@ dependencies:
   declared_license: MIT
 - repo_url: _local/review
   name: review
-  version: 0.1.2
+  version: 0.1.3
   depth: 2
   resolved_by: _local/execution
   package_type: apm_package
@@ -1081,20 +1081,20 @@ dependencies:
   deployed_file_hashes:
     .agents/skills/pr-context/SKILL.md: sha256:b3a77ef40aa97a30c5f929af114edd09f6d8c531860569a51b84d61054569716
     .agents/skills/pr-context/references/state-chart.tsx: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
-    .agents/skills/quick-review/SKILL.md: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
-    .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
-    .agents/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+    .agents/skills/quick-review/SKILL.md: sha256:ee896c3ae8ca23bb8718757de19622a4922b20d25b7f0c6ebf40e15d757b8796
+    .agents/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:cba9808da0b4a4b72cf7760bdbe3b6bae133ff15170bcd0e83ba6a301564f13d
+    .agents/skills/thermo-nuclear-review/SKILL.md: sha256:eaa3d064e98eac24bd07c235aeded1436fbec7838cfa25a8e27c843417bfc751
     .claude/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
-    .claude/agents/thermo-nuclear-review-subagent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+    .claude/agents/thermo-nuclear-review-subagent.md: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
     .claude/skills/pr-context/SKILL.md: sha256:b3a77ef40aa97a30c5f929af114edd09f6d8c531860569a51b84d61054569716
     .claude/skills/pr-context/references/state-chart.tsx: sha256:e07493a4e37df362f50e49e0dd09d44f31c74145289f2b107934c21af7d34d36
-    .claude/skills/quick-review/SKILL.md: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
-    .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
-    .claude/skills/thermo-nuclear-review/SKILL.md: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+    .claude/skills/quick-review/SKILL.md: sha256:ee896c3ae8ca23bb8718757de19622a4922b20d25b7f0c6ebf40e15d757b8796
+    .claude/skills/thermo-nuclear-code-quality-review/SKILL.md: sha256:cba9808da0b4a4b72cf7760bdbe3b6bae133ff15170bcd0e83ba6a301564f13d
+    .claude/skills/thermo-nuclear-review/SKILL.md: sha256:eaa3d064e98eac24bd07c235aeded1436fbec7838cfa25a8e27c843417bfc751
     .cursor/agents/thermo-nuclear-code-quality-review-subagent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
-    .cursor/agents/thermo-nuclear-review-subagent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+    .cursor/agents/thermo-nuclear-review-subagent.md: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
     .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md: sha256:0940284ffdee5594a73d95de13c0a438c6b80bd50606039f374fd8eb23762f89
-    .github/agents/thermo-nuclear-review-subagent.agent.md: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+    .github/agents/thermo-nuclear-review-subagent.agent.md: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
   source: local
   local_path: ../review
   declaring_parent: ../execution
@@ -1118,7 +1118,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
+  content_hash: sha256:bebe5e4dee3411d78950ad5eeeffc9fe2f327b28123ae6d5252688533b87b521
 - kind: project-relative
   target: claude
   value: .claude/agents/thermo-nuclear-code-quality-review-subagent.md
@@ -1136,7 +1136,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+  content_hash: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
 - kind: project-relative
   target: claude
   value: .claude/rules/compatibility-surface-gate.md
@@ -1145,7 +1145,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:cdc543d23abf987209ff3906f86f79d45f50f64f515c4d69879073511c57138b
+  content_hash: sha256:f2bba27edc772115ef400549d6298ca5e9c8f7641896dae34a44f392f369dca0
 - kind: project-relative
   target: claude
   value: .claude/rules/keep-agent-mds-up-to-date.md
@@ -1154,7 +1154,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:506693270e51fb74c5c039fe3ce9747f71a556a0b06c07eedc8367ff7c4b5522
+  content_hash: sha256:0186cf9cb4de69a9439a1447c9e6f05f4db712e64eb703c0f4e847724598e121
 - kind: project-relative
   target: claude
   value: .claude/rules/plan-handoff-standard.md
@@ -1163,7 +1163,7 @@ deployments:
   owners:
   - ../planning
   active_owner: ../planning
-  content_hash: sha256:85f4a5e6cd40dd458740e5bb7649b92903a9def127544379a2c554d18a1d9a75
+  content_hash: sha256:0a78fe57399936ed65dc268d8532d9ff6903312d0479d8014b54ef8b93ea1fa1
 - kind: project-relative
   target: claude
   value: .claude/rules/python-rules.md
@@ -1172,7 +1172,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:fd0df55ae224155ce1afb7723d57cba79b41961805d259fe452d578571cecccc
+  content_hash: sha256:8d1542d9e9959740f6a5de12cfc81c5c3ccba4a53196d0e282376cdbbae11747
 - kind: project-relative
   target: claude
   value: .claude/rules/software-engineering-rules.md
@@ -1181,7 +1181,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:06e82259d653c2d9772d63f5ef6b7557a9c78a910e51c98815c8a123d2b20974
+  content_hash: sha256:98508001c0100d5111c4129f5e562d54f746083a7526206409dcd6136ad721e4
 - kind: project-relative
   target: claude
   value: .claude/skills/agents-md
@@ -1199,7 +1199,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:9dd461e1dae00c9b5a829a1e78b1060f7293c935f02f7e7034d6f7d70b8bc214
+  content_hash: sha256:a3345abc63961bb4e98a3efbf5d1af7ace707b9af86ce30ca4a05806e29e3807
 - kind: project-relative
   target: claude
   value: .claude/skills/architect
@@ -1298,7 +1298,7 @@ deployments:
   owners:
   - local:../pr
   active_owner: local:../pr
-  content_hash: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+  content_hash: sha256:6ca5cae9301652a60f6523561c197fa4ecbb9cef0f40deb51cf9f102f525e15d
 - kind: project-relative
   target: claude
   value: .claude/skills/benchmark-checklist
@@ -1316,7 +1316,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+  content_hash: sha256:7a9cd411a66673c07c89a0d7cf73ea45919e429be371dbe352eb31a88b92bec1
 - kind: project-relative
   target: claude
   value: .claude/skills/blast-radius
@@ -1469,7 +1469,7 @@ deployments:
   owners:
   - local:../deep-interview
   active_owner: local:../deep-interview
-  content_hash: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+  content_hash: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
 - kind: project-relative
   target: claude
   value: .claude/skills/design-skill
@@ -1487,7 +1487,7 @@ deployments:
   owners:
   - ../skill-creation
   active_owner: ../skill-creation
-  content_hash: sha256:db81b70a44f49871541ababb5a23b44134c06624acd637bd70b369430cb40b49
+  content_hash: sha256:66dfd0081fea0da5664e45d54938ccd198dc4b31bdf1b7c3ce978b67b083711b
 - kind: project-relative
   target: claude
   value: .claude/skills/figure-it-out
@@ -1523,7 +1523,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+  content_hash: sha256:c67a2e97da2c47b45e02c8a3a5c22ad2647034594c46459e16f92ff406f5fddb
 - kind: project-relative
   target: claude
   value: .claude/skills/git-diff-all-changes-main
@@ -1559,7 +1559,7 @@ deployments:
   owners:
   - ../git-diff
   active_owner: ../git-diff
-  content_hash: sha256:40a65f72bb3a0df5933a9d17457f414657658d41e59ea2f9fbcb8274c06e1b4c
+  content_hash: sha256:a3be998fb877990f67087d19f590c58535727f0bb4a3b64e91dfb92a17d68a03
 - kind: project-relative
   target: claude
   value: .claude/skills/git-diff-staged-changes-main
@@ -1577,7 +1577,7 @@ deployments:
   owners:
   - ../git-diff
   active_owner: ../git-diff
-  content_hash: sha256:0ff5e0b8b3c5008696c7f01717f905835a335b5328b7f1a303dd95f0084d21b3
+  content_hash: sha256:0b954a6fc27709748d252d8b2f7032509e937ac763005dad444b195c199374f6
 - kind: project-relative
   target: claude
   value: .claude/skills/how
@@ -1595,7 +1595,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
+  content_hash: sha256:a6bb3cf4844e012b363b5e9677281a94ac506765e44fe780f63ce4002de9f82e
 - kind: project-relative
   target: claude
   value: .claude/skills/how/references/explainer-prompt.md
@@ -1631,7 +1631,7 @@ deployments:
   owners:
   - ../execution
   active_owner: ../execution
-  content_hash: sha256:5aa90f2c8bf8f107f53ff93e3fae4cf770dfe1be8f50decab278f61e14cd9d05
+  content_hash: sha256:09331626b8ccd6e5d3f88e508db74362f0dab08b6e829eef0db7b0b00f8a6efe
 - kind: project-relative
   target: claude
   value: .claude/skills/in-your-own-words
@@ -1775,7 +1775,7 @@ deployments:
   owners:
   - ../planning
   active_owner: ../planning
-  content_hash: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+  content_hash: sha256:49bb98451d8ade6dd6cbeb968ed6d8d2ca054f32ead09f66dd0642baf8f12524
 - kind: project-relative
   target: claude
   value: .claude/skills/masterplan/references/masterplan-template.md
@@ -1820,7 +1820,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+  content_hash: sha256:7b03e8f2f22e05b9840242c617bb5580e1947ba5078e07e80af88a4e202b6651
 - kind: project-relative
   target: claude
   value: .claude/skills/optimise-agent-config/references/audit-commands.md
@@ -1829,7 +1829,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+  content_hash: sha256:36e95c7ff5379e536f2853543e16db9dd8e7914dfcc6c5ed37de1d0078afba3e
 - kind: project-relative
   target: claude
   value: .claude/skills/optimise-agent-config/references/audit-process.md
@@ -1838,7 +1838,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+  content_hash: sha256:18a7432580213e5c63d785f658fb2e1de687fffbf3315a4fffd4de2fca9c0ebb
 - kind: project-relative
   target: claude
   value: .claude/skills/optimise-agent-config/references/migration-examples.md
@@ -1847,7 +1847,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+  content_hash: sha256:e6e3d3e2f4d774191c191e8850f622605d731c6b1476e75150243f4a9efc59bd
 - kind: project-relative
   target: claude
   value: .claude/skills/optimise-agent-config/scripts/validate-artefacts.sh
@@ -2063,7 +2063,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:6efd8c2d5181f313e7d6832611e4f0f06bb64f397a5fbfcc1633f31007dc2537
+  content_hash: sha256:a391d8c14a92feb4c6e41e24eacae900fee8c787b2d866b9b1b945dbdd981fe3
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/authoring-a-skill.md
@@ -2135,7 +2135,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
+  content_hash: sha256:05966817530a366037e027d2e4021c361a5fb53fce1e8ecee0e9d519216f6f46
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/hillclimb.md
@@ -2144,7 +2144,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
+  content_hash: sha256:78cf34e0f7559cf62936471cec9d0383a089817da3e00049a9816c6edb090388
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/investigation.md
@@ -2153,7 +2153,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
+  content_hash: sha256:ad5d6f2d79e691808e707dd3fdd85181a8f97f77b0aeb920fdaed6cd8dc2da59
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/multi-phase-plan.md
@@ -2162,7 +2162,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:88f504d048a235d0e9922d097680a0f73810924c67bdddbb8c412462b5eb28bd
+  content_hash: sha256:390ed6ccc45ccf0c5cbec674d97ce648ad37866cf7928bbb2c33bdee47040395
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/opening-a-pr.md
@@ -2171,7 +2171,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
+  content_hash: sha256:50ab5c8824b8758222fe673ee0f234f20e83419f586e1f01cfcb5ae976b948f9
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/orchestrate.md
@@ -2216,7 +2216,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:36b997a8a6da5e1e705085bbbbdda3b7ab4587d74102265ac746cd9b7b62d3fb
+  content_hash: sha256:6d50c518c932ee9669a129be96c414c61df0e08cada252181b8bdccd68f67c54
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/runtime-forensics.md
@@ -2261,7 +2261,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:70a79bb445e4c2f38a8f52c4579ed4e447ad8d7afd612034eee06a8992880334
+  content_hash: sha256:301d4c2ed2a4be3eb03a41e414e1ca54c8bed8cc1cfbcb84a7dc5b6ed36a637e
 - kind: project-relative
   target: claude
   value: .claude/skills/poteto-mode/playbooks/worktree-cleanup.md
@@ -2693,7 +2693,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f
+  content_hash: sha256:ab820ce4700ed5d786df115101c236282d00f19140958fe8e8fcab87c06e9450
 - kind: project-relative
   target: claude
   value: .claude/skills/principle-outcome-oriented-execution
@@ -2729,7 +2729,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:4fdb2904e713066ab28f33496b94974b364847849e5703c81fb74ee138e1aade
+  content_hash: sha256:afae5d98361570a531cd5f65c50d94eff9f16cd6ad11feb07438a43dba39cf08
 - kind: project-relative
   target: claude
   value: .claude/skills/principle-redesign-from-first-principles
@@ -2837,7 +2837,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+  content_hash: sha256:7c36fd313a1ae592f956c25193f6274ac17a60701717c21d333038b4a34e84fe
 - kind: project-relative
   target: claude
   value: .claude/skills/quick-review
@@ -2855,7 +2855,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
+  content_hash: sha256:ee896c3ae8ca23bb8718757de19622a4922b20d25b7f0c6ebf40e15d757b8796
 - kind: project-relative
   target: claude
   value: .claude/skills/recall
@@ -3305,7 +3305,7 @@ deployments:
   owners:
   - local:../pr
   active_owner: local:../pr
-  content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+  content_hash: sha256:1972bb2d9ba9f789dcf4a503f1b16ce175a6cb9138a8d668d8d3fdb5b2b80e3f
 - kind: project-relative
   target: claude
   value: .claude/skills/swarm
@@ -3395,7 +3395,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+  content_hash: sha256:cba9808da0b4a4b72cf7760bdbe3b6bae133ff15170bcd0e83ba6a301564f13d
 - kind: project-relative
   target: claude
   value: .claude/skills/thermo-nuclear-review
@@ -3413,7 +3413,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+  content_hash: sha256:eaa3d064e98eac24bd07c235aeded1436fbec7838cfa25a8e27c843417bfc751
 - kind: project-relative
   target: claude
   value: .claude/skills/typescript-best-practices
@@ -3431,7 +3431,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
+  content_hash: sha256:3a8ecdb6c108f413008965ed7b74143520df1c324960f01f0ab1b0cb0e73b1f6
 - kind: project-relative
   target: claude
   value: .claude/skills/typescript-best-practices/references/patterns.md
@@ -3602,7 +3602,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:9dd461e1dae00c9b5a829a1e78b1060f7293c935f02f7e7034d6f7d70b8bc214
+  content_hash: sha256:a3345abc63961bb4e98a3efbf5d1af7ace707b9af86ce30ca4a05806e29e3807
 - kind: project-relative
   target: copilot
   value: .agents/skills/architect
@@ -3701,7 +3701,7 @@ deployments:
   owners:
   - local:../pr
   active_owner: local:../pr
-  content_hash: sha256:f48af03d8e876dee5b8415a191ee349f8854c9fff9a885b1b460908c7d1e625d
+  content_hash: sha256:6ca5cae9301652a60f6523561c197fa4ecbb9cef0f40deb51cf9f102f525e15d
 - kind: project-relative
   target: copilot
   value: .agents/skills/benchmark-checklist
@@ -3719,7 +3719,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:9eeba73c2377a31978bd9a02dff5698fe5b3632552a17997d6d819025f77a1cc
+  content_hash: sha256:7a9cd411a66673c07c89a0d7cf73ea45919e429be371dbe352eb31a88b92bec1
 - kind: project-relative
   target: copilot
   value: .agents/skills/blast-radius
@@ -3872,7 +3872,7 @@ deployments:
   owners:
   - local:../deep-interview
   active_owner: local:../deep-interview
-  content_hash: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+  content_hash: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
 - kind: project-relative
   target: copilot
   value: .agents/skills/design-skill
@@ -3890,7 +3890,7 @@ deployments:
   owners:
   - ../skill-creation
   active_owner: ../skill-creation
-  content_hash: sha256:db81b70a44f49871541ababb5a23b44134c06624acd637bd70b369430cb40b49
+  content_hash: sha256:66dfd0081fea0da5664e45d54938ccd198dc4b31bdf1b7c3ce978b67b083711b
 - kind: project-relative
   target: copilot
   value: .agents/skills/figure-it-out
@@ -3926,7 +3926,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:11e83890736667dc9950b5dcc378bcb74bb45d204c8d0855135a3f03a5c62e66
+  content_hash: sha256:c67a2e97da2c47b45e02c8a3a5c22ad2647034594c46459e16f92ff406f5fddb
 - kind: project-relative
   target: copilot
   value: .agents/skills/git-diff-all-changes-main
@@ -3962,7 +3962,7 @@ deployments:
   owners:
   - ../git-diff
   active_owner: ../git-diff
-  content_hash: sha256:40a65f72bb3a0df5933a9d17457f414657658d41e59ea2f9fbcb8274c06e1b4c
+  content_hash: sha256:a3be998fb877990f67087d19f590c58535727f0bb4a3b64e91dfb92a17d68a03
 - kind: project-relative
   target: copilot
   value: .agents/skills/git-diff-staged-changes-main
@@ -3980,7 +3980,7 @@ deployments:
   owners:
   - ../git-diff
   active_owner: ../git-diff
-  content_hash: sha256:0ff5e0b8b3c5008696c7f01717f905835a335b5328b7f1a303dd95f0084d21b3
+  content_hash: sha256:0b954a6fc27709748d252d8b2f7032509e937ac763005dad444b195c199374f6
 - kind: project-relative
   target: copilot
   value: .agents/skills/how
@@ -3998,7 +3998,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:7a35af567f82bd855b91b3789f52beacf5bd2ad5db61b2cc74a761135aad2209
+  content_hash: sha256:a6bb3cf4844e012b363b5e9677281a94ac506765e44fe780f63ce4002de9f82e
 - kind: project-relative
   target: copilot
   value: .agents/skills/how/references/explainer-prompt.md
@@ -4034,7 +4034,7 @@ deployments:
   owners:
   - ../execution
   active_owner: ../execution
-  content_hash: sha256:5aa90f2c8bf8f107f53ff93e3fae4cf770dfe1be8f50decab278f61e14cd9d05
+  content_hash: sha256:09331626b8ccd6e5d3f88e508db74362f0dab08b6e829eef0db7b0b00f8a6efe
 - kind: project-relative
   target: copilot
   value: .agents/skills/in-your-own-words
@@ -4178,7 +4178,7 @@ deployments:
   owners:
   - ../planning
   active_owner: ../planning
-  content_hash: sha256:5276a7a17098be3158536aa4f06d45e44b3f3b80eceba07c348c7e6573d7bfb5
+  content_hash: sha256:49bb98451d8ade6dd6cbeb968ed6d8d2ca054f32ead09f66dd0642baf8f12524
 - kind: project-relative
   target: copilot
   value: .agents/skills/masterplan/references/masterplan-template.md
@@ -4223,7 +4223,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:957c01b3eff307c983ffd327d0aa3339c9f92177acb11708007b8d331321fd9e
+  content_hash: sha256:7b03e8f2f22e05b9840242c617bb5580e1947ba5078e07e80af88a4e202b6651
 - kind: project-relative
   target: copilot
   value: .agents/skills/optimise-agent-config/references/audit-commands.md
@@ -4232,7 +4232,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:e322bb157576cbe028d2ddeec9710402cb4c8bd6f2da1dce1cb85866b667c20a
+  content_hash: sha256:36e95c7ff5379e536f2853543e16db9dd8e7914dfcc6c5ed37de1d0078afba3e
 - kind: project-relative
   target: copilot
   value: .agents/skills/optimise-agent-config/references/audit-process.md
@@ -4241,7 +4241,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:f6e641c13edbddefe9a484fefe7233c0c05600a0c5722d03fc2384452f4400df
+  content_hash: sha256:18a7432580213e5c63d785f658fb2e1de687fffbf3315a4fffd4de2fca9c0ebb
 - kind: project-relative
   target: copilot
   value: .agents/skills/optimise-agent-config/references/migration-examples.md
@@ -4250,7 +4250,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:23e057c50d2b8cccd024e18580bb0bf8aa67feaf4345127581e9a192b865138f
+  content_hash: sha256:e6e3d3e2f4d774191c191e8850f622605d731c6b1476e75150243f4a9efc59bd
 - kind: project-relative
   target: copilot
   value: .agents/skills/optimise-agent-config/scripts/validate-artefacts.sh
@@ -4466,7 +4466,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:6efd8c2d5181f313e7d6832611e4f0f06bb64f397a5fbfcc1633f31007dc2537
+  content_hash: sha256:a391d8c14a92feb4c6e41e24eacae900fee8c787b2d866b9b1b945dbdd981fe3
 - kind: project-relative
   target: copilot
   value: .agents/skills/poteto-mode/playbooks/authoring-a-skill.md
@@ -4538,7 +4538,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:3c92dcda5f7c1fe28e9c7ce68c7d878d07c5d47b74d2355f9d2733969d527c0c
+  content_hash: sha256:05966817530a366037e027d2e4021c361a5fb53fce1e8ecee0e9d519216f6f46
 - kind: project-relative
   target: copilot
   value: .agents/skills/poteto-mode/playbooks/hillclimb.md
@@ -4547,7 +4547,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:ecfdb342218fc73adb2f3d9eedbe7b424597d51ae3cdd47b226a9380585b69fb
+  content_hash: sha256:78cf34e0f7559cf62936471cec9d0383a089817da3e00049a9816c6edb090388
 - kind: project-relative
   target: copilot
   value: .agents/skills/poteto-mode/playbooks/investigation.md
@@ -4556,7 +4556,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:3575b785048532eb220515b6d60e1e18174967172ee49c13eb9f8351b58209fd
+  content_hash: sha256:ad5d6f2d79e691808e707dd3fdd85181a8f97f77b0aeb920fdaed6cd8dc2da59
 - kind: project-relative
   target: copilot
   value: .agents/skills/poteto-mode/playbooks/multi-phase-plan.md
@@ -4565,7 +4565,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:88f504d048a235d0e9922d097680a0f73810924c67bdddbb8c412462b5eb28bd
+  content_hash: sha256:390ed6ccc45ccf0c5cbec674d97ce648ad37866cf7928bbb2c33bdee47040395
 - kind: project-relative
   target: copilot
   value: .agents/skills/poteto-mode/playbooks/opening-a-pr.md
@@ -4574,7 +4574,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:e0290c81c96149235627fdd7a27088a1d863a5497beb1a7ab55894eff50cfb6d
+  content_hash: sha256:50ab5c8824b8758222fe673ee0f234f20e83419f586e1f01cfcb5ae976b948f9
 - kind: project-relative
   target: copilot
   value: .agents/skills/poteto-mode/playbooks/orchestrate.md
@@ -4619,7 +4619,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:36b997a8a6da5e1e705085bbbbdda3b7ab4587d74102265ac746cd9b7b62d3fb
+  content_hash: sha256:6d50c518c932ee9669a129be96c414c61df0e08cada252181b8bdccd68f67c54
 - kind: project-relative
   target: copilot
   value: .agents/skills/poteto-mode/playbooks/runtime-forensics.md
@@ -4664,7 +4664,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:70a79bb445e4c2f38a8f52c4579ed4e447ad8d7afd612034eee06a8992880334
+  content_hash: sha256:301d4c2ed2a4be3eb03a41e414e1ca54c8bed8cc1cfbcb84a7dc5b6ed36a637e
 - kind: project-relative
   target: copilot
   value: .agents/skills/poteto-mode/playbooks/worktree-cleanup.md
@@ -5096,7 +5096,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:05030a7a083c337676f793881b4e93cd218e8f1dd676529f56e6ac1d3efb8d1f
+  content_hash: sha256:ab820ce4700ed5d786df115101c236282d00f19140958fe8e8fcab87c06e9450
 - kind: project-relative
   target: copilot
   value: .agents/skills/principle-outcome-oriented-execution
@@ -5132,7 +5132,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:4fdb2904e713066ab28f33496b94974b364847849e5703c81fb74ee138e1aade
+  content_hash: sha256:afae5d98361570a531cd5f65c50d94eff9f16cd6ad11feb07438a43dba39cf08
 - kind: project-relative
   target: copilot
   value: .agents/skills/principle-redesign-from-first-principles
@@ -5240,7 +5240,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106
+  content_hash: sha256:7c36fd313a1ae592f956c25193f6274ac17a60701717c21d333038b4a34e84fe
 - kind: project-relative
   target: copilot
   value: .agents/skills/quick-review
@@ -5258,7 +5258,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:e96b9da0d88d2af476156006ee6c1c67117ce11641130476b8c627b637b6caaf
+  content_hash: sha256:ee896c3ae8ca23bb8718757de19622a4922b20d25b7f0c6ebf40e15d757b8796
 - kind: project-relative
   target: copilot
   value: .agents/skills/recall
@@ -5708,7 +5708,7 @@ deployments:
   owners:
   - local:../pr
   active_owner: local:../pr
-  content_hash: sha256:b76e73b7eac8f41bffcfdbc307a3bfb956079c8458fd0afc8c206ab6f5269196
+  content_hash: sha256:1972bb2d9ba9f789dcf4a503f1b16ce175a6cb9138a8d668d8d3fdb5b2b80e3f
 - kind: project-relative
   target: copilot
   value: .agents/skills/swarm
@@ -5798,7 +5798,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:7faca08b51b643b2ddd0836f92af15574444024685dcc1e677dbbb39ae8c9e8f
+  content_hash: sha256:cba9808da0b4a4b72cf7760bdbe3b6bae133ff15170bcd0e83ba6a301564f13d
 - kind: project-relative
   target: copilot
   value: .agents/skills/thermo-nuclear-review
@@ -5816,7 +5816,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:2ddade19e8b3ee44fe1c8145ffc093fe927e91d9ae9e49a53df28ca5705cd280
+  content_hash: sha256:eaa3d064e98eac24bd07c235aeded1436fbec7838cfa25a8e27c843417bfc751
 - kind: project-relative
   target: copilot
   value: .agents/skills/typescript-best-practices
@@ -5834,7 +5834,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:7ef510857f28832604700802c5dfba7ee80b2cba6c11491f51e2435ea00473de
+  content_hash: sha256:3a8ecdb6c108f413008965ed7b74143520df1c324960f01f0ab1b0cb0e73b1f6
 - kind: project-relative
   target: copilot
   value: .agents/skills/typescript-best-practices/references/patterns.md
@@ -6005,7 +6005,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
+  content_hash: sha256:bebe5e4dee3411d78950ad5eeeffc9fe2f327b28123ae6d5252688533b87b521
 - kind: project-relative
   target: copilot
   value: .github/agents/thermo-nuclear-code-quality-review-subagent.agent.md
@@ -6023,7 +6023,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+  content_hash: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
 - kind: project-relative
   target: copilot
   value: .github/instructions/compatibility-surface-gate.instructions.md
@@ -6032,7 +6032,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:a8d022e4582efae6e046f400f4d07647fe9678bae97c9f06179e0f8609b38551
+  content_hash: sha256:f530f6db676490358d5a200d450678c805afdcdede540cf9ad4937def6d45e16
 - kind: project-relative
   target: copilot
   value: .github/instructions/keep-agent-mds-up-to-date.instructions.md
@@ -6041,7 +6041,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:f398491aa52a5e95a89b1ade8dde133e4f44e6c855b38109c999ca34df2811db
+  content_hash: sha256:6c090c283307ed4a059bef6496bac757d4789cd75c8266d4dd3c1d9e13d8cfc4
 - kind: project-relative
   target: copilot
   value: .github/instructions/plan-handoff-standard.instructions.md
@@ -6050,7 +6050,7 @@ deployments:
   owners:
   - ../planning
   active_owner: ../planning
-  content_hash: sha256:473af0b129a903d4ffa30339f0c5997c057e8ee1ce6181adb2c997dc29023638
+  content_hash: sha256:bba4492008beebd29f4c0467ccf619ca25f350e3eb743aaf67d713f2a610b8a6
 - kind: project-relative
   target: copilot
   value: .github/instructions/python-rules.instructions.md
@@ -6059,7 +6059,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:5e37834dd9b250c69d1a8f2d199e8b193f514cd4441feaf24f898aeb8053458d
+  content_hash: sha256:038304df0337669b692a2a9620050a98af4ae245d80d5490631cfab7e89fa732
 - kind: project-relative
   target: copilot
   value: .github/instructions/software-engineering-rules.instructions.md
@@ -6068,7 +6068,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:945f6db0e3e49420975f61aa5c84ca5a1be4477b20f8b533318b5e48fe41dcf8
+  content_hash: sha256:2adf982dd661a380a46d2c422138edd1a2ad0839cebb291f66b4e7c928ede6b5
 - kind: project-relative
   target: cursor
   value: .cursor/agents/comment-sicko.md
@@ -6086,7 +6086,7 @@ deployments:
   owners:
   - ../p-stack
   active_owner: ../p-stack
-  content_hash: sha256:7e97f95b20b7104d9a84716a70e84bbcf711e288cb0ec074c45ce80cd5f20ce8
+  content_hash: sha256:bebe5e4dee3411d78950ad5eeeffc9fe2f327b28123ae6d5252688533b87b521
 - kind: project-relative
   target: cursor
   value: .cursor/agents/thermo-nuclear-code-quality-review-subagent.md
@@ -6104,7 +6104,7 @@ deployments:
   owners:
   - local:../review
   active_owner: local:../review
-  content_hash: sha256:11ff6cb82c183724aa261cf9d64da97078165c785f81b81a5e08dce7c644931c
+  content_hash: sha256:ff26a7fc4eb791747c45e511595edd973f88d78b9fe7c34e6577610e674541e4
 - kind: project-relative
   target: cursor
   value: .cursor/rules/compatibility-surface-gate.mdc
@@ -6113,7 +6113,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:b75411139bd161bcc3c82083ddf91a8407ca9987fb8d344a7e54e46f5f78c588
+  content_hash: sha256:365564aeb0a4d4f0c73b82306b17ef03eeac100840dc34a8cdd84b8955f5a6e3
 - kind: project-relative
   target: cursor
   value: .cursor/rules/keep-agent-mds-up-to-date.mdc
@@ -6122,7 +6122,7 @@ deployments:
   owners:
   - local:../repo-maintenance
   active_owner: local:../repo-maintenance
-  content_hash: sha256:06dc074873a6013eebf0e902454bd4ae2c75242dc358635aff56be2e0b2054d3
+  content_hash: sha256:954e609b2dec62936d39477e5d2c922266b1de50c49e5eb8aec89b9cb6085f42
 - kind: project-relative
   target: cursor
   value: .cursor/rules/plan-handoff-standard.mdc
@@ -6131,7 +6131,7 @@ deployments:
   owners:
   - ../planning
   active_owner: ../planning
-  content_hash: sha256:45630d969859ca60ad9fc601fd8afe09b690f29d2a761fb4c95e0c4d4e151bf2
+  content_hash: sha256:6a79ea7d0d55edac56b8a5b5c97067627f062a86c4c155dd7b1c892c2f5b6aee
 - kind: project-relative
   target: cursor
   value: .cursor/rules/python-rules.mdc
@@ -6140,7 +6140,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:a7bb04830f9ab7f5dcae5d3e49ef49c20291b3ed7b59e36d68953100b316d601
+  content_hash: sha256:01e2558ffbc8451acfedc3012979822f0e96ba688a0697b86244805f0a825196
 - kind: project-relative
   target: cursor
   value: .cursor/rules/software-engineering-rules.mdc
@@ -6149,4 +6149,4 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:919cf7760e53ac57c42c4115b4d8ffbbb86bf04815ffb667b54c04cc1d107e38
+  content_hash: sha256:ea833cb7c1d060a03afd8b33fb7659832fe6b24bbdfe8cca5f2e6512752b70f2

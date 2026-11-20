@@ -19,7 +19,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+  content_hash: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
 - kind: project-relative
   target: legacy
   value: .agents/skills/deep-interview
@@ -37,12 +37,12 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+  content_hash: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
 local_deployed_files:
 - .agents/skills/deep-interview
 - .agents/skills/deep-interview/SKILL.md
 - .claude/skills/deep-interview
 - .claude/skills/deep-interview/SKILL.md
 local_deployed_file_hashes:
-  .agents/skills/deep-interview/SKILL.md: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
-  .claude/skills/deep-interview/SKILL.md: sha256:61e0c93436640d7db5f7f9b3b26f738f49b8d7725c8f327bf5e753fdaaea2fa0
+  .agents/skills/deep-interview/SKILL.md: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08
+  .claude/skills/deep-interview/SKILL.md: sha256:2b2e3fd190836a66f20666658fce8c03aaec773e5e7a9c19017fa97def18dd08

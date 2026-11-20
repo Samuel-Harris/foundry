@@ -7,8 +7,8 @@ Read-only git diff summaries measured against a repository's main branch.
 | Primitive | Name | Purpose |
 | --- | --- | --- |
 | Skill | `git-diff-all-changes-main` | Show all changes compared to origin/main. |
-| Skill | `git-diff-committed-changes-main` | Show staged and committed changes compared to origin/main. |
-| Skill | `git-diff-staged-changes-main` | Show staged changes compared to origin/main. |
+| Skill | `git-diff-committed-changes-main` | Show committed changes on this branch since it diverged from origin/main, excluding staged and unstaged edits. |
+| Skill | `git-diff-staged-changes-main` | Show staged and committed changes compared to the merge base with origin/main, excluding unstaged edits. |
 
 ## Install
 

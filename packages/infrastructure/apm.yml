@@ -1,5 +1,5 @@
 name: infrastructure
-version: "0.1.0"
+version: "0.1.1"
 description: "AWS architecture diagrams rendered as Mermaid flowcharts."
 author: sam
 license: MIT

@@ -73,7 +73,7 @@ Each live lane runs on its own cloud VM at the PR head, or in its own isolated w
 - [ ] `git fetch origin <head-branch> && git checkout <head SHA>`.
 - [ ] <Start the backend and the surface. Wait for ready.>
 - [ ] <Deliver input only through the control skill's commands. Name the read-only diagnostics.>
-- [ ] Save every screenshot to `/tmp/swarm-<pr-id>/worker-<n>/<slug>.png` and return the paths with the report.
+- [ ] Save every screenshot under the session scratchpad, or the project's gitignored artefacts folder when the user needs to open it later, at `swarm-<pr-id>/worker-<n>/<slug>.png`, and return the full paths with the report.
 
 ## <Task as a verb phrase> (<PR id>)
 

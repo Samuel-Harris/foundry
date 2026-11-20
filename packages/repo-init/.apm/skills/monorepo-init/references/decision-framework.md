@@ -1,7 +1,5 @@
 # Decision framework — interview axes to structural choices
 
-Run the interview one axis at a time. Infer answers from context where possible and ask only what cannot be inferred. Map each answer to its structural consequence immediately, and say the consequence out loud, so the design converges visibly.
-
 ## The ten axes and their mapping
 
 | Axis | Answer → structural consequence |
@@ -22,7 +20,6 @@ Run the interview one axis at a time. Infer answers from context where possible 
 - Prefer Nx over plain dependency-cruiser once the TypeScript side exceeds roughly ten projects or needs affected execution or remote caching.
 - Add remote caching (Turborepo/Nx) when CI for single-package changes regularly exceeds a few minutes.
 - Recommend Bazel, Pants, or Buck2 only with at least three languages, at least 100 targets or services, and a dedicated build engineer; below that, the lightweight stack wins. Never scaffold these — recommend and link.
-- Split a monolithic AGENTS.md into nested files near 150–200 lines.
 - Extract a module into its own service only when scaling, ownership, or compliance requires it; enforced boundaries make later extraction largely mechanical, so default to a modular monolith.
 
 ## Design Decision Record template

@@ -1,6 +1,6 @@
 ---
 name: git-diff-staged-changes-main
-description: Show staged changes compared to origin/main. Use when the user asks for the diff of staged changes against main.
+description: Show staged and committed changes compared to the merge base with origin/main, excluding unstaged edits. Use when the user asks for the diff of everything staged or committed against main.
 disable-model-invocation: true
 ---
 

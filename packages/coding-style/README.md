@@ -7,7 +7,7 @@ Core engineering rules, compatibility guardrails and Python style for agent-writ
 | Primitive   | Name                         | Purpose                                                                                                                                 |
 | ----------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | Instruction | `compatibility-surface-gate` | Gate backward-compatibility and dual code paths.                                                                                        |
-| Instruction | `python-rules`               | Python style rules, applied to `**/*.py` — keyword-only parameters, `NewType` and `NamedTuple` for domain values, top-of-file imports and no unused export surfaces. |
+| Instruction | `python-rules`               | Python style rules, applied to `**/*.py` — keyword-only parameters, the project's identifier aliases, `NamedTuple` and enums for domain values, named exceptions, prompt text, async I/O, top-of-file imports and no unused export surfaces. |
 | Instruction | `software-engineering-rules` | Core engineering rules for agent-written code — read before writing, think before coding, keep changes surgical, verify with tests, and keep agent context progressively disclosed. |
 
 ## Install

@@ -1,6 +1,6 @@
 ---
 name: thermo-nuclear-code-quality-review
-description: Run an extremely strict maintainability review for abstraction quality, giant files, and spaghetti-condition growth. Use for a thermo-nuclear code quality review, thermonuclear review, deep code quality audit, or especially harsh maintainability review.
+description: Run an extremely strict maintainability review for abstraction quality, the project's own rules, tests that cannot fail, giant files, and spaghetti-condition growth. Use for a thermo-nuclear code quality review, thermonuclear review, deep code quality audit, or especially harsh maintainability review.
 ---
 
 # Thermo-Nuclear Code Quality Review
@@ -18,6 +18,15 @@ Start from this baseline:
 > Work to improve abstractions, modularity, reduce Spaghetti code, improve succinctness and legibility.
 > Be ambitious, if there is a clear path to improving the implementation that involves restructuring some of the codebase, go for it.
 > Be extremely thorough and rigorous. Measure twice, cut once.
+
+## Project Rules
+
+Before you review, read every instruction file that applies to a changed path, and check the diff against each rule in it:
+
+- `AGENTS.md` and `CLAUDE.md` at the repository root and in each directory above a changed file.
+- Deployed rules under `.claude/rules/`, `.cursor/rules/` and `.github/instructions/`. A rule applies when its `paths`, `globs` or `applyTo` pattern matches a changed path, or when it has no pattern.
+
+Report each violation with the rule's file and its words. Where a project rule and this rubric disagree, follow the project rule.
 
 ## Non-Negotiable Additional Standards
 
@@ -73,6 +82,11 @@ Apply the baseline prompt above, plus these explicit review rules:
 
 9. **Names must say what the code does.**
    - Flag a name that misdescribes its value, collides with another concept, or names shared infrastructure after one feature.
+
+10. **Every new test must be able to fail because behaviour broke.**
+    - For each test the diff adds, name a behaviour change that would make it fail while the code still builds. Flag the test when you cannot, for example a file-exists or config-string check, a mock that asserts which collaborators were called, a grep of the source, or a constructor that sets fields.
+    - Flag a test that repeats a case a lower-layer test already covers, a test that passes whenever the library or framework works, and a test pinned to data that is meant to change.
+    - Ask for each flagged test to be deleted, or rewritten to assert an output or side effect a caller can observe.
 
 ## What to Flag Aggressively
 
@@ -132,12 +146,14 @@ If the implementation missed an opportunity for a dramatic simplification, say t
 Prioritize findings in this order:
 
 1. Structural code-quality regressions
-2. Missed opportunities for dramatic simplification / code-judo restructuring
-3. Spaghetti / branching complexity increases
-4. Boundary / abstraction / type-contract problems that make the code harder to reason about
-5. File-size and decomposition concerns
-6. Modularity and abstraction issues
-7. Legibility and maintainability concerns
+2. Project-rule violations
+3. Missed opportunities for dramatic simplification / code-judo restructuring
+4. Spaghetti / branching complexity increases
+5. Boundary / abstraction / type-contract problems that make the code harder to reason about
+6. Tests that cannot fail because behaviour broke
+7. File-size and decomposition concerns
+8. Modularity and abstraction issues
+9. Legibility and maintainability concerns
 
 Do not flood the review with low-value nits if there are larger structural issues.
 Prefer a smaller number of high-conviction comments over a long list of cosmetic notes.
@@ -148,6 +164,8 @@ Do not approve merely because behavior seems correct.
 The bar for approval is:
 
 - no clear structural regression
+- no violation of an applicable project rule
+- no new test that cannot fail because behaviour broke
 - no obvious missed opportunity to make the implementation dramatically simpler when such a path is visible
 - no unjustified file-size explosion
 - no obvious spaghetti-growth from special-case branching

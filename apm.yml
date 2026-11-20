@@ -15,6 +15,7 @@ dependencies:
     - path: ./packages/cursor-usage
     - path: ./packages/data-visualisation
     - path: ./packages/execution
+    - path: ./packages/foundry-maintenance
     - path: ./packages/git-diff
     - path: ./packages/handoff
     - path: ./packages/infrastructure

@@ -56,9 +56,8 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 | `cursor-usage`     | 1 skill                                                    | verified   | untested            | untested           |
 | `data-visualisation` | 1 skill | verified | untested | untested |
 | `deep-interview`   | 1 skill                                                    | verified   | untested            | untested           |
-| `default-stack`    | no primitives; resolves 8 direct and 2 transitive packages | verified   | untested            | untested           |
+| `default-stack`    | no primitives; resolves 8 direct and 1 transitive package  | verified   | untested            | untested           |
 | `execution`        | 1 skill                                                    | verified   | untested            | untested           |
-| `explore`          | 1 agent                                                    | verified   | untested            | untested           |
 | `foundry-maintenance` | 1 skill | verified | untested | untested |
 | `git-diff`         | 3 skills                                                   | verified   | untested            | untested           |
 | `handoff`          | 1 skill                                                    | verified   | untested            | untested           |
@@ -73,45 +72,40 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 | `skill-creation`   | 1 skill                                                    | verified   | untested            | untested           |
 | `ui`               | 1 skill                                                    | verified   | untested            | untested           |
 
-Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place — with one documented exception. `default-stack`'s own lockfile cannot be replayed by `apm audit --ci`, because the meta-package reaches `pr` by two paths and an APM 0.32.0 writer defect then records an ambiguous parent chain for `explore`. Consumers are unaffected: a clean install of `default-stack` resolves the same twelve packages and passes `apm audit --ci` on all three targets. See `docs/DEPENDENCY-CONTRACTS.md` for the minimal repro and the reasoning behind keeping the eight-declared-requirement manifest.
+Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place, `default-stack` included. A clean consumer install of `default-stack` resolves the same nine packages and passes `apm audit --ci` on all three targets. `docs/DEPENDENCY-CONTRACTS.md` records the APM 0.32.0 lockfile defect that would break `default-stack`'s own audit if `pr` or `repo-maintenance` gained a sibling dependency.
 
-`apm install --frozen` succeeds for all twenty packages in place.
+`apm install --frozen` succeeds for all nineteen packages in place.
 
 ## Archive coverage
 
-`apm pack --archive` succeeds for the twelve packages with an empty `dependencies:` mapping:
+`apm pack --archive` succeeds for the fourteen packages with an empty `dependencies:` mapping:
 
 - `coding-style`
 - `cursor-usage`
 - `data-visualisation`
-- `explore`
+- `deep-interview`
 - `foundry-maintenance`
 - `git-diff`
 - `handoff`
 - `infrastructure`
+- `pr`
 - `pstack`
+- `repo-maintenance`
 - `review`
 - `search`
 - `ui`
 
-It fails for the eight packages whose manifests declare a sibling `path:` dependency, in every bundle format:
+It fails for the five packages whose manifests declare a sibling `path:` dependency, in every bundle format:
 
 - `default-stack`
-- `deep-interview`
 - `execution`
 - `planning`
-- `pr`
 - `repo-init`
-- `repo-maintenance`
 - `skill-creation`
 
 Their bundle build is a release-time step that requires the `v0.1.0` tag. Archive install, inventory, skill-only inventory and tamper rejection are verified against the packable bundles, and every bundle is asserted to be free of retired primitives.
 
 ## Accepted limitations
-
-### Read-only agents are enforced natively only on Cursor
-
-`readonly: true` is not an APM field. APM passes it through unchanged on all three targets, but only Cursor enforces it natively. On Claude Code and GitHub Copilot the read-only guarantee rests entirely on the prohibition written into the agent body. This is a deliberate, accepted consequence of keeping `readonly` rather than dropping it.
 
 ### Instruction scoping uses three different mechanisms
 

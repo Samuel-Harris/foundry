@@ -1,5 +1,5 @@
 name: repo-maintenance
-version: "0.1.0"
+version: "0.1.1"
 description: "Keep AGENTS.md files and agent configuration accurate and lean."
 author: sam
 license: MIT
@@ -9,8 +9,6 @@ targets:
   - claude
   - copilot
 includes: auto
-dependencies:
-  apm:
-    - path: ../explore
+dependencies: {}
 scripts:
   check: apm audit --ci

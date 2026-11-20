@@ -9,7 +9,7 @@ recorded by absolute checkout path, both as `anchored_local_path` and as
 every install at another root rewrite the lockfile.
 
 This rewrites those absolute paths to paths relative to the lockfile's
-directory, such as `../explore`. Both fields must change together:
+directory, such as `../deep-interview`. Both fields must change together:
 `apm audit --ci` rejects a relative owner whose `anchored_local_path` is still
 absolute. Paths outside the repository are left alone.
 

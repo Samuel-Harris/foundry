@@ -111,8 +111,9 @@ Treat a changelist as large when it has more than 8 paths or more than 400 chang
 
 For a small changelist, inspect it directly.
 
-For a large changelist, dispatch up to four parallel read-only `explore` subagents over disjoint
-logical domains, up to the host's concurrent subagent limit. Prefer product/domain seams over
+For a large changelist, dispatch up to four parallel read-only exploration subagents (the host's
+built-in explore agent where one exists) over disjoint logical domains, up to the host's concurrent
+subagent limit. Where the host has no subagents, inspect each domain directly and read-only instead. Prefer product/domain seams over
 arbitrary directory slices. Give each subagent:
 
 - The exact diff refs or PR.

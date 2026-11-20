@@ -8,10 +8,6 @@ Socratic requirement gathering with ambiguity gating before planning.
 | --------- | ---------------- | --------------------------------------------------------------------------------------------------- |
 | Skill     | `deep-interview` | Socratic deep interview with mathematical ambiguity gating before autonomous execution. |
 
-## Depends on
-
-- `explore`
-
 ## Install
 
 ```bash

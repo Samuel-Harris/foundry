@@ -7,8 +7,16 @@ models answered) and drops tool output. Writes one Markdown digest per session t
 OUT/sessions/ and OUT/summary.json, whose `slices` list groups the digests into
 batches of about --slice-chars characters, one per miner subagent.
 
+--project limits the run to sessions started in that checkout or any directory
+whose path continues it, which covers sibling worktree folders such as
+`<checkout>__worktrees/` or `<checkout>.worktrees/` and nested ones such as
+`<checkout>/.claude/worktrees/`. Hosts name a session's folder after its path
+with punctuation replaced by hyphens, so a different checkout whose path merely
+continues this one (`<checkout>-old`) matches too: check `projects` in the
+summary.
+
 Usage:
-    collect_transcripts.py --since 2026-10-21 --out RUN/transcripts
+    collect_transcripts.py --since 2026-10-21 --out RUN/transcripts [--project ~/code/app ...]
 """
 
 from __future__ import annotations
@@ -34,6 +42,7 @@ COMMAND_NAME = re.compile(r"<command-name>/?([^<\s]+)</command-name>")
 CURSOR_QUERY = re.compile(r"<user_query>(.*?)</user_query>", re.DOTALL)
 CURSOR_ATTACHED_SKILL = re.compile(r"^Skill Name: (\S+)", re.MULTILINE)
 # Claude Code writes these as `user` records, but nobody typed them. Older records carry no `origin`.
+PUNCTUATION_RUN = re.compile(r"[^A-Za-z0-9]+")
 MACHINE_TEXT = ("<task-notification>", "<local-command-stdout>", "<local-command-caveat>", "<bash-stdout>")
 
 
@@ -161,31 +170,44 @@ def modified_at(path: Path) -> datetime:
     return datetime.fromtimestamp(path.stat().st_mtime, timezone.utc)
 
 
-def discover(claude_root: Path, cursor_root: Path, window: Window) -> list[Session]:
+def folder_key(path_or_folder: str) -> str:
+    """The form both hosts' project folder names reduce to: punctuation runs as one hyphen, no edge hyphens."""
+    return PUNCTUATION_RUN.sub("-", path_or_folder).strip("-")
+
+
+def in_projects(folder: str, projects: tuple[Path, ...]) -> bool:
+    if not projects:
+        return True
+    key = folder_key(folder)
+    return any(key == prefix or key.startswith(f"{prefix}-") for prefix in (folder_key(str(project)) for project in projects))
+
+
+def discover(claude_root: Path, cursor_root: Path, window: Window, projects: tuple[Path, ...]) -> list[Session]:
     sessions: list[Session] = []
     for path in sorted(claude_root.glob("*/*.jsonl")):
         modified = modified_at(path)
-        if window.contains(modified):
+        if window.contains(modified) and in_projects(path.parent.name, projects):
             session = Session("claude-code", path.stem, path.parent.name, path, modified)
             session.subagents = len(list((path.with_suffix("") / "subagents").glob("*.jsonl")))
             sessions.append(session)
     for path in sorted(cursor_root.glob("*/agent-transcripts/*/*.jsonl")):
         modified = modified_at(path)
-        if path.stem == path.parent.name and window.contains(modified):
+        if path.stem == path.parent.name and window.contains(modified) and in_projects(path.parents[2].name, projects):
             session = Session("cursor", path.stem, path.parents[2].name, path, modified)
             session.subagents = len(list((path.parent / "subagents").glob("*.jsonl")))
             sessions.append(session)
     return sessions
 
 
-def collect(claude_root: Path, cursor_root: Path, window: Window, out: Path, slice_chars: int) -> dict[str, Any]:
+def collect(claude_root: Path, cursor_root: Path, window: Window, out: Path, slice_chars: int, projects: tuple[Path, ...]) -> dict[str, Any]:
     sessions_dir = out / "sessions"
     sessions_dir.mkdir(parents=True, exist_ok=True)
     digests: list[tuple[str, int]] = []
     by_host: Counter[str] = Counter()
     models: Counter[str] = Counter()
+    folders: set[str] = set()
     unreadable = 0
-    for session in discover(claude_root, cursor_root, window):
+    for session in discover(claude_root, cursor_root, window, projects):
         (parse_claude if session.host == "claude-code" else parse_cursor)(session)
         unreadable += session.unreadable_lines
         if session.human_turns == 0:
@@ -195,12 +217,14 @@ def collect(claude_root: Path, cursor_root: Path, window: Window, out: Path, sli
         (out / relative).write_text(text + "\n", encoding="utf-8")
         digests.append((relative, len(text)))
         by_host[session.host] += 1
+        folders.add(session.project)
         models.update({model: 1 for model in session.models})
     summary = {
         "window": window.to_dict(),
         "sessions": len(digests),
         "by_host": dict(by_host),
         "sessions_per_model": dict(models.most_common()),
+        "projects": sorted(folders),
         "unreadable_lines": unreadable,
         "slices": pack_slices(digests, slice_chars),
     }
@@ -213,8 +237,10 @@ def main(argv: list[str] | None = None) -> int:
     add_window_args(parser)
     parser.add_argument("--claude-root", type=Path, default=Path.home() / ".claude" / "projects")
     parser.add_argument("--cursor-root", type=Path, default=Path.home() / ".cursor" / "projects")
+    parser.add_argument("--project", dest="projects", action="append", type=lambda value: Path(value).expanduser().resolve(), default=[], help="a checkout whose sessions, and its worktrees', to read; repeat for more (default: every project)")
     args = parser.parse_args(argv)
-    summary = collect(args.claude_root, args.cursor_root, Window.parse(args.since, args.until), args.out, args.slice_chars)
+    window = Window.parse(args.since, args.until)
+    summary = collect(args.claude_root, args.cursor_root, window, args.out, args.slice_chars, tuple(args.projects))
     print_summary(summary)
     return 0
 

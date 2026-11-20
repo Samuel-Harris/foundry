@@ -1,5 +1,5 @@
 name: foundry-maintenance
-version: "0.1.0"
+version: "0.1.1"
 description: "Keep Foundry's own guidance current by mining recent PR reviews and agent transcripts."
 author: sam
 license: MIT

@@ -148,7 +148,7 @@
       h("header", {},
         h("h1", {}, document.title),
         h("div", { class: "meta" },
-          h("span", {}, `${REPORT.repo}`),
+          h("span", {}, REPORT.repos.join(", ")),
           h("span", {}, `${span.start} to ${span.end}`),
           h("span", {}, "Foundry at ", h("code", {}, REPORT.foundry_commit)))),
       h("div", { class: "stats" },

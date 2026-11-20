@@ -47,7 +47,7 @@ interface PackageGroup {
 }
 
 interface Report {
-  repo: string;
+  repos: string[];
   window: { start: string; end: string };
   foundry_commit: string;
   min_sources: number;
@@ -200,7 +200,7 @@ export default function GuidanceRetro() {
         <Stack gap={4}>
           <H1>{TITLE}</H1>
           <Text size="small" tone="secondary">
-            {REPORT.repo}, {REPORT.window.start} to {REPORT.window.end}, Foundry at{" "}
+            {REPORT.repos.join(", ")}, {REPORT.window.start} to {REPORT.window.end}, Foundry at{" "}
             {REPORT.foundry_commit}
           </Text>
         </Stack>

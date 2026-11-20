@@ -9,6 +9,7 @@ stdout.
 
     build_report.py RUN --format html   > RUN/report.html
     build_report.py RUN --format canvas > RUN/report.canvas.tsx
+    build_report.py RUN --format json   > RUN/report.json   (the page's data, for the reply)
 
 Evidence bar:
     add                    3 distinct sources (sessions plus PRs), else watching
@@ -36,6 +37,7 @@ REPORT_TOKEN = "__REPORT_JSON__"
 TITLE_TOKEN = "__TITLE__"
 MIN_SOURCES = 3
 HOST_PREFIX = re.compile(r"^(claude-code|cursor)-")
+PR_REF = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#\d+")
 
 ACTIONS = ("add", "update", "delete")
 BASES = ("evidence", "judgement", "silence")
@@ -64,7 +66,7 @@ def choice(raw: dict[str, Any], key: str, allowed: tuple[str, ...], field: str) 
 
 
 def reference(raw: dict[str, Any], field: str) -> str:
-    """A session id, a PR number (string or integer) or, for static evidence, a file path."""
+    """A session id, a PR ref or number (string or integer) or, for static evidence, a file path."""
     value = raw.get("ref")
     if isinstance(value, int) and not isinstance(value, bool):
         return str(value)
@@ -156,7 +158,7 @@ class Digests:
     def read(cls, run: Path) -> Digests:
         return cls(
             sessions=frozenset(HOST_PREFIX.sub("", path.stem) for path in (run / "transcripts" / "sessions").glob("*.md")),
-            prs=frozenset(path.stem for path in (run / "reviews" / "prs").glob("*.md")),
+            prs=frozenset(f"{path.parent.parent.name}/{path.parent.name}#{path.stem}" for path in (run / "reviews" / "prs").glob("*/*/*.md")),
         )
 
     def canonical(self, item: Evidence) -> Evidence | None:
@@ -164,8 +166,12 @@ class Digests:
         if item.source == "static":
             return item
         if item.source == "review":
-            number = re.sub(r"\D", "", item.ref)
-            return replace(item, ref=number) if number in self.prs else None
+            ref = item.ref.strip()
+            if PR_REF.fullmatch(ref):
+                return replace(item, ref=ref) if ref in self.prs else None
+            number = re.sub(r"\D", "", ref)
+            matches = [pr for pr in self.prs if number and pr.endswith(f"#{number}")]
+            return replace(item, ref=matches[0]) if len(matches) == 1 else None
         if item.ref in self.sessions:
             return item
         matches = [session for session in self.sessions if len(item.ref) >= 8 and session.startswith(item.ref)]
@@ -218,12 +224,13 @@ def coverage_notes(transcripts: dict[str, Any], reviews: dict[str, Any], routed:
     if unmatched:
         notes.append(f"{unmatched} evidence items cited a session or PR no collector read, and were dropped.")
     if reviews["truncated_pull_requests"]:
-        numbers = ", ".join(f"#{number}" for number in reviews["truncated_pull_requests"])
-        notes.append(f"Comments on {numbers} were cut at GitHub's per-page limit.")
+        notes.append(f"Comments on {', '.join(reviews['truncated_pull_requests'])} were cut at GitHub's per-page limit.")
     if transcripts["unreadable_lines"]:
         notes.append(f"{transcripts['unreadable_lines']} transcript lines could not be parsed and were skipped.")
     if routed["rejected"]:
         notes.append(f"{len(routed['rejected'])} miner observations were malformed and dropped.")
+    if routed["missing_slices"]:
+        notes.append(f"No miner output for slices {', '.join(routed['missing_slices'])}, so their digests are not in this report.")
     if routed["unknown_guidance"]:
         notes.append(f"Miners named guidance Foundry does not have: {', '.join(routed['unknown_guidance'])}.")
     return notes
@@ -253,7 +260,7 @@ def build_report(run: Path, root: Path) -> dict[str, Any]:
 
     recommended = sections["recommendations"]
     return {
-        "repo": reviews["repo"],
+        "repos": reviews["repos"],
         "window": transcripts["window"],
         "foundry_commit": foundry_commit(root),
         "min_sources": MIN_SOURCES,
@@ -280,17 +287,18 @@ def render(report: dict[str, Any], page_format: str) -> str:
     payload = json.dumps(report, indent=2)
     if page_format == "html":
         payload = payload.replace("<", "\\u003c")
-    title = f"{report['repo'].split('/')[-1]} guidance retro"
+    title = f"{' and '.join(repo.split('/')[-1] for repo in report['repos'])} guidance retro"
     return template.replace(TITLE_TOKEN, title).replace(REPORT_TOKEN, payload)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("run", type=Path)
-    parser.add_argument("--format", choices=sorted(TEMPLATE_FILES), required=True)
+    parser.add_argument("--format", choices=sorted([*TEMPLATE_FILES, "json"]), required=True)
     args = parser.parse_args(argv)
     require_foundry(Path.cwd())
-    sys.stdout.write(render(build_report(args.run, Path.cwd()), args.format))
+    report = build_report(args.run, Path.cwd())
+    sys.stdout.write(json.dumps(report, indent=2) + "\n" if args.format == "json" else render(report, args.format))
     return 0
 
 

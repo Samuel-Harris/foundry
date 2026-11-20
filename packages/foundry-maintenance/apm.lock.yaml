@@ -18,7 +18,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1a05ae2d619e6c213598b2d6c65858977e557801c2aaba946dbda14e2e8b5154
+  content_hash: sha256:c281056102752d45b22945856c0474e49789eb8c1751f35cf7e076a29d01037d
 - kind: project-relative
   target: claude
   value: .claude/skills/guidance-retro/references/package-synthesiser.md
@@ -27,7 +27,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:685a3e1648c9bfbd84c138679d8c1a13e6af7634dbd9653a4144f2da32062631
+  content_hash: sha256:9473e2a357983bc3aa6a04324428cb1f5c215653162ffbd22e92f0bcc55367fc
 - kind: project-relative
   target: claude
   value: .claude/skills/guidance-retro/references/report.canvas.tsx
@@ -36,7 +36,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:12e47ee65d7eab765ad7a1e1a07196ffe7198cc880790b1dc3d2d42cb60d1120
+  content_hash: sha256:b0d8ff83fcd9057d35a44a945f6bd11dc2feda5834bc53f4e576a84285b81295
 - kind: project-relative
   target: claude
   value: .claude/skills/guidance-retro/references/report.html
@@ -45,7 +45,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1ed2310f0d1e05f5446d46c7d242df8f54d9edc5450f2061ed0e407d05f5141d
+  content_hash: sha256:7d0a522d54c87b51c7d3a0705b6908c6d4bc96cfefa37fc360d34a5b6fc0e5ef
 - kind: project-relative
   target: claude
   value: .claude/skills/guidance-retro/references/review-miner.md
@@ -54,7 +54,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1a3a62fee754097edbbbfffb798c14c2a5e38d9ee9f9d6f2deb997b54203910b
+  content_hash: sha256:21b0ea2f11576c0b330317fb72052598bb9a75ab60b6a933d3ba340f10fa27f1
 - kind: project-relative
   target: claude
   value: .claude/skills/guidance-retro/references/transcript-miner.md
@@ -72,7 +72,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:0c9028ce13c5841386a9238df6be74e8a3e5eb1d2f84b35204e699dac714328f
+  content_hash: sha256:a43e9c062ad07e689c244f8267cf8cd046268e61b63f127c16bb13eebf3e7e4c
 - kind: project-relative
   target: claude
   value: .claude/skills/guidance-retro/scripts/collect_reviews.py
@@ -81,7 +81,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:fec9418208e170fc5854f07c6d4c4937f3f9f8b3448007778c50551a27e9dccd
+  content_hash: sha256:848af09d3951cc1060ba18af423c63ef14831aabca3c88acad3b2f85e0fc54c6
 - kind: project-relative
   target: claude
   value: .claude/skills/guidance-retro/scripts/collect_transcripts.py
@@ -90,7 +90,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:d74e0bd4e6c87bd2f9605fa848f57d4f4943234eb1de90bd9ec56b64635b5a9c
+  content_hash: sha256:b1d8f62f9a8eb28fc356733f040d8a8b01be36aa4aca6a5c30266b64c0d4c668
 - kind: project-relative
   target: claude
   value: .claude/skills/guidance-retro/scripts/digest.py
@@ -108,7 +108,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:d0f4137d89cd52b66600ec43760015005551e592d3440790a1bac38ea9e6c9ba
+  content_hash: sha256:efecf57f2141ae3fce1b3e5b860d3d1b10a462bf15d43d5ae695f9b39c8a5740
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro
@@ -126,7 +126,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1a05ae2d619e6c213598b2d6c65858977e557801c2aaba946dbda14e2e8b5154
+  content_hash: sha256:c281056102752d45b22945856c0474e49789eb8c1751f35cf7e076a29d01037d
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro/references/package-synthesiser.md
@@ -135,7 +135,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:685a3e1648c9bfbd84c138679d8c1a13e6af7634dbd9653a4144f2da32062631
+  content_hash: sha256:9473e2a357983bc3aa6a04324428cb1f5c215653162ffbd22e92f0bcc55367fc
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro/references/report.canvas.tsx
@@ -144,7 +144,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:12e47ee65d7eab765ad7a1e1a07196ffe7198cc880790b1dc3d2d42cb60d1120
+  content_hash: sha256:b0d8ff83fcd9057d35a44a945f6bd11dc2feda5834bc53f4e576a84285b81295
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro/references/report.html
@@ -153,7 +153,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1ed2310f0d1e05f5446d46c7d242df8f54d9edc5450f2061ed0e407d05f5141d
+  content_hash: sha256:7d0a522d54c87b51c7d3a0705b6908c6d4bc96cfefa37fc360d34a5b6fc0e5ef
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro/references/review-miner.md
@@ -162,7 +162,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:1a3a62fee754097edbbbfffb798c14c2a5e38d9ee9f9d6f2deb997b54203910b
+  content_hash: sha256:21b0ea2f11576c0b330317fb72052598bb9a75ab60b6a933d3ba340f10fa27f1
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro/references/transcript-miner.md
@@ -180,7 +180,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:0c9028ce13c5841386a9238df6be74e8a3e5eb1d2f84b35204e699dac714328f
+  content_hash: sha256:a43e9c062ad07e689c244f8267cf8cd046268e61b63f127c16bb13eebf3e7e4c
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro/scripts/collect_reviews.py
@@ -189,7 +189,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:fec9418208e170fc5854f07c6d4c4937f3f9f8b3448007778c50551a27e9dccd
+  content_hash: sha256:848af09d3951cc1060ba18af423c63ef14831aabca3c88acad3b2f85e0fc54c6
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro/scripts/collect_transcripts.py
@@ -198,7 +198,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:d74e0bd4e6c87bd2f9605fa848f57d4f4943234eb1de90bd9ec56b64635b5a9c
+  content_hash: sha256:b1d8f62f9a8eb28fc356733f040d8a8b01be36aa4aca6a5c30266b64c0d4c668
 - kind: project-relative
   target: legacy
   value: .agents/skills/guidance-retro/scripts/digest.py
@@ -216,7 +216,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:d0f4137d89cd52b66600ec43760015005551e592d3440790a1bac38ea9e6c9ba
+  content_hash: sha256:efecf57f2141ae3fce1b3e5b860d3d1b10a462bf15d43d5ae695f9b39c8a5740
 local_deployed_files:
 - .agents/skills/guidance-retro
 - .agents/skills/guidance-retro/SKILL.md
@@ -243,25 +243,25 @@ local_deployed_files:
 - .claude/skills/guidance-retro/scripts/digest.py
 - .claude/skills/guidance-retro/scripts/guidance.py
 local_deployed_file_hashes:
-  .agents/skills/guidance-retro/SKILL.md: sha256:1a05ae2d619e6c213598b2d6c65858977e557801c2aaba946dbda14e2e8b5154
-  .agents/skills/guidance-retro/references/package-synthesiser.md: sha256:685a3e1648c9bfbd84c138679d8c1a13e6af7634dbd9653a4144f2da32062631
-  .agents/skills/guidance-retro/references/report.canvas.tsx: sha256:12e47ee65d7eab765ad7a1e1a07196ffe7198cc880790b1dc3d2d42cb60d1120
-  .agents/skills/guidance-retro/references/report.html: sha256:1ed2310f0d1e05f5446d46c7d242df8f54d9edc5450f2061ed0e407d05f5141d
-  .agents/skills/guidance-retro/references/review-miner.md: sha256:1a3a62fee754097edbbbfffb798c14c2a5e38d9ee9f9d6f2deb997b54203910b
+  .agents/skills/guidance-retro/SKILL.md: sha256:c281056102752d45b22945856c0474e49789eb8c1751f35cf7e076a29d01037d
+  .agents/skills/guidance-retro/references/package-synthesiser.md: sha256:9473e2a357983bc3aa6a04324428cb1f5c215653162ffbd22e92f0bcc55367fc
+  .agents/skills/guidance-retro/references/report.canvas.tsx: sha256:b0d8ff83fcd9057d35a44a945f6bd11dc2feda5834bc53f4e576a84285b81295
+  .agents/skills/guidance-retro/references/report.html: sha256:7d0a522d54c87b51c7d3a0705b6908c6d4bc96cfefa37fc360d34a5b6fc0e5ef
+  .agents/skills/guidance-retro/references/review-miner.md: sha256:21b0ea2f11576c0b330317fb72052598bb9a75ab60b6a933d3ba340f10fa27f1
   .agents/skills/guidance-retro/references/transcript-miner.md: sha256:c364af032a2419e02baa577f4a8ab4ecec3c720631e16c22d18540fc60fe08b6
-  .agents/skills/guidance-retro/scripts/build_report.py: sha256:0c9028ce13c5841386a9238df6be74e8a3e5eb1d2f84b35204e699dac714328f
-  .agents/skills/guidance-retro/scripts/collect_reviews.py: sha256:fec9418208e170fc5854f07c6d4c4937f3f9f8b3448007778c50551a27e9dccd
-  .agents/skills/guidance-retro/scripts/collect_transcripts.py: sha256:d74e0bd4e6c87bd2f9605fa848f57d4f4943234eb1de90bd9ec56b64635b5a9c
+  .agents/skills/guidance-retro/scripts/build_report.py: sha256:a43e9c062ad07e689c244f8267cf8cd046268e61b63f127c16bb13eebf3e7e4c
+  .agents/skills/guidance-retro/scripts/collect_reviews.py: sha256:848af09d3951cc1060ba18af423c63ef14831aabca3c88acad3b2f85e0fc54c6
+  .agents/skills/guidance-retro/scripts/collect_transcripts.py: sha256:b1d8f62f9a8eb28fc356733f040d8a8b01be36aa4aca6a5c30266b64c0d4c668
   .agents/skills/guidance-retro/scripts/digest.py: sha256:5177565400c6cb2878d724b5d7a2674dbb8d3f6387dcd03863bd23a249b6ee4d
-  .agents/skills/guidance-retro/scripts/guidance.py: sha256:d0f4137d89cd52b66600ec43760015005551e592d3440790a1bac38ea9e6c9ba
-  .claude/skills/guidance-retro/SKILL.md: sha256:1a05ae2d619e6c213598b2d6c65858977e557801c2aaba946dbda14e2e8b5154
-  .claude/skills/guidance-retro/references/package-synthesiser.md: sha256:685a3e1648c9bfbd84c138679d8c1a13e6af7634dbd9653a4144f2da32062631
-  .claude/skills/guidance-retro/references/report.canvas.tsx: sha256:12e47ee65d7eab765ad7a1e1a07196ffe7198cc880790b1dc3d2d42cb60d1120
-  .claude/skills/guidance-retro/references/report.html: sha256:1ed2310f0d1e05f5446d46c7d242df8f54d9edc5450f2061ed0e407d05f5141d
-  .claude/skills/guidance-retro/references/review-miner.md: sha256:1a3a62fee754097edbbbfffb798c14c2a5e38d9ee9f9d6f2deb997b54203910b
+  .agents/skills/guidance-retro/scripts/guidance.py: sha256:efecf57f2141ae3fce1b3e5b860d3d1b10a462bf15d43d5ae695f9b39c8a5740
+  .claude/skills/guidance-retro/SKILL.md: sha256:c281056102752d45b22945856c0474e49789eb8c1751f35cf7e076a29d01037d
+  .claude/skills/guidance-retro/references/package-synthesiser.md: sha256:9473e2a357983bc3aa6a04324428cb1f5c215653162ffbd22e92f0bcc55367fc
+  .claude/skills/guidance-retro/references/report.canvas.tsx: sha256:b0d8ff83fcd9057d35a44a945f6bd11dc2feda5834bc53f4e576a84285b81295
+  .claude/skills/guidance-retro/references/report.html: sha256:7d0a522d54c87b51c7d3a0705b6908c6d4bc96cfefa37fc360d34a5b6fc0e5ef
+  .claude/skills/guidance-retro/references/review-miner.md: sha256:21b0ea2f11576c0b330317fb72052598bb9a75ab60b6a933d3ba340f10fa27f1
   .claude/skills/guidance-retro/references/transcript-miner.md: sha256:c364af032a2419e02baa577f4a8ab4ecec3c720631e16c22d18540fc60fe08b6
-  .claude/skills/guidance-retro/scripts/build_report.py: sha256:0c9028ce13c5841386a9238df6be74e8a3e5eb1d2f84b35204e699dac714328f
-  .claude/skills/guidance-retro/scripts/collect_reviews.py: sha256:fec9418208e170fc5854f07c6d4c4937f3f9f8b3448007778c50551a27e9dccd
-  .claude/skills/guidance-retro/scripts/collect_transcripts.py: sha256:d74e0bd4e6c87bd2f9605fa848f57d4f4943234eb1de90bd9ec56b64635b5a9c
+  .claude/skills/guidance-retro/scripts/build_report.py: sha256:a43e9c062ad07e689c244f8267cf8cd046268e61b63f127c16bb13eebf3e7e4c
+  .claude/skills/guidance-retro/scripts/collect_reviews.py: sha256:848af09d3951cc1060ba18af423c63ef14831aabca3c88acad3b2f85e0fc54c6
+  .claude/skills/guidance-retro/scripts/collect_transcripts.py: sha256:b1d8f62f9a8eb28fc356733f040d8a8b01be36aa4aca6a5c30266b64c0d4c668
   .claude/skills/guidance-retro/scripts/digest.py: sha256:5177565400c6cb2878d724b5d7a2674dbb8d3f6387dcd03863bd23a249b6ee4d
-  .claude/skills/guidance-retro/scripts/guidance.py: sha256:d0f4137d89cd52b66600ec43760015005551e592d3440790a1bac38ea9e6c9ba
+  .claude/skills/guidance-retro/scripts/guidance.py: sha256:efecf57f2141ae3fce1b3e5b860d3d1b10a462bf15d43d5ae695f9b39c8a5740

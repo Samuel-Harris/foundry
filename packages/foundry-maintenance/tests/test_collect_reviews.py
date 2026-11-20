@@ -12,7 +12,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / ".apm/skills/guidance-retro/scripts"))
 
 import collect_reviews  # noqa: E402
-from collect_reviews import COUNT_QUERY, collect, gh_graphql, split_ranges  # noqa: E402
+from collect_reviews import COUNT_QUERY, collect, gh_graphql, main, split_ranges  # noqa: E402
 from digest import Window  # noqa: E402
 
 START = datetime(2026, 11, 1, tzinfo=timezone.utc)
@@ -92,9 +92,9 @@ class CollectReviewsTests(unittest.TestCase):
         ]
         out = Path(tempfile.mkdtemp())
 
-        summary = collect("o/r", WINDOW, out, 250_000, FakeGitHub({3: 2}, prs))
+        summary = collect(["o/r"], WINDOW, out, 250_000, FakeGitHub({3: 2}, prs))
 
-        digest = (out / "prs" / "1.md").read_text()
+        digest = (out / "prs/o/r/1.md").read_text()
         self.assertIn("conversation comment by reviewer (user)", digest)
         self.assertIn("review (commented) by cursor (bot)", digest)
         self.assertIn("inline comment by reviewer (user), 2026-11-03T10:00:00Z on `a.py:3`", digest)
@@ -102,18 +102,38 @@ class CollectReviewsTests(unittest.TestCase):
         self.assertNotIn("BUGBOT", digest)
         self.assertNotIn("<picture>", digest)
         self.assertNotIn("old", digest)
-        self.assertFalse((out / "prs" / "2.md").exists())
+        self.assertIn("- ref: o/r#1", digest)
+        self.assertFalse((out / "prs/o/r/2.md").exists())
         self.assertEqual(summary["pull_requests_scanned"], 2)
         self.assertEqual(summary["pull_requests_with_comments"], 1)
         self.assertEqual(summary["comments"], 3)
-        self.assertEqual(summary["slices"], [["prs/1.md"]])
+        self.assertEqual(summary["slices"], [["prs/o/r/1.md"]])
 
     def test_records_prs_whose_comment_lists_were_cut_short(self) -> None:
         prs = [pr(7, comments=[node("one")], total_comments=150)]
 
-        summary = collect("o/r", WINDOW, Path(tempfile.mkdtemp()), 250_000, FakeGitHub({3: 1}, prs))
+        summary = collect(["o/r"], WINDOW, Path(tempfile.mkdtemp()), 250_000, FakeGitHub({3: 1}, prs))
 
-        self.assertEqual(summary["truncated_pull_requests"], [7])
+        self.assertEqual(summary["truncated_pull_requests"], ["o/r#7"])
+
+    def test_keeps_prs_of_several_repositories_apart_when_their_numbers_collide(self) -> None:
+        servers = {"o/a": FakeGitHub({3: 1}, [pr(1, comments=[node("from a")])]), "o/b": FakeGitHub({3: 1}, [pr(1, comments=[node("from b")])])}
+
+        def graphql(query: str, variables: dict[str, str]) -> dict[str, Any]:
+            return servers[variables["q"].split()[0].removeprefix("repo:")](query, variables)
+
+        out = Path(tempfile.mkdtemp())
+        summary = collect(["o/a", "o/b"], WINDOW, out, 250_000, graphql)
+
+        self.assertIn("from a", (out / "prs/o/a/1.md").read_text())
+        self.assertIn("from b", (out / "prs/o/b/1.md").read_text())
+        self.assertEqual(summary["repos"], ["o/a", "o/b"])
+        self.assertEqual(summary["pull_requests_with_comments"], 2)
+
+    def test_rejects_a_repository_that_is_not_owner_slash_name(self) -> None:
+        for bad in ("../etc", "o/../x", "just-a-name", "o/r/extra"):
+            with self.subTest(repo=bad), self.assertRaises(SystemExit), mock.patch("sys.stderr"):
+                main(["--repo", bad, "--since", "2026-11-01", "--out", tempfile.mkdtemp()])
 
 
 class GhGraphqlTests(unittest.TestCase):

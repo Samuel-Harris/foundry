@@ -18,6 +18,11 @@ skip the pattern when none fits. Skip `unprompted` observations.
 
 ## Steps
 
+When the observations file is over 200 KB, do not read it whole. Group it with a
+`python3` script by `guidance` and by pattern, print counts and a few quotes per
+group, and read only those. Write the output with a script too, so each
+candidate's `evidence` carries every observation that supports it.
+
 1. Merge observations that describe the same behaviour into one pattern.
 2. For each pattern, choose:
    - `update` when a file already covers it and its wording misled the agent, was

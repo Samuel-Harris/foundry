@@ -1,6 +1,6 @@
 ---
 name: guidance-retro
-description: "Mine a GitHub repository's PR review comments and the user's local Claude Code and Cursor transcripts over a window (default 30 days), fanned out across subagents, and publish a visual report of which Foundry skills, agents and instructions to add, update or delete so they fit how current models behave. Run from a Foundry checkout. Use when asked for a guidance retro, to refresh or prune Foundry's guidance, or which Foundry skills are out of date."
+description: "Mine one or more GitHub repositories' PR review comments and the user's local Claude Code and Cursor transcripts over a window (default 30 days), fanned out across subagents, and publish a visual report of which Foundry skills, agents and instructions to add, update or delete so they fit how current models behave. Run from a Foundry checkout. Use when asked for a guidance retro, to refresh or prune Foundry's guidance, or which Foundry skills are out of date."
 ---
 
 # Guidance Retro
@@ -13,8 +13,10 @@ The user reads the report and makes the changes.
 
 ## Inputs
 
-- **Repository.** A GitHub `owner/name` whose PR reviews to mine. Without one, ask
-  for it and stop.
+- **Repositories.** One or more GitHub `owner/name` whose PR reviews to mine.
+  Without one, ask for it and stop.
+- **Projects.** Optional local checkouts whose transcripts to read. Each one's
+  worktrees come with it. Without any, every project's transcripts are read.
 - **Window.** Defaults to the 30 days ending today. The user may name another.
   `--since` is the first day and `--until` the day after the last (UTC).
 - **Foundry.** The current directory must be a Foundry checkout. `guidance.py`
@@ -28,13 +30,15 @@ The user reads the report and makes the changes.
 ```bash
 RUN=$(mktemp -d)
 python3 <skill>/scripts/guidance.py inventory > "$RUN/inventory.md"
-python3 <skill>/scripts/collect_transcripts.py --since <start> --out "$RUN/transcripts"
-python3 <skill>/scripts/collect_reviews.py --repo <owner/name> --since <start> --out "$RUN/reviews"
+python3 <skill>/scripts/collect_transcripts.py --since <start> --out "$RUN/transcripts" [--project <checkout> ...]
+python3 <skill>/scripts/collect_reviews.py --repo <owner/name> [--repo <owner/name> ...] --since <start> --out "$RUN/reviews"
 ```
 
 Run the two collectors in parallel. Each prints its counts and writes
 `summary.json`, whose `slices` list batches its digests. Never read a digest in the
-main thread. Subagents read them.
+main thread. Subagents read them. With `--project`, read the `projects` list in
+`transcripts/summary.json`, and drop any folder that belongs to another checkout
+by rerunning with a narrower path.
 
 ### 2. Mine
 
@@ -55,8 +59,9 @@ python3 <skill>/scripts/guidance.py route "$RUN"
 ```
 
 It splits the observations into `$RUN/routed/<package>.jsonl` and
-`$RUN/routed/_unowned.jsonl`. If it rejects more than a tenth of the lines, rerun
-the miners whose files those lines came from.
+`$RUN/routed/_unowned.jsonl`. Rerun the miner for every slice it lists under
+`missing_slices`, and the miners whose files hold the rejected lines when it
+rejects more than a tenth of them, then route again.
 
 ### 3. Synthesise
 
@@ -82,7 +87,8 @@ exist. On a rejection, send that package's synthesiser the error and rerun it.
 
 ### 5. Reply
 
-Link the report. Give the window, the source counts, the number of add, update and
+Render `--format json` to `$RUN/report.json` and take the numbers from it. Link the
+report. Give the window, the source counts, the number of add, update and
 delete recommendations, and the report's coverage notes. Name the three
 recommendations with the most sources. Give the `$RUN` path so the user can read
 the digests or delete them. They hold transcript and review text.

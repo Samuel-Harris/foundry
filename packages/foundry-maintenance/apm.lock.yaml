@@ -1,0 +1,267 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1a05ae2d619e6c213598b2d6c65858977e557801c2aaba946dbda14e2e8b5154
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/references/package-synthesiser.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:685a3e1648c9bfbd84c138679d8c1a13e6af7634dbd9653a4144f2da32062631
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/references/report.canvas.tsx
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:12e47ee65d7eab765ad7a1e1a07196ffe7198cc880790b1dc3d2d42cb60d1120
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/references/report.html
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1ed2310f0d1e05f5446d46c7d242df8f54d9edc5450f2061ed0e407d05f5141d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/references/review-miner.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1a3a62fee754097edbbbfffb798c14c2a5e38d9ee9f9d6f2deb997b54203910b
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/references/transcript-miner.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c364af032a2419e02baa577f4a8ab4ecec3c720631e16c22d18540fc60fe08b6
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/scripts/build_report.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0c9028ce13c5841386a9238df6be74e8a3e5eb1d2f84b35204e699dac714328f
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/scripts/collect_reviews.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fec9418208e170fc5854f07c6d4c4937f3f9f8b3448007778c50551a27e9dccd
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/scripts/collect_transcripts.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d74e0bd4e6c87bd2f9605fa848f57d4f4943234eb1de90bd9ec56b64635b5a9c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/scripts/digest.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5177565400c6cb2878d724b5d7a2674dbb8d3f6387dcd03863bd23a249b6ee4d
+- kind: project-relative
+  target: claude
+  value: .claude/skills/guidance-retro/scripts/guidance.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d0f4137d89cd52b66600ec43760015005551e592d3440790a1bac38ea9e6c9ba
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1a05ae2d619e6c213598b2d6c65858977e557801c2aaba946dbda14e2e8b5154
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/references/package-synthesiser.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:685a3e1648c9bfbd84c138679d8c1a13e6af7634dbd9653a4144f2da32062631
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/references/report.canvas.tsx
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:12e47ee65d7eab765ad7a1e1a07196ffe7198cc880790b1dc3d2d42cb60d1120
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/references/report.html
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1ed2310f0d1e05f5446d46c7d242df8f54d9edc5450f2061ed0e407d05f5141d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/references/review-miner.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:1a3a62fee754097edbbbfffb798c14c2a5e38d9ee9f9d6f2deb997b54203910b
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/references/transcript-miner.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c364af032a2419e02baa577f4a8ab4ecec3c720631e16c22d18540fc60fe08b6
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/scripts/build_report.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:0c9028ce13c5841386a9238df6be74e8a3e5eb1d2f84b35204e699dac714328f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/scripts/collect_reviews.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:fec9418208e170fc5854f07c6d4c4937f3f9f8b3448007778c50551a27e9dccd
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/scripts/collect_transcripts.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d74e0bd4e6c87bd2f9605fa848f57d4f4943234eb1de90bd9ec56b64635b5a9c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/scripts/digest.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5177565400c6cb2878d724b5d7a2674dbb8d3f6387dcd03863bd23a249b6ee4d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/guidance-retro/scripts/guidance.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d0f4137d89cd52b66600ec43760015005551e592d3440790a1bac38ea9e6c9ba
+local_deployed_files:
+- .agents/skills/guidance-retro
+- .agents/skills/guidance-retro/SKILL.md
+- .agents/skills/guidance-retro/references/package-synthesiser.md
+- .agents/skills/guidance-retro/references/report.canvas.tsx
+- .agents/skills/guidance-retro/references/report.html
+- .agents/skills/guidance-retro/references/review-miner.md
+- .agents/skills/guidance-retro/references/transcript-miner.md
+- .agents/skills/guidance-retro/scripts/build_report.py
+- .agents/skills/guidance-retro/scripts/collect_reviews.py
+- .agents/skills/guidance-retro/scripts/collect_transcripts.py
+- .agents/skills/guidance-retro/scripts/digest.py
+- .agents/skills/guidance-retro/scripts/guidance.py
+- .claude/skills/guidance-retro
+- .claude/skills/guidance-retro/SKILL.md
+- .claude/skills/guidance-retro/references/package-synthesiser.md
+- .claude/skills/guidance-retro/references/report.canvas.tsx
+- .claude/skills/guidance-retro/references/report.html
+- .claude/skills/guidance-retro/references/review-miner.md
+- .claude/skills/guidance-retro/references/transcript-miner.md
+- .claude/skills/guidance-retro/scripts/build_report.py
+- .claude/skills/guidance-retro/scripts/collect_reviews.py
+- .claude/skills/guidance-retro/scripts/collect_transcripts.py
+- .claude/skills/guidance-retro/scripts/digest.py
+- .claude/skills/guidance-retro/scripts/guidance.py
+local_deployed_file_hashes:
+  .agents/skills/guidance-retro/SKILL.md: sha256:1a05ae2d619e6c213598b2d6c65858977e557801c2aaba946dbda14e2e8b5154
+  .agents/skills/guidance-retro/references/package-synthesiser.md: sha256:685a3e1648c9bfbd84c138679d8c1a13e6af7634dbd9653a4144f2da32062631
+  .agents/skills/guidance-retro/references/report.canvas.tsx: sha256:12e47ee65d7eab765ad7a1e1a07196ffe7198cc880790b1dc3d2d42cb60d1120
+  .agents/skills/guidance-retro/references/report.html: sha256:1ed2310f0d1e05f5446d46c7d242df8f54d9edc5450f2061ed0e407d05f5141d
+  .agents/skills/guidance-retro/references/review-miner.md: sha256:1a3a62fee754097edbbbfffb798c14c2a5e38d9ee9f9d6f2deb997b54203910b
+  .agents/skills/guidance-retro/references/transcript-miner.md: sha256:c364af032a2419e02baa577f4a8ab4ecec3c720631e16c22d18540fc60fe08b6
+  .agents/skills/guidance-retro/scripts/build_report.py: sha256:0c9028ce13c5841386a9238df6be74e8a3e5eb1d2f84b35204e699dac714328f
+  .agents/skills/guidance-retro/scripts/collect_reviews.py: sha256:fec9418208e170fc5854f07c6d4c4937f3f9f8b3448007778c50551a27e9dccd
+  .agents/skills/guidance-retro/scripts/collect_transcripts.py: sha256:d74e0bd4e6c87bd2f9605fa848f57d4f4943234eb1de90bd9ec56b64635b5a9c
+  .agents/skills/guidance-retro/scripts/digest.py: sha256:5177565400c6cb2878d724b5d7a2674dbb8d3f6387dcd03863bd23a249b6ee4d
+  .agents/skills/guidance-retro/scripts/guidance.py: sha256:d0f4137d89cd52b66600ec43760015005551e592d3440790a1bac38ea9e6c9ba
+  .claude/skills/guidance-retro/SKILL.md: sha256:1a05ae2d619e6c213598b2d6c65858977e557801c2aaba946dbda14e2e8b5154
+  .claude/skills/guidance-retro/references/package-synthesiser.md: sha256:685a3e1648c9bfbd84c138679d8c1a13e6af7634dbd9653a4144f2da32062631
+  .claude/skills/guidance-retro/references/report.canvas.tsx: sha256:12e47ee65d7eab765ad7a1e1a07196ffe7198cc880790b1dc3d2d42cb60d1120
+  .claude/skills/guidance-retro/references/report.html: sha256:1ed2310f0d1e05f5446d46c7d242df8f54d9edc5450f2061ed0e407d05f5141d
+  .claude/skills/guidance-retro/references/review-miner.md: sha256:1a3a62fee754097edbbbfffb798c14c2a5e38d9ee9f9d6f2deb997b54203910b
+  .claude/skills/guidance-retro/references/transcript-miner.md: sha256:c364af032a2419e02baa577f4a8ab4ecec3c720631e16c22d18540fc60fe08b6
+  .claude/skills/guidance-retro/scripts/build_report.py: sha256:0c9028ce13c5841386a9238df6be74e8a3e5eb1d2f84b35204e699dac714328f
+  .claude/skills/guidance-retro/scripts/collect_reviews.py: sha256:fec9418208e170fc5854f07c6d4c4937f3f9f8b3448007778c50551a27e9dccd
+  .claude/skills/guidance-retro/scripts/collect_transcripts.py: sha256:d74e0bd4e6c87bd2f9605fa848f57d4f4943234eb1de90bd9ec56b64635b5a9c
+  .claude/skills/guidance-retro/scripts/digest.py: sha256:5177565400c6cb2878d724b5d7a2674dbb8d3f6387dcd03863bd23a249b6ee4d
+  .claude/skills/guidance-retro/scripts/guidance.py: sha256:d0f4137d89cd52b66600ec43760015005551e592d3440790a1bac38ea9e6c9ba

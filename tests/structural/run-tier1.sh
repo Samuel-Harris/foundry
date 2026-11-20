@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tier 1 structural acceptance suite.
 #
-# Proves structural packaging and deployment for all eighteen packages: manifests
+# Proves structural packaging and deployment for all nineteen packages: manifests
 # resolve, installs succeed, deployed inventory matches the promised primitives,
 # and the pinned CLI's documented limitations are asserted rather than hidden.
 #
@@ -37,7 +37,7 @@ PACK_BLOCKED=" default-stack execution planning repo-init skill-creation "
 
 # Direct dependencies of the meta-package, plus the one package they pull in
 # transitively (`deep-interview`). A default-stack install
-# therefore deploys nine of the eighteen packages,
+# therefore deploys nine of the nineteen packages,
 # which is what the scratch-consumer inventory check covers.
 DEFAULT_STACK_DEPLOYED="coding-style deep-interview execution git-diff planning pr repo-maintenance review skill-creation"
 

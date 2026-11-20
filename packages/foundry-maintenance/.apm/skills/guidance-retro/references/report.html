@@ -1,0 +1,176 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* One reading column: summary first, then package > file > change cards, then the low-confidence lists. */
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --fg: #1b1f27;
+    --muted: #5d6573;
+    --line: #dde1e8;
+    --accent: #3b5bdb;
+    --add: #1f7a4d;
+    --add-bg: #e3f4ea;
+    --update: #9a6200;
+    --update-bg: #fbf0d9;
+    --delete: #b42318;
+    --delete-bg: #fbe5e3;
+    --quote-bg: #eef1f5;
+    --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12151b; --surface: #1a1e26; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2c323d;
+      --accent: #8ea8ff; --add: #6fd39f; --add-bg: #173326; --update: #f0c060; --update-bg: #3a2e14;
+      --delete: #ff8a80; --delete-bg: #3d1c1a; --quote-bg: #222834; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12151b; --surface: #1a1e26; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2c323d;
+    --accent: #8ea8ff; --add: #6fd39f; --add-bg: #173326; --update: #f0c060; --update-bg: #3a2e14;
+    --delete: #ff8a80; --delete-bg: #3d1c1a; --quote-bg: #222834; color-scheme: dark;
+  }
+  body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+  main {
+    max-width: 960px; margin: 0 auto; display: grid; gap: 32px;
+    padding-block: 32px 64px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.25; }
+  h1 { font-size: 28px; font-weight: 600; }
+  h2 { font-size: 20px; font-weight: 600; }
+  h3 { font-size: 16px; font-weight: 600; }
+  code, .mono { font-family: var(--font-mono); font-size: 13px; }
+  a { color: var(--accent); }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .meta { color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 6px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+  .stat b { display: block; font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--muted); font-size: 13px; }
+  .notes { margin: 0; padding-left: 20px; color: var(--muted); }
+  section { display: grid; gap: 16px; min-width: 0; }
+  .package { display: grid; gap: 12px; }
+  .package > h3 { font-family: var(--font-mono); font-size: 15px; }
+  .file { display: grid; gap: 10px; }
+  .file > .path { color: var(--muted); overflow-wrap: anywhere; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+  .card-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .card-head h4 { margin: 0; font-size: 15px; font-weight: 600; flex: 1 1 240px; min-width: 0; }
+  .pill { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); letter-spacing: 0.02em; }
+  .pill.add { color: var(--add); background: var(--add-bg); border-color: transparent; }
+  .pill.update { color: var(--update); background: var(--update-bg); border-color: transparent; }
+  .pill.delete { color: var(--delete); background: var(--delete-bg); border-color: transparent; }
+  .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0; }
+  .change { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--quote-bg); border-radius: 6px; padding: 10px 12px; font-family: var(--font-mono); font-size: 13px; }
+  .rationale { margin: 0; max-width: 70ch; }
+  details > summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  .evidence { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+  .evidence li { border-left: 2px solid var(--line); padding-left: 10px; font-size: 13px; overflow-wrap: anywhere; }
+  .evidence q { color: var(--muted); }
+  .empty { color: var(--muted); margin: 0; }
+  .fold > summary { font-size: 20px; font-weight: 600; color: var(--fg); }
+  .fold[open] > summary { margin-bottom: 16px; }
+</style>
+
+<main id="report"></main>
+
+<script>
+  const REPORT = __REPORT_JSON__;
+
+  function h(tag, props, ...children) {
+    const node = document.createElement(tag);
+    for (const [key, value] of Object.entries(props || {})) {
+      if (key === "class") node.className = value;
+      else node.setAttribute(key, value);
+    }
+    for (const child of children.flat()) {
+      if (child === null || child === undefined || child === false) continue;
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    }
+    return node;
+  }
+
+  const plural = (count, noun) => `${count} ${noun}${count === 1 ? "" : "s"}`;
+
+  function evidenceLabel(item) {
+    if (item.source === "review") return `PR #${item.ref}`;
+    if (item.source === "transcript") return `session ${item.ref.slice(0, 8)}`;
+    return item.ref;
+  }
+
+  function evidenceList(items) {
+    if (items.length === 0) return null;
+    return h("details", {},
+      h("summary", {}, `Evidence (${plural(items.length, "item")})`),
+      h("ul", { class: "evidence" }, items.map((item) =>
+        h("li", {},
+          item.url ? h("a", { href: item.url }, evidenceLabel(item)) : h("span", { class: "mono" }, evidenceLabel(item)),
+          " ", h("q", {}, item.quote)))));
+  }
+
+  function card(item) {
+    const basis = item.basis === "evidence" ? plural(item.sources, "source") : item.basis;
+    return h("article", { class: "card" },
+      h("div", { class: "card-head" },
+        h("h4", {}, item.title),
+        h("span", { class: `pill ${item.action}` }, item.action),
+        h("span", { class: "pill" }, basis)),
+      item.section ? h("p", { class: "label" }, `Section: ${item.section}`) : null,
+      item.shortfall ? h("p", { class: "label" }, `Short of the bar: ${item.shortfall}`) : null,
+      h("pre", { class: "change" }, item.change),
+      h("p", { class: "rationale" }, item.rationale),
+      evidenceList(item.evidence));
+  }
+
+  function packages(groups, emptyText) {
+    if (groups.length === 0) return h("p", { class: "empty" }, emptyText);
+    return groups.map((group) =>
+      h("div", { class: "package" },
+        h("h3", {}, group.package),
+        group.files.map((file) =>
+          h("div", { class: "file" },
+            h("code", { class: "path" }, file.path),
+            file.items.map(card)))));
+  }
+
+  const count = (groups) => groups.reduce((total, group) =>
+    total + group.files.reduce((sum, file) => sum + file.items.length, 0), 0);
+
+  function render() {
+    const { sources, counts, window: span } = REPORT;
+    const hosts = Object.entries(sources.sessions_by_host).map(([host, n]) => `${n} ${host}`).join(", ");
+    const models = Object.entries(sources.sessions_per_model).map(([model, n]) => `${model} (${n})`).join(", ");
+    document.getElementById("report").append(
+      h("header", {},
+        h("h1", {}, document.title),
+        h("div", { class: "meta" },
+          h("span", {}, `${REPORT.repo}`),
+          h("span", {}, `${span.start} to ${span.end}`),
+          h("span", {}, "Foundry at ", h("code", {}, REPORT.foundry_commit)))),
+      h("div", { class: "stats" },
+        [[counts.add, "to add"], [counts.update, "to update"], [counts.delete, "to delete"],
+         [sources.pull_requests, "PRs with comments"], [sources.review_comments, "review comments"],
+         [sources.sessions, "agent sessions"]].map(([value, label]) =>
+          h("div", { class: "stat" }, h("b", {}, value), h("span", {}, label)))),
+      h("p", { class: "meta" }, `Sessions: ${hosts || "none"}. Models: ${models || "not recorded"}.`),
+      REPORT.coverage.length ? h("ul", { class: "notes" }, REPORT.coverage.map((note) => h("li", {}, note))) : null,
+      h("section", {}, h("h2", {}, "Recommendations"),
+        packages(REPORT.recommendations, "No change cleared the evidence bar.")),
+      h("details", { class: "fold" },
+        h("summary", {}, `Possibly obsolete (${count(REPORT.obsolete)})`),
+        h("section", {},
+          h("p", { class: "rationale" }, "Guidance whose target failure never appeared in the window. It may be working, or models may no longer need it."),
+          packages(REPORT.obsolete, "Nothing listed."))),
+      h("details", { class: "fold" },
+        h("summary", {}, `Watching (${count(REPORT.watching)})`),
+        h("section", {},
+          h("p", { class: "rationale" }, `Patterns seen in fewer than ${REPORT.min_sources} distinct sessions or PRs.`),
+          packages(REPORT.watching, "Nothing listed."))));
+  }
+
+  render();
+</script>

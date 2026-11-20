@@ -4,11 +4,11 @@
 
 ![Foundry](assets/foundry-logo.png)
 
-Foundry is a collection of 83 agent skills, 5 subagents and 4 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
+Foundry is a collection of 84 agent skills, 5 subagents and 4 instructions distributed as [APM](https://microsoft.github.io/apm/) packages for Cursor, Claude Code and GitHub Copilot. Install the whole stack in one command, or pick the individual packages you need.
 
 ## What this is
 
-This repository was previously a Cursor plugin marketplace. It is now an APM monorepo of 19 independently installable packages. Every primitive has a single target-neutral source, and APM handles the per-target directory and frontmatter translation at install time — there are no per-target variants to keep in sync.
+This repository was previously a Cursor plugin marketplace. It is now an APM monorepo of 20 independently installable packages. Every primitive has a single target-neutral source, and APM handles the per-target directory and frontmatter translation at install time — there are no per-target variants to keep in sync.
 
 ## Prerequisites
 
@@ -62,6 +62,7 @@ Each package has its own version and its own tags, named `<package>--v<version>`
 | `deep-interview`   | skills: `deep-interview`                                                                                                                                                  | Socratic requirement gathering with ambiguity gating before planning.                       |
 | `default-stack`    | *no primitives*                                                                                                                                                           | Meta-package that installs the default Foundry stack.                                       |
 | `execution`        | skills: `implement-linear-ticket`                                                                                                                                         | Take a Linear ticket to a merge-ready draft pull request.                                   |
+| `foundry-maintenance` | skills: `guidance-retro` | Keep Foundry's own guidance current by mining recent PR reviews and agent transcripts. |
 | `git-diff`         | skills: `git-diff-all-changes-main`, `git-diff-committed-changes-main`, `git-diff-staged-changes-main`                                                                    | Read-only git diff summaries measured against a repository's main branch.                   |
 | `handoff`          | skills: `handoff`                                                                                                                                                         | Produce a handoff document that lets another agent or session continue the work.            |
 | `infrastructure`   | skills: `aws-architecture-diagram`                                                                                                                                        | AWS architecture diagrams rendered as Mermaid flowcharts.                                   |
@@ -84,6 +85,7 @@ Each package declares its sibling dependencies in `apm.yml`, so installing one p
 | `cursor-cost-review`                 | `cursor-usage`     | Analyse an exported Cursor usage-events CSV together with local agent transcripts to find where Cursor spend goes and which changes would cut it without lo…      |
 | `data-visualisation` | `data-visualisation` | Munzner's Visualization Analysis and Design as a navigable, page-cited reference. Load it when choosing a chart or visualisation idiom for a dataset and qu… |
 | `implement-linear-ticket`            | `execution`        | Take a Linear ticket to a merge-ready draft GitHub pull request. Resolve the issue, branch from origin/$BASE, plan, implement, run thermos, open a draft PR,…     |
+| `guidance-retro` | `foundry-maintenance` | Mine a GitHub repository's PR review comments and the user's local Claude Code and Cursor transcripts over a window (defau… |
 | `git-diff-all-changes-main`          | `git-diff`         | Show all changes compared to origin/main. Use when the user asks for a full diff of every local change against main.                                              |
 | `git-diff-committed-changes-main`    | `git-diff`         | Show staged and committed changes compared to origin/main. Use when the user asks for the diff of committed work against main.                                    |
 | `git-diff-staged-changes-main`       | `git-diff`         | Show staged changes compared to origin/main. Use when the user asks for the diff of staged changes against main.                                                  |

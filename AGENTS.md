@@ -177,7 +177,7 @@ working on Foundry with Foundry; consumers keep installing individual packages.
   [Validate, audit and pack](#validate-audit-and-pack)). Listing every package
   directly reproduced exactly that failure for `deep-interview`.
 - `default-stack` is not listed. It ships no primitives of its own, and its
-  eight dependencies would duplicate siblings the root already reaches.
+  nine dependencies would duplicate siblings the root already reaches.
 - `tests/structural/check_root_manifest.py` enforces both rules: every package
   that ships anything under `.apm/` must be reachable, and no listed package may
   be reachable through another. It runs in the pre-commit hook and Tier 1. Add

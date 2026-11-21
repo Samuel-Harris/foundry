@@ -10,7 +10,7 @@ Your workers are main sessions that the launcher starts, not subagents, and each
 
 - Read the evidence, not the report. A status file, a commit and a pull request's live state outrank a message, including one that says a phase is done.
 - Check a pull request's live state before you report on it or act on it.
-- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR waiting for you to merge it, and a planner or spec writer that has reported, have no work.
+- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR is never stalled, because tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported has no work.
 - Retry by cause. A session that ended or lost its connection resumes with the launcher. A session whose conversation is the problem, because it loops, its context is full or it has stalled, gets `stop`, then in the next tick `--close` and a launch with `--fresh`.
 - Ask the developer only for a real decision: a one-way door, a product or preference call, or a blocker that survived a restart. Merge mechanics, retries and fix rounds never reach the developer.
 - Never read a phase plan, a diff or long pane output yourself. Give it to a fresh subagent and keep its conclusion. Send your own messages, never through a subagent.
@@ -46,7 +46,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 
 `.foundry/plans/<id>/status/orchestrator.md` holds these:
 
-- The window, the default branch, the default branch commit last merged, and the default branch commit whose new commits step 2's pull request duties last handled.
+- The window, the default branch, and the default branch commit last merged.
 - The board's and the architecture page's addresses, and the orchestrator branch commit the page describes.
 - The time of the last tick, and when the recurring tick was created.
 - Done phases whose status-only merge was refused, and whether the developer has been told.
@@ -63,12 +63,12 @@ Arm it with Claude Code's recurring scheduled task, every 20 minutes, off the ho
 Run the tick checklist in sam-mode's orchestrator handbook.
 ```
 
-Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip the default-branch merge in step 2 and the starts in step 3, and in step 4 merge only the frozen phase and the status-only merges of Finishing a phase. Still run step 2's pull request duties, and still replace stalled sessions.
+Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip step 2 and the starts in step 3, and in step 4 merge only the frozen phase and the status-only merges of Finishing a phase. Still replace stalled sessions.
 
-1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick.
-2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says. Then, if it has moved past the last handled commit, run the pull request duties once and record its tip as handled. The duties are: if any of the new commits came from one of the feature's pull requests, or changed a package that the feature's generated files depend on, run [When a feature pull request lands](#when-a-feature-pull-request-lands); and send another "A pull request merged" `fix-round` for each open pull request whose `needs_update` was already true and whose phase is in PR. Send at most one such round to a phase in a tick.
+1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick. Then set and clear `needs_update` as [Keeping pull requests up to date](#keeping-pull-requests-up-to-date) says.
+2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says.
 3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
-4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, and none in a tick whose default-branch merge committed, so a failing post-merge check names one change. Finishing a phase's status-only merges are exempt from both limits. Before merging, ask each quiet phase in PR whose newest verdicts name its current code head, but which has sent no `prs-open` at that code head, to send `prs-open` once a pull request holds that code, with an `instruction`. Send each quiet phase in PR an "A pull request merged" round while any of its pull requests has `needs_update` set, unless step 2 sent it one this tick. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
+4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, and none in a tick whose default-branch merge committed, so a failing post-merge check names one change. Finishing a phase's status-only merges are exempt from both limits. Before merging, ask each quiet phase in PR whose newest verdicts name its current code head, but which has sent no `prs-open` at that code head, to send `prs-open` once a pull request holds that code, with an `instruction`. Tell phases about flagged pull requests, as [Keeping pull requests up to date](#keeping-pull-requests-up-to-date) says. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
 5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
 6. **Record.** Update the tracker with the tick time, and commit it.
 7. **Publish.** Write the board's changed documents in one database batch. When a phase merged and passed its post-merge check, or a roadmap update merged, have a fresh subagent update the architecture page.
@@ -107,15 +107,15 @@ Merge the default branch into the orchestrator branch on the orchestrator branch
 5. Commit with the hooks on. If a hook refuses, abort the merge and tell the developer.
 6. Record the default branch commit you merged in the tracker, and send `merge-orchestrator-branch` to every live phase that has not reached PR.
 
-## When a feature pull request lands
+## Keeping pull requests up to date
 
-A pull request's checks do not run again when its base moves. Two pull requests can each pass, merge, and together break the default branch. So in the tick that finds such a merge, for every open pull request of the feature:
+A pull request's checks do not run again when the default branch, or a pull request it depends on, moves. Two pull requests can each pass, merge, and together break the default branch. `needs_update` marks each open pull request that has to be refreshed.
 
-- Set its `needs_update` to true in the tracker and on the board.
-- Send its phase a `fix-round` of the kind "A pull request merged", naming the merged pull request, or the default branch commit when no feature pull request merged. The phase refreshes its pull requests and works out each base again, without new gates. The handler expects the phase to be in PR, so send it only to a phase in PR. A phase in another state gets it from tick step 4 once it is back in PR and quiet.
-- Clear `needs_update` only when, after `git fetch origin`, `git merge-base --is-ancestor origin/<default branch> <pull request head SHA>` succeeds and every required check has passed on that head.
+- An open pull request is up to date when, after `git fetch origin`, its head contains the default branch's tip and the current head of every open pull request in its `depends_on`, and every required check has passed on that head. A merged or closed pull request has no flag.
+- In tick step 1, set `needs_update` on each open pull request that is not up to date, and clear it on each that is. Write each change to the tracker and the board.
+- In tick step 4, tell each quiet phase in PR that has a flagged pull request, once a tick. If a flagged pull request lacks the default branch's tip, send a `fix-round` of the kind "A pull request merged", naming the feature pull request that landed, or the default branch tip when none did. Otherwise send an `instruction` to refresh each flagged pull request onto the pull requests it depends on, naming each with its current head. A phase in another state is told once it is back in PR and quiet, because those handlers expect PR.
 
-A pull request is ready for the developer to merge only when its `needs_update` is false.
+A pull request is ready for the developer to merge only when it is up to date.
 
 ## Finishing a phase
 
@@ -130,7 +130,7 @@ In tick step 4, for each merged phase, do every step below whose condition holds
 
 ## Fix rounds
 
-Feedback reaches a phase only through you. When the developer asks for a change, or a tick finds a new review comment or a failed check, send the phase a `fix-round` with the pull request and the comments or the check. Merge it again as [Merging a phase](#merging-a-phase) says. Then, for each open pull request whose `depends_on` lists one this round changed, set `needs_update` and send its phase an `instruction` to refresh it onto the change. Clear that flag only once its head contains the changed pull request's new head and its checks have passed.
+Feedback reaches a phase only through you. When the developer asks for a change, or a tick finds a new review comment or a failed check, send the phase a `fix-round` with the pull request and the comments or the check. Merge it again as [Merging a phase](#merging-a-phase) says.
 
 PR creators choose and change their pull requests' bases themselves, across phases. You never offer or send `restack`. When the developer asks for a restack, pass it to the phase as an `instruction`. When a stack parent merges, the forge rebases its child with a force-push from the developer's account. That is expected, not a second writer on the branch.
 
@@ -151,7 +151,7 @@ Publish the board once for each feature from the template `assets/status-board.h
 The page says what is being built, and the board says how the work is going. A fresh subagent writes the page and each update. Its brief names the roadmap, `run-decisions.md`, the orchestrator branch and the commit the page last described.
 
 - It takes the intended design from the roadmap and `run-decisions.md`, and the built design from the code on the orchestrator branch.
-- It shows a map of the system, the feature's components and boundaries, the data model and main flows, the rules from the roadmap's decisions, each part as planned or built, and the commit and time it describes. A part is built once its phase has merged into the orchestrator branch.
+- It shows a map of the system, the feature's components and boundaries, the data model and main flows, the rules from the roadmap's decisions, each part as planned or built, and the commit and time it describes. A part is built once its phase has merged into the orchestrator branch and that merge passed its post-merge check.
 - s-stack ships no template. The subagent designs the page for the feature, and the page stays private until the developer shares it.
 - To update it, the subagent edits the page's file and then publishes the same path. Never publish with inline edits, which the automatic permission check cannot see.
 

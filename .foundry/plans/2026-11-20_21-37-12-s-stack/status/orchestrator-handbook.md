@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T17:09:26Z"
+state: "Verify"
+changed_at: "2026-11-21T17:10:52Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "5658aa8edf80e0e427f8afa9568117cc59be86ed"
+code_head: "5a2b0473bdcee9e74fc71701cec0158a70449f64"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -112,3 +112,5 @@ The seventh Verify gate was stopped without a verdict when the orchestrator rela
 The cross-phase stacking change is at `efb61c5`. `s-stack-package` (`bbe44ad`) was merged at `83f7f38`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `efb61c5`.
 
 The eighth Verify gate returned VERIFIED at `5658aa8`. One defect would break a real run, so the phase moved back to Implement. The fix goes in the same round as the merge of `s-stack-package` that brings `phase-handbooks`.
+
+The Finishing a phase fix is at `4289747`. `s-stack-package` (`e801458`, which brings `phase-handbooks` and `main`'s pull request 81) was merged at `5a2b047`, after a lockfile-only conflict that was resolved under C7. The phase moved to Verify at code head `5a2b047`.

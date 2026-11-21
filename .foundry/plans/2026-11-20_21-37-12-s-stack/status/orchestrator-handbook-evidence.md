@@ -223,3 +223,30 @@ Defects it named:
 - A refused status-only merge whose cause is not the phase's own file loops, which misleads a reader.
 
 The phase moved back to Implement. The redesign replaces every single idle reading with one "quiet" test: idle at this tick and the previous tick, with no new commit between them. It folds in the orchestrator's message mapping onto `phase-session.md`'s handlers and its new merge condition for a phase whose fix pull request merged first.
+
+## Verify 15, code head `d66a4cb92e56a7c3f70625a3d6b124f71974fb3e`, VERIFIED
+
+A fresh verifier updated the check file for `c19dfe0` (commit `d66a4cb`, with new cold reads W and X, and quiet-gated timings throughout) and ran every check to completion. C6 checks 1, 2, 3, 5 and 7 PASS (`169/200 orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: three scripts and 33 cold reads across four check files.
+
+Every **Done when** item was met:
+
+- The handbook has 169 lines, and no command line appears.
+- All nine launcher flags appear in `launch.sh` on the `launcher` phase branch.
+- A private-name grep found 0 hits, with a positive control of 15.
+
+Fixed in the next round, as the handbook's own contradiction:
+
+- The merge rule let a phase merged before re-merge on any pull request merged since the last merge. That contradicts Finishing a phase, which needs a new pull request holding the new code, and it lets unreviewed code reach Done.
+
+## For the cross-handbook integration
+
+Recorded under the orchestrator's run decision, for its read-through once every handbook has merged:
+
+- `orchestrator.md` sends a `fix-round` of the kind "A pull request merged". `phase-session.md` on `s-stack-package` handles only "Generated files only". The new kind exists only on the unmerged `phase-handbooks` branch.
+- A phase in PR whose code moved after every pull request merged has no step. Both `phase-session.md` and the PR creator are involved, as recorded at Verify 12 and Verify 13.
+- `phase-session.md`'s `stop` handler commits the status file even when nothing changed. Whether that makes a commit sets the quiet timing of the pane close.
+- Minor gaps in `orchestrator.md` for that read-through:
+  - quiet is undefined for a planner or spec writer;
+  - a stalled session's `--close` has no quiet test;
+  - "its own status files" is undefined, and a status-file conflict with the orchestrator branch has no fix path;
+  - a failing default-branch merge is retried every tick.

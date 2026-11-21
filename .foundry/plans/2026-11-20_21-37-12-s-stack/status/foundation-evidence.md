@@ -164,3 +164,11 @@ Two reviewers, Opus and Fable, reviewed `28fb827`, `4e35b4a`, `b02556c` and `829
 | `/sam-mode start` with a feature name the limits forbid has no stated action, and a reader cannot tell who enforces the limits | Fable | Not significant | Cold read of `SKILL.md`; the launcher is not on this branch, so no wrong outcome was shown |
 
 Both reviewers also ran, with clean results: the three cold reads in `checks/foundation.md`, the C2 check (pass, PENDING without the plan, and exit 1 on each mutation tried), the code-head loop on scratch histories including renames, symlinks, binaries and mode-only changes, `apm install` and `apm audit --ci` in `packages/s-stack`, `versioning.py check`, and the pre-commit hook over `50e26ee...HEAD`.
+
+## Follow-up round, Verify: VERIFIED at `98999eef74b7d80f3c83160ef8fa4b439790c2aa`
+
+A fresh verifier reran the whole skill with the main checkout's venv. Checks 1, 2, 3, 5, 7 and 8 PASS, and 4 and 6 are PENDING as before. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0. Every phase's Rerun checks passed, including the board's Chrome render and every cold read. The C2 check passes, and it exits 1 on the reference from `829f3b1`.
+
+The cold read that proves the fix was given only `SKILL.md`, the reference and `handbooks/phase-session.md`. It said a phase in Review with VERIFIED and CLEAR verdicts for its code head moves to PR, that the reference owns the merge rule a phase checks, that `handbooks/orchestrator.md` owns only the orchestrator's further checks, and that the files do not contradict each other.
+
+Every **Done when** item that still applies passed, including `apm audit --ci` with no install (`All 10 check(s) passed`). The only defect found is the minor one already recorded: the package README's requirements omit `gh stack`. The full report is in the phase session's scratchpad as `verify-round2b.md`.

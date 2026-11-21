@@ -420,3 +420,23 @@ Outside this phase: the roadmap's `decisions.md` names a private file that is me
 | A pull request that lacks both the tip and a dependency's head gets two messages in one tick. | Fable | Cold read |
 
 The check file's cold read Z gives a wrong reason for `kaph` in its expected answer, although the scored outcome is right. The verifier owns that file.
+
+## Verify 22, stopped without a verdict
+
+The verifier for `2056fdb` was stopped before it committed anything, when the orchestrator set the common-path significance bar and asked for "Histories handled by asking".
+
+## Verify 23, code head `e0fcca779f7f839dc14510f983f49ae344696b06`, NOT VERIFIED
+
+A fresh verifier updated the check file for `2056fdb` and `e1e7917` (commits `a9e54cc` and `e0fcca7`, with new cold reads AI, AJ, AK and D(8)) and ran every check twice. C6 checks 1, 2, 3, 5 and 7 PASS (`182 handbooks/orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. In check 8, three scripts pass and 45 of 46 cold reads pass, three of them on a fresh reader. Cold read I fails on its own wording, not on the handbook.
+
+Defects that break the common path, found by probe cold reads:
+
+- A message counts as answered only by a commit or a state change. A refresh round (answered by a push and `prs-open`) and a `prs-open` request (answered by the message) stay unanswered. Correct phases then stall and loop through `--fresh` replacements.
+- A hand-written conflict with the default branch is retried, and its round resent, every tick. The owning phase restarts both gates each time and never returns to PR.
+
+Defects that mislead a reader:
+
+- The rare-histories list literally includes the expected rebase of a stack child.
+- Step 7's `stop` is cancelled in the same tick by the merged notice.
+
+Minor: it is unclear whether reconcile and board writes continue for paused phases.

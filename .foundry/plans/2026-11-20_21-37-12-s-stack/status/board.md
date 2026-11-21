@@ -12,6 +12,11 @@ verdicts:
     code_head: "45f0689499b3a4ea0dbe0001949e8a54ba184509"
     at: "2026-11-21T16:04:25Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "45f0689499b3a4ea0dbe0001949e8a54ba184509"
+    at: "2026-11-21T16:12:25Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
 pull_requests: []
 requests: []
 decisions:

@@ -70,3 +70,14 @@ A fourth fresh verifier ran the whole verification skill at `a721dc6`, code head
 - Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
 - Private-name search over the phase diff, its text and 24 commit messages: 0 hits.
 - Minor, recorded: point 2 of phase-handbooks cold read 2's expected answer still says any later change to the check file needs a full rerun, while `verifier.md` now exempts an Evidence-only commit. The reader followed the handbook, and the verifier judged it a pass.
+
+## Review: SIGNIFICANT at `d32a56ae3096f5df29e5608aa6b6c146183c7dd6`
+
+A later review covered `73b5410`, `d32a56a` and the resolution of merge `cddb4b0`, which was lockfile-only. Two reviewers, Opus and Fable, each in a detached worktree at `d8c512d`. All seven probes from the earlier reviews pass, in both reviewers' runs.
+
+Significant:
+
+1. `checks/phase-handbooks.md` cold read 2's expected answer 2 still says "A later change to the file means a new commit and a full rerun". Since `73b5410`, `verifier.md` exempts an Evidence-only commit. Two fresh runs of the check, exactly as written, contradict that point, so check 8 of the verification skill fails at this head. The fourth verifier had noted it and judged it a pass.
+2. `phase-session.md`'s Verdicts paragraph says any commit that moves the code head needs a full verification run. Read literally, that contradicts the Evidence-only exception, and each rerun would add another Evidence commit. Both reviewers' cold readers raised it.
+
+Not significant, fixed alongside because each needs one clause: "Nothing runs `## Evidence`" is untrue where a lint check reads the file (reproduced with markdownlint, which the pre-commit hook would catch), and the new routing sentence for pull requests no longer covers commits the phase plan does not assign, such as the verifier's. Recorded only: whether a second pass reruns one-off checks and replaces old Evidence, and naming the head when the verifier makes no commit.

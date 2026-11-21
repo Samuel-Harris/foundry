@@ -1,7 +1,7 @@
 ---
 phase: "phase-handbooks"
-state: "Review"
-changed_at: "2026-11-21T16:31:38Z"
+state: "Implement"
+changed_at: "2026-11-21T16:37:03Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
 code_head: "d32a56ae3096f5df29e5608aa6b6c146183c7dd6"
@@ -37,6 +37,11 @@ verdicts:
     code_head: "d32a56ae3096f5df29e5608aa6b6c146183c7dd6"
     at: "2026-11-21T16:31:38Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "d32a56ae3096f5df29e5608aa6b6c146183c7dd6"
+    at: "2026-11-21T16:37:03Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -59,4 +64,4 @@ decisions:
 The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/phase-handbooks.md`. Handbooks committed at 89293d5, 0a15039 and 5f4b1c6. The quick-review pass (bug and code quality) found duplication of SKILL.md and the reference file, a re-review that never re-ran earlier significant findings, a re-review scope that pulled in other phases' code after a merge, and a restart check against the wrong field. Fix 1e49d2e addresses them and the orchestrator's instruction about the fix-round, move-back and stop cases. s-stack-package merged at 25ec3ab, which brought only .foundry/ files, so the code head stays 1e49d2e. The first Verify gate returned NOT VERIFIED at a1c1d83, the verifier's check-file commit: phase-session.md never says to follow a direct instruction from the developer. Back to Implement to fix it.
 Fix 305a26e says the session follows a direct instruction and builds what an open request cannot change, and gives the verifier a verdict for a skill without the check-file step. s-stack-package merged again (only .foundry/ came in). The second Verify gate returned VERIFIED at 305a26e. The first Review gate returned SIGNIFICANT at 305a26e, with four findings in verifier.md, reviewer.md and phase-session.md. Back to Implement.
 Fix 6b60476 addresses the four significant review findings. s-stack-package merged at d88dfe0 (only .foundry/). The third Verify gate returned VERIFIED at 6758c7d, the verifier's evidence commit. The second Review gate returned SIGNIFICANT at 6758c7d, with three findings. Back to Implement, with the orchestrator's merge-orchestrator-branch request for spec-planner-handbooks taken in the same round.
-Fix 73b5410 addresses the three findings of the second review. s-stack-package merged at cddb4b0 with the C7 procedure; it brought spec-planner-handbooks (planner.md, spec-writer.md, their check file) and a lockfile-only conflict, resolved by regenerating. The merge moved the code head to cddb4b0. The fourth Verify gate returned VERIFIED at d32a56a.
+Fix 73b5410 addresses the three findings of the second review. s-stack-package merged at cddb4b0 with the C7 procedure; it brought spec-planner-handbooks (planner.md, spec-writer.md, their check file) and a lockfile-only conflict, resolved by regenerating. The merge moved the code head to cddb4b0. The fourth Verify gate returned VERIFIED at d32a56a. The third Review gate returned SIGNIFICANT at d32a56a: a stale expected answer in the check file and a Verdicts sentence in phase-session.md. Back to Implement.

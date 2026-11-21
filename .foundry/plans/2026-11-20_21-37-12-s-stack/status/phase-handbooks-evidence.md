@@ -181,3 +181,18 @@ Significant:
 3. A phase that ignores the every-pull-request-merged notice outside PR has no stated way to reach Done after it returns to PR. The commit created that path.
 
 Not significant, recorded only: the round for a merged pull request does not say what happens to the merged pull request's own `pull_requests` entry; "stays in PR" assumes the phase is in PR (an older gap); which pull request takes commits made after every pull request has merged belongs to `pr-creator.md`; and the `instruction` row routes the notice to PR step 4 in wording a reader followed correctly.
+
+## Verify: VERIFIED at `30f0709ecdfb8865913ac95e1c7f50fcb2e8a9be`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 17:50 and 17:59 UTC, at HEAD `d41b2e5`. It made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 17:50:14 to 17:58:38 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 17:52:35: 0 matches.
+- Five one-off cold reads of the cases the last review broke, all passing:
+  - first entry to Verify starts the verifier;
+  - a restart in Verify reruns the gate;
+  - the orchestrator's `move-back` from PR after a failed check moves back with no contradiction;
+  - the merged notice in Implement is ignored, `state` is sent, and the notice comes again in PR, which leads to Done;
+  - a stale verify verdict in Review moves back to Implement.
+- Outside this phase, all in `references/status-and-messages.md`: its `move-back` and `state` "When" columns and its `instruction` row do not cover a failed check, a reply to an early notice, or the merged notice.

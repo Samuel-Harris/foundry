@@ -45,6 +45,12 @@ phases/<phase id>, one document per phase:
   session_live  boolean, true while the phase's session runs
   pane          string naming the session's pane, or null
   changed_at    time of the phase's last state change
+  depends_on    list of {phase, until} objects, one per phase this phase
+                waits for, or an empty list. phase is the other phase's id.
+                until is "merged" when the other phase's work only has to
+                be merged into the orchestrator branch, or "done" when every
+                pull request of the other phase has to be merged into the
+                default branch. The page draws these as a dependency map.
 
 prs/<number>, one document per pull request, its document id the number
 written as a string, such as prs/42:
@@ -90,6 +96,7 @@ and its checks have passed on that head.
     --muted: #5a6476;
     --line: #dbe0e8;
     --accent: #3b5788;
+    --accent-bg: #e2e9f5;
     --chip-bg: #e9edf3;
     --chip-fg: #374255;
     --good: #1c6e46;
@@ -108,6 +115,7 @@ and its checks have passed on that head.
       --muted: #98a2b3;
       --line: #29303c;
       --accent: #92acd8;
+      --accent-bg: #1d2a40;
       --chip-bg: #1e242f;
       --chip-fg: #c2c9d5;
       --good: #74d3a0;
@@ -125,6 +133,7 @@ and its checks have passed on that head.
     --muted: #98a2b3;
     --line: #29303c;
     --accent: #92acd8;
+    --accent-bg: #1d2a40;
     --chip-bg: #1e242f;
     --chip-fg: #c2c9d5;
     --good: #74d3a0;
@@ -216,6 +225,22 @@ and its checks have passed on that head.
   ol.recent { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
   ol.recent > li { display: grid; grid-template-columns: minmax(0, max-content) minmax(8em, 1fr); gap: 12px; }
   ol.recent > li > :first-child { overflow-wrap: anywhere; }
+  .deps > span { display: block; }
+  h3 { margin: 6px 0 0; font-size: 0.85rem; font-weight: 600; }
+  .map { overflow-x: auto; max-width: 100%; min-width: 0; }
+  .map svg { display: block; }
+  .map text { font-family: var(--font-mono); font-size: 12px; fill: var(--fg); }
+  .map .node-state { font-family: var(--font-text); font-size: 11px; fill: var(--muted); }
+  .map .node { stroke-width: 1.5; }
+  .map .n-plain { fill: var(--chip-bg); stroke: var(--line); }
+  .map .n-accent { fill: var(--accent-bg); stroke: var(--accent); }
+  .map .n-warn { fill: var(--warn-bg); stroke: var(--warn); }
+  .map .n-good { fill: var(--good-bg); stroke: var(--good); }
+  .map .n-crit { fill: var(--crit-bg); stroke: var(--crit); }
+  .map .edge { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+  .map .edge.done { stroke-dasharray: 5 4; }
+  .map .arrow { fill: var(--muted); }
+  .map-legend { margin: 0; }
   .heartbeat { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
 </style>
 
@@ -326,6 +351,104 @@ and its checks have passed on that head.
   function phaseStateChip(s) {
     if (!STATE_NAMES.includes(s)) return chip("unknown: " + str(s), "crit");
     return chip(s, s === "PR" || s === "Done" ? "good" : "");
+  }
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const UNTIL = ["merged", "done"];
+  const MAP = {nodeW: 168, nodeH: 44, colGap: 56, rowGap: 12, pad: 12, lane: 24};
+  const NODE_CLASS = {Spec: "n-plain", Plan: "n-plain", Implement: "n-accent", Verify: "n-warn", Review: "n-warn", PR: "n-good", Done: "n-good"};
+
+  const dependsOn = (p) => (Array.isArray(p.depends_on) ? p.depends_on : [])
+    .filter((d) => isObj(d) && typeof d.phase === "string" && UNTIL.includes(d.until));
+  const cut = (s, n) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+  function svg(tag, attrs, ...children) {
+    const node = document.createElementNS(SVG_NS, tag);
+    for (const [key, value] of Object.entries(attrs || {})) node.setAttribute(key, value);
+    for (const child of children) if (child != null) node.append(child);
+    return node;
+  }
+
+  // An edge into a phase still being walked closes a cycle, so it is left out of layering.
+  function phaseGraph(phases) {
+    const nodes = new Map();
+    for (const p of phases) if (str(p.phase)) nodes.set(str(p.phase), {id: str(p.phase), state: p.state});
+    const edges = [];
+    for (const p of phases) {
+      if (!str(p.phase)) continue;
+      for (const d of dependsOn(p)) {
+        if (!nodes.has(d.phase)) nodes.set(d.phase, {id: d.phase, state: null});
+        edges.push({from: d.phase, to: str(p.phase), until: d.until});
+      }
+    }
+    const layers = new Map();
+    const walking = new Set();
+    const layer = (id) => {
+      if (layers.has(id)) return layers.get(id);
+      walking.add(id);
+      let depth = 0;
+      for (const e of edges) if (e.to === id && !walking.has(e.from)) depth = Math.max(depth, 1 + layer(e.from));
+      walking.delete(id);
+      layers.set(id, depth);
+      return depth;
+    };
+    for (const node of nodes.values()) node.layer = layer(node.id);
+    return {nodes: [...nodes.values()], edges};
+  }
+
+  function drawMap({nodes, edges}) {
+    const {nodeW, nodeH, colGap, rowGap, pad, lane} = MAP;
+    const columns = [];
+    for (const n of nodes) (columns[n.layer] ||= []).push(n);
+    const colHeight = (col) => col.length * nodeH + (col.length - 1) * rowGap;
+    const tallest = Math.max(...columns.map(colHeight));
+    const byId = new Map(nodes.map((n) => [n.id, n]));
+    const laned = (e) => byId.get(e.to).layer - byId.get(e.from).layer !== 1;
+    const backward = edges.some((e) => byId.get(e.to).layer <= byId.get(e.from).layer);
+    const left = pad + (backward ? colGap : 0);
+    const top = pad + (edges.some(laned) ? lane : 0);
+    const laneY = pad + lane / 2;
+    const width = 2 * left + columns.length * nodeW + (columns.length - 1) * colGap;
+    const height = top + tallest + pad;
+
+    const box = new Map();
+    columns.forEach((col, ci) => {
+      col.sort((a, b) => a.id.localeCompare(b.id));
+      const offset = top + (tallest - colHeight(col)) / 2;
+      col.forEach((n, i) => box.set(n.id, {x: left + ci * (nodeW + colGap), y: offset + i * (nodeH + rowGap)}));
+    });
+
+    // Edges into one node would otherwise stack their arrowheads on one point.
+    const arrival = new Map();
+    for (const node of nodes) {
+      const incoming = edges.filter((e) => e.to === node.id);
+      const fromY = (e) => (laned(e) ? -Infinity : box.get(e.from).y);
+      incoming.sort((a, b) => fromY(a) - fromY(b));
+      incoming.forEach((e, k) => arrival.set(e, box.get(node.id).y + nodeH * (k + 1) / (incoming.length + 1)));
+    }
+
+    const edgePath = (e) => {
+      const a = box.get(e.from), b = box.get(e.to);
+      const x0 = a.x + nodeW, y0 = a.y + nodeH / 2, x3 = b.x, y3 = arrival.get(e);
+      if (!laned(e)) {
+        const mid = (x0 + x3) / 2;
+        return `M${x0},${y0} C${mid},${y0} ${mid},${y3} ${x3},${y3}`;
+      }
+      // One curve with both control points on the lane dips back into the middle column, so rise and fall inside the gaps.
+      return `M${x0},${y0} C${x0 + colGap / 2},${y0} ${x0 + colGap / 2},${laneY} ${x0 + colGap},${laneY} ` +
+        `H${x3 - colGap} C${x3 - colGap / 2},${laneY} ${x3 - colGap / 2},${y3} ${x3},${y3}`;
+    };
+
+    const stateText = (s) => (STATE_NAMES.includes(s) ? s : s == null ? "unknown" : "unknown: " + str(s));
+    return svg("svg", {width, height, viewBox: `0 0 ${width} ${height}`, "aria-hidden": "true"},
+      svg("defs", {}, svg("marker", {id: "map-arrow", viewBox: "0 0 8 8", refX: 8, refY: 4, markerWidth: 8, markerHeight: 8, markerUnits: "userSpaceOnUse", orient: "auto"},
+        svg("path", {class: "arrow", d: "M0,0 L8,4 L0,8 z"}))),
+      ...edges.map((e) => svg("path", {class: e.until === "done" ? "edge done" : "edge", d: edgePath(e), "marker-end": "url(#map-arrow)"})),
+      ...nodes.map((n) => svg("g", {transform: `translate(${box.get(n.id).x},${box.get(n.id).y})`},
+        svg("title", {}, n.id),
+        svg("rect", {class: "node " + (NODE_CLASS[n.state] || "n-crit"), width: nodeW, height: nodeH, rx: 6}),
+        svg("text", {class: "node-id", x: 10, y: 19}, cut(n.id, 20)),
+        svg("text", {class: "node-state", x: 10, y: 35}, cut(stateText(n.state), 24)))));
   }
 
   function byRankThenNumber(a, b) {
@@ -494,17 +617,27 @@ and its checks have passed on that head.
       return;
     }
     section.append(table(
-      ["Phase", "State", "Scheduling", "Waits for", "Session", "Last change"],
+      ["Phase", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"],
       phases.map((p) => [
         el("span", {class: "mono"}, str(p.phase)),
         phaseStateChip(p.state),
         str(p.scheduling),
         str(p.waits_for) || "nothing",
+        dependsOn(p).length
+          ? el("span", {class: "mono deps"}, ...dependsOn(p).map((d, i, all) => el("span", {}, d.phase + " (" + d.until + ")" + (i < all.length - 1 ? ", " : ""))))
+          : el("span", {class: "mono"}, "none"),
         p.session_live === true
           ? (str(p.pane) ? el("span", {}, "live in pane ", el("span", {class: "mono"}, str(p.pane))) : "live")
           : "not live",
         timeEl(p.changed_at, "relative"),
       ])));
+    const graph = phaseGraph(phases);
+    if (!graph.edges.length) return;
+    section.append(
+      el("h3", {}, "Dependency map"),
+      el("div", {class: "map"}, drawMap(graph)),
+      el("p", {class: "map-legend sub"},
+        "Solid line: needed merged into the orchestrator branch. Dashed line: needed with every pull request merged into the default branch."));
   }
 
   function renderRecent() {

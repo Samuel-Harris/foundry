@@ -8,8 +8,8 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `dcdda28` (version 3) |
-| Last tick | 2026-11-21 15:52 |
+| Architecture page describes | `1a97298` (version 4) |
+| Last tick | 2026-11-21 16:11 |
 | Default branch merged at | `f7772cc` (into `7e04846`) |
 
 ## Live sessions
@@ -21,7 +21,6 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-phase-handbooks` | `%175` | `../s-stack-phase-phase-handbooks` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-phase-spec-planner-handbooks` | `%177` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 |
 
 ## Open decision requests
 
@@ -33,12 +32,14 @@ None.
 | --- | --- | --- | --- | --- |
 | 81 | `foundation` | `s-stack-foundation-package` | `main` | none |
 | 82 | `foundation` | `s-stack-verify-skill` | `s-stack-foundation-package` | 81 |
+| 84 | `spec-planner-handbooks` | `s-stack-spec-planner-handbooks` | `main` | 81, 82 |
 
 ## Merged phases
 
 | Phase | Merged at | Phase code head | Post-merge check |
 | --- | --- | --- | --- |
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
+| `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
 
 ## Closed sessions
 
@@ -46,6 +47,7 @@ None.
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
 | `s-stack-phase-foundation` | `../s-stack-phase-foundation` | 2026-11-21 | `5df64c0`, merged at `7c4f36d`; worktree kept for fix rounds |
+| `s-stack-phase-spec-planner-handbooks` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 | `22340be`, merged at `4739703`; worktree kept for fix rounds |
 
 ## Queued fix rounds
 
@@ -56,5 +58,20 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 3. `SKILL.md` branch table: add rows for the planner's and the update spec writer's branches. Say that `run-decisions.md` amends the roadmap until an update folds it in.
 4. One home for the launch steps (`--print-window`, then `--window`, run from a main session) in `SKILL.md`. `spec-writer.md` and `orchestrator.md` then point to it, and their owning phases remove their copies.
 5. `references/status-and-messages.md` orchestrator rows, raised by `orchestrator-handbook` at `6c34228`. Two uses of `fix-round`: generated files only, with the phase staying in PR, and a hand-written conflict from the default branch, with the phase going back to Implement. `move-back` to Implement after a failed post-merge check. `stop` before closing a pane, which also covers replacing a stalled session.
+6. `SKILL.md`: list `gh stack` among the tools s-stack needs. Raised by `pr-handbook`.
+7. `references/status-and-messages.md`: the spec writer is listed as a sender of decision requests, but it asks the developer directly by design. Raised by `spec-planner-handbooks`.
+8. `SKILL.md` line 16 says to read `poteto-mode` "before anything else", but the start form says "Do nothing else". Make the two consistent. Raised by `board`.
+9. `SKILL.md`: a commit never mixes `.foundry/` with other files, except a merge of the orchestrator branch, which always does. `phase-session.md` already states this exception. Raised by `phase-handbooks`.
+10. `references/status-and-messages.md`: the orchestrator table also needs a kind for "every pull request merged". Raised by `phase-handbooks` (extends item 5).
+11. `references/status-and-messages.md`: the code-head command follows git history simplification, so after a merge it can resolve to a commit off the phase branch's first-parent line. Add `--first-parent`, and check that a pre-Verify merge that brings in code still moves the code head. Raised by `phase-handbooks`.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
+
+## Merge cautions
+
+- After the pre-commit hook has rewritten a staged lockfile, `git merge --abort` exits 128 and leaves `MERGE_HEAD`. Recover with `git reset --merge`, then check `git status`. Found by `orchestrator-handbook` (review of `e0a51a2`).
+- Read a phase's tip and its code head in one step, and merge that tip SHA, not the branch name, so no commit added after the verdicts check can slip in.
+
+## Queued roadmap update
+
+At the end of the run, start a spec writer to fold `run-decisions.md` into the roadmap. At least these items: `coordination.md` "The launcher" and "Restarts" and C4 now resume by stored id with `--print-window`, `--close`, `--remove` and exit 5; `roles.md` drops the Orchestrate playbook pointer; the status board gains the dependency map and session labels; the generated-files rules for code heads, conflicts and the line limit. Raised by `launcher`.

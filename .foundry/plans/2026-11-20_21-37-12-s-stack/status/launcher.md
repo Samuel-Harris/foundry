@@ -55,6 +55,10 @@ decisions:
     decision: "Only a leading --name argument identifies a session, so prompt text containing --name never matches, and the pane command runs through /bin/sh directly so it does not depend on tmux's default shell. From the quick-review pass."
     door: "two-way"
     at: "2026-11-21T16:15:48Z"
+  - id: "launcher-d8"
+    decision: "Answer to launcher-r2, option A, from the orchestrator: the launcher exits 2 for a feature name that is not kebab-case, contains -phase-, or ends with -phase, -planner, -orchestrator, -spec or -spec-<n>, so derived names never collide."
+    door: "two-way"
+    at: "2026-11-21T16:44:12Z"
 ---
 
 # Phase launcher status

@@ -298,3 +298,23 @@ Defects that mislead a reader:
 - The fix-round sentence's "merge it again" left out the `prs-open` condition.
 
 Minor: the tracker had no field for a status-only refusal awaiting the developer.
+
+## Verify 18, code head `912605a97e15e20e50353ec451f3cc1b870a1a01`, VERIFIED
+
+A fresh verifier updated cold reads I, J and Z for `9537a1d` (commit `912605a`) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`170/200 handbooks/orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. In check 8, three scripts and 35 of 36 cold reads pass. Cold read T did not finish before hand-back, so a second fresh verifier reran T alone at the same head, and it passed.
+
+Every **Done when** item was met:
+
+- The handbook has 170 lines, and no command line appears.
+- All nine launcher flags appear in `launch.sh` on the `launcher` phase branch.
+- A private-name grep found 0 hits, with a positive control of 3.
+
+Items to fold into the next fix round, each misleading a reader:
+
+- No tick step owns the deferred "A pull request merged" round when the default branch has not moved.
+- A merge whose post-merge check failed may read as "a phase merged" for the architecture page.
+
+Minor items:
+
+- The new tracker field never says when it clears.
+- A pull request opened after the landing tick has no starting `needs_update`.

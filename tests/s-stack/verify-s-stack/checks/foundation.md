@@ -47,42 +47,19 @@ Expected answer:
 
 ### Status header matches C2
 
-The reference ships the feature plan's C2 with three kinds of change, all decided by the orchestrator. Request `foundation-r1`, option A, set the first two. Request `foundation-r2`, option A, added one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. This run's example values become placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. The code-head rule states the general command with only `.foundry/` excluded, a sentence to run it from the worktree root, and a sentence that a feature plan may name generated paths to exclude too. The check compares that code-head rule, whole, with the wording the orchestrator approved. Any other difference, such as a new or reworded rule, is a contract change and fails. The check reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. On a pull request branch or the default branch it prints `PENDING: .foundry/ is absent, so the feature plan's C2 cannot be read here` and exits `0`.
+The reference ships the feature plan's C2 with three kinds of change, all decided by the orchestrator. Request `foundation-r1`, option A, set the first two. Request `foundation-r2`, option A, added one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. This run's example values become placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. The code-head rule states the general command with only `.foundry/` excluded, a sentence to run it from the worktree root, and a sentence that a feature plan may name generated paths to exclude too. The check compares that code-head rule, whole, with the wording the orchestrator approved. Any other difference, such as a new or reworded rule, is a contract change and fails. The check runs from the repository root wherever it is started, and always compares the code-head rule, which needs only the reference. The rest of the comparison reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. Without the plan, as on a pull request branch or the default branch, it prints `PENDING: .foundry/plans/2026-11-20_21-37-12-s-stack/README.md not found, so the reference cannot be compared with C2 here` and skips that part. It exits `1` whenever the code-head rule differs, and otherwise `0`, with the PENDING line when only the plan is missing.
 
 ```bash
 python3 - <<'EOF'
-import difflib, pathlib, re, sys
+import difflib, os, pathlib, re, subprocess, sys
+os.chdir(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip())
 plan_path = pathlib.Path(".foundry/plans/2026-11-20_21-37-12-s-stack/README.md")
-if not plan_path.is_file():
-    print("PENDING: .foundry/ is absent, so the feature plan's C2 cannot be read here")
-    sys.exit(0)
-plan = plan_path.read_text()
 ref = pathlib.Path("packages/s-stack/.apm/skills/sam-mode/references/status-and-messages.md").read_text()
 
 def header_section(text):
     start = text.index("The header is")
     end = text.index("\n", text.index("keeps its own form", start))
     return [re.sub(r"\s+", " ", l).strip() for l in text[start:end].splitlines() if l.strip()]
-
-placeholders = [
-    ('"s-stack-phase-launcher"', '"<feature>-phase-<phase>"'),
-    ('phase: "launcher"', 'phase: "<phase>"'),
-    ("2026-11-20_21-37-12-s-stack", "<id>"),
-    ("launcher-evidence", "<phase>-evidence"),
-    ('"launcher-r1"', '"<phase>-r1"'),
-    ('"launcher-d1"', '"<phase>-d1"'),
-    ('branch: "s-stack-launcher"', 'branch: "<pull request branch>"'),
-    ('base: "main"', 'base: "<default branch>"'),
-    ("chore(s-stack)", "chore(<feature>)"),
-    ("tracker at `status/orchestrator.md`", "tracker at `.foundry/plans/<id>/status/orchestrator.md`"),
-    ("cannot break the YAML.", "cannot break the YAML. Keep characters outside the Basic Multilingual Plane, such as emoji, out of header strings, because `json.dumps` writes them as surrogate pairs that a YAML reader does not join."),
-]
-expected = []
-for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):
-    for old, new in placeholders:
-        line = line.replace(old, new)
-    expected.append(line)
-shipped = header_section(ref)
 
 code_head = "- **Code head.** It is `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, the latest commit on the phase branch that changes a file outside `.foundry/`. Run it from the worktree root. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, whose commits also move no code head. Its sessions then add an exclude clause for each such path to the command."
 
@@ -92,12 +69,37 @@ def without_code_head(lines):
         sys.exit("FAIL: expected exactly one Code head rule")
     return lines[hits[0]], lines[:hits[0]] + lines[hits[0] + 1:]
 
-rule, shipped_rest = without_code_head(shipped)
-_, expected_rest = without_code_head(expected)
+rule, shipped_rest = without_code_head(header_section(ref))
 problems = [] if rule == code_head else [f"code-head rule differs from the approved wording:\n-{code_head}\n+{rule}"]
-problems += difflib.unified_diff(expected_rest, shipped_rest, "C2 with placeholders", "reference", lineterm="", n=0)
-print("\n".join(problems) or "reference matches C2 apart from the allowed differences")
-sys.exit(1 if problems else 0)
+if plan_path.is_file():
+    plan = plan_path.read_text()
+    placeholders = [
+        ('"s-stack-phase-launcher"', '"<feature>-phase-<phase>"'),
+        ('phase: "launcher"', 'phase: "<phase>"'),
+        ("2026-11-20_21-37-12-s-stack", "<id>"),
+        ("launcher-evidence", "<phase>-evidence"),
+        ('"launcher-r1"', '"<phase>-r1"'),
+        ('"launcher-d1"', '"<phase>-d1"'),
+        ('branch: "s-stack-launcher"', 'branch: "<pull request branch>"'),
+        ('base: "main"', 'base: "<default branch>"'),
+        ("chore(s-stack)", "chore(<feature>)"),
+        ("tracker at `status/orchestrator.md`", "tracker at `.foundry/plans/<id>/status/orchestrator.md`"),
+        ("cannot break the YAML.", "cannot break the YAML. Keep characters outside the Basic Multilingual Plane, such as emoji, out of header strings, because `json.dumps` writes them as surrogate pairs that a YAML reader does not join."),
+    ]
+    expected = []
+    for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):
+        for old, new in placeholders:
+            line = line.replace(old, new)
+        expected.append(line)
+    _, expected_rest = without_code_head(expected)
+    problems += difflib.unified_diff(expected_rest, shipped_rest, "C2 with placeholders", "reference", lineterm="", n=0)
+else:
+    print(f"PENDING: {plan_path} not found, so the reference cannot be compared with C2 here")
+if problems:
+    print("\n".join(problems))
+    sys.exit(1)
+if plan_path.is_file():
+    print("reference matches C2 apart from the allowed differences")
 EOF
 ```
 

@@ -80,22 +80,37 @@ EOF
 
 ### 5. Package isolation
 
-No relative link inside `sam-mode` resolves outside `packages/s-stack/`, and no file under `packages/p-stack` changed on this branch. The first command reads inline links, with or without angle brackets or a title, reference definitions and HTML `href` and `src` attributes, and skips code spans and fenced blocks. Never assume the default branch is `main`. PASS when both commands exit `0` and the diff prints nothing.
+No relative link inside `sam-mode` resolves outside `packages/s-stack/`, and no file under `packages/p-stack` changed on this branch. The first command parses each file as CommonMark with `markdown-it-py`, so code spans and fenced blocks never yield a link. It reads link and image targets, every reference definition, used or not, and `href` and `src` attributes in inline and block HTML. It declares and pins `markdown-it-py` in inline PEP 723 metadata and runs with `uv run`, as `scripts/pstack_upstream.py` does, so it needs neither `.venv-apm` nor the APM CLI's own dependencies. Never assume the default branch is `main`. PASS when both commands exit `0` and the diff prints nothing.
 
 ```bash
-python3 - <<'EOF'
-import pathlib, re, sys
+uv run --no-project - <<'EOF'
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["markdown-it-py==4.0.0"]
+# ///
+import pathlib, re, sys, urllib.parse
+from markdown_it import MarkdownIt
 package = pathlib.Path("packages/s-stack").resolve()
+html_attr = re.compile(r"""\b(?:href|src)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))""", re.I)
+
+def targets(tokens):
+    for t in tokens:
+        if t.type == "link_open":
+            yield t.attrs["href"]
+        elif t.type == "image":
+            yield t.attrs["src"]
+        elif t.type in ("html_inline", "html_block"):
+            yield from ("".join(groups) for groups in html_attr.findall(t.content))
+        yield from targets(t.children or [])
+
 leaks = []
-link = r"""\]\(\s*<([^>\n]*)>|\]\(\s*([^)\s]+)|^ {0,3}\[[^\]]+\]:\s*<([^>\n]*)>|^ {0,3}\[[^\]]+\]:\s*(\S+)|(?:href|src)\s*=\s*["']([^"']*)"""
 for md in sorted(pathlib.Path("packages/s-stack/.apm/skills/sam-mode").rglob("*.md")):
-    text = re.sub(r"(```|~~~).*?\1", "", md.read_text(), flags=re.S)
-    text = re.sub(r"`[^`\n]*`", "", text)
-    for groups in re.findall(link, text, flags=re.M):
-        target = "".join(groups)
-        if not target or re.match(r"[a-z][a-z0-9+.-]*:|#", target):
+    env = {}
+    tokens = MarkdownIt("commonmark").parse(md.read_text(), env)
+    for target in dict.fromkeys([*targets(tokens), *(ref["href"] for ref in env.get("references", {}).values())]):
+        if not target or target.startswith("#") or re.match(r"[a-z][a-z0-9+.-]*:", target, re.I):
             continue
-        if not (md.parent / target.split("#")[0]).resolve().is_relative_to(package):
+        if not (md.parent / urllib.parse.unquote(target.split("#")[0])).resolve().is_relative_to(package):
             leaks.append(f"{md}: {target}")
 print("\n".join(leaks) or "no relative link leaves packages/s-stack")
 sys.exit(1 if leaks else 0)
@@ -169,7 +184,11 @@ git clean -fdX -- 'packages/*/apm_modules' 'packages/*/.agents' 'packages/*/.cla
 `git clean` leaves each package's `.cursor/` and `.github/` behind once empty, and an empty `.cursor/` makes `apm targets` report cursor as active. No package tracks a file there, so remove the empty directories:
 
 ```bash
-find packages -mindepth 2 -maxdepth 3 -type d -empty \( -path 'packages/*/.cursor*' -o -path 'packages/*/.github*' \) -delete
+bash <<'EOF'
+for d in packages/*/.cursor packages/*/.github; do
+  if [ -d "$d" ]; then find "$d" -depth -type d -empty -delete; fi
+done
+EOF
 ```
 
 Then `find packages -mindepth 2 -maxdepth 2 -type d -empty` must print nothing the run left, and `git status --short` must show no change the run made. Kill only processes you started.

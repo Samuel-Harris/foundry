@@ -83,7 +83,7 @@ The board documents a tick writes:
 
 ## Merging a phase
 
-A phase may merge when its status header lists its open pull requests, the reference file's verdict rule holds for the code head, and you have not already merged that code head. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
+A phase may merge when its status header lists at least one open pull request, the reference file's verdict rule holds for the code head, and you have not already merged that code head. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
 
 To abort a merge, run `git merge --abort`. If it refuses because a hook or check rewrote a file, run `git checkout -- <path>` for each file it names, and abort again. Then run `git checkout -- <path>` for each file outside `.foundry/` that `git status --porcelain --untracked-files=no` still lists, because a hook can rewrite files the merge did not touch.
 
@@ -124,7 +124,7 @@ In tick step 4, for each merged phase, do every step below whose condition holds
 - It has been stopping since an earlier tick and workmux shows it idle: close its pane with `--close`.
 - Every pull request has merged, its status is PR, you have merged its current code head, and it is not marked told: start its session if its pane is closed, then send an `instruction` saying that every pull request has merged into the default branch, and mark it told. It then moves to Done. Clear the mark whenever its status leaves PR, its code head changes, or it replies to the notice with a `state` other than PR.
 - Its status is Done and its pane is open: send `stop` if it is not already stopping.
-- Its status is Done, its pane is closed, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and is exempt from the merge limits in tick step 4. If the code head has changed, start the session and send `move-back` to Implement, because no verdict covers that code.
+- Its status is Done, its pane is closed, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and is exempt from the merge limits in tick step 4. If the code head has changed, start the session and send `move-back` to Implement, because no verdict covers that code. It merges again only once a new pull request holds that code.
 - Its status is Done, its pane is closed, and its branch is fully merged: remove its worktree with `--remove`.
 
 ## Fix rounds

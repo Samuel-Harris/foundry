@@ -51,6 +51,23 @@ A third fresh verifier ran after the review fix round and the merge of phase-han
 
 This verdict is superseded. The developer's pane placement rule (`launcher-d9`) is a scope change, so the phase moves back to Implement.
 
+
+## Verify, code head `13104cc935a923cc9511d71570ac51683a012246`, VERIFIED
+
+A fourth fresh verifier ran after the placement rule, pane reuse, their quick-review fixes and the merge of `s-stack-package` at `c18fb91`. It committed nothing. Its report, summarised:
+
+- The full verification skill passed. Primitives were valid (94), the root manifest printed `12 listed, 19 reached`, lint and budgets passed, and isolation passed. The suite ran 83 tests, all OK, and again under `LC_ALL=C` with `LANG` and `LC_CTYPE` removed. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. All nine cold reads passed.
+- Twelve mutations each failed named tests. They covered select-layout, liveness, the session lock, `--resume`, the orchestrator's column, the sidebar, the window lock, unzooming, re-zoom on failure, reuse, the resumed-nameless rule and the dirty-worktree guard.
+- Placement was reproduced with the stubs on a 240x60 private server, with and without a sidebar. Each pane went where the rule says. The sidebar and an untagged developer pane in the orchestrator's column never changed. A zoomed orchestrator stayed zoomed and kept its width. Three concurrent phase launches all started with the orchestrator's width unchanged. A restart reused the same pane and resumed the stored id. A planner with no orchestrator exited 1, and an orchestrator with no spec writer split the topmost pane of the first column.
+- All three launcher calls in `SKILL.md` and `spec-writer.md` were accepted.
+- Live check with the real `claude` and `workmux`. The first launch took 1.09 s and placed the pane right of the orchestrator. The first prompt began `/sam-mode phase`. A second launch printed `alive` in 0.25 s. `/exit` and a relaunch put `claude --resume <stored id>` in the same pane, with the earlier conversation shown.
+- Minor gaps recorded:
+  - While the orchestrator shares its column (spec writer alive, or a pane below it), the right-hand area is only as tall as the orchestrator's pane, so space runs out early and launches exit 4.
+  - A launch that exits 4 has already created its worktree.
+  - The scratch repository has no `sam-mode`.
+  - `checks/launcher.md` has no one-off layout reproduction, though the unit tests cover each case.
+  - `tests/s-stack/verify-s-stack/SKILL.md` check 8 still says `## Evidence` holds results.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

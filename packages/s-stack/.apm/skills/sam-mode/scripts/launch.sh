@@ -180,6 +180,32 @@ find_live_pane() {
   live_pane=${matches%% *}
 }
 
+# Held until the launcher exits, so a concurrent launch of the same session
+# checks liveness only after ps shows this one's claude.
+lock_session() {
+  local common tries=0
+  common=$(resolve "$(git rev-parse --git-common-dir)")
+  [ -n "$common" ] || die 'cannot resolve the git common directory'
+  lock=$common/s-stack-locks/$name
+  mkdir -p "$common/s-stack-locks" || die "cannot create $common/s-stack-locks"
+  until mkdir "$lock" 2>/dev/null; do
+    tries=$((tries + 1))
+    [ "$tries" -lt 100 ] || die "another launch of $name has held $lock for 10 seconds; if none is running, remove that directory"
+    sleep 0.1
+  done
+  trap 'rmdir "$lock"' EXIT
+}
+
+# A claude shows in ps a moment after its pane opens.
+wait_for_started_claude() {
+  local tries=0
+  until session_panes "$name" '' | awk -v pane="$target_pane" '$1 == pane && $5 == "strict" { found = 1 } END { exit !found }'; do
+    tries=$((tries + 1))
+    [ "$tries" -lt 100 ] || return 0
+    sleep 0.1
+  done
+}
+
 default_branch() {
   local ref
   if ref=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null); then
@@ -236,6 +262,7 @@ cmd_start() {
     [ -n "$first_spec" ] && [ -z "$worktree" ] || usage
   fi
 
+  lock_session
   find_live_pane
   if [ -n "$live_pane" ]; then
     printf 'alive %s pane=%s\n' "$name" "$live_pane"
@@ -317,6 +344,7 @@ EOF
   if [ "$conversation_flag" = --session-id ]; then
     mkdir -p "$markers" && printf '%s\n' "$conversation_id" > "$marker" || die "cannot write the session marker $marker"
   fi
+  wait_for_started_claude
 
   printf 'started %s pane=%s worktree=%s\n' "$name" "$target_pane" "$worktree"
 }

@@ -418,6 +418,7 @@ class StartTests(LauncherTestCase):
     def test_concurrent_launches_of_an_existing_worktree_start_one_copy(self) -> None:
         self.make_feature_worktree()
         self.make_worktree(name="f-planner", base="f")
+        self.tmux("set-environment", "-g", "STUB_CLAUDE_DELAY", "0.5")
         command = [str(LAUNCH), "--feature", "f", "--role", "planner", "--window", self.window]
         launches = [subprocess.Popen(command, env=self.env, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) for _ in range(2)]
         outputs = [launch.communicate(timeout=60) for launch in launches]

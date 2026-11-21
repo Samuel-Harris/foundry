@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T20:28:19Z"
+state: "Verify"
+changed_at: "2026-11-21T20:29:51Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "92b307924868de977ec658b79820b92557ef752e"
+code_head: "03c19982a586aa567cd6062c06e7f0a7bb253934"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -239,3 +239,5 @@ The Review 5 fixes and the two queued items are at `caafc7f`. `s-stack-package` 
 The nineteenth Verify gate returned VERIFIED at `92b3079`. The phase moved to Review, which covers the commits since `912605a`.
 
 The sixth Review gate returned SIGNIFICANT at `92b3079`. The phase moved back to Implement.
+
+The single up-to-date rule and the other Review 6 fixes are at `03c1998`. `s-stack-package` (`8f5c9de`) was merged at `580d079`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `03c1998`.

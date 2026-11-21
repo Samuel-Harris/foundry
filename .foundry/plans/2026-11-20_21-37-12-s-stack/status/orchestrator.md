@@ -8,7 +8,7 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `dcdda28` (version 3) |
+| Architecture page describes | `1a97298` (version 4) |
 | Last tick | 2026-11-21 16:11 |
 | Default branch merged at | `f7772cc` (into `7e04846`) |
 
@@ -21,7 +21,6 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-phase-handbooks` | `%175` | `../s-stack-phase-phase-handbooks` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-phase-spec-planner-handbooks` | `%177` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 |
 
 ## Open decision requests
 
@@ -33,12 +32,14 @@ None.
 | --- | --- | --- | --- | --- |
 | 81 | `foundation` | `s-stack-foundation-package` | `main` | none |
 | 82 | `foundation` | `s-stack-verify-skill` | `s-stack-foundation-package` | 81 |
+| 84 | `spec-planner-handbooks` | `s-stack-spec-planner-handbooks` | `main` | 81, 82 |
 
 ## Merged phases
 
 | Phase | Merged at | Phase code head | Post-merge check |
 | --- | --- | --- | --- |
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
+| `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
 
 ## Closed sessions
 
@@ -46,6 +47,7 @@ None.
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
 | `s-stack-phase-foundation` | `../s-stack-phase-foundation` | 2026-11-21 | `5df64c0`, merged at `7c4f36d`; worktree kept for fix rounds |
+| `s-stack-phase-spec-planner-handbooks` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 | `22340be`, merged at `4739703`; worktree kept for fix rounds |
 
 ## Queued fix rounds
 

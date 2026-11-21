@@ -469,3 +469,21 @@ One item misleads a reader, and the run converges past it. In the tick a phase r
 | A crash just after the "every pull request merged" notice leaves the phase marked told, with the notice lost, so it stays in PR. Lower confidence. | Fable | Cold read |
 
 Both lifecycle walks otherwise reached Done for every phase, with each merged code head covered by both verdicts and no stale pull request shown as ready.
+
+## Verify 25, code head `5b8a48145a2aa1e0ef5c890d5516da78f7b785a4`, VERIFIED
+
+A fresh verifier updated the check file for `37d9146` (commits `94802ee`, `d504b46` and `5b8a481`, with new cold reads AN, AO, AP and AQ, and two expected answers corrected after runs). It reran everything after each commit. The verdict rests on the third run. C6 checks 1, 2, 3, 5 and 7 PASS (`183/200 orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: the board's headless-Chrome check, the three other scripts, and 52 cold reads across four check files. One read, J, was rerun after an answer that contradicted its own scenario.
+
+Every **Done when** item was met:
+
+- The handbook has 183 lines, and no command line appears.
+- A private-name grep of the phase diff, commit messages, plan, status, evidence, handbook and check file found 0 hits.
+
+No defect breaks the common path. For the cross-handbook integration:
+
+- Restarts never say to rerun `--print-window` after a tmux crash. This depends on the launcher.
+- Restarts do not order the resend against the tick.
+- A commit on `stop` could count as answering an unanswered round. This depends on `phase-session.md`.
+- The conflict tip is never cleared.
+- "scheduling" is defined only in the board template.
+- `phase-session.md`'s `stop` commit is unclear, and its Moving back timing to Plan is worded wrongly.

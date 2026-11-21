@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T22:03:12Z"
+state: "Review"
+changed_at: "2026-11-21T22:37:58Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "37d9146f38c531bf4a9eeb66f6d7da7c46b631b4"
+code_head: "5b8a48145a2aa1e0ef5c890d5516da78f7b785a4"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -157,6 +157,11 @@ verdicts:
     code_head: "d5c3d09a02a0fde2e434bd62895c1b3f7c888769"
     at: "2026-11-21T22:01:52Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "5b8a48145a2aa1e0ef5c890d5516da78f7b785a4"
+    at: "2026-11-21T22:37:58Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -295,3 +300,5 @@ The twenty-fourth Verify gate returned VERIFIED at `d5c3d09`. `s-stack-package` 
 The eighth Review gate returned SIGNIFICANT at `d5c3d09`, under the common-path bar. The phase moved back to Implement.
 
 The Review 8 fixes are at `37d9146`. `s-stack-package` (`3b31462`) was merged at `5f94518`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `37d9146`.
+
+The twenty-fifth Verify gate returned VERIFIED at `5b8a481`. The phase moved to Review, which covers the commits since `d5c3d09`.

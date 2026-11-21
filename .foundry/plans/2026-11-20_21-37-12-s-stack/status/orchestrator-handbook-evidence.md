@@ -198,3 +198,16 @@ Recorded and not fixed: a phase still in PR whose code moved after every pull re
 - A docs-only default-branch move leaves an already cleared `needs_update`, which matches C7.
 - No action is given for a failing planner path check.
 - The architecture page's commit is recorded after the tracker commit.
+
+## Review 3, code head `03d289910511be372577e92aa690b0088836b4a5`, SIGNIFICANT
+
+`interrogate` over the commits since `7ccd3ee`, with two adversaries on Opus and Fable in their own worktrees. The phase session checked each cold-read finding against the text and reran the git probe.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| A phase whose pull request the developer merges before the orchestrator merges the phase can never merge, because of the open-pull-request rule from `131526e`. It never reaches Done, and its dependants never start. | Opus, Fable | Two cold reads |
+| A merged phase's pane, reopened for a generated-only round, is never stopped again before Done. That starves new starts when the window is full. | Opus | Cold read |
+| The "every pull request merged" notice can reach a phase whose post-merge check failed. | Fable | Cold read |
+| A refused status-only merge sends a Done phase `merge-orchestrator-branch`. That moves its code head with no code of its own (probe D) and strands it. | Fable | Scratch-repository script, rerun; cold read |
+| A pull request whose `needs_update` was already true gets two generated-only rounds in a tick where a feature pull request lands. | Fable | Cold read |
+| The base `fix-round` and the developer's restack request have no handler that matches across the handbooks. | Opus, Fable | Cold reads |

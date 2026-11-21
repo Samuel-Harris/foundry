@@ -44,7 +44,7 @@ The package's own acceptance needs one real feature run of at least three phases
 
 **Consumers of other packages.** Unaffected. Their packages do not change.
 
-**s-stack's own tags.** CI tags `s-stack--v<version>` on `main` as each s-stack pull request merges. Until the last handbook pull request merges, a tagged version has a `SKILL.md` that names handbooks not yet on `main`. Nothing installs s-stack by default before the `default-stack` phase, so only someone who installs it directly sees an incomplete version.
+**s-stack's own tags.** CI tags `s-stack--v<version>` on `main` as each s-stack pull request merges. Until the last handbook pull request merges, a tagged version has a `SKILL.md` that names handbooks not yet on `main`. Nothing installs s-stack by default before the `default-stack` phase, so only someone who installs it directly sees an incomplete version. The developer accepted during the run that these public tags may point at an incomplete package. Tags are never moved or deleted.
 
 **Developers of Foundry.** The root manifest changes in `foundation`. After pulling it, a developer reinstalls at the root, first deleting the stale deploy output that `AGENTS.md`, "Root development manifest", lists.
 
@@ -324,7 +324,7 @@ The `board` phase builds the template to this schema and writes it as a comment 
 | `board`, `meta` | `feature`, `orchestrator_branch`, `default_branch`, `architecture_url`, `tick_at` (UTC), `stale_after_min` (40) |
 | `board`, `recent` | `items`, a list of at most 20 `{at, phase, from, to}` entries, newest first |
 | `phases`, one per phase id | `phase`, `state` (one of the seven names), `scheduling` (`queued`, `blocked`, `live` or `closed`), `waits_for`, `session_live`, `pane`, `changed_at` |
-| `prs`, one per number | `number`, `url`, `title`, `phase`, `state` (`draft`, `open`, `merged` or `closed`), `checks` (`passing`, `failing`, `pending` or `none`), `base`, `depends_on` (numbers), `review_rank`, `needs_update` |
+| `prs`, one per number | `number`, `url`, `title`, `phase`, `state` (`draft`, `open`, `merged` or `closed`), `checks` (`passing`, `failing`, `pending` or `none`), `base`, `depends_on` (numbers), `review_rank`, `needs_update` (true while the pull request does not contain `main`'s tip, see C7) |
 | `needs`, one per item | `kind` (`decision`, `prompt` or `restack`), `phase`, `summary`, `door` (`one-way`, `two-way` or `null`), `pane`, `since` |
 
 The page shows the six sections of roadmap `coordination.md`, "The status board", in that order. **Ready for your review** lists draft pull requests by `review_rank`, the lowest first. A pull request whose `depends_on` holds an unmerged number comes after that number. **Heartbeat** shows `tick_at` and marks the page stale when `tick_at` is more than `stale_after_min` minutes old. The page renders every value with `textContent`, reads on a phone, and links to `architecture_url`. Only an editor writes, and every viewer reads.
@@ -355,22 +355,56 @@ Two kinds of content are generated. No phase owns either, and nobody edits them 
 - **Lockfiles.** `packages/s-stack/apm.lock.yaml`, and from the last phase on `packages/default-stack/apm.lock.yaml`. They are regenerated with `apm install --target cursor,claude,copilot` in each affected package, then `python3 scripts/relativise_lockfiles.py` on each lockfile.
 - **Version lines.** The `version:` line of each changed package's `apm.yml`, written only by `python3 scripts/versioning.py bump`.
 
-**On a phase branch.** A phase that changes a file under `.apm/` regenerates the lockfile and commits it together with the change, because the pre-commit hook refuses a stale lockfile. A phase branch never runs `versioning.py bump`. s-stack stays at `"0.1.0"`, the version `foundation` writes, on every phase branch and on `s-stack-package`. Its version moves only on `main`, through pull request branches, and reaches `s-stack-package` when the orchestrator merges `main` in.
+**Versions on the orchestrator branch and phase branches.** No session runs `versioning.py bump` on `s-stack-package` or on a phase branch. s-stack's `version:` line there is whatever the orchestrator's latest merge of `main` brought. It is `"0.1.0"`, as `foundation` writes it, until the first s-stack pull request has merged into `main`. Phase branches take the newer value in their pre-Verify merge of `s-stack-package`.
 
-**At the orchestrator-branch merge.** Parallel phases conflict in the lockfile. [Experiment 1](#experiment-1-manifests-and-tier-1) measured why. Every list in it is sorted by path, so two branches conflict whenever their new paths fall into the same gap between existing paths, and all the handbooks and the template fall into one gap. The phase session resolves it. It merges `s-stack-package`, takes either side of each conflicted lockfile, reinstalls, relativises, and commits the lockfile alone. That commit leaves the code head unchanged ([C2](#c2-status-file-header)), so the verdicts stand, and the orchestrator merges the phase branch again. The orchestrator's merged-branch check, which runs Tier 1, proves the lockfile. A merge that also brings changes outside lockfiles does move the code head, and the gates run again as usual.
+**Resolving a conflict confined to generated files.** This is one procedure, proven in [Experiment 7](#experiment-7-merging-past-the-pre-commit-hook). The pre-commit hook runs `apm install --frozen` on a commit that concludes a merge and refuses a stale lockfile. So the lockfile is regenerated before the merge commit, and the hook stays on. `<other>` is the branch being merged in.
 
-When merging `main` into `s-stack-package` conflicts only in lockfiles, the orchestrator hands it to the live phase session that is nearest to Verify. That session merges `main` into its phase branch in its pre-Verify merge and regenerates. Once the orchestrator merges that phase, `main` merges cleanly.
+```bash
+git merge --no-ff --no-edit <other>              # stops on the conflict
+git diff --name-only --diff-filter=U             # must list only apm.lock.yaml and apm.yml files;
+                                                 # an apm.yml must conflict only on its version: line
+git checkout --theirs -- <each conflicted file>  # take <other>'s side
+for p in <each package with a conflicted file>; do
+  (cd "packages/$p" && timeout 300 apm install --target cursor,claude,copilot)
+done
+python3 scripts/relativise_lockfiles.py packages/<p>/apm.lock.yaml ...
+git add <each conflicted file>
+git commit --no-edit                             # hook on; it passes because the lockfile is current
+```
+
+If the list shows any other file, the conflict is not confined to generated files. Run `git merge --abort` and treat it as an ordinary conflict.
+
+**Who resolves it, and where.**
+
+| Merge | Who | Then |
+| --- | --- | --- |
+| `main` into `s-stack-package` | The orchestrator, on `s-stack-package` itself, with `<other>` = `main`. Before `git commit` it runs the Tier 1 suite on the resolved merge, as [Rules for every phase](#rules-for-every-phase) item 7 says, and commits only if Tier 1 passes. If Tier 1 fails, it runs `git merge --abort` and tells the developer. | A conflict in any hand-written file goes to the phase that owns the paths, as roadmap `workflow.md` says. The developer decided this during the run. |
+| `s-stack-package` into a phase branch, before Verify | The phase session, with `<other>` = `s-stack-package` | The merge commit brings other phases' files, so it is a new code head, and both gates run as usual. |
+| A phase branch into `s-stack-package` | Nobody resolves it there. The orchestrator stops the merge and sends the phase back to merge `s-stack-package` first, as roadmap `workflow.md` says. | As in the row above. |
+| `main` into a pull request branch | The PR creator, with `<other>` = `main`, followed by a new regenerate commit (step 2 below) | A regenerate-only fix round, below. |
+
+A lockfile conflict therefore normally means both gates run again on the phase branch, because the merge that resolves it also brings another phase's files. A commit that touches nothing but lockfiles leaves the code head unchanged ([C2](#c2-status-file-header)). That happens only when a phase regenerates without merging anything.
 
 **On a pull request branch.** A pull request branch is cut from `main` or from a parent pull request branch. Its tree differs from the phase branch, because other phases' files are not on `main` yet. So the phase branch's lockfile hunks are stale there, or do not apply. The PR creator handles both generated kinds this way.
 
 1. It replays each content commit without its lockfile hunks, as `git diff-tree -p --binary <c>^ <c> -- . ':(exclude)**/apm.lock.yaml' | git apply --index`, and commits with the original message and `FOUNDRY_SKIP_LOCKFILE_HOOK=1`.
-2. It ends the branch with one regenerate commit, whose subject is exactly `chore(s-stack): regenerate generated files`. That commit runs `python3 scripts/versioning.py bump` against `origin/main`, then regenerates and relativises every changed package's lockfile. It touches only `**/apm.lock.yaml` and `version:` lines.
-3. When `main` moves under an open pull request, for example because a sibling pull request merged, the pull request's lockfile and version go stale. CI's `pre-commit` and `versions` jobs then fail. The PR creator merges `main` into the branch, never force-pushing. It resolves any conflict confined to generated files by taking `main`'s side, and adds a new regenerate commit.
-4. The equality proof ([Experiment 5](#experiment-5-proving-the-pull-requests-equal-the-phase-diff)) replays every own commit except regenerate commits, and compares trees excluding `.foundry/` and `**/apm.lock.yaml`. It then checks that every regenerate commit touches only lockfiles and `version:` lines. CI's frozen-lockfile check and `versions` check on the pull request are the evidence that the generated content is right.
+2. It ends the branch with one regenerate commit, whose subject is exactly `chore(s-stack): regenerate generated files`. That commit runs `python3 scripts/versioning.py bump` against `origin/main`, then regenerates and relativises every changed package's lockfile. It touches only `**/apm.lock.yaml` and `version:` lines. It is committed with the hook on.
+3. When `main` moves under an open pull request, the PR creator merges `main` into the branch, never force-pushing. It resolves a generated-only conflict with the procedure above, then adds a new regenerate commit. When a parent pull request was squash-merged into `main`, the merge also conflicts on the parent's own files, because the child no longer descends from `main`. For each file in `git diff --name-only origin/main...<parent branch>`, the PR creator keeps the child's side with `git checkout --ours`, because the child's branch already holds the parent's change.
+4. It runs the equality proof in the form of Experiment 7. That proof replays every own commit except regenerate commits and compares trees, excluding `.foundry/`, lockfiles and `version:` lines. It then checks that every regenerate commit touches only lockfiles and `version:` lines. A squash-merged dependency is still excluded through its kept branch ref.
 
-Step 3 is a regenerate-only fix round, which the developer decided during the run (option B). The orchestrator sends a `fix-round` message that says generated files only. The PR creator repeats steps 3 and 4, the phase stays in PR, and no gate runs again. A failed check for any other reason is an ordinary fix round, as roadmap `workflow.md` defines it.
+[Experiment 6](#experiment-6-generated-files-on-a-pull-request-branch) proved steps 1 to 3 on real lockfiles.
 
-[Experiment 6](#experiment-6-generated-files-on-a-pull-request-branch) proved steps 1 to 4 on real lockfiles.
+**CI does not notice a moved `main`.** Pull request CI runs on `pull_request` events, and GitHub does not run it again when the base branch moves. `main` is unprotected and allows squash merges only, so two s-stack pull requests that both raise s-stack to the same version both merge. The push check on `main` then fails, and the `tag` job is skipped. The orchestrator therefore owns this duty, for this run and in its handbook. After any merge into `main` that touches `packages/`, its next tick does three things.
+
+- It sends a `fix-round` message, marked generated files only, for every open s-stack pull request.
+- It sets that pull request's `needs_update` to true on the board.
+- It clears `needs_update` only when `git merge-base --is-ancestor origin/main <pull request head>` succeeds and the pull request's checks have run on that head.
+
+A pull request is ready for the developer to merge only when its `needs_update` is false.
+
+A regenerate-only fix round is the developer's option B. The PR creator does steps 3 and 4, the phase stays in PR, and no gate runs again. A failed check for any other reason is an ordinary fix round, as roadmap `workflow.md` defines it.
+
+**How the handbooks carry this.** `pr-creator.md` teaches the regenerate commit, the squash-merge resolution and the regenerate-aware equality proof as general behaviour. Any repository with lockfiles meets the same problem. The handbook takes the generated paths, the regenerate command and the commit subject from the feature plan, and for this run they are the ones above. The code-head exemption is option B, a decision for this run only, and no handbook states it as a general rule.
 
 ## Phases
 
@@ -425,7 +459,7 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 
 **Depends on.** `foundation`.
 
-**Owns.** `packages/s-stack/.apm/skills/sam-mode/scripts/**`, `packages/s-stack/tests/**`, `.github/workflows/ci.yml`, `AGENTS.md` while the middle phases run, and `tests/s-stack/verify-s-stack/checks/launcher.md`. No other middle phase edits `AGENTS.md`.
+**Owns.** `packages/s-stack/.apm/skills/sam-mode/scripts/**`, `packages/s-stack/tests/**`, `.github/workflows/ci.yml`, `AGENTS.md` while the middle phases run, and `tests/s-stack/verify-s-stack/checks/launcher.md`. No other middle phase edits `AGENTS.md`. `AGENTS.md` passes from `foundation` to `launcher` when the orchestrator starts `launcher`. If a `foundation` fix round then needs `AGENTS.md`, that edit waits until `launcher` has merged into `s-stack-package`. The orchestrator then tells `foundation`'s session that the file is back with it, so no two sessions edit it at the same time.
 
 **Exclusive resources.** None. The tests must never use the developer's tmux server or workmux state.
 
@@ -460,7 +494,7 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 
 ### Phase `orchestrator-handbook`
 
-**Scope.** Write `handbooks/orchestrator.md` from roadmap `roles.md` (Orchestrator), `coordination.md` (the tracker, the tick, the board, the architecture page, permission prompts, restarts, parallel work) and `workflow.md` (branches and fix rounds). It points to p-stack's Orchestrate playbook for supervision and states only the differences. It owns the tick checklist, the push notification and both pages. It calls the launcher only through [C4](#c4-launcher-command-line), and points to the board schema in the template rather than copying it. From [Experiment 3](#experiment-3-page-writes-and-permission-prompts), it says to update the architecture page by editing its file and then publishing the same path, never by a publish that carries inline edits.
+**Scope.** Write `handbooks/orchestrator.md` from roadmap `roles.md` (Orchestrator), `coordination.md` (the tracker, the tick, the board, the architecture page, permission prompts, restarts, parallel work) and `workflow.md` (branches and fix rounds). It points to p-stack's Orchestrate playbook for supervision and states only the differences. It owns the tick checklist, the push notification and both pages. It calls the launcher only through [C4](#c4-launcher-command-line), and points to the board schema in the template rather than copying it. From [Experiment 3](#experiment-3-page-writes-and-permission-prompts), it says to update the architecture page by editing its file and then publishing the same path, never by a publish that carries inline edits. From [C7](#c7-generated-files-and-versions), it gives two duties as general behaviour. The first is the tick duty after a merge into the default branch, with the `needs_update` rule and the readiness rule. The second is resolving a conflict confined to generated files when the orchestrator merges the default branch into the orchestrator branch, using the repository's own regenerate and check commands from the feature plan. The handbook does not resolve any other conflict.
 
 **Depends on.** `foundation`.
 
@@ -474,7 +508,8 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 
 - [ ] The handbook is 200 lines or fewer, and names no workmux, tmux or `claude` command line.
 - [ ] A fresh subagent, given the handbook, the reference file and a sample tracker with three sample status files (placeholder data), lists the actions of one tick correctly. That means which phase it starts, which it merges, which it does not merge because a verdict names an old code head, and which board documents it writes.
-- [ ] `checks/orchestrator-handbook.md` holds that scenario and its expected answers, so a later verifier can rerun it.
+- [ ] A fresh subagent, given the handbook and a scenario in which a sibling pull request has just merged into `main`, says which pull requests get a generated-only fix round, which become `needs_update`, and when each is ready to merge again.
+- [ ] `checks/orchestrator-handbook.md` holds both scenarios and their expected answers in its `## Rerun` section, so a later verifier can rerun them.
 
 ### Phase `phase-handbooks`
 
@@ -503,7 +538,7 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 
 ### Phase `pr-handbook`
 
-**Scope.** Write `handbooks/pr-creator.md` from roadmap `workflow.md`, "Pull requests". It holds the `gh stack` commands and the base rule for each dependency case. It runs p-stack's `summarise-pr` itself ([Experiment 2](#experiment-2-nested-subagents)). It covers one writer for each pull request, never force-pushing, restacks only on request, and the equality proof from [Experiment 5](#experiment-5-proving-the-pull-requests-equal-the-phase-diff), written as commands in the handbook, not as a script (roadmap `package.md`, maintenance rule 6).
+**Scope.** Write `handbooks/pr-creator.md` from roadmap `workflow.md`, "Pull requests". It holds the `gh stack` commands and the base rule for each dependency case. It runs p-stack's `summarise-pr` itself ([Experiment 2](#experiment-2-nested-subagents)). It covers one writer for each pull request, never force-pushing, restacks only on request, and the equality proof in the regenerate-aware form of [Experiment 7](#experiment-7-merging-past-the-pre-commit-hook), written as commands in the handbook, not as a script (roadmap `package.md`, maintenance rule 6). It teaches the C7 pull request branch steps as general behaviour, as [C7](#c7-generated-files-and-versions) says.
 
 **Depends on.** `foundation`.
 
@@ -516,8 +551,13 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 **Done when.**
 
 - [ ] The handbook is 200 lines or fewer.
-- [ ] The equality proof commands, copied from the handbook and run in a scratch repository like the one in Experiment 5, print `EQUAL` for a correct split. They fail for a split that drops a change, for one that adds a change, and for one that adds a file under `.foundry/`.
-- [ ] `checks/pr-handbook.md` builds that scratch repository and runs the four cases.
+- [ ] The equality proof commands, copied from the handbook and run in a scratch repository like the one in Experiment 7, give these results.
+  - [ ] A correct split, with regenerate commits, prints `EQUAL`.
+  - [ ] The same split, after its parent was squash-merged into `main` and the child merged `main` and regenerated, prints `EQUAL`, with the parent excluded through its kept branch ref.
+  - [ ] A split that drops a change fails, and so does one that adds a change.
+  - [ ] A pull request branch with a file under `.foundry/` fails.
+  - [ ] A regenerate commit that changes a file outside generated files fails, and so does one that changes an `apm.yml` line other than `version:`.
+- [ ] `checks/pr-handbook.md` builds that scratch repository and runs every case above in its `## Rerun` section.
 
 ### Phase `spec-planner-handbooks`
 
@@ -576,8 +616,9 @@ These apply the roadmap's rules to Foundry.
 - **Base.** `foundation`'s second pull request depends on its first, so it joins the first one's `gh stack`. A middle phase's pull request depends on each `foundation` pull request still open when its PR creator runs, because it needs the package and adds a file under `tests/s-stack/verify-s-stack/checks/`. With both still open, that is two dependencies, so under roadmap `workflow.md`'s base rule it targets `main`, its branch contains their commits, and its description lists them. With only the second still open, it can stack on that one when nothing else is stacked there yet. With neither open, it targets `main` with no dependency. The six middle phases never depend on each other.
 - **Merge order on `main`.** `foundation`'s package pull request merges first. The developer merges the rest in any order, and `default-stack` merges last.
 - **Versions.** See [C7](#c7-generated-files-and-versions).
-- **Equality.** The PR creator runs the proof from Experiment 5, with the generated-file rules in [C7](#c7-generated-files-and-versions), before it reports, and records the output as evidence in the status file.
+- **Equality.** The PR creator runs the proof in the form of Experiment 7, with the generated-file rules in [C7](#c7-generated-files-and-versions), before it reports, and records the output as evidence in the status file.
 - **Generated files.** Every pull request branch that changes a package ends with a regenerate commit, as C7 says.
+- **Ready to merge.** A pull request is ready for the developer to merge only when its `needs_update` is false (C7).
 
 ## Verification
 
@@ -594,7 +635,7 @@ The prose phases are also proven by the first real feature run, which is outside
 
 ## Experiments
 
-The roadmap's `package.md` lists five questions for the planner, and the orchestrator's review raised a sixth. Each was settled by experiment on 21 November 2026 with Claude Code 2.1.330, apm-cli 0.32.0, tmux 3.8 and workmux on macOS. Every experiment ran in a throwaway worktree, a scratch repository or a private tmux server. Nothing was pushed, and the test pages hold placeholder data only.
+The roadmap's `package.md` lists five questions for the planner, and the orchestrator's reviews raised two more. Each was settled by experiment on 21 November 2026 with Claude Code 2.1.330, apm-cli 0.32.0, tmux 3.8 and workmux on macOS. Every experiment ran in a throwaway worktree, a scratch repository or a private tmux server. Nothing was pushed, and the test pages hold placeholder data only.
 
 ### Experiment 1. Manifests and Tier 1
 
@@ -686,6 +727,47 @@ The tree comparison cannot see `.foundry/`, because it excludes that path, so bo
 - The equality proof, excluding regenerate commits and lockfiles, printed `EQUAL`, and the regenerate commit touched only lockfiles.
 - A sibling branch adding `handbooks/phase-session.md` was then merged into `sim-main`. Merging `sim-main` into the pull request branch conflicted in both lockfiles and nowhere else. Taking `sim-main`'s side and adding a new regenerate commit left the lockfiles current again, and the equality proof again printed `EQUAL`.
 - Not exercised. The version bump stayed a no-op, because the real `origin/main` has no s-stack.
+
+### Experiment 7. Merging past the pre-commit hook
+
+**Question.** Raised in the orchestrator's second review. How does a merge with a lockfile conflict get past the pre-commit hook? And does the equality proof hold once pull request branches carry regenerate commits?
+
+**Answer.** Regenerate before the merge commit, and keep the hook on. Measured before `7e04846`, on the Experiment 1 worktree, merging `exp-d-adjacent-Y` into `exp-d-adjacent-X`.
+
+- Taking `--theirs` of both lockfiles and running `git commit --no-edit` with the hook on exited 1, printing `pre-commit: lockfile diff for packages/default-stack`. The hook runs on a commit that concludes a merge, and no `pre-merge-commit` hook exists.
+- Taking `--theirs`, reinstalling both packages, relativising, `git add` and `git commit --no-edit` with the hook on exited 0. It produced one merge commit with two parents.
+- Tier 1 runs on a resolved merge before it is committed. With the merge resolved and staged but not committed, Tier 1 printed `all Tier 1 structural checks passed across 20 packages` in 175 seconds. The merge was still in progress afterwards, and `git commit --no-edit` with the hook on then exited 0.
+
+The regenerate-aware proof ran in a scratch repository. That repository had a package with an `apm.lock.yaml` and an `apm.yml` holding a `version:` line. Its phase branch had lockfile changes inside content commits, plus status commits. Its pull request branches ended with regenerate commits, and one was stacked on another phase's open pull request.
+
+| Case | Result |
+| --- | --- |
+| Correct split with regenerate commits | `EQUAL`, exit 0 |
+| Parent squash-merged into `main` with its branch ref kept, then the child merged `main` keeping its own side for the parent's file, and regenerated | `EQUAL`, exit 0 |
+| A regenerate commit that also changes `b.txt` | That commit is named, exit 1 |
+| A regenerate commit that changes `deps:` in `apm.yml` | That commit and line are named, exit 1 |
+| One pull request left out | `a.txt` listed, exit 1 |
+| Control after resetting the bad commits | `EQUAL`, exit 0 |
+
+```bash
+# <orch> <phase> <default> <pr>:<dep,dep> ...   own commits exclude <default> and every dependency's branch ref
+REGEN='^chore(s-stack): regenerate generated files$'
+base=$(git merge-base "$orch" "$phase"); idx=$(mktemp); GIT_INDEX_FILE=$idx git read-tree "$base"
+for spec in "$@"; do
+  pr=${spec%%:*} deps=${spec#*:}; excl=(^"$default"); [ -n "$deps" ] && for d in ${deps//,/ }; do excl+=(^"$d"); done
+  for c in $(git rev-list --reverse --no-merges "$pr" "${excl[@]}" --invert-grep --grep="$REGEN"); do
+    git diff-tree -p --binary "$c^" "$c" -- . ':(exclude)**/apm.lock.yaml' | GIT_INDEX_FILE=$idx git apply --cached
+  done
+  for c in $(git rev-list --no-merges "$pr" "${excl[@]}" --grep="$REGEN"); do
+    git diff-tree --no-commit-id --name-only -r "$c" | grep -v -E '(^|/)apm\.(lock\.yaml|yml)$'   # must print nothing
+    git diff -U0 "$c^" "$c" -- '*apm.yml' | grep -E '^[-+]' | grep -v -E '^(\+\+\+|---) |^[-+]version: '   # must print nothing
+  done
+  git diff --name-only "$default"..."$pr" -- .foundry   # must print nothing
+done
+r=$(GIT_INDEX_FILE=$idx git write-tree); rm -f "$idx"
+git diff --stat --exit-code "$r" "$phase" -- . ':(exclude).foundry' ':(exclude)**/apm.lock.yaml' ':(exclude)**/apm.yml'
+git diff -U0 "$r" "$phase" -- '*apm.yml' | grep -E '^[-+]' | grep -v -E '^(\+\+\+|---) |^[-+]version: '   # must print nothing
+```
 
 ## Decisions taken by the planner
 

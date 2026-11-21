@@ -14,7 +14,7 @@ The launcher gives every session a fixed name. The name is the session's address
 | Spec writer, roadmap update | `<feature>-spec-<n>` | Its own, named as the session |
 | Phase session | `<feature>-phase-<phase>` | Its own, named as the session |
 
-The developer starts a feature by typing `/sam-mode start <feature>` in any Claude Code session in the repository. That session runs the launcher for the spec writer and does nothing else. The first spec writer ends once the orchestrator has started, so the feature worktree has one live session at a time.
+The developer starts a feature by typing `/sam-mode start <feature>` in any Claude Code session in the repository. That session runs the launcher for the spec writer and does nothing else. The launcher creates the feature worktree with its own tmux window, and the spec writer runs there. The first spec writer ends once the orchestrator has started, so the feature worktree has one live session at a time.
 
 ## The launcher
 
@@ -22,17 +22,17 @@ The launcher is one script. It is the only part of s-stack that knows the workmu
 
 It takes the feature, the role, the phase for a phase session, and the tmux window to use. It then does this:
 
-1. It creates the role's worktree when the worktree does not exist, with `workmux add --headless`, so the project's workmux file operations and hooks run. It cuts the feature worktree from the default branch and every other worktree from the orchestrator branch.
-2. It splits a new pane in the given window and tiles the window again.
-3. It starts `claude --name <session name>` in that pane with the role's first prompt.
+1. It creates the role's worktree when the worktree does not exist. For the feature worktree it uses `workmux add`, which also opens the feature's own tmux window. For every other role it uses `workmux add --headless`. Both run the project's workmux file operations and hooks. It cuts the feature worktree from the default branch and every other worktree from the orchestrator branch.
+2. For every session after the feature's first, it splits a new pane in the feature window and tiles the window again.
+3. It starts `claude --name <session name>` in the pane with the role's first prompt.
 
 The first prompt is fixed text built from the launcher's inputs. It is `/sam-mode <role>`, followed by the feature, the phase, the roadmap path, the plan path and the orchestrator's session name. The orchestrator writes no brief. Everything specific to a phase is in the feature plan.
 
 The launcher guarantees these things:
 
-- It never opens a new tmux window.
+- It opens one tmux window for a feature, the feature worktree's own. Every other session is a pane in that window.
 - It starts at most one live session for a name. When one is alive, it reports the pane and changes nothing.
-- When the worktree exists and no session is alive, it starts a new session there under the same name.
+- When the worktree exists and no session is alive, it starts a session there under the same name. It resumes the last conversation with `claude --continue`, unless it is told to start a fresh session.
 - It takes the window as an input. The orchestrator records its own window when it starts, because a command run from a subagent or a background task can lack `$TMUX_PANE`.
 - It reports tmux's error when the window has no room for another pane.
 - It fails with a clear message when tmux, workmux or the `claude` command is missing.
@@ -163,13 +163,26 @@ On each tick, and whenever a session reports that it is blocked, the orchestrato
 
 ## Restarts
 
-| Session | A restart loses | The new session rebuilds from |
-| --- | --- | --- |
-| Orchestrator | Its conversation and the tick | The tracker, the status files, `workmux status` and the forge. It arms the tick again. |
-| Phase session | Its conversation | The phase plan, the status file and the phase branch |
-| Planner or spec writer | Its conversation | Its committed files |
+A restart keeps a session's name, so every other session keeps the same address. It also keeps the session's conversation where it can.
 
-The launcher starts the new session under the same name, so every other session keeps the same address. A message sent while a session was down is lost. The sender's committed file still holds the fact, and the next tick finds it.
+**One session ended, and tmux kept running.** The orchestrator starts the session again with the launcher. The developer does the same for the orchestrator. The launcher resumes the session's last conversation. It starts a fresh session in two cases. The old conversation is the problem, as when a session stalled. Or a phase needs more work long after its session ended.
+
+**tmux or the computer crashed.** Every session is gone. The developer runs `workmux resurrect` in the repository and then tells the orchestrator to recover. `workmux resurrect` reopens the feature window and resumes the orchestrator's conversation under the same name. The orchestrator arms the tick again and reconciles as it does in a tick. It then starts each phase session that still has work through the launcher, which resumes each conversation.
+
+`workmux resurrect` has two limits:
+
+- It restores a session only when the session ran in the workmux window of its own worktree. The orchestrator does, which is why the feature worktree has its own window. A phase session is a pane in that window with a worktree of its own, so `workmux resurrect` ignores it and the launcher brings it back.
+- It restarts an agent only where the project's workmux layout starts one. In a repository whose layout starts none, the developer starts the orchestrator with the launcher.
+
+The files stay the record after any restart, so a session reads them again before it continues:
+
+| Session | After a restart it reads again |
+| --- | --- |
+| Orchestrator | The tracker, the status files, `workmux status` and the forge |
+| Phase session | The phase plan, the status file and the phase branch |
+| Planner or spec writer | Its committed files |
+
+A message sent while a session was down is lost. The sender's committed file still holds the fact, and the next tick finds it.
 
 ## Parallel work
 

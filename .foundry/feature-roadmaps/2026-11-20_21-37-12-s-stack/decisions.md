@@ -62,7 +62,7 @@ The developer decided in two sittings on 20 November 2026. "In the interview" me
 - **Door.** Two-way.
 - **Decided by.** The spec writer.
 - **Decision.** [coordination.md](coordination.md#session-names) lists the names. The launcher passes each one to `claude --name`.
-- **Why.** Claude Code names an unnamed session itself, and the name changes when the session restarts (R4). A session started twice with `--name sstack-name-probe` was listed under that exact name both times (X3).
+- **Why.** Claude Code names an unnamed session itself, and the name changes when the session restarts (R4). A session started twice with `--name sstack-name-probe` was listed under that exact name both times (X3). A session that is resumed with `claude --continue` keeps the name too (X12).
 
 ## D8. s-stack ships prose, one launcher and one status board template
 
@@ -155,6 +155,16 @@ The developer decided in two sittings on 20 November 2026. "In the interview" me
 - **Decision.** [coordination.md](coordination.md#the-architecture-page) lists what the page shows and when it changes.
 - **Why these rules.** In November the developer asked four times for this page to be updated (R5), so its updates are steps of the tick. That page and the status page used different words for progress and were updated at different times (B3), so this page uses two words and links to the status board for the rest. A subagent writes it, because the orchestrator's context filled up in November (R13).
 - **Rejected.** A template, because each feature's architecture differs. An update on every tick, because the page changes only when a phase merges or the roadmap changes.
+
+## D20. After a crash, `workmux resurrect` restores the orchestrator and the launcher resumes the rest
+
+- **Door.** Two-way.
+- **Decided by.** The developer asked on the pull request whether `workmux resurrect` can recover a restart. The spec writer tested it and chose the split below.
+- **Decision.** [coordination.md](coordination.md#restarts) states it.
+- **What the tests showed.** After a simulated tmux crash, `workmux resurrect` restored a session that ran in the workmux window of its own worktree, with its conversation and its name (X10, X11). It ignored a session that ran as a pane with a worktree of its own, which is how the launcher starts a phase session (X10). A session started again with `claude --continue` keeps its conversation and the name it was given (X12).
+- **Why this split.** One command brings back the orchestrator, and the orchestrator brings back the rest. Every session keeps its conversation, which the first versions of this roadmap lost on every restart. The sessions stay panes in one window, as the developer asked.
+- **Consequence.** The feature worktree has its own workmux window. Starting a feature from another window opens that one new window.
+- **Rejected.** A workmux window for every session. `workmux resurrect` would then restore all of them, but the developer wants new sessions as panes in the current window. A fresh session on every restart, because it discards a conversation that `--continue` can keep.
 
 ## Answers to the first draft's open questions
 

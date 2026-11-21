@@ -96,6 +96,14 @@ The spec writer ran these on 20 November 2026 in the worktree `foundry__worktree
 
 **X9. Removing a worktree deletes its ignored files without a warning.** In a scratch repository, `git worktree remove` exited 0 for a worktree that held an ignored `.foundry/roadmap.md`, and the file was gone. For a worktree with an untracked file that was not ignored, the same command refused with "contains modified or untracked files, use --force to delete it".
 
+The next three tests ran on 21 November 2026 in a separate tmux server, so the developer's own sessions were untouched. Killing that server stood in for a tmux crash.
+
+**X10. `workmux resurrect` restores only a session in the workmux window of its own worktree.** Three sessions ran in the test server. `workmux add` started the first in its own window. The second was started with `claude --name` in a plain tmux window. The third was started with `claude --name` as a pane of the first session's window, in a headless worktree of its own, which is how the launcher starts a phase session. The server was killed and started again. `workmux resurrect --dry-run` listed the first worktree as "restoring" and counted the other two under "unmatched state file(s) ignored".
+
+**X11. What `workmux resurrect` restores.** In the same server, `workmux resurrect` printed "Restored 2 worktree(s)". Each worktree came back as its own window with the project's pane layout. The process list showed `claude --continue`, and the restored pane showed the session's earlier exchange. A second run tested the orchestrator's case. A session was started with `claude --name sstack-orch-named` as a pane in the workmux window of its own worktree, after that window's first agent had ended. After a crash and `workmux resurrect`, the restored pane showed that session's conversation, and `ListAgents` listed `sstack-orch-named`.
+
+**X12. `claude --continue` keeps the conversation and the name.** `claude --name sstack-res-probe3 --continue "<prompt>"`, run in the worktree of an ended session, showed the earlier exchange, answered from it, and appeared in `ListAgents` as `sstack-res-probe3`. `claude --continue` with no `--name`, run in the worktree of a session first started with `--name sstack-res-probe`, appeared as `sstack-res-probe`. Two sessions that never had a name came back with a new random suffix each time.
+
 ## Tools
 
 **T1. workmux has no mode for a pane in the current window.** Checked. `workmux add --help` offers `--mode` with the values `window` and `session`. `--headless` creates the worktree "without a multiplexer target".
@@ -107,6 +115,8 @@ The spec writer ran these on 20 November 2026 in the worktree `foundry__worktree
 **T4. `gh stack`.** Checked. `gh stack link --help` says that arguments "that belong to a different stack are rejected". The instructions for `gh stack` in one of the developer's private repositories state two rules. A stack is strictly linear, so a pull request has one parent and at most one child, and parallel work goes in separate stacks. A stack is planned before any file is written, and a finished change is not split into a stack afterwards. `gh stack submit --auto` opens draft pull requests.
 
 **T5. `claude --add-dir`.** Checked. `claude --help` describes it as "More directories Claude can access".
+
+**T6. How `workmux resurrect` works.** Checked in `workmux docs`. It reads workmux's agent state files, "Matches each state file's working directory to a git worktree in the current repo", "Skips worktrees that are already open or no longer exist", and "Opens each matched worktree with `--continue` to resume the agent". That it restarts an agent only where the project's pane layout starts one is an inference from R2, not a test.
 
 ## Foundry
 

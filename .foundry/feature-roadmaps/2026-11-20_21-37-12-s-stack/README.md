@@ -67,7 +67,7 @@ The developer named the first four requirements in the interview. The last two f
 | No upkeep reminders | The developer never asks the orchestrator to update the status board, the architecture page or the roadmap. |
 | Early first pull request | The first phase's draft pull requests are open while at least one other phase is still in Implement. |
 | Two contact points | The developer types only into the spec writer and orchestrator panes. The exceptions are a permission prompt and a phase session that the developer chooses to visit. |
-| Survives restarts | Kill the orchestrator pane and one phase pane mid-run, then start both again with the launcher. Each returns under the same session name. The status board shows the same phase states as the status files, and no report is lost. |
+| Survives restarts | Kill one phase pane mid-run and start it again with the launcher. Then kill the tmux server, run `workmux resurrect`, and tell the orchestrator to recover. Every session returns under the same name with its conversation. The status board shows the same phase states as the status files, and no report is lost. |
 | No skipped gate | Every phase merged into the orchestrator branch has a verifier verdict and a reviewer verdict for the merged code head. |
 | The developer reviews what agents verified | For every phase, the pull requests together contain exactly the verified phase diff. |
 
@@ -116,6 +116,7 @@ s-stack leaves these out:
 | D17 | No fixed limit on live phase sessions. Dependencies and exclusive resources bound parallel work. |
 | D18 | Review feedback reaches a phase through the orchestrator, from the developer or from the pull request. |
 | D19 | The orchestrator keeps an architecture page current. |
+| D20 | After a crash, `workmux resurrect` restores the orchestrator, and the launcher resumes the other sessions. |
 
 ## Where to read next
 

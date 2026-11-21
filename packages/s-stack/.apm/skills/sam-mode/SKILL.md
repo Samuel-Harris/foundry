@@ -1,6 +1,6 @@
 ---
 name: sam-mode
-description: "Run one large feature as a group of cooperating Claude Code sessions (a spec writer, an orchestrator, a planner and one session for each phase), each in its own git worktree and tmux pane, with verified and reviewed draft pull requests for each phase. Use for /sam-mode start <feature> or /sam-mode <role>. Needs Claude Code with cross-session messaging, tmux and workmux. Not for small patches or minor bug fixes, which one poteto-mode session handles."
+description: "Run one large feature as a group of cooperating Claude Code sessions (a spec writer, an orchestrator, a planner and one session for each phase), each in its own git worktree and tmux pane, with verified and reviewed draft pull requests for each phase. Use for /sam-mode start <feature> or /sam-mode <role>. Needs Claude Code with cross-session messaging, tmux, workmux and `gh stack`. Not for small patches or minor bug fixes, which one poteto-mode session handles."
 ---
 
 # Sam mode
@@ -13,11 +13,11 @@ Use it for a large feature that splits into several phases, some of which can ru
 
 ## First, read poteto-mode
 
-Read `../poteto-mode/SKILL.md`, relative to this skill's directory, before anything else. `poteto-mode` sets `disable-model-invocation: true`, so the Skill tool cannot load it. Follow it for how to work. The handbook for your role adds only what is specific to s-stack.
+Read `../poteto-mode/SKILL.md`, relative to this skill's directory, before anything else. The one exception is `/sam-mode start <feature>`, which runs the launcher and nothing else, without reading `poteto-mode`. `poteto-mode` sets `disable-model-invocation: true`, so the Skill tool cannot load it. Follow it for how to work. The handbook for your role adds only what is specific to s-stack.
 
 ## The invocation
 
-Three placeholders recur. `<feature>` is the feature's kebab-case name, `<id>` is the roadmap's directory name `<date-time>-<feature>`, and `<phase>` is a phase id from the feature plan.
+Three placeholders recur. `<feature>` is the feature's kebab-case name. It must not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>`, because session names join their parts with hyphens. `<id>` is the roadmap's directory name `<date-time>-<feature>`, and `<phase>` is a phase id from the feature plan.
 
 There are two forms.
 
@@ -25,6 +25,17 @@ There are two forms.
 - `/sam-mode <role> feature=<feature> phase=<phase> update=<n> roadmap=<path> plan=<path> orchestrator=<feature>-orchestrator`. This is the first prompt the launcher types, and `-` means an empty value. Take the role, read its handbook, then read the roadmap and the plan the prompt names.
 
 `update` is a roadmap update number, set only for a spec writer that edits an existing roadmap. `roadmap` is the feature roadmap's directory and `plan` the feature plan's `README.md`, each `-` until it exists. `orchestrator` is the orchestrator's session name, the address for every report.
+
+## Starting a session
+
+Start every session after the first spec writer from a main session, never from a subagent, because a subagent can lack the pane. Run these two commands from the worktree root:
+
+```bash
+<this skill's directory>/scripts/launch.sh --print-window
+<this skill's directory>/scripts/launch.sh --feature <feature> --role <role> [--phase <phase>] [--update <n>] --window <window id>
+```
+
+The first prints `window=<window id>` for your own pane. Pass that value to the second. If either command fails, report its exit code and standard error, and do not start the session another way.
 
 ## Roles and handbooks
 
@@ -61,7 +72,8 @@ Main sessions take the role from their first prompt. Subagent roles have no laun
 | Status board and architecture page | Published pages, addresses in the tracker | Orchestrator |
 
 - Every file under `.foundry/` has one writer.
-- A commit never mixes files under `.foundry/` with other files.
+- A commit never mixes files under `.foundry/` with other files. The exception is a merge of another branch, which brings both. A merge of the orchestrator branch always does.
+- `run-decisions.md` records the decisions taken during the run. Each row amends the roadmap until a roadmap update folds it in.
 - Git tracks `.foundry/` on the orchestrator branch and every branch cut from it. A pull request branch never contains it. A repository that uses s-stack must not ignore it.
 
 ### States
@@ -78,12 +90,14 @@ Every phase moves through Spec, Plan, Implement, Verify, Review, PR and Done.
 | --- | --- | --- |
 | Default branch | Resolved from the repository | |
 | Orchestrator branch | `<feature>` | The default branch, when the feature starts |
+| Planner branch | `<feature>-planner` | The orchestrator branch, when the planner starts |
+| Update spec writer branch | `<feature>-spec-<n>` | The orchestrator branch, when the update starts |
 | Phase branch | `<feature>-phase-<phase>` | The orchestrator branch, when the phase starts |
 | Pull request branch | The repository's convention | The default branch, or the branch of the pull request it depends on |
 
 Never assume the default branch is `main`. Resolve it, for example with `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`.
 
-The orchestrator branch and every phase branch carry `.foundry/`. Push neither to a public remote unless the developer says so. Pull request branches never contain `.foundry/`, and the PR creator pushes them.
+The orchestrator branch and every branch cut from it carry `.foundry/`. Push none of them to a public remote unless the developer says so. Pull request branches never contain `.foundry/`, and the PR creator pushes them.
 
 ### Pull requests
 

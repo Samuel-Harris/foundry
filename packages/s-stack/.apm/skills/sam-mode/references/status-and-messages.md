@@ -15,7 +15,7 @@ A status file holds these facts about one phase:
 
 The phase session writes its status file at `.foundry/plans/<id>/status/<phase>.md` from its first commit, and commits it on its phase branch. The orchestrator reads it through git, for example with `git show <phase branch>:<path>`, so no session reads or writes outside its own worktree.
 
-The header is the YAML between the file's first two `---` lines. Notes go below it in Markdown. A program reads the header and ignores the notes. Every key is always present. An empty list is `[]`, and an absent value is `null`. Every string value is double-quoted, exactly as `json.dumps` writes it, including states, times, SHAs and ids, so a colon or a comma in free text cannot break the YAML. Numbers, booleans, `null` and lists are bare. Comments in the example below are explanation only, and a real header has none.
+The header is the YAML between the file's first two `---` lines. Notes go below it in Markdown. A program reads the header and ignores the notes. Every key is always present. An empty list is `[]`, and an absent value is `null`. Every string value is double-quoted, exactly as `json.dumps` writes it, including states, times, SHAs and ids, so a colon or a comma in free text cannot break the YAML. Keep characters outside the Basic Multilingual Plane, such as emoji, out of header strings, because `json.dumps` writes them as surrogate pairs that a YAML reader does not join. Numbers, booleans, `null` and lists are bare. Comments in the example below are explanation only, and a real header has none.
 
 ```yaml
 ---

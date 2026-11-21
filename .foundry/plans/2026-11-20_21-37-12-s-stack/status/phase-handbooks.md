@@ -1,10 +1,10 @@
 ---
 phase: "phase-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T18:22:37Z"
+state: "Verify"
+changed_at: "2026-11-21T18:23:32Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
-code_head: "771ac5da563603602759cd6a1b18acd7a6123760"
+code_head: "8e258caf80c51a48ee2b2c42e7f75ed9a09e17a9"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -148,3 +148,4 @@ Fix bbd35bd: the move-back rule asks only about gates already passed, a stale VE
 The orchestrator withdrew the no-verdict move-back rule before any verifier started. Back to Implement to delete it, keeping the resend wording and the rework-after-Done path.
 Fix 52afb2a drops the no-verdict move-back rule. bbd35bd's other fixes stand. Verify returned VERIFIED at 52afb2a. Review returned SIGNIFICANT at 52afb2a: the resend condition omitted that every pull request, new ones included, must have merged into the default branch. Back to Implement.
 Fix 771ac5d: the merged notice is resent only once every pull request, new ones included, has merged into the default branch, the status shows PR and the code head is merged into the orchestrator branch. Verify returned NOT VERIFIED at 771ac5d: phase-session.md alone allowed an early Done between moving to PR and recording the new pull request. Back to Implement.
+Fixes 52bc3da and 8e258ca: PR step 4 now says the orchestrator merges a phase it has merged before only while that phase lists an open pull request, in the orchestrator's words, so the notice cannot come before the new pull request is recorded.

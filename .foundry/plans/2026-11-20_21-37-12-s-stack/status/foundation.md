@@ -1,10 +1,10 @@
 ---
 phase: "foundation"
-state: "Implement"
-changed_at: "2026-11-21T15:04:05Z"
+state: "Verify"
+changed_at: "2026-11-21T15:07:33Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
-code_head: "b27c4f18e17a1e0492274a936810619ab28a708c"
+code_head: "50e26eebaa31524a81e0cc00d99edf4bdad0e2dc"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -43,11 +43,15 @@ decisions:
     decision: "Answer to foundation-r2 from the orchestrator, outcome option A. json.dumps with ensure_ascii=False round-trips emoji, accented letters, colons, backslashes and U+0001 through PyYAML, but PyYAML rejects DEL (U+007F) and reads NEL (U+0085) as a space. So the reference keeps characters outside the Basic Multilingual Plane out of header strings, and the C2 check allows that sentence."
     door: "two-way"
     at: "2026-11-21T14:51:35Z"
+  - id: "foundation-d3"
+    decision: "verify-s-stack check 5 parses CommonMark with markdown-it-py, declared and pinned as markdown-it-py==4.0.0 in inline PEP 723 metadata and run with uv run --no-project, as scripts/pstack_upstream.py does. Three regular-expression parsers each mis-read some Markdown, and the orchestrator ruled out borrowing markdown-it-py from apm-cli's rich dependency, which a fresh clone or an apm-cli bump could lose."
+    door: "two-way"
+    at: "2026-11-21T15:07:33Z"
 ---
 
 # Phase `foundation` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The first Review gate returned SIGNIFICANT at 0f4bf86. The fix round (ce16529, c68877a, b27c4f1) repaired the verification files and added the foundation-d2 sentence. s-stack-package was merged at 5b346fa. The third Verify gate returned VERIFIED at b27c4f1. The second Review gate, over the commits since 0f4bf86, returned SIGNIFICANT at b27c4f1: the link checker's new fence stripping hides real links. The phase is back in Implement to parse Markdown properly.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The first Review gate returned SIGNIFICANT at 0f4bf86. The fix round (ce16529, c68877a, b27c4f1) repaired the verification files and added the foundation-d2 sentence. s-stack-package was merged at 5b346fa. The third Verify gate returned VERIFIED at b27c4f1. The second Review gate, over the commits since 0f4bf86, returned SIGNIFICANT at b27c4f1: the link checker's new fence stripping hides real links. Fix round 50e26ee parses Markdown with markdown-it-py (foundation-d3), compares the code-head rule on every branch, and narrows the cleanup. s-stack-package was merged at 7f51eff. The fourth Verify gate is running.
 
 ## Notes
 

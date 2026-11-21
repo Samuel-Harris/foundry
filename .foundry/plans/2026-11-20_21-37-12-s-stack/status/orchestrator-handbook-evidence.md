@@ -135,3 +135,22 @@ Two probes outside the check file, each reading `orchestrator.md` with `phase-se
 2. A session woken by a message to an open pane records no new start time. The start-time rule then counts it as stopped and closes its pane mid-work. One example is a Done phase sent `move-back`.
 
 A re-merge at an already merged code head was not excluded, which misleads a reader. The phase moved back to Implement, and "Finishing a phase" is redesigned on the orchestrator's own record of the `stop` messages it sent, not on commit timing.
+
+## Verify 10, code head `7b4f0a3362f57084a329061311644e9d05559bc4`, NOT VERIFIED
+
+A fresh verifier updated the check file for `13fe92c` (commit `7b4f0a3`). It updated cold reads A, B, F, J and K, and added L (the Done handshake with `phase-session.md`), M (a `move-back` to a Done phase over three ticks), N (no re-merge at a merged code head) and O (the layout lines). It then ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`169/200 handbooks/orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 FAILS: every script passes, and 23 of 24 cold reads pass. Cold read M fails on point 3.
+
+The failure: Finishing a phase step 2 sends "every pull request has merged" to any phase not in Done. A phase moved back to Implement after Done gets the notice again, because starting it reset the record of having told it. `phase-session.md` then moves it to Done, and the new code never gets a verdict.
+
+Other findings, each misleading a reader:
+
+- A pane can close in the same tick its `stop` was sent, because the idle reading predates the `stop`.
+- The one-merge reason is false when the default branch merged in the same tick.
+
+One minor item: the update spec writer's pane is never closed.
+
+One-off results at `7b4f0a3`:
+
+- The handbook has 169 lines, and the launcher-call script passes.
+- All nine launcher flags match `launch.sh`'s usage text on the `launcher` phase branch.
+- A private-name grep found 0 hits, with a positive control of 3.

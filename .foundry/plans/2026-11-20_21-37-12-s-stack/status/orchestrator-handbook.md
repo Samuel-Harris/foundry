@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T17:22:58Z"
+state: "Implement"
+changed_at: "2026-11-21T17:35:40Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "13fe92ce38cfab37c230002051313228439e8b6d"
+code_head: "7b4f0a3362f57084a329061311644e9d05559bc4"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -56,6 +56,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "942257045154f4a7e76c16fa4023a5cf3e656bf5"
     at: "2026-11-21T17:21:39Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "7b4f0a3362f57084a329061311644e9d05559bc4"
+    at: "2026-11-21T17:35:40Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -123,3 +128,5 @@ The Finishing a phase fix is at `4289747`. `s-stack-package` (`e801458`, which b
 The ninth Verify gate returned VERIFIED at `9422570`. Two defects would break a real run, so the phase moved back to Implement. The orchestrator's layout instruction goes in the same round.
 
 The Finishing a phase redesign and the layout lines are at `13fe92c`. `s-stack-package` (`e096e48`) was merged at `9435921`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `13fe92c`.
+
+The tenth Verify gate returned NOT VERIFIED at `7b4f0a3`, and the phase moved back to Implement.

@@ -16,7 +16,6 @@
 
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
-| `s-stack-planner` | `%166` | `../s-stack-planner` | 2026-11-21 |
 | `s-stack-phase-foundation` | `%171` | `../s-stack-phase-foundation` | 2026-11-21 |
 
 ## Open decision requests
@@ -26,3 +25,9 @@ None.
 ## Pull requests under watch
 
 None.
+
+## Closed sessions
+
+| Session | Worktree | Closed | Last commit |
+| --- | --- | --- | --- |
+| `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |

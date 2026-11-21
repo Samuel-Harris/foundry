@@ -36,7 +36,7 @@ pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
     base: "main"
-    depends_on: [81, 82]
+    depends_on: [82]
     stacked: false
 requests: []
 decisions:
@@ -56,4 +56,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Both gates passed for `6f70b37`. Draft pull request 84 is open against `main`, holding exactly the verified phase diff on top of 81 and 82, and its CI passed. The phase waits for the orchestrator's merge and the developer's review.
+Both gates passed for `6f70b37`. After #81 merged, draft pull request 84 was rebuilt onto #82 in a generated-only fix round. Its head is `49df8c3`, base `main`, and it depends on #82, which already has #85 stacked on it. CI passed. The phase waits for the developer's review.

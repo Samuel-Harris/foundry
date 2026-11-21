@@ -6,37 +6,49 @@ Phase `board` ships `packages/s-stack/.apm/skills/sam-mode/assets/status-board.h
 
 ### Rendered board in headless Chrome
 
-The script writes its harness to a fresh `mktemp` directory and never writes into the repository. It wraps the template in the skeleton the Artifact tool publishes, which includes `[hidden]{display:none!important}`, and defines `window.claude.use("db")` as a stub. The stub serves placeholder documents with `fromCache: false`, and its `doc` and `collection` references also expose `set`, `update`, `delete` and `add`, which record every call. Headless Chrome will not make a window narrower than 500 px, so the page runs in an `iframe` 400 px wide (1000 px for the word-break scenarios), and the script reads that frame's own `scrollWidth` and `clientWidth`. Chrome's virtual time runs the 10-second and 30-second timers without waiting.
+The script writes its harness to a fresh `mktemp` directory and never writes into the repository. It wraps the template in the skeleton the Artifact tool publishes, which includes `[hidden]{display:none!important}`, and defines `window.claude.use("db")` as a stub. The stub serves placeholder documents, live (`fromCache: false`) or cached (`fromCache: true`) as the scenario asks. The database and every `doc` and `collection` reference are proxies: `onSnapshot`, `get`, `doc` and `collection` read, and any other method, such as `set`, `update`, `delete`, `add`, `acquire` or one not yet in the API, records a write. Headless Chrome will not make a window narrower than 500 px, so the page runs in an `iframe` 400 px wide unless `w` sets another width, and the script reads that frame's own `scrollWidth` and `clientWidth`. Chrome's virtual time runs the 10-second and 30-second timers without waiting.
 
 Each line of the `LIST` block is one scenario: a virtual-time budget in milliseconds, extra Chrome flags (`-` for none) and the query string the stub and collector read.
 
 - `theme` is `light` or `dark`, set as `data-theme` on the root element, or `os`, which sets no `data-theme` and runs Chrome with `--blink-settings=preferredColorScheme=0` so the page's own `prefers-color-scheme: dark` block must apply.
 - `tick` is the age of `tick_at` in minutes, or `bad` for an unreadable 71-character string. `stale` sends `stale_after_min`; without it the field is absent.
-- `fixture` is `full` (the default), `empty`, `missing`, `cycle` or `unreadable`. `deliver` is `live` (the default, data after 20 ms), `silent` (never), `late` (after 11 s), `nodb` (`use("db")` resolves `null`), `error-before` or `error-after`, with `error` naming the source whose listener fails with `permission-denied`.
-- `at` lists the virtual times at which the page is read. `interact` focuses the `#11` link in Ready for your review, scrolls the dependency map to 80 px, then sends every listener a second, identical snapshot. `words` checks word breaks.
+- `fixture` is `full` (the default), `empty`, `missing`, `cycle`, `unreadable`, `lanes-a`, `lanes-b` or `long`. `deliver` is `live` (the default, data after 20 ms), `silent` (never), `late` (after 11 s), `cached` (cached data only), `live-cached` (live data, then the same data cached at 300 ms), `live-cached-error` (that, then the `error` source's listener fails at 600 ms), `nodb` (`use("db")` resolves `null`), `error-before` or `error-after`, with `error` naming the source whose listener fails with `permission-denied`.
+- `at` lists the virtual times at which the page is read. `interact=1` focuses the `#11` link in Ready for your review, scrolls the dependency map to 80 px, then sends every listener a second, identical snapshot. `interact=table` widens the Pull requests table to 1200 px with a test style, so it must scroll inside its own box, scrolls it to its end, then sends the second snapshot. `words` checks word breaks.
 
 The full fixture uses this run's phase shape. `foundation` has `depends_on: []`. `launcher`, `board`, `orchestrator-handbook`, `phase-handbooks`, `pr-handbook` and `spec-planner-handbooks` each depend on `foundation` until `merged`. `default-stack` depends on the other seven until `done`. The phases mix every state colour and all four scheduling values, and arrive unsorted. It has five pull requests: drafts #11 (rank 1, depends on `12`), `"12"` (rank 2, its number a digit string) and #13 (rank 3, depends on `[11, "12", 100, 9]`), open `"100"` and merged #9. #13's title carries `<b>` and `<img>` markup and its `url` is `javascript:alert(1)`. Four needs arrive out of order, one of them with a `javascript:` link in its summary and one with a 61-character pane. `board/recent` holds 22 items, with the second and third out of time order, so a page that re-sorts or fails to cap them shows it.
 
+The map fixtures isolate drawing. `lanes-a` and `lanes-b` have five phases in three columns and two edges that skip the middle column. They differ only in which first-column phase each skipping edge leaves from, so a map that draws both alike has lost information. `long` has two phase ids of 40 characters that share their first 39, and `spec-planner-handbooks`.
+
 The checker asserts, with exact expected values:
 
-- the six section headings in order, in every scenario, and no page-level horizontal scroll in every 400 px scenario, light, dark and OS dark;
+- the six section headings in order, in every scenario, and no page-level horizontal scroll at the frame's width in every scenario, light, dark and OS dark;
 - Needs you: one-way decision, two-way decision, prompt (with its pane), restack, each with kind and door chips, phase, waiting time and summary, and a count of 4;
 - Ready for your review: #12, #11 ("after #12"), #13 ("after #11, #12, #100"), with checks and update chips;
 - Pull requests: all eight cells of each row, ordered #9, #11, #12, #13, #100, so digit-string numbers order as numbers;
 - Phases: all seven cells of each of the eight rows, including the labels "session live", "session closed", "queued to start" and "blocked", and every Depends on entry;
 - Recent changes: the first 20 items in stored order, with "→ Implement" for a null `from`;
-- the dependency map: three columns, every node's state line, 13 edges with 7 dashed (computed `stroke-dasharray`) into `default-stack` and 6 solid from `foundation`, each edge identified by its end points, and no edge passing through any node other than its own two, sampled at 401 points with `getPointAtLength`;
+- the dependency map: three columns, every node's state line, 13 edges with 7 dashed (computed `stroke-dasharray`) into `default-stack` and 6 solid from `foundation`, each edge identified by its end points, and no edge passing through any node other than its own two, sampled at 401 points with `getPointAtLength`; only `foundation` to `default-stack` skips a column; every node shows its full id;
+- the map legend's exact text;
+- node fill by state: four different fills for the four state tones in the full fixture, and each node's fill equal to the background of the same phase's state chip in the Phases table, in light, dark and OS dark;
+- in every scenario with a map, node labels fit inside their nodes, the id text has a contrast of at least 4.5 to its node's fill and the state line at least 3, and each skipping edge has a horizontal run of more than 20 units that no other skipping edge's run overlaps;
+- `lanes-a` and `lanes-b` both draw two skipping edges, and their edge geometry, sampled and rounded, differs;
+- every id in `long` shown whole;
+- the map's computed `overflow-x` is `auto` or `scroll`, and at 400 px its `scrollWidth` exceeds its `clientWidth`;
 - staleness with `stale_after_min` absent (fresh at 39 minutes, stale at 41) and sent as 60 (fresh at 50, stale at 61), the banner text, the Fresh or Stale chip and the age; a 39.5-minute tick that turns stale after 61 s of virtual time with no write; an unreadable tick shown as stale;
 - the no-database notice with every section hidden, the 10-second unreachable notice absent at 5 s and shown at 12 s with a silent stub, and cleared by data arriving at 11 s;
+- with cached data only, every section's content but no Fresh or Stale verdict and no banner for a 180-minute tick, the age still shown, and the unreachable notice absent at 5 s and shown at 12 s;
+- a stale verdict from live data kept, banner and chip, after cached data follows, and after the `board/meta` listener then fails; with cached data after live data, the unreachable notice at 12 s;
 - a subscription error before data (Ready for your review and Pull requests show only the error line, the other sections keep their data) and after data (the error line above the rows already shown, and a heartbeat that stays stale when the `board/meta` listener dies);
-- no call to any write verb in any scenario;
+- no call to any method other than the four reads, in any scenario;
 - dark ground and light text in `dark` and OS dark, light ground in `light`;
 - at 1000 px, no word of up to 16 characters split across lines and no chip clipped;
 - `#11` still focused, on a new element, and the map's `scrollLeft` still 80, on a new map, after the second snapshot;
+- at 700 px, the Pull requests table scrolled to its end inside its own box, and the same `scrollLeft` on the new table after the second snapshot;
+- unknown dependency chips not clipped and inside the content box, in every scenario;
 - no `b`, `img`, `script` or non-`https://` link in the page, and the markup shown as literal text;
 - a missing dependency drawn as an "unknown" node coloured like an unknown state, a cycle shown as the line "The phases depend on each other in a cycle: alpha, beta. Fix depends_on in the feature plan." with no map and every dependency still listed, and unreadable entries, including a `depends_on` that is a string, listed as `unknown: <JSON>`.
 
-Run it from the repository root. It needs Google Chrome at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`, or the path in `CHROME`. Without Chrome it prints `PENDING: Google Chrome not found at <path>, so the board cannot be rendered here` and exits `0`. `TEMPLATE` points it at another copy of the template, which is how the mutation evidence below was produced.
+Run it from the repository root. It needs Google Chrome at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`, or the path in `CHROME`. Without Chrome it prints `PENDING: Google Chrome not found at <path>, so the board cannot be rendered here` and exits `0`. `TEMPLATE` points it at another copy of the template, which is how the mutation proof under Evidence runs it.
 
 ```bash
 bash <<'EOF'
@@ -64,6 +76,10 @@ cat > "$dir/stub.js" <<'JS'
   const onFoundation = [dep("foundation", "merged")];
   const phase = (id, state, scheduling, min, depends_on, more) =>
     ({phase: id, state, scheduling, waits_for: null, session_live: false, pane: null, changed_at: ago(min), depends_on, ...more});
+  const LONG = "orchestrator-handbook-and-phase-handboo";
+  const lanes = (skips) => [phase("a1", "Plan", "queued", 5, []), phase("a2", "Plan", "queued", 5, []),
+    phase("b1", "Plan", "queued", 5, [dep("a1", "merged")]), phase("b2", "Plan", "queued", 5, [dep("a2", "merged")]),
+    ...skips.map(([c, a]) => phase(c, "Plan", "queued", 5, [dep("b" + c[1], "merged"), dep(a, "merged")]))];
   const recentItems = Array.from({length: 22}, (_, i) => ({
     at: ago([0, 10, 5][i] ?? i * 5), phase: "p" + String(i + 1).padStart(2, "0"), from: i === 0 ? null : "Plan", to: "Implement"}));
   const fixtures = {
@@ -100,6 +116,12 @@ cat > "$dir/stub.js" <<'JS'
       phase("alpha", "Plan", "queued", 5, [{phase: 5, until: "merged"}, dep("beta", "later"), "beta"]),
       phase("beta", "Plan", "queued", 5, "alpha"),
       phase("gamma", "Plan", "queued", 5, [dep("alpha", "merged")])]},
+    "lanes-a": {"board/meta": meta, phases: lanes([["c1", "a1"], ["c2", "a2"]])},
+    "lanes-b": {"board/meta": meta, phases: lanes([["c1", "a2"], ["c2", "a1"]])},
+    long: {"board/meta": meta, phases: [
+      phase(LONG + "a", "Plan", "queued", 5, []),
+      phase(LONG + "b", "Review", "queued", 5, [dep(LONG + "a", "merged")]),
+      phase("spec-planner-handbooks", "Done", "closed", 5, [dep(LONG + "a", "done")])]},
     empty: {},
   };
   const data = fixtures[q.get("fixture") || "full"];
@@ -107,8 +129,8 @@ cat > "$dir/stub.js" <<'JS'
   const errSource = q.get("error");
   window.__writes = [];
   const listeners = [];
-  const snapshotOf = (path) => {
-    const metadata = {fromCache: false, hasPendingWrites: false};
+  const snapshotOf = (path, fromCache = false) => {
+    const metadata = {fromCache, hasPendingWrites: false};
     if (path.includes("/")) return {id: path.split("/")[1], exists: path in data, data: () => data[path], metadata};
     const docs = (data[path] || []).map((body, i) => ({id: String(i), exists: true, data: () => structuredClone(body), metadata}));
     return {docs, size: docs.length, empty: !docs.length, docChanges: () => [], metadata};
@@ -117,20 +139,30 @@ cat > "$dir/stub.js" <<'JS'
   const ref = (path) => ({
     onSnapshot(next, fail) {
       const emit = () => next(snapshotOf(path));
+      const cached = () => next(snapshotOf(path, true));
       listeners.push(emit);
       const error = {code: "permission-denied", message: "stub"};
-      if (deliver === "live" || deliver === "error-after") setTimeout(emit, 20);
+      if (["live", "error-after", "live-cached", "live-cached-error"].includes(deliver)) setTimeout(emit, 20);
+      if (deliver === "cached") setTimeout(cached, 20);
+      if (deliver === "live-cached" || deliver === "live-cached-error") setTimeout(cached, 300);
       if (deliver === "late") setTimeout(emit, 11000);
       if (deliver === "error-before" && source(path)) setTimeout(() => fail(error), 20);
       else if (deliver === "error-before") setTimeout(emit, 20);
       if (deliver === "error-after" && source(path)) setTimeout(() => fail(error), 300);
+      if (deliver === "live-cached-error" && source(path)) setTimeout(() => fail(error), 600);
       return () => {};
     },
     get: async () => snapshotOf(path),
   });
-  const write = (verb) => (...args) => { window.__writes.push(verb); return Promise.resolve(); };
-  const writable = (r) => Object.assign(r, {set: write("set"), update: write("update"), delete: write("delete"), add: write("add")});
-  const db = writable({doc: (p) => writable(ref(p)), collection: (p) => writable(Object.assign(ref(p), {doc: (id) => writable(ref(p + "/" + id))}))});
+  const READS = new Set(["onSnapshot", "get", "doc", "collection"]);
+  const guarded = (target) => new Proxy(target, {
+    has: () => true,
+    get(t, key) {
+      if (typeof key !== "string" || key === "then" || READS.has(key)) return t[key];
+      return (...args) => { window.__writes.push(key); return Promise.resolve({ok: true}); };
+    },
+  });
+  const db = guarded({doc: (p) => guarded(ref(p)), collection: (p) => guarded(Object.assign(ref(p), {doc: (id) => guarded(ref(p + "/" + id))}))});
   window.__reemit = () => listeners.forEach((emit) => emit());
   window.claude = {use: async (name) => (name === "db" && deliver !== "nodb" ? db : null)};
 })();
@@ -141,6 +173,7 @@ cat > "$dir/collect.js" <<'JS'
   const q = new URLSearchParams(location.search);
   const text = (n) => (n ? n.innerText.trim().replace(/\s*\n\s*/g, " | ") : null);
   const shown = (n) => !!n && !n.closest("[hidden]") && n.getClientRects().length > 0;
+  const bySection = (title) => [...document.querySelectorAll("main section")].find((s) => s.querySelector("h2").textContent === title);
   const svgBox = (g) => {
     const m = g.transform.baseVal.consolidate().matrix;
     const r = g.querySelector("rect");
@@ -149,26 +182,50 @@ cat > "$dir/collect.js" <<'JS'
   function mapOf(section) {
     const svg = section.querySelector("svg");
     if (!svg) return null;
-    const nodes = [...svg.querySelectorAll("g")].filter((g) => g.querySelector("rect")).map((g) => ({
-      id: g.querySelector("title").textContent, lines: [...g.querySelectorAll("text")].map((t) => t.textContent),
-      fill: getComputedStyle(g.querySelector("rect")).fill, ...svgBox(g)}));
+    const nodes = [...svg.querySelectorAll("g")].filter((g) => g.querySelector("rect")).map((g) => {
+      const texts = [...g.querySelectorAll("text")];
+      const rect = g.querySelector("rect");
+      return {id: g.querySelector("title").textContent, lines: texts.map((t) => t.textContent),
+        fill: getComputedStyle(rect).fill, textFill: texts.map((t) => getComputedStyle(t).fill),
+        fits: texts.every((t) => t.x.baseVal[0].value + t.getComputedTextLength() <= rect.width.baseVal.value - 2), ...svgBox(g)};
+    });
+    const xs = [...new Set(nodes.map((n) => n.x))].sort((a, b) => a - b);
     const at = (p, side) => nodes.find((n) => Math.abs((side === "out" ? n.x + n.w : n.x) - p.x) < 0.5 && p.y >= n.y && p.y <= n.y + n.h);
+    const geometry = new Set();
     const edges = [...svg.querySelectorAll("path")].filter((p) => p.getAttribute("marker-end")).map((p) => {
       const len = p.getTotalLength();
       const from = at(p.getPointAtLength(0), "out"), to = at(p.getPointAtLength(len), "in");
       const crosses = new Set();
+      const pts = [];
       for (let i = 0; i <= 400; i++) {
         const pt = p.getPointAtLength((len * i) / 400);
+        pts.push(pt);
+        geometry.add(Math.round(pt.x) + "," + Math.round(pt.y));
         for (const n of nodes) {
           if (n === from || n === to) continue;
           if (pt.x > n.x + 1 && pt.x < n.x + n.w - 1 && pt.y > n.y + 1 && pt.y < n.y + n.h - 1) crosses.add(n.id);
         }
       }
+      let run = null;
+      for (let i = 0, j = 0; i < pts.length; i = j) {
+        for (j = i + 1; j < pts.length && Math.abs(pts[j].y - pts[i].y) < 0.05; j++);
+        const r = {y: pts[i].y, x1: pts[i].x, x2: pts[j - 1].x};
+        if (!run || r.x2 - r.x1 > run.x2 - run.x1) run = r;
+      }
       const dash = getComputedStyle(p).strokeDasharray;
-      return {from: from && from.id, to: to && to.id, dashed: dash !== "none" && dash !== "", crosses: [...crosses]};
+      const skips = !!(from && to) && xs.indexOf(to.x) - xs.indexOf(from.x) > 1;
+      return {from: from && from.id, to: to && to.id, dashed: dash !== "none" && dash !== "", crosses: [...crosses], skips, run};
     });
-    return {columns: new Set(nodes.map((n) => n.x)).size, nodes, edges, scrollLeft: svg.parentElement.scrollLeft,
-      scrollable: svg.parentElement.scrollWidth > svg.parentElement.clientWidth};
+    return {columns: xs.length, nodes, edges, scrollLeft: svg.parentElement.scrollLeft,
+      scrollable: svg.parentElement.scrollWidth > svg.parentElement.clientWidth,
+      overflowX: getComputedStyle(svg.parentElement).overflowX, geometry: [...geometry].sort().join(" ")};
+  }
+  function depChips() {
+    const box = document.querySelector("main").getBoundingClientRect();
+    return [...document.querySelectorAll("main .deps .chip")].filter(shown).map((c) => {
+      const r = c.getBoundingClientRect();
+      return {text: c.textContent, clipped: c.scrollWidth > c.clientWidth, inside: r.left >= box.left - 0.5 && r.right <= box.right + 0.5};
+    });
   }
   function brokenWords() {
     const broken = [];
@@ -214,6 +271,13 @@ cat > "$dir/collect.js" <<'JS'
       injected: document.querySelectorAll("main b, main img, main script, main a:not([href^='https://'])").length,
       links: [...document.querySelectorAll("a")].map((a) => a.getAttribute("href")),
       chipBg: Object.fromEntries(["one-way", "two-way", "session closed", "Spec", "Done", "blocked", "queued to start", "session live"].map((l) => [l, chipBg(l)])),
+      stateChipBg: Object.fromEntries([...(bySection("Phases")?.querySelectorAll("tbody tr") || [])].map((tr) =>
+        [tr.cells[0].textContent, tr.cells[1].querySelector(".chip") && getComputedStyle(tr.cells[1].querySelector(".chip")).backgroundColor])),
+      depChips: depChips(),
+      prTable: (() => {
+        const wrap = bySection("Pull requests")?.querySelector("table")?.parentElement;
+        return wrap && {scrollLeft: wrap.scrollLeft, overflow: wrap.scrollWidth - wrap.clientWidth, replaced: wrap !== window.__table};
+      })(),
       fg: getComputedStyle(document.body).color,
       bg: getComputedStyle(document.body).backgroundColor,
       dark: matchMedia("(prefers-color-scheme: dark)").matches,
@@ -231,11 +295,16 @@ cat > "$dir/collect.js" <<'JS'
   const last = times[times.length - 1];
   if (q.get("interact")) {
     setTimeout(() => {
-      const review = [...document.querySelectorAll("main section")].find((s) => s.querySelector("h2").textContent === "Ready for your review");
-      [...review.querySelectorAll("a")].find((a) => a.textContent === "#11").focus();
-      document.querySelector("main svg").parentElement.scrollLeft = 80;
-      window.__focused = document.activeElement;
-      window.__map = document.querySelector("main svg");
+      if (q.get("interact") === "table") {
+        document.head.append(Object.assign(document.createElement("style"), {textContent: ".table-wrap table { min-width: 1200px; }"}));
+        window.__table = bySection("Pull requests").querySelector("table").parentElement;
+        window.__table.scrollLeft = window.__table.scrollWidth;
+      } else {
+        [...bySection("Ready for your review").querySelectorAll("a")].find((a) => a.textContent === "#11").focus();
+        document.querySelector("main svg").parentElement.scrollLeft = 80;
+        window.__focused = document.activeElement;
+        window.__map = document.querySelector("main svg");
+      }
       out.before = snapshot();
       window.__reemit();
     }, last + 100);
@@ -289,6 +358,13 @@ done > "$dir/out.txt" <<'LIST'
 5000 - theme=light&deliver=error-before&error=prs
 5000 - theme=light&deliver=error-after&error=prs
 5000 - theme=light&deliver=error-after&error=meta&tick=41
+20000 - theme=light&deliver=cached&tick=180&at=5000,12000
+20000 - theme=dark&deliver=live-cached&tick=41&at=5000,12000
+5000 - theme=light&deliver=live-cached-error&error=meta&tick=41
+5000 - theme=light&w=700&interact=table
+5000 - theme=light&fixture=lanes-a
+5000 - theme=light&fixture=lanes-b
+5000 - theme=dark&fixture=long
 LIST
 
 cat > "$dir/check.py" <<'PY'
@@ -328,7 +404,23 @@ EMPTIES = ["Nothing needs you.", "No draft pull requests yet.", "No pull request
 STOPPED = "This section stopped updating (permission-denied). Reload the page to try again."
 NODB = "This board reads its data from the page's database, which this view cannot open. Open the board in Claude."
 SLOW = "The board's data can't be reached yet. What is shown may be out of date."
+LEGEND = ("Solid line: needed merged into the orchestrator branch. "
+          "Dashed line: needed with every pull request merged into the default branch.")
+LONG = "orchestrator-handbook-and-phase-handboo"
 def STALE(n): return f"The orchestrator has not ticked for {n} minutes."
+
+
+def contrast(a, b):
+    def lum(rgb):
+        c = [int(v) / 255 for v in re.findall(r"[\d.]+", rgb)[:3]]
+        c = [v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4 for v in c]
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+    hi, lo = sorted((lum(a), lum(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def runs_overlap(a, b):
+    return abs(a["y"] - b["y"]) < 1 and min(a["x2"], b["x2"]) - max(a["x1"], b["x1"]) > 1
 
 
 def sec(snap, title):
@@ -352,6 +444,13 @@ def full_content(c, s):
     edges = {(e["from"], e["to"], e["dashed"]) for e in m["edges"]}
     c("map: 13 edges, 7 dashed into default-stack and 6 solid from foundation", len(m["edges"]) == 13 and edges == EDGES)
     c("map: no edge crosses a node", all(not e["crosses"] for e in m["edges"]))
+    c("map: one skipping edge, foundation to default-stack", [(e["from"], e["to"]) for e in m["edges"] if e["skips"]] == [("foundation", "default-stack")])
+    c("map: every node names its full id", all(n["lines"][0] == n["id"] for n in m["nodes"]))
+    c("map: legend explains solid and dashed lines", LEGEND in sec(s, "Phases")["text"])
+    c("map: scrolls inside its own box at 400 px", m.get("overflowX") in ("auto", "scroll") and (m.get("scrollable") or s["width"] != 400))
+    fills = {n["id"]: n["fill"] for n in m["nodes"]}
+    c("map: node fill matches the state chip of the same phase", fills == s["stateChipBg"])
+    c("map: node fill differs by state", len(set(fills.values())) == 4)
     bg = s["chipBg"]
     c("one-way door is critical, two-way is not", bg["one-way"] != bg["two-way"])
     c("session closed is neutral, not the done colour", bg["session closed"] == bg["Spec"] != bg["Done"] and bg["blocked"] != bg["session closed"])
@@ -386,7 +485,20 @@ def map_case(c, s, fixture):
         c("unreadable depends_on entries show as unknown", deps == {
             "alpha": 'unknown: {"phase":5,"until":"merged"} | unknown: {"phase":"beta","until":"later"} | unknown: "beta"',
             "beta": 'unknown: "alpha"', "gamma": "alpha (merged)"})
+        c("every unknown entry is a chip", len(s["depChips"]) == 4)
         c("only readable entries are drawn", m is not None and [(e["from"], e["to"]) for e in m["edges"]] == [("alpha", "gamma")])
+
+
+def map_drawing(c, s):
+    m = sec(s, "Phases")["map"]
+    if not m:
+        return
+    c("map: labels fit inside their nodes", all(n["fits"] for n in m["nodes"]))
+    c("map: node text is readable on its fill", all(contrast(n["textFill"][0], n["fill"]) >= 4.5
+      and contrast(n["textFill"][1], n["fill"]) >= 3 for n in m["nodes"]))
+    skips = [e for e in m["edges"] if e["skips"]]
+    c("map: each skipping edge has a horizontal run of its own", all(e["run"] and e["run"]["x2"] - e["run"]["x1"] > 20 for e in skips)
+      and not any(runs_overlap(a["run"], b["run"]) for i, a in enumerate(skips) for b in skips[i + 1:]))
 
 
 def check(name, r):
@@ -400,12 +512,14 @@ def check(name, r):
     for snap in snaps + [r[k] for k in ("before", "after") if k in r]:
         c("the page never writes", snap["writes"] == [])
         c("six headings in order", [x["title"] for x in snap["sections"]] == HEADINGS)
-        if q.get("w") != "1000":
-            c("400 px frame with no horizontal scroll", snap["width"] == 400 and snap["noHorizontalScroll"])
+        c("frame at the asked width with no horizontal scroll", snap["width"] == int(q.get("w", 400)) and snap["noHorizontalScroll"])
+        c("unknown dependency chips wrap inside the page", all(not d["clipped"] and d["inside"] for d in snap["depChips"]))
+        map_drawing(c, snap)
     deliver = q.get("deliver", "live")
     fixture = q.get("fixture", "full")
-    if deliver == "live" and fixture == "full" and q.get("tick") != "bad":
+    if deliver in ("live", "cached", "live-cached") and fixture == "full" and q.get("tick") != "bad":
         full_content(c, snaps[0])
+    if deliver == "live" and fixture == "full" and q.get("tick") != "bad":
         c("no notice once every source is live", s["notices"] == [])
     if "stale" in q or (deliver == "live" and fixture == "full" and q.get("tick") not in (None, "bad") and "at" not in q):
         limit = float(q.get("stale", 40))
@@ -416,7 +530,11 @@ def check(name, r):
     if q.get("tick") == "bad":
         c("an unreadable tick is stale", s["banner"] == ["The orchestrator has not recorded a readable tick yet."]
           and "Stale" in sec(s, "Heartbeat")["text"])
-    if q.get("interact"):
+    if q.get("interact") == "table":
+        before, after = r["before"]["prTable"], r["after"]["prTable"]
+        c("the Pull requests table scrolls inside its box between 601 and 960 px", before["overflow"] > 0 and before["scrollLeft"] == before["overflow"])
+        c("table scrollLeft survives a second snapshot", after["replaced"] and after["scrollLeft"] == before["scrollLeft"])
+    elif q.get("interact"):
         before, after = r["before"], r["after"]
         c("focus and map scroll set before the second snapshot", before["focus"]["text"] == "#11"
           and sec(before, "Phases")["map"]["scrollLeft"] == 80)
@@ -450,6 +568,24 @@ def check(name, r):
         c("Pull requests: error after data keeps the rows", STOPPED in sec(s, "Pull requests")["text"] and sec(s, "Pull requests")["rows"] == PRS)
         c("Ready for your review: error after data keeps the list", STOPPED in sec(s, "Ready for your review")["text"]
           and sec(s, "Ready for your review")["items"] == REVIEW)
+    if deliver == "cached":
+        hb = sec(s, "Heartbeat")["text"]
+        c("a cached tick never calls the board stale or fresh", all(x["banner"] == [] and "Stale" not in sec(x, "Heartbeat")["text"]
+          and "Fresh" not in sec(x, "Heartbeat")["text"] for x in snaps) and age_text(180) in hb)
+        c("cached data: no notice before 10 s, the unreachable notice after", snaps[0]["notices"] == [] and s["notices"] == [SLOW])
+    if deliver in ("live-cached", "live-cached-error"):
+        c("a live stale verdict survives a cached snapshot", all(x["banner"] == [STALE(41)] and "Stale" in sec(x, "Heartbeat")["text"] for x in snaps))
+    if deliver == "live-cached":
+        c("cached data after live: no notice before 10 s, the unreachable notice after", snaps[0]["notices"] == [] and s["notices"] == [SLOW])
+    if deliver == "live-cached-error":
+        c("the heartbeat shows the error after cached data", STOPPED in sec(s, "Heartbeat")["text"])
+    if fixture.startswith("lanes-"):
+        m = sec(s, "Phases")["map"] or {"edges": []}
+        c("lane graphs: two skipping edges", sum(e["skips"] for e in m["edges"]) == 2)
+    if fixture == "long":
+        nodes = {n["id"]: n["lines"][0] for n in (sec(s, "Phases")["map"] or {"nodes": []})["nodes"]}
+        c("map: ids of up to 40 characters are shown whole", nodes == {LONG + "a": LONG + "a", LONG + "b": LONG + "b",
+          "spec-planner-handbooks": "spec-planner-handbooks"})
     if deliver == "error-after" and q["error"] == "meta":
         c("heartbeat error after data keeps the stale verdict", STOPPED in sec(s, "Heartbeat")["text"] and s["banner"] == [STALE(41)]
           and "Stale" in sec(s, "Heartbeat")["text"])
@@ -458,14 +594,23 @@ def check(name, r):
 
 chunks = re.split(r"^== (\S+)$", open(sys.argv[1]).read(), flags=re.M)[1:]
 failures = []
+results = {}
 for name, dom in zip(chunks[::2], chunks[1::2]):
     m = re.search(r'data-result="([^"]*)"', dom)
     try:
-        bad = check(name, json.loads(html.unescape(m.group(1)))) if m else ["the page produced no result"]
+        results[name] = json.loads(html.unescape(m.group(1))) if m else None
+        bad = check(name, results[name]) if m else ["the page produced no result"]
     except Exception as exc:
         bad = [f"the page result could not be read ({exc!r})"]
     print(f"{'FAIL' if bad else 'ok  '} {name}" + (": " + "; ".join(bad) if bad else ""))
     failures += bad
+try:
+    a, b = (sec(results[f"theme=light&fixture=lanes-{x}"]["1500"], "Phases")["map"]["geometry"] for x in "ab")
+    lanes = ["two graphs that differ only in their skipping edges draw the same map"] if a == b else []
+except Exception as exc:
+    lanes = [f"the two lane graphs could not be compared ({exc!r})"]
+print(f"{'FAIL' if lanes else 'ok  '} lanes-a against lanes-b" + (": " + "; ".join(lanes) if lanes else ""))
+failures += lanes
 print(f"{len(failures)} failed checks" if failures else "board renders as specified")
 sys.exit(1 if failures else 0)
 PY
@@ -473,107 +618,46 @@ python3 "$dir/check.py" "$dir/out.txt"
 EOF
 ```
 
-Expected: exit `0`, one `ok` line for each of the 19 scenarios, then `board renders as specified`. A failing assertion prints `FAIL`, the scenario and the name of each failed check, then `<n> failed checks`, and exits `1`. A page that crashes or produces no result fails its scenario the same way.
+Expected: exit `0`, one `ok` line for each of the 26 scenarios and one for `lanes-a against lanes-b`, then `board renders as specified`. A failing assertion prints `FAIL`, the scenario and the name of each failed check, then `<n> failed checks`, and exits `1`. A page that crashes or produces no result fails its scenario the same way.
 
 ## Evidence
 
-All of these ran on 21 November 2026 against the template last changed in `2f575c8fb5afa5e9ce3c6b7f35531ad0c4abed66` (sha256 `01415b6ea1cc91034d881faae184eba48ecdf89d350698d2cbee5b30e360871a`), with Google Chrome 158.0.8127.37. Every page, row and name is placeholder data.
+The phase's verifier runs these at every code head it verifies and puts every result in its report, never in this file. Every page, row and name is placeholder data.
 
-### The Rerun check fails when the template is wrong
+### Mutation proof
 
-The `## Rerun` script, extracted from this file, exited `0` on the template with 19 `ok` lines. With `CHROME=/nonexistent` it printed the PENDING line and exited `0`. Each mutation below is a single text replacement in a copy of the template written outside the repository. The same extracted script, given each copy through `TEMPLATE`, exited `1` for every one of them. The last column counts the scenarios that printed `FAIL`.
+This shows that the `## Rerun` check fails a broken template. Extract the one bash block between `## Rerun` and `## Evidence` from this file into a script outside the repository. Run it once on the real template, which must exit `0`, and once with `CHROME=/nonexistent`, which must print the PENDING line and exit `0`. Then, in a scratch directory outside the repository, write each mutant as a copy of the current template with one text replacement, refusing any replacement whose target text does not occur exactly once, and run the extracted script on each copy through `TEMPLATE`. Every mutant must make it exit `1`.
 
-| Mutation | Exit | Scenarios with FAIL |
-| --- | --- | --- |
-| stale threshold fixed at 30 | 1 | 3 of 19 |
-| `stale_after_min` ignored | 1 | 1 of 19 |
-| default stale limit 45 | 1 | 3 of 19 |
-| stale two minutes early | 1 | 2 of 19 |
-| 30-second re-render removed | 1 | 1 of 19 |
-| Recent changes always empty | 1 | 8 of 19 |
-| Recent changes not capped | 1 | 8 of 19 |
-| Recent changes re-sorted by time | 1 | 8 of 19 |
-| missing-database notice never shown | 1 | 1 of 19 |
-| subscription errors ignored | 1 | 3 of 19 |
-| error after data drops the rows | 1 | 2 of 19 |
-| error line reworded | 1 | 3 of 19 |
-| Pull requests table drops a row | 1 | 9 of 19 |
-| Pull requests sorted as strings | 1 | 9 of 19 |
-| slow-load notice never shown | 1 | 2 of 19 |
-| slow-load notice shown at once | 1 | 2 of 19 |
-| slow-load notice never cleared | 1 | 2 of 19 |
-| page writes | 1 | 18 of 19 |
-| OS dark block removed | 1 | 1 of 19 |
-| OS dark text same as ground | 1 | 1 of 19 |
-| every phase shown as Done | 1 | 10 of 19 |
-| Phases not sorted | 1 | 9 of 19 |
-| scheduling shown raw | 1 | 9 of 19 |
-| session closed styled as done | 1 | 8 of 19 |
-| Depends on column blank | 1 | 11 of 19 |
-| needs not sorted by kind | 1 | 9 of 19 |
-| one-way door not critical | 1 | 8 of 19 |
-| after note dropped | 1 | 10 of 19 |
-| after note counts merged pull requests | 1 | 10 of 19 |
-| review order ignores dependencies | 1 | 10 of 19 |
-| review lists open pull requests | 1 | 10 of 19 |
-| digit-string numbers not normalised | 1 | 10 of 19 |
-| headings upper-cased in the DOM | 1 | 19 of 19 |
-| text appended as markup | 1 | 14 of 19 |
-| unsafe links allowed | 1 | 12 of 19 |
-| architecture link dropped | 1 | 8 of 19 |
-| phone table layout disabled | 1 | 14 of 19 |
-| long pane widens the page | 1 | 11 of 19 |
-| unreadable tick widens the page | 1 | 1 of 19 |
-| stale verdict lost when meta dies | 1 | 1 of 19 |
-| focus not restored | 1 | 1 of 19 |
-| map scroll not restored | 1 | 1 of 19 |
-| chips wrap mid-word | 1 | 2 of 19 |
-| table cells break anywhere | 1 | 2 of 19 |
-| map: one column | 1 | 8 of 19 |
-| map: all edges solid | 1 | 8 of 19 |
-| map: skip edges not laned | 1 | 8 of 19 |
-| map: missing node gets a state | 1 | 1 of 19 |
-| map: node shows no state | 1 | 9 of 19 |
-| map: cycle drawn instead of reported | 1 | 1 of 19 |
-| map: unreadable entry reads as none | 1 | 1 of 19 |
-| map: non-list `depends_on` dropped | 1 | 1 of 19 |
-| map: label through innerHTML | 1 | 1 of 19 |
-
-The table covers every mutation the review gate at `45f0689` listed that still applies to the code: the stale threshold fixed at 30, `stale_after_min` ignored, Recent changes always empty, the missing-database notice never shown, subscription errors ignored, Pull requests rows removed, the slow-load notice never shown, a page that writes, the OS dark block removed, every phase shown as Done, needs sorted wrongly and the after note dropped. It also covers the four minor findings that review sent back and the implementer fixed: a long pane and an unreadable tick widening the page, the stale verdict lost when the `board/meta` listener dies, digit-string pull request numbers, and focus lost on re-render.
+The mutants cover each behaviour the Rerun asserts, and every broken template that a review gate has reported: the stale threshold and its default, the 30-second re-render, Recent changes, the no-database, unreachable and subscription-error states, every table's rows, order and labels, the review order and its "after" notes, digit-string numbers, the page writing through any method, including `acquire` and a method not in the API, the light, dark and OS dark themes, the phone layout, long values widening the page, focus and both scroll positions across a re-render, injection, the dependency map's layers, dashes, lanes, node colours, labels, legend, scrolling, unknown nodes, cycles and unreadable entries, a cached tick trusted, cached data counted as live, cached data not raising the unreachable notice, and a live stale verdict lost when a cached snapshot follows. A mutant whose target text the template no longer holds is rewritten by hand as the same fault against the current code.
 
 ### Published test page
 
-The template was copied unchanged (same sha256) to a scratch file and published once with the Artifact tool, private, with `capabilities: {db: {rules: [{path: "", read: "view", write: "admin"}]}}`, `icon: "status"` and `title: "placeholder-feature status board"`. The service stored contract 0.2.98, the one root rule, and page version `1795279300-128b`. The page stays private and is not shared.
+This shows that the template works as a published page fed only through its database. Copy the template unchanged to a scratch file and publish it once with the Artifact tool, private, with the capabilities and icon its schema comment names and `title: "placeholder-feature status board"`. The page stays private.
 
-### Batch 1
+Batch 1 is one `ArtifactData` batch of `set` writes in this run's shape:
 
-One `ArtifactData` batch of 15 `set` writes, committed atomically at 16:41 UTC:
+- `board/meta`, with an `https://example.com/` architecture URL and a fresh `tick_at`;
+- `board/recent` with a few items, newest first;
+- eight `phases` with mixed states and scheduling values: `foundation` with `depends_on: []`, `launcher`, `board`, `orchestrator-handbook`, `phase-handbooks`, `pr-handbook` and `spec-planner-handbooks` each on `foundation` until `merged`, and `default-stack` on the other seven until `done`;
+- three `prs`, one of which depends on the other two;
+- two `needs`, a one-way decision and a prompt with a pane.
 
-- `board/meta`: feature `placeholder-feature`, orchestrator branch `placeholder-feature-orchestrator`, default branch `main`, architecture URL `https://example.com/architecture`, `tick_at` `2026-11-21T16:41:00Z`, `stale_after_min` 40.
-- `board/recent`: three items, newest first. `board` Implement to Verify at 16:30, `launcher` Plan to Implement at 16:10, `foundation` Review to PR at 15:00.
-- `phases`, in this run's shape. `foundation` (PR, closed, `depends_on: []`). `launcher` (Implement, live, pane `%12`), `board` (Verify, live, pane `%14`), `orchestrator-handbook` (Review, queued), `phase-handbooks` (Spec, blocked, waits for "a decision on the handbook layout"), `pr-handbook` (Plan, queued) and `spec-planner-handbooks` (Done, closed), each depending on `foundation` until `merged`. `default-stack` (Spec, blocked) depending on the other seven until `done`.
-- `prs/21` (draft, rank 1, depends on 22, needs update, checks passing), `prs/22` (draft, rank 2, no dependencies, checks pending) and `prs/23` (draft, rank 3, depends on 21 and 22, checks failing), each with an `https://example.com/pull/<n>` link and base `main`.
-- `needs/default-stack-d1` (decision, one-way door, since 16:18) and `needs/board-prompt` (prompt, pane `%14`, since 16:37).
+Batch 2 is one `update` of `board/meta` that sets `tick_at` 41 minutes back. The page must then show the stale banner and the Stale chip, and the artifact's version must not change, which shows nothing was published again.
 
-### How the page was read
+### How the page is read
 
-No browser could open the live page. The `claude-in-chrome` skill reported that the Claude in Chrome extension is not set up, and no other browser tool was available. So the claude.ai viewer and its live database transport were not observed. Three reads stand in for them, and each shows only what is stated:
+Read the page after each batch in every way available, and report which ran:
 
-1. The Artifact tool's `read` with `page: true` returned the served document: the publish skeleton, the stored `db` declaration and the template byte for byte. This shows what the viewer serves, not how it renders.
-2. `ArtifactData` `list` of `board`, `phases`, `prs` and `needs` at `as_level: "view"` returned all 15 documents as written, so a viewer can read them. An `update` of `board/meta` at `as_level: "interact"` was refused by the access rules, so only an editor writes.
-3. The rows from step 2 were served unchanged, with `fromCache: false`, to the template inside the served skeleton from step 1, and rendered in headless Chrome in a 400 px frame, light and dark. The DOM was read back with the Rerun check's collector, and a screenshot of the frame was looked at. This shows how the template renders exactly those rows. It does not exercise the claude.ai viewer, `claude.use("db")` or real `onSnapshot` delivery.
+1. The Artifact tool's `read` with `page: true`, to show that the served page is the template byte for byte under the publish skeleton, with the stored `db` declaration.
+2. `ArtifactData` reads of every collection at `as_level: "view"`, to show a viewer reads every row, and one write at `as_level: "interact"`, which the access rules must refuse.
+3. The rows from step 2, served unchanged and live to the template inside the served skeleton, rendered in headless Chrome at 400 px in light and dark and read back with the Rerun check's collector. This shows how the template renders exactly those rows, not the claude.ai viewer or its database transport.
+4. When a browser tool can open claude.ai, one look at the live page itself, which is the only read that exercises the viewer.
 
-Result after batch 1, in light and in dark: the six headings in order. Needs you lists the one-way decision then the prompt with pane `%14`. Ready for your review lists #22, #21 ("after #22"), #23 ("after #21, #22"). The Pull requests table has three rows, and #23's Depends on reads `#21, #22`. Phases has eight rows with "session live", "session closed", "queued to start" and "blocked", and `default-stack`'s Depends on lists all seven phases with `(done)`. The map has three columns and 13 edges, 7 of them dashed, and none crosses a node. Recent changes shows the three items in stored order. Heartbeat reads Fresh, 1 minute ago, with no stale banner. The tab title is `placeholder-feature status board`, nothing was written, and there is no horizontal scroll at 400 px. The body background was `rgb(245, 247, 250)` in light and `rgb(16, 20, 27)` in dark.
+### Cold read of the schema comment
 
-### Batch 2
-
-One `ArtifactData` batch of one write at 16:43 UTC: `update` of `board/meta` with `tick_at` `2026-11-21T16:02:00Z`, 41 minutes earlier, pinned to version 1, which committed as version 2. `board` was read again at `as_level: "view"` and showed version 2 with the new `tick_at`. Rendered the same way, with the other collections as read after batch 1 (batch 2 did not touch them), the page showed the banner "The orchestrator has not ticked for 41 minutes." and the Stale chip with "41 min ago", in light and in dark, with no horizontal scroll. Afterwards the artifact's version was still `1795279300-128b`, so nothing was published again.
-
-### Schema comment
-
-Cold read: a fresh subagent was given only the schema comment (lines 1 to 93 of the template) and a two-phase scenario in which `beta` cannot start until all of `alpha`'s pull requests are merged into `main`. It wrote a first batch of five `set` writes: `board/meta` with `architecture_url: null`, `board/recent` with three items newest first, `phases/alpha` with `depends_on: []`, `phases/beta` with `depends_on: [{"phase": "alpha", "until": "done"}]`, and `needs/alpha-prompt` (prompt, pane `%7`). Checked against the comment, every collection, document id, field and value is valid, `recent` is one document, `depends_on` is present on both phases with the right `until`, and no `prs` document was invented. It also put the prompt in `alpha`'s `waits_for`, which the comment allows but which repeats the needs item. Its open questions: what the four `scheduling` values mean (`queued` against `blocked`), how `scheduling: "live"` relates to `session_live`, whether `waits_for` should repeat a needs item, the order of items with the same time, whether to backfill `recent`, a convention for needs ids, whether `door` applies to prompts, whether to send `stale_after_min`, and whether `until: "done"` means the state Done.
+This shows the comment is enough to write the board's data. Give a fresh subagent only the schema comment, the HTML comment at the top of the template, and tell it to read nothing else. Ask it for the first `ArtifactData` batch of a two-phase feature in which `beta` cannot start until every pull request of `alpha` is merged into the default branch, with one permission prompt waiting in `alpha`'s session. The expected answer, in substance: `set` writes only, at most 50; `board/meta` with every field and a UTC `Z` time; `board/recent` as one document with `items` newest first, `from` null for a first state; `phases/alpha` with `depends_on: []` and `phases/beta` with `depends_on: [{"phase": "alpha", "until": "done"}]`, each with a state name and a scheduling value from the lists; a `needs` document of kind `prompt` with its pane and a null door; no `prs` documents invented; every document id as the comment gives it.
 
 ### Static checks
 
-- `grep -n innerHTML` on the template printed nothing and exited `1`.
-- In `packages/s-stack`, `apm audit --ci` (apm-cli 0.32.0, outside the sandbox) passed all 10 checks with no drift and exited `0`. The committed lockfile holds no `/Users/` path.
+- `grep -n innerHTML` on the template must print nothing.
+- `apm audit --ci` in `packages/s-stack`, run outside the sandbox with apm-cli 0.32.0, must pass, and the committed lockfile must hold no absolute path.

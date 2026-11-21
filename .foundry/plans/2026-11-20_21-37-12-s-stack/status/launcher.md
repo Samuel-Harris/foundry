@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Implement"
-changed_at: "2026-11-21T15:43:28Z"
+state: "Verify"
+changed_at: "2026-11-21T16:15:48Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "50e26eebaa31524a81e0cc00d99edf4bdad0e2dc"
+code_head: "f657820ffa0fe1a25c7672d2776b419f86f6a4fd"
 waits_for: null
 verdicts: []
 pull_requests: []
@@ -30,8 +30,16 @@ decisions:
     decision: "A resumed session receives the first prompt again, so it reloads sam-mode and its handbook and rereads its files."
     door: "two-way"
     at: "2026-11-21T15:43:28Z"
+  - id: "launcher-d6"
+    decision: "A nameless claude in the shared feature worktree counts as the orchestrator only, never as the first spec writer, because workmux resurrect restores only the orchestrator and the spec writer has ended by then. From the quick-review pass."
+    door: "two-way"
+    at: "2026-11-21T16:15:48Z"
+  - id: "launcher-d7"
+    decision: "Only a leading --name argument identifies a session, so prompt text containing --name never matches, and the pane command runs through /bin/sh directly so it does not depend on tmux's default shell. From the quick-review pass."
+    door: "two-way"
+    at: "2026-11-21T16:15:48Z"
 ---
 
 # Phase launcher status
 
-The phase plan is committed at `phases/launcher.md`. Implementation has started.
+Implementation and its quick-review fix round are committed. The phase branch merged `s-stack-package` at 0b0938f before Verify. The suite has 35 tests and passes on macOS (tmux 3.8) and, per the fix-round delegate, in an Ubuntu 24.04 container (tmux 3.4).

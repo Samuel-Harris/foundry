@@ -22,7 +22,7 @@ Roadmap, paragraph 2: The front end's single note view, the one file `web/note-v
 Expected answer:
 
 1. Three phases: the sharing back end, the import command, and the front end that needs both. The front end stays one phase, because its work is one file.
-2. Every phase gives each field that roadmap `workflow.md` names for the feature plan: its scope, the phases it depends on (or none), the paths it owns, its exclusive resources (or none), and a **Done when** list of the evidence that proves it done.
+2. Every phase gives each field of `planner.md`'s "What each phase entry holds" table: its scope, the phases it depends on (or none), the paths it owns, the paths it must not touch, its exclusive resources (or none), and a **Done when** list of the evidence that proves it done. An answer without a **Must not touch** field, or an equivalent, fails this point.
 3. The front end phase depends on both the sharing phase and the import phase. The sharing and import phases depend on nothing and can run at the same time.
 4. No two phases that can run at the same time own the same path.
 5. Port 5432, or the local test database on it, is named as an exclusive resource of each phase whose tests start that database.

@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Implement"
-changed_at: "2026-11-21T22:20:06Z"
+state: "Verify"
+changed_at: "2026-11-21T22:59:59Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "42d3ced56004988cc8e3db84280237636fc19491"
+code_head: "805fccd6ed885a2dffc1cbe765e63888add2640b"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -139,3 +139,5 @@ The full-height right column, the orchestrator-precedence rule and the second re
 The Verify findings at 310d2df are fixed: the window-lock test and close and remove before tmux has ever run. 100 tests pass on macOS and Ubuntu in both locales. Verify runs at 42d3ced.
 
 Merge 90a798c of `s-stack-package` at 3b31462 (board) touched `packages/s-stack/.apm/skills/sam-mode/assets/status-board.html`, `tests/s-stack/verify-s-stack/checks/board.md` and the generated `packages/s-stack/apm.lock.yaml`. None of these is a launcher-owned path, so under launcher-d14 the code head stays 42d3ced and the Verify verdict stands.
+
+The third review's fixes are committed: atomic symlink locks, fixed start times, hand-resumed spec writers, and the shell-only idle rule. 108 tests pass on macOS and Ubuntu in both locales. Merge 132150d of `s-stack-package` at 6bed682 touched only `.foundry/`. Verify runs at 805fccd.

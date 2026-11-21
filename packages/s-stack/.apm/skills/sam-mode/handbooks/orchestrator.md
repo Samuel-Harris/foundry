@@ -111,9 +111,9 @@ Merge the default branch into the orchestrator branch on the orchestrator branch
 
 A pull request's checks do not run again when the default branch, or a pull request it depends on, moves. Two pull requests can each pass, merge, and together break the default branch. `needs_update` marks each open pull request that has to be refreshed.
 
-- An open pull request is up to date when, after `git fetch origin`, its head contains the default branch's tip and the current head of every open pull request in its `depends_on`, and every required check has passed on that head. A merged or closed pull request has no flag.
+- An open pull request is up to date when, after `git fetch origin`, its head contains the default branch's tip and the current head of every open pull request it depends on, directly or through another, and every required check has passed on that head. A merged or closed pull request has no flag.
 - In tick step 1, set `needs_update` on each open pull request that is not up to date, and clear it on each that is. Write each change to the tracker and the board.
-- In tick step 4, tell each quiet phase in PR that has a flagged pull request, once a tick. If a flagged pull request lacks the default branch's tip, send a `fix-round` of the kind "A pull request merged", naming the feature pull request that landed, or the default branch tip when none did. Otherwise send an `instruction` to refresh each flagged pull request onto the pull requests it depends on, naming each with its current head. A phase in another state is told once it is back in PR and quiet, because those handlers expect PR.
+- In tick step 4, tell each phase in PR that has a pull request it must refresh, once a tick: start its session if its pane is closed, and otherwise wait until it is quiet. If the pull request lacks the default branch's tip, send a `fix-round` of the kind "A pull request merged", naming that tip. If it lacks the head of a pull request it depends on, send an `instruction` to refresh it onto that pull request, naming its current head. A pull request flagged only because its checks are pending or failed needs no message here. Step 5 handles a failed check. A phase in another state is told once it is back in PR, because those handlers expect PR.
 
 A pull request is ready for the developer to merge only when it is up to date.
 
@@ -159,7 +159,7 @@ Record the commit it describes in the tracker.
 
 ## Roadmap updates
 
-When the developer asks for a roadmap change, start an update spec writer with `--role spec --update <n>`. The launcher puts it in your column, where the developer talks to it. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, merge it with `--no-ff`, and close its pane with `--close`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner when the phases change.
+When the developer asks for a roadmap change, start an update spec writer with `--role spec --update <n>`. The launcher puts it in your column, where the developer talks to it. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, merge it with `--no-ff`, and close its pane with `--close`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner so that it revises those phases' entries. Its `done-planning` then names them, and they move back to Plan.
 
 ## Restarts
 

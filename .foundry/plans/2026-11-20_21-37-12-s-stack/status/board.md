@@ -1,7 +1,7 @@
 ---
 phase: "board"
-state: "Review"
-changed_at: "2026-11-21T17:42:45Z"
+state: "Implement"
+changed_at: "2026-11-21T18:10:36Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
 code_head: "b2deb4dc95214b6039608c7c3b7f949aae752bce"
@@ -31,6 +31,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "b2deb4dc95214b6039608c7c3b7f949aae752bce"
     at: "2026-11-21T17:42:45Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "b2deb4dc95214b6039608c7c3b7f949aae752bce"
+    at: "2026-11-21T18:10:36Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
 pull_requests: []
 requests: []
@@ -70,3 +75,5 @@ The second Review gate returned SIGNIFICANT at `a678a49`: the dependency map dra
 The fix `66118de` gives each skipping edge its own lane, keeps map labels whole up to 40 characters, wraps unknown dependency chips, and keeps a live stale verdict through a cached snapshot. `s-stack-package` was merged at `eff112d` under C7 with a lockfile-only conflict, bringing `phase-handbooks` and `main`'s merge of #81. The Verify gate is starting for `eff112d`.
 
 A first verifier for `eff112d` was stopped before it committed, when the orchestrator relayed the rule that check files hold no results. A fresh verifier rewrote `checks/board.md` at `b2deb4d`, the new code head, under that rule and returned VERIFIED. The Review gate is starting over `a678a49..b2deb4d`.
+
+The third Review gate returned SIGNIFICANT at `b2deb4d`. Every finding is a gap in `checks/board.md`; both adversaries found the template correct. No template change is planned. The phase moves through Implement to Verify, where a fresh verifier closes the gaps systematically.

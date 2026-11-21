@@ -80,3 +80,25 @@ A fresh verifier, following `handbooks/verifier.md`, rewrote `checks/board.md` a
 Known gap, unchanged: no browser tool was available, so nobody has watched the claude.ai viewer render a test page.
 
 Found by the verifier, outside this phase's paths: `tests/s-stack/verify-s-stack/SKILL.md` check 8 and feature plan C6 still say `## Evidence` records results, which contradicts the run decision and `verifier.md`.
+
+## Review gate, code head `b2deb4dc95214b6039608c7c3b7f949aae752bce`, SIGNIFICANT
+
+`interrogate` ran two adversaries, Opus and Fable, at medium effort, under `handbooks/reviewer.md`. The scope was `66118de`, `b2deb4d` and the conflict resolution of `eff112d`. Both reran the earlier probes: every one of the 74 provided mutants exits 1, and the two lane graphs now draw differently. Both found the template correct, and the merge's lockfile matches the template's hash. The phase session reran each significant finding below and saw the same exit code.
+
+Significant, all gaps in the `## Rerun` check (each mutant exits 0, where 1 is required):
+
+- Skipping edges sharing a lane per source or per target. Found by both adversaries. No fixture has two skipping edges that share a source or a target, so the dashed-under-solid defect that `66118de` fixed can return unnoticed.
+- A template that hangs makes the Rerun hang. A busy loop ran past a 150-second bound. The Chrome call has no wall-clock bound, and the `mktemp` directory and Chrome process were left behind; the phase session removed its own.
+- A `<title>` element, which the schema comment says the file must not have.
+- The Phases table losing its scroll position on re-render.
+- A first live tick that never updates. The banner stays "41 minutes" after a fresh live tick, and no scenario sends a second live `board/meta`.
+- Lane space reserved for only one lane, so a lane runs through a node.
+- An SVG height that ignores the lanes, and a width that ignores grown nodes, which clips the map.
+- Unknown chips that wrap only below 600 px.
+
+Minor, recorded:
+
+- No fixture has an id over 40 characters, so a missing cut at 40 passes.
+- A 40-character id in wide glyphs overflows its node, because node width assumes 7.4 units per character. Phase ids are slugs in practice.
+- The stub records the read-only query builders `where`, `orderBy` and `limit` as writes. This fails safe.
+- The Fable adversary saw one headless Chrome launch sit idle for nine minutes, in about 2,300 launches. It is the same unbounded call as above.

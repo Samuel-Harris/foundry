@@ -42,12 +42,15 @@ phases/<phase id>, one document per phase:
   state         a state name
   scheduling    "queued", "blocked", "live" or "closed"
                 (it describes the session, not the phase's state)
-  waits_for     string naming what the phase waits for, or null
+  waits_for     string, a one-line description of anything the phase waits
+                for, such as a decision, a person or a resource, or null.
+                Other phases go in depends_on, not here.
   session_live  boolean, true while the phase's session runs
   pane          string naming the session's pane, or null
   changed_at    time of the phase's last state change
-  depends_on    list of {phase, until} objects, one per phase this phase
-                waits for, or an empty list. phase is the other phase's id.
+  depends_on    list of {phase, until} objects, one per other phase this
+                phase waits for, or an empty list. It lists only phases.
+                phase is the other phase's id.
                 until is "merged" when the other phase's work only has to
                 be merged into the orchestrator branch, or "done" when every
                 pull request of the other phase has to be merged into the
@@ -55,14 +58,17 @@ phases/<phase id>, one document per phase:
 
 prs/<number>, one document per pull request, its document id the number
 written as a string, such as prs/42:
-  number        number
+  number        number, or a string of its decimal digits, such as "42",
+                which the page reads as that number
   url           https URL of the pull request
   title         string
   phase         string, the phase id
   state         "draft", "open", "merged" or "closed"
   checks        "passing", "failing", "pending" or "none"
   base          string, the base branch
-  depends_on    list of pull request numbers, empty when there are none
+  depends_on    list of pull request numbers, empty when there are none.
+                Each may be a number or a string of its decimal digits, which
+                the page reads as that number.
   review_rank   number, the lowest reviewed first, or null
   needs_update  boolean, explained below
 
@@ -200,6 +206,7 @@ and its checks have passed on that head.
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .chip.accent { background: var(--accent-bg); color: var(--accent); }
   .chip.good { background: var(--good-bg); color: var(--good); }
   .chip.warn { background: var(--warn-bg); color: var(--warn); }
   .chip.crit { background: var(--crit-bg); color: var(--crit); }
@@ -232,18 +239,18 @@ and its checks have passed on that head.
   ol.recent { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
   ol.recent > li { display: grid; grid-template-columns: minmax(0, max-content) minmax(8em, 1fr); gap: 12px; }
   ol.recent > li > :first-child { overflow-wrap: anywhere; }
-  .deps > span { display: block; }
-  h3 { margin: 6px 0 0; font-size: 0.85rem; font-weight: 600; }
+  .deps { max-width: 100%; }
+  .map-heading { margin: 6px 0 0; font-size: 0.85rem; font-weight: 600; }
   .map { overflow-x: auto; max-width: 100%; min-width: 0; }
   .map svg { display: block; }
   .map text { font-family: var(--font-mono); font-size: 12px; fill: var(--fg); }
   .map .node-state { font-family: var(--font-text); font-size: 11px; fill: var(--muted); }
   .map .node { stroke-width: 1.5; }
-  .map .n-plain { fill: var(--chip-bg); stroke: var(--line); }
-  .map .n-accent { fill: var(--accent-bg); stroke: var(--accent); }
-  .map .n-warn { fill: var(--warn-bg); stroke: var(--warn); }
-  .map .n-good { fill: var(--good-bg); stroke: var(--good); }
-  .map .n-crit { fill: var(--crit-bg); stroke: var(--crit); }
+  .map .node.plain { fill: var(--chip-bg); stroke: var(--line); }
+  .map .node.accent { fill: var(--accent-bg); stroke: var(--accent); }
+  .map .node.warn { fill: var(--warn-bg); stroke: var(--warn); }
+  .map .node.good { fill: var(--good-bg); stroke: var(--good); }
+  .map .node.crit { fill: var(--crit-bg); stroke: var(--crit); }
   .map .edge { fill: none; stroke: var(--muted); stroke-width: 1.5; }
   .map .edge.done { stroke-dasharray: 5 4; }
   .map .arrow { fill: var(--muted); }
@@ -271,17 +278,21 @@ and its checks have passed on that head.
 
 <script>
 (() => {
-  const STATE_NAMES = ["Spec", "Plan", "Implement", "Verify", "Review", "PR", "Done"];
+  const STATE_TONE = {Spec: "plain", Plan: "plain", Implement: "accent", Verify: "warn", Review: "warn", PR: "good", Done: "good"};
   const NEED_KINDS = ["decision", "prompt", "restack"];
   const DEFAULT_STALE_MIN = 40;
   const MINUTE = 60000;
 
+  const digitsToNumber = (v) => (typeof v === "string" && /^[0-9]+$/.test(v) ? Number(v) : v);
+  const prDoc = (p) => ({...p, number: digitsToNumber(p.number),
+    depends_on: Array.isArray(p.depends_on) ? p.depends_on.map(digitsToNumber) : p.depends_on});
+
   const SOURCES = {
-    meta: (db) => db.doc("board/meta"),
-    recent: (db) => db.doc("board/recent"),
-    phases: (db) => db.collection("phases"),
-    prs: (db) => db.collection("prs"),
-    needs: (db) => db.collection("needs"),
+    meta: {ref: (db) => db.doc("board/meta")},
+    recent: {ref: (db) => db.doc("board/recent")},
+    phases: {ref: (db) => db.collection("phases")},
+    prs: {ref: (db) => db.collection("prs"), normalise: prDoc},
+    needs: {ref: (db) => db.collection("needs")},
   };
 
   const state = {
@@ -300,6 +311,7 @@ and its checks have passed on that head.
   function el(tag, attrs, ...children) {
     const node = document.createElement(tag);
     for (const [key, value] of Object.entries(attrs || {})) {
+      if (value == null) continue;
       if (key === "class") node.className = value;
       else node.setAttribute(key, value);
     }
@@ -344,9 +356,6 @@ and its checks have passed on that head.
     return el("time", {datetime: new Date(ms).toISOString(), title: local}, text);
   }
 
-  const digitsToNumber = (v) => (typeof v === "string" && /^[0-9]+$/.test(v) ? Number(v) : v);
-  const prDoc = (p) => ({...p, number: digitsToNumber(p.number),
-    depends_on: Array.isArray(p.depends_on) ? p.depends_on.map(digitsToNumber) : p.depends_on});
   const numbers = (v) => (Array.isArray(v) ? v.filter((n) => typeof n === "number") : []);
   const prLabel = (n) => "#" + n;
 
@@ -360,9 +369,14 @@ and its checks have passed on that head.
     return null;
   }
 
+  function stateLook(s) {
+    if (typeof s === "string" && Object.hasOwn(STATE_TONE, s)) return {label: s, tone: STATE_TONE[s]};
+    if (s == null) return {label: "unknown", tone: "crit"};
+    return {label: "unknown: " + str(s), tone: "crit"};
+  }
   function phaseStateChip(s) {
-    if (!STATE_NAMES.includes(s)) return chip("unknown: " + str(s), "crit");
-    return chip(s, s === "PR" || s === "Done" ? "good" : "");
+    const {label, tone} = stateLook(s);
+    return chip(label, tone === "plain" ? "" : tone);
   }
 
   const SCHEDULING = {live: "session live", closed: "session closed", queued: "queued to start", blocked: "blocked"};
@@ -374,11 +388,10 @@ and its checks have passed on that head.
   const SVG_NS = "http://www.w3.org/2000/svg";
   const UNTIL = ["merged", "done"];
   const MAP = {nodeW: 168, nodeH: 44, colGap: 56, rowGap: 12, pad: 12, lane: 24};
-  const NODE_CLASS = {Spec: "n-plain", Plan: "n-plain", Implement: "n-accent", Verify: "n-warn", Review: "n-warn", PR: "n-good", Done: "n-good"};
 
-  const dependsOn = (p) => (Array.isArray(p.depends_on) ? p.depends_on : [])
-    .filter((d) => isObj(d) && typeof d.phase === "string" && UNTIL.includes(d.until));
-  const cut = (s, n) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+  const dependsOn = (p) => (Array.isArray(p.depends_on) ? p.depends_on : []);
+  const readableDep = (d) => isObj(d) && typeof d.phase === "string" && UNTIL.includes(d.until);
+  const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
   function svg(tag, attrs, ...children) {
     const node = document.createElementNS(SVG_NS, tag);
@@ -387,31 +400,36 @@ and its checks have passed on that head.
     return node;
   }
 
-  // An edge into a phase still being walked closes a cycle, so it is left out of layering.
-  function phaseGraph(phases) {
+  // A cycle is a broken plan, so the walk reports the first one it meets instead of laying it out.
+  function phaseGraph(phases, deps) {
     const nodes = new Map();
     for (const p of phases) if (str(p.phase)) nodes.set(str(p.phase), {id: str(p.phase), state: p.state});
     const edges = [];
     for (const p of phases) {
       if (!str(p.phase)) continue;
-      for (const d of dependsOn(p)) {
+      for (const d of deps.get(p).filter(readableDep)) {
         if (!nodes.has(d.phase)) nodes.set(d.phase, {id: d.phase, state: null});
         edges.push({from: d.phase, to: str(p.phase), until: d.until});
       }
     }
     const layers = new Map();
-    const walking = new Set();
+    const path = [];
+    let cycle = null;
     const layer = (id) => {
       if (layers.has(id)) return layers.get(id);
-      walking.add(id);
+      if (path.includes(id)) {
+        cycle ||= path.slice(path.indexOf(id));
+        return 0;
+      }
+      path.push(id);
       let depth = 0;
-      for (const e of edges) if (e.to === id && !walking.has(e.from)) depth = Math.max(depth, 1 + layer(e.from));
-      walking.delete(id);
+      for (const e of edges) if (e.to === id) depth = Math.max(depth, 1 + layer(e.from));
+      path.pop();
       layers.set(id, depth);
       return depth;
     };
     for (const node of nodes.values()) node.layer = layer(node.id);
-    return {nodes: [...nodes.values()], edges};
+    return {nodes: [...nodes.values()], edges, cycle};
   }
 
   function drawMap({nodes, edges}) {
@@ -422,18 +440,16 @@ and its checks have passed on that head.
     const tallest = Math.max(...columns.map(colHeight));
     const byId = new Map(nodes.map((n) => [n.id, n]));
     const laned = (e) => byId.get(e.to).layer - byId.get(e.from).layer !== 1;
-    const backward = edges.some((e) => byId.get(e.to).layer <= byId.get(e.from).layer);
-    const left = pad + (backward ? colGap : 0);
     const top = pad + (edges.some(laned) ? lane : 0);
     const laneY = pad + lane / 2;
-    const width = 2 * left + columns.length * nodeW + (columns.length - 1) * colGap;
+    const width = 2 * pad + columns.length * nodeW + (columns.length - 1) * colGap;
     const height = top + tallest + pad;
 
     const box = new Map();
     columns.forEach((col, ci) => {
       col.sort((a, b) => a.id.localeCompare(b.id));
       const offset = top + (tallest - colHeight(col)) / 2;
-      col.forEach((n, i) => box.set(n.id, {x: left + ci * (nodeW + colGap), y: offset + i * (nodeH + rowGap)}));
+      col.forEach((n, i) => box.set(n.id, {x: pad + ci * (nodeW + colGap), y: offset + i * (nodeH + rowGap)}));
     });
 
     // Edges into one node would otherwise stack their arrowheads on one point.
@@ -457,16 +473,15 @@ and its checks have passed on that head.
         `H${x3 - colGap} C${x3 - colGap / 2},${laneY} ${x3 - colGap / 2},${y3} ${x3},${y3}`;
     };
 
-    const stateText = (s) => (STATE_NAMES.includes(s) ? s : s == null ? "unknown" : "unknown: " + str(s));
     return svg("svg", {width, height, viewBox: `0 0 ${width} ${height}`, "aria-hidden": "true"},
       svg("defs", {}, svg("marker", {id: "map-arrow", viewBox: "0 0 8 8", refX: 8, refY: 4, markerWidth: 8, markerHeight: 8, markerUnits: "userSpaceOnUse", orient: "auto"},
         svg("path", {class: "arrow", d: "M0,0 L8,4 L0,8 z"}))),
       ...edges.map((e) => svg("path", {class: e.until === "done" ? "edge done" : "edge", d: edgePath(e), "marker-end": "url(#map-arrow)"})),
       ...nodes.map((n) => svg("g", {transform: `translate(${box.get(n.id).x},${box.get(n.id).y})`},
         svg("title", {}, n.id),
-        svg("rect", {class: "node " + (NODE_CLASS[n.state] || "n-crit"), width: nodeW, height: nodeH, rx: 6}),
-        svg("text", {class: "node-id", x: 10, y: 19}, cut(n.id, 20)),
-        svg("text", {class: "node-state", x: 10, y: 35}, cut(stateText(n.state), 24)))));
+        svg("rect", {class: "node " + stateLook(n.state).tone, width: nodeW, height: nodeH, rx: 6}),
+        svg("text", {x: 10, y: 19}, truncate(n.id, 20)),
+        svg("text", {class: "node-state", x: 10, y: 35}, truncate(stateLook(n.state).label, 24)))));
   }
 
   function byRankThenNumber(a, b) {
@@ -518,14 +533,14 @@ and its checks have passed on that head.
 
   const isLoaded = (source) => state.status[source] === "cached" || state.status[source] === "live";
   // A cached tick may be old, so only a live one, or the last one before the listener died, can call the board stale or fresh.
-  const tickTrusted = () => state.status.meta === "live" || (isObj(state.status.meta) && state.status.meta.hadData);
+  const tickTrusted = () => state.status.meta === "live" || (isObj(state.status.meta) && state.status.meta.last === "live");
 
   function renderLoadState(section, source) {
     const status = state.status[source];
     if (isObj(status)) {
       section.append(el("p", {class: "section-error"},
         "This section stopped updating (" + status.error + "). Reload the page to try again."));
-      return status.hadData;
+      return status.last !== "loading";
     }
     if (status === "loading") {
       section.append(el("p", {class: "empty"}, "Loading."));
@@ -534,8 +549,8 @@ and its checks have passed on that head.
     return true;
   }
 
-  function table(columns, rows) {
-    return el("div", {class: "table-wrap"}, el("table", {},
+  function table(key, columns, rows) {
+    return el("div", {class: "table-wrap", "data-key": key}, el("table", {},
       el("thead", {}, el("tr", {}, ...columns.map((c) => el("th", {scope: "col"}, c)))),
       el("tbody", {}, ...rows.map((cells) =>
         el("tr", {}, ...cells.map((cell, i) => el("td", {"data-label": columns[i]}, cell)))))));
@@ -614,7 +629,7 @@ and its checks have passed on that head.
       return;
     }
     const deps = (p) => numbers(p.depends_on);
-    section.append(table(
+    section.append(table("table-prs",
       ["Number", "Title", "Phase", "State", "Checks", "Base", "Depends on", "Update"],
       prs.map((p) => [
         el("span", {class: "num"}, link(prLabel(str(p.number)), p.url, "prs-" + str(p.number))),
@@ -628,6 +643,12 @@ and its checks have passed on that head.
       ])));
   }
 
+  function dependsCell(entries) {
+    if (!entries.length) return el("span", {class: "mono"}, "none");
+    return el("div", {class: "mono deps"}, ...entries.map((d) => el("div", {},
+      readableDep(d) ? d.phase + " (" + d.until + ")" : chip("unknown: " + JSON.stringify(d), "crit"))));
+  }
+
   function renderPhases() {
     const phases = state.phases.slice().sort((a, b) => str(a.phase).localeCompare(str(b.phase)));
     const section = sectionShell("s-phases", "Phases", isLoaded("phases") ? phases.length : null);
@@ -636,26 +657,30 @@ and its checks have passed on that head.
       section.append(el("p", {class: "empty"}, "No phases yet. The orchestrator adds them once the feature plan exists."));
       return;
     }
-    section.append(table(
+    const deps = new Map(phases.map((p) => [p, dependsOn(p)]));
+    section.append(table("table-phases",
       ["Phase", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"],
       phases.map((p) => [
         el("span", {class: "mono"}, str(p.phase)),
         phaseStateChip(p.state),
         schedulingChip(p.scheduling),
         str(p.waits_for) || "nothing",
-        dependsOn(p).length
-          ? el("span", {class: "mono deps"}, ...dependsOn(p).map((d, i, all) => el("span", {}, d.phase + " (" + d.until + ")" + (i < all.length - 1 ? ", " : ""))))
-          : el("span", {class: "mono"}, "none"),
+        dependsCell(deps.get(p)),
         p.session_live === true
           ? (str(p.pane) ? el("span", {}, "live in pane ", el("span", {class: "mono"}, str(p.pane))) : "live")
           : "not live",
         timeEl(p.changed_at, "relative"),
       ])));
-    const graph = phaseGraph(phases);
+    const graph = phaseGraph(phases, deps);
+    if (graph.cycle) {
+      section.append(el("p", {class: "section-error"},
+        "The phases depend on each other in a cycle: " + graph.cycle.join(", ") + ". Fix depends_on in the feature plan."));
+      return;
+    }
     if (!graph.edges.length) return;
     section.append(
-      el("h3", {}, "Dependency map"),
-      el("div", {class: "map"}, drawMap(graph)),
+      el("h3", {class: "map-heading"}, "Dependency map"),
+      el("div", {class: "map", "data-key": "map"}, drawMap(graph)),
       el("p", {class: "map-legend sub"},
         "Solid line: needed merged into the orchestrator branch. Dashed line: needed with every pull request merged into the default branch."));
   }
@@ -708,18 +733,28 @@ and its checks have passed on that head.
     $("notice").textContent = message || "";
   }
 
-  function render() {
+  // Each render rebuilds the sections, so the focused element and each scroller's position move to the new copies by data-key.
+  function keepViewState(draw) {
     const focusKey = document.activeElement && document.activeElement.dataset.key;
-    const tick = staleness();
-    renderHeader(tick);
-    renderNeeds();
-    renderReview();
-    renderPrs();
-    renderPhases();
-    renderRecent();
-    renderHeartbeat(tick);
-    renderNotice();
-    if (focusKey) document.querySelector(`[data-key="${CSS.escape(focusKey)}"]`)?.focus({preventScroll: true});
+    const scrolled = [...document.querySelectorAll(".map, .table-wrap")].map((n) => [n.dataset.key, n.scrollLeft]);
+    draw();
+    const find = (key) => document.querySelector(`[data-key="${CSS.escape(key)}"]`);
+    for (const [key, left] of scrolled) if (left) find(key)?.scrollTo({left});
+    if (focusKey) find(focusKey)?.focus({preventScroll: true});
+  }
+
+  function render() {
+    keepViewState(() => {
+      const tick = staleness();
+      renderHeader(tick);
+      renderNeeds();
+      renderReview();
+      renderPrs();
+      renderPhases();
+      renderRecent();
+      renderHeartbeat(tick);
+      renderNotice();
+    });
   }
 
   async function start() {
@@ -734,17 +769,14 @@ and its checks have passed on that head.
       state.waitedLong = true;
       render();
     }, 10000);
-    for (const [source, ref] of Object.entries(SOURCES)) {
+    for (const [source, {ref, normalise = (d) => d}] of Object.entries(SOURCES)) {
       ref(db).onSnapshot((snap) => {
-        if ("docs" in snap) {
-          const docs = snap.docs.map((d) => d.data()).filter(isObj);
-          state[source] = source === "prs" ? docs.map(prDoc) : docs;
-        }
+        if ("docs" in snap) state[source] = snap.docs.map((d) => d.data()).filter(isObj).map(normalise);
         else state[source] = snap.exists ? snap.data() : null;
         state.status[source] = snap.metadata.fromCache ? "cached" : "live";
         render();
       }, (error) => {
-        state.status[source] = {error: str(error && error.code) || "unavailable", hadData: isLoaded(source)};
+        state.status[source] = {error: str(error && error.code) || "unavailable", last: state.status[source]};
         render();
       });
     }

@@ -1,23 +1,23 @@
 # Phase `pr-handbook` checks
 
-Phase `pr-handbook` ships `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`, the PR creator's handbook, and `packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md`, which holds the one script the PR creator runs. The script is the behaviour, so the checks extract it at run time and run it as the handbook says: copied into `pr.sh` outside the repository and called as `bash pr.sh refresh ...` and `bash pr.sh prove ...`. A change that breaks the script fails these checks. Run each block from anywhere inside the repository, with `/bin/bash` as written, because the agent shell is zsh.
+Phase `pr-handbook` ships `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`, the PR creator's handbook, and `packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md`, which holds the one script the PR creator runs. The script is the behaviour, so the checks extract it at run time and run it the way the handbook does: copied into `pr.sh` outside the repository and called as `bash pr.sh refresh <phase branch> <default branch> <spec> [<commit> ...]` and `bash pr.sh prove ...`. Run each block from anywhere inside the repository with `/bin/bash`, as written, because the agent shell is zsh. The script then runs under the same bash.
 
 ## Rerun
 
-### The script blocks parse
+### The script block parses
 
-Every fenced `bash` block in `references/pr-commands.md` passes `bash -n` as extracted, and exactly one of them is the script, which answers `refresh` and `prove`. Expected: one `bash -n ok` line per block, `script block <n>`, and exit `0`.
+Every fenced `bash` block in `references/pr-commands.md` passes `bash -n` as extracted, and exactly one of them is the script, which answers `refresh` and `prove`. Expected: a `bash -n ok` line for each block, one `script block` line, and exit `0`.
 
 ```bash
 /bin/bash <<'CHECK'
-ref="$(git rev-parse --show-toplevel)/packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md"
+md="$(git rev-parse --show-toplevel)/packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md"
 d=$(mktemp -d "${TMPDIR:-/tmp}/pr-commands.XXXXXX"); trap 'rm -rf "$d"' EXIT
-awk -v dir="$d" '/^```bash$/ { n++; f = sprintf("%s/%02d.sh", dir, n); inb = 1; next } /^```$/ { inb = 0; next } inb { print > f }' "$ref"
-status=0; scripts=0
-for f in "$d"/*.sh; do
-  [ -e "$f" ] || { echo "no bash block in $ref"; exit 1; }
+awk '/^```bash$/ { b = 1; n++; next } /^```$/ { b = 0; next } b { print > (dir "/block" n ".sh") }' dir="$d" "$md"
+status=0 scripts=0
+for f in "$d"/block*.sh; do
+  [ -e "$f" ] || { echo "no bash block in $md"; exit 1; }
   if bash -n "$f"; then echo "bash -n ok $(basename "$f")"; else echo "bash -n FAILED $(basename "$f")"; status=1; fi
-  grep -q -E '^ *refresh \| prove\)' "$f" && { echo "script block $(basename "$f" .sh)"; scripts=$((scripts + 1)); }
+  grep -q -E '^ *refresh \| prove\)' "$f" && { echo "script block $(basename "$f")"; scripts=$((scripts + 1)); }
 done
 [ "$scripts" = 1 ] || { echo "expected one script block, found $scripts"; status=1; }
 exit $status
@@ -26,332 +26,503 @@ CHECK
 
 ### Scratch repositories
 
-The check builds throwaway repositories under `$TMPDIR`, with git's global and system configuration switched off, and deletes them on exit. Each has a bare `origin` that refuses every non-fast-forward push, so a force-push by the script or by the round would fail the case. A forge rewrite, as GitHub makes when a stack parent merges, is written straight into the bare repository instead.
+The block builds throwaway repositories under `$TMPDIR` with git's global and system configuration switched off, and deletes them on exit. Each repository has a bare `origin` that refuses every non-fast-forward push and every branch deletion, so a force-push by the script or by a round fails its case. A forge rewrite, as GitHub makes when a stack parent merges, is written straight into the bare repository instead.
 
-Each repository's `main` holds a package `pkg/` with `apm.yml`, whose second line is `version:`, and `apm.lock.yaml`, plus `shared.txt` of twelve lines. A stand-in regenerate command sets `pkg`'s `version:` to the patch after `origin/main`'s and rewrites the lockfile from the tree. The parameter lines stay as the reference file ships them, so `REGEN` is `^chore(s-stack): regenerate generated files$`, `GEN` excludes `*apm.lock.yaml` and `LINES` covers `*apm.yml`.
+`main` holds a package `pkg/` whose `apm.yml` has `version:` on its second line and `description:` on its third, an `apm.lock.yaml` beside each `apm.yml` that lists the package's other files, a twelve-line `shared.txt` and a `README`. The stand-in regenerate command sets `pkg`'s `version:` to the patch after `origin/main`'s and rewrites every lockfile from the tree, and commits with the regenerate subject when that changed anything. The script's parameter lines stay as the reference file ships them.
 
-The harness follows the handbook's round for one branch. It runs `git fetch origin`, then `git worktree add --no-track -B <branch> <path> origin/<branch>`, or `-b <branch> <path> origin/<base>` for a new branch. In that worktree it runs `bash pr.sh refresh origin/main <spec> <commits>` and the stand-in regenerate command, committing with the regenerate subject when it changed anything. It then runs `git push -u origin <branch>` when `origin/<branch>` is missing or differs from `HEAD`, and removes the worktree. Branches below a stacked branch have their round first. The proof runs as `bash pr.sh prove orch phase origin/main <spec> ...` from the clone, where `orch` is the orchestrator branch and `phase` the phase branch, both local and never pushed. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent, as GitHub does, and keeps the merged branch's ref. Commits a round adds are counted along the first-parent chain from the previous `origin/<branch>`, as merges, regenerate commits and all commits.
+Each case follows the handbook's round for each branch, bottom of the stack first. It runs `git fetch origin`, then `git worktree add --no-track -B <branch> <path> origin/<branch>`, or `-b <branch> <path> origin/<base>` for a new branch. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` and the regenerate command, then `git push -u origin <branch>` when `origin/<branch>` is missing or differs from `HEAD`, and removes the worktree. The proof runs from the clone as `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request and no merged one. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
 
-Each case prints `PASS <case>` or `FAIL <case>: <output>`. The block ends with `<n> failed` and exits `0` only when no case fails. Expected results:
+A round keeps the guarantees when the old `origin/<branch>` is an ancestor of the new one, `origin/main` is an ancestor of it, and it adds at most one merge commit and one regenerate commit. Each case prints `PASS <case>` or `FAIL <case>: <output>`, and the block ends with `<n> failed` and exits `0` only when no case failed.
 
-| Repository | Case | Expected |
+| Case | Scenario | Expected |
 | --- | --- | --- |
-| `split` | First build of `pr1:main` with the first content commit and of `pr2:other-pr` with the other three | both exit `0`; `pr2` holds two own commits, because the commit that changes only the lockfile and `.foundry/` drops out; `img.bin` byte for byte; `origin/main` an ancestor of `pr1` |
-| `split` | Correct split with regenerate commits, `pr1:main` and `pr2:other-pr` | `EQUAL`, exit `0` |
-| `split` | `pr2` left out | `b.txt` listed, `FAIL the pull requests differ from the phase`, `NOT EQUAL`, exit `1` |
-| `split` | `pr1` plus a commit adding `extra.txt` | `extra.txt` listed, `NOT EQUAL`, exit `1` |
-| `split` | `pr1` plus a commit adding `.foundry/leak.md` | `FAIL pr1f: contains .foundry/leak.md`, exit `1` |
-| `split` | `pr1` plus a regenerate commit that changes `a.txt` | `FAIL pr1r: regenerate commit <sha> changes a.txt`, exit `1` |
-| `split` | `pr1` plus a regenerate commit that changes `deps:` in `apm.yml` | that commit named with `-deps: []` and `+deps: [x]`, exit `1` |
-| `split` | An immediate second round on `pr1`, and on `pr2` | each prints `up to date with`, adds no commit and pushes nothing |
-| `split` | `main` moves, then a round on `pr1` | one merge commit and one regenerate commit, pushed as a fast-forward, `origin/main` an ancestor, proof `EQUAL` |
-| `split` | `main` moves and raises `version:` to the branch's own `"0.1.1"`, then a round on `pr1` | one merge and one regenerate commit, `version: "0.1.2"`, proof `EQUAL` |
-| `split` | `main` moves, and a round on `pr1` stops after refreshing and regenerating, before its push | `origin/pr1` unchanged |
-| `split` | The next round on `pr1`, started from `origin/pr1` | one merge and one regenerate commit over the old `origin/pr1`, pushed, proof `EQUAL` |
-| `split` | The round after that | `up to date with`, no commit, no push |
-| `split` | No regenerate commit on `pr1` reverts an earlier one | no regenerate commit sets a file back to its content before an earlier regenerate commit changed it |
-| `split` | `main` moves, and `pr1h` merges it by hand with an extra edit to `a.txt` inside the merge commit | `a.txt` listed, `FAIL pr1h: its head differs from its own commits on its base`, exit `1` |
-| `split` | `other-pr` squash-merged into `main`, then a round on `pr2` as `pr2:main::other-pr` | one merge and one regenerate commit, `shared.txt` line 2 is `line 2 child`, hand-written diff against `main` is `b.txt`, `img.bin` and `shared.txt`, proof `pr1:main pr2:main::other-pr` `EQUAL` with `other-pr` excluded through its kept ref |
-| `undeclared` | A branch cut from another phase's open pull request `other-pr`, so its own commits carry `other-pr`'s change, which the orchestrator branch already holds, given as `pr2:main` with no dependency | `FAIL pr2: <sha> is already on orch, so its pull request is an undeclared dependency`, `NOT EQUAL`, exit `1` |
-| `review1` | Another pull request's fix to a squash-merged parent's line, which the child never touched, after the child's round as `child:main::parent` | line 2 is `main`'s fix, the hand-written diff against `main` is `c.txt` only, proof `EQUAL` |
-| `review2a` | A fix round whose fix edits `apm.yml`'s `description:`, next to a `version:` line that the branch's regenerate commit changed | exit `0`, the new description carried, `version: "0.1.1"` kept, proof `EQUAL` |
-| `review2b` | A first build whose commit edits `description:`, while the orchestrator branch holds another phase's `version:` raise | exit `0`, the new description carried, proof `EQUAL` |
-| `review3` | The phase merged a newer orchestrator branch, with another phase's change two lines from the phase's own, then a fix round | exit `0`, proof `EQUAL` |
-| `review4` | A pull request targeting `main` with two open dependencies, both then squash-merged, then a round as `pr3:main::depA,depB` | exit `0`, the child's lines kept in `a.txt` and `b.txt`, `origin/main` an ancestor, proof `EQUAL` |
-| `review5` | `main` moves under a stack, the parent's round and then the child's as `child:parent` | the child's hand-written diff against its parent is `c.txt` only, one merge base, `origin/main` an ancestor of both, proof `EQUAL` |
-| `review6` | Paths with spaces: a squash-merged parent and the child both changed `docs dir/read me.md`, and `main` raised `my pkg/apm.yml`'s `version:` next to the child's `description:` edit | exit `0`, `line 2 child` kept, `my pkg/apm.yml` has `main`'s `version:` and the child's description, proof `EQUAL` |
-| `rewrite` | A stack parent squash-merged, the child's head rewritten on the forge onto `main` with the same tree, `main` moves, then a round as `child:main::parent` | the rewritten head is an ancestor of the new head, the push is a fast-forward, the hand-written diff against `main` is `c.txt` only, proof `EQUAL` |
-| `quoted` | A fix round carrying a commit whose `café.txt` change conflicts with `main` | exit `1`, `STOP café.txt conflicts outside generated content` with the path unquoted, `origin/pr1` unchanged |
-| `quoted` | `pr1` plus a commit adding `.foundry/café.md` | `FAIL pr1q: contains .foundry/café.md` with the path unquoted, `NOT EQUAL`, exit `1` |
-| `quoted` | A round whose spec names a merged dependency `gone`, and one whose spec names an open dependency `gone2`, neither of which is a branch | each exits `1` with `STOP <branch> is not a branch here` and no `fatal:` line, `origin/pr1` unchanged |
+| `done-when build` | Phase commits `a` (with lockfile and `apm.yml` hunks), a `.foundry/` status commit, `b` (on `shared.txt` line 2, which another phase's open pull request `other-pr` also changed), a binary, and a lockfile-and-status commit. `pr1:main` takes `a`; `pr2:other-pr` takes the other three. | Both exit `0`. Hand-written diffs are `a.txt` and `b.txt img.bin shared.txt`. The binary is byte-identical. `pr1`'s carried commit ends with `(cherry picked from commit <a>)`. |
+| `done-when correct split` | `pr1:main pr2:other-pr` | `EQUAL`, exit `0` |
+| `done-when drops a change` | `pr1:main` alone | `FAIL b.txt has not landed and is in no open pull request, so it needs a new pull request`, `NOT EQUAL`, exit `1` |
+| `done-when adds a change` | `pr1` plus a commit adding `extra.txt` | `FAIL pr1x: it changes extra.txt, which the phase does not`, `NOT EQUAL` |
+| `done-when .foundry` | `pr1` plus `.foundry/leak.md` | `FAIL pr1f: contains .foundry/leak.md`, `NOT EQUAL` |
+| `done-when regenerate a.txt` | `pr1` plus a regenerate commit that changes `a.txt` | `FAIL pr1r: regenerate commit <sha> changes a.txt`, `NOT EQUAL` |
+| `done-when regenerate deps` | `pr1` plus a regenerate commit that changes `deps:` in `apm.yml` | that commit named with `-deps: []` and `+deps: [x]`, `NOT EQUAL` |
+| `done-when squash-merged parent` | `other-pr` squash-merged, then `pr2`'s round as `pr2:main::other-pr` | guarantees kept, exactly one merge and one regenerate commit, `shared.txt` line 2 `line 2 child`, diff `b.txt img.bin shared.txt`, proof `pr1:main pr2:main::other-pr` `EQUAL` |
+| `guarantee up to date` | A round straight after the build | `up to date with`, `origin/pr1` unchanged |
+| `guarantee main moves` | `main` changes `README`, then a round | guarantees kept, one merge and one regenerate commit, `EQUAL` |
+| `guarantee version taken` | `main` raises `version:` to the branch's `"0.1.1"`, then a round | guarantees kept, `version: "0.1.2"`, `EQUAL` |
+| `guarantee interrupted` | `main` moves, a round stops after refresh and regenerate and before its push, then a full round | `origin/pr1` unchanged by the first. The second keeps the guarantees over the old `origin/pr1`, with one merge and one regenerate commit, and `EQUAL`. |
+| `guarantee repeated` | Two more rounds | `origin/pr1` unchanged |
+| `guarantee fix rerun` | A fix round, then the same round again with the same fix commit | the second leaves `origin/pr1` unchanged |
+| `hand edit in a merge` | `pr1h` merges `main` by hand and edits `a.txt` inside the merge commit | `FAIL pr1h: its head differs from its target tree`, `a.txt` listed, `NOT EQUAL` |
+| `forge rewrite` | A same-phase stack `parent:main`, `child:parent`. `parent` is squash-merged, the forge rebases `child` onto `main` with the same tree, `main` moves, then `child:main::parent` | guarantees kept over the rewritten head, diff `c.txt`, `EQUAL` |
+| `round 1 squash step` | Child stacked on another phase's `parent`, which is squash-merged; then `main` fixes `parent`'s line 2; child's round as `child:main::parent` | line 2 is `main`'s fix, diff `c.txt`, `EQUAL` |
+| `round 1 version fix` | A fix round editing `description:`, next to the `version:` line the branch's regenerate commit changed | exit `0`, `version: "0.1.1"` and the new description, `EQUAL` |
+| `round 1 version build` | A first build editing `description:`, while the orchestrator branch holds another phase's `version:` raise | exit `0`, the new description, diff `a.txt`, `EQUAL` |
+| `round 1 newer orchestrator` | Another phase changes `shared.txt` line 5 two lines from the phase's line 3, the phase merges the newer orchestrator branch, then a fix round | exit `0`, lines 3 to 5 are `line 3 phase`, `line 4`, `line 5`, diff `a.txt b.txt shared.txt`, `EQUAL` |
+| `round 1 two squashed` | `pr3:main:depA,depB`, both squash-merged, then `pr3:main::depA,depB` | guarantees kept, the child's `a.txt` and `b.txt`, `EQUAL` |
+| `round 1 stack moves` | A same-phase stack after `main` moves: parent's round, then child's as `child:parent` | both keep the guarantees, child's diff against parent is `c.txt`, one merge base, `EQUAL` |
+| `round 1 spaces` | Child and a squash-merged parent both changed `docs dir/read me.md`, and `main` raised `my pkg/apm.yml`'s `version:` beside the child's `description:` edit | line 2 `line 2 child`, `my pkg/apm.yml` with `main`'s version and the child's description, `EQUAL` |
+| `round 2 conflict, commit` | `main` changes the line 5 that `pr1` owns. A round stops; the phase merges `main` taking `main`'s side, then commits its resolution; a round with that commit | first: exit `1`, `STOP shared.txt changed on origin/main after the phase last took it, so the phase must merge it first`, `origin/pr1` unchanged. Then: guarantees kept, line 5 is the resolution, `EQUAL`. |
+| `round 1 and 2 conflict, merge` | The same, but the phase resolves inside its merge of `main`, and the next round passes no commit | the same stop, then guarantees kept, line 5 is the resolution, `EQUAL` |
+| `round 2 clean merge` | The phase merges `main` cleanly, then a round | `EQUAL` |
+| `round 2 orchestrator merged, one line` | The orchestrator merges the phase, a fix changes the same line, the orchestrator merges again, then a round | up to date, line 5 fixed, `EQUAL` |
+| `round 2 orchestrator merged, delete` | The phase deletes `README`, the orchestrator merges the phase | `EQUAL`, no `README` on `pr1` |
+| `round 2 merge commit` | Parent `pr1` merged into `main` with a merge commit, then `pr2:main::pr1` | guarantees kept, diff `b.txt`, `EQUAL` |
+| `round 2 row 3 to row 2` | `pr3:main:depA,depB`, `depA` squash-merged; `depB` lacks the new `main`. First `pr3:depB::depA`, then `pr3:main:depB:depA` | first: exit `1`, `STOP depB does not hold origin/main, so pr3 must target it with depB merged in`, `origin/pr3` unchanged. Then guarantees kept, both child lines, `EQUAL`. |
+| `round 2 grandchild` | Stack `pr1`, `pr2`, `pr3`, where `pr2` rewrites `pr1`'s line. `pr1` squash-merged, the forge rewrites `pr2` only, then `pr2:main::pr1` and `pr3:pr2` | both exit `0`, `pr2` an ancestor of `pr3`, `pr3`'s diff against `pr2` is `three.txt`, line 2 `line 2 Y`, `EQUAL` |
+| `round 2 delete package` | `main` holds package `old/` with its lockfile; the phase deletes `old/` | nothing under `old/` on `pr1`, `EQUAL` |
+| `round 2 undeclared` | `pr2` cut from `pr1` of the same phase, given as `pr2:main` | `NOT EQUAL`, a `FAIL` line naming `a.txt` |
+| `adjacent-line STOP` | Stack `pr1` (line 5) and `pr2` (line 6) of `shared.txt`; a fix to `pr1`'s line 5 | `pr1`'s round exits `1` with `STOP shared.txt conflicts outside generated content`, `STOP <sha> fix: pr1 does not apply` and `STOP the branch is back at <old head>`, `origin/pr1` unchanged |
+| `uncarried, open` | A fix to `b.txt` that `pr2` does not carry | `FAIL b.txt: pr2 lacks phase commits <sha> fix: b;, so they need a pull request` |
+| `uncarried, merged` | After `pr2` carries it and `pr1` is squash-merged, a fix to `a.txt` | `FAIL a.txt has not landed and is in no open pull request, so it needs a new pull request` |
+| `uncarried, new pull request` | A new pull request `pr1b:main::pr1` carrying that fix | diff `a.txt`, `a fixed`, proof `pr2:main pr1b:main::pr1` `EQUAL` |
+| `leak` | Another phase changes `shared.txt` line 9, the phase takes it through the orchestrator branch, then a fix on line 4 | line 9 is `line 9`, lines 3 and 4 the phase's, diff `a.txt shared.txt`, `EQUAL` |
+| `identity` | Two phase commits with the same author, date and subject; `pr1` carries only the first | line 3 changed and line 9 not, `FAIL shared.txt: pr1 lacks phase commits <second> fix: review;, so they need a pull request`. Then `pr2:pr1` carries the second, `EQUAL`. |
+| `assumption, fast-forward` | The phase fast-forwards to the orchestrator branch after the orchestrator merged it | `FAIL pr1: it changes a.txt, which the phase does not` |
+| `assumption, orchestrator commit` | The orchestrator commits `orch-fix.txt` before the phase branches | `FAIL orch-fix.txt has not landed and is in no open pull request, so it needs a new pull request` |
+| `missing branch` | Specs naming a merged dependency `gone` and an open dependency `gone2`, neither a branch | each exits `1` with `STOP <branch> is not a branch here`, `origin/pr1` unchanged |
 
 ```bash
 /bin/bash <<'CHECK'
 set -u
 root=$(git rev-parse --show-toplevel)
-ref="$root/packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md"
+md="$root/packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md"
 S=$(mktemp -d "${TMPDIR:-/tmp}/pr-handbook-check.XXXXXX")
-trap 'rm -rf "$S"' EXIT
+trap 'cd /; rm -rf "$S"' EXIT
 export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
 export GIT_AUTHOR_NAME=check GIT_AUTHOR_EMAIL=check@example.com GIT_COMMITTER_NAME=check GIT_COMMITTER_EMAIL=check@example.com
 REGEN_SUBJECT='chore(s-stack): regenerate generated files' REGEN_RE='^chore(s-stack): regenerate generated files$'
-fails=0
-pass() { echo "PASS $1"; }
-fail() { echo "FAIL $1"; fails=$((fails + 1)); }
-
-awk -v dir="$S" '/^```bash$/ { n++; f = sprintf("%s/block%02d.sh", dir, n); inb = 1; next } /^```$/ { inb = 0; next } inb { print > f }' "$ref"
+awk '/^```bash$/ { b = 1; n++; next } /^```$/ { b = 0; next } b { print > (dir "/block" n ".sh") }' dir="$S" "$md"
 script=$(grep -l -E '^ *refresh \| prove\)' "$S"/block*.sh | head -1)
-[ -n "$script" ] || { echo "FAIL no script block in $ref"; exit 1; }
-cp "$script" "$S/pr.sh"
+[ -n "$script" ] && cp "$script" "$S/pr.sh" || { echo "FAIL no script block in $md"; exit 1; }
+: > "$S/failed"
+pass() { echo "PASS $1"; }
+fail() { echo "FAIL $1"; echo x >> "$S/failed"; }
 
 commit() { git add -A && git commit -q -m "$1"; }
 line() { sed "$1s/.*/$2/" "$3" > "$S/l" && cat "$S/l" > "$3"; }
 set_version() { sed "s/^version: .*/version: \"$1\"/" "$2" > "$S/y" && cat "$S/y" > "$2"; }
-relock() { git ls-files -s -- . ':(exclude)*apm.lock.yaml' > pkg/apm.lock.yaml && git add pkg/apm.lock.yaml; }
-regen_commit() {
+relock() { local p; for p in $(git ls-files -c -o --exclude-standard -- '*apm.yml'); do git ls-files -s -- "$(dirname "$p")" ':(exclude)*apm.lock.yaml' > "$(dirname "$p")/apm.lock.yaml"; git add -- "$(dirname "$p")/apm.lock.yaml"; done; }
+regen() {
   local v; v=$(git show origin/main:pkg/apm.yml | sed -n 's/^version: "\(.*\)"$/\1/p')
   set_version "${v%.*}.$(( ${v##*.} + 1 ))" pkg/apm.yml && git add pkg/apm.yml && relock
   git diff --cached --quiet || git commit -q -m "$REGEN_SUBJECT"
 }
-push() { local b; b=$(git symbolic-ref --short HEAD); [ "$(git rev-parse -q --verify "origin/$b")" = "$(git rev-parse HEAD)" ] || git push -q -u origin "$b"; }
 init() {
   O="$S/$1.git" R="$S/$1"
-  git init -q --bare -b main "$O" && git -C "$O" config receive.denyNonFastForwards true
+  git init -q --bare -b main "$O" && git -C "$O" config receive.denyNonFastForwards true && git -C "$O" config receive.denyDeletes true
   git init -q -b main "$R" && cd "$R" && git remote add origin "$O" || exit 1
   mkdir pkg; printf 'name: pkg\nversion: "0.1.0"\ndescription: "A package."\nlicense: MIT\ndeps: []\n' > pkg/apm.yml
   for i in 1 2 3 4 5 6 7 8 9 10 11 12; do echo "line $i"; done > shared.txt
-  echo readme > README; : > pkg/apm.lock.yaml; git add -A; relock; commit initial; git push -q -u origin main
+  echo readme > README; git add -A; relock; commit initial; git push -q -u origin main
 }
-in_tree() { local wt="$S/wt.tmp" c; git worktree add -q --detach "$wt" "$1" && (cd "$wt" && shift && "$@"); c=$?; git worktree remove --force "$wt"; return $c; }
-on_main() { local m=$1; shift; git fetch -q origin; in_tree origin/main sh_commit "$m" "$@"; git fetch -q origin; }
-sh_commit() { local m=$1; shift; "$@" && relock && commit "$m" && git push -q origin HEAD:main; }
-other() {
-  local b=$1 m=$2; shift 2; git fetch -q origin
-  in_tree origin/main other_pr "$b" "$m" "$@"; git fetch -q origin
+in_wt() { local at=$1 wt="$S/wt.tmp" c; shift; git worktree add -q --detach "$wt" "$at" && (cd "$wt" && "$@"); c=$?; git worktree remove --force "$wt"; git fetch -q origin; return $c; }
+main_commit() { local m=$1; shift; "$@" && relock && commit "$m" && git push -q origin HEAD:main; }
+on_main() { git fetch -q origin; in_wt origin/main main_commit "$@"; }
+other_commit() { local b=$1 m=$2; shift 2; "$@" && relock && commit "$m" && regen && git push -q origin "HEAD:refs/heads/$b"; }
+other() { git fetch -q origin; in_wt origin/main other_commit "$@"; }
+squash_in() { git merge -q --squash "origin/$1" >/dev/null 2>&1; relock; commit "feat: $1 (#1)" && git push -q origin HEAD:main; }
+squash() { git fetch -q origin; in_wt origin/main squash_in "$1"; }
+true_merge_in() { git merge -q --no-ff --no-edit "origin/$1" >/dev/null 2>&1 || { git checkout -q origin/main -- pkg; relock; git commit -q --no-edit; }; git push -q origin HEAD:main; }
+true_merge() { git fetch -q origin; in_wt origin/main true_merge_in "$1"; }
+forge_in() { git rebase -q --onto origin/main "$1" >/dev/null 2>&1 && git rev-parse HEAD > "$S/forged"; }
+forge() {
+  local old=$(git rev-parse "origin/$1") new
+  in_wt "origin/$1" forge_in "$2" || return 1; new=$(cat "$S/forged")
+  git push -q origin "$new:refs/forge/tmp" && git -C "$O" update-ref "refs/heads/$1" "$new" && git -C "$O" update-ref -d refs/forge/tmp && git fetch -q origin
+  [ "$(git rev-parse "$old^{tree}")" = "$(git rev-parse "$new^{tree}")" ] && ! git merge-base --is-ancestor "$old" "$new"
 }
-other_pr() { local b=$1 m=$2; shift 2; "$@" && commit "$m" && regen_commit && git push -q origin "HEAD:refs/heads/$b"; }
-squash() { git fetch -q origin; in_tree origin/main squash_in "$1"; git fetch -q origin; }
-squash_in() {
-  git merge -q --squash "origin/$1" >/dev/null 2>&1 || [ -z "$(git diff --name-only --diff-filter=U -- . ':(exclude)*apm.lock.yaml')" ] || return 1
-  relock && commit "feat: $1 (#1)" && git push -q origin HEAD:main
-}
-variant() { local b=$1 from=$2 wt="$S/wt.$1" c; shift 2; git worktree add -q -b "$b" "$wt" "$from" && (cd "$wt" && "$@"); c=$?; git worktree remove --force "$wt"; return $c; }
-round() {
-  local b=$1 spec=$2 base wt="$S/wt.$1"; shift 2; base=$(echo "$spec" | cut -d: -f2)
-  git fetch -q origin
+orch() { git checkout -q -b orch origin/main && mkdir -p .foundry && echo plan > .foundry/plan.md && commit 'chore: plan'; }
+take() { git merge -q --no-ff --no-edit "$1" >/dev/null 2>&1 || { relock; git commit -q --no-edit; }; }
+phase() { git checkout -q -b phase orch; }
+sha() { git rev-parse HEAD; }
+push_if() { local b; b=$(git symbolic-ref --short HEAD); [ "$(git rev-parse -q --verify "refs/remotes/origin/$b")" = "$(git rev-parse HEAD)" ] || git push -q -u origin "$b"; }
+start() {
+  local b=$1 base=${2#*:}; base=${base%%:*}; wt="$S/wt.$b"; git fetch -q origin
   if git rev-parse -q --verify "refs/remotes/origin/$b" >/dev/null; then git worktree add -q --no-track -B "$b" "$wt" "origin/$b"
-  else git worktree add -q --no-track -b "$b" "$wt" "origin/$base"; fi || { out="worktree add failed"; code=1; return 1; }
-  out=$(cd "$wt" && bash "$S/pr.sh" refresh origin/main "$spec" "$@" 2>&1 && regen_commit 2>&1 && push 2>&1); code=$?
+  else git worktree add -q --no-track -b "$b" "$wt" "origin/$base"; fi
+}
+round() {
+  local b=$1 spec=$2; shift 2; start "$b" "$spec" || { out="worktree add failed"; code=1; return 1; }
+  out=$(cd "$wt" && "$BASH" "$S/pr.sh" refresh phase origin/main "$spec" "$@" 2>&1 && regen 2>&1 && push_if 2>&1); code=$?
   git worktree remove --force "$wt"; git fetch -q origin; return $code
 }
-stopped_round() {
-  local b=$1 spec=$2 wt="$S/wt.$1"; shift 2; git fetch -q origin
-  git worktree add -q --no-track -B "$b" "$wt" "origin/$b" || return 1
-  out=$(cd "$wt" && bash "$S/pr.sh" refresh origin/main "$spec" "$@" 2>&1 && regen_commit 2>&1); code=$?
+unpushed_round() {
+  local b=$1 spec=$2; shift 2; start "$b" "$spec" || return 1
+  out=$(cd "$wt" && "$BASH" "$S/pr.sh" refresh phase origin/main "$spec" "$@" 2>&1 && regen 2>&1); code=$?
   git worktree remove --force "$wt"; return $code
 }
-prove() { out=$(bash "$S/pr.sh" prove orch phase origin/main "$@" 2>&1); code=$?; }
+variant() { local b=$1 from=$2 wt="$S/wt.v" c; shift 2; git worktree add -q -b "$b" "$wt" "$from" && (cd "$wt" && "$@"); c=$?; git worktree remove --force "$wt"; return $c; }
+prove() { out=$("$BASH" "$S/pr.sh" prove orch phase origin/main "$@" 2>&1); code=$?; }
 equal() { prove "$@"; [ $code = 0 ] && [ "$(echo "$out" | tail -1)" = EQUAL ]; }
 not_equal() { prove "$@"; [ $code = 1 ] && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ]; }
+has() { echo "$out" | grep -q -x -E -- "$1"; }
 added() { echo "$(git rev-list --first-parent --merges --count "$1..$2") $(git rev-list --first-parent --count --grep="$REGEN_RE" "$1..$2") $(git rev-list --first-parent --count "$1..$2")"; }
-own_count() { local b=$1; shift; git rev-list --no-merges --count --invert-grep --grep="$REGEN_RE" "$b" --not "$@"; }
 hand() { git diff --name-only "$1...$2" -- . ':(exclude)*apm.lock.yaml' ':(exclude)*apm.yml' | tr '\n' ' '; }
-ancestor() { git merge-base --is-ancestor "$1" "$2"; }
-no_reverts() {
-  local r e f seen="" bad=""
-  for r in $(git rev-list --reverse --first-parent --grep="$REGEN_RE" "$@"); do
-    for f in $(git diff-tree --no-commit-id --name-only -r "$r"); do
-      for e in $seen; do
-        git diff-tree --no-commit-id --name-only -r "$e" | grep -q -x -F "$f" && [ "$(git rev-parse "$r:$f")" = "$(git rev-parse "$e^:$f")" ] && bad="$bad $r restores $f to before $e;"
-      done
-    done
-    seen="$seen $r"
-  done
-  out="regenerate commits:$seen;$bad"; [ -z "$bad" ] && [ -n "$seen" ]
+at() { git show "$1:$2" | sed -n "$3p"; }
+anc() { git merge-base --is-ancestor "$1" "$2"; }
+guarded() {
+  local old=$1 new=$2 a; a=$(added "$old" "$new")
+  anc "$old" "$new" && anc origin/main "$new" && [ "${a%% *}" -le 1 ] && a=${a#* } && [ "${a%% *}" -le 1 ]
 }
-start_orch() { git checkout -q -b orch origin/main && mkdir .foundry && echo plan > .foundry/plan.md && commit 'chore: plan'; }
-merge_dep() { git merge -q --no-ff --no-edit "$1" >/dev/null 2>&1 || { relock && git commit -q --no-edit; }; }
-
-feat_other_pr() { line 2 'line 2 parent' shared.txt && echo o > o.txt; }
-init split
-other other-pr 'feat: other phase' feat_other_pr
-start_orch; merge_dep origin/other-pr
-git checkout -q -b phase orch
-echo a > a.txt; echo 'keywords: [a]' >> pkg/apm.yml; echo stale1 >> pkg/apm.lock.yaml; commit 'feat: a'; c1=$(git rev-parse HEAD)
-echo s1 > .foundry/status.md; commit 'chore: status'
-line 2 'line 2 child' shared.txt; echo b > b.txt; echo stale2 >> pkg/apm.lock.yaml; commit 'feat: b'; c2=$(git rev-parse HEAD)
-printf 'bin\000\001\377' > img.bin; commit 'feat: binary'; c3=$(git rev-parse HEAD)
-echo stale3 >> pkg/apm.lock.yaml; echo s2 > .foundry/status.md; commit 'chore: lockfile and status only'; c4=$(git rev-parse HEAD)
-
-round pr1 pr1:main "$c1"; o1="$code: $out"
-round pr2 pr2:other-pr "$c2" "$c3" "$c4"; o2="$code: $out"
-[ "${o1%%:*}" = 0 ] && [ "${o2%%:*}" = 0 ] && [ "$(own_count origin/pr1 origin/main)" = 1 ] && [ "$(own_count origin/pr2 origin/other-pr)" = 2 ] \
-  && git diff --quiet phase origin/pr2 -- img.bin && [ "$(git cat-file -s origin/pr2:img.bin)" = 6 ] && ancestor origin/main origin/pr1 \
-  && pass "first build of pr1 and of pr2 stacked on another phase's pull request" || fail "first build: pr1 $o1; pr2 $o2"
-equal pr1:main pr2:other-pr && pass "correct split with regenerate commits: EQUAL" || fail "correct split: $out"
-not_equal pr1:main && echo "$out" | grep -q 'b.txt' && echo "$out" | grep -q '^FAIL the pull requests differ from the phase$' && pass "split that drops a change: NOT EQUAL" || fail "dropped change: $out"
-add_extra() { echo extra > extra.txt && commit extra; }
-variant pr1x pr1 add_extra; not_equal pr1x:main pr2:other-pr && echo "$out" | grep -q 'extra.txt' && pass "split that adds a change: NOT EQUAL" || fail "added change: $out"
-add_leak() { mkdir -p .foundry && echo leak > .foundry/leak.md && commit leak; }
-variant pr1f pr1 add_leak; not_equal pr1f:main pr2:other-pr && echo "$out" | grep -q '^FAIL pr1f: contains .foundry/leak.md$' && pass "branch with a file under .foundry: NOT EQUAL" || fail ".foundry leak: $out"
-regen_hand() { echo changed >> a.txt && git commit -q -am "$REGEN_SUBJECT"; }
-variant pr1r pr1 regen_hand; not_equal pr1r:main pr2:other-pr && echo "$out" | grep -q -E '^FAIL pr1r: regenerate commit [0-9a-f]+ changes a.txt$' && pass "regenerate commit changing a hand-written file: NOT EQUAL" || fail "regenerate commit changing a.txt: $out"
-regen_deps() { sed 's/^deps: .*/deps: [x]/' pkg/apm.yml > "$S/y" && cat "$S/y" > pkg/apm.yml && git commit -q -am "$REGEN_SUBJECT"; }
-variant pr1y pr1 regen_deps; not_equal pr1y:main pr2:other-pr && echo "$out" | grep -q -E '^FAIL pr1y: regenerate commit [0-9a-f]+ changes -deps: \[\]$' && echo "$out" | grep -q -x -F '+deps: [x]' && pass "regenerate commit changing an apm.yml line other than version: NOT EQUAL" || fail "regenerate commit changing deps: $out"
-
-h1=$(git rev-parse origin/pr1) h2=$(git rev-parse origin/pr2)
-round pr1 pr1:main; o1="$code: $out"; round pr2 pr2:other-pr; o2="$code: $out"
-echo "$o1" | grep -q '^0: up to date with' && echo "$o2" | grep -q '^0: up to date with' && [ "$(git rev-parse origin/pr1) $(git rev-parse pr1) $(git rev-parse origin/pr2)" = "$h1 $h1 $h2" ] \
-  && pass "an up-to-date round changes nothing" || fail "up-to-date round: pr1 $o1, adds $(added "$h1" origin/pr1); pr2 $o2"
-
 readme() { echo "readme $1" > README; }
-on_main 'docs: main moves' readme 2
-h=$(git rev-parse origin/pr1); round pr1 pr1:main; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(added "$h" origin/pr1)" = '1 1 2' ] && ancestor "$h" origin/pr1 && ancestor origin/main origin/pr1 && equal pr1:main pr2:other-pr \
-  && pass "a round after main moves: one merge and one regenerate commit, fast-forward, EQUAL" || fail "round after a move: $o; adds $(added "$h" origin/pr1); proof $out"
-raise() { readme 3 && set_version "$1" pkg/apm.yml; }
-on_main 'feat: another pull request raises the version' raise 0.1.1
-h=$(git rev-parse origin/pr1); round pr1 pr1:main; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(added "$h" origin/pr1)" = '1 1 2' ] && git show origin/pr1:pkg/apm.yml | grep -q -x 'version: "0.1.2"' && equal pr1:main pr2:other-pr \
-  && pass "a round after main takes the branch's version: one merge, one regenerate commit, EQUAL" || fail "round after main takes the version: $o; adds $(added "$h" origin/pr1); proof $out"
-on_main 'docs: main moves again' readme 4
-h=$(git rev-parse origin/pr1); stopped_round pr1 pr1:main; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(git rev-parse origin/pr1)" = "$h" ] && [ "$(git rev-parse pr1)" != "$h" ] || fail "the stopped round did not leave an unpushed local head: $o"
-round pr1 pr1:main; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(added "$h" origin/pr1)" = '1 1 2' ] && ancestor "$h" origin/pr1 && ancestor origin/main origin/pr1 && equal pr1:main pr2:other-pr \
-  && pass "a round that stopped part-way finishes on the next round from origin/pr1" || fail "round after a stopped round: $o; adds $(added "$h" origin/pr1); proof $out"
-h=$(git rev-parse origin/pr1); round pr1 pr1:main; o="$code: $out"
-echo "$o" | grep -q '^0: up to date with' && [ "$(git rev-parse origin/pr1)" = "$h" ] && pass "the round after a finished one changes nothing" || fail "round after a finished one: $o; adds $(added "$h" origin/pr1)"
-no_reverts origin/pr1 ^origin/main && pass "no regenerate commit reverts an earlier one" || fail "regenerate commits revert: $out"
+put_line() { line "$1" "$2" "$3"; }
+desc() { line 3 "description: \"$1\"" pkg/apm.yml; }
+write() { printf '%s\n' "$2" > "$1"; }
 
-on_main 'docs: main moves for a hand edit' readme 5
-hand_merge() { git merge -q --no-ff --no-commit origin/main >/dev/null 2>&1; relock && echo 'by hand' >> a.txt && git add -A && git commit -q --no-edit; }
-variant pr1h origin/pr1 hand_merge
-not_equal pr1h:main pr2:other-pr && echo "$out" | grep -q 'a.txt' && echo "$out" | grep -q -x 'FAIL pr1h: its head differs from its own commits on its base' && pass "a merge commit carrying a hand edit: NOT EQUAL" || fail "hand edit in a merge commit: $out"
-
-squash other-pr
-h=$(git rev-parse origin/pr2); round pr2 pr2:main::other-pr; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(added "$h" origin/pr2)" = '1 1 2' ] && ancestor origin/main origin/pr2 && [ "$(git show origin/pr2:shared.txt | sed -n 2p)" = 'line 2 child' ] \
-  && [ "$(hand origin/main origin/pr2)" = 'b.txt img.bin shared.txt ' ] && equal pr1:main pr2:main::other-pr \
-  && pass "parent squash-merged, the child's round and regenerate commit, parent excluded through its kept ref: EQUAL" || fail "squash-merged parent: $o; adds $(added "$h" origin/pr2); diff $(hand origin/main origin/pr2); proof $out"
-
-cd "$S"; init undeclared
-other other-pr 'feat: other phase' feat_other_pr
-start_orch; merge_dep origin/other-pr; git checkout -q -b phase orch
-echo b > b.txt; commit 'feat: b'; c1=$(git rev-parse HEAD)
-git worktree add -q --no-track -b pr2 "$S/wt.pr2" origin/other-pr && (cd "$S/wt.pr2" && bash "$S/pr.sh" refresh origin/main pr2:main "$c1" >/dev/null && regen_commit && push)
-git worktree remove --force "$S/wt.pr2"; git fetch -q origin
-not_equal pr2:main && echo "$out" | grep -q -E '^FAIL pr2: [0-9a-f]+ is already on orch, so its pull request is an undeclared dependency$' && pass "a split whose own commits carry another phase's change from the orchestrator branch: NOT EQUAL" || fail "undeclared dependency: diff against main $(hand origin/main origin/pr2); proof exit $code: $out"
-
-feat_parent() { line 2 'line 2 parent' shared.txt; }
-fix_line2() { line 2 'line 2 fixed by a later pull request' shared.txt; }
-cd "$S"; init review1
-other parent 'feat: parent' feat_parent
-start_orch; merge_dep origin/parent; git checkout -q -b phase orch
-echo c > c.txt; commit 'feat: child'; c1=$(git rev-parse HEAD)
-round child child:parent "$c1" || fail "review1 first build: $out"
-squash parent; on_main 'fix: a later pull request fixes line 2' fix_line2
-round child child:main::parent; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(git show origin/child:shared.txt | sed -n 2p)" = 'line 2 fixed by a later pull request' ] && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal child:main::parent \
-  && pass "review 1: a squash-merged parent's line fixed on main stays fixed, and the proof agrees" || fail "review 1: $o; line 2 '$(git show origin/child:shared.txt | sed -n 2p)'; diff $(hand origin/main origin/child); proof $out"
-
-describe() { line 3 "description: \"$1\"" pkg/apm.yml; }
-cd "$S"; init review2a
-start_orch; git checkout -q -b phase orch
-echo a > a.txt; commit 'feat: a'; c1=$(git rev-parse HEAD)
-round pr1 pr1:main "$c1" || fail "review2a first build: $out"
-describe 'A better description.'; commit 'fix: describe the package'; f1=$(git rev-parse HEAD)
-round pr1 pr1:main "$f1"; o="$code: $out"
-[ "${o%%:*}" = 0 ] && git show origin/pr1:pkg/apm.yml | grep -q -x 'description: "A better description."' && git show origin/pr1:pkg/apm.yml | grep -q -x 'version: "0.1.1"' && equal pr1:main \
-  && pass "review 2a: a fix next to a version: line the branch changed is carried" || fail "review 2a: $o; proof $out"
-
-cd "$S"; init review2b
-other other-pr 'feat: other phase' feat_other_pr
-start_orch; merge_dep origin/other-pr; git checkout -q -b phase orch
-echo a > a.txt; describe 'A better description.'; commit 'feat: a'; c1=$(git rev-parse HEAD)
-round pr1 pr1:main "$c1"; o="$code: $out"
-[ "${o%%:*}" = 0 ] && git show origin/pr1:pkg/apm.yml | grep -q -x 'description: "A better description."' && equal pr1:main \
-  && pass "review 2b: a commit next to another phase's version: raise is carried" || fail "review 2b: $o; proof $out"
-
-cd "$S"; init review3
-start_orch; git checkout -q -b phase orch
-line 3 'line 3 phase' shared.txt; echo a > a.txt; commit 'feat: a'; c1=$(git rev-parse HEAD)
-round pr1 pr1:main "$c1" || fail "review3 first build: $out"
-git checkout -q -b other-phase orch; line 5 'line 5 other phase' shared.txt; commit 'feat: other phase'
-git checkout -q orch; git merge -q --no-ff --no-edit other-phase
-git checkout -q phase; git merge -q --no-edit orch >/dev/null; echo b > b.txt; commit 'feat: b'; c2=$(git rev-parse HEAD)
-round pr1 pr1:main "$c2"; o="$code: $out"
-[ "${o%%:*}" = 0 ] && equal pr1:main && pass "review 3: the proof after the phase merged a newer orchestrator branch: EQUAL" || fail "review 3: $o; proof $out"
-
-dep_line() { echo "$2" > "$1"; }
-base_files() { echo 'a 1' > a.txt && echo 'b 1' > b.txt; }
-cd "$S"; init review4
-on_main 'feat: base files' base_files
-other depA 'feat: depA' dep_line a.txt 'a 1 depA'
-other depB 'feat: depB' dep_line b.txt 'b 1 depB'
-start_orch; merge_dep origin/depA; merge_dep origin/depB; git checkout -q -b phase orch
-echo 'a 1 depA child' > a.txt; echo 'b 1 depB child' > b.txt; commit 'feat: child builds on both'; c1=$(git rev-parse HEAD)
-round pr3 pr3:main:depA,depB "$c1" || fail "review4 first build: $out"
-squash depA; squash depB
-round pr3 pr3:main::depA,depB; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(git show origin/pr3:a.txt) $(git show origin/pr3:b.txt)" = 'a 1 depA child b 1 depB child' ] && ancestor origin/main origin/pr3 && equal pr3:main::depA,depB \
-  && pass "review 4: two squash-merged dependencies: EQUAL" || fail "review 4: $o; proof $out"
-
-unrelated() { echo m > m.txt && line 9 'line 9 main' shared.txt; }
-feat_p() { echo p > p.txt; }
-cd "$S"; init review5
-other parent 'feat: parent' feat_p
-start_orch; merge_dep origin/parent; git checkout -q -b phase orch
-echo c > c.txt; commit 'feat: child'; c1=$(git rev-parse HEAD)
-round child child:parent "$c1" || fail "review5 first build: $out"
-on_main 'feat: an unrelated pull request lands' unrelated
-round parent parent:main || fail "review5 parent round: $out"
-round child child:parent; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(hand origin/parent origin/child)" = 'c.txt ' ] && [ "$(git merge-base --all origin/parent origin/child | wc -l | tr -d ' ')" = 1 ] \
-  && ancestor origin/main origin/parent && ancestor origin/main origin/child && equal child:parent \
-  && pass "review 5: a stacked child's diff shows only its own change" || fail "review 5: $o; diff $(hand origin/parent origin/child); merge bases $(git merge-base --all origin/parent origin/child | wc -l | tr -d ' '); proof $out"
-
-spaced() { mkdir -p 'docs dir' 'my pkg' && for i in 1 2 3 4 5 6; do echo "line $i"; done > 'docs dir/read me.md' && printf 'name: my\nversion: "0.1.0"\ndescription: "Mine."\n' > 'my pkg/apm.yml'; }
-spaced_parent() { line 2 'line 2 parent' 'docs dir/read me.md'; }
-bump_my() { set_version 0.2.0 'my pkg/apm.yml'; }
-cd "$S"; init review6
-on_main 'feat: spaced paths' spaced
-other parent 'feat: parent' spaced_parent
-start_orch; merge_dep origin/parent; git checkout -q -b phase orch
-line 2 'line 2 child' 'docs dir/read me.md'; line 3 'description: "Spaced."' 'my pkg/apm.yml'; commit 'feat: child'; c1=$(git rev-parse HEAD)
-round child child:parent "$c1" || fail "review6 first build: $out"
-squash parent; on_main 'feat: another pull request raises my pkg' bump_my
-round child child:main::parent; o="$code: $out"
-[ "${o%%:*}" = 0 ] && [ "$(git show 'origin/child:docs dir/read me.md' | sed -n 2p)" = 'line 2 child' ] \
-  && [ "$(git show 'origin/child:my pkg/apm.yml' | sed -n '2,3p' | tr '\n' '|')" = 'version: "0.2.0"|description: "Spaced."|' ] && equal child:main::parent \
-  && pass "review 6: paths with spaces" || fail "review 6: $o; proof $out"
-
-forge_rebase() {
-  local old new wt="$S/wt.forge"
-  old=$(git rev-parse "origin/$1")
-  git worktree add -q --detach "$wt" "origin/$1" && (cd "$wt" && git rebase -q --onto origin/main "origin/$2" >/dev/null 2>&1); new=$(git -C "$wt" rev-parse HEAD); git worktree remove --force "$wt"
-  git push -q origin "$new:refs/forge/rewrite" && git -C "$O" update-ref "refs/heads/$1" "$new" && git -C "$O" update-ref -d refs/forge/rewrite && git fetch -q origin || return 1
-  [ "$(git rev-parse "origin/$1")" = "$new" ] && [ "$(git rev-parse "$old^{tree}")" = "$(git rev-parse "$new^{tree}")" ] && ! ancestor "$old" "$new"
+c_split() {
+  init split
+  other other-pr 'feat: other phase' sh -c 'sed "2s/.*/line 2 parent/" shared.txt > t && mv t shared.txt && echo o > o.txt'
+  orch; take origin/other-pr; phase
+  echo a > a.txt; echo 'keywords: [a]' >> pkg/apm.yml; echo stale >> pkg/apm.lock.yaml; commit 'feat: a'; c1=$(sha)
+  echo s1 > .foundry/status.md; commit 'chore: status'
+  line 2 'line 2 child' shared.txt; echo b > b.txt; commit 'feat: b'; c2=$(sha)
+  printf 'bin\000\001\377' > img.bin; commit 'feat: binary'; c3=$(sha)
+  echo stale2 >> pkg/apm.lock.yaml; echo s2 > .foundry/status.md; commit 'chore: lockfile and status only'; c4=$(sha)
+  round pr1 pr1:main "$c1"; o1="$code $out"; round pr2 pr2:other-pr "$c2" "$c3" "$c4"; o2="$code $out"
+  [ "${o1%% *} ${o2%% *}" = '0 0' ] && [ "$(hand origin/main origin/pr1)" = 'a.txt ' ] && [ "$(hand origin/other-pr origin/pr2)" = 'b.txt img.bin shared.txt ' ] \
+    && git diff --quiet phase origin/pr2 -- img.bin && anc origin/main origin/pr1 && anc origin/other-pr origin/pr2 \
+    && [ "$(git log --format=%B origin/main..origin/pr1 | grep -c -x -F "(cherry picked from commit $c1)")" = 1 ] \
+    && git show origin/pr1:pkg/apm.yml | grep -q -x 'keywords: \[a\]' \
+    && pass "done-when build: pr1 on main and pr2 stacked on another phase's pull request, own paths only, trailer, binary intact" || fail "done-when build: pr1 $o1; pr2 $o2"
+  equal pr1:main pr2:other-pr && pass "done-when correct split with regenerate commits: EQUAL" || fail "done-when correct split: $out"
+  not_equal pr1:main && has 'FAIL b.txt has not landed and is in no open pull request, so it needs a new pull request' && pass "done-when split that drops a change: NOT EQUAL" || fail "done-when dropped change: $out"
+  variant pr1x origin/pr1 sh -c 'echo extra > extra.txt && git add -A && git commit -q -m extra'
+  not_equal pr1x:main pr2:other-pr && has 'FAIL pr1x: it changes extra.txt, which the phase does not' && pass "done-when split that adds a change: NOT EQUAL" || fail "done-when added change: $out"
+  variant pr1f origin/pr1 sh -c 'mkdir -p .foundry && echo leak > .foundry/leak.md && git add -A && git commit -q -m leak'
+  not_equal pr1f:main pr2:other-pr && has 'FAIL pr1f: contains .foundry/leak.md' && pass "done-when branch with a file under .foundry: NOT EQUAL" || fail "done-when .foundry: $out"
+  variant pr1r origin/pr1 sh -c "echo more >> a.txt && git commit -q -am '$REGEN_SUBJECT'"
+  not_equal pr1r:main pr2:other-pr && has 'FAIL pr1r: regenerate commit [0-9a-f]+ changes a.txt' && pass "done-when regenerate commit that changes a hand-written file: NOT EQUAL" || fail "done-when regenerate a.txt: $out"
+  variant pr1y origin/pr1 sh -c "sed 's/^deps: .*/deps: [x]/' pkg/apm.yml > t && mv t pkg/apm.yml && git commit -q -am '$REGEN_SUBJECT'"
+  not_equal pr1y:main pr2:other-pr && has 'FAIL pr1y: regenerate commit [0-9a-f]+ changes -deps: \[\]' && has '\+deps: \[x\]' && pass "done-when regenerate commit that changes an apm.yml line other than version: NOT EQUAL" || fail "done-when regenerate deps: $out"
+  squash other-pr; h=$(git rev-parse origin/pr2)
+  round pr2 pr2:main::other-pr; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr2 && [ "$(added "$h" origin/pr2)" = '1 1 2' ] && [ "$(hand origin/main origin/pr2)" = 'b.txt img.bin shared.txt ' ] \
+    && [ "$(at origin/pr2 shared.txt 2)" = 'line 2 child' ] && equal pr1:main pr2:main::other-pr \
+    && pass "done-when squash-merged parent: the child's round and regenerate commit, parent excluded through its kept ref, EQUAL" || fail "done-when squash-merged parent: $o; adds $(added "$h" origin/pr2); diff $(hand origin/main origin/pr2); proof $out"
 }
-cd "$S"; init rewrite
-other parent 'feat: parent' feat_p
-start_orch; merge_dep origin/parent; git checkout -q -b phase orch
-echo c > c.txt; commit 'feat: child'; c1=$(git rev-parse HEAD)
-round child child:parent "$c1" || fail "rewrite first build: $out"
-squash parent
-if forge_rebase child parent; then
-  rewritten=$(git rev-parse origin/child)
-  on_main 'docs: main moves' readme 2
-  round child child:main::parent; o="$code: $out"
-  [ "${o%%:*}" = 0 ] && ancestor "$rewritten" origin/child && ancestor origin/main origin/child && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal child:main::parent \
-    && pass "a head the forge rewrote is the next round's starting point: commits only on top, EQUAL" || fail "forge rewrite: $o; adds $(added "$rewritten" origin/child); proof $out"
-else
-  fail "forge rewrite: the simulated rebase did not keep the tree"
-fi
 
-feat_cafe() { for i in 1 2 3 4; do echo "line $i"; done > 'café.txt'; }
-cafe_parent() { line 2 'line 2 parent' 'café.txt'; }
-cd "$S"; init quoted
-on_main 'feat: café' feat_cafe
-other parent 'feat: parent' cafe_parent
-start_orch; merge_dep origin/parent; git checkout -q -b phase orch
-echo a > a.txt; commit 'feat: a'; c1=$(git rev-parse HEAD)
-line 2 'line 2 phase' 'café.txt'; commit 'feat: café'; c2=$(git rev-parse HEAD)
-round pr1 pr1:main "$c1" || fail "quoted first build: $out"
-h=$(git rev-parse origin/pr1); round pr1 pr1:main "$c2"; o="$code: $out"
-[ "${o%%:*}" = 1 ] && echo "$out" | grep -q -x -F 'STOP café.txt conflicts outside generated content' && [ "$(git rev-parse origin/pr1)" = "$h" ] \
-  && pass "a hand-written conflict in a non-ASCII path stops, naming the path unquoted" || fail "non-ASCII conflict: $o"
-add_cafe_leak() { mkdir -p .foundry && echo leak > '.foundry/café.md' && commit leak; }
-variant pr1q pr1 add_cafe_leak; not_equal pr1q:main && echo "$out" | grep -q -x -F 'FAIL pr1q: contains .foundry/café.md' \
-  && pass "a non-ASCII path under .foundry is named unquoted" || fail "non-ASCII .foundry leak: $out"
-round pr1 pr1:main::gone; o1="$code: $out"; round pr1 pr1:main:gone2; o2="$code: $out"
-[ "${o1%%:*}" = 1 ] && [ "${o2%%:*}" = 1 ] && echo "${o1#*: }" | grep -q -x -F 'STOP gone is not a branch here' && echo "${o2#*: }" | grep -q -x -F 'STOP gone2 is not a branch here' \
-  && ! echo "$o1$o2" | grep -q 'fatal:' && [ "$(git rev-parse origin/pr1)" = "$h" ] \
-  && pass "a missing dependency branch stops with a STOP line and changes nothing" || fail "missing dependency branch: merged $o1; open $o2"
+c_rounds() {
+  init rounds; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "rounds build: $out"
+  h=$(git rev-parse origin/pr1); round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && echo "$out" | grep -q '^up to date with' && [ "$(git rev-parse origin/pr1)" = "$h" ] && pass "guarantee: a round on an up-to-date branch changes nothing" || fail "up-to-date round: $o"
+  on_main 'docs: main moves' readme 2; h=$(git rev-parse origin/pr1); round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr1 && [ "$(added "$h" origin/pr1)" = '1 1 2' ] && equal pr1:main \
+    && pass "guarantee: main moves, one merge and one regenerate commit, a fast-forward push, main an ancestor, EQUAL" || fail "round after a move: $o; adds $(added "$h" origin/pr1); proof $out"
+  on_main 'feat: another pull request raises the version' sh -c 'echo "readme 3" > README && sed "s/^version: .*/version: \"0.1.1\"/" pkg/apm.yml > t && mv t pkg/apm.yml'
+  h=$(git rev-parse origin/pr1); round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr1 && [ "$(at origin/pr1 pkg/apm.yml 2)" = 'version: "0.1.2"' ] && equal pr1:main \
+    && pass "guarantee: main takes the branch's own version, the round raises it again" || fail "version taken: $o; proof $out"
+  on_main 'docs: main moves again' readme 4; h=$(git rev-parse origin/pr1)
+  unpushed_round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/pr1)" = "$h" ] && [ "$(git rev-parse pr1)" != "$h" ] || fail "interrupted round did not leave an unpushed head: $o"
+  round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr1 && [ "$(added "$h" origin/pr1)" = '1 1 2' ] && equal pr1:main \
+    && pass "guarantee: an interrupted round finishes on the next one, from origin/pr1" || fail "after an interrupted round: $o; adds $(added "$h" origin/pr1); proof $out"
+  h=$(git rev-parse origin/pr1); round pr1 pr1:main; round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/pr1)" = "$h" ] && pass "guarantee: repeated rounds after that change nothing" || fail "repeated rounds: $o"
+  echo 'a fixed' > a.txt; commit 'fix: a'; f1=$(sha); round pr1 pr1:main "$f1" || fail "fix round: $out"
+  h=$(git rev-parse origin/pr1); round pr1 pr1:main "$f1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/pr1)" = "$h" ] && [ "$(git show origin/pr1:a.txt)" = 'a fixed' ] && pass "guarantee: a fix round rerun after its push, with the same commit, changes nothing" || fail "rerun fix round: $o; adds $(added "$h" origin/pr1)"
+  on_main 'docs: main moves for a hand edit' readme 5
+  variant pr1h origin/pr1 sh -c 'git merge -q --no-ff --no-commit origin/main >/dev/null 2>&1; git checkout -q origin/main -- pkg; echo "by hand" >> a.txt; git add -A; git commit -q --no-edit'
+  not_equal pr1h:main && has 'FAIL pr1h: its head differs from its target tree' && echo "$out" | grep -q 'a.txt' && pass "a hand edit inside a merge commit: NOT EQUAL" || fail "hand edit in a merge: $out"
+}
 
-cd "$root"
-echo "$fails failed"
-[ "$fails" = 0 ]
+c_rewrite() {
+  init rewrite; orch; phase
+  echo p > p.txt; commit 'feat: parent'; c1=$(sha)
+  echo c > c.txt; commit 'feat: child'; c2=$(sha)
+  round parent parent:main "$c1" && round child child:parent "$c2" || fail "rewrite build: $out"
+  squash parent
+  if forge child origin/parent; then
+    rw=$(git rev-parse origin/child); on_main 'docs: main moves' readme 2
+    round child child:main::parent; o="$code $out"
+    [ "${o%% *}" = 0 ] && guarded "$rw" origin/child && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal child:main::parent \
+      && pass "forge rewrite: the rewritten head is the start, commits only on top, EQUAL" || fail "forge rewrite: $o; adds $(added "$rw" origin/child); proof $out"
+  else fail "forge rewrite: the simulated rebase changed the tree"; fi
+}
+
+c_r1_squash_fix() {
+  init r1-squash-fix
+  other parent 'feat: parent' put_line 2 'line 2 parent' shared.txt
+  orch; take origin/parent; phase
+  echo c > c.txt; commit 'feat: child'; c1=$(sha)
+  round child child:parent "$c1" || fail "r1-squash-fix build: $out"
+  squash parent; on_main 'fix: another pull request fixes line 2' put_line 2 'line 2 fixed' shared.txt
+  round child child:main::parent; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(at origin/child shared.txt 2)" = 'line 2 fixed' ] && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal child:main::parent \
+    && pass "round 1, squash step: a later fix on main to a squash-merged parent's line stays, EQUAL" || fail "r1-squash-fix: $o; line 2 '$(at origin/child shared.txt 2)'; diff $(hand origin/main origin/child); proof $out"
+}
+
+c_r1_version_fix() {
+  init r1-version-fix; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "r1-version-fix build: $out"
+  desc 'Better.'; commit 'fix: describe'; f1=$(sha)
+  round pr1 pr1:main "$f1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(at origin/pr1 pkg/apm.yml 2,3 | tr '\n' '|')" = 'version: "0.1.1"|description: "Better."|' ] && equal pr1:main \
+    && pass "round 1, version context: a fix next to a version: line the regenerate commit changed is carried" || fail "r1-version-fix: $o; proof $out"
+}
+
+c_r1_version_build() {
+  init r1-version-build
+  other other-pr 'feat: other phase' sh -c 'echo o > o.txt'
+  orch; take origin/other-pr; phase
+  echo a > a.txt; desc 'Better.'; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(at origin/pr1 pkg/apm.yml 3)" = 'description: "Better."' ] && [ "$(hand origin/main origin/pr1)" = 'a.txt ' ] && equal pr1:main \
+    && pass "round 1, version context: a first build next to another phase's version: raise" || fail "r1-version-build: $o; proof $out"
+}
+
+c_r1_orch_merged() {
+  init r1-orch-merged; orch; phase
+  line 3 'line 3 phase' shared.txt; echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "r1-orch-merged build: $out"
+  git checkout -q -b other-phase orch; line 5 'line 5 other phase' shared.txt; commit 'feat: other phase'
+  git checkout -q orch; take other-phase; git checkout -q phase; take orch
+  echo b > b.txt; commit 'feat: b'; c2=$(sha)
+  round pr1 pr1:main "$c2"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(at origin/pr1 shared.txt 3,5 | tr '\n' '|')" = 'line 3 phase|line 4|line 5|' ] && [ "$(hand origin/main origin/pr1)" = 'a.txt b.txt shared.txt ' ] && equal pr1:main \
+    && pass "round 1, newer orchestrator branch: the fix round leaves the other phase's line out, EQUAL" || fail "r1-orch-merged: $o; lines $(at origin/pr1 shared.txt 3,5 | tr '\n' '|'); proof $out"
+}
+
+c_r1_two_squashed() {
+  init r1-two-squashed
+  on_main 'feat: base files' sh -c 'echo "a 1" > a.txt && echo "b 1" > b.txt'
+  other depA 'feat: depA' write a.txt 'a 1 depA'; other depB 'feat: depB' write b.txt 'b 1 depB'
+  orch; take origin/depA; take origin/depB; phase
+  echo 'a 1 depA child' > a.txt; echo 'b 1 depB child' > b.txt; commit 'feat: child'; c1=$(sha)
+  round pr3 pr3:main:depA,depB "$c1" || fail "r1-two-squashed build: $out"
+  squash depA; squash depB; h=$(git rev-parse origin/pr3)
+  round pr3 pr3:main::depA,depB; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr3 && [ "$(git show origin/pr3:a.txt) $(git show origin/pr3:b.txt)" = 'a 1 depA child b 1 depB child' ] && [ "$(hand origin/main origin/pr3)" = 'a.txt b.txt ' ] && equal pr3:main::depA,depB \
+    && pass "round 1, two squash-merged dependencies in one round: EQUAL" || fail "r1-two-squashed: $o; proof $out"
+}
+
+c_r1_stack_moves() {
+  init r1-stack-moves; orch; phase
+  echo p > p.txt; commit 'feat: parent'; c1=$(sha)
+  echo c > c.txt; commit 'feat: child'; c2=$(sha)
+  round parent parent:main "$c1" && round child child:parent "$c2" || fail "r1-stack-moves build: $out"
+  on_main 'feat: an unrelated pull request' sh -c 'echo m > m.txt'
+  hp=$(git rev-parse origin/parent) hc=$(git rev-parse origin/child)
+  round parent parent:main; o1="$code $out"; round child child:parent; o2="$code $out"
+  [ "${o1%% *} ${o2%% *}" = '0 0' ] && guarded "$hp" origin/parent && guarded "$hc" origin/child && [ "$(hand origin/parent origin/child)" = 'c.txt ' ] \
+    && [ "$(git merge-base --all origin/parent origin/child | wc -l | tr -d ' ')" = 1 ] && anc origin/parent origin/child && equal parent:main child:parent \
+    && pass "round 1, a stack after main moves: the child takes its parent, its diff is its own change" || fail "r1-stack-moves: parent $o1; child $o2; diff $(hand origin/parent origin/child); proof $out"
+}
+
+c_r1_spaces() {
+  init r1-spaces
+  on_main 'feat: spaced paths' sh -c 'mkdir -p "docs dir" "my pkg" && for i in 1 2 3 4 5 6; do echo "line $i"; done > "docs dir/read me.md" && printf "name: my\nversion: \"0.1.0\"\ndescription: \"Mine.\"\n" > "my pkg/apm.yml"'
+  other parent 'feat: parent' put_line 2 'line 2 parent' 'docs dir/read me.md'
+  orch; take origin/parent; phase
+  line 2 'line 2 child' 'docs dir/read me.md'; line 3 'description: "Spaced."' 'my pkg/apm.yml'; commit 'feat: child'; c1=$(sha)
+  round child child:parent "$c1" || fail "r1-spaces build: $out"
+  squash parent; on_main 'feat: raise my pkg' set_version 0.2.0 'my pkg/apm.yml'
+  round child child:main::parent; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(at origin/child 'docs dir/read me.md' 2)" = 'line 2 child' ] && [ "$(at origin/child 'my pkg/apm.yml' 2,3 | tr '\n' '|')" = 'version: "0.2.0"|description: "Spaced."|' ] && equal child:main::parent \
+    && pass "round 1, paths with spaces" || fail "r1-spaces: $o; proof $out"
+}
+
+conflict_setup() {
+  init "$1"; orch; phase
+  line 5 'line 5 phase' shared.txt; echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "$1 build: $out"
+  on_main 'feat: another pull request edits line 5' sh -c 'sed "5s/.*/line 5 main/" shared.txt > t && mv t shared.txt && echo m > m.txt'
+  h=$(git rev-parse origin/pr1); round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 1 ] && has 'STOP shared.txt changed on origin/main after the phase last took it, so the phase must merge it first' && [ "$(git rev-parse origin/pr1)" = "$h" ] \
+    && pass "$1: a stale owned path stops the round and leaves the branch" || fail "$1 stale stop: $o"
+  git checkout -q phase; git merge -q --no-ff --no-commit origin/main >/dev/null 2>&1
+}
+c_r2_conflict_commit() {
+  conflict_setup r2-conflict-commit
+  git checkout -q origin/main -- shared.txt pkg; relock; git commit -q --no-edit
+  line 5 'line 5 phase and main' shared.txt; commit 'fix: resolve line 5'; f1=$(sha)
+  round pr1 pr1:main "$f1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr1 && [ "$(at origin/pr1 shared.txt 5)" = 'line 5 phase and main' ] && equal pr1:main \
+    && pass "round 2, old conflicting commit: an ordinary resolution commit on the phase carries, EQUAL" || fail "r2-conflict-commit: $o; line 5 '$(at origin/pr1 shared.txt 5)'; proof $out"
+}
+c_r2_conflict_merge() {
+  conflict_setup r2-conflict-merge
+  line 5 'line 5 phase and main' shared.txt; git checkout -q origin/main -- pkg; relock; git add -A; git commit -q --no-edit
+  round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr1 && [ "$(at origin/pr1 shared.txt 5)" = 'line 5 phase and main' ] && equal pr1:main \
+    && pass "round 1 and 2, resolution inside the phase's merge: the next round takes it, EQUAL" || fail "r2-conflict-merge: $o; line 5 '$(at origin/pr1 shared.txt 5)'; proof $out"
+}
+
+c_r2_clean_merge() {
+  init r2-clean-merge; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "r2-clean-merge build: $out"
+  on_main 'feat: another pull request lands' write m.txt m
+  git checkout -q phase; take origin/main
+  round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && equal pr1:main && pass "round 2, clean merge of main into the phase: EQUAL" || fail "r2-clean-merge: $o; proof $out"
+}
+
+c_r2_orch_line() {
+  init r2-orch-line; orch; phase
+  line 5 'line 5 first' shared.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "r2-orch-line build: $out"
+  git checkout -q orch; take phase; git checkout -q phase
+  line 5 'line 5 fixed' shared.txt; commit 'fix: line 5'; f1=$(sha)
+  round pr1 pr1:main "$f1" || fail "r2-orch-line fix round: $out"
+  git checkout -q orch; take phase; git checkout -q phase
+  h=$(git rev-parse origin/pr1); round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/pr1)" = "$h" ] && [ "$(at origin/pr1 shared.txt 5)" = 'line 5 fixed' ] && equal pr1:main \
+    && pass "round 2, orchestrator merged the phase and two own commits share a line: EQUAL" || fail "r2-orch-line: $o; proof $out"
+}
+
+c_r2_orch_delete() {
+  init r2-orch-delete; orch; phase
+  git rm -q README; echo a > a.txt; commit 'feat: drop README'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "r2-orch-delete build: $out"
+  git checkout -q orch; take phase; git checkout -q phase
+  equal pr1:main && ! git cat-file -e origin/pr1:README 2>/dev/null && pass "round 2, orchestrator merged a phase that deletes a file: EQUAL" || fail "r2-orch-delete: $out"
+}
+
+c_r2_merge_commit() {
+  init r2-merge-commit; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  echo b > b.txt; commit 'feat: b'; c2=$(sha)
+  round pr1 pr1:main "$c1" && round pr2 pr2:pr1 "$c2" || fail "r2-merge-commit build: $out"
+  true_merge pr1; h=$(git rev-parse origin/pr2)
+  round pr2 pr2:main::pr1; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr2 && [ "$(hand origin/main origin/pr2)" = 'b.txt ' ] && equal pr2:main::pr1 \
+    && pass "round 2, a parent merged with a merge commit: the child's round and the proof, EQUAL" || fail "r2-merge-commit: $o; proof $out"
+}
+
+c_r2_row3_to_row2() {
+  init r2-row3-to-row2
+  on_main 'feat: base files' sh -c 'echo "a 1" > a.txt && echo "b 1" > b.txt'
+  other depA 'feat: depA' write a.txt 'a 1 depA'; other depB 'feat: depB' write b.txt 'b 1 depB'
+  orch; take origin/depA; take origin/depB; phase
+  echo 'a 1 depA child' > a.txt; echo 'b 1 depB child' > b.txt; commit 'feat: child'; c1=$(sha)
+  round pr3 pr3:main:depA,depB "$c1" || fail "r2-row3-to-row2 build: $out"
+  squash depA; h=$(git rev-parse origin/pr3)
+  round pr3 pr3:depB::depA; o="$code $out"
+  [ "${o%% *}" = 1 ] && has 'STOP depB does not hold origin/main, so pr3 must target it with depB merged in' && [ "$(git rev-parse origin/pr3)" = "$h" ] \
+    && pass "round 2, row 3 to row 2 under a parent without main: STOP, branch unchanged" || fail "r2-row3-to-row2 stop: $o"
+  round pr3 pr3:main:depB:depA; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr3 && [ "$(git show origin/pr3:a.txt) $(git show origin/pr3:b.txt)" = 'a 1 depA child b 1 depB child' ] && equal pr3:main:depB:depA \
+    && pass "round 2, staying in row 3 with depB merged in: merged dependency kept, EQUAL" || fail "r2-row3-to-row2 row 3: $o; proof $out"
+}
+
+c_r2_grandchild() {
+  init r2-grandchild; orch; phase
+  line 2 'line 2 X' shared.txt; commit 'feat: one'; c1=$(sha)
+  line 2 'line 2 Y' shared.txt; echo two > two.txt; commit 'feat: two'; c2=$(sha)
+  echo three > three.txt; commit 'feat: three'; c3=$(sha)
+  round pr1 pr1:main "$c1" && round pr2 pr2:pr1 "$c2" && round pr3 pr3:pr2 "$c3" || fail "r2-grandchild build: $out"
+  squash pr1; forge pr2 origin/pr1 || fail "r2-grandchild: the simulated rewrite changed the tree"
+  round pr2 pr2:main::pr1; o1="$code $out"; round pr3 pr3:pr2; o2="$code $out"
+  [ "${o1%% *} ${o2%% *}" = '0 0' ] && anc origin/pr2 origin/pr3 && [ "$(hand origin/pr2 origin/pr3)" = 'three.txt ' ] && [ "$(at origin/pr3 shared.txt 2)" = 'line 2 Y' ] && equal pr2:main::pr1 pr3:pr2 \
+    && pass "round 2, a grandchild whose parent the forge rewrote, spec without the merged grandparent" || fail "r2-grandchild: pr2 $o1; pr3 $o2; diff $(hand origin/pr2 origin/pr3); proof $out"
+}
+
+c_r2_delete_package() {
+  init r2-delete-package
+  on_main 'feat: a second package' sh -c 'mkdir old && printf "name: old\nversion: \"0.1.0\"\n" > old/apm.yml && echo skill > old/skill.md'
+  orch; phase
+  git rm -rq old; commit 'feat: remove the old package'; c1=$(sha)
+  round pr1 pr1:main "$c1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && git cat-file -e origin/main:old/apm.lock.yaml && [ -z "$(git ls-tree -r --name-only origin/pr1 -- old)" ] && equal pr1:main \
+    && pass "round 2, a phase that deletes a package: the lockfile goes too, EQUAL" || fail "r2-delete-package: $o; left $(git ls-tree -r --name-only origin/pr1 -- old | tr '\n' ' '); proof $out"
+}
+
+c_r2_undeclared() {
+  init r2-undeclared; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  echo b > b.txt; commit 'feat: b'; c2=$(sha)
+  round pr1 pr1:main "$c1" || fail "r2-undeclared build: $out"
+  git fetch -q origin; git worktree add -q --no-track -b pr2 "$S/wt.u" origin/pr1
+  (cd "$S/wt.u" && "$BASH" "$S/pr.sh" refresh phase origin/main pr2:main "$c2" >/dev/null 2>&1 && regen && push_if); git worktree remove --force "$S/wt.u"; git fetch -q origin
+  not_equal pr1:main pr2:main && echo "$out" | grep -q '^FAIL.*a\.txt' && pass "round 2, a same-phase branch with an undeclared dependency: NOT EQUAL" || fail "r2-undeclared: $out"
+}
+
+c_r2_adjacent() {
+  init r2-adjacent; orch; phase
+  line 5 'line 5 pr1' shared.txt; commit 'feat: pr1'; c1=$(sha)
+  line 6 'line 6 pr2' shared.txt; commit 'feat: pr2'; c2=$(sha)
+  round pr1 pr1:main "$c1" && round pr2 pr2:pr1 "$c2" || fail "r2-adjacent build: $out"
+  equal pr1:main pr2:pr1 || fail "r2-adjacent proof before the fix: $out"
+  line 5 'line 5 pr1 fixed' shared.txt; commit 'fix: pr1'; f1=$(sha)
+  h=$(git rev-parse origin/pr1); round pr1 pr1:main "$f1"; o="$code $out"
+  [ "${o%% *}" = 1 ] && has 'STOP shared.txt conflicts outside generated content' && has 'STOP [0-9a-f]+ fix: pr1 does not apply' && has "STOP the branch is back at $h" && [ "$(git rev-parse origin/pr1)" = "$h" ] \
+    && pass "adjacent-line edits split across a stack: STOP, branch unchanged" || fail "r2-adjacent: $o"
+}
+
+c_uncarried() {
+  init uncarried; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  echo b > b.txt; commit 'feat: b'; c2=$(sha)
+  round pr1 pr1:main "$c1" && round pr2 pr2:main "$c2" || fail "uncarried build: $out"
+  echo 'b fixed' > b.txt; commit 'fix: b'; f1=$(sha)
+  not_equal pr1:main pr2:main && has "FAIL b.txt: pr2 lacks phase commits $(git rev-parse --short "$f1") fix: b;, so they need a pull request" \
+    && pass "a phase commit an open pull request does not carry: NOT EQUAL, named" || fail "uncarried open: $out"
+  round pr2 pr2:main "$f1" || fail "uncarried fix round: $out"
+  squash pr1; echo 'a fixed' > a.txt; commit 'fix: a after its pull request merged'; f2=$(sha)
+  not_equal pr2:main && has 'FAIL a.txt has not landed and is in no open pull request, so it needs a new pull request' \
+    && pass "a fix after its pull request merged: NOT EQUAL, needs a new pull request" || fail "uncarried merged: $out"
+  round pr1b pr1b:main::pr1 "$f2"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(hand origin/main origin/pr1b)" = 'a.txt ' ] && [ "$(git show origin/pr1b:a.txt)" = 'a fixed' ] && equal pr2:main pr1b:main::pr1 && pass "the new pull request for it: EQUAL" || fail "uncarried new pull request: $o; proof $out"
+}
+
+c_leak() {
+  init leak; orch; phase
+  line 3 'line 3 phase' shared.txt; echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "leak build: $out"
+  git checkout -q -b other-phase orch; line 9 'line 9 other phase' shared.txt; echo o > o.txt; commit 'feat: other phase'
+  git checkout -q orch; take other-phase; git checkout -q phase; take orch
+  line 4 'line 4 phase' shared.txt; commit 'fix: line 4'; f1=$(sha)
+  round pr1 pr1:main "$f1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(at origin/pr1 shared.txt 9)" = 'line 9' ] && [ "$(at origin/pr1 shared.txt 3,4 | tr '\n' '|')" = 'line 3 phase|line 4 phase|' ] && [ "$(hand origin/main origin/pr1)" = 'a.txt shared.txt ' ] && equal pr1:main \
+    && pass "leak: another phase's line in a shared file stays out of the pull request" || fail "leak: $o; line 9 '$(at origin/pr1 shared.txt 9)'; diff $(hand origin/main origin/pr1); proof $out"
+}
+
+c_identity() {
+  init identity; orch; phase
+  export GIT_AUTHOR_DATE='1795000000 +0000'
+  line 3 'line 3 first' shared.txt; commit 'fix: review'; c1=$(sha)
+  line 9 'line 9 second' shared.txt; commit 'fix: review'; c2=$(sha)
+  unset GIT_AUTHOR_DATE
+  round pr1 pr1:main "$c1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(at origin/pr1 shared.txt 3) $(at origin/pr1 shared.txt 9)" = 'line 3 first line 9' ] && not_equal pr1:main && has "FAIL shared.txt: pr1 lacks phase commits $(git rev-parse --short "$c2") fix: review;, so they need a pull request" \
+    && pass "identity: twin commits with one author, date and subject stay distinct" || fail "identity: $o; proof $out"
+  round pr2 pr2:pr1 "$c2"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(at origin/pr2 shared.txt 9)" = 'line 9 second' ] && equal pr1:main pr2:pr1 && pass "identity: the twin carried by its own pull request: EQUAL" || fail "identity second: $o; proof $out"
+}
+
+c_assumptions() {
+  init ff; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "ff build: $out"
+  git checkout -q orch; take phase; git checkout -q phase; git merge -q --ff-only orch
+  not_equal pr1:main && has 'FAIL pr1: it changes a.txt, which the phase does not' && pass "assumption: a fast-forward of the orchestrator branch is reported" || fail "ff: $out"
+  cd "$S"; init orch-commit; orch; echo fix > orch-fix.txt; commit 'chore: orchestrator edits a file'; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "orch-commit build: $out"
+  not_equal pr1:main && has 'FAIL orch-fix.txt has not landed and is in no open pull request, so it needs a new pull request' && pass "assumption: an orchestrator commit outside .foundry is reported" || fail "orch-commit: $out"
+}
+
+c_missing() {
+  init missing; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "missing build: $out"
+  h=$(git rev-parse origin/pr1); round pr1 pr1:main::gone; o1="$code $out"; round pr1 pr1:main:gone2; o2="$code $out"
+  [ "${o1%% *} ${o2%% *}" = '1 1' ] && echo "$o1" | grep -q -x -F '1 STOP gone is not a branch here' && echo "$o2" | grep -q -x -F '1 STOP gone2 is not a branch here' && [ "$(git rev-parse origin/pr1)" = "$h" ] \
+    && pass "a spec naming a missing branch: STOP, branch unchanged" || fail "missing branch: $o1; $o2"
+}
+
+for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_version_build c_r1_orch_merged c_r1_two_squashed c_r1_stack_moves c_r1_spaces \
+  c_r2_conflict_commit c_r2_conflict_merge c_r2_clean_merge c_r2_orch_line c_r2_orch_delete c_r2_merge_commit c_r2_row3_to_row2 c_r2_grandchild \
+  c_r2_delete_package c_r2_undeclared c_r2_adjacent c_uncarried c_leak c_identity c_assumptions c_missing; do
+  (cd "$S" && "$c") || fail "$c ended early"
+done
+n=$(wc -l < "$S/failed" | tr -d ' ')
+echo "$n failed"
+[ "$n" = 0 ]
 CHECK
 ```
 
@@ -368,31 +539,35 @@ echo "$n/200 $f"
 CHECK
 ```
 
-### Cold read. Restacking after a parent merged
+### Cold read. What each `STOP` means and who acts
 
-Restacking is prose the PR creator acts on, so this check is a cold read. Start a fresh subagent, give it only the two files below, tell it to read nothing else, and ask the question. Its answer passes when it agrees in substance with every point of the expected answer. Wait for the subagent to finish before reporting.
+A `STOP` line hands work to someone, and the PR creator acts on the handbook's prose, so this check is a cold read. Start a fresh subagent, give it only `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`, tell it to read nothing else, and ask the question. Its answer passes when it agrees in substance with every point of the expected answer. Wait for it to finish before reporting.
 
-Files, relative to the repository root:
-
-- `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`
-- `packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md`
-
-Prompt: "Read only the two files at the paths below and nothing else, not even files they link to. Answer from them alone. You are the PR creator for phase `widgets`, in a fix round, and both gates passed for the current code head. The default branch is `main`. Your phase's one pull request is #12, on branch `widgets-pr`. It was stacked on another phase's pull request #10, branch `gadgets-pr`. Since your last round, #10 was squash-merged into `main`, and GitHub then rewrote `widgets-pr`'s head with a force-push from the developer's account, keeping its tree. Your fix commit needs the change in another phase's open pull request #11, branch `doohickey-pr`, which has no pull request stacked on it. (1) Which commit does your round on `widgets-pr` start from, and what do you do with your old local head? (2) Which base do you choose, and what spec do you pass to the script? (3) Which commands change the base and the stacking on GitHub, and in what order relative to the push? (4) May you push or refresh `doohickey-pr` or `gadgets-pr`? (5) How do you push `widgets-pr`?"
+Prompt: "Read only the file `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md` and nothing else, not even files it links to or names. Answer from it alone. You are the PR creator for phase `widgets`. The default branch is `main`. Your pull request #12 is on branch `widgets-pr`. Each item below is output you see in a round. For each, say what it means, who acts next and what they do, what you do, and in what state the branch is left. (1) The refresh prints `STOP shared.txt changed on origin/main after the phase last took it, so the phase must merge it first` and exits 1. (2) The same line, but naming `gadgets-pr`, another phase's open pull request that #12 depends on, instead of `origin/main`. (3) The refresh prints `STOP shared.txt conflicts outside generated content`, then `STOP 1a2b3c4 feat: widgets does not apply`, while a parent pull request of your own phase had a fix round on the line next to your change. (4) The refresh prints `STOP gadgets-pr does not hold origin/main, so widgets-pr must target it with gadgets-pr merged in`. Answer twice: (a) `widgets-pr` is a new pull request; (b) `widgets-pr` is already stacked on an open parent and the base table now gives another base. (5) The refresh prints `STOP gone is not a branch here`, where `gone` is a dependency that merged last week. (6) A carry stops and also prints `the branch is back at 9f8e7d6`. What has happened to the branch and to `origin/widgets-pr`? (7) The proof prints `FAIL a.txt has not landed and is in no open pull request, so it needs a new pull request`. Answer twice: (a) `a.txt` changed in a fix the phase made after its pull request merged; (b) the named path is `orch-fix.txt`, which the orchestrator committed on the orchestrator branch outside `.foundry/`. (8) May you resolve any of these conflicts yourself by editing files?"
 
 Expected answer:
 
-1. From `origin/widgets-pr`'s current head, the one GitHub rewrote, through `git worktree add --no-track -B widgets-pr <path> origin/widgets-pr`. The rewrite is not an error, and the old local head is never merged back in.
-2. One open dependency, #11, with nothing stacked on it, so `widgets-pr` joins #11's stack with `doohickey-pr` as its base. #10 has merged, so it goes in the fourth field: `widgets-pr:doohickey-pr::gadgets-pr`, with the fix commit as the commit argument.
-3. After the branch is pushed, `gh pr edit 12 --base doohickey-pr`, then `gh stack link 11 12`, naming only the direct parent and itself. Never #10, a merged pull request, and never `gh stack sync`, `rebase`, `push`, `submit` or `unstack`, or `gh stack link` with branch names.
-4. No. Another phase's branch or pull request is never written, even when this one depends on it.
-5. With a plain `git push -u origin widgets-pr`, only when `origin/widgets-pr` is missing or differs from `HEAD`. It is a fast-forward, and never a force-push.
+1. The default branch changed a path the pull request owns after the phase last took it. The PR creator reports it to the phase session, which merges the default branch into the phase and resolves any conflict there. The next round then goes through. The branch is left where it started, nothing is pushed.
+2. The same stale path, on another phase's pull request. The PR creator reports it to the phase session as a decision, and never writes that phase's branch.
+3. A shared path's own commits do not apply on this base. The PR creator reports both lines to the phase session and does not resolve the conflict. The branch is back where it started.
+4. (a) Use the third row of the base table: target `main` with `gadgets-pr` merged in, a spec such as `widgets-pr:main:gadgets-pr`, and no `gh stack link`. (b) This is leaving a stack. Do not refresh it onto the new base, and do not run `gh stack unstack`. Report it to the phase session.
+5. A branch in the spec is missing. Fetch again, restore the merged dependency's ref with `git fetch origin pull/<number>/head:gone`, or correct the spec, then run the round again. Never prune remote-tracking refs.
+6. The carry failed and the branch was reset to the head it started from. `origin/widgets-pr` is untouched, because pushing comes after a successful refresh.
+7. (a) An uncarried phase change. Open a new draft pull request for it, with its base from the base table and a new branch, run its round and the three checks again. (b) A broken assumption of the proof, not the phase's own work. Open no pull request. Report it to the phase session with the `FAIL` lines, and the phase session raises it with the orchestrator.
+8. No. The PR creator never resolves a hand-written conflict and never changes what the code does.
 
 ## Evidence
 
+The phase's own verifier runs these at every code head it verifies. They are never rerun by the merged-branch check.
+
+### `gh stack link` with pull request numbers only links
+
+What it checks: the handbook's rule that `gh stack link <parent number> <own number>` adds a pull request on top of its parent's stack without pushing or rebasing any branch, and that linking a merged pull request is refused. The scratch cases cannot reach GitHub.
+
+How: in a throwaway public repository owned by the developer, never Foundry, push two branches with plain `git push`, open both as drafts with `gh pr create --draft`, and run `gh stack link <first> <second>`. Record both branches' head SHAs before and after, and the stack GitHub shows. Then merge the first, open a third draft on the second, and run `gh stack link <first> <third>`. The rule holds when the heads do not move on the first link and the second link is refused. This changes state on GitHub, so the developer runs it or approves it first.
+
 ### A forge rewrite keeps the tree
 
-What it checks: the handbook's rule that GitHub may rewrite a stacked pull request's head when its parent merges, keeping the tree and changing the commits, so the PR creator takes that head as its starting point. The scratch case `rewrite` assumes this shape, and this check ties it to the forge.
+What it checks: the handbook's rule that when a stack parent merges, GitHub may rewrite the child's head with the same tree and new commits, which the `forge rewrite` and `round 2 grandchild` cases simulate.
 
-How: pick a pull request of this run whose stack parent has merged, from the run's decisions. Read its force-push events with `gh api graphql`, asking for `pullRequest(number: <n>) { timelineItems(itemTypes: [HEAD_REF_FORCE_PUSHED_EVENT]) { nodes { ... on HeadRefForcePushedEvent { createdAt beforeCommit { oid tree { oid } } afterCommit { oid tree { oid } } } } } }`. The rule holds when an event at the parent's merge time has equal tree object ids for the two commits and different commit ids. The check only reads.
-</content>
-</invoke>
+How: pick a pull request of this run whose stack parent has merged, from the run's decisions. Read its force-push events with `gh api graphql`, asking for `pullRequest(number: <n>) { timelineItems(itemTypes: [HEAD_REF_FORCE_PUSHED_EVENT]) { nodes { ... on HeadRefForcePushedEvent { createdAt beforeCommit { oid tree { oid } } afterCommit { oid tree { oid } } } } } }`. The rule holds when an event at the parent's merge time has equal tree ids and different commit ids. It only reads.

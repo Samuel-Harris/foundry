@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 import signal
 import subprocess
 import time
@@ -239,3 +240,60 @@ class StartTimeTests(LauncherTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class IdlePaneTests(LauncherTestCase):
+    """A session's left-over pane is reused only while it sits at an interactive shell."""
+
+    def left_over_pane(self, *, command: list[str], ready: str) -> tuple[tuple[str, ...], str]:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        (self.tmp / ".zshrc").write_text("")
+        args = ("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window)
+        pane, _ = self.started(self.launch(*args), name="f-phase-p")
+        self.wait_for_claude(pane)
+        self.kill_claude("f-phase-p")
+        self.tmux("respawn-pane", "-k", "-t", pane, *command)
+        foreground = lambda: any(row.args == ready for row in self.processes())
+        self.wait_for(foreground, message=f"{ready!r} did not start in {pane}")
+        return args, pane
+
+    def assert_busy(self, *, command: list[str], ready: str) -> None:
+        args, pane = self.left_over_pane(command=command, ready=ready)
+
+        restarted, _ = self.started(self.launch(*args), name="f-phase-p")
+
+        self.assertNotEqual(restarted, pane, f"{ready!r} counted as idle")
+        self.assertTrue(any(row.args == ready for row in self.processes()), f"{ready!r} was killed")
+
+    def assert_idle(self, *, command: list[str], ready: str) -> None:
+        args, pane = self.left_over_pane(command=command, ready=ready)
+
+        restarted, _ = self.started(self.launch(*args), name="f-phase-p")
+
+        self.assertEqual(restarted, pane, f"{ready!r} counted as busy")
+
+    def zsh(self) -> str:
+        zsh = shutil.which("zsh")
+        if zsh is None:
+            self.skipTest("zsh is not installed")
+        return zsh
+
+    def test_a_shell_running_a_script_is_busy(self) -> None:
+        script = self.tmp / "build.sh"
+        script.write_text("sleep 60\n")
+        self.assert_busy(command=["bash", str(script)], ready=f"bash {script}")
+
+    def test_a_shell_running_a_command_is_busy(self) -> None:
+        self.assert_busy(command=["sh", "-c", "sleep 61; true"], ready="sh -c sleep 61; true")
+
+    def test_a_bare_interactive_bash_is_idle(self) -> None:
+        self.assert_idle(command=["bash"], ready="bash")
+
+    def test_a_login_zsh_is_idle(self) -> None:
+        zsh = self.zsh()
+        self.assert_idle(command=[zsh, "-l"], ready=f"{zsh} -l")
+
+    def test_a_zsh_started_as_a_login_shell_by_name_is_idle(self) -> None:
+        zsh = self.zsh()
+        self.assert_idle(command=["bash", "-c", f"exec -a -zsh {zsh}"], ready="-zsh")

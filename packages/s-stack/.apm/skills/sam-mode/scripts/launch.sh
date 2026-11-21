@@ -133,6 +133,22 @@ resolve() {
   (cd "$1" 2>/dev/null && pwd -P) || true
 }
 
+# A pane is idle when every process in its terminal's foreground group is an
+# interactive shell given no script and no -c command: -zsh, zsh -l, bash. A
+# helper the shell keeps in the background, as zsh prompt plugins do, is not in
+# that group; a build started as bash build.sh, or a command run with exec, is.
+pane_is_idle() {
+  LC_ALL=C ps -t "${1#/dev/}" -o stat=,args= 2>/dev/null | awk '
+    $1 !~ /[+]/ { next }
+    {
+      seen = 1
+      program = $2; sub(/^-/, "", program); sub(/.*\//, "", program)
+      if (program !~ /^(sh|bash|zsh|dash|fish|ksh|tcsh|csh)$/) busy = 1
+      for (i = 3; i <= NF; i++) if ($i !~ /^-/ || $i ~ /^-[^-]*c/ || $i == "--command") busy = 1
+    }
+    END { exit !(seen && !busy) }'
+}
+
 # Prints "pane_id window_id tag kind in_worktree idle" for every pane, in tmux's
 # order. tag is the pane's @s-stack-session option, or - when unset. kind
 # describes the claude processes among the pane's descendants: strict when a
@@ -141,15 +157,12 @@ resolve() {
 # which is how workmux resurrect restarts a session; other for any other
 # claude; none without one. A pane running several claudes reports the closest
 # match. in_worktree is 1 when the pane's directory is <worktree> or under it.
-# idle is 1 when the pane's foreground process is a shell: a helper the shell
-# keeps in the background, as zsh prompt plugins do, leaves the pane idle, and a
-# command the developer runs or execs there does not.
+# idle is 1 when the pane sits at an interactive shell, as pane_is_idle decides.
 pane_inventory() {
-  local session=$1 worktree_path=$2 panes pane_id pane_pid window_id tag idle current_path in_worktree resolved_worktree='' status
-  local idle_format='#{?#{m/r:^-?(sh|bash|zsh|dash|fish|ksh|tcsh|csh)$,#{pane_current_command}},1,0}'
+  local session=$1 worktree_path=$2 panes pane_id pane_pid window_id tag tty idle current_path in_worktree resolved_worktree='' status
   # Spaces, not tabs, separate the fields: a tmux client without a UTF-8 locale
   # prints a tab in a format as "_". The path goes last so read keeps its spaces.
-  if ! panes=$(tmux list-panes -a -F "#{pane_id} #{pane_pid} #{window_id} #{?@s-stack-session,#{@s-stack-session},-} $idle_format #{pane_current_path}"); then
+  if ! panes=$(tmux list-panes -a -F "#{pane_id} #{pane_pid} #{window_id} #{?@s-stack-session,#{@s-stack-session},-} #{pane_tty} #{pane_current_path}"); then
     # With no server no session runs, which --close and --remove may rely on; start mode needs a window.
     # Before tmux has ever run there is no socket directory, and tmux says it cannot connect.
     status=$(tmux list-sessions 2>&1) || true
@@ -158,8 +171,10 @@ pane_inventory() {
   fi
   [ -z "$worktree_path" ] || resolved_worktree=$(resolve "$worktree_path")
   {
-    printf '%s\n' "$panes" | while read -r pane_id pane_pid window_id tag idle current_path; do
+    printf '%s\n' "$panes" | while read -r pane_id pane_pid window_id tag tty current_path; do
       [ -n "$pane_id" ] || continue
+      idle=0
+      if pane_is_idle "$tty"; then idle=1; fi
       in_worktree=0
       if [ -n "$resolved_worktree" ] && [[ "$(resolve "$current_path")/" == "$resolved_worktree"/* ]]; then in_worktree=1; fi
       printf 'pane %s %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$window_id" "$tag" "$in_worktree" "$idle"

@@ -230,6 +230,17 @@ wait_for_started_claude() {
   done
 }
 
+# Sets orchestrator_pane to the pane that runs the feature's orchestrator when
+# that pane is in $window, else to nothing.
+find_orchestrator_pane() {
+  local feature_worktree
+  feature_worktree=$(workmux path "$feature" 2>/dev/null) || feature_worktree=''
+  orchestrator_pane=$(pane_inventory "$feature-orchestrator" "$feature_worktree" | live_pane_of "$feature-orchestrator" 1)
+  if [ -n "$orchestrator_pane" ] && [ "$(tmux display-message -p -t "$orchestrator_pane" '#{window_id}')" != "$window" ]; then
+    orchestrator_pane=''
+  fi
+}
+
 # Two panes of at least 80 columns each, and the divider between them.
 side_by_side_width=161
 
@@ -277,7 +288,7 @@ right_of_column() {
 # leaves untagged, and the first column's top pane when the orchestrator starts
 # with no spec writer.
 choose_split() {
-  local panes anchor feature_worktree
+  local panes anchor
   # Spaces separate the fields, as in pane_inventory, and the command goes last.
   panes=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_left} #{pane_right} #{pane_top} #{pane_width} #{pane_height} #{?@s-stack-session,#{@s-stack-session},-} #{pane_current_command}') || die "tmux list-panes -t $window failed"
   direction=-v split_size=''
@@ -288,20 +299,18 @@ choose_split() {
       [ -n "$target_pane" ] || target_pane=$(printf '%s\n' "$panes" | top_of_first_column)
       [ -n "$target_pane" ] || die "no pane to split in $window"
       ;;
-    spec|planner|phase)
-      feature_worktree=$(workmux path "$feature" 2>/dev/null) || feature_worktree=''
-      anchor=$(pane_inventory "$feature-orchestrator" "$feature_worktree" | live_pane_of "$feature-orchestrator" 1)
-      if [ "$role" = spec ]; then
-        target_pane=$(printf '%s\n' "$panes" | bottom_of_column "$anchor")
-        if [ -z "$target_pane" ] && [ -n "$first_spec" ]; then
-          target_pane=$(printf '%s\n' "$panes" | top_of_first_column)
-          [ -n "$target_pane" ] || die "no pane to split in $window"
-        fi
-      else
-        read -r target_pane direction split_size <<EOF
-$(printf '%s\n' "$panes" | right_of_column "$anchor")
-EOF
+    spec)
+      target_pane=$(printf '%s\n' "$panes" | bottom_of_column "$orchestrator_pane")
+      if [ -z "$target_pane" ] && [ -n "$first_spec" ]; then
+        target_pane=$(printf '%s\n' "$panes" | top_of_first_column)
+        [ -n "$target_pane" ] || die "no pane to split in $window"
       fi
+      [ -n "$target_pane" ] || die "no $feature-orchestrator pane in $window"
+      ;;
+    planner|phase)
+      read -r target_pane direction split_size <<EOF
+$(printf '%s\n' "$panes" | right_of_column "$orchestrator_pane")
+EOF
       [ -n "$target_pane" ] || die "no $feature-orchestrator pane in $window"
       ;;
   esac
@@ -379,6 +388,11 @@ cmd_start() {
 
   target_pane=''
   [ -z "$window" ] || target_pane=$(printf '%s\n' "$inventory" | find_own_pane)
+  orchestrator_pane=''
+  if [ -z "$target_pane" ] && [ -n "$window" ] && [ "$role" != orchestrator ]; then
+    find_orchestrator_pane
+    [ -n "$orchestrator_pane" ] || [ -n "$first_spec" ] || die "no $feature-orchestrator pane in $window"
+  fi
   split=''
   if [ -z "$worktree" ]; then
     if [ "$role" = orchestrator ]; then

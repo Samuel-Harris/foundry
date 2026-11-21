@@ -119,8 +119,9 @@ class PlacementTests(LauncherTestCase):
     def test_sessions_the_orchestrator_starts_need_its_pane_in_the_window(self) -> None:
         self.tmux("new-window", "-d", "-c", str(self.worktree("f")), "claude --name f-orchestrator")
         self.wait_for(lambda: self.named_claudes("f-orchestrator"), message="no orchestrator in the other window")
-        for args in (("--role", "planner"), ("--role", "phase", "--phase", "p"), ("--role", "spec", "--update", "1")):
-            with self.subTest(args=args):
+        launches = ((("--role", "planner"), "f-planner"), (("--role", "phase", "--phase", "p"), "f-phase-p"), (("--role", "spec", "--update", "1"), "f-spec-1"))
+        for args, name in launches:
+            with self.subTest(name=name):
                 before = self.geometry()
 
                 result = self.launch("--feature", "f", *args, "--window", self.window)
@@ -128,6 +129,8 @@ class PlacementTests(LauncherTestCase):
                 self.assertEqual((result.returncode, result.stdout), (1, ""), result.stderr)
                 self.assertIn(f"no f-orchestrator pane in {self.window}", result.stderr)
                 self.assertEqual(self.geometry(), before)
+                self.assertFalse(self.worktree(name).exists())
+                self.assertEqual(self.git("-C", str(self.root), "branch", "--list", name), "")
         self.assertEqual(self.claude_processes(), self.named_claudes("f-orchestrator"))
 
     def test_a_resurrected_orchestrator_places_sessions_like_a_launched_one(self) -> None:

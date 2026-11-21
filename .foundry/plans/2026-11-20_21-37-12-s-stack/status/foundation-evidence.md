@@ -56,3 +56,17 @@ A second fresh verifier reviewed `checks/foundation.md` and added the Rerun chec
 **Done when.** Every item passed. `apm audit --ci` in a fresh detached worktree at `0f4bf86` with no install printed `All 10 check(s) passed`. The counts grep's only hit is `AGENTS.md:4` "nineteen content packages", which is correct. `SKILL.md` is 103 lines. Cold read 1 named all seven handbook paths and wrote `/sam-mode phase feature=<feature> phase=<phase> update=- roadmap=<path> plan=<path> orchestrator=<feature>-orchestrator`. A private-names grep over every changed file and commit message found nothing.
 
 The full report is in the phase session's scratchpad as `verify-gate-2.md`.
+
+## Review: SIGNIFICANT at `0f4bf86be72cef85833be3096e3cbf9fc85b59ff`
+
+p-stack's `interrogate` ran two adversaries, on Opus and Fable, each in its own detached worktree, with the diff and the repository only. The configured Gemini seat is unavailable on this host and was dropped. The phase session reran the first two findings below and saw both reproduce.
+
+| Finding | Found by | Severity | Proof |
+| --- | --- | --- | --- |
+| The "Status header matches C2" Rerun check in `checks/foundation.md` crashes where `.foundry/` is absent, which includes every pull request branch and `main`, so verify-s-stack reports NOT VERIFIED there | Both | Significant | `git archive HEAD -- . ':(exclude).foundry'`, then the check: `FileNotFoundError: ... .foundry/plans/2026-11-20_21-37-12-s-stack/README.md` |
+| The skill's cleanup leaves an empty `.cursor/` and `.github/` in every package, and `apm targets` then reports `cursor` active | Opus | Significant | `find packages -mindepth 2 -maxdepth 2 -type d -empty \| wc -l` printed `40` |
+| The C2 check accepts a reworded code-head rule ("cancels every verdict") because it tests that line only for three substrings | Fable | Significant | Mutated reference, check exit `0` |
+| Check 5's link checker misses angle-bracket links, links with titles, indented reference definitions and HTML links | Both | Low | Probe tree, 2 of 5 leaking links reported |
+| C2's `json.dumps` quoting does not round-trip characters outside the Basic Multilingual Plane through PyYAML | Both | Low, contract | Sent to the orchestrator as `foundation-r2` |
+
+Both adversaries ran Tier 1 (`all Tier 1 structural checks passed across 20 packages`), root install and audit, the pre-commit hook in check-all mode, `versioning.py check`, and scratch-consumer installs for each target, all clean.

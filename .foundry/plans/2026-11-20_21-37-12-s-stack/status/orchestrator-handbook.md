@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T21:38:14Z"
+state: "Verify"
+changed_at: "2026-11-21T21:39:26Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "e0fcca779f7f839dc14510f983f49ae344696b06"
+code_head: "b33f4a5de85d2c0ee94dfd7884ca0ed2dd22c0d5"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -277,3 +277,5 @@ The twenty-second Verify gate was stopped without a verdict or commit, because t
 The "Histories handled by asking" section is at `e1e7917`. `s-stack-package` (`968a97a`, which records the review-scope cap) was merged at `70f89a1`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `e1e7917`.
 
 The twenty-third Verify gate returned NOT VERIFIED at `e0fcca7`. The phase moved back to Implement.
+
+The Verify 23 fixes are at `b33f4a5`. `s-stack-package` (`df13acf`) was merged at `eef8318`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `b33f4a5`.

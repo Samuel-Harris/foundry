@@ -1,0 +1,79 @@
+# Phase `spec-planner-handbooks` evidence
+
+## Verify, code head `0d7b25d0a0156ac524a6a32e7e221ad4fed9e1ee`
+
+A fresh verifier subagent wrote `tests/s-stack/verify-s-stack/checks/spec-planner-handbooks.md` in commits `7c59af5` and `0d7b25d`. The second commit fixed the check rather than the handbook: the first expected answer assumed a front end that `planner.md` rightly split in two. The verifier then ran `tests/s-stack/verify-s-stack/SKILL.md` end to end at `0d7b25d`.
+
+| Check | Result |
+| --- | --- |
+| 1. Primitives and root manifest | PASS. `94 primitives valid`, `12 listed, 19 reached` |
+| 2. Markdown lint | PASS. 8 files, 0 errors |
+| 3. Line budgets | PASS. `SKILL.md` 103/150, `planner.md` 64/200, `spec-writer.md` 61/200 |
+| 4. Routes | PENDING. `planner.md` and `spec-writer.md` present, five other handbooks pending |
+| 5. Package isolation | PASS |
+| 6. Launcher tests | PENDING. `packages/s-stack/tests` missing |
+| 7. Tier 1 | PASS. `all Tier 1 structural checks passed across 20 packages`, exit 0, checked by the phase session in the log |
+| 8. Check files | PASS. Three foundation cold reads, the C2 comparison and both spec-planner-handbooks cold reads |
+
+Verdict: VERIFIED. The verifier noted two small gaps, which the phase session fixes in a new code head: `planner.md` did not say what happens when a phase must depend on two open phases, and `spec-writer.md` did not say which command's output to report.
+
+## Verify, code head `08874f390fa5e43df00cb90946b113b92f1fb1e0`
+
+A second fresh verifier ran the full skill again at HEAD `8d22ba0` and left the check file unchanged. Checks 1, 2, 3, 5, 7 and 8 passed. Check 4 is pending on the five handbooks other phases own, and check 6 is pending on the launcher's tests. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0, which the phase session confirmed in the log. All four Done-when items passed, and both cold reads matched their expected answers point by point. Verdict: VERIFIED. Minor note: in `planner.md` the sentence that gives every phase its own check file sits inside the "no existing verification skill" bullet.
+
+## Review, code head `08874f390fa5e43df00cb90946b113b92f1fb1e0`
+
+p-stack's `interrogate` skill ran with two adversaries, on Opus and on Fable, each in its own detached worktree at `08874f3`. Each got only the diff and the repository and was told not to read `.foundry/`. The configured Gemini seat is not available on this host. Neither adversary found a significant issue. Their cold reads covered roadmap updates, soft approvals, launcher failures, one-way doors, a typed developer instruction and a restart, and in every one the session acted correctly. The phase session reran each minor finding's command and confirmed it. Verdict: CLEAR.
+
+Minor findings fixed in the next code head:
+
+- The planner sent decision requests only after writing the plan.
+- The planner's record of a developer's answer lacked the door type and who decided.
+- Nothing stopped the planner sending `done-planning` while a request was open.
+- An update spec writer skipped the visibility check.
+- In the check file, the first cold read cites roadmap `workflow.md`, which never ships, and leaves out **Must not touch**. The next verifier fixes that.
+
+Findings dismissed, with reasons:
+
+- A restarted planner can still find answers. The orchestrator records each decision in `run-decisions.md` (roadmap `coordination.md`, tick step 5), and the planner reads that file after a restart.
+- The spec writer asks the developer directly and sends no decision request, as roadmap `roles.md` and `workflow.md` design it. The reference file still lists the spec writer as a sender, and that gap is with the orchestrator as a `foundation` follow-up.
+- Session names and branch names belong to the launcher.
+
+## Verify, code head `6f70b3707c6c24f174c333817b3a17f37a5d9f63`
+
+A third fresh verifier made the check-file fix the review asked for at `6f70b37`. Cold read 1's expected fields now come from `planner.md`'s own table and include **Must not touch**. It then ran the full skill. Checks 1, 2, 3, 5, 7 and 8 passed. Checks 4 and 6 are pending, as the skill allows. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0, which the phase session confirmed in the log. All Done-when items passed. Verdict: VERIFIED.
+
+Minor notes, recorded and not fixed, under the orchestrator's instruction to fix only what would mislead a reader or break a real run:
+
+- `spec-writer.md` does not define `<this skill's directory>`. `SKILL.md` lines 16 and 24 do.
+- `spec-writer.md` does not say who to record as decider for a two-way door the spec writer decides itself.
+- `planner.md` does not say where each phase's check file lives. The plan names it.
+
+## Review, code head `6f70b3707c6c24f174c333817b3a17f37a5d9f63`
+
+p-stack's `interrogate` skill ran again with two adversaries, on Opus and on Fable, over the commits since `08874f3`. Each worked in its own detached worktree at `6f70b37`, got only the diff and the repository, and was told not to read `.foundry/`. Neither found anything, significant or minor. Their seven cold reads covered decisions met before the plan existed, a request still open at the end of planning, a restart mid-request, a restarted planner with an old-format plan, an update spec writer in a public repository given private names, and the check file's cold read 1. Every session acted correctly. Fable's mechanical checks found the lockfile hashes in step and `versioning.py check` clean. Verdict: CLEAR.
+
+## Pull request 84
+
+https://github.com/Samuel-Harris/foundry/pull/84. Draft, branch `s-stack-spec-planner-handbooks`, base `main`, head `dede1c5`. It depends on 81 and 82, both open, so it is cut from `s-stack-verify-skill` at `78162e9` and carries both parents' commits. It is not stacked.
+
+- **Equality proof.** The PR creator ran the Experiment 7 commands on `s-stack-package`, the phase branch, `origin/main`, and `s-stack-spec-planner-handbooks:origin/s-stack-foundation-package,origin/s-stack-verify-skill`, and they printed `EQUAL`. The regenerate check, the `.foundry` check and the `apm.yml` check printed nothing. The phase session confirmed three things: the three content files on the pull request branch are byte-identical to `6f70b37`, `git diff --name-only origin/main...origin/s-stack-spec-planner-handbooks -- .foundry` is empty, and the pull request is a draft against `main`.
+- **Regenerate commit.** `dede1c5` changes only `packages/s-stack/apm.lock.yaml`. `versioning.py bump` raised no version, because s-stack is not on `main` yet.
+- **Size.** 166 hand-written lines against `s-stack-verify-skill`, and 802 added and 26 removed against `main` including both parents, lockfiles excluded.
+- **CI.** Pre-commit checks, Package versions, Detect changed paths, data-visualisation tools tests and foundry-maintenance script tests passed. The p-stack tests and Tag package versions were skipped by their path and event conditions.
+
+## Fix round after #81 merged, generated files only
+
+#81 was squash-merged into `main` as `d7e036c`, and #84 conflicted with `main`. The phase branch merged `s-stack-package` at `2dff76b`. That merge changed nothing outside `.foundry/`, so the code head stays `6f70b37` and no gate ran.
+
+A fresh PR creator rebuilt #84 under `pr-handbook-r1`.
+
+- **Rebuild.** It replayed the eight own commits with `git apply --3way` onto `origin/s-stack-verify-skill` (`04e239a`), with no conflict. The rebuilt tree differed only in `packages/s-stack/apm.lock.yaml`. It recorded the tree as merge commit `3b15a0a` (`git commit-tree -p dede1c5 -p origin/s-stack-verify-skill`), then added regenerate commit `49df8c3`, which raised s-stack from 0.1.0 to 0.1.1. It pushed as a fast-forward, with no force.
+- **Base.** #85 is already stacked on #82, so #84 keeps base `main` and carries #82's commits. It depends on [82] and is not stacked.
+- **Equality proof.** The rebuild-form proof printed `EQUAL`. The phase session confirmed four things:
+  - The three content files are byte-identical to `6f70b37`.
+  - The diff against `s-stack-verify-skill` adds only `packages/s-stack/apm.lock.yaml` and the `version:` line of `packages/s-stack/apm.yml`.
+  - No `.foundry/` path is on the branch.
+  - GitHub reports #84 as mergeable and CLEAN.
+- **Size.** 167 added and 1 removed against `s-stack-verify-skill`.
+- **CI at `49df8c3`.** Pre-commit checks, Package versions, Detect changed paths and both tools test jobs passed.

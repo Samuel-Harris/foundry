@@ -269,3 +269,16 @@ More for the cross-handbook integration:
 - It is not stated whether phase merges wait while a default-branch merge keeps failing.
 - The repeat "A pull request merged" round for an already set `needs_update` does not say what it names.
 - `stop` and the merged notice can be sent in the same tick.
+
+## Review 4, code head `7fc56cf30188c760809d2827c628f575d9564707`, SIGNIFICANT
+
+`interrogate` over the commits since `03d2899`, with two adversaries on Opus and Fable in their own worktrees. The phase session reran all three git probes.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| The re-merge rule's commit-time test admits code that no pull request holds. An old pull request merged after the fix commit, but before the PR creator carried the fix, passes it. | Opus | Scratch-repository script, rerun; cold read |
+| Once a phase's code head is a merge commit, the time test can never pass again, although its merged pull request holds all its code. This follows a conflicted re-merge, or a default-branch conflict round. | Fable | Two scratch-repository scripts, rerun; two cold reads |
+| A refused status-only merge whose cause the phase cannot fix loops every four ticks, and never reaches the developer. | Opus | Cold read |
+| "A pull request merged" rounds go to phases not in PR, while `phase-session.md`'s handler assumes PR. A PR creator could carry unverified commits. | Opus | Cold read |
+
+The fix replaces the time test with the roadmap's own trigger: a phase merges once it has reported its pull requests open (`prs-open`) at its current code head.

@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "Review"
-changed_at: "2026-11-21T19:05:03Z"
+state: "Implement"
+changed_at: "2026-11-21T19:14:05Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "7fc56cf30188c760809d2827c628f575d9564707"
@@ -97,6 +97,11 @@ verdicts:
     code_head: "7fc56cf30188c760809d2827c628f575d9564707"
     at: "2026-11-21T19:05:03Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "7fc56cf30188c760809d2827c628f575d9564707"
+    at: "2026-11-21T19:14:05Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -191,3 +196,5 @@ The fifteenth Verify gate returned VERIFIED at `d66a4cb`. One contradiction in t
 The re-merge fix is at its own commit before `1178d03`. `s-stack-package` (`ce086bb`, the `phase-handbooks` re-merge) was merged at `1178d03`, after a lockfile-only conflict that was resolved under C7. It brings `phase-session.md`'s "A pull request merged" handler, which resolves the first integration item. The phase moved to Verify at code head `1178d03`.
 
 The sixteenth Verify gate returned VERIFIED at `7fc56cf`. The phase moved to Review, which covers the commits since `03d2899`.
+
+The fourth Review gate returned SIGNIFICANT at `7fc56cf`. The phase moved back to Implement.

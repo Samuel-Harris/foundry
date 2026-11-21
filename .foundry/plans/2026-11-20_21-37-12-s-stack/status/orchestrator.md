@@ -6,7 +6,7 @@
 | Branch | `s-stack-package` (pull request 76, review only) |
 | Default branch | `main` |
 | tmux window | `@47` |
-| Status board | not yet published |
+| Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | not yet published |
 | Architecture page describes | none |
 | Last tick | 2026-11-21 13:53 |

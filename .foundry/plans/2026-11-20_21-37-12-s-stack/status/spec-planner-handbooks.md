@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T23:14:46Z"
+state: "Implement"
+changed_at: "2026-11-21T23:19:32Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "ba02397c72378fd5d5a54389d49b9ee7011f52ee"
@@ -42,6 +42,11 @@ verdicts:
     code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
     at: "2026-11-21T23:14:37Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "ba02397c72378fd5d5a54389d49b9ee7011f52ee"
+    at: "2026-11-21T23:19:32Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
@@ -70,4 +75,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. The review's point 5 gap is fixed at `ba02397`. A fresh verifier runs in full, then the review covers the commits since `49f2959`.
+Follow-up round. Verify failed at `ba02397`, because cold read 1's point 3 rejected a correct answer that serialises two phases sharing an exclusive resource. The phase is fixing point 3.

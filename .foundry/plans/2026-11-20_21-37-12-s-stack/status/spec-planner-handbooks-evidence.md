@@ -99,3 +99,17 @@ Two adversaries ran `interrogate`, on Opus and on Fable, scoped to the one-line 
 - Both reviewers confirmed the change's aims hold. Answers with the port off the sharing phase, or with no port at all, fail. Real answers that give the port to a second phase under an assumption pass.
 
 Verdict: SIGNIFICANT. The phase moves back to Implement. The fix restores the database alternative and fails an answer whose own assumptions put a concurrent phase on the database without naming it there.
+
+## Follow-up round: Verify, code head `ba02397c72378fd5d5a54389d49b9ee7011f52ee`
+
+A fresh verifier ran the full skill and four point 5 probes, each graded by a fresh subagent.
+
+- **Probes.** All four came out as intended:
+  - (C) A concurrent import phase uses the database by its own assumption but lists "none". FAIL.
+  - (E) The database is named without the port number. PASS.
+  - (A) The port is on the import phase only. FAIL.
+  - (D) The port is on both phases under a stated assumption. PASS.
+- **Tier 1 and check files.** Tier 1 passed across 20 packages. Every check file's Rerun passed.
+- **Failure.** One of three extra runs of cold read 1 failed point 3. It gave the port to both the sharing and import phases under a stated assumption, and so ran them one after the other. Roadmap `roles.md` says the orchestrator "never runs two phases that need the same exclusive resource", so that reading is right, and point 3 was too strict.
+
+Verdict: NOT VERIFIED. Fix: point 3 also accepts the two phases running one after the other when the answer's own stated assumption gives both the same exclusive resource. `planner.md` does not change.

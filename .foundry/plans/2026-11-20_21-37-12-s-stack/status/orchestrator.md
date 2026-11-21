@@ -21,8 +21,6 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 | `s-stack-phase-phase-handbooks` | `%181` | `../s-stack-phase-phase-handbooks` | 2026-11-21, resumed for the #85 fix round |
-| `s-stack-phase-foundation` | `%182` | `../s-stack-phase-foundation` | 2026-11-21, resumed to record Done |
-| `s-stack-phase-spec-planner-handbooks` | `%183` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21, resumed to record Done |
 
 ## Open decision requests
 
@@ -50,8 +48,8 @@ None.
 | Session | Worktree | Closed | Last commit |
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
-| `s-stack-phase-foundation` | `../s-stack-phase-foundation` | 2026-11-21 | `5df64c0`, merged at `7c4f36d`; worktree kept for fix rounds |
-| `s-stack-phase-spec-planner-handbooks` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 | `22340be`, merged at `4739703`; worktree kept for fix rounds |
+| `s-stack-phase-foundation` | removed, branch kept | 2026-11-21 | Done at `d7a6cb3`, merged; #81 and #82 merged into `main` |
+| `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-21 | Done at `b9429a2`, merged; #84 merged into `main` |
 | `s-stack-phase-phase-handbooks` | `../s-stack-phase-phase-handbooks` | 2026-11-21 | `88ebe79`, merged at `377dc78`; worktree kept for fix rounds |
 
 ## Queued fix rounds
@@ -73,6 +71,7 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 13. `tests/s-stack/verify-s-stack/SKILL.md` check 8: `## Evidence` must not "record one-off checks with their results". Results go in the phase's evidence file under `.foundry/`, as the no evidence-exception run decision says. The feature plan's C6 has the same wording, and that run decision overrides it. Raised by `phase-handbooks`.
 14. `references/status-and-messages.md`: drop the `restack` orchestrator message kind. PR creators now restack themselves (run decision, automatic stacking). Raised by `orchestrator-handbook`. Make the `fix-round` row cover a merged dependency, after which the PR creator works out the base again. Raised by `phase-handbooks`.
 15. `SKILL.md` line 20: a feature name must also not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>` (run decision `launcher-r2`). Raised by `launcher`.
+16. `references/status-and-messages.md`: the code-head rule must ignore version-only changes, as the run decision on version lines says. Its message rows must also cover a failed post-merge check, a `state` reply to an early merged notice, and the merged notice itself (move-back, state and instruction rows). Raised by `phase-handbooks`.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
@@ -90,3 +89,7 @@ Known launcher limits to record in that update: a pane left at its shell after `
 ## Window layout
 
 The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. Start planner and phase sessions by hand to the right of that column: split the largest session pane there, with `-v` unless both halves stay at least 80 columns wide. Start a spec writer in `%165`'s column. Never move a pane the developer adds to that column, and never run `select-layout`.
+
+## Deferred follow-ups for live phases
+
+- `pr-handbook` (`phase-handbooks` folded it in at its `30f0709` review round): rework after Done. A Done phase asked to change code moves back to Implement, and its PR creator opens a new pull request for commits no open pull request carries. Fold this into each phase's next Implement round. If either reaches PR without one, send it as a fix round. `orchestrator.md` at `131526e` fails safe meanwhile. Raised by `orchestrator-handbook`.

@@ -2492,7 +2492,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:36686eec64ee33486eeda94d41573fcc3dc5d505d68c7b5d454f8a3a768ec148
+  content_hash: sha256:c7e1b72e3e465c2671aec2e76282968d62d674bbe32c6dba6012de4d237f817c
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/handbooks/reviewer.md
@@ -2528,7 +2528,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:dfe49c40a67efdeb4b20546a7c0bd9ac209f16d31fdd01e84ada49c35abed937
+  content_hash: sha256:3daf1bfc62358a8fb2e9b9f84e7b9e3ac763d1f28216aa44a089c207f41ef8a7
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/references/status-and-messages.md
@@ -5336,7 +5336,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:36686eec64ee33486eeda94d41573fcc3dc5d505d68c7b5d454f8a3a768ec148
+  content_hash: sha256:c7e1b72e3e465c2671aec2e76282968d62d674bbe32c6dba6012de4d237f817c
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/handbooks/reviewer.md
@@ -5372,7 +5372,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:dfe49c40a67efdeb4b20546a7c0bd9ac209f16d31fdd01e84ada49c35abed937
+  content_hash: sha256:3daf1bfc62358a8fb2e9b9f84e7b9e3ac763d1f28216aa44a089c207f41ef8a7
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/references/status-and-messages.md
@@ -5407,18 +5407,18 @@ local_deployed_file_hashes:
   .agents/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
   .agents/skills/sam-mode/handbooks/phase-session.md: sha256:cbeaf11dd71fa3a9bd938eee9d137e9c24cf6b289ec9039fe24fac02434b2cd0
   .agents/skills/sam-mode/handbooks/planner.md: sha256:ebf2a3e49084d906ad9e1e1a2ca6d76fb9e795c6a6e2b1693237e81cae89962f
-  .agents/skills/sam-mode/handbooks/pr-creator.md: sha256:36686eec64ee33486eeda94d41573fcc3dc5d505d68c7b5d454f8a3a768ec148
+  .agents/skills/sam-mode/handbooks/pr-creator.md: sha256:c7e1b72e3e465c2671aec2e76282968d62d674bbe32c6dba6012de4d237f817c
   .agents/skills/sam-mode/handbooks/reviewer.md: sha256:d19c4492585e8fdf731a28f78b1b2826133fe8c58dbe7fbe85ad08c0f4a303ea
   .agents/skills/sam-mode/handbooks/spec-writer.md: sha256:ab76ce1e7b190c899fa78c3fa04aef68af0bf94564a829b0c0ff3a60ff573683
   .agents/skills/sam-mode/handbooks/verifier.md: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
-  .agents/skills/sam-mode/references/pr-commands.md: sha256:dfe49c40a67efdeb4b20546a7c0bd9ac209f16d31fdd01e84ada49c35abed937
+  .agents/skills/sam-mode/references/pr-commands.md: sha256:3daf1bfc62358a8fb2e9b9f84e7b9e3ac763d1f28216aa44a089c207f41ef8a7
   .agents/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60
   .claude/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
   .claude/skills/sam-mode/handbooks/phase-session.md: sha256:cbeaf11dd71fa3a9bd938eee9d137e9c24cf6b289ec9039fe24fac02434b2cd0
   .claude/skills/sam-mode/handbooks/planner.md: sha256:ebf2a3e49084d906ad9e1e1a2ca6d76fb9e795c6a6e2b1693237e81cae89962f
-  .claude/skills/sam-mode/handbooks/pr-creator.md: sha256:36686eec64ee33486eeda94d41573fcc3dc5d505d68c7b5d454f8a3a768ec148
+  .claude/skills/sam-mode/handbooks/pr-creator.md: sha256:c7e1b72e3e465c2671aec2e76282968d62d674bbe32c6dba6012de4d237f817c
   .claude/skills/sam-mode/handbooks/reviewer.md: sha256:d19c4492585e8fdf731a28f78b1b2826133fe8c58dbe7fbe85ad08c0f4a303ea
   .claude/skills/sam-mode/handbooks/spec-writer.md: sha256:ab76ce1e7b190c899fa78c3fa04aef68af0bf94564a829b0c0ff3a60ff573683
   .claude/skills/sam-mode/handbooks/verifier.md: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
-  .claude/skills/sam-mode/references/pr-commands.md: sha256:dfe49c40a67efdeb4b20546a7c0bd9ac209f16d31fdd01e84ada49c35abed937
+  .claude/skills/sam-mode/references/pr-commands.md: sha256:3daf1bfc62358a8fb2e9b9f84e7b9e3ac763d1f28216aa44a089c207f41ef8a7
   .claude/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60

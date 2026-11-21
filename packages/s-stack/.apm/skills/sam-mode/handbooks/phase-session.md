@@ -66,7 +66,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 | --- | --- |
 | VERIFIED, for the current code head | Review |
 | NOT VERIFIED | Implement, to fix what failed |
-| INCONCLUSIVE | Implement, to make the check runnable, or a decision request for what is missing |
+| INCONCLUSIVE | Implement, to make the check runnable. If only the developer can supply what is missing, send a decision request and wait in Implement. |
 
 ## Review
 
@@ -82,7 +82,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 ## PR
 
 1. Move to PR once the reference file's merge rule holds for the current code head.
-2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff.
+2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When the phase's pull requests are already open, the PR creator carries the new commits to them, as in [Fix rounds](#fix-rounds), and opens no new ones.
 3. Record each pull request in `pull_requests`, then send `prs-open` with each number and its `depends_on` list.
 4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done.
 
@@ -91,8 +91,8 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 | Kind | What you do |
 | --- | --- |
 | `answer` | Record the outcome in `decisions`, commit, and continue the work that waited. |
-| `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer). |
-| `merge-orchestrator-branch` | Merge as in [Merge the orchestrator branch](#merge-the-orchestrator-branch), once nothing is half done. If the phase was in Verify or later, move back to Implement. |
+| `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. |
+| `merge-orchestrator-branch` | Merge as in [Merge the orchestrator branch](#merge-the-orchestrator-branch), once nothing is half done. If the merge moved the code head and the phase was in Verify or later, move back to Implement. If the code head did not move, the phase keeps its state and its verdicts. |
 | `fix-round` | Run the fix round below that matches it. |
 | `restack` | Start a PR creator to make the change. The phase stays in PR. |
 | `move-back` | Move back as in [Moving back](#moving-back). |

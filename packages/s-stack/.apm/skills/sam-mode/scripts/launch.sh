@@ -305,6 +305,9 @@ cmd_start() {
 $(printf '%s\n' "$candidates" | awk '{ area = $2 * $3; if (area > best) { best = area; line = $0 } } END { print line }')
 EOF
     if [ "$width" -gt $((2 * height)) ]; then direction=-h; else direction=-v; fi
+    # split-window unzooms a zoomed window unless given -Z, which zooms an unzoomed one.
+    zoom=''
+    if [ "$(tmux display-message -p -t "$target_pane" '#{window_zoomed_flag}')" = 1 ]; then zoom=-Z; fi
   fi
 
   roadmap_pattern='^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}-(.*)$'
@@ -336,7 +339,7 @@ EOF
   pane_command="claude --name $(printf %q "$name") $conversation_flag $(printf %q "$conversation_id") $(printf %q "$prompt"); exec \"\${SHELL:-/bin/sh}\" -l"
 
   if [ -n "$split" ]; then
-    target_pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" /bin/sh -c "$pane_command") || cannot_split
+    target_pane=$(tmux split-window -d $zoom -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" /bin/sh -c "$pane_command") || cannot_split
   else
     tmux respawn-pane -k -t "$target_pane" -c "$worktree" /bin/sh -c "$pane_command" || die "tmux respawn-pane -t $target_pane failed"
   fi

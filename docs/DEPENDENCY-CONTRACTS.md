@@ -71,7 +71,7 @@ $ apm install --target cursor            # with {git: Samuel-Harris/foundry, pat
 
 The CLI prefixes the failing dependency's identifier with the repository name, so the error names `foundry-planning` while the manifest path is `packages/planning`.
 
-So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:` permanently, not only until the tag exists, because a remote install already resolves it correctly (see below) and the remote form would pin every sibling to a tag, so a change spanning two packages could not be tested on a feature branch. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance` and `skill-creation` — is deferred until bundles are needed; a release job would then rewrite a throwaway copy of each manifest to `{git: Samuel-Harris/foundry, path: packages/<name>, ref: <tag>}` and pack that. The local Tier 1 suite asserts the guardrail for those packages rather than skipping them.
+So no single manifest form satisfies both `apm install` (which needs `path:`) and `apm pack` (which needs a resolvable remote ref) before `v0.1.0` exists. This repository keeps `path:` permanently, not only until the tag exists, because a remote install already resolves it correctly (see below) and the remote form would pin every sibling to a tag, so a change spanning two packages could not be tested on a feature branch. Bundle production for the nine dependency-bearing packages — `default-stack`, `deep-interview`, `execution`, `planning`, `pr`, `repo-init`, `repo-maintenance`, `s-stack` and `skill-creation` — is deferred until bundles are needed; a release job would then rewrite a throwaway copy of each manifest to `{git: Samuel-Harris/foundry, path: packages/<name>, ref: <tag>}` and pack that. The local Tier 1 suite asserts the guardrail for those packages rather than skipping them.
 
 **A remote install rewrites sibling paths to the same repository and commit.** When APM fetches a package from a git remote, it expands each `path: ../<name>` dependency into a dependency on `packages/<name>` in the same repository at the same resolved commit (`_expand_remote_parent_local_path` in `apm_cli/deps/apm_resolver.py`); a path that escapes the repository root is rejected. Verified with 0.32.0: `apm install Samuel-Harris/foundry/packages/swarm#main` in an empty directory resolved `swarm`, `architect` and, transitively, `explore` all at `main @c00c862a`, and the consumer's lockfile records only `virtual_path: packages/<name>` with `resolved_ref: main`, with no local or absolute path. A consumer therefore gets mutually consistent packages from one tag or branch.
 
@@ -163,6 +163,13 @@ Every primitive that names a primitive shipped by another package is covered by 
 | `deep-interview`        | `skill-creation` — the `design-skill` skill                      | `deep-interview`   | skill-creation → deep-interview   |
 | `deep-interview`        | `repo-init` — the `terraform-monorepo-init` skill                | `deep-interview`   | repo-init → deep-interview        |
 | `optimise-agent-config` | `skill-creation` — the `design-skill` skill                      | `repo-maintenance` | skill-creation → repo-maintenance |
+| `poteto-mode`           | `s-stack` — the `sam-mode` skill and its handbooks               | `p-stack`          | s-stack → p-stack                 |
+| `interrogate`           | `s-stack` — the `sam-mode` skill and its handbooks               | `p-stack`          | s-stack → p-stack                 |
+| `deep-interview`        | `s-stack` — the `sam-mode` skill and its handbooks               | `deep-interview`   | s-stack → deep-interview          |
+| `quick-review`          | `s-stack` — the `sam-mode` skill and its handbooks               | `review`           | s-stack → review                  |
+| `summarise-pr`          | `s-stack` — the `sam-mode` skill and its handbooks               | `pr`               | s-stack → pr                      |
+| `plan-handoff-standard` | `s-stack` — the `sam-mode` skill and its handbooks               | `planning`         | s-stack → planning                |
+| `software-engineering-rules` | `s-stack` — the `sam-mode` skill and its handbooks               | `coding-style`     | s-stack → coding-style            |
 
 `plan-handoff-standard` treats its `quick-review` step as required; the `planning → review` edge above satisfies it, so a single-package install of `planning` carries the capability its own text names.
 
@@ -180,6 +187,12 @@ planning --> deep-interview
 planning --> review
 execution --> pr
 execution --> review
+s-stack --> p-stack
+s-stack --> deep-interview
+s-stack --> review
+s-stack --> pr
+s-stack --> planning
+s-stack --> coding-style
 ```
 
 APM cannot express a dependency cycle, so any future reference that points backwards along `planning → deep-interview` or `execution → pr` must be reworded or extracted, not declared.
@@ -218,7 +231,7 @@ Error: Cannot pack — apm.yml contains local path dependency: ../planning
 Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
 ```
 
-This is the reason every package with a sibling `path:` dependency cannot be packed from its committed manifest: `default-stack`, `execution`, `planning`, `repo-init` and `skill-creation`. The sibling section above records the full comparison, the tested remote fallback and the release-job rewrite that would produce their bundles.
+This is the reason every package with a sibling `path:` dependency cannot be packed from its committed manifest: `default-stack`, `execution`, `planning`, `repo-init`, `s-stack` and `skill-creation`. The sibling section above records the full comparison, the tested remote fallback and the release-job rewrite that would produce their bundles.
 
 ### `apm audit --ci` cannot replay a lockfile with a duplicated local `resolved_by` parent
 

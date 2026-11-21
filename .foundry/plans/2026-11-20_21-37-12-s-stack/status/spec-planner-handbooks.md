@@ -32,7 +32,12 @@ verdicts:
     code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
     at: "2026-11-21T16:13:07Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
-pull_requests: []
+pull_requests:
+  - number: 84
+    branch: "s-stack-spec-planner-handbooks"
+    base: "main"
+    depends_on: [81, 82]
+    stacked: false
 requests: []
 decisions:
   - id: "spec-planner-handbooks-d1"
@@ -51,4 +56,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Both gates passed for `6f70b37`. A PR creator subagent is opening one draft pull request against `main`. It depends on foundation's pull requests 81 and 82, both open, so it carries their commits.
+Both gates passed for `6f70b37`. Draft pull request 84 is open against `main`, holding exactly the verified phase diff on top of 81 and 82, and its CI passed. The phase waits for the orchestrator's merge and the developer's review.

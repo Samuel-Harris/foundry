@@ -52,3 +52,12 @@ Minor notes, recorded and not fixed, under the orchestrator's instruction to fix
 ## Review, code head `6f70b3707c6c24f174c333817b3a17f37a5d9f63`
 
 p-stack's `interrogate` skill ran again with two adversaries, on Opus and on Fable, over the commits since `08874f3`. Each worked in its own detached worktree at `6f70b37`, got only the diff and the repository, and was told not to read `.foundry/`. Neither found anything, significant or minor. Their seven cold reads covered decisions met before the plan existed, a request still open at the end of planning, a restart mid-request, a restarted planner with an old-format plan, an update spec writer in a public repository given private names, and the check file's cold read 1. Every session acted correctly. Fable's mechanical checks found the lockfile hashes in step and `versioning.py check` clean. Verdict: CLEAR.
+
+## Pull request 84
+
+https://github.com/Samuel-Harris/foundry/pull/84. Draft, branch `s-stack-spec-planner-handbooks`, base `main`, head `dede1c5`. It depends on 81 and 82, both open, so it is cut from `s-stack-verify-skill` at `78162e9` and carries both parents' commits. It is not stacked.
+
+- **Equality proof.** The PR creator ran the Experiment 7 commands on `s-stack-package`, the phase branch, `origin/main`, and `s-stack-spec-planner-handbooks:origin/s-stack-foundation-package,origin/s-stack-verify-skill`, and they printed `EQUAL`. The regenerate check, the `.foundry` check and the `apm.yml` check printed nothing. The phase session confirmed three things: the three content files on the pull request branch are byte-identical to `6f70b37`, `git diff --name-only origin/main...origin/s-stack-spec-planner-handbooks -- .foundry` is empty, and the pull request is a draft against `main`.
+- **Regenerate commit.** `dede1c5` changes only `packages/s-stack/apm.lock.yaml`. `versioning.py bump` raised no version, because s-stack is not on `main` yet.
+- **Size.** 166 hand-written lines against `s-stack-verify-skill`, and 802 added and 26 removed against `main` including both parents, lockfiles excluded.
+- **CI.** Pre-commit checks, Package versions, Detect changed paths, data-visualisation tools tests and foundry-maintenance script tests passed. The p-stack tests and Tag package versions were skipped by their path and event conditions.

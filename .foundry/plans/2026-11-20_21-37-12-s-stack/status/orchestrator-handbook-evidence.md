@@ -103,3 +103,24 @@ One-off results at `5af4618`:
 - A grep of the phase's files and commit messages for the private names found 0 hits.
 
 One item misleads a reader. Done handling sat inside step 2's once-per-commit duty, while a freeze forbids other merges. A skipped Done merge was never retried, and `--remove` would then refuse. The phase moved back to Implement.
+
+## Verify 7, stopped without a verdict
+
+A verifier for `d53722e` was stopped when the orchestrator relayed the developer's cross-phase stacking instruction. Its partial check-file commit `b494dbd` was kept for the next verifier to judge.
+
+## Verify 8, code head `5658aa8edf80e0e427f8afa9568117cc59be86ed`, VERIFIED
+
+A fresh verifier judged `b494dbd`, updated the check file for `d53722e` and `efb61c5` (commit `5658aa8`: restack expectations removed, a base `fix-round` for dependants, the expected force-push, cold read J for Finishing a phase), and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`168/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: `foundation`'s status-header script, the launcher-call script and the abort script, and 15 cold reads across three check files. Every **Done when** item was met.
+
+One-off results at `5658aa8`:
+
+- The handbook has 168 lines.
+- A case-insensitive grep finds workmux, tmux and claude only in prose.
+- The only long options are the launcher flags and six git options.
+- A private-name grep of the phase's files, diff and commit messages found 0 hits.
+
+Defects that sent the phase back to Implement:
+
+- The pane-close step in Finishing a phase fires on any stop commit. That includes the old one on a session restarted to record Done, so it breaks a real run.
+- "They hold only status" is asserted, not checked. That misleads a reader.
+- The freeze's "start no phase" conflicts with starting a session for Done. That is minor.

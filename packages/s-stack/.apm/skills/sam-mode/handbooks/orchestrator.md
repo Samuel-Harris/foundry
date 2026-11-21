@@ -46,7 +46,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 
 `.foundry/plans/<id>/status/orchestrator.md` holds these:
 
-- The window, the default branch, and the commit at which the default branch was last merged.
+- The window, the default branch, the default branch commit last merged, and the default branch commit whose new commits step 2's pull request duties last handled.
 - The board's and the architecture page's addresses, and the orchestrator branch commit the page describes.
 - The time of the last tick, and when the recurring tick was created.
 - Live sessions: name, pane, worktree, started.
@@ -62,10 +62,10 @@ Arm it with Claude Code's recurring scheduled task, every 20 minutes, off the ho
 Run the tick checklist in sam-mode's orchestrator handbook.
 ```
 
-Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip step 2 and the starts in step 3, and in step 4 merge only the frozen phase. Still replace stalled sessions.
+Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip the default-branch merge in step 2 and the starts in step 3, and in step 4 merge only the frozen phase. Still run step 2's pull request duties, and still replace stalled sessions.
 
 1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick.
-2. **Default branch.** If `origin/<default branch>` has moved since the tracker's commit, merge it as [Merging the default branch](#merging-the-default-branch) says. If any of its new commits came from one of the feature's pull requests, or changed a package that the feature's generated files depend on, run [When a feature pull request lands](#when-a-feature-pull-request-lands). On any move, send another generated-only `fix-round` for each open pull request whose `needs_update` is still true.
+2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says. Then, if it has moved past the last handled commit, run the pull request duties once and record its tip as handled. The duties are: if any of the new commits came from one of the feature's pull requests, or changed a package that the feature's generated files depend on, run [When a feature pull request lands](#when-a-feature-pull-request-lands); and send another generated-only `fix-round` for each open pull request whose `needs_update` was already true.
 3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
 4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, so a failing post-merge check names one phase.
 5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
@@ -85,7 +85,7 @@ The board documents a tick writes:
 
 A phase may merge when its status header lists its open pull requests and the reference file's verdict rule holds for the code head. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
 
-To abort a merge, run `git merge --abort`. If it refuses because a hook or check rewrote a file, run `git checkout -- <path>` for each file it names, and abort again.
+To abort a merge, run `git merge --abort`. If it refuses because a hook or check rewrote a file, run `git checkout -- <path>` for each file it names, and abort again. Then run `git checkout -- <path>` for each file outside `.foundry/` that `git status --porcelain --untracked-files=no` still lists, because a hook can rewrite files the merge did not touch.
 
 1. On the orchestrator branch, run `git merge --no-ff --no-commit <tip SHA>`.
 2. If it conflicts anywhere, run `git merge --abort` and send the phase `merge-orchestrator-branch`. Never resolve the conflict.

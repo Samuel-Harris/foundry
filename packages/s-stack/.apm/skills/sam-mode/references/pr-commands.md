@@ -64,19 +64,22 @@ The merge commit and the carried commits run no hook. A stop prints `STOP` lines
 | `<branch> is not a branch here` | A branch in the spec is missing |
 | `<base> does not hold origin/<default>, so <pr> must target it with <base> merged in` | A stacked spec on a parent that has not taken the default branch |
 | `<path> changed on <branch> after the phase last took it, so the phase must merge it first` | An owned path is stale |
-| `<path> conflicts outside generated content`, then `<commit> does not apply` | A shared path's replay conflicts |
+| `<path> conflicts outside generated content`, `<commit> does not apply`, then `<path> is a shared path, so the stop is permanent: no merge or commit on the phase clears it, and it needs a decision` | A shared path's replay or carry conflicts |
+| `<path> conflicts outside generated content` alone | An open dependency conflicts with the base or with another dependency |
 | `the branch is back at <commit>` | Follows a failed carry |
+
+A shared path's stop is permanent because the refresh replays only the phase's original commits on it. A merge of the default branch into the phase, or a resolution commit, never changes those commits' context on the pull request's base.
 
 ## Prove the split
 
-`prove` checks that the pull requests hold exactly the phase. List every open pull request of the phase, bottom of the stack first. A merged pull request may be left out, but keep its branch in the specs that name it. The default branch may be given as `<default>` or `origin/<default>`.
+`prove` checks that the pull requests hold exactly the phase. List every pull request of the phase, merged ones included, bottom of the stack first. Write a merged one with the default branch as its base, and name each merged dependency in the fourth field of every spec that depends on it. A pull request may be written `<pr>` or `origin/<pr>`. The default branch may be given as `<default>` or `origin/<default>`.
 
 - **Each pull request's head** equals its target tree outside generated files and generated lines. The target tree is the overlay of its own commits, built at the merge base of its base and its head, with each open dependency's merge base merged in. This catches a hand edit inside a merge commit and a path taken from the wrong version.
 - **No own commit is already on the orchestrator branch.** Such a commit belongs to another pull request, so the spec is missing a dependency.
 - **No pull request changes a path that the phase commits do not.**
 - **Regenerate commits** change only generated files and generated lines.
 - **No pull request contains `.foundry/`.**
-- **Every path is owned.** Each path of the phase commits whose version on the phase tip differs from the default branch's is in an open pull request. Every open pull request that holds it lies in one dependency chain, and the topmost of them accounts for every phase commit on the path.
+- **Every path is owned.** Each path of the phase commits whose version on the phase tip differs from the default branch's is in a listed pull request. Every pull request that holds a phase path, whether or not the path differs, lies in one dependency chain, and the topmost of them accounts for every phase commit on the path. When the phase tip's version equals the default branch's, the topmost one's version must also equal the phase tip's or its base's.
 
 It prints each pull request's hand-written diff against its base as `git diff --shortstat` does, then `EQUAL` and exits 0, or a `FAIL` line for each fault, then `NOT EQUAL`, and exits 1. Before a head's `FAIL` line, a `git diff --stat` list names each file that differs.
 
@@ -84,14 +87,18 @@ The ownership check prints one of these:
 
 - `<path> has not landed and is in no open pull request, so it needs a new pull request`;
 - `<path> is in <pr> and <pr>, which are not in one stack`;
-- `<path>: <pr> lacks phase commits <hash> <subject>;, so they need a pull request`.
+- `<path>: <pr> lacks phase commits <hash> <subject>;, so they need a pull request`, which also catches a pull request that still holds a change the phase later reverted;
+- `<path>: <pr> holds a version that is neither the phase's nor <base>'s`, for such a path with no uncarried commit to name.
 
 ## What the proof assumes
 
-The proof relies on two rules from the other handbooks. When either is broken, it prints `NOT EQUAL`.
+The proof relies on three rules from the other handbooks. When one is broken, it prints `NOT EQUAL`.
 
 - **The phase merges the orchestrator branch with `git merge --no-ff`.** A fast-forward puts the orchestrator's merges on the phase's first-parent line, and the phase's own commits then drop out of the phase commits. The proof prints `<pr>: it changes <path>, which the phase does not`.
 - **The orchestrator commits nothing outside `.foundry/`.** An orchestrator commit outside `.foundry/`, or another phase's branch squash-merged into the phase, becomes a phase commit that no pull request carries. The proof prints `<path> has not landed and is in no open pull request`.
+- **The phase's own commits sit on its first-parent line.** A delegate's branch merged into the phase leaves its commits off that line, so a pull request that carries them prints `<pr>: it changes <path>, which the phase does not`. Commits taken with `git cherry-pick -x` are phase commits, and the proof handles them.
+
+Two histories also print `NOT EQUAL` in every round, and the handbook sends both for a decision. When GitHub rewrites a third-row dependency's head after its parent merges, the proof prints `<pr>: it changes <file>, which the phase does not` for the dependency's files. When the phase replaces a file with a directory of the same name, the refresh prints `git checkout-index: <path> is not in the cache` and the proof prints the same `FAIL` with the file and directory names run together.
 
 ## The script
 
@@ -126,7 +133,7 @@ apply_c() {
   git diff-tree -r --quiet "$c^" "$c" -- "$@" && return 0
   git diff-tree -p --binary "$c^" "$c" -- "$@" | git apply --index --3way --whitespace=nowarn 2>/dev/null ||
     { [ -n "$(git ls-files -u)" ] && resolve; } ||
-    { echo "STOP $(git log -1 --format='%h %s' "$c") does not apply"; return 1; }
+    { echo "STOP $(git log -1 --format='%h %s' "$c") does not apply"; echo "STOP ${1#':(literal)'} is a shared path, so the stop is permanent: no merge or commit on the phase clears it, and it needs a decision"; return 1; }
 }
 merge_in() {
   local t; for t; do
@@ -225,10 +232,10 @@ refresh() {
     echo "merged $m"
   else echo "up to date with $(echo $tips)"; fi
 }
-deps_of() { local s b e x m; for s in "${specs[@]}"; do IFS=: read -r b e x m <<< "$s"; [ "$b" = "$1" ] && { echo "${e#origin/}"; list "$x,$m" | sed 's,^origin/,,'; }; done; }
-above() { local d; for d in $(deps_of "$1"); do { [ "$d" = "$2" ] || above "$d" "$2"; } && return 0; done; return 1; }
+deps_of() { local s b e x m; for s in "${specs[@]}"; do IFS=: read -r b e x m <<< "$s"; [ "${b#origin/}" = "${1#origin/}" ] && { echo "${e#origin/}"; list "$x,$m" | sed 's,^origin/,,'; }; done; }
+above() { local d; for d in $(deps_of "$1"); do { [ "$d" = "${2#origin/}" ] || above "$d" "$2"; } && return 0; done; return 1; }
 prove() {
-  local orch=$1 fail=0 top s c f l t x o i; setup "$2" "$3"; shift 3; specs=("$@") top=$(pwd)
+  local orch=$1 fail=0 top s c f l t x o i b v; setup "$2" "$3"; shift 3; specs=("$@") top=$(pwd)
   spec() { IFS=: read -r pr base extra merged <<< "$1"; mine=($(own "$pr" "$D" "$base" $(list "$extra") $(list "$merged"))); }
   paths $(git rev-list --first-parent --no-merges "$PH" "^$D") > "$W/pp"
   for s; do
@@ -248,13 +255,14 @@ prove() {
     [ -n "$t" ] && same "$t" "$pr" || { [ -z "$t" ] || git diff --stat "$t" "$pr" -- . "${GEN[@]}" "${LINES[@]}"; echo "FAIL $pr: its head differs from its target tree"; fail=1; }
   done
   for x in $(cat "$W/pp"); do
-    [ "$(ver "$PH" "$x")" = "$(ver "$D" "$x")" ] && continue
     o=(); for s; do IFS=: read -r pr _ <<< "$s"; grep -q -x -F -- "$x" "$W/own.${pr//\//_}" && o+=("$pr"); done
+    l=; [ "$(ver "$PH" "$x")" = "$(ver "$D" "$x")" ] && { [ ${#o[@]} -gt 0 ] || continue; l=1; }
     [ ${#o[@]} -gt 0 ] || { echo "FAIL $x has not landed and is in no open pull request, so it needs a new pull request"; fail=1; continue; }
     t=${o[0]}; for i in "${o[@]}"; do above "$i" "$t" && t=$i; done
     for i in "${o[@]}"; do [ "$i" = "$t" ] || above "$t" "$i" || { echo "FAIL $x is in $i and $t, which are not in one stack"; fail=1; continue 2; }; done
-    for s; do IFS=: read -r pr _ _ merged <<< "$s"; [ "$pr" = "$t" ] && accounted "$pr" $(refs "$merged"); done
-    ! unacc "$x" || { echo "FAIL $x: $t lacks phase commits $(git rev-list --first-parent --no-merges "$PH" "^$D" -- ":(literal)$x" | grep -v -x -F -f "$W/acc" | git log --stdin --no-walk=unsorted --format='%h %s' | tr '\n' ';'), so they need a pull request"; fail=1; }
+    for s; do IFS=: read -r pr base _ merged <<< "$s"; [ "$pr" = "$t" ] && accounted "$pr" $(refs "$merged") && b=$base; done
+    if unacc "$x"; then echo "FAIL $x: $t lacks phase commits $(git rev-list --first-parent --no-merges "$PH" "^$D" -- ":(literal)$x" | grep -v -x -F -f "$W/acc" | git log --stdin --no-walk=unsorted --format='%h %s' | tr '\n' ';'), so they need a pull request"; fail=1
+    elif [ -n "$l" ] && v=$(ver "$t" "$x") && [ "$v" != "$(ver "$PH" "$x")" ] && [ "$v" != "$(ver "$(ref "$b")" "$x")" ]; then echo "FAIL $x: $t holds a version that is neither the phase's nor $b's"; fail=1; fi
   done
   [ "$fail" = 0 ] && echo EQUAL || { echo "NOT EQUAL"; exit 1; }
 }

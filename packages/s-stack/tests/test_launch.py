@@ -132,7 +132,6 @@ class StartTests(LauncherTestCase):
         self.kill_claude("f-phase-p")
 
         resumed, _ = self.started(self.launch(*args), name="f-phase-p")
-        self.assertNotEqual(resumed, first)
         resumed_args = self.wait_for_claude(resumed)
         self.assertEqual(conversation(resumed_args, flag="--resume"), first_id)
         self.assertIn(f"--name f-phase-p --resume {first_id} /sam-mode phase ", resumed_args)
@@ -153,18 +152,77 @@ class StartTests(LauncherTestCase):
         }
         self.assertNotEqual(ids["f-spec"], ids["f-orchestrator"])
 
-        panes = [spec_pane, orchestrator_pane]
+        panes = {"f-spec": spec_pane, "f-orchestrator": orchestrator_pane}
         for order in ((orchestrator, spec), (spec, orchestrator)):
             self.kill_claude("f-spec")
             self.kill_claude("f-orchestrator")
-            for pane in panes:
-                self.tmux("kill-pane", "-t", pane)
-            panes = []
             for args in order:
                 name = f"f-{args[3]}"
                 pane, _ = self.started(self.launch(*args), name=name)
-                panes.append(pane)
+                self.assertEqual(pane, panes[name], order)
                 self.assertEqual(conversation(self.wait_for_claude(pane), flag="--resume"), ids[name], order)
+
+    def test_a_restart_reuses_the_sessions_own_pane(self) -> None:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        args = ("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window)
+        first, _ = self.started(self.launch(*args), name="f-phase-p")
+        first_id = conversation(self.wait_for_claude(first), flag="--session-id")
+        self.kill_claude("f-phase-p")
+        panes = len(self.panes())
+
+        restarted, _ = self.started(self.launch(*args), name="f-phase-p")
+
+        self.assertEqual(restarted, first)
+        self.assertEqual(len(self.panes()), panes)
+        self.assertEqual(self.tag_of(restarted), "f-phase-p")
+        self.assertEqual(conversation(self.wait_for_claude(restarted), flag="--resume"), first_id)
+        (running,) = self.named_claudes("f-phase-p")
+
+        again = self.launch(*args)
+
+        self.assertEqual((again.returncode, again.stdout), (0, f"alive f-phase-p pane={first}\n"), again.stderr)
+        self.assertEqual(self.named_claudes("f-phase-p"), [running])
+
+    def test_ten_restarts_keep_the_pane_count(self) -> None:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        args = ("--feature", "f", "--role", "planner", "--window", self.window)
+        pane, _ = self.started(self.launch(*args), name="f-planner")
+        self.wait_for_claude(pane)
+        panes = len(self.panes())
+
+        for restart in range(10):
+            self.kill_claude("f-planner")
+            self.assertEqual(self.started(self.launch(*args), name="f-planner").pane, pane, restart)
+            self.wait_for_claude(pane)
+
+        self.assertEqual(len(self.panes()), panes)
+
+    def test_a_pane_left_by_another_session_is_never_reused(self) -> None:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        other, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "q", "--window", self.window), name="f-phase-q")
+        self.wait_for_claude(other)
+        self.kill_claude("f-phase-q")
+
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
+
+        self.assertNotEqual(pane, other)
+        self.assertIn("--name f-phase-p ", self.wait_for_claude(pane))
+        self.assertIn(other, [p["id"] for p in self.panes()])
+        self.assertIsNone(self.claude_in_pane(other))
+
+    def test_a_tagged_pane_with_a_claude_running_is_never_reused(self) -> None:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        occupied = self.make_pane(self.tmp, command="claude --name someone-else")
+        self.tmux("set-option", "-p", "-t", occupied, "@s-stack-session", "f-phase-p")
+
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
+
+        self.assertNotEqual(pane, occupied)
+        self.assertIn("--name someone-else", self.claude_in_pane(occupied) or "")
 
     def test_concurrent_launches_of_an_existing_worktree_start_one_copy(self) -> None:
         self.make_feature_worktree()

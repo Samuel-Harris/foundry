@@ -18,11 +18,12 @@ Features and phases are kebab-case. A feature name may not contain -phase- or
 end with -phase, -planner, -orchestrator, -spec or -spec-<n>, because another
 feature's session could have that name.
 
-Standard output is one line:
+Standard output is one line, except one closed line per pane for --close:
   started <name> pane=<pane id> worktree=<path>   started the session
   alive <name> pane=<pane id>                     the session already runs; nothing changed
-  closed <name> pane=<pane id>                    --close closed the session's pane
-  absent <name>                                   --close found no pane running the session
+  closed <name> pane=<pane id>                    --close closed a pane running the session
+                                                  or tagged with its name
+  absent <name>                                   --close found neither
   removed <name> worktree=<path>                  --remove removed the session's worktree
   window=<window id>                              --print-window
 
@@ -186,6 +187,25 @@ find_live_pane() {
   live_pane=${matches%% *}
 }
 
+tagged_panes() {
+  local panes
+  panes=$(tmux list-panes "$@" -F '#{pane_id} #{@s-stack-session}') || return 1
+  printf '%s\n' "$panes" | awk -v name="$name" '$2 == name { print $1 }'
+}
+
+# Sets own_pane to the first pane of $window tagged with the session's name in
+# which no claude runs: the session's pane, left at its shell after claude
+# exited. Restarting there keeps restarts from shrinking the columns.
+find_own_pane() {
+  local tagged busy pane
+  own_pane=''
+  tagged=$(tagged_panes -t "$window") || die "tmux list-panes -t $window failed"
+  busy=" $(session_panes "$name" '' | awk '{ print $1 }' | tr '\n' ' ') "
+  for pane in $tagged; do
+    case "$busy" in *" $pane "*) ;; *) own_pane=$pane; return ;; esac
+  done
+}
+
 # Held until the launcher exits, so a concurrent launch of the same session
 # checks liveness only after ps shows this one's claude.
 lock_session() {
@@ -309,13 +329,16 @@ cmd_print_window() {
 
 cmd_close() {
   require tmux
-  local matches pane
+  local matches tagged panes pane
   matches=$(session_panes "$name" '' | awk '$5 == "strict"')
-  [ -n "$matches" ] || { printf 'absent %s\n' "$name"; return; }
   at_most_one "pane runs $name" "$matches"
-  pane=${matches%% *}
-  tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
-  printf 'closed %s pane=%s\n' "$name" "$pane"
+  tagged=$(tagged_panes -a) || [[ $(tmux list-sessions 2>&1) == 'no server running'* ]] || die 'tmux list-panes failed'
+  panes=$(printf '%s\n%s\n' "${matches%% *}" "$tagged" | awk 'NF && !seen[$1]++')
+  [ -n "$panes" ] || { printf 'absent %s\n' "$name"; return; }
+  for pane in $panes; do
+    tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
+    printf 'closed %s pane=%s\n' "$name" "$pane"
+  done
 }
 
 cmd_remove() {
@@ -373,6 +396,10 @@ cmd_start() {
     fi
   fi
 
+  if [ -z "$target_pane" ]; then
+    find_own_pane
+    target_pane=$own_pane
+  fi
   if [ -z "$target_pane" ]; then
     split=1
     choose_split

@@ -48,6 +48,38 @@ class CloseTests(LauncherTestCase):
         self.assertEqual((result.returncode, result.stdout), (0, f"closed f-phase-p pane={pane}\n"), result.stderr)
         self.assertNotIn(pane, [p["id"] for p in self.panes()])
 
+    def test_closes_the_sessions_pane_after_its_claude_exits(self) -> None:
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
+        self.wait_for_claude(pane)
+        self.kill_claude("f-phase-p")
+
+        result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"closed f-phase-p pane={pane}\n"), result.stderr)
+        self.assertNotIn(pane, [p["id"] for p in self.panes()])
+
+    def test_closes_both_the_sessions_left_pane_and_a_pane_running_it(self) -> None:
+        left, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
+        self.wait_for_claude(left)
+        self.kill_claude("f-phase-p")
+        running = self.make_pane(self.tmp, command="claude --name f-phase-p")
+
+        result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(sorted(result.stdout.splitlines()), sorted([f"closed f-phase-p pane={left}", f"closed f-phase-p pane={running}"]))
+        self.assertFalse({left, running} & {p["id"] for p in self.panes()})
+
+    def test_a_pane_left_by_another_session_is_not_closed(self) -> None:
+        other, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "q", "--window", self.window), name="f-phase-q")
+        self.wait_for_claude(other)
+        self.kill_claude("f-phase-q")
+
+        result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
+
+        self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
+        self.assertIn(other, [p["id"] for p in self.panes()])
+
     def test_absent_when_no_tmux_server_runs(self) -> None:
         self.tmux("kill-server")
 

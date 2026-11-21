@@ -4,7 +4,7 @@ state: "Verify"
 changed_at: "2026-11-21T16:15:48Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "c1ec2d3d85a9f5f9535101e63ac9956ebaa32371"
+code_head: "2ecc9f0639440676d445ca12656a7485227d6701"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -47,4 +47,4 @@ decisions:
 
 # Phase launcher status
 
-Implementation and its quick-review fix round are committed. The phase branch merged `s-stack-package` at 0b0938f before Verify. The suite has 35 tests and passes on macOS (tmux 3.8) and, per the fix-round delegate, in an Ubuntu 24.04 container (tmux 3.4).
+Implementation and its quick-review fix round are committed. The phase branch merged `s-stack-package` at 0b0938f before Verify, and again at 2ecc9f0 (bringing spec-planner-handbooks), which is a new code head, so Verify runs again. The suite has 35 tests and passes on macOS (tmux 3.8) and, per the fix-round delegate, in an Ubuntu 24.04 container (tmux 3.4).

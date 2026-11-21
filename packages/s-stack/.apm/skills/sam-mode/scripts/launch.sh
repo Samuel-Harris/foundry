@@ -228,13 +228,47 @@ find_own_pane() {
   awk -v window="$window" -v name="$name" '$2 == window && $3 == name && $4 == "none" && $6 == 0 { print $1; exit }'
 }
 
+# A launch killed with SIGKILL leaves its lock behind, and a crash is when every
+# session is relaunched. The holder's PID and start time tell such a lock from a
+# live one; the start time catches a PID that another process has since reused.
+process_start() {
+  ps -o lstart= -p "$1" 2>/dev/null | awk '{ $1 = $1; print }'
+}
+
+holder_of() {
+  local pid start
+  read -r pid start < "$1/holder" 2>/dev/null || return 1
+  printf '%s %s\n' "$pid" "$(printf '%s\n' "$start" | awk '{ $1 = $1; print }')"
+}
+
 take_lock() {
-  local lock=$1 holder=$2 seconds=$3 tries=0
+  local lock=$1 holder=$2 seconds=$3 tries=0 unwritten=0 recorded pid aside
   until mkdir "$lock" 2>/dev/null; do
+    if recorded=$(holder_of "$lock"); then
+      unwritten=0
+      pid=${recorded%% *}
+      if [ "$(process_start "$pid")" != "${recorded#* }" ]; then
+        aside=$lock.stale.$$
+        if mv "$lock" "$aside" 2>/dev/null; then
+          # Another waiter may have replaced the stale lock between the check and the move.
+          if [ "$(holder_of "$aside")" = "$recorded" ]; then rm -rf "$aside"; else mv "$aside" "$lock" 2>/dev/null || rm -rf "$aside"; fi
+        fi
+        continue
+      fi
+    else
+      # A holder killed between mkdir and writing its record leaves the lock empty.
+      unwritten=$((unwritten + 1))
+      if [ "$unwritten" -ge 50 ]; then
+        rm -rf "$lock"
+        unwritten=0
+        continue
+      fi
+    fi
     tries=$((tries + 1))
-    [ "$tries" -lt $((seconds * 10)) ] || die "another launch of $holder has held $lock for $seconds seconds; remove that directory only after checking that no launch.sh is running"
+    [ "$tries" -lt $((seconds * 10)) ] || die "launch $(holder_of "$lock" | awk '{ print $1 }') of $holder has held $lock for $seconds seconds"
     sleep 0.1
   done
+  printf '%s %s\n' "$$" "$(process_start "$$")" > "$lock/holder" || die "cannot record the holder of $lock"
 }
 
 release_window() {
@@ -242,7 +276,7 @@ release_window() {
     tmux resize-pane -Z -t "$zoomed_pane" || true
     zoomed_pane=''
   fi
-  [ -z "$window_lock" ] || rmdir "$window_lock"
+  [ -z "$window_lock" ] || rm -rf "$window_lock"
   window_lock=''
 }
 
@@ -255,7 +289,7 @@ lock_worktrees() {
 }
 
 release_worktrees() {
-  [ -z "$worktrees_lock" ] || rmdir "$worktrees_lock"
+  [ -z "$worktrees_lock" ] || rm -rf "$worktrees_lock"
   worktrees_lock=''
 }
 
@@ -270,7 +304,7 @@ lock_session() {
   take_lock "$locks/$name" "$name" 300
   session_lock=$locks/$name
   window_lock='' zoomed_pane='' worktrees_lock=''
-  trap 'release_worktrees; release_window; rmdir "$session_lock"' EXIT
+  trap 'release_worktrees; release_window; rm -rf "$session_lock"' EXIT
 }
 
 # Held from reading the window's layout until the new pane is tagged, so a

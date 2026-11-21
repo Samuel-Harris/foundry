@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import os
+import signal
 import subprocess
+import time
 import unittest
+from pathlib import Path
 
 from launcher_case import LAUNCH, STUBS, LauncherTestCase, conversation
 
@@ -96,6 +100,61 @@ done
         self.assertEqual(list(elsewhere.iterdir()), [])
         self.assertFalse(self.worktree("f-planner").exists())
         self.assertEqual(self.pane_ids(), panes)
+
+
+class StaleLockTests(LauncherTestCase):
+    def lock_held_by(self, process: subprocess.Popen, /, *, start: str | None = None) -> Path:
+        common = Path(self.git("-C", str(self.root), "rev-parse", "--path-format=absolute", "--git-common-dir").strip())
+        lock = common / "s-stack-locks" / "f-planner"
+        lock.mkdir(parents=True)
+        if start is None:
+            start = subprocess.run(["ps", "-o", "lstart=", "-p", str(process.pid)], capture_output=True, text=True, check=True).stdout.strip()
+        (lock / "holder").write_text(f"{process.pid} {start}\n")
+        return lock
+
+    def planner_args(self) -> tuple[str, ...]:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        return ("--feature", "f", "--role", "planner", "--window", self.window)
+
+    def test_a_lock_left_by_a_killed_launch_is_taken_at_once(self) -> None:
+        args = self.planner_args()
+        holder = subprocess.Popen(["sleep", "60"])
+        self.lock_held_by(holder)
+        holder.send_signal(signal.SIGKILL)
+        holder.wait()
+
+        began = time.monotonic()
+        self.started(self.launch(*args), name="f-planner")
+
+        self.assertLess(time.monotonic() - began, 5)
+
+    def test_a_lock_whose_holder_pid_now_belongs_to_another_process_is_taken_at_once(self) -> None:
+        args = self.planner_args()
+        other = subprocess.Popen(["sleep", "60"])
+        self.addCleanup(other.kill)
+        self.lock_held_by(other, start="Thu Jan  1 00:00:00 1970")
+
+        began = time.monotonic()
+        self.started(self.launch(*args), name="f-planner")
+
+        self.assertLess(time.monotonic() - began, 5)
+
+    def test_a_live_holder_makes_the_launch_wait_until_it_ends(self) -> None:
+        args = self.planner_args()
+        holder = subprocess.Popen(["sleep", "60"])
+        self.addCleanup(holder.kill)
+        self.lock_held_by(holder)
+
+        launch = subprocess.Popen([str(LAUNCH), *args], env=self.env, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        time.sleep(2)
+        self.assertIsNone(launch.poll(), "the launch went ahead while the holder was alive")
+        holder.kill()
+        holder.wait()
+        out, err = launch.communicate(timeout=20)
+
+        self.assertEqual(launch.returncode, 0, err)
+        self.assertTrue(out.startswith("started f-planner "), out)
 
 
 if __name__ == "__main__":

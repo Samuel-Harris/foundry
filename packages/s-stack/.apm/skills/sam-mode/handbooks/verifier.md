@@ -32,7 +32,7 @@ The skill's own files, its `SKILL.md` and its feature map, are shared by every p
 
 ## The check file
 
-You write one file, `checks/<phase>.md`, in the verification skill's directory beside its `SKILL.md`. Only this phase writes it. The verification skill must run the `## Rerun` section of every check file beside it, in name order. When you own the skill's files and it lacks that step, add it.
+You write one file, `checks/<phase>.md`, in the verification skill's directory beside its `SKILL.md`. Only this phase writes it. The verification skill must run the `## Rerun` section of every check file beside it, in name order. When you own the skill's files and it lacks that step, add it. When you do not own them and it lacks that step, your verdict is INCONCLUSIVE, and your report names the missing step.
 
 The check file has two sections.
 

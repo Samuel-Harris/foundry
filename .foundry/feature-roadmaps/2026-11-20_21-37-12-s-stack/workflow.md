@@ -175,5 +175,5 @@ A two-way door is a decision that is easy to reverse. A one-way door is hard to 
 - A session decides a two-way door itself, records the decision and continues. It raises the decision to the developer when the choice is architectural, nuanced or not obvious.
 - A decision request states the question, the options, the session's recommendation, the door type and the work that waits on the answer.
 - While a request is open, the session continues the work that the decision does not affect.
-- The spec writer asks about every one-way door during the interview and records each answer in the roadmap's `decisions.md` with its door type.
+- The spec writer does not decide a two-way door itself when the specification is ambiguous. It asks the developer about every one-way door and about every ambiguity, so some of its questions are about two-way doors. It records each answer in the roadmap's `decisions.md` with its door type.
 - The roadmap's two decision files hold the decisions that affect the whole feature. A phase's status file holds the decisions that affect only that phase. No list is shared between writers, so no one allocates decision numbers.

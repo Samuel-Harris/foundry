@@ -28,7 +28,7 @@ The spec writer turns the developer's idea into a feature roadmap. The whole wor
 
 1. It gathers the relevant context with subagents.
 2. It interviews the developer with the `deep-interview` skill until the specification is clear enough to write.
-3. It asks the developer about every one-way door.
+3. It asks the developer about every one-way door. It also resolves every ambiguity in the specification by asking the developer, so some of its questions are about two-way doors.
 4. It writes the roadmap. [workflow.md](workflow.md#shared-artefacts) says what a roadmap holds.
 5. It waits for the developer's review and makes the changes the developer asks for.
 6. On the developer's approval, it starts the orchestrator with the launcher.

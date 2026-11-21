@@ -518,3 +518,14 @@ No defect breaks the common path. For the cross-handbook integration:
 - "its own status files" is undefined.
 - A phase newly added by a later `done-planning` gets no board document.
 - `phase-session.md` line 123's timing for `move-back` to Plan is worded wrongly.
+
+## Review 10, code head `ac3d7c0e7e46869167b4774f4a3094d37318d745`, SIGNIFICANT
+
+`interrogate` over the commits since `5b8a481`, under the common-path bar, with two adversaries on Opus and Fable in their own worktrees, each walking a whole feature. The phase session checked each finding against both handbooks.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| A phase answers a review `fix-round` with the state change to Implement. If it then stalls mid-fix, its `--fresh` replacement is sent nothing, the comment is lost, and the pull request is later shown as ready with the comment unaddressed. | Opus | Two cold reads |
+| A `move-back` lost in a crash after a failed post-merge check is never resent, because the tracker records only `fix-round` and `instruction`. The orchestrator branch stays frozen for good. | Fable | Two cold reads |
+
+Both walks otherwise reached Done for every phase, with no deadlock or loop and no unverified code merged.

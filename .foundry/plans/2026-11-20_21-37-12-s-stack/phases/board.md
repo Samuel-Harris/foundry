@@ -128,7 +128,7 @@ The schema comment gains this field under `phases/<phase id>`, worded for a cold
 // layer(p) = 0 when p has no edges in, else 1 + max(layer(from)) over its edges in
 ```
 
-The layer is computed by a depth-first walk with an in-progress set. An edge that would close a cycle is ignored for layering and still drawn. A `depends_on` value that is not a list, an entry that is not an object, or a `phase` that is not a string is skipped. An id with no `phases` document becomes a node with the state "unknown", drawn like an unknown state.
+The layer is computed by a memoised depth-first walk. A dependency cycle is a broken plan, so the page does not draw it: the map is replaced by one error line naming the phases in the cycle, and the Depends on column still lists every entry (amended after the second `quick-review`). A `depends_on` entry the page cannot read (not an object, a `phase` that is not a string, or an `until` other than `merged` or `done`) is not drawn and shows in the Depends on column as a critical `unknown: <raw value>` entry, so a typo never reads as "no dependencies". An id with no `phases` document becomes a node with the state "unknown", drawn like an unknown state.
 
 **Layout.** Layers run left to right, one column per layer. Nodes within a column are sorted by phase id and stacked top to bottom, and each column is centred vertically. Constants: node 168 × 44 units, column gap 56, row gap 12, padding 12. The label is the phase id in the mono face at 12 px, cut to 20 characters with "…" when longer, with the full id in an SVG `<title>`. A second line in the text face at 11 px names the state. Colour is never the only signal.
 
@@ -233,5 +233,5 @@ The feature plan's four **Done when** items for `board`, plus these:
 - [ ] No data value reaches `innerHTML`: `grep -n innerHTML` on the template finds no line that assigns data.
 - [ ] `apm audit --ci` passes in `packages/s-stack` on the committed, relativised lockfile.
 - [ ] With this run's eight phases (`foundation` with `[]`, the six middle phases each with `foundation` until `merged`, `default-stack` with the other seven until `done`), the map shows three columns. The seven edges into `default-stack` are dashed, and the six from `foundation` into the middle phases are solid. The `foundation` to `default-stack` edge runs through the top lane and crosses no node. Every node names its state. The page body has no horizontal scroll at 400 px in light and dark.
-- [ ] A `depends_on` naming a phase with no document draws an "unknown" node, and a cycle renders without hanging.
+- [ ] A `depends_on` naming a phase with no document draws an "unknown" node. A cycle shows an error line naming its phases and no map, without hanging. An unreadable entry shows as `unknown: …` in the Depends on column.
 - [ ] The verifier extends `checks/board.md`'s `## Rerun` with the map cases above, and the published test page gains `depends_on` rows.

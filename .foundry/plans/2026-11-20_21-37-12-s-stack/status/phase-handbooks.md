@@ -1,10 +1,10 @@
 ---
 phase: "phase-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T18:28:33Z"
+state: "Verify"
+changed_at: "2026-11-21T18:29:27Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
-code_head: "8e258caf80c51a48ee2b2c42e7f75ed9a09e17a9"
+code_head: "a1c95f1df8eab39ede778ec82f49b025034881da"
 waits_for: null
 verdicts:
   - gate: "verify"

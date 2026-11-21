@@ -8,8 +8,8 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 21:32 |
+| Architecture page describes | `d3dd837` (version 6) |
+| Last tick | 2026-11-21 21:52 |
 | Default branch merged at | `6f42b1c` (#85, into `7409b48`) |
 
 ## Live sessions
@@ -17,7 +17,6 @@
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
-| `s-stack-phase-board` | `%173` | `../s-stack-phase-board` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 
@@ -33,6 +32,7 @@ None.
 | 82 | `foundation` | merged into `main` as `e4a18d1` | | |
 | 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
 | 85 | `phase-handbooks` | merged into `main` as `6f42b1c` | | |
+| 86 | `board` | `s-stack-board` | `main` | none |
 
 ## Merged phases
 
@@ -42,6 +42,7 @@ None.
 | `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
 | `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
 | `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | VERIFIED on `ce086bb` |
+| `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | VERIFIED on `3ce7d34` |
 
 ## Closed sessions
 
@@ -51,6 +52,7 @@ None.
 | `s-stack-phase-foundation` | removed, branch kept | 2026-11-21 | Done at `d7a6cb3`, merged; #81 and #82 merged into `main` |
 | `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-21 | Done at `b9429a2`, merged; #84 merged into `main` |
 | `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-21 | Done at `0cb6af5`, merged; #85 merged into `main` |
+| `s-stack-phase-board` | `../s-stack-phase-board` | 2026-11-21 | `22e6ab0`, merged at `a606589`; worktree kept for fix rounds on #86 |
 
 ## Queued fix rounds
 

@@ -67,7 +67,7 @@ Run these steps in order on every tick. While the orchestrator branch is frozen,
 1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick.
 2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says. Then, if it has moved past the last handled commit, run the pull request duties once and record its tip as handled. The duties are: if any of the new commits came from one of the feature's pull requests, or changed a package that the feature's generated files depend on, run [When a feature pull request lands](#when-a-feature-pull-request-lands); and send another generated-only `fix-round` for each open pull request whose `needs_update` was already true.
 3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
-4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, so a failing post-merge check names one phase. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
+4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, and none in a tick that merged the default branch, so a failing post-merge check names one change. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
 5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
 6. **Record.** Update the tracker with the tick time, and commit it.
 7. **Publish.** Write the board's changed documents in one database batch. When a phase merged or a roadmap update merged, have a fresh subagent update the architecture page.
@@ -121,8 +121,8 @@ A pull request is ready for the developer to merge only when its `needs_update` 
 
 In tick step 4, for each merged phase, do every step below whose condition holds. Each step reads the record, so repeating it is safe and a step that waits happens in a later tick. A session is stopping from the moment you send it `stop` until you next send it any other message or start it. Mark that in the tracker.
 
-- It is stopping and workmux shows it idle: close its pane with `--close`.
-- Every pull request has merged, its status is not Done, and you have not told it so since it last started: start its session if its pane is closed, then send an `instruction` saying that every pull request has merged into the default branch. It then moves to Done.
+- It has been stopping since an earlier tick and workmux shows it idle: close its pane with `--close`.
+- Every pull request has merged, its status is PR, and you have not told it so since it last started: start its session if its pane is closed, then send an `instruction` saying that every pull request has merged into the default branch. It then moves to Done.
 - Its status is Done and its pane is open: send `stop` if it is not already stopping.
 - Its status is Done, its pane is closed, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and does not count against the one-merge limit. If the code head has changed, start the session and send `move-back` to Implement, because no verdict covers that code.
 - Its status is Done, its pane is closed, and its branch is fully merged: remove its worktree with `--remove`.
@@ -158,7 +158,7 @@ Record the commit it describes in the tracker.
 
 ## Roadmap updates
 
-When the developer asks for a roadmap change, start an update spec writer with `--role spec --update <n>`. The launcher puts it in your column, where the developer talks to it. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, and merge it with `--no-ff`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner when the phases change.
+When the developer asks for a roadmap change, start an update spec writer with `--role spec --update <n>`. The launcher puts it in your column, where the developer talks to it. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, merge it with `--no-ff`, and close its pane with `--close`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner when the phases change.
 
 ## Restarts
 

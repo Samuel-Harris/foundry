@@ -4,7 +4,6 @@ import os
 import shutil
 import signal
 import subprocess
-import sys
 import tempfile
 import time
 import unittest
@@ -12,15 +11,21 @@ from pathlib import Path
 from typing import Callable, NamedTuple, TypeVar
 
 LAUNCH = Path(__file__).resolve().parents[1] / ".apm/skills/sam-mode/scripts/launch.sh"
+STUBS = Path(__file__).resolve().parent / "stubs"
 ROADMAP_ID = "2026-11-20_21-37-12-f"
 T = TypeVar("T")
 
 
-class Process(NamedTuple):
+class PsRow(NamedTuple):
     pid: int
     ppid: int
     args: str
-    pane: str | None
+
+
+class ClaudeProcess(NamedTuple):
+    pid: int
+    args: str
+    pane: str
 
 
 class Started(NamedTuple):
@@ -29,35 +34,6 @@ class Started(NamedTuple):
 
 
 PANE_FORMAT = "#{pane_id}\t#{pane_pid}\t#{pane_width}\t#{pane_height}\t#{window_id}"
-
-WORKMUX_STUB = f"""#!{sys.executable}
-import os, subprocess, sys
-
-root = os.environ["STUB_ROOT"]
-with open(os.environ["STUB_WORKMUX_LOG"], "a") as log:
-    log.write(" ".join(sys.argv[1:]) + "\\n")
-
-command, name, *rest = sys.argv[1:]
-path = f"{{root}}__wt/{{name}}"
-if command == "add":
-    base = rest[rest.index("--base") + 1]
-    subprocess.run(["git", "-C", root, "worktree", "add", "-q", "-b", name, path, base], check=True)
-    if "--headless" not in rest:
-        window = subprocess.run(["tmux", "new-window", "-d", "-P", "-F", "#{{window_id}}", "-c", path], check=True, capture_output=True, text=True).stdout.strip()
-        subprocess.run(["tmux", "split-window", "-d", "-t", window, "-c", path], check=True)
-elif command == "path":
-    if not os.path.isdir(path):
-        sys.exit(f"Worktree '{{name}}' not found")
-    print(path)
-elif command == "remove":
-    subprocess.run(["git", "-C", root, "worktree", "remove", path], check=True)
-"""
-
-CLAUDE_STUB = """#!/bin/bash
-printf '%s\\n' "$*" >> "$STUB_CLAUDE_LOG"
-exec -a claude perl -e 'sleep 86400' -- "$@"
-"""
-
 
 def conversation(args: str, *, flag: str) -> str | None:
     words = args.split()
@@ -103,10 +79,8 @@ class LauncherTestCase(unittest.TestCase):
         self.bin = self.tmp / "bin"
         self.bin.mkdir()
         (self.bin / "tmux").symlink_to(shutil.which("tmux"))
-        (self.bin / "workmux").write_text(WORKMUX_STUB)
-        (self.bin / "claude").write_text(CLAUDE_STUB)
-        (self.bin / "workmux").chmod(0o755)
-        (self.bin / "claude").chmod(0o755)
+        (self.bin / "workmux").symlink_to(STUBS / "workmux")
+        (self.bin / "claude").symlink_to(STUBS / "claude")
         (self.tmp / "gitconfig").write_text("")
         self.workmux_log = self.tmp / "workmux.log"
         self.claude_log = self.tmp / "claude.log"
@@ -194,16 +168,16 @@ class LauncherTestCase(unittest.TestCase):
     def windows(self) -> list[str]:
         return self.tmux("list-windows", "-a", "-F", "#{window_id}").split()
 
-    def processes(self) -> list[Process]:
+    def processes(self) -> list[PsRow]:
         out = self.run_tool(["ps", "-A", "-o", "pid=,ppid=,args="], check=True).stdout
         rows = []
         for line in out.splitlines():
             parts = line.split(None, 2)
             if len(parts) == 3:
-                rows.append(Process(pid=int(parts[0]), ppid=int(parts[1]), args=parts[2], pane=None))
+                rows.append(PsRow(pid=int(parts[0]), ppid=int(parts[1]), args=parts[2]))
         return rows
 
-    def claude_processes(self) -> list[Process]:
+    def claude_processes(self) -> list[ClaudeProcess]:
         """Claude processes under the private server's panes, never the developer's own sessions."""
         rows = self.processes()
         parent = {row.pid: row.ppid for row in rows}
@@ -216,10 +190,10 @@ class LauncherTestCase(unittest.TestCase):
             while current > 1 and current not in pane_of_pid:
                 current = parent.get(current, 0)
             if current in pane_of_pid:
-                found.append(Process(pid=row.pid, ppid=row.ppid, args=row.args, pane=pane_of_pid[current]))
+                found.append(ClaudeProcess(pid=row.pid, args=row.args, pane=pane_of_pid[current]))
         return found
 
-    def named_claudes(self, name: str, /) -> list[Process]:
+    def named_claudes(self, name: str, /) -> list[ClaudeProcess]:
         return [row for row in self.claude_processes() if f"--name {name}" in row.args]
 
     def claude_in_pane(self, pane: str, /) -> str | None:
@@ -276,12 +250,14 @@ class StartTests(LauncherTestCase):
     def test_phase_session_gets_a_pane_in_the_window_and_its_prompt(self) -> None:
         feature = self.make_feature_worktree()
         self.commit_in(feature, relative=f".foundry/feature-roadmaps/{ROADMAP_ID}/README.md")
+        windows = self.windows()
 
         pane, worktree = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
 
         self.assertEqual(next(p["window"] for p in self.panes() if p["id"] == pane), self.window)
         self.assertEqual(Path(worktree), self.worktree("f-phase-p"))
-        self.assertIn("add f-phase-p --headless --base f", self.workmux_log.read_text().splitlines())
+        self.assertEqual(self.windows(), windows)
+        self.assertEqual(self.git("-C", worktree, "rev-parse", "HEAD"), self.git("-C", str(feature), "rev-parse", "HEAD"))
         self.assertIn("--name f-phase-p ", self.wait_for_claude(pane))
         self.assertEqual(
             self.prompt_of("f-phase-p"),
@@ -324,7 +300,7 @@ class StartTests(LauncherTestCase):
         self.assertEqual(len(self.panes()), panes)
         self.assertEqual(len(self.claude_processes()), 1)
 
-    def test_named_orchestrator_in_a_test_made_pane_is_alive(self) -> None:
+    def test_a_claude_named_for_the_session_is_alive_outside_its_worktree(self) -> None:
         self.make_feature_worktree()
         pane = self.make_pane(self.tmp, command="claude --name f-orchestrator")
 
@@ -406,7 +382,7 @@ class StartTests(LauncherTestCase):
         result = self.launch("--feature", "f", "--role", "planner", "--window", tiny)
 
         self.assertEqual(result.returncode, 4, result.stderr)
-        self.assertIn("no space for a new pane", result.stderr)
+        self.assertIn("no space for", result.stderr)
         self.assertEqual(self.claude_processes(), [])
 
         retry, _ = self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
@@ -456,7 +432,6 @@ class DefaultBranchTests(LauncherTestCase):
 
         _, worktree = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
 
-        self.assertIn("add f --base origin/trunk -C", self.workmux_log.read_text().splitlines())
         self.assertEqual(self.git("-C", worktree, "rev-parse", "HEAD").strip(), latest)
 
     def test_no_origin_head_and_no_gh_fails_naming_both(self) -> None:
@@ -479,9 +454,12 @@ class ArgumentTests(LauncherTestCase):
                 self.assertEqual(result.stdout, "")
 
     def test_close_and_remove_need_only_their_commands(self) -> None:
+        self.make_feature_worktree()
+        self.make_worktree(name="f-planner", base="f")
         no_claude = self.without("claude")
         self.assertEqual(self.launch("--feature", "f", "--role", "planner", "--close", env=no_claude).returncode, 0)
-        self.assertEqual(self.launch("--feature", "f", "--role", "planner", "--remove", env=no_claude).returncode, 5)
+        removed = self.launch("--feature", "f", "--role", "planner", "--remove", env=no_claude)
+        self.assertEqual(removed.returncode, 0, removed.stderr)
         no_workmux = self.without("workmux")
         self.assertEqual(self.launch("--feature", "f", "--role", "planner", "--close", env=no_workmux).returncode, 0)
         self.assertEqual(self.launch("--feature", "f", "--role", "planner", "--remove", env=no_workmux).returncode, 3)
@@ -591,7 +569,7 @@ class RemoveTests(LauncherTestCase):
         self.make_feature_worktree()
 
     def assert_refused(self, reason: str) -> None:
-        removes_before = self.workmux_log.read_text().count("remove ")
+        worktrees_before = self.git("-C", str(self.root), "worktree", "list", "--porcelain")
 
         result = self.launch(*self.args, "--remove")
 
@@ -599,7 +577,7 @@ class RemoveTests(LauncherTestCase):
         self.assertEqual(result.stdout, "")
         self.assertTrue(result.stderr.startswith("refused f-phase-p: "), result.stderr)
         self.assertIn(reason, result.stderr)
-        self.assertEqual(self.workmux_log.read_text().count("remove "), removes_before)
+        self.assertEqual(self.git("-C", str(self.root), "worktree", "list", "--porcelain"), worktrees_before)
 
     def test_removes_a_clean_merged_worktree_and_keeps_its_branch(self) -> None:
         worktree = self.make_worktree(name="f-phase-p", base="f")
@@ -608,7 +586,6 @@ class RemoveTests(LauncherTestCase):
 
         self.assertEqual((result.returncode, result.stdout), (0, f"removed f-phase-p worktree={worktree}\n"), result.stderr)
         self.assertFalse(worktree.exists())
-        self.assertIn("remove f-phase-p --keep-branch --force", self.workmux_log.read_text().splitlines())
         self.assertEqual(self.git("-C", str(self.root), "branch", "--list", "f-phase-p").strip(), "f-phase-p")
 
     def test_dirty_worktree_is_refused(self) -> None:

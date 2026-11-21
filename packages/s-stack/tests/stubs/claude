@@ -1,0 +1,3 @@
+#!/bin/bash
+printf '%s\n' "$*" >> "$STUB_CLAUDE_LOG"
+exec -a claude perl -e 'sleep 86400' -- "$@"

@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+import os, subprocess, sys
+
+root = os.environ["STUB_ROOT"]
+with open(os.environ["STUB_WORKMUX_LOG"], "a") as log:
+    log.write(" ".join(sys.argv[1:]) + "\n")
+
+command, name, *rest = sys.argv[1:]
+path = f"{root}__wt/{name}"
+if command == "add":
+    base = rest[rest.index("--base") + 1]
+    subprocess.run(["git", "-C", root, "worktree", "add", "-q", "-b", name, path, base], check=True)
+    if "--headless" not in rest:
+        window = subprocess.run(["tmux", "new-window", "-d", "-P", "-F", "#{window_id}", "-c", path], check=True, capture_output=True, text=True).stdout.strip()
+        subprocess.run(["tmux", "split-window", "-d", "-t", window, "-c", path], check=True)
+elif command == "path":
+    if not os.path.isdir(path):
+        sys.exit(f"Worktree '{name}' not found")
+    print(path)
+elif command == "remove":
+    subprocess.run(["git", "-C", root, "worktree", "remove", path], check=True)

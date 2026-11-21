@@ -1,16 +1,21 @@
 ---
 phase: "foundation"
-state: "Verify"
-changed_at: "2026-11-21T14:32:14Z"
+state: "Review"
+changed_at: "2026-11-21T14:40:37Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
-code_head: "0eba66d24bc2190125fe6212ae68c5fafb7cb0ea"
+code_head: "0f4bf86be72cef85833be3096e3cbf9fc85b59ff"
 waits_for: null
 verdicts:
   - gate: "verify"
     result: "NOT VERIFIED"
     code_head: "13f835b7a61f0f3287cdd307b712338ae8751cde"
     at: "2026-11-21T14:26:36Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "0f4bf86be72cef85833be3096e3cbf9fc85b59ff"
+    at: "2026-11-21T14:35:16Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
 pull_requests: []
 requests: []
@@ -23,7 +28,7 @@ decisions:
 
 # Phase `foundation` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate is running.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The Review gate is running.
 
 ## Notes
 

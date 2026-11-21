@@ -37,3 +37,22 @@ A fresh verifier committed `tests/s-stack/verify-s-stack/checks/foundation.md` a
 Every **Done when** item passed, including `apm audit --ci` in a fresh detached worktree with no install (`All 10 check(s) passed`) and the cold read of roles and the phase session's first prompt.
 
 The failure: `references/status-and-messages.md` line 63 adds "The file is append-only. Each verdict adds a section ..." to the Evidence rule. C2 and decision `foundation-d1` allow only placeholders and the general code-head rule, with every other part of C2 copied unchanged. The sentence came from the first quick-review fix round, `4e0090d`.
+
+## Verify: VERIFIED at `0f4bf86be72cef85833be3096e3cbf9fc85b59ff`
+
+A second fresh verifier reviewed `checks/foundation.md` and added the Rerun check "Status header matches C2", committed alone as `0f4bf86`. The check diffs the reference's header section against the feature plan's C2, allowing only the placeholders and the general code-head rule. It exits 0 on the current reference. The phase session reran it against `13f835b`, where it printed the append-only sentences, the defect that failed the first gate.
+
+| Check | Result | Key output |
+| --- | --- | --- |
+| 1. Primitives and root manifest | PASS | `94 primitives valid`; `12 listed, 19 reached` |
+| 2. Markdown lint | PASS | `Summary: 0 error(s)` over 5 files |
+| 3. Line budgets | PASS | `103/150` |
+| 4. Handbook routes | PENDING | Seven handbooks missing |
+| 5. Package isolation | PASS | No link leaves the package; `default branch: main`; empty p-stack diff |
+| 6. Launcher tests | PENDING | `packages/s-stack/tests is missing` |
+| 7. Tier 1 | PASS | `all Tier 1 structural checks passed across 20 packages`, exit 0 |
+| 8. Phase check files | PASS | Three cold reads matched; the C2 check exited 0 |
+
+**Done when.** Every item passed. `apm audit --ci` in a fresh detached worktree at `0f4bf86` with no install printed `All 10 check(s) passed`. The counts grep's only hit is `AGENTS.md:4` "nineteen content packages", which is correct. `SKILL.md` is 103 lines. Cold read 1 named all seven handbook paths and wrote `/sam-mode phase feature=<feature> phase=<phase> update=- roadmap=<path> plan=<path> orchestrator=<feature>-orchestrator`. A private-names grep over every changed file and commit message found nothing.
+
+The full report is in the phase session's scratchpad as `verify-gate-2.md`.

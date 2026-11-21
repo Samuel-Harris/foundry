@@ -21,8 +21,8 @@ feature's session could have that name.
 Standard output is one line, except one closed line per pane for --close:
   started <name> pane=<pane id> worktree=<path>   started the session
   alive <name> pane=<pane id>                     the session already runs; nothing changed
-  closed <name> pane=<pane id>                    --close closed a pane running the session
-                                                  or tagged with its name
+  closed <name> pane=<pane id>                    --close closed a pane running the session,
+                                                  or tagged with its name and idle at a shell
   absent <name>                                   --close found neither
   removed <name> worktree=<path>                  --remove removed the session's worktree
   window=<window id>                              --print-window
@@ -133,7 +133,7 @@ resolve() {
   (cd "$1" 2>/dev/null && pwd -P) || true
 }
 
-# Prints "pane_id window_id tag kind in_worktree busy" for every pane, in tmux's
+# Prints "pane_id window_id tag kind in_worktree idle" for every pane, in tmux's
 # order. tag is the pane's @s-stack-session option, or - when unset. kind
 # describes the claude processes among the pane's descendants: strict when a
 # claude's first argument is --name <session>, as the launcher writes it, so a
@@ -141,12 +141,15 @@ resolve() {
 # which is how workmux resurrect restarts a session; other for any other
 # claude; none without one. A pane running several claudes reports the closest
 # match. in_worktree is 1 when the pane's directory is <worktree> or under it.
-# busy is 1 when the pane's process has a child process.
+# idle is 1 when the pane's foreground process is a shell: a helper the shell
+# keeps in the background, as zsh prompt plugins do, leaves the pane idle, and a
+# command the developer runs or execs there does not.
 pane_inventory() {
-  local session=$1 worktree_path=$2 panes pane_id pane_pid window_id tag current_path in_worktree resolved_worktree='' status
+  local session=$1 worktree_path=$2 panes pane_id pane_pid window_id tag idle current_path in_worktree resolved_worktree='' status
+  local idle_format='#{?#{m/r:^-?(sh|bash|zsh|dash|fish|ksh|tcsh|csh)$,#{pane_current_command}},1,0}'
   # Spaces, not tabs, separate the fields: a tmux client without a UTF-8 locale
   # prints a tab in a format as "_". The path goes last so read keeps its spaces.
-  if ! panes=$(tmux list-panes -a -F '#{pane_id} #{pane_pid} #{window_id} #{?@s-stack-session,#{@s-stack-session},-} #{pane_current_path}'); then
+  if ! panes=$(tmux list-panes -a -F "#{pane_id} #{pane_pid} #{window_id} #{?@s-stack-session,#{@s-stack-session},-} $idle_format #{pane_current_path}"); then
     # With no server no session runs, which --close and --remove may rely on; start mode needs a window.
     # Before tmux has ever run there is no socket directory, and tmux says it cannot connect.
     status=$(tmux list-sessions 2>&1) || true
@@ -155,18 +158,17 @@ pane_inventory() {
   fi
   [ -z "$worktree_path" ] || resolved_worktree=$(resolve "$worktree_path")
   {
-    printf '%s\n' "$panes" | while read -r pane_id pane_pid window_id tag current_path; do
+    printf '%s\n' "$panes" | while read -r pane_id pane_pid window_id tag idle current_path; do
       [ -n "$pane_id" ] || continue
       in_worktree=0
       if [ -n "$resolved_worktree" ] && [[ "$(resolve "$current_path")/" == "$resolved_worktree"/* ]]; then in_worktree=1; fi
-      printf 'pane %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$window_id" "$tag" "$in_worktree"
+      printf 'pane %s %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$window_id" "$tag" "$in_worktree" "$idle"
     done
     ps -A -o pid=,ppid=,args=
   } | awk -v name="$session" '
-    $1 == "pane" { order[++n] = $3; pane_pid[$3] = $2; info[$2] = $2 " " $4 " " $5; in_worktree[$2] = $6; next }
+    $1 == "pane" { order[++n] = $3; pane_pid[$3] = $2; info[$2] = $2 " " $4 " " $5; in_worktree[$2] = $6; idle[$2] = $7; next }
     {
       parent[$1] = $2
-      has_child[$2] = 1
       program = $3; sub(/.*\//, "", program)
       if (program != "claude") next
       strict = ($4 == "--name" && $5 == name) || $4 == "--name=" name
@@ -185,21 +187,21 @@ pane_inventory() {
           break
         }
       }
-      for (i = 1; i <= n; i++) { pane = pane_pid[order[i]]; print info[pane], kind[pane], in_worktree[pane], (order[i] in has_child) ? 1 : 0 }
+      for (i = 1; i <= n; i++) { pane = pane_pid[order[i]]; print info[pane], kind[pane], in_worktree[pane], idle[pane] }
     }'
 }
 
 # Reads pane_inventory for <session> and prints the one pane that runs it, or
-# nothing. With an empty <marker> only a claude named for the session counts.
-# Otherwise a nameless claude in the inventory's worktree counts too, first in
-# the session's own tagged pane, as a developer resuming it by hand leaves it.
-# Only when neither exists does one in an untagged pane count, as workmux
-# resurrect makes, and only when <marker> shows the launcher started the session
-# there, so a developer's own claude is not taken for it.
+# nothing. A claude named for the session counts, and so does a nameless claude
+# in the inventory's worktree in the session's own tagged pane, as a developer
+# resuming it by hand leaves it. Only when neither exists does a nameless one in
+# an untagged pane count, as workmux resurrect makes, and only when <marker>
+# shows the launcher started the session there, so a developer's own claude is
+# not taken for it.
 live_pane_of() {
   local session=$1 marker=$2 inventory matches
   inventory=$(cat)
-  matches=$(printf '%s\n' "$inventory" | awk -v nameless="${marker:+1}" -v session="$session" '$4 == "strict" || (nameless && $4 == "nameless" && $5 == 1 && $3 == session) { print $1 }')
+  matches=$(printf '%s\n' "$inventory" | awk -v session="$session" '$4 == "strict" || ($4 == "nameless" && $5 == 1 && $3 == session) { print $1 }')
   if [ -z "$matches" ] && [ -n "$marker" ] && [ -s "$marker" ]; then
     matches=$(printf '%s\n' "$inventory" | awk '$4 == "nameless" && $5 == 1 && $3 == "-" { print $1 }')
   fi
@@ -217,60 +219,66 @@ marker_of() {
 find_live_pane() {
   local marker=''
   # workmux resurrect restores only the orchestrator, and the spec writer has
-  # ended by then, so a nameless claude in the feature worktree is the orchestrator.
+  # ended by then, so a nameless claude in an untagged pane of the feature
+  # worktree is the orchestrator.
   if [ -z "$first_spec" ] && [ -n "$worktree" ]; then marker=$(marker_of "$worktree" "$name"); fi
   printf '%s\n' "$inventory" | live_pane_of "$name" "$marker"
 }
 
 # Reads pane_inventory and prints the first pane of $window tagged with the
-# session's name whose process has no child: the session's pane, left at its
-# shell after claude exited, and not running a command of the developer's.
-# Restarting there keeps restarts from shrinking the columns.
+# session's name that is idle: the session's pane, left at its shell after
+# claude exited, and not running a command of the developer's. Restarting there
+# keeps restarts from shrinking the columns.
 find_own_pane() {
-  awk -v window="$window" -v name="$name" '$2 == window && $3 == name && $4 == "none" && $6 == 0 { print $1; exit }'
+  awk -v window="$window" -v name="$name" '$2 == window && $3 == name && $4 == "none" && $6 == 1 { print $1; exit }'
 }
 
 # A launch killed with SIGKILL leaves its lock behind, and a crash is when every
 # session is relaunched. The holder's PID and start time tell such a lock from a
 # live one; the start time catches a PID that another process has since reused.
+# ps prints the start time in the caller's locale and time zone, and launches
+# compare each other's records, so every launch prints it in the same ones.
 process_start() {
-  ps -o lstart= -p "$1" 2>/dev/null | awk '{ $1 = $1; print }'
+  LC_ALL=C TZ=UTC ps -o lstart= -p "$1" 2>/dev/null | awk '{ $1 = $1; print }'
 }
 
-holder_of() {
-  local pid start
-  { read -r pid start < "$1/holder"; } 2>/dev/null || return 1
-  printf '%s %s\n' "$pid" "$(printf '%s\n' "$start" | awk '{ $1 = $1; print }')"
+# A record is "<pid> <start time>".
+is_stale() {
+  [ "$(process_start "${1%% *}")" != "${1#* }" ]
+}
+
+# A lock is a symlink whose target is its holder's record, so a launch takes the
+# lock and records itself in one step. Two waiters can both see the same stale
+# record, and the slower one must not remove the lock the faster one has taken
+# since, so a stale lock is removed only under the breaker lock, and only while
+# it still holds the record seen. Succeeds when it removed a stale lock or a
+# stale breaker, so the caller retries at once.
+break_stale_lock() {
+  local lock=$1 stale=$2 breaker=$1.break record
+  if ln -s "$lock_record" "$breaker" 2>/dev/null; then
+    if [ "$(readlink "$lock" 2>/dev/null)" = "$stale" ]; then rm -f "$lock"; fi
+    rm -f "$breaker"
+    return 0
+  fi
+  record=$(readlink "$breaker" 2>/dev/null) && is_stale "$record" || return 1
+  rm -f "$breaker"
 }
 
 take_lock() {
-  local lock=$1 holder=$2 seconds=$3 tries=0 unwritten=0 recorded pid aside
-  until mkdir "$lock" 2>/dev/null; do
-    if recorded=$(holder_of "$lock"); then
-      unwritten=0
-      pid=${recorded%% *}
-      if [ "$(process_start "$pid")" != "${recorded#* }" ]; then
-        aside=$lock.stale.$$
-        if mv "$lock" "$aside" 2>/dev/null; then
-          # Another waiter may have replaced the stale lock between the check and the move.
-          if [ "$(holder_of "$aside")" = "$recorded" ]; then rm -rf "$aside"; else mv "$aside" "$lock" 2>/dev/null || rm -rf "$aside"; fi
-        fi
-        continue
-      fi
-    else
-      # A holder killed between mkdir and writing its record leaves the lock empty.
-      unwritten=$((unwritten + 1))
-      if [ "$unwritten" -ge 50 ]; then
-        rm -rf "$lock"
-        unwritten=0
-        continue
-      fi
+  local lock=$1 holder=$2 seconds=$3 tries=0 record
+  until ln -s "$lock_record" "$lock" 2>/dev/null; do
+    if record=$(readlink "$lock" 2>/dev/null) && is_stale "$record" && break_stale_lock "$lock" "$record"; then
+      continue
     fi
     tries=$((tries + 1))
-    [ "$tries" -lt $((seconds * 10)) ] || die "launch $(holder_of "$lock" | awk '{ print $1 }') of $holder has held $lock for $seconds seconds"
+    [ "$tries" -lt $((seconds * 10)) ] || die "launch $(readlink "$lock" | awk '{ print $1 }') of $holder has held $lock for $seconds seconds"
     sleep 0.1
   done
-  printf '%s %s\n' "$$" "$(process_start "$$")" > "$lock/holder" || die "cannot record the holder of $lock"
+}
+
+# A lock whose holder was judged stale may since belong to another launch.
+release_lock() {
+  if [ -n "$1" ] && [ "$(readlink "$1" 2>/dev/null)" = "$lock_record" ]; then rm -f "$1"; fi
 }
 
 release_window() {
@@ -278,7 +286,7 @@ release_window() {
     tmux resize-pane -Z -t "$zoomed_pane" || true
     zoomed_pane=''
   fi
-  [ -z "$window_lock" ] || rm -rf "$window_lock"
+  release_lock "$window_lock"
   window_lock=''
 }
 
@@ -291,7 +299,7 @@ lock_worktrees() {
 }
 
 release_worktrees() {
-  [ -z "$worktrees_lock" ] || rm -rf "$worktrees_lock"
+  release_lock "$worktrees_lock"
   worktrees_lock=''
 }
 
@@ -303,10 +311,11 @@ lock_session() {
   common=$(git rev-parse --git-common-dir 2>/dev/null) && common=$(resolve "$common") && [ -n "$common" ] || die 'cannot resolve the git common directory'
   locks=$common/s-stack-locks
   mkdir -p "$locks" || die "cannot create $locks"
+  lock_record="$$ $(process_start "$$")"
   take_lock "$locks/$name" "$name" 300
   session_lock=$locks/$name
   window_lock='' zoomed_pane='' worktrees_lock=''
-  trap 'release_worktrees; release_window; rm -rf "$session_lock"' EXIT
+  trap 'release_worktrees; release_window; release_lock "$session_lock"' EXIT
 }
 
 # Held from reading the window's layout until the new pane is tagged, so a
@@ -472,8 +481,8 @@ cmd_close() {
   local inventory panes pane zoomed
   inventory=$(pane_inventory "$name" '')
   panes=$(printf '%s\n' "$inventory" | live_pane_of "$name" '')
-  # A tagged pane where another claude now runs belongs to whoever started it there.
-  panes="$panes $(printf '%s\n' "$inventory" | awk -v name="$name" '$3 == name && $4 == "none" { print $1 }')"
+  # A tagged pane where another claude or a command now runs belongs to whoever started it there.
+  panes="$panes $(printf '%s\n' "$inventory" | awk -v name="$name" '$3 == name && $4 == "none" && $6 == 1 { print $1 }')"
   [ -n "${panes// /}" ] || { printf 'absent %s\n' "$name"; return; }
   for pane in $panes; do
     # Closing a pane unzooms its window.

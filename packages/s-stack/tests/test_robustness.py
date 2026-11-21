@@ -106,13 +106,7 @@ done
 
 class StaleLockTests(LauncherTestCase):
     def lock_held_by(self, process: subprocess.Popen, /, *, start: str | None = None) -> Path:
-        common = Path(self.git("-C", str(self.root), "rev-parse", "--path-format=absolute", "--git-common-dir").strip())
-        lock = common / "s-stack-locks" / "f-planner"
-        lock.mkdir(parents=True)
-        if start is None:
-            start = subprocess.run(["ps", "-o", "lstart=", "-p", str(process.pid)], capture_output=True, text=True, check=True).stdout.strip()
-        (lock / "holder").write_text(f"{process.pid} {start}\n")
-        return lock
+        return self.write_lock("f-planner", record=f"{process.pid} {start or self.start_time(process.pid)}")
 
     def planner_args(self) -> tuple[str, ...]:
         self.make_feature_worktree()

@@ -184,9 +184,14 @@ class LauncherTestCase(unittest.TestCase):
     def write_lock(self, name: str, *, record: str) -> Path:
         """The lock <name> as a launch holding it leaves it, recording "<pid> <start time>"."""
         lock = self.lock_path(name)
-        lock.mkdir(parents=True)
-        (lock / "holder").write_text(f"{record}\n")
+        lock.parent.mkdir(parents=True, exist_ok=True)
+        lock.symlink_to(record)
         return lock
+
+    def start_time(self, pid: int, /) -> str:
+        """A process's start time as every launch records it."""
+        out = subprocess.run(["ps", "-o", "lstart=", "-p", str(pid)], env={**self.env, "LC_ALL": "C", "TZ": "UTC"}, capture_output=True, text=True, check=True).stdout
+        return " ".join(out.split())
 
     def worktree(self, name: str) -> Path:
         return Path(f"{self.root}__wt/{name}")

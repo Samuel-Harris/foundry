@@ -1,10 +1,10 @@
 ---
 phase: "foundation"
-state: "Implement"
-changed_at: "2026-11-21T14:52:00Z"
+state: "Verify"
+changed_at: "2026-11-21T14:32:14Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
-code_head: "13f835b7a61f0f3287cdd307b712338ae8751cde"
+code_head: "0eba66d24bc2190125fe6212ae68c5fafb7cb0ea"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -23,7 +23,7 @@ decisions:
 
 # Phase `foundation` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The phase is back in Implement to remove it.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate is running.
 
 ## Notes
 

@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T17:21:39Z"
+state: "Verify"
+changed_at: "2026-11-21T17:22:58Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "942257045154f4a7e76c16fa4023a5cf3e656bf5"
+code_head: "13fe92ce38cfab37c230002051313228439e8b6d"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -121,3 +121,5 @@ The eighth Verify gate returned VERIFIED at `5658aa8`. One defect would break a 
 The Finishing a phase fix is at `4289747`. `s-stack-package` (`e801458`, which brings `phase-handbooks` and `main`'s pull request 81) was merged at `5a2b047`, after a lockfile-only conflict that was resolved under C7. The phase moved to Verify at code head `5a2b047`.
 
 The ninth Verify gate returned VERIFIED at `9422570`. Two defects would break a real run, so the phase moved back to Implement. The orchestrator's layout instruction goes in the same round.
+
+The Finishing a phase redesign and the layout lines are at `13fe92c`. `s-stack-package` (`e096e48`) was merged at `9435921`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `13fe92c`.

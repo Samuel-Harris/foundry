@@ -24,7 +24,7 @@ There are two forms.
 - `/sam-mode start <feature>`. Run `<this skill's directory>/scripts/launch.sh --feature <feature> --role spec` with the repository root as the working directory and report its output. Do nothing else.
 - `/sam-mode <role> feature=<feature> phase=<phase> update=<n> roadmap=<path> plan=<path> orchestrator=<feature>-orchestrator`. This is the first prompt the launcher types, and `-` means an empty value. Take the role, read its handbook, then read the roadmap and the plan the prompt names.
 
-`update` is a roadmap update number, set only for a spec writer that edits an existing roadmap. `orchestrator` is the orchestrator's session name, the address for every report.
+`update` is a roadmap update number, set only for a spec writer that edits an existing roadmap. `roadmap` is the feature roadmap's directory and `plan` the feature plan's `README.md`, each `-` until it exists. `orchestrator` is the orchestrator's session name, the address for every report.
 
 ## Roles and handbooks
 
@@ -83,7 +83,7 @@ Every phase moves through Spec, Plan, Implement, Verify, Review, PR and Done.
 
 Never assume the default branch is `main`. Resolve it, for example with `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`.
 
-The orchestrator branch and every phase branch carry `.foundry/`. Push neither to a public remote unless the developer says so. Only pull request branches, which never contain `.foundry/`, are pushed.
+The orchestrator branch and every phase branch carry `.foundry/`. Push neither to a public remote unless the developer says so. Pull request branches never contain `.foundry/`, and the PR creator pushes them.
 
 ### Pull requests
 

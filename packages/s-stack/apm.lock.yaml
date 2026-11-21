@@ -2465,7 +2465,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:3e0b071342c1578b21adea3c8a921e9a91f5d05bd0cdba617a9644b2eef4dc6f
+  content_hash: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/references/status-and-messages.md
@@ -2474,7 +2474,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:8be9f09a576cfd8e2c3c90189931fe1ea8bcc955d74888b49ad634802ae52455
+  content_hash: sha256:c4772084c8f16671ea793b2afc1861f2011a550f3beb27f0dbe7dc540c07a2ac
 - kind: project-relative
   target: claude
   value: .claude/skills/setup-pstack
@@ -5246,7 +5246,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:3e0b071342c1578b21adea3c8a921e9a91f5d05bd0cdba617a9644b2eef4dc6f
+  content_hash: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/references/status-and-messages.md
@@ -5255,7 +5255,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:8be9f09a576cfd8e2c3c90189931fe1ea8bcc955d74888b49ad634802ae52455
+  content_hash: sha256:c4772084c8f16671ea793b2afc1861f2011a550f3beb27f0dbe7dc540c07a2ac
 local_deployed_files:
 - .agents/skills/sam-mode
 - .agents/skills/sam-mode/SKILL.md
@@ -5264,7 +5264,7 @@ local_deployed_files:
 - .claude/skills/sam-mode/SKILL.md
 - .claude/skills/sam-mode/references/status-and-messages.md
 local_deployed_file_hashes:
-  .agents/skills/sam-mode/SKILL.md: sha256:3e0b071342c1578b21adea3c8a921e9a91f5d05bd0cdba617a9644b2eef4dc6f
-  .agents/skills/sam-mode/references/status-and-messages.md: sha256:8be9f09a576cfd8e2c3c90189931fe1ea8bcc955d74888b49ad634802ae52455
-  .claude/skills/sam-mode/SKILL.md: sha256:3e0b071342c1578b21adea3c8a921e9a91f5d05bd0cdba617a9644b2eef4dc6f
-  .claude/skills/sam-mode/references/status-and-messages.md: sha256:8be9f09a576cfd8e2c3c90189931fe1ea8bcc955d74888b49ad634802ae52455
+  .agents/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
+  .agents/skills/sam-mode/references/status-and-messages.md: sha256:c4772084c8f16671ea793b2afc1861f2011a550f3beb27f0dbe7dc540c07a2ac
+  .claude/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
+  .claude/skills/sam-mode/references/status-and-messages.md: sha256:c4772084c8f16671ea793b2afc1861f2011a550f3beb27f0dbe7dc540c07a2ac

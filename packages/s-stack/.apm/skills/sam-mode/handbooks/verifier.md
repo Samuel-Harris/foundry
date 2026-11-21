@@ -43,7 +43,7 @@ The check file has two sections.
 
 Each check is one behaviour from the phase's **Done when** list or the phase plan's verification section. A check earns its place only if wrong behaviour can fail it. A check that only finds a file, a heading or a fixed string is not a check.
 
-Commit the check file with its `## Rerun` checks, and any change to the skill, before you run anything. Such a commit holds no file under `.foundry/`, so it moves the code head. After the run, write the one-off results into `## Evidence` and commit that change alone. Nothing runs `## Evidence`, so that commit needs no new run. Your verdict names the code head after your last commit.
+Commit the check file with its `## Rerun` checks, and any change to the skill, before you run anything. Such a commit holds no file under `.foundry/`, so it moves the code head. After the run, write the one-off results into `## Evidence` and commit that change alone. No behavioural check runs `## Evidence`, so that commit needs no new run, but it must still pass the repository's lint and commit checks. Your verdict names the code head after your last commit.
 
 If a run shows that a check is wrong, fix it, commit again, and run everything again. Never weaken a check so that it passes. A check is wrong only when it misstates what the roadmap or the plans require.
 

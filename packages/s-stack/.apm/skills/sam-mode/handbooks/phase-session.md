@@ -23,7 +23,7 @@ A merge of another branch is the one commit that may bring files under `.foundry
 
 ## Verdicts
 
-Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small. In Review, PR or Done, if the newest verdicts do not name the current code head, move back to Implement. In Verify that is expected, because the verifier's own commits move the code head.
+Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small. Move back to Implement when a gate the phase has already passed no longer covers the current code head: in Review, when the newest verify verdict does not name it, and in PR or Done, when the newest verify or review verdict does not. A gate that is running has no verdict yet. In Verify, a VERIFIED verdict that names an older code head means running Verify again.
 
 ## Changing state
 
@@ -82,9 +82,9 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 ## PR
 
 1. Move to PR once the reference file's merge rule holds for the current code head.
-2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request only for commits that the phase plan assigns to a new one.
+2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request for commits that the phase plan assigns to a new one, and for commits that no open pull request carries, such as a fix made after every pull request has merged.
 3. Record each pull request in `pull_requests`, then send `prs-open` with each number and its `depends_on` list.
-4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done only if the phase is in PR. In any other state, ignore it and send `state`. The orchestrator sends it again once your status file shows PR and your current code head is merged.
+4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done only if the phase is in PR. In any other state, ignore it and send `state`. The orchestrator sends it again once your status file shows PR and your current code head is merged into the orchestrator branch.
 
 ## Messages from the orchestrator
 
@@ -124,7 +124,7 @@ A `move-back` names the state and what changed.
 
 ## Instructions from the developer
 
-The developer can type into your pane. Follow a direct instruction. When it changes the phase's scope or a recorded decision, also record it in `decisions`, commit, and send the orchestrator an `instruction` message that carries it, before you start the work. When it conflicts with the feature plan, send a decision request as well, because only the planner changes the plan. Build the instructed work that the answer cannot change while the request is open.
+The developer can type into your pane. Follow a direct instruction. When it changes the phase's scope or a recorded decision, also record it in `decisions`, commit, and send the orchestrator an `instruction` message that carries it, before you start the work. When it conflicts with the feature plan, send a decision request as well, because only the planner changes the plan. Build the instructed work that the answer cannot change while the request is open. In Done, an instruction or a message that asks for a change to the code moves the phase back to Implement first.
 
 ## After a restart
 

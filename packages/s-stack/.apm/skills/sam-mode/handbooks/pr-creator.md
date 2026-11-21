@@ -91,8 +91,8 @@ A pull request's branch and description have one writer, the phase session, thro
 When the base table gives a new base, use it in the refresh's spec, then run `gh pr edit <number> --base <new base>` once the branch is pushed.
 
 - **Joining a stack.** Link it with `gh stack link <parent number> <own number>`.
-- **Leaving a stack.** Do not refresh it onto the new base. Report it to the phase session instead of running `gh stack unstack`, which unstacks the whole stack.
-- **A parent that merged.** GitHub moves a stacked child to the default branch itself. Its spec becomes `<branch>:<default>::<parent branch>`.
+- **Leaving a stack.** This means a pull request still stacked on an open parent for which the base table now gives another base. Do not refresh it onto the new base. Report it to the phase session instead of running `gh stack unstack`, which unstacks the whole stack.
+- **A parent that merged.** GitHub moves a stacked child to the default branch itself, so the child is not leaving a stack. Its spec becomes `<branch>:<default>::<parent branch>`, and the base table then applies as for any pull request on the default branch, so it may join a new parent's stack.
 
 Then update the description's dependency lines.
 

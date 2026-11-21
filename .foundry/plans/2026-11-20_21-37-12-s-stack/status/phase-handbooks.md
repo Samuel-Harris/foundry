@@ -1,10 +1,10 @@
 ---
 phase: "phase-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T17:49:22Z"
+state: "Implement"
+changed_at: "2026-11-21T18:00:55Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
-code_head: "30f0709ecdfb8865913ac95e1c7f50fcb2e8a9be"
+code_head: "e826e6ac53cd2d24bbe1eb0487d3cc9e67821d29"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -122,3 +122,4 @@ Fix round from the orchestrator: phase-session.md still told the PR creator to m
 Fix 515c907 removes the restack row, has every fix round re-derive the base, and points a refresh of pull request branches at pr-creator.md. The layer's quick-review pass from the first Implement stands, because this fix round changed four lines and both gates follow. Verify returned VERIFIED at 515c907. Review returned CLEAR at 515c907. On the orchestrator's instruction, the phase goes back to Implement to restrict the move to Done to a phase in PR and to widen the move back to Implement.
 Fix 2155716: Done only from PR, back to Implement whenever no verdict covers the current code head, and a pull-request-merged round records bases and sends prs-open. Verify returned VERIFIED at 2155716. Review returned SIGNIFICANT at 2155716: the new move-back rule also fired in Verify, the Moving back example did not fit it, and a phase that ignored the merged notice had no route to Done. Back to Implement.
 Fix 30f0709: the no-verdict move-back applies in Review, PR and Done only; the Implement move-back applies whenever the orchestrator sends it; the merged notice ignored outside PR comes again once the status shows PR and the code head is merged, in the orchestrator's words. Verify returned VERIFIED at 30f0709. The orchestrator's merge-orchestrator-branch request, which brings #82 and #84 from main, comes before Review.
+s-stack-package merged at e826e6a with #82 and #84 from main. It changed only packages/s-stack/apm.yml's version line (0.1.0 to 0.1.1) outside .foundry/, but that moves the code head, so the phase moves back to Implement and both gates run again.

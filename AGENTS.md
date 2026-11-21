@@ -352,8 +352,9 @@ script; `status` reports drift when a file falls outside them, and exits `1`.
 `.github/workflows/ci.yml` runs `pre-commit` plus a job for each of p-stack's
 script test suites, which `packages/p-stack/README.md` describes, and a
 `data-visualisation-tools-tests` job that runs the data-visualisation tools'
-unit tests with `uv run --frozen`, and a `foundry-maintenance-tests` job for
-`packages/foundry-maintenance/tests`. `pre-commit`
+unit tests with `uv run --frozen`, a `foundry-maintenance-tests` job for
+`packages/foundry-maintenance/tests`, and an `s-stack-launcher-tests` job that
+installs tmux and runs `packages/s-stack/tests`. `pre-commit`
 checks out the full history, installs the CLI with `microsoft/apm-action@v1` and
 `setup-only: true`, then runs `.githooks/pre-commit`. `setup-only` matters: the action must not
 install packages itself, or it would rewrite lockfiles before the hook could

@@ -10,7 +10,7 @@
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
 | Last tick | 2026-11-21 18:52 |
-| Default branch merged at | `e4a18d1` (#82, #84, into `321f333`) |
+| Default branch merged at | `6f42b1c` (#85, into `7409b48`) |
 
 ## Live sessions
 
@@ -42,7 +42,7 @@ None.
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
 | `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
 | `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
-| `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | running |
+| `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | VERIFIED on `ce086bb` |
 
 ## Closed sessions
 

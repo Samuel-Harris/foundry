@@ -409,6 +409,9 @@ class StartTests(LauncherTestCase):
         self.assertIn("no space for a new pane", result.stderr)
         self.assertEqual(self.claude_processes(), [])
 
+        retry, _ = self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
+        self.assertIsNotNone(conversation(self.wait_for_claude(retry), flag="--session-id"))
+
 
 class RoadmapTests(LauncherTestCase):
     def launch_planner(self) -> subprocess.CompletedProcess:

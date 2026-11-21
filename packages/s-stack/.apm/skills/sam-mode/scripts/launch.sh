@@ -262,7 +262,6 @@ if [ -z "$fresh" ] && [ -s "$marker" ]; then
 else
   conversation_flag=--session-id
   conversation_id=$(new_conversation_id) || die 'cannot make a conversation id: neither uuidgen nor /proc/sys/kernel/random/uuid works'
-  mkdir -p "$markers" && printf '%s\n' "$conversation_id" > "$marker" || die "cannot write the session marker $marker"
 fi
 
 prompt="/sam-mode $role feature=$feature phase=${phase:--} update=${update:--} roadmap=$roadmap plan=$plan orchestrator=$feature-orchestrator"
@@ -273,6 +272,10 @@ if [ -n "$split" ]; then
   target_pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" "$command") || exit 4
 else
   tmux respawn-pane -k -t "$target_pane" -c "$worktree" "$command" || die "tmux respawn-pane -t $target_pane failed"
+fi
+
+if [ "$conversation_flag" = --session-id ]; then
+  mkdir -p "$markers" && printf '%s\n' "$conversation_id" > "$marker" || die "cannot write the session marker $marker"
 fi
 
 printf 'started %s pane=%s worktree=%s\n' "$name" "$target_pane" "$worktree"

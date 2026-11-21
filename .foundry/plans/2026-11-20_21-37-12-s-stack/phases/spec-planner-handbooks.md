@@ -82,7 +82,7 @@ Content, in order:
    - Make the feature's verification skill the first phase when no existing skill covers the feature. Give every phase its own check file in that skill, so no two phases edit one verification file.
    - Read the pull request rules before drawing dependencies: the PR creator's handbook, and `SKILL.md` for drafts and branches. A pull request stacks cleanly on one parent only, so a phase that depends on two open phases gets a pull request that carries both diffs.
    - Write the contracts between phases (interfaces, file layout, data schemas, command lines) so a phase builds against a neighbour that does not exist yet. A phase that needs to change a contract sends a decision request.
-5. **What each phase entry holds.** Scope, the phases it depends on, owned paths, paths it must not touch, exclusive resources, planned pull requests with their dependencies, and a **Done when** checklist naming the evidence that proves it.
+5. **What each phase entry holds.** Scope, the phases it depends on, owned paths, paths it must not touch, exclusive resources, and a **Done when** checklist naming the evidence that proves it. The phase session plans its own pull request split in its phase plan (changed after quick-review, because roadmap `workflow.md` gives the split to the phase plan).
 6. **What other handbooks take from the plan.** A table:
 
    | Reader | Takes from the plan |
@@ -135,7 +135,7 @@ PATH="$PWD/.venv-apm/bin:$PATH" python3 tests/structural/validate_primitives.py
 
 The verifier writes `checks/spec-planner-handbooks.md` with these two cold reads in `## Rerun`, each run by a fresh subagent given only the named file and the scenario:
 
-1. **Planner.** Given `planner.md` and a two-paragraph placeholder roadmap for a feature with two independent parts and one part that needs both, the subagent produces a phase table. Expected: every phase has scope, depends on, owned paths, exclusive resources, planned pull requests and the evidence that proves it done; no two phases that can run together share an owned path; the third phase depends on both others.
+1. **Planner.** Given `planner.md` and a two-paragraph placeholder roadmap for a feature with two independent parts and one part that needs both, the subagent produces a phase table. Expected: every phase has scope, depends on, owned paths, exclusive resources and the evidence that proves it done; no two phases that can run together share an owned path; the third phase depends on both others.
 2. **Spec writer.** Given `spec-writer.md` and a placeholder idea that hides one one-way door (a migration that drops a column) and one ambiguity (whether an export is daily or on demand), the subagent says it asks the developer about both, records each answer in the roadmap's `decisions.md` with its door type, and starts the orchestrator through the launcher only after the developer approves the roadmap.
 
 The verifier then runs the verification skill and the feature plan's **Done when** list, and returns VERIFIED, NOT VERIFIED or INCONCLUSIVE.

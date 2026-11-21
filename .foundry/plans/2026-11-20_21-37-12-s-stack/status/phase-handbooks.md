@@ -1,10 +1,10 @@
 ---
 phase: "phase-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T16:07:41Z"
+state: "Verify"
+changed_at: "2026-11-21T16:08:46Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
-code_head: "305a26e4a846d378d2dac65faa47909405a36865"
+code_head: "6b6047634a138cba75093ebe15bfcad33716e594"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -43,3 +43,4 @@ decisions:
 
 The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/phase-handbooks.md`. Handbooks committed at 89293d5, 0a15039 and 5f4b1c6. The quick-review pass (bug and code quality) found duplication of SKILL.md and the reference file, a re-review that never re-ran earlier significant findings, a re-review scope that pulled in other phases' code after a merge, and a restart check against the wrong field. Fix 1e49d2e addresses them and the orchestrator's instruction about the fix-round, move-back and stop cases. s-stack-package merged at 25ec3ab, which brought only .foundry/ files, so the code head stays 1e49d2e. The first Verify gate returned NOT VERIFIED at a1c1d83, the verifier's check-file commit: phase-session.md never says to follow a direct instruction from the developer. Back to Implement to fix it.
 Fix 305a26e says the session follows a direct instruction and builds what an open request cannot change, and gives the verifier a verdict for a skill without the check-file step. s-stack-package merged again (only .foundry/ came in). The second Verify gate returned VERIFIED at 305a26e. The first Review gate returned SIGNIFICANT at 305a26e, with four findings in verifier.md, reviewer.md and phase-session.md. Back to Implement.
+Fix 6b60476 addresses the four significant review findings. s-stack-package merged at d88dfe0 (only .foundry/).

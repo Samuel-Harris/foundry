@@ -23,7 +23,7 @@ A merge of another branch is the one commit that may bring files under `.foundry
 
 ## Verdicts
 
-Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small.
+Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. The one exception is the verifier's own commit of its `## Evidence` results, which its verdict already covers. Never carry an old verdict forward because the change looks small.
 
 ## Changing state
 
@@ -82,7 +82,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 ## PR
 
 1. Move to PR once the reference file's merge rule holds for the current code head.
-2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). It opens a new pull request only for commits that the phase plan assigns to a new one.
+2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request only for commits that the phase plan assigns to a new one.
 3. Record each pull request in `pull_requests`, then send `prs-open` with each number and its `depends_on` list.
 4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done.
 

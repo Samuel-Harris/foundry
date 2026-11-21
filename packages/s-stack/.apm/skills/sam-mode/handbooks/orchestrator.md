@@ -10,7 +10,7 @@ Your workers are main sessions that the launcher starts, not subagents, and each
 
 - Read the evidence, not the report. A status file, a commit and a pull request's live state outrank a message, including one that says a phase is done.
 - Check a pull request's live state before you report on it or act on it.
-- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR has work only while a `fix-round` or `instruction` you sent it is unanswered by a commit or a state change. Otherwise tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported since you last started it has no work.
+- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR has work only while a `fix-round` or `instruction` you sent it is unanswered. A commit, a push to one of its pull requests, a `prs-open` or a state change answers it. Otherwise tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported since you last started it has no work.
 - Retry by cause. A session that ended or lost its connection resumes with the launcher. A session whose conversation is the problem, because it loops, its context is full or it has stalled, gets `stop`, then in the next tick `--close` and a launch with `--fresh`.
 - Ask the developer only for a real decision: a one-way door, a product or preference call, or a blocker that survived a restart. Merge mechanics, retries and fix rounds never reach the developer.
 - Never read a phase plan, a diff or long pane output yourself. Give it to a fresh subagent and keep its conclusion. Send your own messages, never through a subagent.
@@ -46,7 +46,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 
 `.foundry/plans/<id>/status/orchestrator.md` holds these:
 
-- The window, the default branch, and the default branch commit last merged.
+- The window, the default branch, the default branch commit last merged, and the default branch tip a hand-written conflict was last sent to a phase for.
 - The board's and the architecture page's addresses, and the orchestrator branch commit the page describes.
 - The time of the last tick, and when the recurring tick was created.
 - Done phases whose status-only merge was refused, and whether the developer has been told.
@@ -94,14 +94,14 @@ To abort a merge, run `git merge --abort`. If it refuses because a hook or check
 4. Have a fresh subagent run the feature's verification skill on the orchestrator branch. Record the result in the tracker.
 5. If the check fails, the orchestrator branch is frozen until a later check passes. Send `move-back` to Implement to the phase, naming the failed check. Before it verifies again it merges the orchestrator branch, which holds the combination that failed. While frozen, start no new phase, merge no other phase and not the default branch, and send `merge-orchestrator-branch` to no other phase. Merge the phase again only when both its newest verdicts name a code head newer than the one that failed.
 6. If it passes, send `merge-orchestrator-branch` to every other live phase that has not reached PR, and start the phases that now have their dependencies.
-7. After a passing check only, and once none of its pull requests has `needs_update` set, send the merged phase `stop`. [Finishing a phase](#finishing-a-phase) closes its pane once it is quiet. Its worktree stays until the phase is Done.
+7. After a passing check only, once none of its pull requests has `needs_update` set, and unless every pull request has merged, which means Finishing a phase tells it instead, send the merged phase `stop`. [Finishing a phase](#finishing-a-phase) closes its pane once it is quiet. Its worktree stays until the phase is Done.
 
 ## Merging the default branch
 
 Merge the default branch into the orchestrator branch on the orchestrator branch itself. Every such merge stops before committing, so the hooks and checks run even when git could merge on its own.
 
-1. Run `git merge --no-ff --no-commit origin/<default branch>`, never a local copy, which can be behind. If nothing is merged, stop.
-2. For each conflicted file in a generated path the feature plan names, take the default branch's side. For a package manifest whose sides differ only in a generated version line, do the same. On any other conflict, run `git merge --abort` and send the owning phase a `fix-round` that names the conflicting paths and the default branch commit. It merges the default branch into its phase branch and passes both gates again. If no phase owns the paths, tell the developer.
+1. Run `git merge --no-ff --no-commit origin/<default branch>`, never a local copy, which can be behind. If nothing is merged, record the tip as merged and stop. If the tracker shows a conflict round was sent for this tip and the owning phase is not back in PR, do not retry yet.
+2. For each conflicted file in a generated path the feature plan names, take the default branch's side. For a package manifest whose sides differ only in a generated version line, do the same. On any other conflict, abort the merge, send the owning phase a `fix-round` that names the conflicting paths and the default branch commit, and record that tip in the tracker. It merges the default branch into its phase branch and passes both gates again. If no phase owns the paths, tell the developer.
 3. Regenerate with the feature plan's command, whether or not anything conflicted, and stage the result.
 4. Run the repository checks the feature plan names. If they fail, abort the merge and tell the developer.
 5. Commit with the hooks on. If a hook refuses, abort the merge and tell the developer.
@@ -132,13 +132,13 @@ In tick step 4, for each merged phase, do every step below whose condition holds
 
 Some histories are rare, and the handbook does not handle them:
 
-- a pull request whose new head does not contain the head you recorded;
+- a pull request whose new head does not contain the head you recorded, other than a stack child that the forge rebased after its parent merged;
 - a pull request closed without merging;
 - a pull request merged into a branch other than the default branch;
 - a forge rewrite other than the rebase of a stack child after its parent merges;
 - a tracker fact that git or the forge contradicts.
 
-When the reconcile step finds one, record what you saw in the tracker, and stop acting on every phase it touches. Send the developer a decision request with the options you see and your recommendation. Act on those phases again once the developer answers.
+When the reconcile step finds one, record what you saw in the tracker, and stop acting on every phase it touches, apart from reconciling it and keeping the board current. Send the developer a decision request with the options you see and your recommendation. Act on those phases again once the developer answers.
 
 ## Fix rounds
 

@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T16:09:12Z"
+state: "Verify"
+changed_at: "2026-11-21T16:10:21Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "e0a51a20465f216f54eb5aca4fef91810d643eab"
+code_head: "fc9c6cd123f3140fbc233b7059b821646852ed4a"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -56,3 +56,5 @@ The fixes are at `b4844d8`, the lockfile regenerated at `62a0fd2`, and `s-stack-
 The second Verify gate returned VERIFIED at `e0a51a2`, the verifier's check-file update. The phase moved to Review.
 
 The first Review gate returned SIGNIFICANT at `e0a51a2`. The phase moved back to Implement to fix the six findings and to add the orchestrator's `depends_on` instruction for `phases` board documents.
+
+The review fixes and the `depends_on` instruction are at `fc9c6cd`, the lockfile was regenerated at `e4b6773`, and `s-stack-package` (`fbd548d`) was merged at `85df12d`. The phase moved to Verify at code head `fc9c6cd`.

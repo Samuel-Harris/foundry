@@ -13,6 +13,21 @@ Usage:
 Roles: spec, orchestrator, planner, phase. --phase is required with --role phase
 and refused otherwise. --update is allowed only with --role spec. --window is
 required for every session except the first spec writer of a feature.
+
+Standard output is one line:
+  started <name> pane=<pane id> worktree=<path>   started the session
+  alive <name> pane=<pane id>                     the session already runs; nothing changed
+  closed <name> pane=<pane id>                    --close closed the session's pane
+  absent <name>                                   --close found no pane running the session
+  removed <name> worktree=<path>                  --remove removed the session's worktree
+  window=<window id>                              --print-window
+
+Exit codes:
+  1  any other failure, named on standard error
+  2  bad arguments
+  3  tmux, workmux or claude is not on PATH
+  4  tmux could not split a pane; tmux's error is on standard error
+  5  --remove refused: no such worktree, a live session, a dirty worktree or an unmerged branch
 EOF
   exit 2
 }
@@ -27,15 +42,27 @@ refuse() {
   exit 5
 }
 
+cannot_split() {
+  exit 4
+}
+
 require() {
-  local command
-  for command in "$@"; do
-    command -v "$command" >/dev/null 2>&1 || { printf 'launch.sh: %s not found on PATH\n' "$command" >&2; exit 3; }
+  local tool
+  for tool in "$@"; do
+    command -v "$tool" >/dev/null 2>&1 || { printf 'launch.sh: %s not found on PATH\n' "$tool" >&2; exit 3; }
   done
 }
 
+at_most_one() {
+  [ "$(printf '%s\n' "$2" | wc -l)" -le 1 ] || die "more than one $1: $(printf '%s\n' "$2" | awk '{print $1}' | tr '\n' ' ')"
+}
+
 kebab='^[a-z0-9]+(-[a-z0-9]+)*$'
-feature='' role='' phase='' update='' window='' fresh='' close='' remove='' print_window=''
+feature='' role='' phase='' update='' window='' fresh='' mode=start
+set_mode() {
+  [ "$mode" = start ] || usage
+  mode=$1
+}
 while [ $# -gt 0 ]; do
   case "$1" in
     --feature|--role|--phase|--update|--window)
@@ -50,69 +77,67 @@ while [ $# -gt 0 ]; do
       shift 2
       ;;
     --fresh) fresh=1; shift ;;
-    --close) close=1; shift ;;
-    --remove) remove=1; shift ;;
-    --print-window) print_window=1; shift ;;
+    --close) set_mode close; shift ;;
+    --remove) set_mode remove; shift ;;
+    --print-window) set_mode print-window; shift ;;
     *) usage ;;
   esac
 done
 
-if [ -n "$print_window" ]; then
-  [ -z "$feature$role$phase$update$window$fresh$close$remove" ] || usage
-  require tmux
-  [ -n "${TMUX_PANE:-}" ] || die 'not inside tmux'
-  printf 'window=%s\n' "$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}')"
-  exit 0
-fi
-
-[[ $feature =~ $kebab ]] || usage
-case "$role" in spec|orchestrator|planner|phase) ;; *) usage ;; esac
-if [ "$role" = phase ]; then
-  [[ $phase =~ $kebab ]] || usage
+if [ "$mode" = print-window ]; then
+  [ -z "$feature$role$phase$update$window$fresh" ] || usage
 else
-  [ -z "$phase" ] || usage
-fi
-if [ -n "$update" ]; then
-  [ "$role" = spec ] || usage
-  [[ $update =~ ^[1-9][0-9]*$ ]] || usage
-fi
-if [ -n "$close" ] || [ -n "$remove" ]; then
-  [ -z "$fresh$window" ] || usage
-  [ -z "$close" ] || [ -z "$remove" ] || usage
-fi
+  [[ $feature =~ $kebab ]] || usage
+  case "$role" in spec|orchestrator|planner|phase) ;; *) usage ;; esac
+  if [ "$role" = phase ]; then
+    [[ $phase =~ $kebab ]] || usage
+  else
+    [ -z "$phase" ] || usage
+  fi
+  if [ -n "$update" ]; then
+    [ "$role" = spec ] || usage
+    [[ $update =~ ^[1-9][0-9]*$ ]] || usage
+  fi
+  if [ "$mode" != start ]; then
+    [ -z "$fresh$window" ] || usage
+  fi
 
-case "$role" in
-  spec)
-    if [ -n "$update" ]; then name=$feature-spec-$update; worktree_name=$name; else name=$feature-spec; worktree_name=$feature; fi ;;
-  orchestrator) name=$feature-orchestrator; worktree_name=$feature ;;
-  planner) name=$feature-planner; worktree_name=$name ;;
-  phase) name=$feature-phase-$phase; worktree_name=$name ;;
-esac
-feature_worktree=''
-[ "$worktree_name" != "$feature" ] || feature_worktree=1
-if [ -n "$remove" ] && [ -n "$feature_worktree" ]; then usage; fi
+  case "$role" in
+    spec)
+      if [ -n "$update" ]; then name=$feature-spec-$update; worktree_name=$name; else name=$feature-spec; worktree_name=$feature; fi ;;
+    orchestrator) name=$feature-orchestrator; worktree_name=$feature ;;
+    planner) name=$feature-planner; worktree_name=$name ;;
+    phase) name=$feature-phase-$phase; worktree_name=$name ;;
+  esac
+  first_spec=''
+  if [ "$role" = spec ] && [ -z "$update" ]; then first_spec=1; fi
+  if [ "$mode" = remove ] && [ "$worktree_name" = "$feature" ]; then usage; fi
+fi
 
 resolve() {
   (cd "$1" 2>/dev/null && pwd -P) || true
 }
 
-# Prints "pane_id width height window_id" for each pane with a claude process
-# among its descendants that matches $1. strict: started with --name $name.
-# both: strict, or a claude with no --name whose pane is in $worktree, which is
-# how workmux resurrect restarts a session. any: every claude.
+# Prints "pane_id width height window_id kind in_worktree" for each pane with a
+# claude process among its descendants. kind is strict when that claude was
+# started with --name <name>, other for any other --name, and nameless without
+# --name, which is how workmux resurrect restarts a session. A pane running
+# several claudes reports the closest match. in_worktree is 1 when the pane's
+# directory is <worktree>.
 session_panes() {
-  local mode=$1 tab panes pane_id pane_pid width height path window_id resolved_worktree=''
+  local session=$1 worktree_path=$2 tab panes pane_id pane_pid width height current_path window_id in_worktree resolved_worktree=''
   tab=$(printf '\t')
   panes=$(tmux list-panes -a -F "#{pane_id}${tab}#{pane_pid}${tab}#{pane_width}${tab}#{pane_height}${tab}#{pane_current_path}${tab}#{window_id}") || die 'tmux list-panes failed'
-  [ "$mode" = strict ] || [ -z "$worktree" ] || resolved_worktree=$(resolve "$worktree")
+  [ -z "$worktree_path" ] || resolved_worktree=$(resolve "$worktree_path")
   {
-    printf '%s\n' "$panes" | while IFS="$tab" read -r pane_id pane_pid width height path window_id; do
+    printf '%s\n' "$panes" | while IFS="$tab" read -r pane_id pane_pid width height current_path window_id; do
       [ -n "$pane_id" ] || continue
-      if [ -n "$resolved_worktree" ] && [ "$(resolve "$path")" = "$resolved_worktree" ]; then path=1; else path=0; fi
-      printf 'pane %s %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$width" "$height" "$window_id" "$path"
+      in_worktree=0
+      if [ -n "$resolved_worktree" ] && [ "$(resolve "$current_path")" = "$resolved_worktree" ]; then in_worktree=1; fi
+      printf 'pane %s %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$width" "$height" "$window_id" "$in_worktree"
     done
     ps -A -o pid=,ppid=,args=
-  } | awk -v name="$name" -v mode="$mode" '
+  } | awk -v name="$session" '
     $1 == "pane" { pane_pid[$3] = $2; info[$2] = $2 " " $4 " " $5 " " $6; in_worktree[$2] = $7; next }
     {
       parent[$1] = $2
@@ -126,64 +151,25 @@ session_panes() {
       claude[$1] = strict ? "strict" : (named ? "other" : "nameless")
     }
     END {
+      rank["other"] = 1; rank["nameless"] = 2; rank["strict"] = 3
       for (pid in claude) {
         for (p = pid; p != "" && p > 1; p = parent[p]) {
           if (!(p in pane_pid)) continue
           pane = pane_pid[p]
-          kind = claude[pid]
-          if (mode == "any" || kind == "strict" || (mode == "both" && kind == "nameless" && in_worktree[pane] == 1)) found[pane] = 1
+          if (rank[claude[pid]] > rank[kind[pane]]) kind[pane] = claude[pid]
           break
         }
       }
-      for (pane in found) print info[pane]
+      for (pane in kind) print info[pane], kind[pane], in_worktree[pane]
     }'
 }
 
-worktree=''
-if [ -n "$close" ]; then
-  require tmux
-  matches=$(session_panes strict)
-  [ -n "$matches" ] || { printf 'absent %s\n' "$name"; exit 0; }
-  [ "$(printf '%s\n' "$matches" | wc -l)" -eq 1 ] || die "more than one pane runs $name: $(printf '%s\n' "$matches" | awk '{print $1}' | tr '\n' ' ')"
-  pane=${matches%% *}
-  tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
-  printf 'closed %s pane=%s\n' "$name" "$pane"
-  exit 0
-fi
-
-if [ -n "$remove" ]; then
-  require workmux tmux
-else
-  require tmux workmux claude
-fi
-
-worktree=$(workmux path "$worktree_name" 2>/dev/null) || worktree=''
-
-if [ -z "$remove" ] && [ -z "$window" ]; then
-  [ "$role" = spec ] && [ -n "$feature_worktree" ] && [ -z "$worktree" ] || usage
-fi
-
-matches=$(session_panes both)
-if [ -n "$matches" ] && [ "$(printf '%s\n' "$matches" | wc -l)" -gt 1 ]; then
-  die "more than one pane runs $name: $(printf '%s\n' "$matches" | awk '{print $1}' | tr '\n' ' ')"
-fi
-live_pane=${matches%% *}
-
-if [ -n "$remove" ]; then
-  [ -n "$worktree" ] || refuse 'no such worktree'
-  [ -z "$live_pane" ] || refuse "a live session in pane $live_pane"
-  dirty=$(git -C "$worktree" status --porcelain) || die "git -C $worktree status failed"
-  [ -z "$dirty" ] || refuse "dirty worktree $worktree"
-  git merge-base --is-ancestor "$worktree_name" "$feature" || refuse "branch $worktree_name not merged into $feature"
-  workmux remove "$worktree_name" --keep-branch --force >&2 || die "workmux remove $worktree_name failed"
-  printf 'removed %s worktree=%s\n' "$name" "$worktree"
-  exit 0
-fi
-
-if [ -n "$live_pane" ]; then
-  printf 'alive %s pane=%s\n' "$name" "$live_pane"
-  exit 0
-fi
+find_live_pane() {
+  local matches
+  matches=$(session_panes "$name" "$worktree" | awk '$5 == "strict" || ($5 == "nameless" && $6 == 1)')
+  at_most_one "pane runs $name" "$matches"
+  live_pane=${matches%% *}
+}
 
 default_branch() {
   local ref
@@ -196,55 +182,6 @@ default_branch() {
   fi
 }
 
-target_pane=''
-split=''
-if [ -z "$worktree" ]; then
-  if [ "$role" = orchestrator ]; then
-    die "the feature worktree $feature does not exist; start the spec writer first"
-  elif [ -n "$feature_worktree" ]; then
-    branch=$(default_branch)
-    git fetch -q origin "$branch" || die "git fetch origin $branch failed"
-    windows_before=" $(tmux list-windows -a -F '#{window_id}' | tr '\n' ' ') "
-    workmux add "$feature" --base "origin/$branch" -C >&2 || die "workmux add $feature failed"
-  else
-    workmux add "$worktree_name" --headless --base "$feature" >&2 || die "workmux add $worktree_name failed"
-  fi
-  worktree=$(workmux path "$worktree_name") || die "workmux path $worktree_name failed after workmux add"
-  if [ -n "$feature_worktree" ]; then
-    resolved_worktree=$(resolve "$worktree")
-    new_windows=$(tmux list-panes -a -F '#{window_id} #{pane_current_path}' | while read -r window_id path; do
-      [[ $windows_before != *" $window_id "* ]] || continue
-      [ "$(resolve "$path")" != "$resolved_worktree" ] || printf '%s\n' "$window_id"
-    done | sort -u)
-    [ -n "$new_windows" ] && [ "$(printf '%s\n' "$new_windows" | wc -l)" -eq 1 ] || die "expected one new window for $worktree after workmux add, found: ${new_windows:-none}"
-    target_pane=$(tmux list-panes -t "$new_windows" -F '#{pane_id}' | head -n 1)
-  fi
-fi
-
-if [ -z "$target_pane" ]; then
-  split=1
-  window_panes=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_width} #{pane_height} #{window_id}') || die "tmux list-panes -t $window failed"
-  candidates=$(session_panes any | awk -v window="$window" '$4 == window')
-  [ -n "$candidates" ] || candidates=$window_panes
-  read -r target_pane width height _ <<EOF
-$(printf '%s\n' "$candidates" | awk '{ area = $2 * $3; if (area > best) { best = area; line = $0 } } END { print line }')
-EOF
-  if [ "$width" -gt $((2 * height)) ]; then direction=-h; else direction=-v; fi
-fi
-
-roadmap_pattern='^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}-(.*)$'
-roadmap=- plan=-
-if [ -d "$worktree/.foundry/feature-roadmaps" ]; then
-  found=$(cd "$worktree/.foundry/feature-roadmaps" && for entry in *; do
-    [ -d "$entry" ] && [[ $entry =~ $roadmap_pattern ]] && [ "${BASH_REMATCH[1]}" = "$feature" ] && printf '%s\n' "$entry"
-  done || true)
-  if [ -n "$found" ]; then
-    [ "$(printf '%s\n' "$found" | wc -l)" -eq 1 ] || die "more than one roadmap for $feature in $worktree/.foundry/feature-roadmaps: $(printf '%s\n' "$found" | tr '\n' ' ')"
-    roadmap=.foundry/feature-roadmaps/$found
-    plan=.foundry/plans/$found/README.md
-  fi
-fi
-
 new_conversation_id() {
   if command -v uuidgen >/dev/null 2>&1; then
     uuidgen | tr 'A-Z' 'a-z'
@@ -253,29 +190,131 @@ new_conversation_id() {
   fi
 }
 
-markers=$(git -C "$worktree" rev-parse --git-path s-stack-sessions) || die "git -C $worktree rev-parse failed"
-case "$markers" in /*) ;; *) markers=$worktree/$markers ;; esac
-marker=$markers/$name
-if [ -z "$fresh" ] && [ -s "$marker" ]; then
-  conversation_flag=--resume
-  conversation_id=$(head -n 1 "$marker")
-else
-  conversation_flag=--session-id
-  conversation_id=$(new_conversation_id) || die 'cannot make a conversation id: neither uuidgen nor /proc/sys/kernel/random/uuid works'
-fi
+cmd_print_window() {
+  require tmux
+  [ -n "${TMUX_PANE:-}" ] || die 'not inside tmux'
+  printf 'window=%s\n' "$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}')"
+}
 
-prompt="/sam-mode $role feature=$feature phase=${phase:--} update=${update:--} roadmap=$roadmap plan=$plan orchestrator=$feature-orchestrator"
-# The trailing shell keeps the pane open after claude exits, so its last output stays visible.
-command="claude --name $(printf %q "$name") $conversation_flag $(printf %q "$conversation_id") $(printf %q "$prompt"); exec \"\${SHELL:-/bin/sh}\" -l"
+cmd_close() {
+  require tmux
+  local matches pane
+  matches=$(session_panes "$name" '' | awk '$5 == "strict"')
+  [ -n "$matches" ] || { printf 'absent %s\n' "$name"; return; }
+  at_most_one "pane runs $name" "$matches"
+  pane=${matches%% *}
+  tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
+  printf 'closed %s pane=%s\n' "$name" "$pane"
+}
 
-if [ -n "$split" ]; then
-  target_pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" "$command") || exit 4
-else
-  tmux respawn-pane -k -t "$target_pane" -c "$worktree" "$command" || die "tmux respawn-pane -t $target_pane failed"
-fi
+cmd_remove() {
+  require workmux tmux
+  local dirty
+  worktree=$(workmux path "$worktree_name" 2>/dev/null) || refuse 'no such worktree'
+  find_live_pane
+  [ -z "$live_pane" ] || refuse "a live session in pane $live_pane"
+  dirty=$(git -C "$worktree" status --porcelain) || die "git -C $worktree status failed"
+  [ -z "$dirty" ] || refuse "dirty worktree $worktree"
+  git merge-base --is-ancestor "$worktree_name" "$feature" || refuse "branch $worktree_name not merged into $feature"
+  workmux remove "$worktree_name" --keep-branch --force >&2 || die "workmux remove $worktree_name failed"
+  printf 'removed %s worktree=%s\n' "$name" "$worktree"
+}
 
-if [ "$conversation_flag" = --session-id ]; then
-  mkdir -p "$markers" && printf '%s\n' "$conversation_id" > "$marker" || die "cannot write the session marker $marker"
-fi
+cmd_start() {
+  require tmux workmux claude
+  worktree=$(workmux path "$worktree_name" 2>/dev/null) || worktree=''
+  if [ -z "$window" ]; then
+    [ -n "$first_spec" ] && [ -z "$worktree" ] || usage
+  fi
 
-printf 'started %s pane=%s worktree=%s\n' "$name" "$target_pane" "$worktree"
+  find_live_pane
+  if [ -n "$live_pane" ]; then
+    printf 'alive %s pane=%s\n' "$name" "$live_pane"
+    return
+  fi
+
+  target_pane=''
+  split=''
+  if [ -z "$worktree" ]; then
+    if [ "$role" = orchestrator ]; then
+      die "the feature worktree $feature does not exist; start the spec writer first"
+    elif [ -n "$first_spec" ]; then
+      branch=$(default_branch)
+      git fetch -q origin "$branch" || die "git fetch origin $branch failed"
+      windows_before=" $(tmux list-windows -a -F '#{window_id}' | tr '\n' ' ') "
+      # workmux resurrect restores only sessions that ran in their worktree's own workmux window.
+      workmux add "$feature" --base "origin/$branch" -C >&2 || die "workmux add $feature failed"
+    else
+      workmux add "$worktree_name" --headless --base "$feature" >&2 || die "workmux add $worktree_name failed"
+    fi
+    worktree=$(workmux path "$worktree_name") || die "workmux path $worktree_name failed after workmux add"
+    if [ -n "$first_spec" ]; then
+      resolved_worktree=$(resolve "$worktree")
+      new_windows=$(tmux list-panes -a -F '#{window_id} #{pane_current_path}' | while read -r window_id path; do
+        [[ $windows_before != *" $window_id "* ]] || continue
+        [ "$(resolve "$path")" != "$resolved_worktree" ] || printf '%s\n' "$window_id"
+      done | sort -u)
+      [ -n "$new_windows" ] || die "no new window for $worktree after workmux add"
+      at_most_one "new window for $worktree after workmux add" "$new_windows"
+      target_pane=$(tmux list-panes -t "$new_windows" -F '#{pane_id}' | head -n 1)
+    fi
+  fi
+
+  if [ -z "$target_pane" ]; then
+    split=1
+    window_panes=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_width} #{pane_height} #{window_id}') || die "tmux list-panes -t $window failed"
+    candidates=$(session_panes "$name" '' | awk -v window="$window" '$4 == window')
+    [ -n "$candidates" ] || candidates=$window_panes
+    read -r target_pane width height _ <<EOF
+$(printf '%s\n' "$candidates" | awk '{ area = $2 * $3; if (area > best) { best = area; line = $0 } } END { print line }')
+EOF
+    if [ "$width" -gt $((2 * height)) ]; then direction=-h; else direction=-v; fi
+  fi
+
+  roadmap_pattern='^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}-(.*)$'
+  roadmap=- plan=-
+  if [ -d "$worktree/.foundry/feature-roadmaps" ]; then
+    found=$(cd "$worktree/.foundry/feature-roadmaps" && for entry in *; do
+      [ -d "$entry" ] && [[ $entry =~ $roadmap_pattern ]] && [ "${BASH_REMATCH[1]}" = "$feature" ] && printf '%s\n' "$entry"
+    done || true)
+    if [ -n "$found" ]; then
+      at_most_one "roadmap for $feature in $worktree/.foundry/feature-roadmaps" "$found"
+      roadmap=.foundry/feature-roadmaps/$found
+      plan=.foundry/plans/$found/README.md
+    fi
+  fi
+
+  markers=$(git -C "$worktree" rev-parse --git-path s-stack-sessions) || die "git -C $worktree rev-parse failed"
+  case "$markers" in /*) ;; *) markers=$worktree/$markers ;; esac
+  marker=$markers/$name
+  if [ -z "$fresh" ] && [ -s "$marker" ]; then
+    conversation_flag=--resume
+    conversation_id=$(head -n 1 "$marker")
+  else
+    conversation_flag=--session-id
+    conversation_id=$(new_conversation_id) || die 'cannot make a conversation id: neither uuidgen nor /proc/sys/kernel/random/uuid works'
+  fi
+
+  prompt="/sam-mode $role feature=$feature phase=${phase:--} update=${update:--} roadmap=$roadmap plan=$plan orchestrator=$feature-orchestrator"
+  # The trailing shell keeps the pane open after claude exits, so its last output stays visible.
+  pane_command="claude --name $(printf %q "$name") $conversation_flag $(printf %q "$conversation_id") $(printf %q "$prompt"); exec \"\${SHELL:-/bin/sh}\" -l"
+
+  if [ -n "$split" ]; then
+    target_pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" "$pane_command") || cannot_split
+  else
+    tmux respawn-pane -k -t "$target_pane" -c "$worktree" "$pane_command" || die "tmux respawn-pane -t $target_pane failed"
+  fi
+
+  if [ "$conversation_flag" = --session-id ]; then
+    mkdir -p "$markers" && printf '%s\n' "$conversation_id" > "$marker" || die "cannot write the session marker $marker"
+  fi
+
+  printf 'started %s pane=%s worktree=%s\n' "$name" "$target_pane" "$worktree"
+}
+
+case "$mode" in
+  start) cmd_start ;;
+  close) cmd_close ;;
+  remove) cmd_remove ;;
+  print-window) cmd_print_window ;;
+esac

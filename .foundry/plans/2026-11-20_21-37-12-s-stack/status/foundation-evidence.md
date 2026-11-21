@@ -172,3 +172,12 @@ A fresh verifier reran the whole skill with the main checkout's venv. Checks 1, 
 The cold read that proves the fix was given only `SKILL.md`, the reference and `handbooks/phase-session.md`. It said a phase in Review with VERIFIED and CLEAR verdicts for its code head moves to PR, that the reference owns the merge rule a phase checks, that `handbooks/orchestrator.md` owns only the orchestrator's further checks, and that the files do not contradict each other.
 
 Every **Done when** item that still applies passed, including `apm audit --ci` with no install (`All 10 check(s) passed`). The only defect found is the minor one already recorded: the package README's requirements omit `gh stack`. The full report is in the phase session's scratchpad as `verify-round2b.md`.
+
+## Follow-up round, Review: SIGNIFICANT at `98999eef74b7d80f3c83160ef8fa4b439790c2aa`
+
+Two reviewers, Opus and Fable, reviewed `e92c913` and `98999ee` and reran the earlier significant probe.
+
+- The probe now passes for both. Given only `SKILL.md`, the reference and `handbooks/phase-session.md`, each reader named one owner of the merge rule and moved to PR on the two verdicts.
+- Both found the same significant finding. `checks/foundation.md` line 51 still says the run decision on `prs-open` re-merges makes the Verdicts rule "a condition of the merge rule rather than the whole of it", while lines 45, 89 and 91 say it is the merge rule. A cold read of the check file could not settle how to grade an answer between them. Both judged the impact small.
+- Clean under both: the C2 check, which exits 1 on every rewording tried; cold read 3; `apm install` and `apm audit --ci` in `packages/s-stack`; the validator and markdown lint. No other handbook states who owns the merge rule.
+- Noted by Fable, not caused by this round: `versioning.py check origin/main` fails because `main` already carries s-stack 0.1.3. The PR creator's regenerate commit raises the version on the pull request branch.

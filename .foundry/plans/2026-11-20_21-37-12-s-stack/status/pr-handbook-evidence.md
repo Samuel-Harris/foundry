@@ -208,3 +208,17 @@ Defects, both significant, both in `mine_branch`:
 - **Defect 2: another phase's unproved local branch reaches our pushed pull request.** In the stack `pr1` (ours) ← `x` (another phase) ← `pr2` (ours), `x`'s newest reachable non-merge commit can be our carried fix. A crashed round that left `x` ahead with `u.txt` is then read locally, the proof prints `EQUAL`, and `origin/pr2` holds `u.txt`.
 
 The phase session's judgement: two heuristics for "this phase's branch" have failed. The PR creator creates its own branches, so the round should name them instead of inferring them.
+
+## Verify: VERIFIED at `697c739bd6e0f74b9de3e8d918196ea947afd469`
+
+A fourteenth fresh verifier covered `e81ff27` plus its own check-file commit `697c739`. That commit makes the harness export `OWN`, and adds three cases: a mixed stack where the parent only merges, a crashed foreign branch, and a branch missing from `OWN`. All three fail on the `e57cbea` script.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING.
+- **Check 8.** It passed for `board`, with 50 `ok` lines, and for `foundation`, `phase-handbooks` and `spec-planner-handbooks`. For `pr-handbook.md`, `bash -n` passed, the scratch block printed 85 PASS and `0 failed`, the budget is 153/200, and the `STOP` cold read agreed on all eleven points.
+- **Independent rerun.** The phase session reran the scratch block from outside the repository: 85 PASS and `0 failed`, with the branch list unchanged.
+- **Every Done when item and decisions d1 to d13 hold.**
+
+Findings, carried to the round after Review:
+
+- **Minor, could mislead.** `pr-creator.md` defines `<own branches>` as "the ones you create", but a fresh PR creator in a later fix round did not create the earlier branches. Leaving them out gives a false `STOP`, or a child pushed without its parent's new head, which the next round heals. Suggested wording: every pull request branch of this phase, including those opened in earlier rounds.
+- **Minor.** An empty or missing `OWN` is accepted silently. The script could refuse a refresh whose `<pr>` is not in `OWN`.

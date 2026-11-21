@@ -279,13 +279,15 @@ class IdlePaneTests(LauncherTestCase):
             self.skipTest("zsh is not installed")
         return zsh
 
+    # Each shell blocks in the read builtin, so it is the only foreground process
+    # and only its argument list can show that it is busy.
     def test_a_shell_running_a_script_is_busy(self) -> None:
         script = self.tmp / "build.sh"
-        script.write_text("sleep 60\n")
+        script.write_text("read -r line\n")
         self.assert_busy(command=["bash", str(script)], ready=f"bash {script}")
 
     def test_a_shell_running_a_command_is_busy(self) -> None:
-        self.assert_busy(command=["sh", "-c", "sleep 61; true"], ready="sh -c sleep 61; true")
+        self.assert_busy(command=["sh", "-c", "read -r line; true"], ready="sh -c read -r line; true")
 
     def test_a_bare_interactive_bash_is_idle(self) -> None:
         self.assert_idle(command=["bash"], ready="bash")

@@ -110,3 +110,15 @@ A seventh fresh verifier ran the whole verification skill, then this phase's own
 - Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
 - Private-name search at 16:51:45 over the phase diff's files, its text and 38 commit messages: 0 matches.
 - Cold readers' remarks, none failing a check: the move back to Implement after a merge sits only in the message table; "Read first" and "After a restart" overlap; how to tell a scope change from a conflict with the feature plan.
+
+## Review: CLEAR at `c666afdc929b1e05e49decda745d79b469f0333f`
+
+A later review covered `c666afd`, with clean merges `ed38da7` and `161c7c7`. Two reviewers, Opus and Fable, each in a detached worktree at `69ccdf2`. All ten probes from the earlier significant findings pass, in both reviewers' runs. Each reviewer added its own cold reads against the new Evidence wording: a code head made by a merge, a later phase's verifier, and another phase's one-off check. None broke the change. Markdownlint reported 0 errors, and `versioning.py check origin/main` reported no package without a bump.
+
+Not significant, recorded only:
+
+- "after every merge" in the Evidence row could, read alone, suggest that a head made by a merge is exempt. The row's next sentences settle it, and every reader acted correctly.
+- No sentence says outright that another phase's Evidence checks fall outside the verdict. Readers inferred it from "your own check file".
+- Step 1's "your own check file" assumes the phase has one. A None phase's reader filled the gap correctly.
+- Older gaps in `phase-session.md`: the state for a developer instruction received in PR, a verifier commit that checks the work of all pull requests, and no Verify row for a stale VERIFIED.
+- Older wording in `verifier.md`: "needs no verification" against "needs no checks of its own".

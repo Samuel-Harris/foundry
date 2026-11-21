@@ -66,6 +66,8 @@ The merge commit and the carried commits run no hook. A stop prints `STOP` lines
 | `<path> changed on <branch> after the phase last took it, so the phase must merge it first` | An owned path is stale |
 | `<path> conflicts outside generated content`, `<commit> does not apply`, then `<path> is a shared path, so the stop is permanent: no merge or commit on the phase clears it, and it needs a decision` | A shared path's replay or carry conflicts |
 | `<path> conflicts outside generated content` alone | An open dependency conflicts with the base or with another dependency |
+| `<pr> would carry <path>, which the phase does not change` | The pull request's own commits touch a path off the phase's first-parent line: a delegate's branch merged into the phase, or a third-row dependency whose old head GitHub rewrote. The check runs before anything is recorded |
+| `<path> cannot be written into the tree, as when a file and a directory share its name` | The phase replaced a file with a directory of the same name, or the reverse |
 | `the branch is back at <commit>` | Follows a failed carry |
 
 A shared path's stop is permanent because the refresh replays only the phase's original commits on it. A merge of the default branch into the phase, or a resolution commit, never changes those commits' context on the pull request's base.
@@ -96,7 +98,7 @@ The proof relies on three rules from the other handbooks. When one is broken, it
 
 - **The phase merges the orchestrator branch with `git merge --no-ff`.** A fast-forward puts the orchestrator's merges on the phase's first-parent line, and the phase's own commits then drop out of the phase commits. The proof prints `<pr>: it changes <path>, which the phase does not`.
 - **The orchestrator commits nothing outside `.foundry/`.** An orchestrator commit outside `.foundry/`, or another phase's branch squash-merged into the phase, becomes a phase commit that no pull request carries. The proof prints `<path> has not landed and is in no open pull request`.
-- **The phase's own commits sit on its first-parent line.** A delegate's branch merged into the phase leaves its commits off that line, so a pull request that carries them prints `<pr>: it changes <path>, which the phase does not`. Commits taken with `git cherry-pick -x` are phase commits, and the proof handles them.
+- **The phase's own commits sit on its first-parent line.** A delegate's branch merged into the phase leaves its commits off that line, so the refresh stops with `<pr> would carry <path>, which the phase does not change`. Commits taken with `git cherry-pick -x` are phase commits, and the proof handles them.
 
 Two histories also print `NOT EQUAL` in every round, and the handbook sends both for a decision. When GitHub rewrites a third-row dependency's head after its parent merges, the proof prints `<pr>: it changes <file>, which the phase does not` for the dependency's files. When the phase replaces a file with a directory of the same name, the refresh prints `git checkout-index: <path> is not in the cache` and the proof prints the same `FAIL` with the file and directory names run together.
 
@@ -190,7 +192,7 @@ overlay() {
       for c in $(git rev-list --reverse --first-parent --no-merges "$PH" "^$D" -- ":(literal)$x"); do
         grep -q -x -F "$c" "$W/mine" || continue; apply_c "$c" ":(literal)$x" || return 1
       done
-    else put "$x" "$PH"; fi
+    else put "$x" "$PH" || { echo "STOP $x cannot be written into the tree, as when a file and a directory share its name"; return 1; }; fi
   done
 }
 trailer() {
@@ -199,7 +201,7 @@ trailer() {
 }
 carry() {
   local c x; for c; do
-    for x in $(paths "$c"); do if unacc "$x" "$c"; then apply_c "$c" ":(literal)$x" || return 1; else put "$x" "$c"; fi; done
+    for x in $(paths "$c"); do if unacc "$x" "$c"; then apply_c "$c" ":(literal)$x" || return 1; else put "$x" "$c" || { echo "STOP $x cannot be written into the tree, as when a file and a directory share its name"; return 1; }; fi; done
     git diff --cached --quiet || { trailer "$c" && git commit -q --no-verify -F "$W/msg" --author="$(git log -1 --format='%an <%ae>' "$c")" --date="$(git log -1 --format=%ad --date=raw "$c")"; } || return 1
   done
 }
@@ -224,6 +226,8 @@ refresh() {
   stale "$D" $(refs "$extra") $(outside "$base") || exit 1
   [ ${#new_c[@]} = 0 ] || carry "${new_c[@]}" || { git reset -q --hard "$head"; echo "STOP the branch is back at $head"; exit 1; }
   mine=($(own HEAD "$D" "$base" $(list "$extra") $(list "$merged"))); accounted HEAD $(refs "$merged")
+  paths $(git rev-list --first-parent --no-merges "$PH" "^$D") > "$W/pp"
+  for x in $(paths "${mine[@]}" | grep -v -x -F -f "$W/pp"); do git reset -q --hard "$head"; echo "STOP $pr would carry $x, which the phase does not change"; exit 1; done
   at "$(ref "$base")" && merge_in $(echo "$tips" | sed 1d) && overlay "${mine[@]}" || { done_at "$wt"; git reset -q --hard "$head"; exit 1; }
   t=$(git write-tree); done_at "$wt"
   new=$(for x in $tips; do git merge-base --is-ancestor "$x" HEAD || echo "$x"; done)

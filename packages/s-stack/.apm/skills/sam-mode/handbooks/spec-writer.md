@@ -41,7 +41,7 @@ The directory is `.foundry/feature-roadmaps/<id>/`, where `<id>` is `<date-time>
    ```
 
    The first prints `window=<window id>` for your own pane. Pass that value to the second. The launcher writes the orchestrator's first prompt, so hand the orchestrator nothing else. If either command fails, report its exit code and standard error to the developer and stop.
-8. **Stop.** Report the launcher's output line to the developer and do no further work. The feature worktree then has one live session, and the developer can close your pane.
+8. **Stop.** Report the second command's output line to the developer and do no further work. The feature worktree then has one live session, and the developer can close your pane.
 
 ## Updating a roadmap
 

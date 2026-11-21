@@ -78,3 +78,16 @@ A third fresh verifier changed no verification file, so the verdict covers `b27c
 The review fixes behave. In a `git archive HEAD -- . ':(exclude).foundry'` export, the C2 check printed `PENDING: .foundry/ is absent...`, exit 0. After the skill's Cleanup, `find packages -mindepth 2 -maxdepth 2 -type d -empty` printed nothing and `git status --short` was clean.
 
 Every **Done when** item passed. `apm audit --ci` in a fresh detached worktree at `b27c4f1` with no install printed `All 10 check(s) passed`. A private-names grep over every changed file and commit message found nothing. The full report is in the phase session's scratchpad as `verify-gate-3.md`.
+
+## Review: SIGNIFICANT at `b27c4f18e17a1e0492274a936810619ab28a708c`
+
+The second `interrogate` run, Opus and Fable, covered `git diff 0f4bf86 b27c4f1` outside `.foundry/`. The phase session reran the first finding and saw it reproduce.
+
+| Finding | Found by | Severity | Proof |
+| --- | --- | --- | --- |
+| Regression: check 5 strips fences with a regular expression before code spans, so two inline `` `~~~` `` spans hide every link between them. The checker at `0f4bf86` caught the same file. | Fable | Significant | Probe file, check 5 printed `no relative link leaves packages/s-stack`, exit 0 |
+| A longer fence holding a shorter one, or a code span holding three backticks, also hides or invents links. Unquoted or uppercase HTML attributes and a reference definition in a blockquote are missed. | Both | Low, same cause | CommonMark (markdown-it-py) output compared with the checker's |
+| On a tree without `.foundry/`, the C2 check returns PENDING before its code-head comparison, which needs nothing from `.foundry/`, so a reworded rule passes there. Run from a subdirectory, it also claims `.foundry/` is absent. | Fable | Significant | Mutated export, `PENDING ...`, exit 0 |
+| The empty-folder cleanup pattern also matches nested `.github` folders and names starting with `.github`, which can make its own post-check fail | Opus | Low | Scratch tree; nothing with content was deleted |
+
+Clean under both: the reference's new emoji sentence is true for PyYAML 6.0.4, the C2 check on the worktree, install and audit in `packages/s-stack`, `FOUNDRY_CHECK_ALL=1` pre-commit, and `versioning.py check`.

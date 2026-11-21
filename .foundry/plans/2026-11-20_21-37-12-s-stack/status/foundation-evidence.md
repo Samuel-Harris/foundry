@@ -70,3 +70,11 @@ p-stack's `interrogate` ran two adversaries, on Opus and Fable, each in its own 
 | C2's `json.dumps` quoting does not round-trip characters outside the Basic Multilingual Plane through PyYAML | Both | Low, contract | Sent to the orchestrator as `foundation-r2` |
 
 Both adversaries ran Tier 1 (`all Tier 1 structural checks passed across 20 packages`), root install and audit, the pre-commit hook in check-all mode, `versioning.py check`, and scratch-consumer installs for each target, all clean.
+
+## Verify: VERIFIED at `b27c4f18e17a1e0492274a936810619ab28a708c`
+
+A third fresh verifier changed no verification file, so the verdict covers `b27c4f1`. All eight checks ran as written: 1, 2, 3, 5, 7 and 8 PASS, 4 and 6 PENDING as planned. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0. Check 8 ran four Rerun checks: three cold reads, all matched, and "Status header matches C2", which printed `reference matches C2 apart from the allowed differences`.
+
+The review fixes behave. In a `git archive HEAD -- . ':(exclude).foundry'` export, the C2 check printed `PENDING: .foundry/ is absent...`, exit 0. After the skill's Cleanup, `find packages -mindepth 2 -maxdepth 2 -type d -empty` printed nothing and `git status --short` was clean.
+
+Every **Done when** item passed. `apm audit --ci` in a fresh detached worktree at `b27c4f1` with no install printed `All 10 check(s) passed`. A private-names grep over every changed file and commit message found nothing. The full report is in the phase session's scratchpad as `verify-gate-3.md`.

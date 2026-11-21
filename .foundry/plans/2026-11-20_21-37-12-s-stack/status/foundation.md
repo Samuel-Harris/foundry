@@ -1,7 +1,7 @@
 ---
 phase: "foundation"
-state: "Verify"
-changed_at: "2026-11-21T14:51:35Z"
+state: "Review"
+changed_at: "2026-11-21T14:57:22Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
 code_head: "b27c4f18e17a1e0492274a936810619ab28a708c"
@@ -22,6 +22,11 @@ verdicts:
     code_head: "0f4bf86be72cef85833be3096e3cbf9fc85b59ff"
     at: "2026-11-21T14:48:05Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "b27c4f18e17a1e0492274a936810619ab28a708c"
+    at: "2026-11-21T14:57:22Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -37,7 +42,7 @@ decisions:
 
 # Phase `foundation` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The first Review gate returned SIGNIFICANT at 0f4bf86. The fix round (ce16529, c68877a, b27c4f1) repaired the verification files and added the foundation-d2 sentence. s-stack-package was merged at 5b346fa. The third Verify gate is running.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The first Review gate returned SIGNIFICANT at 0f4bf86. The fix round (ce16529, c68877a, b27c4f1) repaired the verification files and added the foundation-d2 sentence. s-stack-package was merged at 5b346fa. The third Verify gate returned VERIFIED at b27c4f1. The Review gate covers the commits since 0f4bf86.
 
 ## Notes
 

@@ -23,7 +23,7 @@ A merge of another branch is the one commit that may bring files under `.foundry
 
 ## Verdicts
 
-Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small.
+Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small. Whenever the phase is past Implement and no verdict covers its current code head, move back to Implement.
 
 ## Changing state
 
@@ -84,14 +84,14 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 1. Move to PR once the reference file's merge rule holds for the current code head.
 2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request only for commits that the phase plan assigns to a new one.
 3. Record each pull request in `pull_requests`, then send `prs-open` with each number and its `depends_on` list.
-4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done.
+4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done only if the phase is in PR. In any other state, ignore the notice and send `state` with your current state.
 
 ## Messages from the orchestrator
 
 | Kind | What you do |
 | --- | --- |
 | `answer` | Record the outcome in `decisions`, commit, and continue the work that waited. |
-| `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. |
+| `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. A notice that every pull request has merged is handled as [PR](#pr) step 4 says. |
 | `merge-orchestrator-branch` | Merge as in [Merge the orchestrator branch](#merge-the-orchestrator-branch), once nothing is half done. If the merge moved the code head and the phase was in Verify or later, move back to Implement. If the code head did not move, the phase keeps its state and its verdicts. |
 | `fix-round` | Run the fix round below that matches it. In every fix round, the PR creator works out each pull request's base again, as `pr-creator.md` says. |
 | `move-back` | Move back as in [Moving back](#moving-back). |
@@ -106,7 +106,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 3. Start a PR creator to carry the fix commits to the pull request branch that owns each one.
 4. Move to PR and report. The orchestrator merges the phase branch again.
 
-**A pull request merged elsewhere.** A pull request yours depend on has merged, or another phase's pull request has landed on the default branch and left your generated files stale. Start a PR creator to refresh each of your pull request branches, as `pr-creator.md` says. The phase branch does not change, so the phase stays in PR and no gate runs again.
+**A pull request merged.** One that your pull requests depend on has merged, or another phase's pull request has landed on the default branch and left your generated files stale. Start a PR creator to refresh each of your pull request branches, as `pr-creator.md` says. Record each pull request's base and `depends_on` in `pull_requests`, then send `prs-open`. The phase branch does not change, so the phase stays in PR and no gate runs again.
 
 **A conflict with the default branch.** The message names the conflicting paths, which you own, and the default branch commit. Move back to Implement, merge that commit into the phase branch, resolve the conflict in your own paths, and pass both gates again before you report.
 
@@ -118,7 +118,7 @@ A `move-back` names the state and what changed.
 2. Stop the work that the change could invalidate. Continue only work it cannot touch.
 3. Record the new state and send `state`.
 4. Then act on the state:
-   - **Implement**, after the orchestrator branch failed its check once your phase merged. The message names the failed check. Fix it, then pass both gates again.
+   - **Implement**, whenever no verdict covers the current code head, as [Verdicts](#verdicts) says. One case is a failed check on the orchestrator branch after your phase merged, and the message then names the check. Fix what is needed, then pass both gates again.
    - **Plan**, after the planner changed your phase's entry. Merge the orchestrator branch, update the phase plan against the new entry, commit it, and move to Implement.
    - **Spec**, after a roadmap update touched your phase. Wait for a `move-back` to Plan, which the orchestrator sends once the update has merged.
 

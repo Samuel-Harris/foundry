@@ -62,12 +62,12 @@ Arm it with Claude Code's recurring scheduled task, every 20 minutes, off the ho
 Run the tick checklist in sam-mode's orchestrator handbook.
 ```
 
-Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip the default-branch merge in step 2 and the starts in step 3, and in step 4 merge only the frozen phase. Still run step 2's pull request duties, and still replace stalled sessions.
+Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip the default-branch merge in step 2 and the starts in step 3, and in step 4 merge only the frozen phase and the status-only merges of Finishing a phase. Still run step 2's pull request duties, and still replace stalled sessions.
 
 1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick.
 2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says. Then, if it has moved past the last handled commit, run the pull request duties once and record its tip as handled. The duties are: if any of the new commits came from one of the feature's pull requests, or changed a package that the feature's generated files depend on, run [When a feature pull request lands](#when-a-feature-pull-request-lands); and send another generated-only `fix-round` for each open pull request whose `needs_update` was already true.
 3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
-4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, so a failing post-merge check names one phase.
+4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, so a failing post-merge check names one phase. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
 5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
 6. **Record.** Update the tracker with the tick time, and commit it.
 7. **Publish.** Write the board's changed documents in one database batch. When a phase merged or a roadmap update merged, have a fresh subagent update the architecture page.
@@ -93,7 +93,7 @@ To abort a merge, run `git merge --abort`. If it refuses because a hook or check
 4. Have a fresh subagent run the feature's verification skill on the orchestrator branch. Record the result in the tracker.
 5. If the check fails, the orchestrator branch is frozen until a later check passes. Send `move-back` to Implement to the phase, naming the failed check. Before it verifies again it merges the orchestrator branch, which holds the combination that failed. While frozen, start no phase, merge no other phase and not the default branch, and send `merge-orchestrator-branch` to no other phase. Merge the phase again only when both its newest verdicts name a code head newer than the one that failed.
 6. If it passes, send `merge-orchestrator-branch` to every other live phase that has not reached PR, and start the phases that now have their dependencies.
-7. After a passing check only, send the merged phase `stop`. Once its stop commit is on its branch, close its pane with `--close`. Its worktree stays until the phase is Done.
+7. After a passing check only, send the merged phase `stop`. [Finishing a phase](#finishing-a-phase) closes its pane once the stop commit lands. Its worktree stays until the phase is Done.
 
 ## Merging the default branch
 
@@ -116,7 +116,14 @@ A pull request's checks do not run again when its base moves. Two pull requests 
 
 A pull request is ready for the developer to merge only when its `needs_update` is false.
 
-When every pull request of a phase has merged, start the phase's session, which moves the phase to Done, and send it `stop`. Once its stop commit is on its branch, merge the branch as [Merging a phase](#merging-a-phase) steps 1 to 3 say, so its status commits reach the orchestrator branch. Then close its pane with `--close` and remove its worktree with `--remove`.
+## Finishing a phase
+
+In tick step 4, for each merged phase, do every step below whose condition holds. Each step is safe to repeat, so a step that waits on a commit happens in a later tick.
+
+- Its pane is open and the newest commit on its branch is a stop commit: close the pane with `--close`.
+- Every pull request has merged and its status is not Done: start its session, which moves the phase to Done, and send it `stop`.
+- Its status is Done, the newest commit on its branch is a stop commit, and the branch has commits the orchestrator branch lacks: merge them as [Merging a phase](#merging-a-phase) steps 1 to 3 say. They hold only status, so this merge runs while frozen and does not count against the one-merge limit.
+- Its status is Done and its branch is fully merged: close its pane with `--close` if it is open, and remove its worktree with `--remove`.
 
 ## Fix rounds and restacks
 

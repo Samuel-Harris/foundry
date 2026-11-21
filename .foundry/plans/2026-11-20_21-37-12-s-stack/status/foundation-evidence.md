@@ -110,3 +110,20 @@ The third `interrogate` run, Opus and Fable, covered `git diff b27c4f1 50e26ee` 
 - **Offline cold cache.** With a cold uv cache and no network, check 5 exits 1 with uv's resolution error. Checks 2 and 7 need the network in the same way.
 
 Both adversaries confirmed that the C2 check gives the intended result in every combination of plan present or absent and code-head rule matching or not, and that the cleanup loop deletes only empty folders under each package's own `.cursor/` and `.github/`.
+
+## PR: draft pull requests 81 and 82 for code head `50e26eebaa31524a81e0cc00d99edf4bdad0e2dc`
+
+A fresh PR creator replayed the phase's commits onto two branches cut from `origin/main` at `f7772cc`, without lockfile hunks or `.foundry/`, following C7.
+
+| Pull request | Branch and head | Base | Depends on | Hand-written lines |
+| --- | --- | --- | --- | --- |
+| [81](https://github.com/Samuel-Harris/foundry/pull/81) | `s-stack-foundation-package` at `fe20069` | `main` | None | 352, plus 5,270 generated lockfile lines |
+| [82](https://github.com/Samuel-Harris/foundry/pull/82) | `s-stack-verify-skill` at `78162e9` | `s-stack-foundation-package`, GitHub stack 83 | 81 | 310 against its parent |
+
+Pull request 81 ends with `chore(s-stack): regenerate generated files`. `versioning.py bump` printed `nothing to bump`, because s-stack is new on `main`. The regenerated lockfile is byte-identical to the phase branch's.
+
+On each branch, `FOUNDRY_DIFF_RANGE=origin/main...HEAD bash .githooks/pre-commit`, `versioning.py check origin/main` and Tier 1 (`all Tier 1 structural checks passed across 20 packages`) all exited 0.
+
+The equality proof in the form of Experiment 7 printed nothing on every "must print nothing" line, and its tree diff against `s-stack-phase-foundation` exited 0. The phase session checked independently: `git diff --stat origin/s-stack-verify-skill s-stack-phase-foundation -- . ':(exclude).foundry'` printed nothing, neither remote branch holds a file under `.foundry/`, and both pull requests are drafts.
+
+The PR creator pushed only these two branches, with plain pushes. The automatic permission check refused `gh stack submit --auto`, so it opened the drafts with `gh pr create --draft` and linked them with `gh stack link 81 82`.

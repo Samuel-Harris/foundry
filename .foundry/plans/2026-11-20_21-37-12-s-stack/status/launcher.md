@@ -122,6 +122,10 @@ decisions:
     decision: "A pane counts as idle when its foreground process is a shell (pane_current_command is sh, bash, zsh, dash, fish, ksh, tcsh or csh). That replaces the no-child rule, so background prompt helpers do not make it busy and an exec'd command does. Restart reuse and --close both use it. A lock is a symlink whose target is the holder's PID and start time, read with LC_ALL=C TZ=UTC. A stale lock is removed only under a breaker lock, after the record is read again."
     door: "two-way"
     at: "2026-11-21T22:20:06Z"
+  - id: "launcher-d16"
+    decision: "From the orchestrator: idleness reads the full argument list of every process in the pane's foreground group with LC_ALL=C. Only an interactive shell with no script and no -c command is idle, so bash build.sh and sh -c are busy and -zsh, zsh -l and bash are idle. Unusual login shells never count as idle, which is safe."
+    door: "two-way"
+    at: "2026-11-21T23:11:10Z"
 ---
 
 # Phase launcher status

@@ -80,3 +80,13 @@ Notes recorded and not fixed, because each repeats a correct message and leads n
 - In the tick that first sets `needs_update`, the any-move resend can read as a second generated-only round.
 - While a default-branch merge stays aborted, each tick retries it and resends the same `fix-round` or notice.
 - Several timings are not stated: when the `needs_update` clearing test runs, where the Done merge sits relative to the one-merge limit and the freeze, the seeding of a newly added phase, the meaning of a "newer" code head, and the tracker's first default-branch commit.
+
+## Review 2, code head `7ccd3ee91dc0e7d8a18cce43d64f663678b8ed8f`, SIGNIFICANT
+
+`interrogate` over the commits since `e0a51a2`, with two adversaries on Opus and Fable in their own worktrees. The Gemini seat was dropped. The phase session reran each script and checked each cold read against the text.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| The freeze skips all of tick step 2, the only route to "When a feature pull request lands". A pull request that landed during a freeze sets no `needs_update`, so the board shows stale pull requests as ready. This regression came from Review 1's fix round. | Opus, Fable | Two cold reads; text at line 65 |
+| When the hook rewrites a tracked file that the merge did not touch, `git merge --abort` succeeds and keeps the rewrite. The next merge then fails (`Your local changes ... would be overwritten`) every tick. | Fable | Scratch-repository script, rerun |
+| The check file's cold read H spells the generated-path exclude as `':(exclude)**/lock.json'`, which misses a root `lock.json`. `':(exclude,glob)**/lock.json'` matches it. | Fable | Scratch-repository script, rerun |

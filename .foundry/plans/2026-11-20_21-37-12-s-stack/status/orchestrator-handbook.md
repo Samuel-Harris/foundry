@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "Review"
-changed_at: "2026-11-21T16:34:23Z"
+state: "Implement"
+changed_at: "2026-11-21T16:40:26Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "7ccd3ee91dc0e7d8a18cce43d64f663678b8ed8f"
@@ -36,6 +36,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "7ccd3ee91dc0e7d8a18cce43d64f663678b8ed8f"
     at: "2026-11-21T16:34:23Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "7ccd3ee91dc0e7d8a18cce43d64f663678b8ed8f"
+    at: "2026-11-21T16:40:26Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -83,3 +88,5 @@ The fourth Verify gate returned VERIFIED at `ca4e3b6`. One item would mislead a 
 The fix is at `22a1695`. `s-stack-package` (`22a0112`) was merged at `26c3ecd`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `22a1695`.
 
 The fifth Verify gate returned VERIFIED at `7ccd3ee`. The phase moved to Review, which covers the commits since `e0a51a2`.
+
+The second Review gate returned SIGNIFICANT at `7ccd3ee`. The phase moved back to Implement.

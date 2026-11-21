@@ -404,3 +404,19 @@ For the cross-handbook integration:
 - Step 7's `stop` has no quiet test.
 
 Outside this phase: the roadmap's `decisions.md` names a private file that is meant to stay untracked. It was reported to the orchestrator.
+
+## Review 7, code head `038cdc4e65eae7cf6bbe9c447f9d290ece02bce7`, SIGNIFICANT
+
+`interrogate` over the commits since `92b3079`, with two adversaries on Opus and Fable in their own worktrees. The phase session checked each finding against the handbook text.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| A dependency force-pushed to drop a commit still passes the ancestry test, so its child turns ready while it carries the dropped commit. | Opus | Scratch-repository script; cold read |
+| A dependency closed without merging drops out of the test, but its commits stay in the child. | Opus | Scratch-repository script; cold read |
+| A stacked child merged into its parent's branch counts as merged into the default branch, and its phase is told so. | Opus | Scratch-repository script; cold read |
+| A phase in PR that ignores a fix round is never followed up, because a phase in PR was made unstallable. | Fable | Cold read |
+| A default-branch conflict round and a refresh round go to one phase in one tick, and the second then runs outside PR. | Fable | Cold read |
+| The restarted planner is told nothing, and can never count as stalled. | Fable | Cold read |
+| A pull request that lacks both the tip and a dependency's head gets two messages in one tick. | Fable | Cold read |
+
+The check file's cold read Z gives a wrong reason for `kaph` in its expected answer, although the scored outcome is right. The verifier owns that file.

@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "Review"
-changed_at: "2026-11-21T21:01:46Z"
+state: "Implement"
+changed_at: "2026-11-21T21:11:00Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "038cdc4e65eae7cf6bbe9c447f9d290ece02bce7"
@@ -137,6 +137,11 @@ verdicts:
     code_head: "038cdc4e65eae7cf6bbe9c447f9d290ece02bce7"
     at: "2026-11-21T21:01:46Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "038cdc4e65eae7cf6bbe9c447f9d290ece02bce7"
+    at: "2026-11-21T21:11:00Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -257,3 +262,5 @@ The twentieth Verify gate returned NOT VERIFIED at `5976721`. The phase moved ba
 The Verify 20 fixes are at `20c031a`. `s-stack-package` (`e5580c8`) was merged at `778a0bf`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `20c031a`.
 
 The twenty-first Verify gate returned VERIFIED at `038cdc4`. The phase moved to Review, which covers the commits since `92b3079`.
+
+The seventh Review gate returned SIGNIFICANT at `038cdc4`. The phase moved back to Implement.

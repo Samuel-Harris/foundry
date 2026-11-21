@@ -142,3 +142,19 @@ The third `interrogate` run used Opus and Fable, with the brief in `handbooks/re
 - A file replaced by a directory breaks the proof (Fable 6).
 
 **Fallback.** Under `pr-handbook-d9` condition 4, a defect in the overlay premise ends redesigning. The current design ships. Each history it does not handle becomes a documented `STOP` that the phase session sends to the orchestrator as a decision request. The two wrong-result defects, the false `EQUAL` and the `origin/` false `FAIL`, are fixed in the implementation, because a false result cannot be a documented stop.
+
+## Verify: NOT VERIFIED at `cff49f82534b3d132232b232060000fd5a9fd5bb`
+
+A ninth fresh verifier extended `checks/pr-handbook.md` in `cff49f8`, on top of `9b1493c`. It added ten scratch cases, updated the `STOP` cold read to eleven items, and verified there.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING. In check 8, `foundation` and `phase-handbooks` agreed, and the `STOP` cold read agreed on all eleven items.
+- **`spec-planner-handbooks.md` cold read 1** failed expected point 3 twice: both readers said the two phases cannot run together, because both need port 5432. That check belongs to another phase.
+- **`pr-handbook.md` scratch block.** It printed 59 PASS and `5 failed`.
+- **What passes.** Both wrong-result cases pass now and fail at `b4da68b`: the revert, and `origin/` names. The shared-path and owned-path stops print exactly their documented output and leave the branch unchanged. The chained rule and the merged-listing cases pass. Every **Done when** item holds.
+
+Defects:
+
+- **Misleads a reader, and the round pushes a wrong tree.** `pr-creator.md`'s table says that for every unhandled history the branch is left alone and nothing is pushed. For the forge-rewritten row-3 dependency, the delegate merge and the file replaced by a directory, the refresh exits 0. The round pushes, and only the proof after it fails. In the delegate case the pushed branch lacks the delegate's file.
+- **A directory replaced by a file** prints different output from the table's. The script ignores a failed `put`, pushes a tree that deletes `notes/one.md` without adding `notes`, and the proof's `FAIL` sends the reader to open a new pull request.
+- **Minor.** `prove` reads a plain `<pr>` as the local branch, although the script's prose says it prefers `origin/<branch>`.
+- **Not this phase's.** The `spec-planner-handbooks` cold read above.

@@ -80,7 +80,7 @@ A shared path's stop is permanent because the refresh replays only the phase's o
 
 - **Each pull request's head** equals its target tree outside generated files and generated lines. The target tree is the overlay of its own commits, built at the merge base of its base and its head, with each open dependency's merge base merged in. This catches a hand edit inside a merge commit and a path taken from the wrong version.
 - **No own commit is already on the orchestrator branch.** Such a commit belongs to another pull request, so the spec is missing a dependency.
-- **Every own commit matches a phase commit.** A commit made on the pull request branch, such as GitHub's "Apply suggestions from code review", fails with `<pr>: <commit> is neither a phase commit, a carried one nor a regenerate commit, so it was made on the branch`, because the refresh would revert it.
+- **Every own commit matches a phase commit.** A commit made on the pull request branch, such as GitHub's "Apply suggestions from code review", is reported as `DEVELOPER-COMMITS <pr> <sha>...`, which makes the proof `NOT EQUAL`, because the refresh would revert it. A merge commit that only brings in the default branch, as GitHub's "Update branch" button makes, is not reported; the refresh starts from it.
 - **No pull request changes a path that the phase commits do not.**
 - **Regenerate commits** change only generated files and generated lines.
 - **No pull request contains `.foundry/`.**
@@ -94,7 +94,7 @@ The ownership check prints one of these:
 
 - `<path> has not landed and is in no open pull request, so it needs a new pull request`;
 - `<path> is in <pr> and <pr>, which are not in one stack`;
-- `<path>: <pr> lacks phase commits <hash> <subject>;, so they need a pull request`, which also catches a pull request that still holds a change the phase later reverted;
+- `<path>: <pr> lacks phase commits <hash> <subject>;, so they need a pull request`, when the pull request's version of the path also differs from the phase tip's, which catches a pull request that still holds a change the phase later reverted. A path whose version already equals the phase tip's passes, even when older phase commits on it cannot be matched;
 - `<path>: <pr> holds a version that is neither the phase's nor <base>'s`, for such a path with no uncarried commit to name.
 
 ## What the proof assumes
@@ -288,8 +288,8 @@ prove() {
     spec "$s"; paths "${mine[@]}" > "$W/own.${pr//\//_}"
     echo "$pr:$(git diff --shortstat "$(ref "$base")...$pr" -- . "${GEN[@]}")"
     for c in ${mine[@]}; do ! git merge-base --is-ancestor "$c" "$orch" || { echo "FAIL $pr: $c is already on $orch, so its pull request is an undeclared dependency"; fail=1; }; done
-    for c in ${mine[@]}; do ids --no-walk "$c" | grep -q -x -F -f "$W/fp" || cut -d ' ' -f 2 "$W/named" | grep -q -x -F "$c" ||
-      { echo "FAIL $pr: $(git log -1 --format='%h %s' "$c") is neither a phase commit, a carried one nor a regenerate commit, so it was made on the branch"; fail=1; }; done
+    dev=(); for c in ${mine[@]}; do ids --no-walk "$c" | grep -q -x -F -f "$W/fp" || cut -d ' ' -f 2 "$W/named" | grep -q -x -F "$c" || dev+=("$(git rev-parse --short "$c")"); done
+    [ ${#dev[@]} = 0 ] || { echo "DEVELOPER-COMMITS $pr $(printf '%s ' "${dev[@]}")"; fail=1; }
     for x in $(grep -v -x -F -f "$W/pp" "$W/own.${pr//\//_}"); do echo "FAIL $pr: it changes $x, which the phase does not"; fail=1; done
     for c in $(git rev-list --no-merges "$pr" $(not "$D" "$base" $(list "$extra") $(list "$merged")) --grep="$REGEN"); do
       for f in $(git diff-tree --no-commit-id --name-only -r "$c" -- . "${GEN[@]}" "${LINES[@]}"); do echo "FAIL $pr: regenerate commit $c changes $f"; fail=1; done
@@ -309,7 +309,7 @@ prove() {
     t=${o[0]}; for i in "${o[@]}"; do above "$i" "$t" && t=$i; done
     for i in "${o[@]}"; do [ "$i" = "$t" ] || above "$t" "$i" || { echo "FAIL $x is in $i and $t, which are not in one stack"; fail=1; continue 2; }; done
     for s; do IFS=: read -r pr base _ merged <<< "$s"; [ "$pr" = "$t" ] && accounted "$pr" $(refs "$merged") && b=$base; done
-    if unacc "$x"; then echo "FAIL $x: $t lacks phase commits $(git rev-list --first-parent --no-merges "$PH" "^$D" -- ":(literal)$x" | grep -v -x -F -f "$W/acc" | git log --stdin --no-walk=unsorted --format='%h %s' | tr '\n' ';'), so they need a pull request"; fail=1
+    if unacc "$x" && [ "$(ver "$t" "$x")" != "$(ver "$PH" "$x")" ]; then echo "FAIL $x: $t lacks phase commits $(git rev-list --first-parent --no-merges "$PH" "^$D" -- ":(literal)$x" | grep -v -x -F -f "$W/acc" | git log --stdin --no-walk=unsorted --format='%h %s' | tr '\n' ';'), so they need a pull request"; fail=1
     elif [ -n "$l" ] && v=$(ver "$t" "$x") && [ "$v" != "$(ver "$PH" "$x")" ] && [ "$v" != "$(ver "$(ref "$b")" "$x")" ]; then echo "FAIL $x: $t holds a version that is neither the phase's nor $b's"; fail=1; fi
   done
   [ "$fail" = 0 ] && echo EQUAL || { echo "NOT EQUAL"; exit 1; }

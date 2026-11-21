@@ -90,3 +90,16 @@ Notes recorded and not fixed, because each repeats a correct message and leads n
 | The freeze skips all of tick step 2, the only route to "When a feature pull request lands". A pull request that landed during a freeze sets no `needs_update`, so the board shows stale pull requests as ready. This regression came from Review 1's fix round. | Opus, Fable | Two cold reads; text at line 65 |
 | When the hook rewrites a tracked file that the merge did not touch, `git merge --abort` succeeds and keeps the rewrite. The next merge then fails (`Your local changes ... would be overwritten`) every tick. | Fable | Scratch-repository script, rerun |
 | The check file's cold read H spells the generated-path exclude as `':(exclude)**/lock.json'`, which misses a root `lock.json`. `':(exclude,glob)**/lock.json'` matches it. | Fable | Scratch-repository script, rerun |
+
+## Verify 6, code head `5af461837620e10ebf182320e1aaa4546bb60a0d`, VERIFIED
+
+A fresh verifier updated the check file for `7b296da` (commit `5af4618`). It removed run results to follow the no-evidence-exception run decision, turned the command-line grep into a rerunnable script, used the glob form in cold read H, updated cold reads D and F, added cold read I (a landing during a freeze), and extended the abort script to a hook that rewrites an untouched file. It then reran everything. C6 checks 1, 2, 3, 5 and 7 PASS (`160/200 handbooks/orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: 14 cold reads across three check files, the launcher-call script and the abort script. The verifier did not run `foundation`'s status-header script, so the phase session ran it at the same head: `reference matches C2 apart from the allowed differences`, exit 0.
+
+One-off results at `5af4618`:
+
+- The handbook has 160 lines.
+- A case-insensitive grep for workmux, tmux and claude finds only prose: "workmux shows it idle", "workmux's status", and Claude Code's scheduled task and push notification tool.
+- The only long options are the launcher flags and the git options `--no-ff`, `--no-commit`, `--abort`, `--is-ancestor`, `--porcelain` and `--untracked-files`.
+- A grep of the phase's files and commit messages for the private names found 0 hits.
+
+One item misleads a reader. Done handling sat inside step 2's once-per-commit duty, while a freeze forbids other merges. A skipped Done merge was never retried, and `--remove` would then refuse. The phase moved back to Implement.

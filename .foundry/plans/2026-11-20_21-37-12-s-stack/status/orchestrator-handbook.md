@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T16:10:21Z"
+state: "Implement"
+changed_at: "2026-11-21T16:19:43Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "fc9c6cd123f3140fbc233b7059b821646852ed4a"
+code_head: "60e66c4203ece3b7a049358bdbb05eff9ab95f07"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -21,6 +21,11 @@ verdicts:
     result: "SIGNIFICANT"
     code_head: "e0a51a20465f216f54eb5aca4fef91810d643eab"
     at: "2026-11-21T16:09:12Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "60e66c4203ece3b7a049358bdbb05eff9ab95f07"
+    at: "2026-11-21T16:19:43Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -58,3 +63,5 @@ The second Verify gate returned VERIFIED at `e0a51a2`, the verifier's check-file
 The first Review gate returned SIGNIFICANT at `e0a51a2`. The phase moved back to Implement to fix the six findings and to add the orchestrator's `depends_on` instruction for `phases` board documents.
 
 The review fixes and the `depends_on` instruction are at `fc9c6cd`, the lockfile was regenerated at `e4b6773`, and `s-stack-package` (`fbd548d`) was merged at `85df12d`. The phase moved to Verify at code head `fc9c6cd`.
+
+The third Verify gate returned VERIFIED at `60e66c4`. It named three gaps that would break a real run, so the phase moved back to Implement.

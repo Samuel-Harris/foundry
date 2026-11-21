@@ -52,3 +52,15 @@ p-stack's `interrogate` ran two adversaries in their own worktrees, one on Opus 
 | "Merge at most one phase per tick, so each later phase merges the newest orchestrator branch" is false for phases already in PR, which never get `merge-orchestrator-branch`. | Fable | Cold read |
 
 Cold reads A and B of the check file were rerun by the Fable adversary and matched.
+
+## Verify 3, code head `60e66c4203ece3b7a049358bdbb05eff9ab95f07`, VERIFIED
+
+A fresh verifier updated the check file for `fc9c6cd` (commit `60e66c4`: cold reads A, B and D updated, new cold reads F, G and H, and a scratch-repository script for the blocked-abort recovery) and reran everything. C6 checks 1, 2, 3, 5, 7 and 8 PASS (`160/200 handbooks/orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`; foundation cold reads 1 to 3; cold reads A to H; `blocked abort recovered`). Checks 4 and 6 are PENDING, which is allowed. Every **Done when** item was met.
+
+Three gaps that it judged would break a real run sent the phase back to Implement:
+
+1. Tick Start knew only dependencies merged into the orchestrator branch, not those the plan requires to be Done.
+2. The freeze skipped tick step 3, which also held the stall replacement, so a stalled frozen phase could never be replaced.
+3. `needs_update` stayed true for good when the default branch moved again without touching a package.
+
+It also noted that the board section seeded `phases` documents "when you publish", before any feature plan exists.

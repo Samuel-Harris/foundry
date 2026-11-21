@@ -83,7 +83,7 @@ The board documents a tick writes:
 
 ## Merging a phase
 
-A phase may merge when its status header lists at least one pull request. If you have merged the phase before, one of them must be open, or merged into the default branch after your last merge of the phase, so the developer has reviewed or can review its new code. It also needs the reference file's verdict rule to hold for the code head, and a code head you have not already merged. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
+A phase may merge when its status header lists at least one pull request. If you have merged the phase before, one of them must be open, or merged into the default branch after the phase's current code head was committed, so a pull request the developer reviewed or can review holds its new code. It also needs the reference file's verdict rule to hold for the code head, and a code head you have not already merged. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
 
 To abort a merge, run `git merge --abort`. If it refuses because a hook or check rewrote a file, run `git checkout -- <path>` for each file it names, and abort again. Then run `git checkout -- <path>` for each file outside `.foundry/` that `git status --porcelain --untracked-files=no` still lists, because a hook can rewrite files the merge did not touch.
 
@@ -110,7 +110,7 @@ Merge the default branch into the orchestrator branch on the orchestrator branch
 
 A pull request's checks do not run again when its base moves. Two pull requests can each pass, merge, and together break the default branch. So in the tick that finds such a merge, for every open pull request of the feature:
 
-- Send its phase a `fix-round` of the kind "A pull request merged", naming the merged pull request. The phase refreshes its pull requests and works out each base again, without new gates.
+- Send its phase a `fix-round` of the kind "A pull request merged", naming the merged pull request, or the default branch commit when no feature pull request merged. The phase refreshes its pull requests and works out each base again, without new gates.
 - Set its `needs_update` to true in the tracker and on the board.
 - Clear `needs_update` only when, after `git fetch origin`, `git merge-base --is-ancestor origin/<default branch> <pull request head SHA>` succeeds and every required check has passed on that head.
 

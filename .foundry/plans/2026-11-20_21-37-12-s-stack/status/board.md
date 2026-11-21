@@ -31,6 +31,10 @@ decisions:
     decision: "Instruction from the developer, relayed by the orchestrator: the board gains a dependency map of the phases, drawn from a new depends_on field on each phases document (a list of phase and until entries, until merged or done). The phase moved back from Review to Implement for it."
     door: "two-way"
     at: "2026-11-21T16:06:59Z"
+  - id: "board-d5"
+    decision: "Instruction from the developer, relayed by the orchestrator: the scheduling value renders as a phrase that names the session, live as session live, closed as session closed, queued as queued to start, blocked as blocked, and session closed is styled neutral, never in the Done colour. C5 data values are unchanged."
+    door: "two-way"
+    at: "2026-11-21T16:08:04Z"
 ---
 
 # Phase `board` status

@@ -8,7 +8,7 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `1a97298` (version 4) |
+| Architecture page describes | `2b5a9b6` (version 5) |
 | Last tick | 2026-11-21 16:32 |
 | Default branch merged at | `d7e036c` (#81, into `8093a85`) |
 

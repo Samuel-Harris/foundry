@@ -209,3 +209,18 @@ Significant:
 Not significant, fixed alongside: the narrowing left Verify no exit for a VERIFIED verdict that names an older head. Recorded only, all older text: the order of moving to PR and starting the PR creator in a fix round, the end of a `blocked` wait, no PR creator step in the conflict round, and restarts in the middle of a state change.
 
 The orchestrator's deferred instruction also goes into this round: a Done phase asked to change code moves back to Implement, and its PR creator opens a new pull request for commits no open pull request carries.
+
+## Verify: VERIFIED at `52afb2aaf8bf4136369f33bbe38aba122e8b1220`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 18:08 and 18:12 UTC, at HEAD `2facd26`. It confirmed the code head under the run decision on `version:` lines, and made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 18:08:51 to 18:11:27 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 18:10: 0 matches.
+- Five one-off cold reads, all passing every required point:
+  - entry to Review after a SIGNIFICANT verdict runs the gate;
+  - entry to Verify and a restart in Verify run the verifier;
+  - a `move-back` from PR after a failed check moves the phase to Implement;
+  - the merged notice in Implement is ignored, comes again once the code head is merged into the orchestrator branch, and leads to Done, with the fix in a new pull request;
+  - a developer's change request in Done moves the phase back to Implement, and the fix goes in a new pull request.
+- Remarks outside the required points: in a fix round, the order of moving to PR and starting the PR creator (older text); the NOT VERIFIED, INCONCLUSIVE and SIGNIFICANT table rows do not repeat "for the current code head"; and the reference file's message rows lag.

@@ -40,7 +40,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 2. Arm the tick, as [The tick](#the-tick) says.
 3. Publish the status board, as [The status board](#the-status-board) says.
 4. Have a fresh subagent publish the first architecture page from the approved roadmap.
-5. Start the planner. When it sends `done-planning`, check that its branch changes nothing outside `.foundry/`, merge it with `--no-ff`, and start each phase whose dependencies are met.
+5. Start the planner. When it sends `done-planning`, check that its branch changes nothing outside `.foundry/`, merge it with `--no-ff`, and start each phase whose dependencies are met. On a later `done-planning`, send `move-back` to Plan to each started phase whose plan entry the message names as changed.
 
 ## The tracker
 
@@ -64,7 +64,7 @@ Run the tick checklist in sam-mode's orchestrator handbook.
 
 Run these steps in order on every tick.
 
-1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`), workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick.
+1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick.
 2. **Default branch.** If `origin/<default branch>` has moved since the tracker's commit, merge it as [Merging the default branch](#merging-the-default-branch) says. If any of its new commits came from one of the feature's pull requests, or touched paths the feature generates, run [When a feature pull request lands](#when-a-feature-pull-request-lands).
 3. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, so each later phase merges the newest orchestrator branch before it verifies.
 4. **Start.** Start each phase whose dependencies are merged into the orchestrator branch and passed their post-merge check, and whose exclusive resources in the feature plan are free. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
@@ -124,7 +124,7 @@ When a merge leaves a pull request with exactly one open dependency it could sta
 
 ## Decisions
 
-Put each open decision request to the developer with all its fields, and list it in the tracker and under **Needs you**. The developer decides every one-way door. You may decide a two-way door that affects only the run's coordination. Before you send `answer`, record the decision in `run-decisions.md` with its date, door type and reason, and commit it.
+Phase requests sit in status headers. The planner has no status file, so its requests, `planner-r<n>`, sit in the feature plan's "Open requests" section, and the reconcile subagent reads them there. Put each open decision request to the developer with all its fields, and list it in the tracker and under **Needs you**. The developer decides every one-way door. You may decide a two-way door that affects only the run's coordination. Before you send `answer`, record the decision in `run-decisions.md` with its date, door type and reason, and commit it.
 
 ## Permission prompts
 
@@ -147,7 +147,7 @@ Record the commit it describes in the tracker.
 
 ## Roadmap updates
 
-When the developer asks for a roadmap change, start an update spec writer with `--update <n>`. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, and merge it with `--no-ff`. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner when the phases change.
+When the developer asks for a roadmap change, start an update spec writer with `--update <n>`. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, and merge it with `--no-ff`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner when the phases change.
 
 ## Restarts
 

@@ -139,3 +139,17 @@ Compared the reference's header section with feature plan C2 by `diff` of the te
 ### Private names at `512edd797f497f955ca5a0175faead7c18a8c2d8`
 
 A case-insensitive `grep` over every file in `git diff --name-only s-stack-package...HEAD -- . ':(exclude).foundry'` and over the phase's commit messages, for the private repository's name, its feature's name and both prototype page ids (taken from the developer's private notes and not reproduced here), found no hit.
+
+## Follow-up round, Verify: VERIFIED at `829f3b1982124399b5ea54f8b597d62b7c8779a9`
+
+A fresh verifier ran the whole skill with the main checkout's pinned venv in place of `.venv-apm`, which this worktree lacks. Checks 0, 1, 2, 3, 5, 7 and 8 PASS. Check 4 is PENDING for `orchestrator.md` and `pr-creator.md`, and check 6 is PENDING because `packages/s-stack/tests` is missing. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0. Check 8 ran every phase's Rerun section: the board's headless Chrome check (`board renders as specified`), the C2 check, and nine cold reads, all passing. Mutated references made the C2 check exit 1.
+
+Every **Done when** item passed. `apm audit --ci` in `packages/s-stack` passed 10 of 10 checks without a reinstall. All 17 queued items are addressed at the code head, items 10 and the merged-notice part of 16 through the phase session's decision to keep that notice an `instruction`. In a scratch repository the code-head loop gave the expected result for status-only, version-only, `.foundry/`-only merge, version-only merge and code-bringing merge cases, and the controls showed both the glob and `-I` clauses are needed.
+
+Minor findings, recorded and not fixed (run decision on minor findings):
+
+- `packages/s-stack/README.md` lists the requirements without `gh stack`, and the body of `SKILL.md` names it only in the frontmatter.
+- `checks/foundation.md` has no rerunnable check for "Starting a session", the feature-name rule or the code-head loop's behaviour.
+- `tests/s-stack/verify-s-stack/SKILL.md` names `handbooks/verifier.md` without saying it is relative to `sam-mode`.
+
+The full report is in the phase session's scratchpad as `verify-round2.md`.

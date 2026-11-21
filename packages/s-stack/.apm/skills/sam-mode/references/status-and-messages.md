@@ -57,10 +57,10 @@ decisions:                          # decisions taken for this phase only
 
 The rules:
 
-- **Code head.** It is `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, the latest commit on the phase branch that changes a file outside `.foundry/`. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, whose commits also move no code head. Its sessions then add an exclude clause for each such path to the command.
+- **Code head.** It is `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, the latest commit on the phase branch that changes a file outside `.foundry/`. Run it from the worktree root. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, whose commits also move no code head. Its sessions then add an exclude clause for each such path to the command.
 - **Verdicts.** The list keeps every verdict, newest last. The orchestrator merges only when the newest `verify` verdict is `VERIFIED` and the newest `review` verdict is `CLEAR`, and both name the current code head.
 - **Ids.** A request or decision id is `<phase>-r<n>` or `<phase>-d<n>`, numbered by the phase itself. No list is shared between writers.
-- **Evidence.** Evidence that is not a URL lives in a file the phase owns under `.foundry/plans/<id>/status/`, named `<phase>-evidence.md`.
+- **Evidence.** Evidence that is not a URL lives in a file the phase owns under `.foundry/plans/<id>/status/`, named `<phase>-evidence.md`. The file is append-only. Each verdict adds a section headed by its gate and the code head it covers, and no earlier section is ever rewritten, so every verdict in the list keeps its evidence.
 - **Commits.** A status commit holds files under `.foundry/` and nothing else. Its subject is `chore(<feature>): <phase> <state>`.
 
 The orchestrator's tracker at `.foundry/plans/<id>/status/orchestrator.md` keeps its own form. It is not a status file.
@@ -78,12 +78,12 @@ A phase session, the planner or a spec writer sends these to the orchestrator:
 
 | Kind | When | The message carries |
 | --- | --- | --- |
-| `started` | The session starts | Its session name and branch |
+| `started` | The session starts. The first spec writer skips it, because it starts the orchestrator itself. | Its session name and branch |
 | `state` | A phase changes state | The new state and the code head |
 | `decision-request` | The session needs a decision | The decision request, as [Decision requests](#decision-requests) defines it |
 | `blocked` | The session is blocked | What it waits for |
 | `prs-open` | A phase's pull requests are open | Each number with its `depends_on` list |
-| `instruction` | The developer gave it an instruction that changes scope | The instruction |
+| `instruction` | The developer gave it an instruction that changes the phase's scope or a recorded decision | The instruction |
 | `done-planning` | The planner has finished | The branch and commit to merge |
 | `roadmap-update` | A spec writer has an approved update | The branch and commit to merge, what changed, and the behaviour that the change affects |
 
@@ -119,4 +119,4 @@ A decision request states five things. They match the fields of a `requests` ent
 | `door` | `one-way` or `two-way` |
 | `waiting_work` | The work that waits on the answer |
 
-The session commits the request to its status file, then sends a `decision-request` message. While the request is open, it continues the work that the decision does not affect. It removes the request from `requests` once the answer arrives.
+The session commits the request to its status file, then sends a `decision-request` message. It removes the request from `requests` once the answer arrives.

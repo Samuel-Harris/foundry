@@ -17,7 +17,7 @@ Read `../poteto-mode/SKILL.md`, relative to this skill's directory, before anyth
 
 ## The invocation
 
-Three placeholders recur. `<feature>` is the feature's kebab-case name. It must not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>`, because session names join their parts with hyphens. `<id>` is the roadmap's directory name `<date-time>-<feature>`, and `<phase>` is a phase id from the feature plan.
+Three placeholders recur. `<feature>` is the feature's kebab-case name. It must not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>`, because session names join their parts with hyphens, so a name ending in a role suffix or containing `-phase-` cannot be told apart from another session's name. `<id>` is the roadmap's directory name `<date-time>-<feature>`, and `<phase>` is a phase id from the feature plan.
 
 There are two forms.
 
@@ -28,7 +28,7 @@ There are two forms.
 
 ## Starting a session
 
-Start every session after the first spec writer from a main session, never from a subagent, because a subagent can lack the pane. Run these two commands from the worktree root:
+Start every session after the first spec writer from a main session, never from a subagent, because a subagent can lack the pane. The spec writer starts the orchestrator, and the orchestrator starts the planner, phase sessions and update spec writers. Run these two commands with the repository root as the working directory:
 
 ```bash
 <this skill's directory>/scripts/launch.sh --print-window
@@ -72,7 +72,7 @@ Main sessions take the role from their first prompt. Subagent roles have no laun
 | Status board and architecture page | Published pages, addresses in the tracker | Orchestrator |
 
 - Every file under `.foundry/` has one writer.
-- A commit never mixes files under `.foundry/` with other files. The exception is a merge of another branch, which brings both. A merge of the orchestrator branch always does.
+- A commit never mixes files under `.foundry/` with other files. The exception is a merge of another branch, which brings both.
 - `run-decisions.md` records the decisions taken during the run. Each row amends the roadmap until a roadmap update folds it in.
 - Git tracks `.foundry/` on the orchestrator branch and every branch cut from it. A pull request branch never contains it. A repository that uses s-stack must not ignore it.
 
@@ -82,7 +82,7 @@ Every phase moves through Spec, Plan, Implement, Verify, Review, PR and Done.
 
 - A phase moves forward one state at a time and skips none. It can move back any number of states.
 - Only the phase session changes its phase's state, by committing its status file.
-- A verdict names the code head it covers. A new code head needs new verdicts. The reference file defines the code head and when a phase may merge.
+- A verdict names the code head it covers. A new code head needs new verdicts. The reference file defines the code head and the verdict condition, and `handbooks/orchestrator.md` owns the merge rule.
 
 ### Branches
 
@@ -106,7 +106,7 @@ The orchestrator branch and every branch cut from it carry `.foundry/`. Push non
 
 ### Doors
 
-- The developer decides every one-way door. Send a decision request to the orchestrator and continue with the work the decision does not affect.
+- The developer decides every one-way door. A phase session or the planner sends a decision request to the orchestrator and continues with the work the decision does not affect. A subagent reports a one-way door to its phase session, which sends the request. The spec writer asks the developer directly.
 - Decide a two-way door yourself and record it in your own file. Raise it when the choice is architectural, nuanced or not obvious.
 
 ## Where to read next

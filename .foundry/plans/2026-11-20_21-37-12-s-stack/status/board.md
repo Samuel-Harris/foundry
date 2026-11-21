@@ -74,6 +74,10 @@ decisions:
     decision: "Answer to board-r1 from the orchestrator, option A. Under its convergence rule, a gap in checks/board.md is significant only when the broken template that passes is a defect a plausible edit would introduce and that would mislead the developer on the live board: wrong staleness, a hidden or wrong dependency or state, lost or misattributed data, or a page that hangs or will not render. A gap shown only by changed constants, styling or a promise nobody acts on is minor, recorded in the evidence file, and does not hold the phase in Review."
     door: "two-way"
     at: "2026-11-21T18:11:44Z"
+  - id: "board-d7"
+    decision: "Instruction from the orchestrator, replacing board-d6 from the fifth Review gate on: only a real defect in the template is significant. Every check gap, however misleading its mutant, goes under Check hardening backlog in the evidence file, and the phase goes to PR. The twelve gaps of the fourth review are still closed in the current round."
+    door: "two-way"
+    at: "2026-11-21T20:59:46Z"
 ---
 
 # Phase `board` status

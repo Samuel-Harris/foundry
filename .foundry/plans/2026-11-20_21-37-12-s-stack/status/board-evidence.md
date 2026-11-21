@@ -160,3 +160,22 @@ Minor, recorded:
 - No scenario covers a page without `window.claude`.
 - A pull request focus key could collide. Its effect was not shown.
 - Ctrl-C waits up to the 30-second Chrome bound before cleanup. Cleanup is complete.
+
+## Check hardening backlog
+
+`board-d7` sends every check gap found from the fifth Review gate on to this list, for a future hardening pass. These are not fixed in this phase.
+
+- From the fourth Review gate (minor):
+  - The banner rounds minutes where it should floor them. No scenario has a fractional minute of 0.5 or more.
+  - An unreadable needs `since` reads "waiting 0 min", or the need is dropped.
+  - No scenario covers a page without `window.claude`.
+  - A pull request focus key could collide; its effect was not shown.
+  - Ctrl-C waits up to the 30-second Chrome bound before cleanup, though cleanup is complete.
+- From the third Review gate (minor):
+  - No fixture has an id over 40 characters.
+  - Node width assumes 7.4 units per character, so wide glyphs overflow their node.
+  - The stub records read-only query builders as writes.
+- From the second Review gate (minor):
+  - Text selection is lost on re-render.
+  - `review_rank` and `stale_after_min` sent as digit strings are ignored.
+  - At 700 px the Pull requests table scrolls by 4 px inside its wrapper.

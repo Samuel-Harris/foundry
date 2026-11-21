@@ -127,3 +127,15 @@ On each branch, `FOUNDRY_DIFF_RANGE=origin/main...HEAD bash .githooks/pre-commit
 The equality proof in the form of Experiment 7 printed nothing on every "must print nothing" line, and its tree diff against `s-stack-phase-foundation` exited 0. The phase session checked independently: `git diff --stat origin/s-stack-verify-skill s-stack-phase-foundation -- . ':(exclude).foundry'` printed nothing, neither remote branch holds a file under `.foundry/`, and both pull requests are drafts.
 
 The PR creator pushed only these two branches, with plain pushes. The automatic permission check refused `gh stack submit --auto`, so it opened the drafts with `gh pr create --draft` and linked them with `gh stack link 81 82`.
+
+## One-off check results moved from `checks/foundation.md`
+
+These results stood in the check file's `## Evidence` section until the run decision that check files hold no results.
+
+### C2 conformance of the reference at `512edd797f497f955ca5a0175faead7c18a8c2d8`
+
+Compared the reference's header section with feature plan C2 by `diff` of the text from "The header is" to the tracker sentence. Differences: the `<id>`, `<feature>` and `<phase>` placeholders and the general code-head rule, both as the orchestrator decided (`foundation-r1`, option A), plus two additions that C2 does not contain: "Run it from the worktree root." in the code-head rule, and three sentences in the **Evidence** rule making the evidence file append-only with one section per verdict. Option A says every other part of C2 is copied unchanged, so the append-only rule is a contract change made without a decision request. Result: FAIL, reported to the phase session.
+
+### Private names at `512edd797f497f955ca5a0175faead7c18a8c2d8`
+
+A case-insensitive `grep` over every file in `git diff --name-only s-stack-package...HEAD -- . ':(exclude).foundry'` and over the phase's commit messages, for the private repository's name, its feature's name and both prototype page ids (taken from the developer's private notes and not reproduced here), found no hit.

@@ -153,3 +153,14 @@ Minor findings, recorded and not fixed (run decision on minor findings):
 - `tests/s-stack/verify-s-stack/SKILL.md` names `handbooks/verifier.md` without saying it is relative to `sam-mode`.
 
 The full report is in the phase session's scratchpad as `verify-round2.md`.
+
+## Follow-up round, Review: SIGNIFICANT at `829f3b1982124399b5ea54f8b597d62b7c8779a9`
+
+Two reviewers, Opus and Fable, reviewed `28fb827`, `4e35b4a`, `b02556c` and `829f3b1` under `handbooks/reviewer.md`. The merges in the range resolved no conflicts.
+
+| Finding | Found by | Classification | Proof |
+| --- | --- | --- | --- |
+| `SKILL.md` and the reference say `handbooks/orchestrator.md` owns the merge rule, while `handbooks/phase-session.md` lines 5 and 84 say the reference owns it and move to PR "once the reference file's merge rule holds". A phase session with VERIFIED and CLEAR verdicts for its code head could not decide to move to PR. | Both | Significant | Cold reads given only those files; each reader quoted the contradiction and would not move on the verdicts alone |
+| `/sam-mode start` with a feature name the limits forbid has no stated action, and a reader cannot tell who enforces the limits | Fable | Not significant | Cold read of `SKILL.md`; the launcher is not on this branch, so no wrong outcome was shown |
+
+Both reviewers also ran, with clean results: the three cold reads in `checks/foundation.md`, the C2 check (pass, PENDING without the plan, and exit 1 on each mutation tried), the code-head loop on scratch histories including renames, symlinks, binaries and mode-only changes, `apm install` and `apm audit --ci` in `packages/s-stack`, `versioning.py check`, and the pre-commit hook over `50e26ee...HEAD`.

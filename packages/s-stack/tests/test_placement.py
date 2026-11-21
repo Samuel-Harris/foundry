@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import subprocess
 import unittest
 
-from launcher_case import Pane, LauncherTestCase
+from launcher_case import LAUNCH, LauncherTestCase, Pane
 
 
 class PlacementTests(LauncherTestCase):
@@ -101,6 +102,24 @@ class PlacementTests(LauncherTestCase):
         new = self.assert_split(before=before, target=first, new=self.start("--role", "spec", "--update", "2", name="f-spec-2"))
         self.assertGreater(new.top, before[first].top)
         self.assertLess(new.top, before[developer].top)
+
+    def test_concurrent_launches_of_different_sessions_keep_the_orchestrator_column(self) -> None:
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        phases = ("a", "b", "c")
+        for phase in phases:
+            self.make_worktree(name=f"f-phase-{phase}", base="f")
+        commands = [[str(LAUNCH), "--feature", "f", "--role", "phase", "--phase", phase, "--window", self.window] for phase in phases]
+        launches = [subprocess.Popen(command, env=self.env, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) for command in commands]
+        results = []
+        for launch in launches:
+            stdout, stderr = launch.communicate(timeout=60)
+            results.append(subprocess.CompletedProcess(launch.args, launch.returncode, stdout, stderr))
+
+        new = [self.started(result, name=f"f-phase-{phase}").pane for result, phase in zip(results, phases, strict=True)]
+        after = self.geometry()
+        for pane in new:
+            self.assertGreater(after[pane].left, self.right_of(pane=orchestrator))
+            self.assertGreaterEqual(after[orchestrator].width, after[pane].width)
 
     def test_a_developer_pane_in_the_orchestrator_column_is_never_touched(self) -> None:
         developer = self.split(target=self.first, flags=["-v"])

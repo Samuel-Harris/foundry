@@ -206,20 +206,40 @@ find_own_pane() {
   awk -v window="$window" -v name="$name" '$2 == window && $3 == name && $4 == "none" { print $1; exit }'
 }
 
+take_lock() {
+  local lock=$1 holder=$2 tries=0
+  until mkdir "$lock" 2>/dev/null; do
+    tries=$((tries + 1))
+    [ "$tries" -lt 100 ] || die "another launch of $holder has held $lock for 10 seconds; if none is running, remove that directory"
+    sleep 0.1
+  done
+}
+
+release_window() {
+  [ -z "$window_lock" ] || rmdir "$window_lock"
+  window_lock=''
+}
+
 # Held until the launcher exits, so a concurrent launch of the same session
 # checks liveness only after ps shows this one's claude.
 lock_session() {
-  local common tries=0
+  local common
   common=$(resolve "$(git rev-parse --git-common-dir)")
   [ -n "$common" ] || die 'cannot resolve the git common directory'
-  lock=$common/s-stack-locks/$name
-  mkdir -p "$common/s-stack-locks" || die "cannot create $common/s-stack-locks"
-  until mkdir "$lock" 2>/dev/null; do
-    tries=$((tries + 1))
-    [ "$tries" -lt 100 ] || die "another launch of $name has held $lock for 10 seconds; if none is running, remove that directory"
-    sleep 0.1
-  done
-  trap 'rmdir "$lock"' EXIT
+  locks=$common/s-stack-locks
+  mkdir -p "$locks" || die "cannot create $locks"
+  take_lock "$locks/$name" "$name"
+  session_lock=$locks/$name
+  window_lock=''
+  trap 'release_window; rmdir "$session_lock"' EXIT
+}
+
+# Held from reading the window's layout until the new pane is tagged, so a
+# concurrent launch of another session into the same window measures the
+# layout after this split, not before it.
+lock_window() {
+  take_lock "$locks/window-${window#@}" "a session into $window"
+  window_lock=$locks/window-${window#@}
 }
 
 # A claude shows in ps a moment after its pane opens.
@@ -423,6 +443,7 @@ cmd_start() {
 
   if [ -z "$target_pane" ]; then
     split=1
+    lock_window
     choose_split
     # split-window unzooms a zoomed window unless given -Z, which zooms an unzoomed one.
     zoom=''
@@ -463,6 +484,7 @@ cmd_start() {
     tmux respawn-pane -k -t "$target_pane" -c "$worktree" /bin/sh -c "$pane_command" || die "tmux respawn-pane -t $target_pane failed"
   fi
   tmux set-option -p -t "$target_pane" @s-stack-session "$name" || die "tmux set-option -p -t $target_pane @s-stack-session failed"
+  release_window
 
   if [ "$conversation_flag" = --session-id ]; then
     mkdir -p "$markers" && printf '%s\n' "$conversation_id" > "$marker" || die "cannot write the session marker $marker"

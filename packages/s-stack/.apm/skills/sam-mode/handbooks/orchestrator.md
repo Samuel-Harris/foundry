@@ -53,7 +53,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 - Live sessions: name, pane, worktree, started, the tick in which it began stopping, if it is stopping, and whether you have told it that every pull request merged. Drop a session's row when you close its pane.
 - Unanswered messages: phase, kind, what each `fix-round`, `instruction` or `move-back` said, and the code head when you sent it, kept until it is answered as Supervision says.
 - Open decision requests: id, phase, door, since.
-- Pull requests under watch: number, phase, branch, base, head, depends on, `needs_update`, and the code head at each phase's last `prs-open`.
+- Pull requests under watch: number, phase, branch, base, head, the head its phase last reported in `prs-open`, depends on, `needs_update`, and the code head at each phase's last `prs-open`.
 - Merged phases: merge commit, phase code head, post-merge check result.
 
 ## The tick
@@ -137,13 +137,15 @@ Some histories are rare, and the handbook does not handle them:
 - a pull request closed without merging;
 - a pull request merged into a branch other than the default branch;
 - a forge rewrite other than the rebase of a stack child after its parent merges;
-- a tracker fact that git or the forge contradicts, other than an expected change: your own steps, a PR creator's pushes, the developer's merges into the default branch, or the forge's rebase of a stack child after its parent merges.
+- a tracker fact that git or the forge contradicts, other than an expected change: your own steps, a PR creator's pushes, the developer's commits on a pull request branch, the developer's merges into the default branch, or the forge's rebase of a stack child after its parent merges.
 
 When the reconcile step finds one, record what you saw in the tracker, and stop acting on every phase it touches, apart from reconciling it and keeping the board current. Send the developer a decision request with the options you see and your recommendation. Act on those phases again once the developer answers.
 
 ## Fix rounds
 
 Feedback reaches a phase only through you. When the developer asks for a change, or a tick finds a new review comment or a failed check, send the phase a `fix-round` with the pull request and the comments or the check. Merge it again as [Merging a phase](#merging-a-phase) says.
+
+A developer's commit on a pull request branch, such as an applied suggestion, is review feedback. When a pull request's new head contains its recorded head but holds commits beyond the head its phase last reported in `prs-open`, and nothing you sent that phase is unanswered, so its own PR creator is not mid-push, send the phase a `fix-round` of the kind "Feedback on a pull request", naming those commits. The phase takes them into its branch and passes both gates, and its `prs-open` answers the round.
 
 PR creators choose and change their pull requests' bases themselves, across phases. You never offer or send `restack`. When the developer asks for a restack, pass it to the phase as an `instruction`. When a stack parent merges, the forge rebases its child with a force-push from the developer's account. That is expected, not a second writer on the branch.
 

@@ -125,7 +125,7 @@ A `move-back` names the state and what changed.
 
 ## Instructions from the developer
 
-The developer can type into your pane. When a direct instruction changes the phase's scope or a recorded decision, record it in `decisions`, commit, and send the orchestrator an `instruction` message that carries it. A scope change that conflicts with the feature plan is also a decision request, because only the planner changes the plan.
+The developer can type into your pane. Follow a direct instruction. When it changes the phase's scope or a recorded decision, also record it in `decisions`, commit, and send the orchestrator an `instruction` message that carries it, before you start the work. When it conflicts with the feature plan, send a decision request as well, because only the planner changes the plan. Build the instructed work that the answer cannot change while the request is open.
 
 ## After a restart
 

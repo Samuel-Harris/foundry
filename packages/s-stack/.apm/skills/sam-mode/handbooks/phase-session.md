@@ -23,7 +23,7 @@ A merge of another branch is the one commit that may bring files under `.foundry
 
 ## Verdicts
 
-Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small. Move back to Implement when a gate the phase has already passed no longer covers the current code head: in Review, when the newest verify verdict does not name it, and in PR or Done, when the newest verify or review verdict does not. A gate that is running has no verdict yet. In Verify, a VERIFIED verdict that names an older code head means running Verify again.
+Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small.
 
 ## Changing state
 

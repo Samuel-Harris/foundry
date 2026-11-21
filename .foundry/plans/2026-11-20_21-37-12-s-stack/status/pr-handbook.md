@@ -1,10 +1,10 @@
 ---
 phase: "pr-handbook"
-state: "Implement"
-changed_at: "2026-11-21T15:41:21Z"
+state: "Verify"
+changed_at: "2026-11-21T16:00:04Z"
 session: "s-stack-phase-pr-handbook"
 branch: "s-stack-phase-pr-handbook"
-code_head: "50e26eebaa31524a81e0cc00d99edf4bdad0e2dc"
+code_head: "391d9a86ba533c163608938dda6f2d881e5f8c41"
 waits_for: null
 verdicts: []
 pull_requests: []
@@ -30,4 +30,9 @@ decisions:
 
 # Phase `pr-handbook` status
 
-The session started on `s-stack-phase-pr-handbook`, cut from `s-stack-package` at `42c54ee`. The phase plan is committed at `780fa00`, at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/pr-handbook.md`. The equality proof it carries was prototyped in a scratch repository, and every case gave the result the feature plan's **Done when** list expects. The code head is still `foundation`'s, inherited from the orchestrator branch.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/pr-handbook.md`. Implement is complete. `2fbf1cd` added the handbook. `27785f0` added a merge check to the equality proof and corrected why `gh stack submit` is not used. `quick-review` then found four defects in the merge and binary handling, and `589411b` fixed them, with every scratch case rerun from the handbook's own commands. `391d9a8` reorders one sentence. The handbook is 185 lines. `s-stack-package` was merged at `e69b6ee`, bringing only `.foundry/` changes. The code head is `391d9a8`.
+
+## Notes
+
+- `quick-review` also asked to move the commands into script files. Declined, because the feature plan and roadmap `package.md` maintenance rule 6 put the equality proof in the handbook as commands.
+- `SKILL.md` does not list `gh stack` among the tools s-stack needs. That file belongs to `foundation`.

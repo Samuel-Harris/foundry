@@ -106,6 +106,17 @@ EOF
 | A regenerate commit that changes `deps:` in `apm.yml` | That commit and both lines named, exit 1 |
 | `other-pr` squash-merged into `main`, `pr2` merged `main` and added a new regenerate commit, `other-pr`'s ref kept | `EQUAL`, exit 0 |
 
+### Changes made in the `quick-review` round
+
+The handbook's commands supersede the two blocks above and below. Review of `27785f0` found four defects, each reproduced in a scratch repository and fixed in `589411b`.
+
+- The squash step's `git checkout --ours` took the child's whole file and dropped a later default-branch change elsewhere in it, while the proof still printed `EQUAL`. It now resolves per hunk with `git merge-file --ours --object-id`.
+- The proof replayed only non-merge commits, so a hand-made change in a merge commit was invisible. It now compares each merge with `git merge-tree --write-tree -X ours` of its parents, apart from generated files and lines. A clean automatic merge passes, and a hand edit or a reverted change fails.
+- A version-only conflict in a file with generated lines aborted when the pull request also hand-edited that file. The check now compares only the conflicting hunks.
+- `$(git diff-tree -p --binary ...)` dropped the trailing newline a binary patch needs. Both loops now test emptiness with `git diff-tree --quiet` and pipe the patch directly.
+
+The commands need git 2.43 or later. The scratch cases for all of these are in the session scratchpad at `run2/`.
+
 ### The carry loop
 
 From C7 step 1, generalised with the parameters. It runs on the pull request branch, once for each pull request, with the commits that the phase plan assigns to it.

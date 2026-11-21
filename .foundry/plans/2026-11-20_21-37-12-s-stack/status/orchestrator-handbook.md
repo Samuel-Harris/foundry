@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T20:48:20Z"
+state: "Verify"
+changed_at: "2026-11-21T20:49:20Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "5976721323ca91e4e3b2cdd071c45fe731215e9d"
+code_head: "20c031abddd67e15dc6d7ef846852653895404c2"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -248,3 +248,5 @@ The sixth Review gate returned SIGNIFICANT at `92b3079`. The phase moved back to
 The single up-to-date rule and the other Review 6 fixes are at `03c1998`. `s-stack-package` (`8f5c9de`) was merged at `580d079`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `03c1998`.
 
 The twentieth Verify gate returned NOT VERIFIED at `5976721`. The phase moved back to Implement.
+
+The Verify 20 fixes are at `20c031a`. `s-stack-package` (`e5580c8`) was merged at `778a0bf`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `20c031a`.

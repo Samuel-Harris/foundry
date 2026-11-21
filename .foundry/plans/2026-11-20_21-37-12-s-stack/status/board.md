@@ -60,6 +60,10 @@ decisions:
     decision: "Instruction from the developer, relayed by the orchestrator: the scheduling value renders as a phrase that names the session, live as session live, closed as session closed, queued as queued to start, blocked as blocked, and session closed is styled neutral, never in the Done colour. C5 data values are unchanged."
     door: "two-way"
     at: "2026-11-21T16:08:04Z"
+  - id: "board-d6"
+    decision: "Answer to board-r1 from the orchestrator, option A. Under its convergence rule, a gap in checks/board.md is significant only when the broken template that passes is a defect a plausible edit would introduce and that would mislead the developer on the live board: wrong staleness, a hidden or wrong dependency or state, lost or misattributed data, or a page that hangs or will not render. A gap shown only by changed constants, styling or a promise nobody acts on is minor, recorded in the evidence file, and does not hold the phase in Review."
+    door: "two-way"
+    at: "2026-11-21T18:11:44Z"
 ---
 
 # Phase `board` status

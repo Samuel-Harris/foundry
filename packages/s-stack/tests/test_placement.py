@@ -153,6 +153,8 @@ class PlacementTests(LauncherTestCase):
         for pane in new:
             self.assertGreater(after[pane].left, self.right_of(pane=orchestrator))
             self.assertGreaterEqual(after[orchestrator].width, after[pane].width)
+        self.assertEqual(len({after[pane].left for pane in new}), 1, "the three sessions share one right-hand column")
+        self.assertEqual(len({after[pane].width for pane in new}), 1, "no session's column was squeezed")
 
     def test_a_developer_pane_in_the_orchestrator_column_is_never_split_or_moved(self) -> None:
         developer = self.split(target=self.first, flags=["-v"])

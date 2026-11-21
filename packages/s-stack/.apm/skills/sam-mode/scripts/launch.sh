@@ -143,12 +143,14 @@ resolve() {
 # match. in_worktree is 1 when the pane's directory is <worktree> or under it.
 # busy is 1 when the pane's process has a child process.
 pane_inventory() {
-  local session=$1 worktree_path=$2 panes pane_id pane_pid window_id tag current_path in_worktree resolved_worktree=''
+  local session=$1 worktree_path=$2 panes pane_id pane_pid window_id tag current_path in_worktree resolved_worktree='' status
   # Spaces, not tabs, separate the fields: a tmux client without a UTF-8 locale
   # prints a tab in a format as "_". The path goes last so read keeps its spaces.
   if ! panes=$(tmux list-panes -a -F '#{pane_id} #{pane_pid} #{window_id} #{?@s-stack-session,#{@s-stack-session},-} #{pane_current_path}'); then
     # With no server no session runs, which --close and --remove may rely on; start mode needs a window.
-    [ "$mode" != start ] && [[ $(tmux list-sessions 2>&1) == 'no server running'* ]] || die 'tmux list-panes failed'
+    # Before tmux has ever run there is no socket directory, and tmux says it cannot connect.
+    status=$(tmux list-sessions 2>&1) || true
+    [ "$mode" != start ] && [[ $status == 'no server running'* || $status == 'error connecting to'* ]] || die 'tmux list-panes failed'
     panes=''
   fi
   [ -z "$worktree_path" ] || resolved_worktree=$(resolve "$worktree_path")
@@ -237,7 +239,7 @@ process_start() {
 
 holder_of() {
   local pid start
-  read -r pid start < "$1/holder" 2>/dev/null || return 1
+  { read -r pid start < "$1/holder"; } 2>/dev/null || return 1
   printf '%s %s\n' "$pid" "$(printf '%s\n' "$start" | awk '{ $1 = $1; print }')"
 }
 

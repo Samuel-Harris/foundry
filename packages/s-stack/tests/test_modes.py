@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -111,6 +112,13 @@ class CloseTests(LauncherTestCase):
 
         self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
 
+    def test_absent_when_tmux_has_never_run(self) -> None:
+        never_ran = dict(self.env, TMUX_TMPDIR=tempfile.mkdtemp(dir=self.tmp))
+
+        result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close", env=never_ran)
+
+        self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
+
     def test_absent_when_only_another_session_runs(self) -> None:
         other, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "q", "--window", self.window), name="f-phase-q")
         self.wait_for_claude(other)
@@ -190,6 +198,14 @@ class RemoveTests(LauncherTestCase):
         self.tmux("kill-server")
 
         result = self.launch(*self.args, "--remove")
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"removed f-phase-p worktree={worktree}\n"), result.stderr)
+
+    def test_removes_when_tmux_has_never_run(self) -> None:
+        worktree = self.make_worktree(name="f-phase-p", base="f")
+        never_ran = dict(self.env, TMUX_TMPDIR=tempfile.mkdtemp(dir=self.tmp))
+
+        result = self.launch(*self.args, "--remove", env=never_ran)
 
         self.assertEqual((result.returncode, result.stdout), (0, f"removed f-phase-p worktree={worktree}\n"), result.stderr)
 

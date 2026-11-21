@@ -80,6 +80,7 @@ class StartTests(LauncherTestCase):
 
     def test_a_resumed_claude_in_the_feature_worktree_is_the_orchestrator_not_the_spec_writer(self) -> None:
         feature = self.make_feature_worktree()
+        self.mark_launched(feature, name="f-orchestrator")
         resurrected = self.make_pane(feature, command="claude --continue")
         panes = len(self.panes())
 
@@ -91,6 +92,15 @@ class StartTests(LauncherTestCase):
 
         spec, _ = self.started(self.launch("--feature", "f", "--role", "spec", "--window", self.window), name="f-spec")
         self.assertIn("--name f-spec ", self.wait_for_claude(spec))
+
+    def test_a_plain_claude_in_the_feature_worktree_is_not_an_orchestrator_never_launched(self) -> None:
+        feature = self.make_feature_worktree()
+        plain = self.make_pane(feature, command="claude")
+
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "orchestrator", "--window", self.window), name="f-orchestrator")
+
+        self.assertIn("--name f-orchestrator ", self.wait_for_claude(pane))
+        self.assertEqual(self.claude_in_pane(plain), "claude")
 
     def test_a_name_later_in_the_arguments_is_not_the_session(self) -> None:
         self.make_feature_worktree()
@@ -197,6 +207,23 @@ class StartTests(LauncherTestCase):
 
         self.assertEqual((again.returncode, again.stdout), (0, f"alive f-phase-p pane={first}\n"), again.stderr)
         self.assertEqual(self.named_claudes("f-phase-p"), [running])
+
+    def test_a_command_running_in_the_sessions_own_pane_is_never_killed(self) -> None:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        args = ("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window)
+        first, _ = self.started(self.launch(*args), name="f-phase-p")
+        self.wait_for_claude(first)
+        self.kill_claude("f-phase-p")
+        self.tmux("send-keys", "-t", first, "sleep 98765", "Enter")
+        busy = lambda: [row for row in self.processes() if row.args == "sleep 98765"]
+        self.wait_for(busy, message="the developer's command did not start")
+
+        restarted, _ = self.started(self.launch(*args), name="f-phase-p")
+
+        self.assertNotEqual(restarted, first)
+        self.assertIn("--name f-phase-p ", self.wait_for_claude(restarted))
+        self.assertTrue(busy(), "the developer's command was killed")
 
     def test_ten_restarts_keep_the_pane_count(self) -> None:
         self.make_feature_worktree()

@@ -144,8 +144,8 @@ class LauncherTestCase(unittest.TestCase):
     def tmux(self, *args: str) -> str:
         return self.run_tool(["tmux", *args], check=True).stdout
 
-    def launch(self, *args: str, env: dict[str, str] | None = None) -> subprocess.CompletedProcess:
-        return subprocess.run([str(LAUNCH), *args], env=env or self.env, cwd=self.root, capture_output=True, text=True, timeout=60)
+    def launch(self, *args: str, env: dict[str, str] | None = None, cwd: Path | None = None) -> subprocess.CompletedProcess:
+        return subprocess.run([str(LAUNCH), *args], env=env or self.env, cwd=cwd or self.root, capture_output=True, text=True, timeout=60)
 
     def c_locale(self) -> dict[str, str]:
         """Python gives its children LC_CTYPE=C.UTF-8 when the locale is C, so only an explicit environment reaches the launcher with no UTF-8 locale."""
@@ -162,6 +162,20 @@ class LauncherTestCase(unittest.TestCase):
             if entry.name != command and not (reduced / entry.name).exists():
                 (reduced / entry.name).symlink_to(entry)
         return {**self.env, "PATH": f"{reduced}:{self.system_bin}"}
+
+    def replace_stub(self, name: str, *, body: str) -> None:
+        target = self.bin / name
+        target.unlink()
+        target.write_text(body)
+        target.chmod(0o755)
+
+    def mark_launched(self, worktree: Path, *, name: str) -> None:
+        """The conversation marker the launcher writes once it has started <name> in <worktree>."""
+        markers = Path(self.git("-C", str(worktree), "rev-parse", "--git-path", "s-stack-sessions").strip())
+        if not markers.is_absolute():
+            markers = worktree / markers
+        markers.mkdir(parents=True, exist_ok=True)
+        (markers / name).write_text("00000000-0000-4000-8000-000000000000\n")
 
     def worktree(self, name: str) -> Path:
         return Path(f"{self.root}__wt/{name}")
@@ -261,16 +275,20 @@ class LauncherTestCase(unittest.TestCase):
             self.wait_for_claude(pane)
         return pane
 
+    def sidebar_program(self) -> Path:
+        """A copy of sleep named workmux, which tmux reports as the sidebar's command."""
+        program = self.tmp / "sidebar" / "workmux"
+        if not program.exists():
+            program.parent.mkdir()
+            shutil.copy(os.path.realpath(shutil.which("sleep", path=str(self.system_bin))), program)
+            if sys.platform == "darwin":
+                # macOS kills a copied system binary until it is signed again.
+                subprocess.run(["codesign", "-f", "-s", "-", str(program)], check=True, capture_output=True)
+        return program
+
     def add_sidebar(self) -> str:
         """A narrow, full-height leftmost pane whose foreground process is named workmux, as tmux reports the sidebar."""
-        sidebar_bin = self.tmp / "sidebar"
-        sidebar_bin.mkdir()
-        program = sidebar_bin / "workmux"
-        shutil.copy(os.path.realpath(shutil.which("sleep", path=str(self.system_bin))), program)
-        if sys.platform == "darwin":
-            # macOS kills a copied system binary until it is signed again.
-            subprocess.run(["codesign", "-f", "-s", "-", str(program)], check=True, capture_output=True)
-        pane = self.tmux("split-window", "-d", "-h", "-b", "-f", "-l", "20", "-P", "-F", "#{pane_id}", "-t", self.window, f"exec {program} 86400").strip()
+        pane = self.tmux("split-window", "-d", "-h", "-b", "-f", "-l", "20", "-P", "-F", "#{pane_id}", "-t", self.window, f"exec {self.sidebar_program()} 86400").strip()
         self.wait_for(lambda: self.tmux("display-message", "-p", "-t", pane, "#{pane_current_command}").strip() == "workmux", message="the sidebar stub does not read as workmux")
         return pane
 

@@ -30,6 +30,41 @@ class PlacementTests(LauncherTestCase):
         g = self.geometry()[pane]
         return g.left + g.width - 1
 
+    def assert_full_height_column(self, *, before: dict[str, Pane], orchestrator: str, new: str) -> Pane:
+        """new spans the window's height right of the orchestrator's column, which alone gave up width."""
+        after = self.geometry()
+        self.assertEqual(set(after) - set(before), {new})
+        column = before[orchestrator]
+        height = int(self.tmux("display-message", "-p", "-t", self.window, "#{window_height}"))
+        self.assertEqual((after[new].top, after[new].height), (0, height))
+        self.assertGreater(after[new].left, self.right_of(pane=orchestrator))
+        self.assertIn(after[orchestrator].width - after[new].width, (0, 1))
+        for pane, g in before.items():
+            if g.left >= column.left and g.left + g.width <= column.left + column.width:
+                self.assertEqual(after[pane]._replace(width=0), g._replace(width=0), pane)
+                self.assertEqual(after[pane].width, after[orchestrator].width, pane)
+            else:
+                self.assertEqual((after[pane].top, after[pane].width, after[pane].height), (g.top, g.width, g.height), pane)
+                if g.left < column.left:
+                    self.assertEqual(after[pane].left, g.left, pane)
+        return after[new]
+
+    def test_a_planner_opens_a_full_height_column_beside_a_shared_orchestrator_column(self) -> None:
+        self.tmux("respawn-pane", "-k", "-t", self.first, "-c", str(self.worktree("f")), "claude --name f-spec")
+        self.wait_for_claude(self.first)
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        developer = self.split(target=orchestrator, flags=["-v"])
+        before = self.geometry()
+        self.assertEqual({before[p].left for p in (self.first, orchestrator, developer)}, {before[orchestrator].left})
+
+        planner = self.assert_full_height_column(before=before, orchestrator=orchestrator, new=self.start("--role", "planner", name="f-planner"))
+
+        if self.sidebar:
+            self.assertEqual(self.geometry()[self.sidebar_pane], before[self.sidebar_pane])
+        before = self.geometry()
+        new = self.assert_split(before=before, target=planner.id, new=self.start("--role", "phase", "--phase", "p", name="f-phase-p"))
+        self.assertEqual((new.left, new.width), (planner.left, planner.width))
+
     def test_orchestrator_goes_under_the_first_spec_writer(self) -> None:
         spec = self.split(target=self.first, flags=["-h"], command="claude --name f-spec")
         before = self.geometry()
@@ -50,16 +85,14 @@ class PlacementTests(LauncherTestCase):
         self.assertGreater(new.top, before[self.first].top)
         self.assertLess(new.top, before[lower].top)
 
-    def test_a_planner_splits_the_orchestrator_pane_when_no_session_lies_right_of_its_column(self) -> None:
-        self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
+    def test_a_planners_column_lands_right_of_a_developer_column_which_keeps_its_width(self) -> None:
+        developer = self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
         orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
         before = self.geometry()
 
-        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "planner", name="f-planner"))
+        new = self.assert_full_height_column(before=before, orchestrator=orchestrator, new=self.start("--role", "planner", name="f-planner"))
 
-        self.assertGreater(new.left, self.right_of(pane=orchestrator))
-        self.assertLessEqual(new.width, self.geometry()[orchestrator].width)
-        self.assertEqual((new.top, new.height), (before[orchestrator].top, before[orchestrator].height))
+        self.assertGreater(new.left, self.right_of(pane=developer))
 
     def test_a_phase_splits_the_largest_session_pane_right_of_the_column_and_never_a_developer_pane(self) -> None:
         self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
@@ -121,7 +154,7 @@ class PlacementTests(LauncherTestCase):
             self.assertGreater(after[pane].left, self.right_of(pane=orchestrator))
             self.assertGreaterEqual(after[orchestrator].width, after[pane].width)
 
-    def test_a_developer_pane_in_the_orchestrator_column_is_never_touched(self) -> None:
+    def test_a_developer_pane_in_the_orchestrator_column_is_never_split_or_moved(self) -> None:
         developer = self.split(target=self.first, flags=["-v"])
         before = self.geometry()[developer]
         launches = [
@@ -132,8 +165,12 @@ class PlacementTests(LauncherTestCase):
             (("--role", "spec"), "f-spec"),
         ]
         for args, name in launches:
-            self.start(*args, name=name)
-            self.assertEqual(self.geometry().get(developer), before, name)
+            pane = self.start(*args, name=name)
+            after = self.geometry()
+            if name == "f-planner":
+                before = before._replace(width=after[self.first].width)
+            self.assertEqual(after.get(developer), before, name)
+            self.assertNotEqual(pane, developer)
 
     def test_sessions_the_orchestrator_starts_need_its_pane_in_the_window(self) -> None:
         self.tmux("new-window", "-d", "-c", str(self.worktree("f")), "claude --name f-orchestrator")
@@ -153,11 +190,11 @@ class PlacementTests(LauncherTestCase):
         self.assertEqual(self.claude_processes(), self.named_claudes("f-orchestrator"))
 
     def test_a_resurrected_orchestrator_places_sessions_like_a_launched_one(self) -> None:
+        self.mark_launched(self.worktree("f"), name="f-orchestrator")
         orchestrator = self.split(target=self.first, flags=["-v"], command="claude --continue")
 
         before = self.geometry()
-        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "phase", "--phase", "p", name="f-phase-p"))
-        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+        self.assert_full_height_column(before=before, orchestrator=orchestrator, new=self.start("--role", "phase", "--phase", "p", name="f-phase-p"))
 
         before = self.geometry()
         new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "spec", "--update", "1", name="f-spec-1"))
@@ -200,9 +237,19 @@ class PlacementTests(LauncherTestCase):
         orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
         before = self.geometry()
 
-        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "planner", name="f-planner", env=self.c_locale()))
+        self.assert_full_height_column(before=before, orchestrator=orchestrator, new=self.start("--role", "planner", name="f-planner", env=self.c_locale()))
+
+    def test_a_developers_nameless_claude_under_the_named_orchestrator_does_not_hide_it(self) -> None:
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        planner = self.start("--role", "planner", name="f-planner")
+        self.split(target=orchestrator, flags=["-v"], command="claude")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=planner, new=self.start("--role", "phase", "--phase", "p", name="f-phase-p"))
 
         self.assertGreater(new.left, self.right_of(pane=orchestrator))
+        result = self.launch("--feature", "f", "--role", "orchestrator", "--window", self.window)
+        self.assertEqual((result.returncode, result.stdout), (0, f"alive f-orchestrator pane={orchestrator}\n"), result.stderr)
 
 
 class PlacementWithSidebarTests(PlacementTests):

@@ -70,6 +70,18 @@ class CloseTests(LauncherTestCase):
         self.assertEqual(sorted(result.stdout.splitlines()), sorted([f"closed f-phase-p pane={left}", f"closed f-phase-p pane={running}"]))
         self.assertFalse({left, running} & set(self.pane_ids()))
 
+    def test_a_window_zoomed_on_another_pane_stays_zoomed_on_it(self) -> None:
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
+        self.wait_for_claude(pane)
+        orchestrator = self.named_claudes("f-orchestrator")[0].pane
+        self.tmux("select-pane", "-t", orchestrator)
+        self.tmux("resize-pane", "-Z", "-t", orchestrator)
+
+        result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"closed f-phase-p pane={pane}\n"), result.stderr)
+        self.assertEqual(self.tmux("display-message", "-p", "-t", self.window, "#{window_zoomed_flag} #{pane_id}").strip(), f"1 {orchestrator}")
+
     def test_a_pane_left_by_another_session_is_not_closed(self) -> None:
         other, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "q", "--window", self.window), name="f-phase-q")
         self.wait_for_claude(other)

@@ -51,7 +51,6 @@ A third fresh verifier ran after the review fix round and the merge of phase-han
 
 This verdict is superseded. The developer's pane placement rule (`launcher-d9`) is a scope change, so the phase moves back to Implement.
 
-
 ## Verify, code head `13104cc935a923cc9511d71570ac51683a012246`, VERIFIED
 
 A fourth fresh verifier ran after the placement rule, pane reuse, their quick-review fixes and the merge of `s-stack-package` at `c18fb91`. It committed nothing. Its report, summarised:

@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 16:32 |
+| Last tick | 2026-11-21 17:12 |
 | Default branch merged at | `d7e036c` (#81, into `8093a85`) |
 
 ## Live sessions
@@ -69,6 +69,7 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 12. `references/status-and-messages.md`: write generated-path exclusions with glob magic, `':(exclude,glob)**/<name>'`. The plain `':(exclude)**/<name>'` does not match a file at the repository root. Foundry is safe only because its root `apm.lock.yaml` is gitignored. Raised by `orchestrator-handbook`.
 13. `tests/s-stack/verify-s-stack/SKILL.md` check 8: `## Evidence` must not "record one-off checks with their results". Results go in the phase's evidence file under `.foundry/`, as the no evidence-exception run decision says. The feature plan's C6 has the same wording, and that run decision overrides it. Raised by `phase-handbooks`.
 14. `references/status-and-messages.md`: drop the `restack` orchestrator message kind. PR creators now restack themselves (run decision, automatic stacking). Raised by `orchestrator-handbook`. Also remove the `restack` row from `phase-session.md` (line 97 at `c666afd`) in `phase-handbooks`' next fix round.
+15. `SKILL.md` line 20: a feature name must also not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>` (run decision `launcher-r2`). Raised by `launcher`.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
@@ -82,3 +83,7 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 At the end of the run, start a spec writer to fold `run-decisions.md` into the roadmap. At least these items: `coordination.md` "The launcher" and "Restarts" and C4 now resume by stored id with `--print-window`, `--close`, `--remove` and exit 5; `roles.md` drops the Orchestrate playbook pointer; the status board gains the dependency map and session labels; the generated-files rules for code heads, conflicts and the line limit. Raised by `launcher`.
 
 Known launcher limits to record in that update: a pane left at its shell after `claude` exits is not reused, and `--close` does not clear it, so a relaunch adds a pane. A restarted spec writer needs `--window`.
+
+## Window layout
+
+The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. Start planner and phase sessions by hand to the right of that column: split the largest session pane there, with `-v` unless both halves stay at least 80 columns wide. Start a spec writer in `%165`'s column. Never move a pane the developer adds to that column, and never run `select-layout`.

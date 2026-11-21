@@ -350,3 +350,16 @@ Minor items:
 - The step 4 requests repeat every quiet tick.
 - Merge step 7's `stop` has no quiet condition.
 - Cold read V's instruction conflicts with its point 5.
+
+## Review 6, code head `92b307924868de977ec658b79820b92557ef752e`, SIGNIFICANT
+
+`interrogate` over the commits since `912605a`, with two adversaries on Opus and Fable in their own worktrees. The phase session reran both git probes and checked each cold read against the text.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| A stacked child's flag clears only on ancestry of one fixed commit. A parent refreshed by rebase removes that commit, so the child never clears, never gets `stop`, and gets a round on every quiet tick. | Opus | Scratch-repository script, rerun; cold read |
+| A grandchild in a stack is never flagged after its grandparent's fix, and shows as ready on a stale head. | Fable | Scratch-repository script, rerun; cold read |
+| Step 4 resends an "A pull request merged" round for a flag a fix round set, naming an unrelated commit. A phase in PR with a flagged pull request can also read as stalled. | Fable | Two cold reads |
+| A roadmap update merged during a freeze lets the architecture page show a merge that failed its check as built. | Fable | Cold read |
+
+Together with the three queued `needs_update` items, these show the flag's design was wrong: it tracked one fixed commit, and one level of a stack. The fix replaces it with one readiness rule based on current state.

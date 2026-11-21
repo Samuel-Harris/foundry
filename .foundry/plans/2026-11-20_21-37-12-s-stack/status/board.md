@@ -1,6 +1,6 @@
 ---
 phase: "board"
-state: "Implement"
+state: "Verify"
 changed_at: "2026-11-21T18:10:36Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
@@ -77,3 +77,5 @@ The fix `66118de` gives each skipping edge its own lane, keeps map labels whole 
 A first verifier for `eff112d` was stopped before it committed, when the orchestrator relayed the rule that check files hold no results. A fresh verifier rewrote `checks/board.md` at `b2deb4d`, the new code head, under that rule and returned VERIFIED. The Review gate is starting over `a678a49..b2deb4d`.
 
 The third Review gate returned SIGNIFICANT at `b2deb4d`. Every finding is a gap in `checks/board.md`; both adversaries found the template correct. No template change is planned. The phase moves through Implement to Verify, where a fresh verifier closes the gaps systematically.
+
+The code head is unchanged at `b2deb4d`. The Verify gate is starting.

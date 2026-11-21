@@ -49,3 +49,15 @@ A third fresh verifier recorded the one-off checks in the check file's `## Evide
 - Pending, not failing: four handbook routes other phases own, and the launcher tests.
 - Private-name search over the 5 files of the phase diff, the diff text and every phase commit message: 0 hits.
 - Wording gaps the cold readers raised, none contradicting an expected answer: when a merge moves the code head during Verify, which state to be in; when a scope change counts as conflicting with the feature plan; whether a restart re-reads the roadmap and feature plan.
+
+## Review: SIGNIFICANT at `6758c7df2ea497bdc5536dd704c5a49656dbb4f3`
+
+A later review covered `6b60476` and `6758c7d`. The merges `fd6fdf7` and `d88dfe0` in the range are clean, with empty remerge-diffs. Two reviewers, Opus and Fable, each in a detached worktree at `06b7634`. All four probes from the first review pass, in both reviewers' runs.
+
+Significant:
+
+1. `verifier.md` gives no order that both fills `## Evidence` and names the current code head. "Commit the check file ... before you run anything" conflicts with an Evidence section that holds results. A cold read in each review could not find an order that ends, and `6758c7d` is such a post-run commit.
+2. A fast-forward merge of the orchestrator branch puts the orchestrator's merges back into the later-review scope. Rerun in the reviewer's clone `.repro/ff`: after `git merge demo`, the range lists `e78a928` and `b170eba`, and the uv.lock resolution appears. With `--no-ff`, it lists only the phase's own merge, and its remerge-diff is empty.
+3. `phase-session.md`'s "opens no new ones" contradicts a phase plan that adds a pull request after a scope change. A cold read would push new-scope commits into an unrelated open pull request.
+
+Not significant, but fixed with finding 1 because it is one sentence: the None case is missing from the check-file and run sections. Recorded only: whether `prs-open` is resent on re-entering PR, the order of starting the PR creator and moving to PR, the state for a scope change received in PR, and "once nothing is half done" being undefined.

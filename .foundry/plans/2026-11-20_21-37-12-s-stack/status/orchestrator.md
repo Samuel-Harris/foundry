@@ -21,8 +21,6 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 | `s-stack-phase-phase-handbooks` | `%181` | `../s-stack-phase-phase-handbooks` | 2026-11-21, resumed for the #85 fix round |
-| `s-stack-phase-foundation` | `%182` | `../s-stack-phase-foundation` | 2026-11-21, resumed to record Done |
-| `s-stack-phase-spec-planner-handbooks` | `%183` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21, resumed to record Done |
 
 ## Open decision requests
 
@@ -50,8 +48,8 @@ None.
 | Session | Worktree | Closed | Last commit |
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
-| `s-stack-phase-foundation` | `../s-stack-phase-foundation` | 2026-11-21 | `5df64c0`, merged at `7c4f36d`; worktree kept for fix rounds |
-| `s-stack-phase-spec-planner-handbooks` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 | `22340be`, merged at `4739703`; worktree kept for fix rounds |
+| `s-stack-phase-foundation` | removed, branch kept | 2026-11-21 | Done at `d7a6cb3`, merged; #81 and #82 merged into `main` |
+| `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-21 | Done at `b9429a2`, merged; #84 merged into `main` |
 | `s-stack-phase-phase-handbooks` | `../s-stack-phase-phase-handbooks` | 2026-11-21 | `88ebe79`, merged at `377dc78`; worktree kept for fix rounds |
 
 ## Queued fix rounds

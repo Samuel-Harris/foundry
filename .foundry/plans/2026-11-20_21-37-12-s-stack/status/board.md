@@ -1,7 +1,7 @@
 ---
 phase: "board"
-state: "PR"
-changed_at: "2026-11-21T21:41:33Z"
+state: "Done"
+changed_at: "2026-11-21T23:15:33Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
 code_head: "afd3f270ba9c2ddc689b0afe12927591941ccc7f"
@@ -126,3 +126,5 @@ The verifier closed the twelve gaps at `afd3f27`, the new code head, and returne
 The fifth Review gate returned CLEAR at `afd3f27` under `board-d7`: neither adversary found a template defect. Both verdicts cover `afd3f27`. The PR creator is starting. Every foundation pull request is merged into `main`, so the board pull request has no open dependency.
 
 Draft pull request #86 (`s-stack-board` into `main`, head `7f233e4`) is open, with no open dependency. It replays the 14 own commits without lockfile hunks or `.foundry/`, and ends with `chore(s-stack): regenerate generated files`, which raises s-stack from 0.1.2 to 0.1.3 and regenerates its lockfile. The equality proof, in the form of Experiment 7, printed EQUAL against the phase branch, with an empty regenerate check and no `.foundry/` on the branch. The phase session confirmed that both hand-written files on the branch are byte-identical to `afd3f27`. The pull request carries 1,792 hand-written lines plus 22 generated lockfile lines. Its CI run https://github.com/Samuel-Harris/foundry/actions/runs/44953157241 passed: Pre-commit checks and Package versions pass, and the path-filtered jobs skipped.
+
+Pull request #86 merged into `main` as `51f334e`. The code head `afd3f27` is merged into `s-stack-package` (`a606589`), and the orchestrator's post-merge check returned VERIFIED on `3ce7d34`. Every pull request of the phase is merged, so the phase is Done.

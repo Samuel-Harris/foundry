@@ -17,7 +17,6 @@
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
-| `s-stack-phase-board` | `%173` | `../s-stack-phase-board` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 
@@ -43,7 +42,7 @@ None.
 | `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
 | `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
 | `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | VERIFIED on `ce086bb` |
-| `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | running |
+| `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | VERIFIED on `3ce7d34` |
 
 ## Closed sessions
 
@@ -53,6 +52,7 @@ None.
 | `s-stack-phase-foundation` | removed, branch kept | 2026-11-21 | Done at `d7a6cb3`, merged; #81 and #82 merged into `main` |
 | `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-21 | Done at `b9429a2`, merged; #84 merged into `main` |
 | `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-21 | Done at `0cb6af5`, merged; #85 merged into `main` |
+| `s-stack-phase-board` | `../s-stack-phase-board` | 2026-11-21 | `22e6ab0`, merged at `a606589`; worktree kept for fix rounds on #86 |
 
 ## Queued fix rounds
 

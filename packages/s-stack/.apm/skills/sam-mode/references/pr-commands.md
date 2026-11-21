@@ -55,6 +55,7 @@ The merge commit and the carried commits run no hook. When the refresh stops, it
 
 - **The phase.** Every pull request's own commits, replayed in order onto the phase's merge base with the orchestrator branch, equal the phase head outside `.foundry/`, generated files and generated lines.
 - **Each pull request.** Its head equals its own commits replayed onto its base, outside generated files and generated lines. This catches a hand edit inside a merge commit.
+- **No own commit is already on the orchestrator branch.** Such a commit belongs to another pull request, so the spec is missing a dependency.
 - **Regenerate commits** change only generated files and generated lines.
 - **No pull request contains `.foundry/`.**
 
@@ -65,6 +66,7 @@ It prints each pull request's hand-written diff against its base as `git diff --
 ```bash
 cd "$(git rev-parse --show-toplevel)" || exit 1
 IFS=$'\n'                                               # paths with spaces survive every loop
+export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.quotePath GIT_CONFIG_VALUE_0=false
 REGEN='^chore(s-stack): regenerate generated files$'
 GEN=(':(exclude)*apm.lock.yaml')
 LINES=(':(exclude)*apm.yml') LINES_IN='*apm.yml'
@@ -106,6 +108,7 @@ done_at() { cd "$1" && git worktree remove --force "$tmp"; }
 list() { echo "$1" | tr , '\n' | grep .; }
 refresh() {
   local default=$1 pr base extra merged wt head tips t new m; IFS=: read -r pr base extra merged <<< "$2"; shift 2
+  for t in "$base" $(list "$extra") $(list "$merged"); do git rev-parse -q --verify "$(ref "$t")^{commit}" >/dev/null || { echo "STOP $t is not a branch here"; exit 1; }; done
   wt=$(pwd) head=$(git rev-parse HEAD) tips=$(for b in "$base" $(list "$extra"); do ref "$b"; done)
   at "$(ref "$base")" && merge_in $(echo "$tips" | sed 1d) && replay $(own "$head" "$default" "$base" $(list "$extra") $(list "$merged")) || { done_at "$wt"; exit 1; }
   t=$(git write-tree); done_at "$wt"
@@ -120,7 +123,11 @@ prove() {
   local orch=$1 phase=$2 default=$3 fail=0 top s c f l t r; shift 3; top=$(pwd)
   spec() { IFS=: read -r pr base extra merged <<< "$1"; mine=$(own "$pr" "$default" "$base" $(list "$extra") $(list "$merged")); }
   at "$(git merge-base "$orch" "$phase")"
-  for s; do spec "$s"; replay $mine || { echo "FAIL $pr: its own commits do not replay onto the phase"; fail=1; }; done
+  for s; do
+    spec "$s"
+    for c in $mine; do ! git merge-base --is-ancestor "$c" "$orch" || { echo "FAIL $pr: $c is already on $orch, so its pull request is an undeclared dependency"; fail=1; }; done
+    replay $mine || { echo "FAIL $pr: its own commits do not replay onto the phase"; fail=1; }
+  done
   r=$(git write-tree); done_at "$top"
   same "$r" "$phase" || { git diff --stat "$r" "$phase" -- . ':(exclude).foundry' "${GEN[@]}" "${LINES[@]}"; only_lines "$r" "$phase"; echo "FAIL the pull requests differ from the phase"; fail=1; }
   for s; do

@@ -88,6 +88,20 @@ Dismissed:
 
 - `scripts/versioning.py check` fails on the phase branch. Under C7 a phase branch never bumps, and the PR creator's regenerate commit raises the version on the pull request branch.
 
+## Verify, code head `310d2dff457fe1e8e4163280000f93242feab154`, NOT VERIFIED
+
+A fresh verifier ran the full skill, Tier 1, the cold reads, the live check and 18 mutations. Two checks failed.
+
+1. Dropping the window placement lock left all 98 tests passing. The concurrency test asserted only that each new pane lay right of the orchestrator and that the orchestrator stayed at least as wide. Without the lock, three launches each made their own full-span column, and two of those columns were 1 cell wide.
+2. With no tmux socket directory at all, `--close` and `--remove` exited 1. tmux then prints `error connecting to ... (No such file or directory)`, not `no server running`.
+
+Everything else passed. That covered all other review defects, full-height placement with and without a sidebar, the named-orchestrator precedence, a busy pane surviving a relaunch, a non-ASCII path under `LC_ALL=C`, stale and live locks, and a real `claude` launched in 0.52 s, then alive, then resumed in its own pane.
+
+Minor findings:
+
+- A concurrent launch can print a `holder: No such file or directory` line on standard error.
+- `checks/launcher.md` lacks newer mutations, a layout and stale-lock reproduction, and the note that the trust dialog's cursor starts on "No, exit".
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

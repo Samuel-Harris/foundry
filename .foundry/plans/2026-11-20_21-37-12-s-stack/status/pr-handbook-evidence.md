@@ -52,3 +52,20 @@ p-stack's `interrogate` ran two adversaries, Opus and Fable, on the phase diff, 
 - **Minor.** Paths with spaces split in the merge procedure's loops (Fable 6).
 
 The phase session raised `pr-handbook-r1`, because the common root is the premise of merging the default branch and repairing conflicts by heuristic.
+
+## Verify: NOT VERIFIED at `200f342aa307c118f504d438bb6e5ae988ac3791`
+
+A sixth fresh verifier rewrote `checks/pr-handbook.md` for the rebuild design. It committed `5f1fc10`, where everything passed, Tier 1 included. Probing then found a defect, so it added a case in `200f342` and verified there.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Check 4 lists only `orchestrator.md` as PENDING. Check 6 is PENDING. Check 8 passed for `foundation.md`, `phase-handbooks.md` and `spec-planner-handbooks.md`, with ten cold reads in all. For `pr-handbook.md`, `bash -n` passed, the restacking cold read agreed, and the scratch repositories gave 23 PASS and 1 FAIL.
+- **The six Review findings** each fail on the old procedure from `412a91d` and pass now. The squash revert gave `EQUAL` with `main`'s fix lost on the old procedure, and keeps the fix now. The version-context carry gave `patch failed` and now carries. The newer orchestrator merge gave `does not apply` and now gives `EQUAL`. Several squash-merged ancestors gave `FAIL b.txt` and now merge. The stacked child showed `c.txt p.txt` with 2 merge bases, and now shows `c.txt` with 1. The path with spaces gave `FAIL docs` and now merges.
+- **Mutations.** Five mutated copies of the script each fail the check: no `--3way`, no `IFS`, no per-pull-request check, a forced merge every round, and a no-op `gen_as`.
+- **Rounds.** The repeated rounds, the interrupted round, the hand-edit merge and the forge rewrite of a child's head all gave their required results.
+- **The forge rewrite in this run.** On GitHub, #82 moved from `78162e9` to `04e239a` five seconds after #81 merged. Both commits have tree `6a826c3c`.
+
+Defects:
+
+- **Breaks a real run, silently.** A pull request cut from another phase's open pull request, but given a spec without that dependency, carries the other phase's commits as its own. `git apply --3way` absorbs them in the phase-level replay, because the orchestrator branch already holds them, so the proof prints `EQUAL` while the diff holds another phase's files.
+- **Minor.** Git quotes non-ASCII paths, so a `STOP` line names `"caf\303\251.md"`.
+- **Minor.** A missing open-dependency ref gives a `fatal:` line instead of a `STOP` line. The round still stops safely.
+- **Minor, misleads a reader.** The handbook does not say that a child GitHub moved to the default branch after its parent merged is not leaving a stack.

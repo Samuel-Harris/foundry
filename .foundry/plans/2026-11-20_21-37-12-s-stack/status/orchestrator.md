@@ -9,8 +9,8 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 17:32 |
-| Default branch merged at | `d7e036c` (#81, into `8093a85`) |
+| Last tick | 2026-11-21 17:59 |
+| Default branch merged at | `e4a18d1` (#82, #84, into `321f333`) |
 
 ## Live sessions
 
@@ -21,6 +21,8 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 | `s-stack-phase-phase-handbooks` | `%181` | `../s-stack-phase-phase-handbooks` | 2026-11-21, resumed for the #85 fix round |
+| `s-stack-phase-foundation` | `%182` | `../s-stack-phase-foundation` | 2026-11-21, resumed to record Done |
+| `s-stack-phase-spec-planner-handbooks` | `%183` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21, resumed to record Done |
 
 ## Open decision requests
 
@@ -31,9 +33,9 @@ None.
 | Number | Phase | Branch | Base | Depends on |
 | --- | --- | --- | --- | --- |
 | 81 | `foundation` | merged into `main` as `d7e036c` | | |
-| 82 | `foundation` | `s-stack-verify-skill` | `main` | none |
-| 84 | `spec-planner-handbooks` | `s-stack-spec-planner-handbooks` | `main` | 81, 82 |
-| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `s-stack-verify-skill` (stacked on 82) | 82 |
+| 82 | `foundation` | merged into `main` as `e4a18d1` | | |
+| 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
+| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `main` | none; needs a refresh |
 
 ## Merged phases
 

@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 17:12 |
+| Last tick | 2026-11-21 17:32 |
 | Default branch merged at | `d7e036c` (#81, into `8093a85`) |
 
 ## Live sessions
@@ -20,6 +20,7 @@
 | `s-stack-phase-board` | `%173` | `../s-stack-phase-board` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
+| `s-stack-phase-phase-handbooks` | `%181` | `../s-stack-phase-phase-handbooks` | 2026-11-21, resumed for the #85 fix round |
 
 ## Open decision requests
 
@@ -68,7 +69,7 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 11. `references/status-and-messages.md`: the code-head command follows git history simplification, so after a merge it can resolve to a commit off the phase branch's first-parent line. Add `--first-parent`, and check that a pre-Verify merge that brings in code still moves the code head. Raised by `phase-handbooks`.
 12. `references/status-and-messages.md`: write generated-path exclusions with glob magic, `':(exclude,glob)**/<name>'`. The plain `':(exclude)**/<name>'` does not match a file at the repository root. Foundry is safe only because its root `apm.lock.yaml` is gitignored. Raised by `orchestrator-handbook`.
 13. `tests/s-stack/verify-s-stack/SKILL.md` check 8: `## Evidence` must not "record one-off checks with their results". Results go in the phase's evidence file under `.foundry/`, as the no evidence-exception run decision says. The feature plan's C6 has the same wording, and that run decision overrides it. Raised by `phase-handbooks`.
-14. `references/status-and-messages.md`: drop the `restack` orchestrator message kind. PR creators now restack themselves (run decision, automatic stacking). Raised by `orchestrator-handbook`. Also remove the `restack` row from `phase-session.md` (line 97 at `c666afd`) in `phase-handbooks`' next fix round.
+14. `references/status-and-messages.md`: drop the `restack` orchestrator message kind. PR creators now restack themselves (run decision, automatic stacking). Raised by `orchestrator-handbook`. Make the `fix-round` row cover a merged dependency, after which the PR creator works out the base again. Raised by `phase-handbooks`.
 15. `SKILL.md` line 20: a feature name must also not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>` (run decision `launcher-r2`). Raised by `launcher`.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".

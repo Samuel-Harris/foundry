@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T22:01:52Z"
+state: "Verify"
+changed_at: "2026-11-21T22:03:12Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "d5c3d09a02a0fde2e434bd62895c1b3f7c888769"
+code_head: "37d9146f38c531bf4a9eeb66f6d7da7c46b631b4"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -293,3 +293,5 @@ The Verify 23 fixes are at `b33f4a5`. `s-stack-package` (`df13acf`) was merged a
 The twenty-fourth Verify gate returned VERIFIED at `d5c3d09`. `s-stack-package` was merged at `7daf642`, and under `launcher-r3` that merge keeps the code head, because it touched no owned path. The phase moved to Review, which covers the commits since `038cdc4`.
 
 The eighth Review gate returned SIGNIFICANT at `d5c3d09`, under the common-path bar. The phase moved back to Implement.
+
+The Review 8 fixes are at `37d9146`. `s-stack-package` (`3b31462`) was merged at `5f94518`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `37d9146`.

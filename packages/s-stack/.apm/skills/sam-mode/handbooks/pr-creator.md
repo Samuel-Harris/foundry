@@ -40,9 +40,10 @@ The last row exists because a `gh stack` is one linear chain. A pull request has
 
 ## The parameters
 
-The feature plan names the generated files, the command that regenerates them and the regenerate commit's subject. Write them once as this block, which every command below starts with. The values shown are Foundry's.
+The feature plan names the generated files, the command that regenerates them and the regenerate commit's subject. Write them once as this block, which every command below starts with. The values shown are Foundry's. Its first line moves to the repository root, because every pathspec below is relative to it.
 
 ```bash
+cd "$(git rev-parse --show-toplevel)" || exit 1
 REGEN='^chore(s-stack): regenerate generated files$'  # the regenerate commit's subject, as a git --grep pattern
 GEN=(':(exclude)*apm.lock.yaml')                        # files that are wholly generated
 LINES=(':(exclude)*apm.yml') LINES_IN='*apm.yml'         # files in which some lines are generated
@@ -145,25 +146,27 @@ bash -s -- <other> <squash-merged parent branch> <<'EOF'
 <the parameter block>
 is_generated() { [ -z "$(git ls-files -- "$1" "${GEN[@]}")" ]; }
 has_generated_lines() { [ -z "$(git ls-files -- "$1" "${LINES[@]}")" ]; }
-side() { git merge-file -p "--$1" --object-id ":2:$2" ":1:$2" ":3:$2"; }
+abort() { echo "FAIL $1"; git merge --abort; exit 1; }
+side() { local base=":1:$2"; git cat-file -e "$base" 2>/dev/null || base=$(git hash-object -w --stdin </dev/null); git merge-file -p "--$1" --object-id ":2:$2" "$base" ":3:$2"; }
+take() { side "$1" "$2" > "$2.side" && cat "$2.side" > "$2" && rm "$2.side" && git add -- "$2"; }
 sides_differ_by_hand() { diff -U0 <(side ours "$1") <(side theirs "$1") | grep -E '^[-+]' | grep -v -E '^(\+\+\+|---) ' | grep -q -v -E "$LINE_OK"; }
 git merge --no-ff --no-commit "$1"; status=$?
 git rev-parse -q --verify MERGE_HEAD >/dev/null || exit "$status"
 if [ -n "$2" ]; then
   for f in $(git diff --name-only "$1...$2" -- . "${GEN[@]}" "${LINES[@]}"); do
-    git ls-files -u -- "$f" | grep -q . && side ours "$f" > "$f" && git add -- "$f"
+    git ls-files -u -- "$f" | grep -q . || continue
+    take ours "$f" || abort "$f cannot be resolved hunk by hunk"
   done
 fi
 for f in $(git diff --name-only --diff-filter=U); do
-  if is_generated "$f"; then git checkout --theirs -- "$f"
-  elif has_generated_lines "$f" && ! sides_differ_by_hand "$f"; then side theirs "$f" > "$f"
-  else echo "FAIL $f conflicts outside generated content"; git merge --abort; exit 1; fi
-  git add -- "$f"
+  if is_generated "$f"; then git checkout --theirs -- "$f" && git add -- "$f" || abort "$f cannot take the other side"
+  elif has_generated_lines "$f" && ! sides_differ_by_hand "$f"; then take theirs "$f" || abort "$f cannot be resolved hunk by hunk"
+  else abort "$f conflicts outside generated content"; fi
 done
 EOF
 ```
 
-When a parent was squash-merged into the default branch, the child no longer descends from it, so the merge conflicts on the parent's hand-written files. The child's branch already holds that change, so the squash step keeps the child's side in each conflicting hunk and the default branch's later changes elsewhere in the file. A file with generated lines takes the other side in each conflicting hunk when the two sides differ only in generated lines, and the regenerate command rewrites those lines. When a generated line and a hand-written line fall in one hunk, the script aborts, which is a safe stop to report. Any other hand-written conflict aborts. Report it, and the phase that owns the paths resolves it. When the merge never starts, the script exits with `git merge`'s status, which is 0 when the branch is already up to date. After the script, run the feature plan's regenerate command, stage the generated files, and run `git commit --no-edit` with the hook on.
+When a parent was squash-merged into the default branch, the child no longer descends from it, so the merge conflicts on the parent's hand-written files. The child's branch already holds that change, so the squash step keeps the child's side in each conflicting hunk and the default branch's later changes elsewhere in the file. When both sides added a file, as after a parent that added it was squash-merged, the empty file stands in for the missing base. A file with generated lines takes the other side in each conflicting hunk when the two sides differ only in generated lines, and the regenerate command rewrites those lines. When a generated line and a hand-written line fall in one hunk, the script aborts, which is a safe stop to report. Any other hand-written conflict aborts. Report it, and the phase that owns the paths resolves it. When the merge never starts, the script exits with `git merge`'s status, which is 0 when the branch is already up to date. After the script, run the feature plan's regenerate command, stage the generated files, and run `git commit --no-edit` with the hook on.
 
 ## Update an open pull request
 

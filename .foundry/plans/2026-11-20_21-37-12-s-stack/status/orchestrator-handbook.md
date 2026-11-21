@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T16:28:32Z"
+state: "Review"
+changed_at: "2026-11-21T16:34:23Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "22a1695494372d464719da0f52c6909cbc1cd84f"
+code_head: "7ccd3ee91dc0e7d8a18cce43d64f663678b8ed8f"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -31,6 +31,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "ca4e3b67d6a3a79db36ecb8895578bdbba310c2e"
     at: "2026-11-21T16:27:33Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "7ccd3ee91dc0e7d8a18cce43d64f663678b8ed8f"
+    at: "2026-11-21T16:34:23Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -76,3 +81,5 @@ The fixes are at `693d8b2`. `s-stack-package` (`fd342b4`, which brings `spec-pla
 The fourth Verify gate returned VERIFIED at `ca4e3b6`. One item would mislead a reader, so the phase moved back to Implement.
 
 The fix is at `22a1695`. `s-stack-package` (`22a0112`) was merged at `26c3ecd`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `22a1695`.
+
+The fifth Verify gate returned VERIFIED at `7ccd3ee`. The phase moved to Review, which covers the commits since `e0a51a2`.

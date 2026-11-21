@@ -70,3 +70,13 @@ It also noted that the board section seeded `phases` documents "when you publish
 A fresh verifier updated the check file for `693d8b2` and the merge of `spec-planner-handbooks` (commit `ca4e3b6`). It covers a frozen tick that still replaces a stall, a dependency that must be Done, a repeated generated-only round on a docs-only move, and seeding at the first `done-planning`. It reran everything. C6 checks 1, 2, 3, 5, 7 and 8 PASS (`161/200 orchestrator.md`; Tier 1 across 20 packages; 13 cold reads across three check files; the abort script). Checks 4 and 6 are PENDING, which is allowed. Every **Done when** item was met.
 
 One remaining item misleads a reader. The resend rule for `needs_update` sat inside a section that tick step 2 runs only for package-changing moves. The phase moved back to Implement to fix it, and also to say where a Done phase's status is read and to scope the `done-planning` board write.
+
+## Verify 5, code head `7ccd3ee91dc0e7d8a18cce43d64f663678b8ed8f`, VERIFIED
+
+A fresh verifier updated cold reads E(3) and B(2) for `22a1695` (commit `7ccd3ee`) and reran everything. C6 checks 1, 2, 3, 5, 7 and 8 PASS (`160/200 orchestrator.md`; Tier 1 across 20 packages; 13 cold reads across three check files; the abort script). Checks 4 and 6 are PENDING, which is allowed. Every **Done when** item was met. Nothing remaining breaks a real run.
+
+Notes recorded and not fixed, because each repeats a correct message and leads no reader to a wrong action:
+
+- In the tick that first sets `needs_update`, the any-move resend can read as a second generated-only round.
+- While a default-branch merge stays aborted, each tick retries it and resends the same `fix-round` or notice.
+- Several timings are not stated: when the `needs_update` clearing test runs, where the Done merge sits relative to the one-merge limit and the freeze, the seeding of a newly added phase, the meaning of a "newer" code head, and the tracker's first default-branch commit.

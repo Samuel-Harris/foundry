@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T16:51:49Z"
+state: "Verify"
+changed_at: "2026-11-21T16:53:32Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "5af461837620e10ebf182320e1aaa4546bb60a0d"
+code_head: "d53722e71a1204960fe0546156dbfe1832c2407e"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -99,3 +99,5 @@ The second Review gate returned SIGNIFICANT at `7ccd3ee`. The phase moved back t
 The Review 2 fixes are at `7b296da`. `s-stack-package` (`06959f7`) was merged at `f321277`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `7b296da`.
 
 The sixth Verify gate returned VERIFIED at `5af4618`. One item would mislead a reader, so the phase moved back to Implement.
+
+The Finishing a phase fix is at `d53722e`. `s-stack-package` (`7dc1bc7`) was merged at `3a27576`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `d53722e`.

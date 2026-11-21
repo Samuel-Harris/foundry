@@ -242,3 +242,13 @@ A fresh verifier ran the whole verification skill on 2026-11-21 between 18:18 an
 - If the notice arrived then, the phase would move to Done with its fix in no pull request.
 
 The orchestrator's handbook closes the window: it merges a phase only while the phase lists an open pull request (`orchestrator.md` at `131526e`, as the orchestrator stated). But `phase-session.md` does not say so. Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets, package isolation, Tier 1 18:18:37 to 18:21:04, every Rerun cold read of all three check files, the C2 check, and the private-name search (0 hits). Pending, not failing: two routes and the launcher tests.
+
+## Verify: NOT VERIFIED at `8e258caf80c51a48ee2b2c42e7f75ed9a09e17a9`
+
+A fresh verifier ran the whole verification skill on 2026-11-21 between 18:24 and 18:28 UTC, at HEAD `f34346d`, and made no commit. Everything passed except the one-off rerun of the merged-notice cold read. Two independent reads, on different models, found the same dead end:
+
+1. The developer merges the new fix pull request into the default branch before the orchestrator merges the phase branch again.
+2. Under the added sentence, the orchestrator merges a re-merged phase only while it lists an open pull request, so it never merges this one.
+3. The code head never reaches the orchestrator branch, the notice never comes, and the phase waits in PR indefinitely.
+
+Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets, package isolation, Tier 1 18:24:14 to 18:26:43, all four phase-handbooks cold reads, and the private-name search (0 hits). Pending, not failing: two routes and the launcher tests.

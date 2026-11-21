@@ -79,7 +79,7 @@ The board documents a tick writes:
 - `board/recent`, when any phase changed state.
 - One `phases/<phase>` for each phase whose state, scheduling, `waits_for`, session or pane changed.
 - One `prs/<number>` for each pull request whose state, checks, base, dependencies or `needs_update` changed.
-- A `needs` document added for each new decision request, waiting prompt or restack, and removed once it is resolved.
+- A `needs` document added for each new decision request or waiting prompt, and removed once it is resolved.
 
 ## Merging a phase
 
@@ -112,6 +112,7 @@ A pull request's checks do not run again when its base moves. Two pull requests 
 
 - Send its phase a `fix-round` marked generated files only. The phase brings its pull request up to date with the default branch and regenerates, without new gates.
 - Set its `needs_update` to true in the tracker and on the board.
+- If its `depends_on` lists a pull request that just merged, also send its phase a `fix-round` naming that pull request, so its PR creator works out its base again.
 - Clear `needs_update` only when, after `git fetch origin`, `git merge-base --is-ancestor origin/<default branch> <pull request head SHA>` succeeds and every required check has passed on that head.
 
 A pull request is ready for the developer to merge only when its `needs_update` is false.
@@ -125,11 +126,11 @@ In tick step 4, for each merged phase, do every step below whose condition holds
 - Its status is Done, the newest commit on its branch is a stop commit, and the branch has commits the orchestrator branch lacks: merge them as [Merging a phase](#merging-a-phase) steps 1 to 3 say. They hold only status, so this merge runs while frozen and does not count against the one-merge limit.
 - Its status is Done and its branch is fully merged: close its pane with `--close` if it is open, and remove its worktree with `--remove`.
 
-## Fix rounds and restacks
+## Fix rounds
 
 Feedback reaches a phase only through you. When the developer asks for a change, or a tick finds a new review comment or a failed check, send the phase a `fix-round` with the pull request and the comments or the check. When it reports both verdicts for the new code head, merge it again. Then set `needs_update` on the pull requests of every phase that builds on the changed code.
 
-When a merge leaves a pull request with exactly one open dependency it could stack on, or with none, add a restack to **Needs you**. Send `restack` only when the developer asks for it.
+PR creators choose and change their pull requests' bases themselves, across phases. You never offer or send a restack. When a stack parent merges, the forge rebases its child with a force-push from the developer's account. That is expected, not a second writer on the branch.
 
 ## Decisions
 

@@ -1,10 +1,10 @@
 ---
 phase: "foundation"
-state: "Implement"
-changed_at: "2026-11-21T13:56:21Z"
+state: "Verify"
+changed_at: "2026-11-21T14:23:53Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
-code_head: "f7772cca88da57b5984cbff6ca125ae783c440ec"
+code_head: "512edd797f497f955ca5a0175faead7c18a8c2d8"
 waits_for: null
 verdicts: []
 pull_requests: []
@@ -18,7 +18,7 @@ decisions:
 
 # Phase `foundation` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. Implementation of pull request 1 is under way.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. Both planned pull request layers are built and each passed its quick-review fix round. The Verify gate is running.
 
 ## Notes
 

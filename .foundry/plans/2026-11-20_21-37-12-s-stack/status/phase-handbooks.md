@@ -62,7 +62,12 @@ verdicts:
     code_head: "c666afdc929b1e05e49decda745d79b469f0333f"
     at: "2026-11-21T16:58:22Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
-pull_requests: []
+pull_requests:
+  - number: 85
+    branch: "s-stack-phase-handbooks"
+    base: "s-stack-verify-skill"
+    depends_on: [82]
+    stacked: true
 requests: []
 decisions:
   - id: "phase-handbooks-d1"
@@ -87,4 +92,4 @@ Fix 6b60476 addresses the four significant review findings. s-stack-package merg
 Fix 73b5410 addresses the three findings of the second review. s-stack-package merged at cddb4b0 with the C7 procedure; it brought spec-planner-handbooks (planner.md, spec-writer.md, their check file) and a lockfile-only conflict, resolved by regenerating. The merge moved the code head to cddb4b0. The fourth Verify gate returned VERIFIED at d32a56a. The third Review gate returned SIGNIFICANT at d32a56a: a stale expected answer in the check file and a Verdicts sentence in phase-session.md. Back to Implement.
 Fix e592b60 addresses the third review's handbook findings. The stale expected answer in the check file goes to the next verifier. s-stack-package merged again (only .foundry/).
 The fifth verifier was stopped before it committed, on the orchestrator's instruction to remove the evidence-only exception. Commit 691ea62 removes it: the check file holds only checks, and results go in this phase's evidence file. Verification restarts at the new code head. The sixth Verify gate returned VERIFIED at 691ea62. The fourth Review gate returned SIGNIFICANT at 691ea62: whether a phase's own one-off checks rerun at a new code head, and a cold-read prompt that does not ask what its expected answer requires.
-Fix c666afd: the phase's own verifier runs its one-off checks at every code head it verifies, and cold read 2 asks what its expected answer requires. s-stack-package merged at 161c7c7 (only .foundry/). The seventh Verify gate returned VERIFIED at c666afd. The fifth Review gate returned CLEAR at c666afd. Both verdicts cover c666afd.
+Fix c666afd: the phase's own verifier runs its one-off checks at every code head it verifies, and cold read 2 asks what its expected answer requires. s-stack-package merged at 161c7c7 (only .foundry/). The seventh Verify gate returned VERIFIED at c666afd. The fifth Review gate returned CLEAR at c666afd. Both verdicts cover c666afd. Draft pull request 85 is open, stacked on #82 in GitHub stack 83, and the equality proof shows it holds exactly the verified phase diff.

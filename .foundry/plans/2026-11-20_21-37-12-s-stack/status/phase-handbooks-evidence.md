@@ -122,3 +122,14 @@ Not significant, recorded only:
 - Step 1's "your own check file" assumes the phase has one. A None phase's reader filled the gap correctly.
 - Older gaps in `phase-session.md`: the state for a developer instruction received in PR, a verifier commit that checks the work of all pull requests, and no Verify row for a stale VERIFIED.
 - Older wording in `verifier.md`: "needs no verification" against "needs no checks of its own".
+
+## PR: draft pull request 85 for code head `c666afdc929b1e05e49decda745d79b469f0333f`
+
+https://github.com/Samuel-Harris/foundry/pull/85 is a draft on branch `s-stack-phase-handbooks`, head `2c43b3d`, with base `s-stack-verify-skill`. It depends on #82 and joined GitHub stack #83, which holds #81 (merged), #82 and #85. A fresh PR creator replayed the 13 non-merge phase commits without lockfile hunks or `.foundry/`, then added `chore(s-stack): regenerate generated files`, which raises s-stack from 0.1.0 to 0.1.1 and regenerates its lockfile.
+
+- The Experiment 7 equality proof printed `EQUAL`.
+- The phase session checked independently. `git diff origin/s-stack-verify-skill origin/s-stack-phase-handbooks`, without lockfiles and `apm.yml`, equals `git diff s-stack-package...s-stack-phase-phase-handbooks -- . ':(exclude).foundry'` under the same exclusions. The branch holds 0 files under `.foundry/`, and `apm.yml` changes only its `version:` line.
+- `FOUNDRY_DIFF_RANGE=origin/s-stack-verify-skill...HEAD bash .githooks/pre-commit` exited 0, with the lockfile unchanged. `versioning.py check origin/main` reported no package without a bump.
+- Hand-written lines: 372 added and 1 removed against #82's branch, and 682 added and 1 removed against `main`.
+- `gh stack link 81 82 85` also tried to retarget #82 to #81's old branch, and GitHub refused with HTTP 422. #82's base is still `main`.
+- `s-stack-phase-spec-planner-handbooks` checked first and agreed that #84 targets `main`, because #85 is #82's only child.

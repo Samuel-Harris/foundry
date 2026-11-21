@@ -37,7 +37,7 @@ Both commands describe a pull request as `<pr>:<base>[:<open deps>[:<merged deps
 | `pr3:main:pr1,pr2` | Targets `main` and carries `pr1` and `pr2` |
 | `pr2:main::pr1` | `pr1` was squash-merged into `main` |
 
-A branch may be written `main` or `origin/main`. The default branch always resolves to `origin/<default>`. Any other branch resolves to the local branch when it exists, holds `origin/<branch>`, and carries this phase's commits by their `cherry-pick` trailers, so a child reads its own phase's parent's unpushed head. Another phase's branch always resolves to `origin/<branch>`, the state that phase proved and pushed, whatever its local copy holds. A pull request's own commits are the commits reachable from its branch and from none of the default branch, its base and its dependencies, leaving out merges and regenerate commits.
+A branch may be written `main` or `origin/main`. The default branch always resolves to `origin/<default>`. Any other branch resolves to the local branch when it exists, holds `origin/<branch>`, and whose newest carried commit names a commit of this phase in its `cherry-pick` trailer, so a child reads its own phase's parent's unpushed head. Another phase's branch always resolves to `origin/<branch>`, the state that phase proved and pushed, whatever its local copy holds. A pull request's own commits are the commits reachable from its branch and from none of the default branch, its base and its dependencies, leaving out merges and regenerate commits.
 
 ## How the script sees the phase
 
@@ -113,7 +113,12 @@ REGEN='^chore(s-stack): regenerate generated files$'
 GEN=(':(exclude)*apm.lock.yaml')
 LINES=(':(exclude)*apm.yml') LINES_IN='*apm.yml'
 GEN_LINE='^version: '
-mine_branch() { [ -s "${W:-/nonexistent}/fp" ] && ids "refs/heads/$1" "^$D" | grep -q -x -F -f "$W/fp"; }
+mine_branch() {
+  local c t; [ -s "${W:-/nonexistent}/fp" ] || return 1
+  c=$(git rev-list -1 --no-merges --invert-grep --grep="$REGEN" "refs/heads/$1" "^$D"); [ -n "$c" ] || return 1
+  t=$(git log -1 --format=%B "$c" | sed -n 's/^(cherry picked from commit \([0-9a-f]*\))$/\1/p' | tail -1)
+  [ -n "$t" ] && grep -q -x -F "$t" "$W/fp"
+}
 ref() {
   local b=${1#origin/}; git rev-parse -q --verify "refs/remotes/origin/$b" >/dev/null || { echo "$1"; return; }
   [ "origin/$b" != "${D:-}" ] && git rev-parse -q --verify "refs/heads/$b" >/dev/null && git merge-base --is-ancestor "origin/$b" "refs/heads/$b" && mine_branch "$b" && echo "$b" || echo "origin/$b"
@@ -247,8 +252,10 @@ prove() {
   local orch=$1 fail=0 top s c f l t x o i b v m p deps; setup "$2" "$3"; shift 3; specs=("$@") top=$(pwd)
   spec() { IFS=: read -r pr base extra merged <<< "$1"; mine=($(own "$pr" "$D" "$base" $(list "$extra") $(list "$merged"))); }
   deps=$(for s; do IFS=: read -r _ b x m <<< "$s"; ref "$b"; refs "$x"; refs "$m"; done)
-  for m in $(git rev-list --first-parent --merges "$PH" "^$D"); do for p in $(git rev-parse "$m^@" | sed 1d); do
-    for b in "$orch" "$D" $deps; do git merge-base --is-ancestor "$p" "$b" && continue 2; done
+  git rev-list --first-parent "$orch" > "$W/ofp"
+  for m in $(git rev-list --first-parent --merges "$PH" "^$D" | grep -v -x -F -f "$W/ofp"); do for p in $(git rev-parse "$m^@" | sed 1d); do
+    grep -q -x -F "$p" "$W/ofp" && continue
+    for b in "$D" $deps; do git merge-base --is-ancestor "$p" "$b" && continue 2; done
     echo "FAIL $(git log -1 --format='%h %s' "$m") merges $(git rev-parse --short "$p"), whose commits are not phase commits: a delegate's branch merged into the phase"; fail=1
   done; done
   paths $(git rev-list --first-parent --no-merges "$PH" "^$D") > "$W/pp"

@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `d3dd837` (version 6) |
-| Last tick | 2026-11-21 22:51 |
+| Last tick | 2026-11-21 23:31 |
 | Default branch merged at | `51f334e` (#86, into `853a26d`) |
 
 ## Live sessions
@@ -109,9 +109,12 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 
 Raised by `foundation`'s follow-up review. They point at text that round adds, so they wait for it to merge.
 
-- `phase-handbooks`: `phase-session.md` lines 5 and 84 say the reference owns "the merge rule". Point to `handbooks/orchestrator.md` for it. (Medium.)
 - `phase-handbooks` and `spec-planner-handbooks`: `phase-session.md` line 26 and `planner.md` line 54 mention only generated paths. Say "generated paths and generated lines", because the reference's code head now excludes plan-named lines such as `^version:`. (Medium.)
 - `spec-planner-handbooks`: `spec-writer.md` lines 36 to 43 copy the launch steps. Point to `SKILL.md`'s "Starting a session", keeping the failure handling in one place.
 - `board` (Done): `assets/status-board.html` lines 77 and 283 still offer a "restack" need, but the restack kind is gone under automatic stacking.
 - Low: `planner.md` lines 21 and 61 and `spec-writer.md` line 54 restate payloads the reference owns. Point to it instead.
 - `phase-handbooks`: `phase-session.md`'s "Feedback on a pull request" round must handle commits a developer made on a pull request branch. Cherry-pick each into the phase branch with `-x`, pass both gates, then have the PR creator refresh. `pr-creator.md` reports them as `DEVELOPER-COMMITS`. (Medium, common path.)
+
+## Post-merge check briefs
+
+Tell the post-merge verifier to grade every cold read with Opus subagents, not Sonnet. `spec-planner-handbooks` found Sonnet graders flaky on a correct answer to its point 3.

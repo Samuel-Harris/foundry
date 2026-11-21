@@ -38,3 +38,17 @@ Findings carried to the fix round after Review:
 - **Minor.** The squash step is skipped when the child merged a default-branch tip its parent never merged. The merge then aborts safely. Under this run's `needs_update` rule the case cannot arise.
 - **Minor.** Step 4 pushes before it runs the proof, so a round interrupted between the two skips the proof on the next round.
 - **Minor.** The check file's `## Evidence` section still describes failures at `391d9a8` that are long fixed.
+
+## Review: SIGNIFICANT at `412a91d852ac3d59e38fa95a6aa366d5e59a3e91`
+
+p-stack's `interrogate` ran two adversaries, Opus and Fable, on the phase diff, with no access to `.foundry/`. The Gemini seat was dropped because this host does not offer it. The phase session reran each Opus repro, and each reproduced. Verified findings, merged by root cause:
+
+- **Breaks a real run, silently.** On the first merge after a squash, the squash step takes the child's side in every conflicting hunk of the parent's files. It reverts another pull request's change on the same line, or a later default-branch fix to the parent's line, and the proof prints `EQUAL`, because its merge check uses the same rule (Opus 1, Fable 1).
+- **Breaks a real run.** The carry loop cannot apply a hunk whose context holds a `version:` line that differs on the target branch: another phase's bump on the orchestrator branch, a regenerate commit in a fix round, or a version change in the commit itself (Opus 2, Fable 2).
+- **Breaks a real run.** The proof's replay fails for a correct split once the phase branch has merged a newer orchestrator branch (Opus 3).
+- **Breaks a real run.** More than one squash-merged ancestor between rounds cannot be merged, and the wording names the parent rather than the squash-merged ancestor (Fable 3).
+- **Breaks a real run, safe stop.** A phase merge that resolved a hand-written conflict cannot be carried (Fable 4).
+- **Misleads a reader.** A stacked child merges the default branch rather than its parent's branch (Opus 4, and the verifier). The proof's default argument must be `origin/<default>`, and the order is bottom of the stack first (Fable 5).
+- **Minor.** Paths with spaces split in the merge procedure's loops (Fable 6).
+
+The phase session raised `pr-handbook-r1`, because the common root is the premise of merging the default branch and repairing conflicts by heuristic.

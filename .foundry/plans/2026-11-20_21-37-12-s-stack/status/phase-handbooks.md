@@ -1,10 +1,10 @@
 ---
 phase: "phase-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T17:39:18Z"
+state: "Verify"
+changed_at: "2026-11-21T17:39:55Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
-code_head: "515c907896a51762c83dfeb2756981e03bd4b257"
+code_head: "21557166e37a58d905fa420d8b4605584e490bdc"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -105,3 +105,4 @@ The fifth verifier was stopped before it committed, on the orchestrator's instru
 Fix c666afd: the phase's own verifier runs its one-off checks at every code head it verifies, and cold read 2 asks what its expected answer requires. s-stack-package merged at 161c7c7 (only .foundry/). The seventh Verify gate returned VERIFIED at c666afd. The fifth Review gate returned CLEAR at c666afd. Both verdicts cover c666afd. Draft pull request 85 is open, stacked on #82 in GitHub stack 83, and the equality proof shows it holds exactly the verified phase diff.
 Fix round from the orchestrator: phase-session.md still told the PR creator to merge the default branch into pull request branches (replaced by run decision pr-handbook-r1's rebuild) and kept a restack row (replaced by automatic stacking). Back to Implement.
 Fix 515c907 removes the restack row, has every fix round re-derive the base, and points a refresh of pull request branches at pr-creator.md. The layer's quick-review pass from the first Implement stands, because this fix round changed four lines and both gates follow. Verify returned VERIFIED at 515c907. Review returned CLEAR at 515c907. On the orchestrator's instruction, the phase goes back to Implement to restrict the move to Done to a phase in PR and to widen the move back to Implement.
+Fix 2155716: Done only from PR, back to Implement whenever no verdict covers the current code head, and a pull-request-merged round records bases and sends prs-open.

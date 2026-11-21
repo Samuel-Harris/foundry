@@ -39,11 +39,11 @@ The check file has two sections.
 | Section | Holds |
 | --- | --- |
 | `## Rerun` | Checks that are cheap and repeatable and touch nothing outside the machine, such as cold reads, scratch repositories and unit tests. Each states its command or prompt and its expected result. Later verifiers and the orchestrator's merged-branch check run them again. |
-| `## Evidence` | One-off checks with their results, such as a published test page or a real session. Nobody runs them again. |
+| `## Evidence` | One-off checks that nobody runs again, such as a published test page or a real session: what each checks and how. Never their results. |
 
 Each check is one behaviour from the phase's **Done when** list or the phase plan's verification section. A check earns its place only if wrong behaviour can fail it. A check that only finds a file, a heading or a fixed string is not a check.
 
-Commit the check file with its `## Rerun` checks, and any change to the skill, before you run anything. Such a commit holds no file under `.foundry/`, so it moves the code head. After the run, write the one-off results into `## Evidence` and commit that change alone. No behavioural check runs `## Evidence`, so that commit needs no new run, but it must still pass the repository's lint and commit checks. Your verdict names the code head after your last commit.
+The check file changes only when the checks change. Commit it, and any change to the skill, before you run anything. Such a commit holds no file under `.foundry/`, so it moves the code head, and your verdict must come from a run at that head. Results, outputs and dates go in your report, never in the check file.
 
 If a run shows that a check is wrong, fix it, commit again, and run everything again. Never weaken a check so that it passes. A check is wrong only when it misstates what the roadmap or the plans require.
 
@@ -75,4 +75,4 @@ Return these to the phase session.
 - For INCONCLUSIVE, what is missing and what would let the check run.
 - For a phase that needs no verification, the reason.
 
-Write nothing under `.foundry/`. The phase session records your verdict in its status file and your evidence in its evidence file.
+Write nothing under `.foundry/`. The phase session records your verdict in its status file, and your results, outputs and dates in its evidence file.

@@ -67,8 +67,8 @@ Prompt: "Read only the handbook file at the path below and nothing else, not eve
 
 Expected answer:
 
-1. `tests/demo/verify-demo/checks/widgets.md`, beside the verification skill's `SKILL.md`, with a `## Rerun` section for cheap, repeatable, local checks and an `## Evidence` section for one-off checks and their results. It does not edit the skill's `SKILL.md`, which its phase does not own.
-2. Before running anything. The commit moves the code head, and the verdict names the head that includes it. A later change to the file means a new commit and a full rerun.
+1. `tests/demo/verify-demo/checks/widgets.md`, beside the verification skill's `SKILL.md`, with a `## Rerun` section for cheap, repeatable, local checks and an `## Evidence` section that describes one-off checks without their results. It does not edit the skill's `SKILL.md`, which its phase does not own.
+2. Before running anything. The commit moves the code head, and the verdict must come from a run at that head. Any later change outside `.foundry/`, this file included, means a new commit and a full rerun.
 3. INCONCLUSIVE, because no check failed but one could not run. INCONCLUSIVE is not a pass.
 4. No. It waits until every subagent it started has reported.
 
@@ -109,10 +109,6 @@ Expected answer:
 
 ## Evidence
 
-### Private names at `cddb4b09f57776a82487c11e24c4622964a7ccb3`
+### Private names
 
-A case-insensitive `grep -ciE -f <patterns>` over every file in `git diff --name-only s-stack-package...s-stack-phase-phase-handbooks -- . ':(exclude).foundry'` (the three handbooks, `packages/s-stack/apm.lock.yaml` and this file), over that diff's text, and over the messages of the 24 commits in `s-stack-package..s-stack-phase-phase-handbooks` up to `a721dc6`. The patterns cover the private repository's name, its feature's name and both prototype page ids, taken from the developer's private notes and not reproduced here. The same patterns hit the private notes themselves, so the search can find them. Result: no hit in any file, the diff or a commit message. PASS.
-
-### Tier 1 at `a721dc6`, code head `cddb4b09f57776a82487c11e24c4622964a7ccb3`
-
-`PATH="$PWD/.venv-apm/bin:$PATH" APM="$PWD/.venv-apm/bin/apm" bash tests/structural/run-tier1.sh`, outside the sandbox, with `apm` 0.32.0 from `.venv-apm`. It exited `0`, and its last line was `all Tier 1 structural checks passed across 20 packages`. The skill's cleanup then left `git status --short` empty. PASS. This change to `## Evidence` is committed alone after the run and needs no new run.
+A case-insensitive search for the private repository's name, its feature's name and the prototype page ids, over every file in `git diff --name-only s-stack-package...s-stack-phase-phase-handbooks -- . ':(exclude).foundry'`, over that diff's text and over the messages of the commits in `s-stack-package..s-stack-phase-phase-handbooks`. The patterns live outside this repository and are never written here. It passes when nothing matches. The verifier reports the result.

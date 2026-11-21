@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T23:25:34Z"
+state: "Verify"
+changed_at: "2026-11-21T23:26:09Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "1f6216019e8b1c657d52e1c360285e2bc2516ef5"
+code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -84,4 +84,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Verify passed at `1f62160`, but it exposed a gap in `planner.md`: it does not say that a shared exclusive resource serialises the phases that need it. The phase is fixing that and point 3.
+Follow-up round. `planner.md` and point 3 are fixed at `47f792f`, and the orchestrator accepted `spec-planner-handbooks-d5`. A fresh verifier runs in full, then the review covers the commits since `49f2959`.

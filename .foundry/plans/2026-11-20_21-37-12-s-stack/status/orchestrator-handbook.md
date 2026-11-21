@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T20:49:20Z"
+state: "Review"
+changed_at: "2026-11-21T21:01:46Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "20c031abddd67e15dc6d7ef846852653895404c2"
+code_head: "038cdc4e65eae7cf6bbe9c447f9d290ece02bce7"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -132,6 +132,11 @@ verdicts:
     code_head: "5976721323ca91e4e3b2cdd071c45fe731215e9d"
     at: "2026-11-21T20:48:20Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "038cdc4e65eae7cf6bbe9c447f9d290ece02bce7"
+    at: "2026-11-21T21:01:46Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -250,3 +255,5 @@ The single up-to-date rule and the other Review 6 fixes are at `03c1998`. `s-sta
 The twentieth Verify gate returned NOT VERIFIED at `5976721`. The phase moved back to Implement.
 
 The Verify 20 fixes are at `20c031a`. `s-stack-package` (`e5580c8`) was merged at `778a0bf`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `20c031a`.
+
+The twenty-first Verify gate returned VERIFIED at `038cdc4`. The phase moved to Review, which covers the commits since `92b3079`.

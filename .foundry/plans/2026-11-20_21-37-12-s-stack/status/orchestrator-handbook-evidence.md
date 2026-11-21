@@ -381,3 +381,26 @@ Minor items:
 - The round named "the feature pull request that landed", which is no longer recorded.
 
 For the integration read-through: C5's `needs_update` wording, and the board template's schema comment, should match the up-to-date test.
+
+## Verify 21, code head `038cdc4e65eae7cf6bbe9c447f9d290ece02bce7`, VERIFIED
+
+A fresh verifier updated cold reads B, AD, AF, AH and the round-naming reads for `20c031a` (commit `038cdc4`) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`170/200 orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: three scripts and 43 cold reads across four check files, all on their first run.
+
+Every **Done when** item was met:
+
+- The handbook has 170 lines, and no command line appears.
+- All nine launcher flags appear in `launch.sh` on the `launcher` phase branch.
+- A private-name grep of the phase diff and commit messages found 0 hits, with a positive control of 6.
+
+Queued for the next fix round:
+
+- The architecture page subagent's brief does not name which merges passed their check. This misleads a reader.
+
+For the cross-handbook integration:
+
+- A dependency reached through another is named as the refresh target, which depends on `pr-creator.md`.
+- A phase the restarted planner leaves unchanged is never sent `move-back` to Plan.
+- A `move-back` to Plan during a freeze.
+- Step 7's `stop` has no quiet test.
+
+Outside this phase: the roadmap's `decisions.md` names a private file that is meant to stay untracked. It was reported to the orchestrator.

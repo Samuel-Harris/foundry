@@ -2477,6 +2477,15 @@ deployments:
   content_hash: sha256:46128bd2b48c64c4b375f827db9082fd860e3d6e099dd3810169e92bc081caab
 - kind: project-relative
   target: claude
+  value: .claude/skills/sam-mode/handbooks/phase-session.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:78217078758d276f686567413c75675ae92778f3e9991ddba160453e9f48ef8e
+- kind: project-relative
+  target: claude
   value: .claude/skills/sam-mode/handbooks/planner.md
   runtime: null
   scope: project
@@ -2486,6 +2495,15 @@ deployments:
   content_hash: sha256:ebf2a3e49084d906ad9e1e1a2ca6d76fb9e795c6a6e2b1693237e81cae89962f
 - kind: project-relative
   target: claude
+  value: .claude/skills/sam-mode/handbooks/reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d19c4492585e8fdf731a28f78b1b2826133fe8c58dbe7fbe85ad08c0f4a303ea
+- kind: project-relative
+  target: claude
   value: .claude/skills/sam-mode/handbooks/spec-writer.md
   runtime: null
   scope: project
@@ -2493,6 +2511,15 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:ab76ce1e7b190c899fa78c3fa04aef68af0bf94564a829b0c0ff3a60ff573683
+- kind: project-relative
+  target: claude
+  value: .claude/skills/sam-mode/handbooks/verifier.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/references/status-and-messages.md
@@ -5285,6 +5312,15 @@ deployments:
   content_hash: sha256:46128bd2b48c64c4b375f827db9082fd860e3d6e099dd3810169e92bc081caab
 - kind: project-relative
   target: legacy
+  value: .agents/skills/sam-mode/handbooks/phase-session.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:78217078758d276f686567413c75675ae92778f3e9991ddba160453e9f48ef8e
+- kind: project-relative
+  target: legacy
   value: .agents/skills/sam-mode/handbooks/planner.md
   runtime: null
   scope: project
@@ -5294,6 +5330,15 @@ deployments:
   content_hash: sha256:ebf2a3e49084d906ad9e1e1a2ca6d76fb9e795c6a6e2b1693237e81cae89962f
 - kind: project-relative
   target: legacy
+  value: .agents/skills/sam-mode/handbooks/reviewer.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:d19c4492585e8fdf731a28f78b1b2826133fe8c58dbe7fbe85ad08c0f4a303ea
+- kind: project-relative
+  target: legacy
   value: .agents/skills/sam-mode/handbooks/spec-writer.md
   runtime: null
   scope: project
@@ -5301,6 +5346,15 @@ deployments:
   - .
   active_owner: .
   content_hash: sha256:ab76ce1e7b190c899fa78c3fa04aef68af0bf94564a829b0c0ff3a60ff573683
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/sam-mode/handbooks/verifier.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/references/status-and-messages.md
@@ -5314,23 +5368,35 @@ local_deployed_files:
 - .agents/skills/sam-mode
 - .agents/skills/sam-mode/SKILL.md
 - .agents/skills/sam-mode/handbooks/orchestrator.md
+- .agents/skills/sam-mode/handbooks/phase-session.md
 - .agents/skills/sam-mode/handbooks/planner.md
+- .agents/skills/sam-mode/handbooks/reviewer.md
 - .agents/skills/sam-mode/handbooks/spec-writer.md
+- .agents/skills/sam-mode/handbooks/verifier.md
 - .agents/skills/sam-mode/references/status-and-messages.md
 - .claude/skills/sam-mode
 - .claude/skills/sam-mode/SKILL.md
 - .claude/skills/sam-mode/handbooks/orchestrator.md
+- .claude/skills/sam-mode/handbooks/phase-session.md
 - .claude/skills/sam-mode/handbooks/planner.md
+- .claude/skills/sam-mode/handbooks/reviewer.md
 - .claude/skills/sam-mode/handbooks/spec-writer.md
+- .claude/skills/sam-mode/handbooks/verifier.md
 - .claude/skills/sam-mode/references/status-and-messages.md
 local_deployed_file_hashes:
   .agents/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
   .agents/skills/sam-mode/handbooks/orchestrator.md: sha256:46128bd2b48c64c4b375f827db9082fd860e3d6e099dd3810169e92bc081caab
+  .agents/skills/sam-mode/handbooks/phase-session.md: sha256:78217078758d276f686567413c75675ae92778f3e9991ddba160453e9f48ef8e
   .agents/skills/sam-mode/handbooks/planner.md: sha256:ebf2a3e49084d906ad9e1e1a2ca6d76fb9e795c6a6e2b1693237e81cae89962f
+  .agents/skills/sam-mode/handbooks/reviewer.md: sha256:d19c4492585e8fdf731a28f78b1b2826133fe8c58dbe7fbe85ad08c0f4a303ea
   .agents/skills/sam-mode/handbooks/spec-writer.md: sha256:ab76ce1e7b190c899fa78c3fa04aef68af0bf94564a829b0c0ff3a60ff573683
+  .agents/skills/sam-mode/handbooks/verifier.md: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
   .agents/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60
   .claude/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
   .claude/skills/sam-mode/handbooks/orchestrator.md: sha256:46128bd2b48c64c4b375f827db9082fd860e3d6e099dd3810169e92bc081caab
+  .claude/skills/sam-mode/handbooks/phase-session.md: sha256:78217078758d276f686567413c75675ae92778f3e9991ddba160453e9f48ef8e
   .claude/skills/sam-mode/handbooks/planner.md: sha256:ebf2a3e49084d906ad9e1e1a2ca6d76fb9e795c6a6e2b1693237e81cae89962f
+  .claude/skills/sam-mode/handbooks/reviewer.md: sha256:d19c4492585e8fdf731a28f78b1b2826133fe8c58dbe7fbe85ad08c0f4a303ea
   .claude/skills/sam-mode/handbooks/spec-writer.md: sha256:ab76ce1e7b190c899fa78c3fa04aef68af0bf94564a829b0c0ff3a60ff573683
+  .claude/skills/sam-mode/handbooks/verifier.md: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
   .claude/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60

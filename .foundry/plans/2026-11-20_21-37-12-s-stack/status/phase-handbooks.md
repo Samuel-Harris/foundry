@@ -1,10 +1,10 @@
 ---
 phase: "phase-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T17:27:50Z"
+state: "Verify"
+changed_at: "2026-11-21T17:28:36Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
-code_head: "c666afdc929b1e05e49decda745d79b469f0333f"
+code_head: "515c907896a51762c83dfeb2756981e03bd4b257"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -94,3 +94,4 @@ Fix e592b60 addresses the third review's handbook findings. The stale expected a
 The fifth verifier was stopped before it committed, on the orchestrator's instruction to remove the evidence-only exception. Commit 691ea62 removes it: the check file holds only checks, and results go in this phase's evidence file. Verification restarts at the new code head. The sixth Verify gate returned VERIFIED at 691ea62. The fourth Review gate returned SIGNIFICANT at 691ea62: whether a phase's own one-off checks rerun at a new code head, and a cold-read prompt that does not ask what its expected answer requires.
 Fix c666afd: the phase's own verifier runs its one-off checks at every code head it verifies, and cold read 2 asks what its expected answer requires. s-stack-package merged at 161c7c7 (only .foundry/). The seventh Verify gate returned VERIFIED at c666afd. The fifth Review gate returned CLEAR at c666afd. Both verdicts cover c666afd. Draft pull request 85 is open, stacked on #82 in GitHub stack 83, and the equality proof shows it holds exactly the verified phase diff.
 Fix round from the orchestrator: phase-session.md still told the PR creator to merge the default branch into pull request branches (replaced by run decision pr-handbook-r1's rebuild) and kept a restack row (replaced by automatic stacking). Back to Implement.
+Fix 515c907 removes the restack row, has every fix round re-derive the base, and points a refresh of pull request branches at pr-creator.md. The layer's quick-review pass from the first Implement stands, because this fix round changed four lines and both gates follow.

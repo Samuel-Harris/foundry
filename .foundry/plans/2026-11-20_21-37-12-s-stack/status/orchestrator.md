@@ -92,4 +92,4 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 
 ## Deferred follow-ups for live phases
 
-- `phase-handbooks` and `pr-handbook`: rework after Done. A Done phase asked to change code moves back to Implement, and its PR creator opens a new pull request for commits no open pull request carries. Fold this into each phase's next Implement round. If either reaches PR without one, send it as a fix round. `orchestrator.md` at `131526e` fails safe meanwhile. Raised by `orchestrator-handbook`.
+- `pr-handbook` (`phase-handbooks` folded it in at its `30f0709` review round): rework after Done. A Done phase asked to change code moves back to Implement, and its PR creator opens a new pull request for commits no open pull request carries. Fold this into each phase's next Implement round. If either reaches PR without one, send it as a fix round. `orchestrator.md` at `131526e` fails safe meanwhile. Raised by `orchestrator-handbook`.

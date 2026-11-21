@@ -227,8 +227,10 @@ new_conversation_id() {
 
 cmd_print_window() {
   require tmux
+  local window_id
   [ -n "${TMUX_PANE:-}" ] || die 'not inside tmux'
-  printf 'window=%s\n' "$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}')"
+  window_id=$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}') && [ -n "$window_id" ] || die "no window for pane $TMUX_PANE"
+  printf 'window=%s\n' "$window_id"
 }
 
 cmd_close() {

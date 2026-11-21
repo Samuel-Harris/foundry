@@ -172,3 +172,28 @@ The **Done when** list in the feature plan entry, with this evidence:
 ## Open decision
 
 `foundation-r1` in the status file. C2 says to copy the header definition into the reference unchanged, but its code-head command excludes `**/apm.lock.yaml`, which is option B, a decision for this run only (C7 says no handbook states it as a general rule). Recommendation A: the shipped reference gives the general rule, `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, says that a feature plan may name generated paths that also move no code head, and uses `<id>` and `<feature>` placeholders. This run's sessions keep using C2 from the feature plan, which names the lockfile exclusion. Option B: copy C2 word for word. The work waiting on it is the code-head paragraph of the reference file only.
+
+## Follow-up round, 21 November 2026
+
+The orchestrator sent 17 queued items after the phase reached Done (`status/orchestrator.md`, "Queued fix rounds"). The phase moved back to Implement and merged `s-stack-package` at `9feaae9`. Read `run-decisions.md` with this section: several rules changed after the first round.
+
+### Files
+
+`SKILL.md`, `references/status-and-messages.md`, `tests/s-stack/verify-s-stack/SKILL.md` and `tests/s-stack/verify-s-stack/checks/foundation.md`. The last is needed because its C2 check pins the code-head wording, its cold read 2 tests item 8, and its `## Evidence` section holds results, which the run decision on check files forbids.
+
+### Decisions for the delegate
+
+- **Item 8.** The start form is an exception to reading `poteto-mode` first: `/sam-mode start <feature>` runs the launcher and does nothing else, without reading `poteto-mode`. State it once, in the first-read section.
+- **Items 11, 12 and 16, the code head.** The reference keeps the general rule (`foundation-r1`) and gains three things. It walks only the first-parent line. A commit counts when its diff against its first parent, outside `.foundry/` and the generated paths a feature plan names, changes any line other than the generated lines a feature plan names, such as a `version:` line. Exclusions use glob magic, `':(exclude,glob)**/<name>'`. Give the rule as one short bash loop over `git rev-list --first-parent`. A pre-Verify merge that brings in code still moves the code head, because its diff against its first parent holds that code. `launcher-r3` (a merge that touches none of the phase's owned paths) is a run decision about owned paths and stays out of the shipped reference.
+- **Item 17.** The Verdicts rule keeps the verdict condition and points to `handbooks/orchestrator.md` for when the orchestrator merges. That handbook is not on `s-stack-package` yet, so the pointer is a code span.
+- **Item 4.** `SKILL.md` gets one short "Starting a session" section: from a main session, run `launch.sh --print-window` to learn the window, then `launch.sh --feature ... --role ... --window <window id>`. The handbooks point to it. `spec-writer.md` and `orchestrator.md` belong to other phases, which remove their own copies.
+- **Items 5, 10, 14 and 16, the orchestrator's message kinds.** `restack` goes. `fix-round` covers a generated-files-only round (the phase stays in PR), a hand-written conflict with the default branch (back to Implement), and a merged dependency (the PR creator works out the base again). `move-back` covers a failed post-merge check. A new kind, `prs-merged`, is the notice that every pull request of the phase merged. `stop` also covers replacing a stalled session. The table says which state each implies, and points to `handbooks/phase-session.md` for what the phase does.
+- **Items 1, 2 and 7.** Planner requests are `planner-r<n>`, kept in an "Open requests" section of the feature plan. The spec writer asks the developer directly and sends no decision request, so the sender list says so.
+- **Items 3, 6, 9 and 15** are as the queue states.
+- **Item 13 and the check file.** Check 8's `## Evidence` describes what each one-off check does and how, never its results. `checks/foundation.md`'s `## Evidence` results move to `status/foundation-evidence.md`.
+- **The C2 check** keeps its exact comparisons. Its approved code-head wording becomes the new bullet. Each other reference line that a run decision changed becomes an allowed difference, named with its decision.
+- `SKILL.md` stays at or under 150 lines.
+
+### Pull request
+
+One new draft pull request against `main` for this round's commits, since #81 and #82 have merged.

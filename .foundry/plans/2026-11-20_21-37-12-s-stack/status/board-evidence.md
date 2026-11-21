@@ -102,3 +102,24 @@ Minor, recorded:
 - A 40-character id in wide glyphs overflows its node, because node width assumes 7.4 units per character. Phase ids are slugs in practice.
 - The stub records the read-only query builders `where`, `orderBy` and `limit` as writes. This fails safe.
 - The Fable adversary saw one headless Chrome launch sit idle for nine minutes, in about 2,300 launches. It is the same unbounded call as above.
+
+## Verify gate, code head `a5b3a9c8a79a19b3d65691765019a0e6adb28279`, VERIFIED
+
+Two verifiers worked on this gate.
+
+The first committed `checks/board.md` at `e21d7e8`. That version maps every template promise to a scenario and gives every Chrome call a wall-clock bound, where a timeout fails. It ran 225 mutants in two rounds, and three survived. The phase session stopped it at 20:10 under the orchestrator's 15-minute limit, because it had started a further edit. The phase session then merged `s-stack-package` at `cc362c4`.
+
+A fresh verifier, scoped by the orchestrator to one representative mutant per assertion, committed `a5b3a9c` and verified it.
+
+- Fallback fonts: with Google Fonts blocked, the 1000 px word check failed on one break, `bold</b>|<img`, inside the fixture's adversarial markup title. That is a legitimate break between two punctuation marks, not a split word. No word in data that follows the schema breaks, with or without the web fonts. The check now blocks host resolution, so it is deterministic and offline, and it counts a break only between two letters or digits.
+- `## Rerun`: 45 scenarios. The phase session reran it at 2026-11-21T20:31:13Z: exit 0 in 27 s, the tree clean, and the OS dark-text mutant from the earlier set exited 1.
+- Mutation proof: 41 mutants, one or more per promise row, including every mutant from the third Review gate. All 41 exit 1; the phase session counted the exit column. The hang mutant fails with "Chrome timed out twice" in 61 s and leaves no Chrome process behind. The three survivors from the first verifier (an `orderBy` read, and two dropped guards in `keepViewState`) render identically to the real template in all 44 recorded scenarios, so they are equivalent.
+- Verification skill: checks 1, 2, 3, 5, 7 and 8 PASS. Tier 1 passed across 20 packages in 153 s. Check 4 is PENDING for `orchestrator.md` and `pr-creator.md`, and check 6 is PENDING with no launcher tests yet.
+- Live page https://claude.ai/artifact/G9DR3pgSxrcgiWkPRh897c serves the current template byte for byte. A batch with a fresh `tick_at` rendered Fresh. A batch with `tick_at` 41 minutes old rendered the stale banner, with no publish. A write at `interact` level was refused.
+- The cold reader wrote a valid first batch with `depends_on`. `grep innerHTML` finds nothing. `apm audit --ci` passes.
+
+Known gaps:
+
+- No browser tool could open the claude.ai viewer.
+- The first verifier's 225-mutant rounds were not re-checked, apart from its three survivors.
+- The cold readers noted that the schema comment shows no batch wire format and names no state for a phase that has not started. Both are minor.

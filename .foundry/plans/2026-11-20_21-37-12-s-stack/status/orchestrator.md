@@ -109,7 +109,6 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 
 Raised by `foundation`'s follow-up review. They point at text that round adds, so they wait for it to merge.
 
-- `phase-handbooks`: `phase-session.md` lines 5 and 84 say the reference owns "the merge rule". Point to `handbooks/orchestrator.md` for it. (Medium.)
 - `phase-handbooks` and `spec-planner-handbooks`: `phase-session.md` line 26 and `planner.md` line 54 mention only generated paths. Say "generated paths and generated lines", because the reference's code head now excludes plan-named lines such as `^version:`. (Medium.)
 - `spec-planner-handbooks`: `spec-writer.md` lines 36 to 43 copy the launch steps. Point to `SKILL.md`'s "Starting a session", keeping the failure handling in one place.
 - `board` (Done): `assets/status-board.html` lines 77 and 283 still offer a "restack" need, but the restack kind is gone under automatic stacking.

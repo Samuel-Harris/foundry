@@ -247,6 +247,16 @@ class StartTests(LauncherTestCase):
         self.assertIn("add f --base origin/main -C", self.workmux_log.read_text().splitlines())
         self.assertEqual(self.prompt_of("f-spec"), "/sam-mode spec feature=f phase=- update=- roadmap=- plan=- orchestrator=f-orchestrator")
 
+    def test_first_spec_writer_finds_its_window_when_the_layout_opens_in_a_subdirectory(self) -> None:
+        self.env["STUB_WORKMUX_START_DIR"] = "docs"
+        before = self.windows()
+
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+
+        new_windows = [w for w in self.windows() if w not in before]
+        self.assertEqual([p["window"] for p in self.panes() if p["id"] == pane], new_windows)
+        self.assertIn("--name f-spec ", self.wait_for_claude(pane))
+
     def test_phase_session_gets_a_pane_in_the_window_and_its_prompt(self) -> None:
         feature = self.make_feature_worktree()
         self.commit_in(feature, relative=f".foundry/feature-roadmaps/{ROADMAP_ID}/README.md")
@@ -289,7 +299,7 @@ class StartTests(LauncherTestCase):
         self.assertEqual((len(self.panes()), self.windows()), (panes, windows))
         self.assertEqual(len(self.named_claudes("f-phase-p")), 1)
 
-    def test_resumed_orchestrator_outside_the_launcher_is_alive(self) -> None:
+    def test_a_resumed_claude_in_the_feature_worktree_is_the_orchestrator_not_the_spec_writer(self) -> None:
         feature = self.make_feature_worktree()
         resurrected = self.make_pane(feature, command="claude --continue")
         panes = len(self.panes())
@@ -299,6 +309,29 @@ class StartTests(LauncherTestCase):
         self.assertEqual((result.returncode, result.stdout), (0, f"alive f-orchestrator pane={resurrected}\n"), result.stderr)
         self.assertEqual(len(self.panes()), panes)
         self.assertEqual(len(self.claude_processes()), 1)
+
+        spec, _ = self.started(self.launch("--feature", "f", "--role", "spec", "--window", self.window), name="f-spec")
+        self.assertIn("--name f-spec ", self.wait_for_claude(spec))
+
+    def test_a_name_later_in_the_arguments_is_not_the_session(self) -> None:
+        self.make_feature_worktree()
+        decoy = self.make_pane(self.tmp, command="claude --model m --continue say --name f-phase-p")
+        args = ("--feature", "f", "--role", "phase", "--phase", "p")
+
+        closed = self.launch(*args, "--close")
+
+        self.assertEqual((closed.returncode, closed.stdout), (0, "absent f-phase-p\n"), closed.stderr)
+        self.assertIn(decoy, [p["id"] for p in self.panes()])
+        pane, _ = self.started(self.launch(*args, "--window", self.window), name="f-phase-p")
+        self.assertIn("--name f-phase-p ", self.wait_for_claude(pane))
+
+    def test_the_session_starts_whatever_the_default_shell(self) -> None:
+        self.make_feature_worktree()
+        self.tmux("set-option", "-g", "default-shell", "/usr/bin/false")
+
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
+
+        self.assertIn("--name f-planner ", self.wait_for_claude(pane))
 
     def test_a_claude_named_for_the_session_is_alive_outside_its_worktree(self) -> None:
         self.make_feature_worktree()

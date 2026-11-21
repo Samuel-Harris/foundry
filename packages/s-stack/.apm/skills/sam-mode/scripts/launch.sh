@@ -119,9 +119,10 @@ resolve() {
 }
 
 # Prints "pane_id width height window_id kind in_worktree" for each pane with a
-# claude process among its descendants. kind is strict when that claude was
-# started with --name <name>, other for any other --name, and nameless without
-# --name, which is how workmux resurrect restarts a session. A pane running
+# claude process among its descendants. kind is strict when that claude's first
+# argument is --name <name>, as the launcher writes it, so a --name inside a
+# prompt never matches. It is nameless when no argument is --name, which is how
+# workmux resurrect restarts a session, and other otherwise. A pane running
 # several claudes reports the closest match. in_worktree is 1 when the pane's
 # directory is <worktree>.
 session_panes() {
@@ -143,11 +144,9 @@ session_panes() {
       parent[$1] = $2
       program = $3; sub(/.*\//, "", program)
       if (program != "claude") next
-      named = 0; strict = 0
-      for (i = 4; i <= NF; i++) {
-        if ($i == "--name") { named = 1; if ($(i + 1) == name) strict = 1 }
-        else if (index($i, "--name=") == 1) { named = 1; if ($i == "--name=" name) strict = 1 }
-      }
+      strict = ($4 == "--name" && $5 == name) || $4 == "--name=" name
+      named = 0
+      for (i = 4; i <= NF; i++) if ($i == "--name" || index($i, "--name=") == 1) named = 1
       claude[$1] = strict ? "strict" : (named ? "other" : "nameless")
     }
     END {
@@ -165,8 +164,11 @@ session_panes() {
 }
 
 find_live_pane() {
-  local matches
-  matches=$(session_panes "$name" "$worktree" | awk '$5 == "strict" || ($5 == "nameless" && $6 == 1)')
+  local matches resumed=1
+  # workmux resurrect restores only the orchestrator, and the spec writer has
+  # ended by then, so a nameless claude in the feature worktree is the orchestrator.
+  [ -z "$first_spec" ] || resumed=0
+  matches=$(session_panes "$name" "$worktree" | awk -v resumed="$resumed" '$5 == "strict" || (resumed && $5 == "nameless" && $6 == 1)')
   at_most_one "pane runs $name" "$matches"
   live_pane=${matches%% *}
 }
@@ -252,7 +254,7 @@ cmd_start() {
       resolved_worktree=$(resolve "$worktree")
       new_windows=$(tmux list-panes -a -F '#{window_id} #{pane_current_path}' | while read -r window_id path; do
         [[ $windows_before != *" $window_id "* ]] || continue
-        [ "$(resolve "$path")" != "$resolved_worktree" ] || printf '%s\n' "$window_id"
+        if [[ "$(resolve "$path")/" == "$resolved_worktree"/* ]]; then printf '%s\n' "$window_id"; fi
       done | sort -u)
       [ -n "$new_windows" ] || die "no new window for $worktree after workmux add"
       at_most_one "new window for $worktree after workmux add" "$new_windows"
@@ -300,9 +302,9 @@ EOF
   pane_command="claude --name $(printf %q "$name") $conversation_flag $(printf %q "$conversation_id") $(printf %q "$prompt"); exec \"\${SHELL:-/bin/sh}\" -l"
 
   if [ -n "$split" ]; then
-    target_pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" "$pane_command") || cannot_split
+    target_pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" /bin/sh -c "$pane_command") || cannot_split
   else
-    tmux respawn-pane -k -t "$target_pane" -c "$worktree" "$pane_command" || die "tmux respawn-pane -t $target_pane failed"
+    tmux respawn-pane -k -t "$target_pane" -c "$worktree" /bin/sh -c "$pane_command" || die "tmux respawn-pane -t $target_pane failed"
   fi
 
   if [ "$conversation_flag" = --session-id ]; then

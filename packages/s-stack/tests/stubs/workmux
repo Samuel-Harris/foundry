@@ -11,8 +11,12 @@ if command == "add":
     base = rest[rest.index("--base") + 1]
     subprocess.run(["git", "-C", root, "worktree", "add", "-q", "-b", name, path, base], check=True)
     if "--headless" not in rest:
-        window = subprocess.run(["tmux", "new-window", "-d", "-P", "-F", "#{window_id}", "-c", path], check=True, capture_output=True, text=True).stdout.strip()
-        subprocess.run(["tmux", "split-window", "-d", "-t", window, "-c", path], check=True)
+        start = path
+        if "STUB_WORKMUX_START_DIR" in os.environ:
+            start = os.path.join(path, os.environ["STUB_WORKMUX_START_DIR"])
+            os.makedirs(start)
+        window = subprocess.run(["tmux", "new-window", "-d", "-P", "-F", "#{window_id}", "-c", start], check=True, capture_output=True, text=True).stdout.strip()
+        subprocess.run(["tmux", "split-window", "-d", "-t", window, "-c", start], check=True)
 elif command == "path":
     if not os.path.isdir(path):
         sys.exit(f"Worktree '{name}' not found")

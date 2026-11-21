@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "PR"
-changed_at: "2026-11-21T16:13:07Z"
+state: "Done"
+changed_at: "2026-11-21T17:59:48Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
@@ -56,4 +56,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Both gates passed for `6f70b37`. After #81 merged, draft pull request 84 was rebuilt onto #82 in a generated-only fix round. Its head is `49df8c3`, base `main`, and it depends on #82, which already has #85 stacked on it. CI passed. The phase waits for the developer's review.
+Done. Pull request 84 merged into `main` as `0531411`, and the orchestrator merged code head `6f70b37` into `s-stack-package`. Both handbooks and the check file are on `main`.

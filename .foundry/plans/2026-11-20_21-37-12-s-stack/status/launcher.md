@@ -95,6 +95,10 @@ decisions:
     decision: "From the orchestrator: the orchestrator is found by its name or its tagged pane first. An unnamed claude counts only when neither is alive, when it is the only candidate in the feature worktree, and when the launcher has started an orchestrator there before. Two or more candidates give exit 1 naming the panes."
     door: "two-way"
     at: "2026-11-21T20:08:23Z"
+  - id: "launcher-d13"
+    decision: "From the orchestrator: a lock records its holder's PID and start time, and a waiter takes over a lock whose holder is gone or whose PID was reused at once. Only a live holder makes a launch wait, up to 300 seconds."
+    door: "two-way"
+    at: "2026-11-21T21:04:08Z"
 ---
 
 # Phase launcher status

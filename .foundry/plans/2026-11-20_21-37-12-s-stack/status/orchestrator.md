@@ -115,3 +115,7 @@ Raised by `foundation`'s follow-up review. They point at text that round adds, s
 - `board` (Done): `assets/status-board.html` lines 77 and 283 still offer a "restack" need, but the restack kind is gone under automatic stacking.
 - Low: `planner.md` lines 21 and 61 and `spec-writer.md` line 54 restate payloads the reference owns. Point to it instead.
 - `phase-handbooks`: `phase-session.md`'s "Feedback on a pull request" round must handle commits a developer made on a pull request branch. Cherry-pick each into the phase branch with `-x`, pass both gates, then have the PR creator refresh. `pr-creator.md` reports them as `DEVELOPER-COMMITS`. (Medium, common path.)
+
+## Post-merge check briefs
+
+Tell the post-merge verifier to grade every cold read with Opus subagents, not Sonnet. `spec-planner-handbooks` found Sonnet graders flaky on a correct answer to its point 3.

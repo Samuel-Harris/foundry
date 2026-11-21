@@ -27,7 +27,8 @@ All measured on 21 November 2026 with Claude Code 2.1.330, tmux 3.8 and workmux 
 | Fact | Consequence |
 | --- | --- |
 | `claude --continue` in a directory resumes the newest conversation there and restores the name given earlier with `--name`. Its process arguments are then `claude --continue ...`, with no `--name`. | After `workmux resurrect`, which reopens with `--continue`, the orchestrator cannot be found from its arguments alone. Liveness has a second rule (below). |
-| `claude --resume <name>` opens an interactive picker when two conversations share the name. | The launcher resumes with `--continue`, never `--resume <name>`. |
+| `claude --resume <name>` opens an interactive picker when two conversations share the name. | The launcher never resumes by name. |
+| `claude --name <n> --session-id <uuid> <prompt>` starts a conversation with that id. Later, `claude --name <n> --resume <uuid> <prompt>` resumes exactly that conversation, keeps its id and name, delivers the prompt and opens no picker, even when a newer conversation exists in the same directory. | The launcher chooses each conversation's id itself and resumes by id, so two sessions that share the feature worktree each get their own conversation back. |
 | `workmux add --headless` creates and provisions a worktree with no tmux target. `workmux add` without it opens a window and runs the layout's pane commands. `-C` (`--no-pane-cmds`) opens the layout's panes as plain shells. | The feature worktree is created with `workmux add <feature> --base origin/<default> -C`, and the launcher starts `claude` in that window's first pane itself, so it can pass `--name`. |
 | `workmux path <name>` prints the worktree path and exits 0, or exits 1 with `Worktree '<name>' not found`. | It is the existence test and the path source. |
 | `workmux remove <name> --keep-branch --force` removes the worktree without a prompt and keeps the branch. Without `--force` it asks for confirmation. | `--remove` runs its own guards first, then this. |
@@ -132,10 +133,10 @@ flowchart TD
 
 - **New window.** Record `#{window_id}` of every window, run `workmux add`, then take the one new window whose panes have `current_path` equal to the worktree. Respawn its first pane (`list-panes` order) with `tmux respawn-pane -k -t <pane> -c <worktree> <command>`. The launcher created that window, so it may change its panes.
 - **Split.** In `--window`, take the panes that run any `claude` process. Choose the largest by `width * height`, or, when none runs `claude`, the largest pane in the window. Split it with `tmux split-window -d -P -F '#{pane_id}' -t <pane> -c <worktree> <-h|-v> <command>`. Use `-h` when `width > 2 * height`, else `-v`, because a terminal cell is about twice as tall as it is wide. Never `select-layout`, never `resize-pane`. A split failure is exit 4 with tmux's error.
-- **Command.** `claude --name <name> [--continue] <first prompt>; exec "${SHELL:-/bin/sh}" -l`, every value quoted with `printf %q`. The trailing shell keeps the pane after `claude` exits, so its last output stays visible. Liveness checks the `claude` process, so a pane left at a shell is not alive.
-- **Resume or fresh.** The launcher resumes with `--continue` only when it has started this name in this worktree before and `--fresh` is absent. It records a start in the marker file `$(git -C <worktree> rev-parse --git-path s-stack-sessions)/<name>`, inside the worktree's own git directory, so nothing is tracked and no ignore entry is needed. Without the marker, the first orchestrator launch in the feature worktree would `--continue` the spec writer's conversation, because both share that directory.
+- **Command.** `claude --name <name> <--session-id <uuid> | --resume <uuid>> <first prompt>; exec "${SHELL:-/bin/sh}" -l`, every value quoted with `printf %q`. The trailing shell keeps the pane after `claude` exits, so its last output stays visible. Liveness checks the `claude` process, so a pane left at a shell is not alive.
+- **Resume or fresh.** Each session's conversation id lives in the marker file `$(git -C <worktree> rev-parse --git-path s-stack-sessions)/<name>`, inside the worktree's own git directory, so nothing is tracked and no ignore entry is needed. The file holds one lowercase UUID. When the file exists and `--fresh` is absent, the command uses `--resume <uuid>`. Otherwise the launcher makes a new UUID (`uuidgen`, lowercased, or `/proc/sys/kernel/random/uuid` where `uuidgen` is missing), writes it to the file, and uses `--session-id <uuid>`. The launcher writes the file before it starts `claude`. If `claude` died before its first message, the id has no conversation, and the next resume fails in the pane with `No conversation found with session ID: <uuid>` and exit 1 (measured). The pane falls back to its shell, liveness reports no session, and `--fresh` starts a new conversation. The launcher does not inspect Claude Code's conversation store to prevent this, because that store is internal.
 - **The first prompt on resume.** A resumed session also gets the first prompt. It reloads `sam-mode` and the role's handbook, which tells the session to read its files again, as roadmap `coordination.md`, "Restarts", requires.
-- **Known limit.** `--continue` takes the newest conversation in the directory. In the feature worktree that is the orchestrator's once the spec writer has ended, which the roadmap requires. A second conversation started by hand in the feature worktree would be resumed instead. This is the same assumption `workmux resurrect` makes.
+- **Known limit, outside the launcher.** `workmux resurrect` reopens the feature window with `claude --continue`, which takes the newest conversation in the directory. That is the orchestrator's once the spec writer has ended, as the roadmap requires. A launcher restart never depends on it, because it resumes by id.
 
 ### `--print-window`
 
@@ -157,6 +158,7 @@ Fixture for every test:
 
 - A temporary directory from `tempfile.mkdtemp()`, holding a bare `origin` repository with a `main` branch and `refs/remotes/origin/HEAD` set in the clone, a clone used as the repository root, and a `bin/` put first on `PATH`.
 - An environment without `TMUX` and `TMUX_PANE`, with `TMUX_TMPDIR` set to a short temporary directory. A private server is started with `tmux -f /dev/null new-session -d -x 200 -y 50`, and killed in `tearDown`.
+- A guard in `setUp` that fails the test, before any launcher call, unless `tmux display-message -p '#{socket_path}'` run in the test environment names a socket under the test's `TMUX_TMPDIR`. So a test that would reach the developer's server fails instead of touching it.
 - Stub `workmux`, a Python script. `add <name> [--headless] [--base B] [-C]` runs `git worktree add -b <name> <root>__wt/<name> <B>`, and without `--headless` opens a window with two panes whose start directory is the worktree, as the default layout does. `path <name>` prints the path or exits 1 with workmux's message. `remove <name> --keep-branch --force` runs `git worktree remove`. Every call is appended to a log file.
 - Stub `claude`, a Bash script that appends its arguments to a log file, then runs `exec -a claude perl -e 'sleep 86400' -- "$@"`, so `ps` shows `claude` as the first word followed by the real arguments.
 
@@ -169,7 +171,8 @@ One test per row. Each asserts on exit code, standard output and the server's pa
 | Planner and update spec writer | Session and worktree names, `update=2` in the prompt |
 | Alive by name | Second launch prints `alive`, pane count and window count unchanged, no new `claude` |
 | Alive after `workmux resurrect` | A pane the test made outside the launcher in the feature worktree, running stub `claude --continue` with no `--name`. Launching `orchestrator` prints `alive` and starts nothing. Also the plan's case, a stub `claude --name f-orchestrator` in a test-made pane. |
-| Resume | Kill the `claude` of a started phase session. The next launch starts `claude --name … --continue` in a new pane. With `--fresh`, no `--continue`. A first launch of `orchestrator` after the spec writer has no `--continue`. |
+| Resume | Kill the `claude` of a started phase session. The next launch starts `claude --name … --resume <the id of the first launch>` in a new pane. With `--fresh`, a new `--session-id` that differs from the first. |
+| Two names in one worktree | Start `spec`, then `orchestrator`, in the feature worktree. Their ids differ. Kill both `claude` processes, relaunch `orchestrator`, then `spec`. Each `--resume`s its own id, in either order. |
 | Untouched panes | Panes the test created, including a narrow sidebar pane, keep their size except the one split pane. No layout change: a pane added by the test at a recorded size keeps it. |
 | Largest session pane is split | With two session panes of different sizes, the new pane comes from the larger. |
 | Full window | A window too small to split gives exit 4 and tmux's message, no new `claude`. |
@@ -229,7 +232,7 @@ One, as the feature plan says. Its dependencies are the `foundation` pull reques
 | --- | --- | --- |
 | `launcher-d1` | `--print-window` added to C4, answer to `launcher-r1` (option A). | Two-way, decided by the orchestrator |
 | `launcher-d2` | `--close` and `--remove` added to C4, from `orchestrator-handbook-r2`. Refusals exit 5. `--close` matches strictly. `--remove` keeps the branch. | Two-way, modes from the orchestrator, details here |
-| `launcher-d3` | Resume with `--continue` only when a marker in the worktree's git directory shows the launcher started that name there. | Two-way |
+| `launcher-d3` | The launcher picks each session's conversation id, stores it in the worktree's git directory, starts with `--session-id` and resumes with `--resume <id>`, never `--continue`. The orchestrator asked for this, so that two sessions sharing the feature worktree never swap conversations. | Two-way |
 | `launcher-d4` | A nameless `claude` in a pane whose directory is the session's worktree counts as that session for start and `--remove`. | Two-way |
 | `launcher-d5` | A resumed session receives the first prompt again. | Two-way |
 
@@ -237,5 +240,6 @@ One, as the feature plan says. Its dependencies are the `foundation` pull reques
 
 - **Reading Claude Code's live-session files** under `~/.claude/sessions/` for liveness. They hold each session's name and pane, but they are an undocumented internal format that a release can change, and they carry other repositories' paths.
 - **`claude --resume <name>`.** It opens a picker when names repeat (measured).
-- **A deterministic `--session-id` per name.** `--fresh` would need a new id, which brings back a stored counter, and `workmux resurrect` resumes with `--continue` anyway.
+- **`claude --continue` with a marker that only records a start.** It resumes the newest conversation in the directory, so the spec writer and the orchestrator in the feature worktree could swap conversations.
+- **A deterministic `--session-id` per name.** `--fresh` would need a new id, so the id must be stored anyway.
 - **Tagging launcher panes with a tmux user option.** Panes restored by `workmux resurrect` carry no tag, so the process check is needed regardless, and one matcher is simpler than two.

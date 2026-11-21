@@ -19,7 +19,7 @@ decisions:
     door: "two-way"
     at: "2026-11-21T15:43:28Z"
   - id: "launcher-d3"
-    decision: "Resume with claude --continue only when a marker in the worktree's git directory shows the launcher started that name there before, so the first orchestrator does not resume the spec writer's conversation."
+    decision: "At the orchestrator's instruction, the launcher picks each session's conversation id, stores it in the worktree's git directory, starts claude with --session-id and resumes with --resume <id>, never --continue, so two sessions in one worktree never swap conversations. Measured: resume by id opens no picker and keeps the id and name."
     door: "two-way"
     at: "2026-11-21T15:43:28Z"
   - id: "launcher-d4"

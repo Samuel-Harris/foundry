@@ -102,6 +102,23 @@ Minor findings:
 - A concurrent launch can print a `holder: No such file or directory` line on standard error.
 - `checks/launcher.md` lacks newer mutations, a layout and stale-lock reproduction, and the note that the trust dialog's cursor starts on "No, exit".
 
+## Verify, code head `42d3ced56004988cc8e3db84280237636fc19491`, VERIFIED
+
+A fresh verifier ran with nothing committed. Its report, summarised:
+
+- The full verification skill passed. Primitives were valid (94), the root manifest printed `12 listed, 19 reached`, and lint, budgets and isolation passed. 100 tests passed, and again under `LC_ALL=C`. Tier 1 passed across 20 packages, and all nine cold reads passed.
+- All 16 mutations listed in `checks/launcher.md` and 3 extra ones each failed named tests, with an unmutated control passing beside them.
+- The layout reproduction ran on 240x60 private servers, with and without a sidebar. The sidebar stayed 20 wide. The first phase column was full height, and the orchestrator's column stayed at least as wide (120 against 119, 109 against 109). Later phases tiled inside that column, and the developer pane was never split. With a developer's unnamed `claude` below the named orchestrator, phases were placed by the named one and `alive` named the right pane.
+- A SIGKILLed holder's lock was taken over in 0.61 s.
+- Both findings at 310d2df are fixed. The window-lock mutant failed 5 runs of 5. With tmux never run, `--close` printed `absent` and `--remove` removed the worktree, kept the branch and refused a second time with exit 5.
+- All three launcher calls in the handbooks were accepted.
+- Live check with the real `claude` 2.1.330 and `workmux` 0.1.283. The first launch took 0.41 s, and its first prompt began `/sam-mode phase`. The second launch printed `alive` with no pane change. `/exit` and a relaunch took 0.19 s, used the same pane, ran `--resume` with the stored id, and showed the earlier conversation.
+- Minor gaps recorded and not fixed, under the minor-findings rule:
+  - Before tmux has ever run, tmux's own `error connecting to` line still reaches standard error.
+  - `checks/launcher.md` does not say how to hold a launch inside its lock (`tmux set-environment -g STUB_CLAUDE_DELAY`).
+  - It does not say how to make a macOS sidebar stub (codesign the copied `sleep`).
+  - It still asks for the developer's server to have exactly its earlier sessions, not just none of the verifier's.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

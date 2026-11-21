@@ -73,6 +73,10 @@ decisions:
     decision: "From the developer, relayed by the orchestrator, with the edge cases decided here and accepted: launcher panes carry @s-stack-session tags, the orchestrator holds the first column after the workmux sidebar, update spec writers go in its column, planner and phase sessions go to its right, a resurrected orchestrator found by liveness counts as the launcher's, an orchestrator with no spec pane splits the topmost pane of the leftmost column, and a planner, phase or update spec writer with no orchestrator pane is exit 1."
     door: "two-way"
     at: "2026-11-21T17:23:01Z"
+  - id: "launcher-d10"
+    decision: "A restart reuses the session's own tagged pane when no claude runs in it, and --close closes a pane tagged with the session's name even when nothing runs in it, so repeated restarts never shrink the columns until tmux has no room."
+    door: "two-way"
+    at: "2026-11-21T17:55:43Z"
 ---
 
 # Phase launcher status

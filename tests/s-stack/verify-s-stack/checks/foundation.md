@@ -47,12 +47,16 @@ Expected answer:
 
 ### Status header matches C2
 
-The reference ships the feature plan's C2 with two kinds of change, both decided by the orchestrator (request `foundation-r1`, option A). This run's example values become placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. The code-head rule states the general command with only `.foundry/` excluded, a sentence to run it from the worktree root, and a sentence that a feature plan may name generated paths to exclude too. Any other difference, such as a new or reworded rule, is a contract change and fails. The check reads the feature plan under `.foundry/`, so it runs on the orchestrator branch and the phase branches, where the skill runs.
+The reference ships the feature plan's C2 with two kinds of change, both decided by the orchestrator (request `foundation-r1`, option A). This run's example values become placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. The code-head rule states the general command with only `.foundry/` excluded, a sentence to run it from the worktree root, and a sentence that a feature plan may name generated paths to exclude too. The check compares that code-head rule, whole, with the wording the orchestrator approved. Any other difference, such as a new or reworded rule, is a contract change and fails. The check reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. On a pull request branch or the default branch it prints `PENDING: .foundry/ is absent, so the feature plan's C2 cannot be read here` and exits `0`.
 
 ```bash
 python3 - <<'EOF'
 import difflib, pathlib, re, sys
-plan = pathlib.Path(".foundry/plans/2026-11-20_21-37-12-s-stack/README.md").read_text()
+plan_path = pathlib.Path(".foundry/plans/2026-11-20_21-37-12-s-stack/README.md")
+if not plan_path.is_file():
+    print("PENDING: .foundry/ is absent, so the feature plan's C2 cannot be read here")
+    sys.exit(0)
+plan = plan_path.read_text()
 ref = pathlib.Path("packages/s-stack/.apm/skills/sam-mode/references/status-and-messages.md").read_text()
 
 def header_section(text):
@@ -79,6 +83,8 @@ for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):
     expected.append(line)
 shipped = header_section(ref)
 
+code_head = "- **Code head.** It is `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, the latest commit on the phase branch that changes a file outside `.foundry/`. Run it from the worktree root. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, whose commits also move no code head. Its sessions then add an exclude clause for each such path to the command."
+
 def without_code_head(lines):
     hits = [k for k, l in enumerate(lines) if l.startswith("- **Code head.**")]
     if len(hits) != 1:
@@ -87,13 +93,7 @@ def without_code_head(lines):
 
 rule, shipped_rest = without_code_head(shipped)
 _, expected_rest = without_code_head(expected)
-problems = []
-if "`git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`" not in rule:
-    problems.append("code-head rule lacks the general command")
-if any(s in rule for s in ("apm.lock.yaml", "s-stack-package", "versioning.py")):
-    problems.append("code-head rule carries this run's generated-files exemption")
-if "worktree root" not in rule or "generated paths" not in rule:
-    problems.append("code-head rule lacks the worktree-root or generated-paths sentence")
+problems = [] if rule == code_head else [f"code-head rule differs from the approved wording:\n-{code_head}\n+{rule}"]
 problems += difflib.unified_diff(expected_rest, shipped_rest, "C2 with placeholders", "reference", lineterm="", n=0)
 print("\n".join(problems) or "reference matches C2 apart from the allowed differences")
 sys.exit(1 if problems else 0)

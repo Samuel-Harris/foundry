@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tier 1 structural acceptance suite.
 #
-# Proves structural packaging and deployment for all nineteen packages: manifests
+# Proves structural packaging and deployment for all twenty packages: manifests
 # resolve, installs succeed, deployed inventory matches the promised primitives,
 # and the pinned CLI's documented limitations are asserted rather than hidden.
 #
@@ -33,11 +33,11 @@ APM_TIMEOUT="${APM_TIMEOUT:-180}"
 # Manifests that declare a sibling `path:` dependency. APM 0.32.0 refuses to
 # pack such a manifest in every bundle format. See docs/DEPENDENCY-CONTRACTS.md;
 # this suite asserts that refusal rather than skipping these packages silently.
-PACK_BLOCKED=" default-stack execution planning repo-init skill-creation "
+PACK_BLOCKED=" default-stack execution planning repo-init s-stack skill-creation "
 
 # Direct dependencies of the meta-package, plus the one package they pull in
 # transitively (`deep-interview`). A default-stack install
-# therefore deploys nine of the nineteen packages,
+# therefore deploys nine of the twenty packages,
 # which is what the scratch-consumer inventory check covers.
 DEFAULT_STACK_DEPLOYED="coding-style deep-interview execution git-diff planning pr repo-maintenance review skill-creation"
 

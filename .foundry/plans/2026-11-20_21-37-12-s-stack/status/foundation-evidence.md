@@ -99,3 +99,14 @@ A fourth fresh verifier changed no verification file, so the verdict covers `50e
 The fixes in `50e26ee` behave. On a probe tree, check 5 reported exactly six leaks: a link between two inline `~~~` spans, an unquoted HTML href, an image, a single-quoted `src`, an unused reference definition and a `%2E%2E` escape. It ignored fenced links, a code-span link, an in-package link, an anchor and an `https:` link. In a `.foundry`-less export the C2 check printed PENDING, exit 0. With the code-head rule reworded there, it exited 1.
 
 Every **Done when** item passed, including `apm audit --ci` in a fresh detached worktree with no install (`All 10 check(s) passed`). The full report is in the phase session's scratchpad as `verify-gate-4.md`.
+
+## Review: CLEAR at `50e26eebaa31524a81e0cc00d99edf4bdad0e2dc`
+
+The third `interrogate` run, Opus and Fable, covered `git diff b27c4f1 50e26ee` outside `.foundry/`. Both found only edge cases in check 5's link checker on adversarial input, plus one environment note. None is significant.
+
+- **Raw HTML forms.** Character references, a leading space or tab, backslashes, attributes in comments, `data-href` and text in HTML blocks. The repository's markdownlint config leaves MD033 (no inline HTML) on, so check 2 already fails any HTML in `sam-mode`, which the round-1 Fable adversary confirmed.
+- **Duplicate reference definition.** CommonMark never renders the second definition, so nothing leaks.
+- **Contrived Markdown.** A query string that walks the path back into the package, a symlink inside the skill, a percent-encoded slash, and other file extensions. No handbook author produces these by accident.
+- **Offline cold cache.** With a cold uv cache and no network, check 5 exits 1 with uv's resolution error. Checks 2 and 7 need the network in the same way.
+
+Both adversaries confirmed that the C2 check gives the intended result in every combination of plan present or absent and code-head rule matching or not, and that the cleanup loop deletes only empty folders under each package's own `.cursor/` and `.github/`.

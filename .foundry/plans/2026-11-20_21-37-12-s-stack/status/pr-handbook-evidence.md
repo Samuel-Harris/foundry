@@ -119,3 +119,26 @@ Findings, both misleading a reader:
 Minor: the proof does not catch a deleted package's lockfile being kept or restored on a pull request, because the head comparison excludes generated files.
 
 Not this phase's: `tests/s-stack/verify-s-stack/SKILL.md` check 8 still says `## Evidence` records results.
+
+## Review: SIGNIFICANT at `b4da68bfd86af51de95f4abfd87c63225920817e`
+
+The third `interrogate` run used Opus and Fable, with the brief in `handbooks/reviewer.md`. Its scope was `3ccad64` and `b4da68b`. The earlier findings' probe, the check file's scratch block, printed 46 PASS and `0 failed` for both adversaries.
+
+**Significant, in the overlay premise.**
+
+- **A shared path that conflicts with the default branch is a permanent stop** (Opus 1, Fable 1). It happens with another phase's line in the same file, or with two pull requests of one stack. Neither the phase's merge resolution nor an ordinary resolution commit ever reaches the pull request, because shared paths only replay the phase's original commits.
+- **A clean default-branch change to an owned path stops the round** (Opus 3). This is the routine round after another pull request merges. The stop sends the phase to merge the default branch, which moves its code head and reruns both gates, while `phase-session.md` says that round runs no gate.
+
+**Significant, in the implementation or the wording.**
+
+- **The proof prints `EQUAL` for a pull request that still holds a change the phase later reverted** (Opus 2), when the reverting commit is not carried, because the ownership check skips paths that equal the default branch.
+- **After the forge rewrites another phase's dependency in row 3, the proof prints `NOT EQUAL` for good,** although the pull request's content is right (Fable 2).
+- **The base table yields a split the proof rejects** (Fable 3). Two pull requests that touch one path must be chained, and the handbook never says so.
+
+**Lesser.**
+
+- A delegate branch merged into the phase is dropped, and the proof names the wrong cause (Fable 4).
+- `origin/` on a pull request's name gives a false `FAIL` (Fable 5).
+- A file replaced by a directory breaks the proof (Fable 6).
+
+**Fallback.** Under `pr-handbook-d9` condition 4, a defect in the overlay premise ends redesigning. The current design ships. Each history it does not handle becomes a documented `STOP` that the phase session sends to the orchestrator as a decision request. The two wrong-result defects, the false `EQUAL` and the `origin/` false `FAIL`, are fixed in the implementation, because a false result cannot be a documented stop.

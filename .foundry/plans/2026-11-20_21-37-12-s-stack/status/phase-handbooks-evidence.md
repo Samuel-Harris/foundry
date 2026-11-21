@@ -224,3 +224,11 @@ A fresh verifier ran the whole verification skill and this phase's `## Evidence`
   - the merged notice in Implement is ignored, comes again once the code head is merged into the orchestrator branch, and leads to Done, with the fix in a new pull request;
   - a developer's change request in Done moves the phase back to Implement, and the fix goes in a new pull request.
 - Remarks outside the required points: in a fix round, the order of moving to PR and starting the PR creator (older text); the NOT VERIFIED, INCONCLUSIVE and SIGNIFICANT table rows do not repeat "for the current code head"; and the reference file's message rows lag.
+
+## Review: SIGNIFICANT at `52afb2aaf8bf4136369f33bbe38aba122e8b1220`
+
+A later review covered `bbd35bd` and `52afb2a`, with clean merges `e826e6a`, `c56f0bb` and `2facd26`. Two reviewers, Opus and Fable, each in a detached worktree at `c452bff`, ran seven cold reads between them. Both earlier probes pass: entry to Review after a SIGNIFICANT verdict runs the gate, and a fix made after every pull request merged reaches a new pull request.
+
+Significant, and found by both reviewers independently: PR step 4's resend condition ("once your status file shows PR and your current code head is merged into the orchestrator branch") omits the orchestrator's first condition, that every pull request has merged into the default branch, new ones included. Read cold, the phase reaches Done while its new fix pull request is still open, or before it exists.
+
+Not significant, recorded only: the SIGNIFICANT, NOT VERIFIED and INCONCLUSIVE table rows carry no code-head qualifier (readers resolved them from "A verdict covers only the code head it names"); a restart in PR after a merge moved the code head is covered only by the restart and merge-orchestrator-branch sentences (the reader acted correctly); whether merged pull requests stay in `pull_requests`; and the `state` sent on an ignored notice (the reference file's known lag).

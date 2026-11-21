@@ -1,7 +1,7 @@
 ---
 phase: "phase-handbooks"
-state: "Review"
-changed_at: "2026-11-21T18:13:51Z"
+state: "Implement"
+changed_at: "2026-11-21T18:17:18Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
 code_head: "52afb2aaf8bf4136369f33bbe38aba122e8b1220"
@@ -97,6 +97,11 @@ verdicts:
     code_head: "52afb2aaf8bf4136369f33bbe38aba122e8b1220"
     at: "2026-11-21T18:13:51Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "52afb2aaf8bf4136369f33bbe38aba122e8b1220"
+    at: "2026-11-21T18:17:18Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
 pull_requests:
   - number: 85
     branch: "s-stack-phase-handbooks"
@@ -136,4 +141,4 @@ s-stack-package merged at e826e6a with #82 and #84 from main. It changed only pa
 Correction from the orchestrator: under the run decision on generated files, a change to a packages/*/apm.yml version: line does not move the code head. Merge e826e6a changed only that line outside .foundry/ and lockfiles, so the code head is still 30f0709, and its VERIFIED verdict stands. The fresh verifier started for e826e6a was stopped before it committed anything. phase-session.md points to the reference file and the feature plan for the code head and states no command of its own, so it needs no change. On to Review of 30f0709. Review returned SIGNIFICANT at 30f0709: the move-back rule fired on entry to Review, and an ambiguous 'merged' left a dead end. Back to Implement, with the orchestrator's deferred Done-rework instruction in the same round.
 Fix bbd35bd: the move-back rule asks only about gates already passed, a stale VERIFIED in Verify reruns Verify, the resend condition says merged into the orchestrator branch (confirmed by the orchestrator), a Done phase asked to change code moves back to Implement, and the PR creator opens a new pull request for commits no open one carries.
 The orchestrator withdrew the no-verdict move-back rule before any verifier started. Back to Implement to delete it, keeping the resend wording and the rework-after-Done path.
-Fix 52afb2a drops the no-verdict move-back rule. bbd35bd's other fixes stand. Verify returned VERIFIED at 52afb2a.
+Fix 52afb2a drops the no-verdict move-back rule. bbd35bd's other fixes stand. Verify returned VERIFIED at 52afb2a. Review returned SIGNIFICANT at 52afb2a: the resend condition omitted that every pull request, new ones included, must have merged into the default branch. Back to Implement.

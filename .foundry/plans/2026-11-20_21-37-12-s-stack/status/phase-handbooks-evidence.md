@@ -40,3 +40,12 @@ Not significant, recorded only:
 - `SKILL.md` says a commit never mixes `.foundry/` with other files, while `phase-session.md` states the merge exception. `SKILL.md` belongs to `foundation`.
 - Minor gaps: Plan sends only `started`; the INCONCLUSIVE row does not name the state while a decision request waits; a voluntary fix after CLEAR has no stated path.
 - `checks/phase-handbooks.md`'s `## Evidence` section holds no results.
+
+## Verify: VERIFIED at `6758c7df2ea497bdc5536dd704c5a49656dbb4f3`
+
+A third fresh verifier recorded the one-off checks in the check file's `## Evidence` section at `6758c7d`, its only commit, then reran the whole verification skill at that head.
+
+- Passed: primitives, root manifest, markdownlint (9 files, 0 errors), line budgets (138, 41 and 78 of 200), package isolation, Tier 1 at `6758c7d` (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, and all four phase-handbooks cold reads.
+- Pending, not failing: four handbook routes other phases own, and the launcher tests.
+- Private-name search over the 5 files of the phase diff, the diff text and every phase commit message: 0 hits.
+- Wording gaps the cold readers raised, none contradicting an expected answer: when a merge moves the code head during Verify, which state to be in; when a scope change counts as conflicting with the feature plan; whether a restart re-reads the roadmap and feature plan.

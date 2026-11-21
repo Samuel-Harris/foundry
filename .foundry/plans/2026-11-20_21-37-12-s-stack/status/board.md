@@ -1,10 +1,10 @@
 ---
 phase: "board"
-state: "Implement"
-changed_at: "2026-11-21T16:06:59Z"
+state: "Verify"
+changed_at: "2026-11-21T16:29:55Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
-code_head: "45f0689499b3a4ea0dbe0001949e8a54ba184509"
+code_head: "9e4a8d51f2604ba7c13fdb20abe582e528500da5"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -45,3 +45,5 @@ decisions:
 # Phase `board` status
 
 The phase plan is committed at `8f55e96`. The template landed at `fef789b`. `quick-review` (bug and code-quality passes) found overflow from untrusted values, a false "Up to date" chip, closed pull requests counted as dependencies, staleness judged from cached data and scattered load state. Fixed in `68f7ab7` and `f3d0e32`. Dismissed with reasons: the no-database `hidden` finding (the publish skeleton ships `[hidden]{display:none!important}`), a single owner for review order (C5 requires both `review_rank` and the dependency rule), the duplicated dark token block (the page contract requires it), a guard for a `window.claude` without `use`, and focus loss on the 30-second re-render. `s-stack-package` was merged at `f0d9c7e` with no conflict and no change outside `.foundry/`. The verifier committed `checks/board.md` at `45f0689`, the new code head, and returned VERIFIED for it. The evidence file records one gap: nobody has watched the live viewer render the test page. The Review gate started for `45f0689`. The developer then asked, through the orchestrator, for a dependency map of the phases on the board (`board-d4`), so the phase moved back to Implement. The VERIFIED verdict at `45f0689` will not cover the new code head.
+
+The Implement round for `board-d4` and `board-d5`: the dependency map (`921552b`), the scheduling labels with the adversarial review's fixes (`3137664`), a second `quick-review` round's fixes (`ba53040`), and a `depends_on` that is not a list shown as unknown (`2f575c8`). Dismissed from the second `quick-review` with reasons: fixed map margins and a split of the layout function (no behaviour change), overlapping lane runs (cosmetic, the Depends on column lists every edge), focus-key collisions (malformed data only), and the overlap between the Scheduling and Session columns (the developer asked for the labels; raised in the pull request). `s-stack-package` was merged at `9e4a8d5` under C7 with a lockfile-only conflict, bringing `spec-planner-handbooks`. The Verify gate is starting for `9e4a8d5`.

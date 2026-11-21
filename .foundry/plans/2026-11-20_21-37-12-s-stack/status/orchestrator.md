@@ -24,7 +24,16 @@ None.
 
 ## Pull requests under watch
 
-None.
+| Number | Phase | Branch | Base | Depends on |
+| --- | --- | --- | --- | --- |
+| 81 | `foundation` | `s-stack-foundation-package` | `main` | none |
+| 82 | `foundation` | `s-stack-verify-skill` | `s-stack-foundation-package` | 81 |
+
+## Merged phases
+
+| Phase | Merged at | Phase code head | Post-merge check |
+| --- | --- | --- | --- |
+| `foundation` | `7c4f36d` | `50e26ee` | running |
 
 ## Closed sessions
 

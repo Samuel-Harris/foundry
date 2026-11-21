@@ -143,3 +143,18 @@ This was the fix round for `pr-handbook-r1` and automatic stacking. A fresh veri
 - Private-name search at 17:31:23: 0 matches.
 - One-off cold read: a fix round for a merged dependency. The phase session starts a PR creator that works out the base again and refreshes the branches as `pr-creator.md` says, stays in PR, runs no gate again, and has no `restack` handling. The verifier checked this against `pr-creator.md` on `s-stack-phase-pr-handbook`.
 - Outside this phase: `references/status-and-messages.md` still lists `restack` as an orchestrator message, and its `fix-round` row does not cover a merged dependency.
+
+## Review: CLEAR at `515c907896a51762c83dfeb2756981e03bd4b257`
+
+A later review covered `515c907`, with clean merges `161c7c7`, `0bf2777` and `bd8149e`. Two reviewers, Opus and Fable, each in a detached worktree at `28ba138`, ran five cold reads between them, plus the validator and markdownlint. Neither found anything significant. The last verdict was CLEAR, so no probes were given.
+
+Not significant, recorded only:
+
+- The merged-elsewhere round says nothing about updating `pull_requests` or reporting afterwards. This is borderline, and it is fixed in the next round because a stale base would mislead the status board.
+- "A pull request yours depend on" and the heading "merged elsewhere" read awkwardly when the merged pull request is the phase's own. It is fixed in the same edit.
+- The conflict round never says in words to start a PR creator or to move to PR. Readers inferred both from the fix-round row and the PR section.
+- "The phase stays in PR" assumes the phase is in PR when the round arrives.
+- A conflict found during a refresh, and how a merge commit's resolution reaches a pull request branch, belong to `pr-creator.md`.
+- `versioning.py check origin/main` fails at the phase head, as it does on every phase branch. The pull request's regenerate commit raises the version.
+
+The orchestrator's instruction, received during this review, sends the phase back to Implement in the same round. `phase-session.md` moved a phase to Done on "every pull request has merged" in any state, and moved back only after a failed post-merge check.

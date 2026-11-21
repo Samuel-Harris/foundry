@@ -37,7 +37,7 @@ Both commands describe a pull request as `<pr>:<base>[:<open deps>[:<merged deps
 | `pr3:main:pr1,pr2` | Targets `main` and carries `pr1` and `pr2` |
 | `pr2:main::pr1` | `pr1` was squash-merged into `main` |
 
-A branch may be written `main` or `origin/main`. The script uses `origin/<branch>` whenever that ref exists, so push a parent before its child reads it. A pull request's own commits are the commits reachable from its branch and from none of the default branch, its base and its dependencies, leaving out merges and regenerate commits.
+A branch may be written `main` or `origin/main`. The default branch always resolves to `origin/<default>`. Any other branch resolves to the local branch when it exists and holds `origin/<branch>`, so a child reads its parent's unpushed head, and otherwise to `origin/<branch>` when that ref exists. A pull request's own commits are the commits reachable from its branch and from none of the default branch, its base and its dependencies, leaving out merges and regenerate commits.
 
 ## How the script sees the phase
 
@@ -74,7 +74,7 @@ A shared path's stop is permanent because the refresh replays only the phase's o
 
 ## Prove the split
 
-`prove` checks that the pull requests hold exactly the phase. List every pull request of the phase, merged ones included, bottom of the stack first. Write a merged one with the default branch as its base, and name each merged dependency in the fourth field of every spec that depends on it. A pull request may be written `<pr>` or `origin/<pr>`. The default branch may be given as `<default>` or `origin/<default>`.
+`prove` checks that the pull requests hold exactly the phase. List every pull request of the phase, merged ones included, bottom of the stack first. Write a merged one with the default branch as its base, and name each merged dependency in the fourth field of every spec that depends on it. Write each pull request as its local branch, `<pr>`, because the proof runs before the push: `prove` reads a pull request's head as written, and `origin/<pr>` names the pushed head. The default branch may be given as `<default>` or `origin/<default>`.
 
 - **Each pull request's head** equals its target tree outside generated files and generated lines. The target tree is the overlay of its own commits, built at the merge base of its base and its head, with each open dependency's merge base merged in. This catches a hand edit inside a merge commit and a path taken from the wrong version.
 - **No own commit is already on the orchestrator branch.** Such a commit belongs to another pull request, so the spec is missing a dependency.
@@ -82,6 +82,7 @@ A shared path's stop is permanent because the refresh replays only the phase's o
 - **Regenerate commits** change only generated files and generated lines.
 - **No pull request contains `.foundry/`.**
 - **Every path is owned.** Each path of the phase commits whose version on the phase tip differs from the default branch's is in a listed pull request. Every pull request that holds a phase path, whether or not the path differs, lies in one dependency chain, and the topmost of them accounts for every phase commit on the path. When the phase tip's version equals the default branch's, the topmost one's version must also equal the phase tip's or its base's.
+- **No delegate merge.** No merge on the phase's first-parent line brings in a branch that the orchestrator branch, the default branch and the specs' bases and dependencies all lack.
 
 It prints each pull request's hand-written diff against its base as `git diff --shortstat` does, then `EQUAL` and exits 0, or a `FAIL` line for each fault, then `NOT EQUAL`, and exits 1. Before a head's `FAIL` line, a `git diff --stat` list names each file that differs.
 
@@ -94,13 +95,13 @@ The ownership check prints one of these:
 
 ## What the proof assumes
 
-The proof relies on three rules from the other handbooks. When one is broken, it prints `NOT EQUAL`.
+The proof relies on three rules from the other handbooks. When one is broken, it prints `NOT EQUAL`, and the round pushes nothing.
 
 - **The phase merges the orchestrator branch with `git merge --no-ff`.** A fast-forward puts the orchestrator's merges on the phase's first-parent line, and the phase's own commits then drop out of the phase commits. The proof prints `<pr>: it changes <path>, which the phase does not`.
 - **The orchestrator commits nothing outside `.foundry/`.** An orchestrator commit outside `.foundry/`, or another phase's branch squash-merged into the phase, becomes a phase commit that no pull request carries. The proof prints `<path> has not landed and is in no open pull request`.
-- **The phase's own commits sit on its first-parent line.** A delegate's branch merged into the phase leaves its commits off that line, so the refresh stops with `<pr> would carry <path>, which the phase does not change`. Commits taken with `git cherry-pick -x` are phase commits, and the proof handles them.
+- **The phase's own commits sit on its first-parent line.** A delegate's branch merged into the phase leaves its commits off that line. The refresh stops with `<pr> would carry <path>, which the phase does not change` when it is given a delegate commit, and the proof prints `<merge> merges <commit>, whose commits are not phase commits: a delegate's branch merged into the phase` in every case. Commits taken with `git cherry-pick -x` are phase commits, and the proof handles them.
 
-Two histories also print `NOT EQUAL` in every round, and the handbook sends both for a decision. When GitHub rewrites a third-row dependency's head after its parent merges, the proof prints `<pr>: it changes <file>, which the phase does not` for the dependency's files. When the phase replaces a file with a directory of the same name, the refresh prints `git checkout-index: <path> is not in the cache` and the proof prints the same `FAIL` with the file and directory names run together.
+Two other histories stop the refresh in every round, so nothing is pushed, and the handbook sends both for a decision. When GitHub rewrites a third-row dependency's head after its parent merges, or a stack parent's head while leaving its child's alone, the refresh prints `<pr> would carry <file>, which the phase does not change` for the parent's or dependency's files. When the phase replaces a file with a directory of the same name, or the reverse, the refresh prints git's own error and then `<path> cannot be written into the tree, as when a file and a directory share its name`.
 
 ## The script
 
@@ -112,7 +113,10 @@ REGEN='^chore(s-stack): regenerate generated files$'
 GEN=(':(exclude)*apm.lock.yaml')
 LINES=(':(exclude)*apm.yml') LINES_IN='*apm.yml'
 GEN_LINE='^version: '
-ref() { local b=${1#origin/}; git rev-parse -q --verify "refs/remotes/origin/$b" >/dev/null && echo "origin/$b" || echo "$1"; }
+ref() {
+  local b=${1#origin/}; git rev-parse -q --verify "refs/remotes/origin/$b" >/dev/null || { echo "$1"; return; }
+  [ "origin/$b" != "${D:-}" ] && git rev-parse -q --verify "refs/heads/$b" >/dev/null && git merge-base --is-ancestor "origin/$b" "refs/heads/$b" && echo "$b" || echo "origin/$b"
+}
 not() { local d r; for d; do for r in "$d" "$(ref "$d")"; do git rev-parse -q --verify "$r^{commit}" >/dev/null && echo "^$r"; done; done; }
 own() { local pr=$1; shift; git rev-list --reverse --no-merges "$pr" $(not "$@") --invert-grep --grep="$REGEN"; }
 only_lines() { git diff -U0 "$1" "$2" -- "${3:-$LINES_IN}" | grep -E '^[-+]' | grep -v -E '^(\+\+\+|---) ' | grep -v -E "^[-+]${GEN_LINE#^}"; }
@@ -164,7 +168,7 @@ ids() {
     n = split($0, l, "\n"); for (i = n; i > 1; i--) if (l[i] ~ /^\(cherry picked from commit [0-9a-f]+\)$/) { print substr(l[i], 28, length(l[i]) - 28); break } }'
 }
 setup() {
-  local first; PH=$1 D=$(ref "$2") W=$(mktemp -d); trap 'rm -rf "$W"' EXIT; first=$(git rev-list --first-parent "$PH" "^$D" | tail -1)
+  local first; PH=$1 D=origin/${2#origin/}; D=$(ref "$2") W=$(mktemp -d); trap 'rm -rf "$W"' EXIT; first=$(git rev-list --first-parent "$PH" "^$D" | tail -1)
   S0=$(git rev-parse "${first:-$D}^" 2>/dev/null || git rev-parse "$D")
   git rev-list --first-parent --no-merges "$PH" "^$D" > "$W/fp"
 }
@@ -239,8 +243,13 @@ refresh() {
 deps_of() { local s b e x m; for s in "${specs[@]}"; do IFS=: read -r b e x m <<< "$s"; [ "${b#origin/}" = "${1#origin/}" ] && { echo "${e#origin/}"; list "$x,$m" | sed 's,^origin/,,'; }; done; }
 above() { local d; for d in $(deps_of "$1"); do { [ "$d" = "${2#origin/}" ] || above "$d" "$2"; } && return 0; done; return 1; }
 prove() {
-  local orch=$1 fail=0 top s c f l t x o i b v; setup "$2" "$3"; shift 3; specs=("$@") top=$(pwd)
+  local orch=$1 fail=0 top s c f l t x o i b v m p deps; setup "$2" "$3"; shift 3; specs=("$@") top=$(pwd)
   spec() { IFS=: read -r pr base extra merged <<< "$1"; mine=($(own "$pr" "$D" "$base" $(list "$extra") $(list "$merged"))); }
+  deps=$(for s; do IFS=: read -r _ b x m <<< "$s"; ref "$b"; refs "$x"; refs "$m"; done)
+  for m in $(git rev-list --first-parent --merges "$PH" "^$D"); do for p in $(git rev-parse "$m^@" | sed 1d); do
+    for b in "$orch" "$D" $deps; do git merge-base --is-ancestor "$p" "$b" && continue 2; done
+    echo "FAIL $(git log -1 --format='%h %s' "$m") merges $(git rev-parse --short "$p"), whose commits are not phase commits: a delegate's branch merged into the phase"; fail=1
+  done; done
   paths $(git rev-list --first-parent --no-merges "$PH" "^$D") > "$W/pp"
   for s; do
     spec "$s"; paths "${mine[@]}" > "$W/own.${pr//\//_}"

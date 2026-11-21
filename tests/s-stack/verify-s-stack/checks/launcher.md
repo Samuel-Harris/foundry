@@ -49,9 +49,25 @@ One-off checks. Each touches something outside a unit test, such as the real `cl
 
 ### Mutations
 
-Apply each change to `launch.sh`, run the unit suite, and restore the file with `git checkout --`. Use at least these: add `tmux select-layout tiled` after the split; make liveness never match; drop the session lock; drop `--resume`; put a planner or phase session in the orchestrator's column; split the workmux sidebar; drop the window placement lock; measure a zoomed window without unzooming it; skip the re-zoom when the split fails; never reuse a session's own idle pane.
+Apply each change to `launch.sh`, run the unit suite, and restore the file with `git checkout --`. Use at least these: add `tmux select-layout tiled` after the split; make liveness never match; drop the session lock; drop `--resume`; put a planner or phase session in the orchestrator's column; split the workmux sidebar; drop the window placement lock; measure a zoomed window without unzooming it; skip the re-zoom when the split fails; never reuse a session's own idle pane; reuse a busy own pane; never take over a stale lock; split without `-f`; skip the width restore after the full-span split; let an unnamed `claude` count beside a named orchestrator; drop `-u` from tmux.
 
 It passes when every mutation makes at least one named test fail and the unmutated suite passes.
+
+### Layout and locks
+
+Reproduce these with the stubs on a 240x60 private server, and list the panes with `list-panes -F '#{pane_id} #{pane_left},#{pane_top} #{pane_width}x#{pane_height} #{@s-stack-session}'` after each launch.
+
+- **Shared column.** The orchestrator shares its column: the first spec writer is above it and an untagged developer pane is below it. Launch one phase, then three more. Do this with and without a sidebar pane whose current command is `workmux`.
+- **Precedence.** A named orchestrator runs with a developer's unnamed `claude` in an untagged pane below it.
+- **Stale lock.** Kill a launch with SIGKILL while it holds its session lock, then launch the same session again.
+
+It passes when all of these hold:
+
+- The sidebar's width never changes.
+- The first phase's column spans the window's height, and the orchestrator's column is at least as wide as that column.
+- Later phases tile inside that column.
+- With the developer's unnamed `claude` present, a phase is placed by the named orchestrator and the developer's pane is never split.
+- After the SIGKILL, the relaunch starts within a few seconds instead of waiting for the lock.
 
 ### Launcher calls in the handbooks
 
@@ -61,7 +77,7 @@ It passes when the launcher accepts every form.
 
 ### Live session
 
-Use the real `claude`, `workmux` and tmux on a private server, in a scratch repository outside this one. The repository needs a bare `origin` with `main`, a clone whose `refs/remotes/origin/HEAD` is set, and a branch holding `.foundry/feature-roadmaps/2026-11-21_00-00-00-probe/`. Start the orchestrator's pane first, because a phase session is placed to its right. Then launch one phase session, accepting the folder-trust dialog of the scratch folder in the private pane if it appears. Launch the same command again. Exit the session with `/exit` and launch once more. Afterwards, remove the scratch worktree with `workmux remove <name> --keep-branch --force` in the scratch repository and kill the private server.
+Use the real `claude`, `workmux` and tmux on a private server, in a scratch repository outside this one. The repository needs a bare `origin` with `main`, a clone whose `refs/remotes/origin/HEAD` is set, and a branch holding `.foundry/feature-roadmaps/2026-11-21_00-00-00-probe/`. Start the orchestrator's pane first, because a phase session is placed to its right. Then launch one phase session, accepting the folder-trust dialog of the scratch folder in the private pane if it appears. Its cursor starts on "No, exit", so press Down and then Enter. Launch the same command again. Exit the session with `/exit` and launch once more. Afterwards, remove the scratch worktree with `workmux remove <name> --keep-branch --force` in the scratch repository and kill the private server.
 
 It passes when all of these hold:
 

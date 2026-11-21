@@ -1,7 +1,7 @@
 ---
 phase: "board"
-state: "Review"
-changed_at: "2026-11-21T16:04:25Z"
+state: "Implement"
+changed_at: "2026-11-21T16:06:59Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
 code_head: "45f0689499b3a4ea0dbe0001949e8a54ba184509"
@@ -27,8 +27,12 @@ decisions:
     decision: "Ready for your review lists only draft pull requests, as C5 says."
     door: "two-way"
     at: "2026-11-21T15:39:03Z"
+  - id: "board-d4"
+    decision: "Instruction from the developer, relayed by the orchestrator: the board gains a dependency map of the phases, drawn from a new depends_on field on each phases document (a list of phase and until entries, until merged or done). The phase moved back from Review to Implement for it."
+    door: "two-way"
+    at: "2026-11-21T16:06:59Z"
 ---
 
 # Phase `board` status
 
-The phase plan is committed at `8f55e96`. The template landed at `fef789b`. `quick-review` (bug and code-quality passes) found overflow from untrusted values, a false "Up to date" chip, closed pull requests counted as dependencies, staleness judged from cached data and scattered load state. Fixed in `68f7ab7` and `f3d0e32`. Dismissed with reasons: the no-database `hidden` finding (the publish skeleton ships `[hidden]{display:none!important}`), a single owner for review order (C5 requires both `review_rank` and the dependency rule), the duplicated dark token block (the page contract requires it), a guard for a `window.claude` without `use`, and focus loss on the 30-second re-render. `s-stack-package` was merged at `f0d9c7e` with no conflict and no change outside `.foundry/`. The verifier committed `checks/board.md` at `45f0689`, the new code head, and returned VERIFIED for it. The evidence file records one gap: nobody has watched the live viewer render the test page. The Review gate is starting for `45f0689`.
+The phase plan is committed at `8f55e96`. The template landed at `fef789b`. `quick-review` (bug and code-quality passes) found overflow from untrusted values, a false "Up to date" chip, closed pull requests counted as dependencies, staleness judged from cached data and scattered load state. Fixed in `68f7ab7` and `f3d0e32`. Dismissed with reasons: the no-database `hidden` finding (the publish skeleton ships `[hidden]{display:none!important}`), a single owner for review order (C5 requires both `review_rank` and the dependency rule), the duplicated dark token block (the page contract requires it), a guard for a `window.claude` without `use`, and focus loss on the 30-second re-render. `s-stack-package` was merged at `f0d9c7e` with no conflict and no change outside `.foundry/`. The verifier committed `checks/board.md` at `45f0689`, the new code head, and returned VERIFIED for it. The evidence file records one gap: nobody has watched the live viewer render the test page. The Review gate started for `45f0689`. The developer then asked, through the orchestrator, for a dependency map of the phases on the board (`board-d4`), so the phase moved back to Implement. The VERIFIED verdict at `45f0689` will not cover the new code head.

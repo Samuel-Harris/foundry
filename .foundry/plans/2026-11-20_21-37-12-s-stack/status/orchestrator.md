@@ -21,7 +21,6 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-phase-handbooks` | `%175` | `../s-stack-phase-phase-handbooks` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-phase-spec-planner-handbooks` | `%180` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21, resumed for the #84 fix round |
 
 ## Open decision requests
 

@@ -158,3 +158,20 @@ Defects:
 - **A directory replaced by a file** prints different output from the table's. The script ignores a failed `put`, pushes a tree that deletes `notes/one.md` without adding `notes`, and the proof's `FAIL` sends the reader to open a new pull request.
 - **Minor.** `prove` reads a plain `<pr>` as the local branch, although the script's prose says it prefers `origin/<branch>`.
 - **Not this phase's.** The `spec-planner-handbooks` cold read above.
+
+## Verify: NOT VERIFIED at `345764ca0ca2270b7b958d21acc55125655bc08b`
+
+A tenth fresh verifier updated `checks/pr-handbook.md` in `345764c`, on top of `262027f`, so the five unhandled histories assert the refresh's new stops.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING. Check 8 passed for every file. `pr-handbook.md`'s scratch block printed 64 PASS and `0 failed`, the `STOP` cold read agreed on all eleven points, and `spec-planner-handbooks` cold read 1 agreed this time.
+- **The new stops.** No false `STOP` came from the "would carry" check on a correct history: a fix round after the orchestrator merged the phase, a squash-merged parent, stacked children, and a whole-stack forge rewrite all passed.
+
+Defects:
+
+- **Significant: a false `EQUAL` and a pushed wrong tree after a delegate merge.** If the round is given only the phase's first-parent commits, the refresh pushes `pr1` without the delegate's `d.txt`, and the proof prints `EQUAL`. The proof only looks at first-parent paths, so it contradicts `pr-commands.md`'s statement that a broken assumption gives `NOT EQUAL`.
+- **Significant: the table's delegate remedy never reaches `EQUAL`.** After reverting the merge and taking the commits with `git cherry-pick -x`, the revert commit carries nothing on the pull request, and the proof then counts it as uncarried in every round.
+- **Misleads a reader.** `pr-commands.md` still says a file replaced by a directory gets through the refresh, which is no longer true.
+- **Minor.** A stacked child of another phase's rewritten parent hits the "would carry" stop, which the table names only for row 3.
+- **Minor.** A stopped first build cannot be retried as written, because step 1 uses `-b` on a branch the stop left behind.
+
+The phase session's judgement: whether a failed check pushes anything should not depend on the refresh catching every history. The round should refresh, regenerate and prove every branch locally, and push only after `EQUAL`.

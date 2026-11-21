@@ -1,7 +1,7 @@
 ---
 phase: "phase-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T18:07:22Z"
+state: "Implement"
+changed_at: "2026-11-21T18:07:36Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
 code_head: "bbd35bd18e039cb50c9c96dd7b2be167be5d9814"
@@ -130,3 +130,4 @@ Fix 30f0709: the no-verdict move-back applies in Review, PR and Done only; the I
 s-stack-package merged at e826e6a with #82 and #84 from main. It changed only packages/s-stack/apm.yml's version line (0.1.0 to 0.1.1) outside .foundry/, but that moves the code head, so the phase moves back to Implement and both gates run again.
 Correction from the orchestrator: under the run decision on generated files, a change to a packages/*/apm.yml version: line does not move the code head. Merge e826e6a changed only that line outside .foundry/ and lockfiles, so the code head is still 30f0709, and its VERIFIED verdict stands. The fresh verifier started for e826e6a was stopped before it committed anything. phase-session.md points to the reference file and the feature plan for the code head and states no command of its own, so it needs no change. On to Review of 30f0709. Review returned SIGNIFICANT at 30f0709: the move-back rule fired on entry to Review, and an ambiguous 'merged' left a dead end. Back to Implement, with the orchestrator's deferred Done-rework instruction in the same round.
 Fix bbd35bd: the move-back rule asks only about gates already passed, a stale VERIFIED in Verify reruns Verify, the resend condition says merged into the orchestrator branch (confirmed by the orchestrator), a Done phase asked to change code moves back to Implement, and the PR creator opens a new pull request for commits no open one carries.
+The orchestrator withdrew the no-verdict move-back rule before any verifier started. Back to Implement to delete it, keeping the resend wording and the rework-after-Done path.

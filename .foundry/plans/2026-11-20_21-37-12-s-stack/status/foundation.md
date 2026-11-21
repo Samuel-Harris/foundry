@@ -1,12 +1,17 @@
 ---
 phase: "foundation"
-state: "Verify"
-changed_at: "2026-11-21T14:23:53Z"
+state: "Implement"
+changed_at: "2026-11-21T14:52:00Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
-code_head: "512edd797f497f955ca5a0175faead7c18a8c2d8"
+code_head: "13f835b7a61f0f3287cdd307b712338ae8751cde"
 waits_for: null
-verdicts: []
+verdicts:
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "13f835b7a61f0f3287cdd307b712338ae8751cde"
+    at: "2026-11-21T14:50:00Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -18,8 +23,8 @@ decisions:
 
 # Phase `foundation` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. Both planned pull request layers are built and each passed its quick-review fix round. The Verify gate is running.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The phase is back in Implement to remove it.
 
 ## Notes
 
-- `docs/DEPENDENCY-CONTRACTS.md` line 74 says "nine dependency-bearing packages" but lists eight, and some of them declare no dependency. This is pre-existing. The phase adds `s-stack` to that list and corrects nothing else there.
+- `docs/COMPATIBILITY.md` line 126 says "The nine dependency-bearing packages use the sibling `path:` form". Six do. This predates the phase and is outside its change. The phase corrected the same wrong list in `docs/DEPENDENCY-CONTRACTS.md` line 74, which it edits.

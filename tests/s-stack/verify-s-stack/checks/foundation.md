@@ -42,7 +42,7 @@ Expected answer:
 
 1. Walk the phase branch's first-parent line, newest first, diff each commit against its own first parent, and take the newest that changes something outside `.foundry/`, leaving out the generated paths and lines the feature plan names. So a merge that brings in code moves the code head and one that brings only `.foundry/` changes does not. A commit that only records status, or changes only those generated paths and lines, leaves it unchanged.
 2. It first commits its status file (state `Verify`, the code head) on its own branch. Then it sends a message whose first line is `billing-export-phase-launcher: state: <one sentence>`, carrying the new state `Verify` and the code head, with any detail lines below being facts already committed.
-3. The newest `verify` verdict must be `VERIFIED` and the newest `review` verdict `CLEAR`, and both must name the current code head. That is one condition, and `handbooks/orchestrator.md` owns the rest of the merge rule.
+3. The newest `verify` verdict must be `VERIFIED` and the newest `review` verdict `CLEAR`, and both must name the current code head. That is the merge rule, and the phase moves to PR once it holds. `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges.
 4. `chore(billing-export): launcher Verify`.
 5. (a) An `instruction` carrying the merged pull request numbers. (b) `fix-round`. (c) `move-back`, naming the state to move back to and the failed check.
 
@@ -86,9 +86,9 @@ if plan_path.is_file():
         ("chore(s-stack)", "chore(<feature>)"),
         ("tracker at `status/orchestrator.md`", "tracker at `.foundry/plans/<id>/status/orchestrator.md`"),
         ("cannot break the YAML.", "cannot break the YAML. Keep characters outside the Basic Multilingual Plane, such as emoji, out of header strings, because `json.dumps` writes them as surrogate pairs that a YAML reader does not join."),
-        ("The orchestrator merges only when", "A phase can merge only when"),
+        ("The orchestrator merges only when", "The merge rule is that"),
         ("numbered by the phase itself.", "numbered by the phase itself. The planner numbers its requests `planner-r<n>`, and `handbooks/planner.md` says where it keeps them."),
-        ("and both name the current code head.", "and both name the current code head. That is one condition of the merge rule, which `handbooks/orchestrator.md` owns."),
+        ("and both name the current code head.", "and both name the current code head. A phase moves to PR once it holds, and `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges."),
     ]
     expected = []
     for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):

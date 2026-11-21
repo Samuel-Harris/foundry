@@ -52,7 +52,7 @@ Each case prints `PASS <case>` or `FAIL <case>: <output>`. The block ends with `
 | `split` | No regenerate commit on `pr1` reverts an earlier one | no regenerate commit sets a file back to its content before an earlier regenerate commit changed it |
 | `split` | `main` moves, and `pr1h` merges it by hand with an extra edit to `a.txt` inside the merge commit | `a.txt` listed, `FAIL pr1h: its head differs from its own commits on its base`, exit `1` |
 | `split` | `other-pr` squash-merged into `main`, then a round on `pr2` as `pr2:main::other-pr` | one merge and one regenerate commit, `shared.txt` line 2 is `line 2 child`, hand-written diff against `main` is `b.txt`, `img.bin` and `shared.txt`, proof `pr1:main pr2:main::other-pr` `EQUAL` with `other-pr` excluded through its kept ref |
-| `undeclared` | A branch cut from another phase's open pull request `other-pr`, so its own commits carry `other-pr`'s change, which the orchestrator branch already holds, given as `pr2:main` with no dependency | its hand-written diff against `main` holds `o.txt`, which is not in the phase, so `NOT EQUAL`, exit `1` |
+| `undeclared` | A branch cut from another phase's open pull request `other-pr`, so its own commits carry `other-pr`'s change, which the orchestrator branch already holds, given as `pr2:main` with no dependency | `FAIL pr2: <sha> is already on orch, so its pull request is an undeclared dependency`, `NOT EQUAL`, exit `1` |
 | `review1` | Another pull request's fix to a squash-merged parent's line, which the child never touched, after the child's round as `child:main::parent` | line 2 is `main`'s fix, the hand-written diff against `main` is `c.txt` only, proof `EQUAL` |
 | `review2a` | A fix round whose fix edits `apm.yml`'s `description:`, next to a `version:` line that the branch's regenerate commit changed | exit `0`, the new description carried, `version: "0.1.1"` kept, proof `EQUAL` |
 | `review2b` | A first build whose commit edits `description:`, while the orchestrator branch holds another phase's `version:` raise | exit `0`, the new description carried, proof `EQUAL` |
@@ -61,6 +61,9 @@ Each case prints `PASS <case>` or `FAIL <case>: <output>`. The block ends with `
 | `review5` | `main` moves under a stack, the parent's round and then the child's as `child:parent` | the child's hand-written diff against its parent is `c.txt` only, one merge base, `origin/main` an ancestor of both, proof `EQUAL` |
 | `review6` | Paths with spaces: a squash-merged parent and the child both changed `docs dir/read me.md`, and `main` raised `my pkg/apm.yml`'s `version:` next to the child's `description:` edit | exit `0`, `line 2 child` kept, `my pkg/apm.yml` has `main`'s `version:` and the child's description, proof `EQUAL` |
 | `rewrite` | A stack parent squash-merged, the child's head rewritten on the forge onto `main` with the same tree, `main` moves, then a round as `child:main::parent` | the rewritten head is an ancestor of the new head, the push is a fast-forward, the hand-written diff against `main` is `c.txt` only, proof `EQUAL` |
+| `quoted` | A fix round carrying a commit whose `café.txt` change conflicts with `main` | exit `1`, `STOP café.txt conflicts outside generated content` with the path unquoted, `origin/pr1` unchanged |
+| `quoted` | `pr1` plus a commit adding `.foundry/café.md` | `FAIL pr1q: contains .foundry/café.md` with the path unquoted, `NOT EQUAL`, exit `1` |
+| `quoted` | A round whose spec names a merged dependency `gone`, and one whose spec names an open dependency `gone2`, neither of which is a branch | each exits `1` with `STOP <branch> is not a branch here` and no `fatal:` line, `origin/pr1` unchanged |
 
 ```bash
 /bin/bash <<'CHECK'
@@ -218,7 +221,7 @@ start_orch; merge_dep origin/other-pr; git checkout -q -b phase orch
 echo b > b.txt; commit 'feat: b'; c1=$(git rev-parse HEAD)
 git worktree add -q --no-track -b pr2 "$S/wt.pr2" origin/other-pr && (cd "$S/wt.pr2" && bash "$S/pr.sh" refresh origin/main pr2:main "$c1" >/dev/null && regen_commit && push)
 git worktree remove --force "$S/wt.pr2"; git fetch -q origin
-not_equal pr2:main && pass "a split whose own commits carry another phase's change from the orchestrator branch: NOT EQUAL" || fail "undeclared dependency: diff against main $(hand origin/main origin/pr2); proof exit $code: $out"
+not_equal pr2:main && echo "$out" | grep -q -E '^FAIL pr2: [0-9a-f]+ is already on orch, so its pull request is an undeclared dependency$' && pass "a split whose own commits carry another phase's change from the orchestrator branch: NOT EQUAL" || fail "undeclared dependency: diff against main $(hand origin/main origin/pr2); proof exit $code: $out"
 
 feat_parent() { line 2 'line 2 parent' shared.txt; }
 fix_line2() { line 2 'line 2 fixed by a later pull request' shared.txt; }
@@ -325,6 +328,26 @@ if forge_rebase child parent; then
 else
   fail "forge rewrite: the simulated rebase did not keep the tree"
 fi
+
+feat_cafe() { for i in 1 2 3 4; do echo "line $i"; done > 'café.txt'; }
+cafe_parent() { line 2 'line 2 parent' 'café.txt'; }
+cd "$S"; init quoted
+on_main 'feat: café' feat_cafe
+other parent 'feat: parent' cafe_parent
+start_orch; merge_dep origin/parent; git checkout -q -b phase orch
+echo a > a.txt; commit 'feat: a'; c1=$(git rev-parse HEAD)
+line 2 'line 2 phase' 'café.txt'; commit 'feat: café'; c2=$(git rev-parse HEAD)
+round pr1 pr1:main "$c1" || fail "quoted first build: $out"
+h=$(git rev-parse origin/pr1); round pr1 pr1:main "$c2"; o="$code: $out"
+[ "${o%%:*}" = 1 ] && echo "$out" | grep -q -x -F 'STOP café.txt conflicts outside generated content' && [ "$(git rev-parse origin/pr1)" = "$h" ] \
+  && pass "a hand-written conflict in a non-ASCII path stops, naming the path unquoted" || fail "non-ASCII conflict: $o"
+add_cafe_leak() { mkdir -p .foundry && echo leak > '.foundry/café.md' && commit leak; }
+variant pr1q pr1 add_cafe_leak; not_equal pr1q:main && echo "$out" | grep -q -x -F 'FAIL pr1q: contains .foundry/café.md' \
+  && pass "a non-ASCII path under .foundry is named unquoted" || fail "non-ASCII .foundry leak: $out"
+round pr1 pr1:main::gone; o1="$code: $out"; round pr1 pr1:main:gone2; o2="$code: $out"
+[ "${o1%%:*}" = 1 ] && [ "${o2%%:*}" = 1 ] && echo "${o1#*: }" | grep -q -x -F 'STOP gone is not a branch here' && echo "${o2#*: }" | grep -q -x -F 'STOP gone2 is not a branch here' \
+  && ! echo "$o1$o2" | grep -q 'fatal:' && [ "$(git rev-parse origin/pr1)" = "$h" ] \
+  && pass "a missing dependency branch stops with a STOP line and changes nothing" || fail "missing dependency branch: merged $o1; open $o2"
 
 cd "$root"
 echo "$fails failed"

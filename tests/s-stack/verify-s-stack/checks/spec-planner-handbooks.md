@@ -17,11 +17,11 @@ Prompt: "Read only this file and nothing else, not even files it names or links 
 
 Roadmap, paragraph 1: The placeholder application `acme-notes` is a small web service with a Python back end under `server/` and a browser front end under `web/`. It gains note sharing. A shared note is stored in a new `shares` table, and the back end exposes `POST /shares` and `GET /shares/<id>`. Separately, a command-line tool under `cli/` gains a `notes import` command that reads a Markdown folder into the existing `notes` table. The import does not touch sharing.
 
-Roadmap, paragraph 2: The front end gains a share dialog that calls the two sharing endpoints and lists notes brought in by `notes import` with an 'imported' badge, so it needs both the sharing back end and the import. The back end's test suite starts a local database on port 5432, and only one test run can use that port at a time. The repository already has a verification skill, `verify-acme-notes`, that covers all three directories."
+Roadmap, paragraph 2: The front end's single note view, the one file `web/note-view.js`, gains a share button that calls the two sharing endpoints and an 'imported' badge on notes brought in by `notes import`. Both changes go in that one file and ship together, so the front end work is one unit that needs both the sharing back end and the import. The back end's test suite starts a local database on port 5432, and only one test run can use that port at a time. The repository already has a verification skill, `verify-acme-notes`, that covers all three directories."
 
 Expected answer:
 
-1. At least three phases: the sharing back end, the import command, and the front end that needs both.
+1. Three phases: the sharing back end, the import command, and the front end that needs both. The front end stays one phase, because its work is one file.
 2. Every phase gives each field that roadmap `workflow.md` names for the feature plan: its scope, the phases it depends on (or none), the paths it owns, its exclusive resources (or none), and a **Done when** list of the evidence that proves it done.
 3. The front end phase depends on both the sharing phase and the import phase. The sharing and import phases depend on nothing and can run at the same time.
 4. No two phases that can run at the same time own the same path.

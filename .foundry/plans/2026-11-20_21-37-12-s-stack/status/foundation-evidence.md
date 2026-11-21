@@ -91,3 +91,11 @@ The second `interrogate` run, Opus and Fable, covered `git diff 0f4bf86 b27c4f1`
 | The empty-folder cleanup pattern also matches nested `.github` folders and names starting with `.github`, which can make its own post-check fail | Opus | Low | Scratch tree; nothing with content was deleted |
 
 Clean under both: the reference's new emoji sentence is true for PyYAML 6.0.4, the C2 check on the worktree, install and audit in `packages/s-stack`, `FOUNDRY_CHECK_ALL=1` pre-commit, and `versioning.py check`.
+
+## Verify: VERIFIED at `50e26eebaa31524a81e0cc00d99edf4bdad0e2dc`
+
+A fourth fresh verifier changed no verification file, so the verdict covers `50e26ee`. Checks 1, 2, 3, 5, 7 and 8 PASS, and 4 and 6 are PENDING as planned. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0. All three cold reads matched, and the C2 check matched from the root and from a subdirectory.
+
+The fixes in `50e26ee` behave. On a probe tree, check 5 reported exactly six leaks: a link between two inline `~~~` spans, an unquoted HTML href, an image, a single-quoted `src`, an unused reference definition and a `%2E%2E` escape. It ignored fenced links, a code-span link, an in-package link, an anchor and an `https:` link. In a `.foundry`-less export the C2 check printed PENDING, exit 0. With the code-head rule reworded there, it exited 1.
+
+Every **Done when** item passed, including `apm audit --ci` in a fresh detached worktree with no install (`All 10 check(s) passed`). The full report is in the phase session's scratchpad as `verify-gate-4.md`.

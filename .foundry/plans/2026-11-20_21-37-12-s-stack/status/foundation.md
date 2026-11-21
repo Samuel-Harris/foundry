@@ -1,7 +1,7 @@
 ---
 phase: "foundation"
-state: "Verify"
-changed_at: "2026-11-21T15:07:33Z"
+state: "Review"
+changed_at: "2026-11-21T15:14:55Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
 code_head: "50e26eebaa31524a81e0cc00d99edf4bdad0e2dc"
@@ -32,6 +32,11 @@ verdicts:
     code_head: "b27c4f18e17a1e0492274a936810619ab28a708c"
     at: "2026-11-21T15:04:05Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "50e26eebaa31524a81e0cc00d99edf4bdad0e2dc"
+    at: "2026-11-21T15:14:55Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -51,7 +56,7 @@ decisions:
 
 # Phase `foundation` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The first Review gate returned SIGNIFICANT at 0f4bf86. The fix round (ce16529, c68877a, b27c4f1) repaired the verification files and added the foundation-d2 sentence. s-stack-package was merged at 5b346fa. The third Verify gate returned VERIFIED at b27c4f1. The second Review gate, over the commits since 0f4bf86, returned SIGNIFICANT at b27c4f1: the link checker's new fence stripping hides real links. Fix round 50e26ee parses Markdown with markdown-it-py (foundation-d3), compares the code-head rule on every branch, and narrows the cleanup. s-stack-package was merged at 7f51eff. The fourth Verify gate is running.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The first Review gate returned SIGNIFICANT at 0f4bf86. The fix round (ce16529, c68877a, b27c4f1) repaired the verification files and added the foundation-d2 sentence. s-stack-package was merged at 5b346fa. The third Verify gate returned VERIFIED at b27c4f1. The second Review gate, over the commits since 0f4bf86, returned SIGNIFICANT at b27c4f1: the link checker's new fence stripping hides real links. Fix round 50e26ee parses Markdown with markdown-it-py (foundation-d3), compares the code-head rule on every branch, and narrows the cleanup. s-stack-package was merged at 7f51eff. The fourth Verify gate returned VERIFIED at 50e26ee. The Review gate covers the commits since b27c4f1.
 
 ## Notes
 

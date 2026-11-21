@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T23:20:55Z"
+state: "Verify"
+changed_at: "2026-11-21T23:22:30Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "3743f4c5fb20cb081555217d83c7421a69aeacf3"
+code_head: "7d40d4e3e9374d0739447078adec631d203b13ca"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -329,3 +329,5 @@ The tenth Review gate returned SIGNIFICANT at `ac3d7c0`, under the common-path b
 The Review 10 fix is at `3743f4c`. `s-stack-package` (`a4d130f`) was merged at `fb0784d`, and outside `.foundry/` it touched only s-stack's `version:` line, so the code head is unchanged. The phase moved to Verify at code head `3743f4c`.
 
 The twenty-seventh Verify gate was stopped without a verdict or commit, so that the orchestrator's instruction on developer commits could fold into this round. The phase moved back to Implement.
+
+The developer-commit rule is at `7d40d4e`, on top of the Review 10 fix at `3743f4c`. `s-stack-package` (`ad63912`) was merged at `1ef3ee2`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `7d40d4e`.

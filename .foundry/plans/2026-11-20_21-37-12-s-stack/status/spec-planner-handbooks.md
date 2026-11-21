@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T23:14:37Z"
+state: "Verify"
+changed_at: "2026-11-21T23:14:46Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
+code_head: "ba02397c72378fd5d5a54389d49b9ee7011f52ee"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -70,4 +70,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Review found a significant gap in the new point 5 at `49f2959`, and the phase is fixing it.
+Follow-up round. The review's point 5 gap is fixed at `ba02397`. A fresh verifier runs in full, then the review covers the commits since `49f2959`.

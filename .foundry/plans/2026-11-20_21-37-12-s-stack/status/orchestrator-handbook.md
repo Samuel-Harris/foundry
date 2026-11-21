@@ -1,12 +1,17 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T15:45:38Z"
+state: "Implement"
+changed_at: "2026-11-21T15:55:07Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "44efc922159f1c3a0f69a3e6e6e9753d1a3ecc65"
+code_head: "019c8a14316585c687fe3cc3434ea67428e9afb3"
 waits_for: null
-verdicts: []
+verdicts:
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "019c8a14316585c687fe3cc3434ea67428e9afb3"
+    at: "2026-11-21T15:55:07Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -29,3 +34,5 @@ The phase plan was committed at `86ae7dc`, and the phase moved to Implement.
 The handbook was committed at `8bf296b` and the lockfile regenerated at `d021335`. `orchestrator-handbook-r1` is answered (`orchestrator-handbook-d1`). `orchestrator-handbook-r2` is open. `orchestrator-handbook-r2` is answered (`orchestrator-handbook-d2`).
 
 quick-review ran on the single pull request layer, and its findings were fixed at `6c34228`. `s-stack-package` (`080d4df`) was merged at `25089d5`. The phase moved to Verify at code head `44efc92`.
+
+The first Verify gate returned VERIFIED at `019c8a1`, the verifier's check-file commit. Its report named three handbook defects that would fail in a real run, so the phase moved back to Implement to fix them before Review.

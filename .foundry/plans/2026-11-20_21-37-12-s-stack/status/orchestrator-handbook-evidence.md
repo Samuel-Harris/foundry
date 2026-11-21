@@ -499,3 +499,22 @@ No defect breaks the common path. For the cross-handbook integration:
 | After a failed post-merge check, the idle-phase `stop` in Finishing a phase can still fire, because it has no passing-check clause. Conditional on one reading. | Fable | Cold read |
 
 The Fable walk otherwise reached Done for all three phases, through a roadmap update, a crash with `workmux resurrect`, a failed check and out-of-order merges.
+
+## Verify 26, code head `ac3d7c0e7e46869167b4774f4a3094d37318d745`, VERIFIED
+
+A fresh verifier updated the check file for `07e5d30` (commit `ac3d7c0`, with new cold reads AR, AS and AT) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`183/200 orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: the board's 49 headless-Chrome scenarios, the three other scripts, and 55 cold reads across five check files. A grader marked `foundation` cold read 2 FAIL, because the reader also read `poteto-mode` first, as `SKILL.md` line 16 requires. The verifier and the phase session count it as agreeing in substance. The clash between `SKILL.md` lines 16 and 24 is `foundation`'s, and it is on the integration list.
+
+Every **Done when** item was met:
+
+- The handbook has 183 lines, and no command line appears.
+- A private-name grep across the phase's files, diff and commit messages found 0 hits.
+
+No defect breaks the common path. For the cross-handbook integration:
+
+- Supervision's stall `--close` timing differs from Finishing's quiet close.
+- A round is resent each tick while it is unanswered.
+- A phase waiting in Spec has no `waits_for`, so it can be replaced while the planner runs.
+- Merge step 7's `stop` has no quiet test.
+- "its own status files" is undefined.
+- A phase newly added by a later `done-planning` gets no board document.
+- `phase-session.md` line 123's timing for `move-back` to Plan is worded wrongly.

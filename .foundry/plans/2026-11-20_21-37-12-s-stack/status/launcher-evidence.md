@@ -23,3 +23,15 @@ A second fresh verifier ran at the merged head on 21 November 2026, in full. The
   - A pane left at its shell after `claude` exits is not reused. A relaunch splits a new pane, and `--close` does not clear a dead pane.
   - `SKILL.md`'s `start` form covers only the first spec writer. A restart needs `--window`, as C4 says.
   - The real `sam-mode` did not load in the scratch repository.
+
+## Review, code head `2726205c5a71584501fb366f588125c64af9cfbd`, SIGNIFICANT
+
+The review ran p-stack's `interrogate` skill with two adversaries, on Opus and on Fable. The Gemini seat was dropped, because this host has no Gemini model. The phase session reran every finding below on macOS, and each reproduced. Repros are in the adversaries' worktrees under `.claude/worktrees/` in the main checkout.
+
+1. Outside a UTF-8 locale, tmux replaces the tab separators in `list-panes -F` output with `_`, so no live session is ever detected. Under `LC_ALL=C` a second launch starts a second copy, `--close` reports `absent`, and `--remove` deletes the worktree under two live sessions. Found by Fable.
+2. Derived names collide across features. The planner of `a-phase` and phase `planner` of `a` are both `a-phase-planner`. The planner of `trip` reuses, and `--remove` deletes, feature `trip-planner`'s worktree. Found by both. Settled as `launcher-d8`.
+3. Two concurrent launches of one name, with the worktree present, start two copies. Found by both.
+4. A launch into a zoomed window unzooms it and shrinks the zoomed pane. Found by both.
+5. `--print-window` with a stale `TMUX_PANE` prints `window=` and exits 0. Found by Fable.
+6. With no tmux server running, `--close` and `--remove` exit 1 instead of `absent` and a normal removal. Found by Fable.
+7. `--remove` removes a worktree whose detached HEAD holds commits that are on no branch, and a worktree in which another `claude` is still working. Found by Fable.

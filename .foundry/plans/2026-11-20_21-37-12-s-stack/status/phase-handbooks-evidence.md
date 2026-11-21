@@ -133,3 +133,13 @@ https://github.com/Samuel-Harris/foundry/pull/85 is a draft on branch `s-stack-p
 - Hand-written lines: 372 added and 1 removed against #82's branch, and 682 added and 1 removed against `main`.
 - `gh stack link 81 82 85` also tried to retarget #82 to #81's old branch, and GitHub refused with HTTP 422. #82's base is still `main`.
 - `s-stack-phase-spec-planner-handbooks` checked first and agreed that #84 targets `main`, because #85 is #82's only child.
+
+## Verify: VERIFIED at `515c907896a51762c83dfeb2756981e03bd4b257`
+
+This was the fix round for `pr-handbook-r1` and automatic stacking. A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 17:29 and 17:34 UTC, at HEAD `f194006`. It made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 17:29:45 to 17:34:11 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 17:31:23: 0 matches.
+- One-off cold read: a fix round for a merged dependency. The phase session starts a PR creator that works out the base again and refreshes the branches as `pr-creator.md` says, stays in PR, runs no gate again, and has no `restack` handling. The verifier checked this against `pr-creator.md` on `s-stack-phase-pr-handbook`.
+- Outside this phase: `references/status-and-messages.md` still lists `restack` as an orchestrator message, and its `fix-round` row does not cover a merged dependency.

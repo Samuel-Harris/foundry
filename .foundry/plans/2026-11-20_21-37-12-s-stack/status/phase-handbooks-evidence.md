@@ -81,3 +81,12 @@ Significant:
 2. `phase-session.md`'s Verdicts paragraph says any commit that moves the code head needs a full verification run. Read literally, that contradicts the Evidence-only exception, and each rerun would add another Evidence commit. Both reviewers' cold readers raised it.
 
 Not significant, fixed alongside because each needs one clause: "Nothing runs `## Evidence`" is untrue where a lint check reads the file (reproduced with markdownlint, which the pre-commit hook would catch), and the new routing sentence for pull requests no longer covers commits the phase plan does not assign, such as the verifier's. Recorded only: whether a second pass reruns one-off checks and replaces old Evidence, and naming the head when the verifier makes no commit.
+
+## Verify: VERIFIED at `691ea624c93b5dbf1e8f33cd9b9dc1021d38308c`
+
+A sixth fresh verifier ran the whole verification skill on 2026-11-21 between 16:40 and 16:43 UTC, at HEAD `96fb87b`. It made no commit, because no check misstated a requirement. This was the first run under the rule that run results never go in the check file.
+
+- Passed: primitives (`94 primitives valid`), root manifest (`12 listed, 19 reached`), markdownlint (12 files, 0 errors), line budgets (phase-session 138, reviewer 41, verifier 78 of 200), no relative link leaving the package, no p-stack change, Tier 1 16:40:53 to 16:42:26 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads (cold read 2 under its new expected answer), and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- One-off private-name search at 16:42:15 over the five files of the phase diff, the diff text and 33 commit messages: 0 matches.
+- Outside this phase: `tests/s-stack/verify-s-stack/SKILL.md` check 8 and feature plan C6 still say `## Evidence` records results, against the newer run decision.

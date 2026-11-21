@@ -1,7 +1,7 @@
 ---
 phase: "phase-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T16:39:30Z"
+state: "Review"
+changed_at: "2026-11-21T16:43:43Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
 code_head: "691ea624c93b5dbf1e8f33cd9b9dc1021d38308c"
@@ -42,6 +42,11 @@ verdicts:
     code_head: "d32a56ae3096f5df29e5608aa6b6c146183c7dd6"
     at: "2026-11-21T16:37:03Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "691ea624c93b5dbf1e8f33cd9b9dc1021d38308c"
+    at: "2026-11-21T16:43:43Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -66,4 +71,4 @@ Fix 305a26e says the session follows a direct instruction and builds what an ope
 Fix 6b60476 addresses the four significant review findings. s-stack-package merged at d88dfe0 (only .foundry/). The third Verify gate returned VERIFIED at 6758c7d, the verifier's evidence commit. The second Review gate returned SIGNIFICANT at 6758c7d, with three findings. Back to Implement, with the orchestrator's merge-orchestrator-branch request for spec-planner-handbooks taken in the same round.
 Fix 73b5410 addresses the three findings of the second review. s-stack-package merged at cddb4b0 with the C7 procedure; it brought spec-planner-handbooks (planner.md, spec-writer.md, their check file) and a lockfile-only conflict, resolved by regenerating. The merge moved the code head to cddb4b0. The fourth Verify gate returned VERIFIED at d32a56a. The third Review gate returned SIGNIFICANT at d32a56a: a stale expected answer in the check file and a Verdicts sentence in phase-session.md. Back to Implement.
 Fix e592b60 addresses the third review's handbook findings. The stale expected answer in the check file goes to the next verifier. s-stack-package merged again (only .foundry/).
-The fifth verifier was stopped before it committed, on the orchestrator's instruction to remove the evidence-only exception. Commit 691ea62 removes it: the check file holds only checks, and results go in this phase's evidence file. Verification restarts at the new code head.
+The fifth verifier was stopped before it committed, on the orchestrator's instruction to remove the evidence-only exception. Commit 691ea62 removes it: the check file holds only checks, and results go in this phase's evidence file. Verification restarts at the new code head. The sixth Verify gate returned VERIFIED at 691ea62.

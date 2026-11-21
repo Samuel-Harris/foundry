@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T23:05:25Z"
+state: "Verify"
+changed_at: "2026-11-21T23:05:42Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
+code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -56,4 +56,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-A follow-up round from the orchestrator, after #84 merged. Cold read 1's expected point 5 is reworded so that a strict grader cannot fail an answer that also gives port 5432 to another phase under a stated assumption. `planner.md` does not change. `s-stack-package` is merged at `9533cf9`. That merge touched none of this phase's owned paths, so under `launcher-r3` the code head stays `6f70b37`.
+Follow-up round. Cold read 1's point 5 is reworded at `49f2959`, and `s-stack-package` is merged at `9533cf9`. A fresh verifier runs in full. The change is one sentence of check text, so it had no `quick-review`, and the Review gate covers it.

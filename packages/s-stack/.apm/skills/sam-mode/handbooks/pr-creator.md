@@ -60,7 +60,7 @@ bash -s -- <commits, oldest first> <<'EOF'
 <the parameter block>
 paths=(. "${GEN[@]}" ':(exclude).foundry')
 for c in $(git rev-list --no-merges --no-walk=unsorted "$@" -- . ':(exclude).foundry'); do
-  git diff-tree --quiet "$c^" "$c" -- "${paths[@]}" && continue
+  git diff-tree -r --quiet "$c^" "$c" -- "${paths[@]}" && continue
   git diff-tree -p --binary "$c^" "$c" -- "${paths[@]}" | git apply --index --whitespace=nowarn && git commit -q -C "$c" || exit 1
 done
 EOF
@@ -109,7 +109,7 @@ for spec in "$@"; do
   pr=${spec%%:*} deps=${spec#*:}; excl=("^$default")
   for d in ${deps//,/ }; do excl+=("^$d"); done
   for c in $(git rev-list --reverse --no-merges "$pr" "${excl[@]}" --invert-grep --grep="$REGEN"); do
-    git diff-tree --quiet "$c^" "$c" -- . "${GEN[@]}" && continue
+    git diff-tree -r --quiet "$c^" "$c" -- . "${GEN[@]}" && continue
     git diff-tree -p --binary "$c^" "$c" -- . "${GEN[@]}" | GIT_INDEX_FILE=$idx git apply --cached --whitespace=nowarn || { echo "FAIL $pr: $c does not apply"; fail=1; }
   done
   for c in $(git rev-list --no-merges "$pr" "${excl[@]}" --grep="$REGEN"); do

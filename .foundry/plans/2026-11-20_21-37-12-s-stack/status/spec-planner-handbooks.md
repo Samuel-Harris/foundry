@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T23:26:09Z"
+state: "Review"
+changed_at: "2026-11-21T23:31:04Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
@@ -52,6 +52,11 @@ verdicts:
     code_head: "1f6216019e8b1c657d52e1c360285e2bc2516ef5"
     at: "2026-11-21T23:25:34Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
+    at: "2026-11-21T23:31:04Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
@@ -84,4 +89,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. `planner.md` and point 3 are fixed at `47f792f`, and the orchestrator accepted `spec-planner-handbooks-d5`. A fresh verifier runs in full, then the review covers the commits since `49f2959`.
+Follow-up round. Verify passed at `47f792f`. The review covers this phase's owned paths from `49f2959` to `47f792f`.

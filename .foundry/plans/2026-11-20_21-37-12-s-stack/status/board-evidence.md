@@ -45,3 +45,24 @@ A fresh verifier rewrote `tests/s-stack/verify-s-stack/checks/board.md` at `a678
 - A cold reader given only the schema comment wrote a valid first batch with `depends_on`. `grep innerHTML` finds nothing. `apm audit --ci` passes.
 
 Known gap, unchanged: no browser tool was available, so nobody has watched the claude.ai viewer render either test page.
+
+## Review gate, code head `a678a49d30e83b4d65ce068b8120ac192e61595c`, SIGNIFICANT
+
+`interrogate` again ran two adversaries, Opus and Fable, at medium effort, over `45f0689..a678a49` for the template and `checks/board.md`. The Gemini seat was dropped as before. The phase session reran each finding below.
+
+Significant, found by both adversaries:
+
+- Edges that skip layers share one lane, so two different dependency sets draw the same map. The Opus adversary's graphs 1 and 2 screenshot identically (194 of 200,000 pixels differ, antialiasing only), and the phase session compared the two images by eye. A "done" edge under a "merged" edge also draws solid along the lane.
+- The `## Rerun` check passes broken templates. The phase session reran nine mutants and each exits 0: a cached tick trusted, nodes not coloured by state, the map not scrollable, the table scroll not kept, an `acquire` write, the legend swapped, the chip palette differing from the map, dark text on dark nodes, and no notice over cached data. The causes: the stub never serves `fromCache: true` and has no `acquire`, the legend is never read, node fill is compared only between unknown nodes, `scrollable` is collected but never asserted, and only the map's scroll position is checked.
+
+Minor, to be fixed in Implement:
+
+- Map labels are cut at 20 characters, so two ids that share 19 characters render the same, and this run's `spec-planner-handbooks` is cut.
+- An `unknown:` dependency chip is clipped at 400 px and runs into the gutter.
+- A tick proved stale by a live read loses its banner when a cached snapshot follows.
+
+Minor, recorded and not fixed:
+
+- Text selection is lost on each re-render.
+- `review_rank` and `stale_after_min` sent as digit strings are ignored. The schema says number for both.
+- At 700 px the Pull requests table scrolls sideways by 4 px inside its own wrapper.

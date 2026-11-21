@@ -1,7 +1,7 @@
 ---
 phase: "board"
-state: "Review"
-changed_at: "2026-11-21T16:53:47Z"
+state: "Implement"
+changed_at: "2026-11-21T17:05:18Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
 code_head: "a678a49d30e83b4d65ce068b8120ac192e61595c"
@@ -21,6 +21,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "a678a49d30e83b4d65ce068b8120ac192e61595c"
     at: "2026-11-21T16:53:47Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "a678a49d30e83b4d65ce068b8120ac192e61595c"
+    at: "2026-11-21T17:05:18Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
 pull_requests: []
 requests: []
@@ -54,3 +59,5 @@ The phase plan is committed at `8f55e96`. The template landed at `fef789b`. `qui
 The Implement round for `board-d4` and `board-d5`: the dependency map (`921552b`), the scheduling labels with the adversarial review's fixes (`3137664`), a second `quick-review` round's fixes (`ba53040`), and a `depends_on` that is not a list shown as unknown (`2f575c8`). Dismissed from the second `quick-review` with reasons: fixed map margins and a split of the layout function (no behaviour change), overlapping lane runs (cosmetic, the Depends on column lists every edge), focus-key collisions (malformed data only), and the overlap between the Scheduling and Session columns (the developer asked for the labels; raised in the pull request). `s-stack-package` was merged at `9e4a8d5` under C7 with a lockfile-only conflict, bringing `spec-planner-handbooks`. The Verify gate is starting for `9e4a8d5`.
 
 The verifier rewrote `checks/board.md` at `a678a49`, the new code head, and returned VERIFIED for it. Its 53 mutated templates all fail the new Rerun check. The Review gate is starting over `45f0689..a678a49`.
+
+The second Review gate returned SIGNIFICANT at `a678a49`: the dependency map draws different graphs alike, and the Rerun check still passes broken templates. The phase is back in Implement for that.

@@ -23,7 +23,7 @@ Expected answer:
 
 1. Three phases: the sharing back end, the import command, and the front end that needs both. The front end stays one phase, because its work is one file.
 2. Every phase gives each field of `planner.md`'s "What each phase entry holds" table: its scope, the phases it depends on (or none), the paths it owns, the paths it must not touch, its exclusive resources (or none), and a **Done when** list of the evidence that proves it done. An answer without a **Must not touch** field, or an equivalent, fails this point.
-3. The front end phase depends on both the sharing phase and the import phase. The sharing and import phases depend on nothing and can run at the same time.
+3. The front end phase depends on both the sharing phase and the import phase. The sharing and import phases depend on nothing and can run at the same time. When the answer's own stated assumption gives both of them the same exclusive resource, running them one after the other also passes, because phases that need one exclusive resource never run together.
 4. No two phases that can run at the same time own the same path.
 5. Port 5432, or the local test database on it, is named as an exclusive resource of the sharing back-end phase. Naming it for another phase under a stated assumption neither passes nor fails this point. An answer whose own assumptions have another phase that can run at the same time use that database, without naming it as that phase's exclusive resource, fails this point.
 

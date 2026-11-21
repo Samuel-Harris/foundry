@@ -1,10 +1,10 @@
 ---
 phase: "pr-handbook"
-state: "Implement"
-changed_at: "2026-11-21T16:09:22Z"
+state: "Verify"
+changed_at: "2026-11-21T16:10:01Z"
 session: "s-stack-phase-pr-handbook"
 branch: "s-stack-phase-pr-handbook"
-code_head: "a42cd47ca1eb9cbcfc5dc51e6b608b4864b31d22"
+code_head: "f66ec2c29857b67568dc264bc4e87c71ccae242d"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -39,7 +39,7 @@ decisions:
 
 # Phase `pr-handbook` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/pr-handbook.md`. Implement is complete. `2fbf1cd` added the handbook. `27785f0` added a merge check to the equality proof and corrected why `gh stack submit` is not used. `quick-review` then found four defects in the merge and binary handling, and `589411b` fixed them, with every scratch case rerun from the handbook's own commands. `391d9a8` reorders one sentence. The handbook is 185 lines. `s-stack-package` was merged at `e69b6ee`, bringing only `.foundry/` changes. The first Verify gate returned NOT VERIFIED at `a42cd47`, the verifier's check-file commit: `git diff-tree --quiet` without `-r` breaks the carry loop and the proof on a commit that changes only a nested lockfile. The phase is back in Implement for that fix.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/pr-handbook.md`. Implement is complete. `2fbf1cd` added the handbook. `27785f0` added a merge check to the equality proof and corrected why `gh stack submit` is not used. `quick-review` then found four defects in the merge and binary handling, and `589411b` fixed them, with every scratch case rerun from the handbook's own commands. `391d9a8` reorders one sentence. The handbook is 185 lines. `s-stack-package` was merged at `e69b6ee`, bringing only `.foundry/` changes. The first Verify gate returned NOT VERIFIED at `a42cd47`, the verifier's check-file commit: `git diff-tree --quiet` without `-r` breaks the carry loop and the proof on a commit that changes only a nested lockfile. `f66ec2c` adds `-r` to both checks, and the check file's Rerun block then printed `0 failed`. The code head is `f66ec2c`, and Verify runs again in full.
 
 ## Notes
 

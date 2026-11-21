@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 18:38 |
+| Last tick | 2026-11-21 18:52 |
 | Default branch merged at | `e4a18d1` (#82, #84, into `321f333`) |
 
 ## Live sessions
@@ -33,7 +33,7 @@ None.
 | 81 | `foundation` | merged into `main` as `d7e036c` | | |
 | 82 | `foundation` | merged into `main` as `e4a18d1` | | |
 | 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
-| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `main` | none; rebuilt at `f54b7b8` |
+| 85 | `phase-handbooks` | merged into `main` as `6f42b1c` | | |
 
 ## Merged phases
 

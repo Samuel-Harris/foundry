@@ -33,12 +33,14 @@ None.
 | --- | --- | --- | --- | --- |
 | 81 | `foundation` | `s-stack-foundation-package` | `main` | none |
 | 82 | `foundation` | `s-stack-verify-skill` | `s-stack-foundation-package` | 81 |
+| 84 | `spec-planner-handbooks` | `s-stack-spec-planner-handbooks` | `main` | 81, 82 |
 
 ## Merged phases
 
 | Phase | Merged at | Phase code head | Post-merge check |
 | --- | --- | --- | --- |
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
+| `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | running |
 
 ## Closed sessions
 

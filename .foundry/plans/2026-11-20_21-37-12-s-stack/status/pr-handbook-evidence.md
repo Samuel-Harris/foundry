@@ -80,3 +80,23 @@ A seventh fresh verifier covered `3c8b9b7` plus its own check-file commit `f5c99
 - **Done when.** Every item holds, and so do decisions d1 to d8 and the four round guarantees.
 - **Minor finding, recorded and not fixed.** When a merged dependency's ref is gone, `prove` says "undeclared dependency" instead of naming the missing ref. It fails closed, `refresh` prints a clear `STOP` for the same spec, and the handbook says to restore the ref.
 - **Probed and rejected.** A fix round after the orchestrator merged the phase gives `EQUAL`, because carried commits are new objects. A non-ASCII package path resolves correctly.
+
+## Review: SIGNIFICANT at `f5c99ae57b1715a0ceb8f5442426c74d433af3c9`
+
+The second `interrogate` run used Opus and Fable, with the brief in `handbooks/reviewer.md`. Its scope was the commits since `412a91d` plus merge `5821887`'s lockfile-only resolution. The earlier findings' probe, cases `review 1` to `review 6`, passed for both adversaries: 27 PASS, `0 failed`. The new findings, merged by root cause, are below. Significance follows the reviewer brief.
+
+**Significant.**
+
+- **A refresh cannot get past an old commit that conflicts with the default branch** (Opus 1, Fable 1). Once a pull request's existing commit conflicts with a later default-branch change, every refresh stops. That stays true after the phase resolves the conflict, because the refresh replays the old commit first. The documented remedy, an ordinary resolution commit on the phase, never carries.
+- **The proof's phase-level replay is wrong once the phase holds content its orchestrator merge base lacks** (Opus 2, Fable 2). That happens after a clean merge of the default branch into the phase (`m.txt` listed), or after the orchestrator merged the phase and two own commits share a line or one deletes a file.
+- **A pull request merged with a merge commit drops out of the proof** (Opus 3, Fable 4). This breaks the "squash-merged or not" statement.
+- **Moving from row 3 to row 2 under another phase's parent that has not absorbed the default branch** either pushes a tree that reverts a merged dependency or stops falsely (Opus 4).
+- **A grandchild whose parent the forge rewrote** stops unless its spec also lists the merged grandparent (Opus 5). This depends on how GitHub rewrites stacks.
+- **A phase that deletes a package** leaves the package's lockfile in the pull request, and the proof prints `EQUAL` (Fable 3).
+
+**Not significant alone.**
+
+- A same-phase branch with an undeclared dependency proves `EQUAL` (Fable 6).
+- A parent's fix next to a child's change cannot be carried, and the stop is clean (Fable 5).
+
+The phase session raised `pr-handbook-r3`, because the common root is defining a pull request by replaying its commits onto a moving base.

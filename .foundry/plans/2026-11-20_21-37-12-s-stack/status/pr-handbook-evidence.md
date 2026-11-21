@@ -175,3 +175,22 @@ Defects:
 - **Minor.** A stopped first build cannot be retried as written, because step 1 uses `-b` on a branch the stop left behind.
 
 The phase session's judgement: whether a failed check pushes anything should not depend on the refresh catching every history. The round should refresh, regenerate and prove every branch locally, and push only after `EQUAL`.
+
+## Verify: NOT VERIFIED at `2168718a942213f1163caf2369ee389837065d31`
+
+The eleventh verifier was stopped before any verdict, because `pr-handbook-d12` changed the script. A twelfth fresh verifier then covered `0a30b0a` plus its own check-file commit `2168718`. That commit makes the harness refresh and regenerate every branch, prove locally, and push only on `EQUAL`. On any failing round it asserts that nothing on `origin` moved.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING. In check 8, `board`, `foundation`, `phase-handbooks` and `spec-planner-handbooks` passed. `pr-handbook.md` parsed, met its budget and agreed on all eleven cold-read points, but its scratch block printed 77 PASS and `6 failed`.
+- **What passes.** Every `STOP` and proof `FAIL` pushed nothing. Also passing:
+  - the delegate cases, the first-parent-only round, the rebuild remedy and the round after a push;
+  - the own-phase stack on an unpushed parent;
+  - d12's required case, where another phase's local parent ahead of `origin` is ignored;
+  - the retries;
+  - the stale-owned-path remedy through another phase's branch.
+
+Defects:
+
+- **Significant: a regression from `f87a03f`.** A new branch starts from `origin/<default>`, so a same-phase stacked child that extends its parent's file hits a false permanent shared-path `STOP` on its first build. That was cases `r2-adjacent` and `r2-grandchild`. Started from the local parent, it proves `EQUAL`.
+- **Significant, rare: d12 breached.** `mine_branch` treats a branch that carries even one of this phase's commits as this phase's own. Another phase's branch stacked on ours, left ahead of `origin` by a crash, was read locally. The child then pushed the other phase's unproved file, and the proof printed `EQUAL`.
+- **Minor: the delegate check is exempted once the orchestrator branch holds the delegate merge.** A fix round after that proves `EQUAL` without the delegate's file.
+- **Check file, for the next verifier.** Cold-read expected point 10 still says "reverts that merge".

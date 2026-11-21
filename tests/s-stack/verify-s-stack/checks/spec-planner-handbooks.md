@@ -25,7 +25,7 @@ Expected answer:
 2. Every phase gives each field of `planner.md`'s "What each phase entry holds" table: its scope, the phases it depends on (or none), the paths it owns, the paths it must not touch, its exclusive resources (or none), and a **Done when** list of the evidence that proves it done. An answer without a **Must not touch** field, or an equivalent, fails this point.
 3. The front end phase depends on both the sharing phase and the import phase. The sharing and import phases depend on nothing and can run at the same time.
 4. No two phases that can run at the same time own the same path.
-5. Port 5432, or the local test database on it, is named as an exclusive resource of each phase whose tests start that database.
+5. Port 5432 is named as an exclusive resource of the sharing back-end phase. Naming it for another phase under a stated assumption neither passes nor fails this point.
 
 ### Cold read 2. The spec writer's questions, records and handover
 

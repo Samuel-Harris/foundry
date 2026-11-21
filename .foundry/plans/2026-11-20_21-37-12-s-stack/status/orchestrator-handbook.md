@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T17:47:40Z"
+state: "Verify"
+changed_at: "2026-11-21T17:50:04Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "aa1691c294db133b3d809d901732719cc55b6097"
+code_head: "0f37a7b5e7be061859099573ceeb82e610f8c755"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -139,3 +139,5 @@ The tenth Verify gate returned NOT VERIFIED at `7b4f0a3`, and the phase moved ba
 The fixes are at `63e2e35`. `s-stack-package` (`1e9e4bb`) was merged at `34d639f`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `63e2e35`.
 
 The eleventh Verify gate returned INCONCLUSIVE at `aa1691c`, and two defects would break a real run. The phase moved back to Implement.
+
+The Verify 11 fixes are at `b5cc777`, and the orchestrator's told-mark instruction is at `0f37a7b`. `s-stack-package` was already merged. The phase moved to Verify at code head `0f37a7b`.

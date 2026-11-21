@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T18:19:05Z"
+state: "Verify"
+changed_at: "2026-11-21T18:20:24Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "03d289910511be372577e92aa690b0088836b4a5"
+code_head: "bab45692ed099c4e8464f14da8d7054c83907525"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -164,3 +164,5 @@ The open-pull-request requirement is at `131526e`. `s-stack-package` (`d7aac72`)
 The thirteenth Verify gate returned VERIFIED at `03d2899`. The phase moved to Review, which covers the commits since `7ccd3ee`.
 
 The third Review gate returned SIGNIFICANT at `03d2899`. The phase moved back to Implement.
+
+The Review 3 fixes are at `bab4569`. `s-stack-package` (`a715ab3`) was merged at `d9e108e`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `bab4569`.

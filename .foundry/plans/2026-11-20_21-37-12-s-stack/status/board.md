@@ -1,10 +1,10 @@
 ---
 phase: "board"
-state: "Implement"
-changed_at: "2026-11-21T17:05:18Z"
+state: "Verify"
+changed_at: "2026-11-21T17:12:06Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
-code_head: "a678a49d30e83b4d65ce068b8120ac192e61595c"
+code_head: "eff112da063ff5156ee3cc09e7a50adb8453ed95"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -61,3 +61,5 @@ The Implement round for `board-d4` and `board-d5`: the dependency map (`921552b`
 The verifier rewrote `checks/board.md` at `a678a49`, the new code head, and returned VERIFIED for it. Its 53 mutated templates all fail the new Rerun check. The Review gate is starting over `45f0689..a678a49`.
 
 The second Review gate returned SIGNIFICANT at `a678a49`: the dependency map draws different graphs alike, and the Rerun check still passes broken templates. The phase is back in Implement for that.
+
+The fix `66118de` gives each skipping edge its own lane, keeps map labels whole up to 40 characters, wraps unknown dependency chips, and keeps a live stale verdict through a cached snapshot. `s-stack-package` was merged at `eff112d` under C7 with a lockfile-only conflict, bringing `phase-handbooks` and `main`'s merge of #81. The Verify gate is starting for `eff112d`.

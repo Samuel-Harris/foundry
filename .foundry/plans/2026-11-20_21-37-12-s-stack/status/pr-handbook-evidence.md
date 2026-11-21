@@ -69,3 +69,14 @@ Defects:
 - **Minor.** Git quotes non-ASCII paths, so a `STOP` line names `"caf\303\251.md"`.
 - **Minor.** A missing open-dependency ref gives a `fatal:` line instead of a `STOP` line. The round still stops safely.
 - **Minor, misleads a reader.** The handbook does not say that a child GitHub moved to the default branch after its parent merged is not leaving a stack.
+
+## Verify: VERIFIED at `f5c99ae57b1715a0ceb8f5442426c74d433af3c9`
+
+A seventh fresh verifier covered `3c8b9b7` plus its own check-file commit `f5c99ae`. That commit adds a non-ASCII conflict, a non-ASCII `.foundry/` path and a missing dependency branch, and makes the undeclared-dependency case require the proof's own line. All four new cases failed against the script at `200f342`.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Check 4 lists only `orchestrator.md` as PENDING. Check 6 is PENDING.
+- **Check 8.** Passed for `foundation.md` (three cold reads and C2), `phase-handbooks.md` (four cold reads), `spec-planner-handbooks.md` (two cold reads) and `pr-handbook.md`. For `pr-handbook.md`, `bash -n` passed, the 27 scratch cases printed `0 failed`, the line budget is 127/200, and the restacking cold read agreed.
+- **Independent rerun.** The phase session reran the scratch cases at `f5c99ae`: 27 PASS, `0 failed`, clean tree.
+- **Done when.** Every item holds, and so do decisions d1 to d8 and the four round guarantees.
+- **Minor finding, recorded and not fixed.** When a merged dependency's ref is gone, `prove` says "undeclared dependency" instead of naming the missing ref. It fails closed, `refresh` prints a clear `STOP` for the same spec, and the handbook says to restore the ref.
+- **Probed and rejected.** A fix round after the orchestrator merged the phase gives `EQUAL`, because carried commits are new objects. A non-ASCII package path resolves correctly.

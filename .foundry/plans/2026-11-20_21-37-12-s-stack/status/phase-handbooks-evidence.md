@@ -158,3 +158,14 @@ Not significant, recorded only:
 - `versioning.py check origin/main` fails at the phase head, as it does on every phase branch. The pull request's regenerate commit raises the version.
 
 The orchestrator's instruction, received during this review, sends the phase back to Implement in the same round. `phase-session.md` moved a phase to Done on "every pull request has merged" in any state, and moved back only after a failed post-merge check.
+
+## Verify: VERIFIED at `21557166e37a58d905fa420d8b4605584e490bdc`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 17:40 and 17:44 UTC, at HEAD `5703280`. It made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 17:40:40 to 17:43:26 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 17:42:04: 0 matches.
+- One-off cold read, a merge notice while in Implement: the phase does not move to Done, sends `state` with Implement, and passes both gates for its new code. Every required point passed.
+- One-off cold read, #90 merged with #91 stacked on it: the phase starts a PR creator that works out the bases again and refreshes the branches, records each base and `depends_on`, sends `prs-open`, stays in PR and runs no gate. Every required point passed.
+- Gaps the readers noted, outside this check: where fix commits go once every pull request has merged, and whether a merged pull request stays listed in `pull_requests`.

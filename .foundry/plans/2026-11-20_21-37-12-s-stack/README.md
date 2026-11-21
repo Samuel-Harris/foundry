@@ -12,6 +12,7 @@ The specification is the feature roadmap at `.foundry/feature-roadmaps/2026-11-2
 | A phase session | [Rules for every phase](#rules-for-every-phase), [Contracts between phases](#contracts-between-phases) and its own entry under [Phases](#phases) |
 | Verifier | The phase's entry, its **Done when** list, and [Verification](#verification) |
 | PR creator | The phase's **Pull requests** line, [Generated files and versions](#c7-generated-files-and-versions) and [Pull request rules for this run](#pull-request-rules-for-this-run) |
+| Anyone checking scope or impact | [Non-goals, compatibility and rollout](#non-goals-compatibility-and-rollout) and [Blast radius](#blast-radius) |
 | Anyone asking why | [Experiments](#experiments), [Decisions taken by the planner](#decisions-taken-by-the-planner), [Rejected alternatives](#rejected-alternatives) and [Risks](#risks) |
 
 ## The problem and the outcome
@@ -27,6 +28,52 @@ When this plan is complete, these things are true:
 - The Tier 1 suite, the primitive validator and the launcher's tests pass, and the launcher's tests run in CI in their own job.
 
 The package's own acceptance needs one real feature run of at least three phases, and a revision of the handbooks from that run (roadmap `package.md`, "When the package is done"). That run comes after this plan and is not a phase of it.
+
+## Non-goals, compatibility and rollout
+
+**Non-goals.** This plan does not include these things.
+
+- The real feature run that the package's own acceptance needs, and the revision of the handbooks from it.
+- Any change under `packages/p-stack`.
+- Marking a pull request ready, or merging one into `main`. The developer does both.
+- A command-line tool that enforces state changes, the Data page type, and hosts other than Claude Code. The package still declares the three targets, like every package, and its description says it needs Claude Code.
+
+**What stays unchanged.** Every existing package keeps its primitives, its version and its dependencies, except `default-stack` in the last phase. No skill, agent or instruction disappears from any consumer.
+
+**Consumers of `default-stack`.** The last phase raises `default-stack` by one patch version above `main`'s at that time. It was measured as 0.1.12 to 0.1.13 on the orchestrator branch at `2c02803`. A consumer that pins `#^0.1.0` gets it on `apm update`, because a patch is inside the range. That consumer gains the `sam-mode` skill on each target it installs. It keeps `planning`, `deep-interview`, `review`, `pr`, `coding-style` and `p-stack`, which it now reaches partly through s-stack. Its deployed files only grow, and the `default-stack` phase proves that.
+
+**Consumers of other packages.** Unaffected. Their packages do not change.
+
+**s-stack's own tags.** CI tags `s-stack--v<version>` on `main` as each s-stack pull request merges. Until the last handbook pull request merges, a tagged version has a `SKILL.md` that names handbooks not yet on `main`. Nothing installs s-stack by default before the `default-stack` phase, so only someone who installs it directly sees an incomplete version.
+
+**Developers of Foundry.** The root manifest changes in `foundation`. After pulling it, a developer reinstalls at the root, first deleting the stale deploy output that `AGENTS.md`, "Root development manifest", lists.
+
+**Rollout order.** `foundation`'s first pull request merges first, then the middle phases' pull requests in any order, then `default-stack`'s.
+
+**Rollback.** To withdraw s-stack from consumers, revert the `default-stack` pull request on `main` and raise `default-stack` again with `versioning.py bump`, because a version may never go down. Never delete or move a tag by hand, as `AGENTS.md` says.
+
+## Blast radius
+
+Every file this plan changes, by phase. Generated files are marked.
+
+| Path | Phases | Change |
+| --- | --- | --- |
+| `packages/s-stack/**` | `foundation` creates it, and each middle phase adds its own files | New package |
+| `packages/s-stack/apm.lock.yaml` | Every phase that changes `.apm/`, generated | New, 5,314 lines measured at `2c02803` with four placeholder files, about 22 more for each further file |
+| `packages/default-stack/apm.yml` | `default-stack` | `../planning` becomes `../s-stack`, plus the version |
+| `packages/default-stack/apm.lock.yaml` | `default-stack`, generated | +1,158/-1,015 lines measured at `2c02803` |
+| Root `apm.yml` | `foundation` | Adds s-stack. Drops `coding-style`, `planning` and `p-stack` |
+| `tests/structural/run-tier1.sh` | `foundation`, then `default-stack` | `PACK_BLOCKED`, `DEFAULT_STACK_DEPLOYED` and counts in comments |
+| `tests/s-stack/verify-s-stack/**` | `foundation` creates it, and every phase adds `checks/<phase>.md` | New verification skill |
+| `.github/workflows/ci.yml` | `launcher` | New job `s-stack-launcher-tests`, and the `tag` job's `needs` |
+| `AGENTS.md` | `foundation`, then `launcher`, then `default-stack` | Counts, pack-blocked list, CI section, `default-stack`'s doubly reached packages |
+| Root `README.md` | `foundation` | Package and skill rows |
+| `docs/COMPATIBILITY.md` | `foundation`, then `default-stack` | Count, row, pack-blocked list, `default-stack` row |
+| `docs/DEPENDENCY-CONTRACTS.md` | `foundation`, then `default-stack` | s-stack's edges, pack-blocked list, `default-stack`'s edge and count, the audit defect |
+| `tests/acceptance.md` | `foundation` | Counts and the pack-blocked list |
+| Git tags `s-stack--v*` and one new `default-stack--v*` | CI on `main` | New tags |
+
+Nothing else changes. In particular, no file under `packages/p-stack/`, `.foundry/` on any pull request branch, or any other package's manifest or lockfile changes.
 
 ## Rules for every phase
 
@@ -167,49 +214,49 @@ dependencies:
 
 Every phase session of this run writes its status file at `.foundry/plans/2026-11-20_21-37-12-s-stack/status/<phase>.md`, in this form, from its first commit. The `foundation` phase copies this definition into `references/status-and-messages.md` unchanged, and from then on that file owns it.
 
-The header is the YAML between the file's first two `---` lines. Notes go below it in Markdown. A program reads the header and ignores the notes. Every key is always present. An empty list is `[]`, and an absent value is `null`.
+The header is the YAML between the file's first two `---` lines. Notes go below it in Markdown. A program reads the header and ignores the notes. Every key is always present. An empty list is `[]`, and an absent value is `null`. Every string value is double-quoted, exactly as `json.dumps` writes it, including states, times, SHAs and ids, so a colon or a comma in free text cannot break the YAML. Numbers, booleans, `null` and lists are bare. Comments in the example below are explanation only, and a real header has none.
 
 ```yaml
 ---
-phase: launcher                     # the phase id from the feature plan
-state: Implement                    # Spec | Plan | Implement | Verify | Review | PR | Done
-changed_at: 2026-11-21T14:05:00Z    # UTC, the time of the last state change
-session: s-stack-phase-launcher     # the session name
-branch: s-stack-phase-launcher      # the phase branch
-code_head: 3f2c1e0a9b...            # full SHA, see below
+phase: "launcher"                   # the phase id from the feature plan
+state: "Implement"                  # Spec | Plan | Implement | Verify | Review | PR | Done
+changed_at: "2026-11-21T14:05:00Z"  # UTC, the time of the last state change
+session: "s-stack-phase-launcher"   # the session name
+branch: "s-stack-phase-launcher"    # the phase branch
+code_head: "3f2c1e0a9b..."          # full SHA, see below
 waits_for: null                     # one line of text while the phase waits, else null
 verdicts:
-  - gate: verify                    # verify | review
-    result: VERIFIED                # verify: VERIFIED | NOT VERIFIED | INCONCLUSIVE
+  - gate: "verify"                  # verify | review
+    result: "VERIFIED"              # verify: VERIFIED | NOT VERIFIED | INCONCLUSIVE
                                     # review: CLEAR | SIGNIFICANT
-    code_head: 3f2c1e0a9b...        # the code head the verdict covers
-    at: 2026-11-21T15:40:00Z
-    evidence: .foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md
+    code_head: "3f2c1e0a9b..."      # the code head the verdict covers
+    at: "2026-11-21T15:40:00Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - number: 81
-    branch: s-stack-launcher
-    base: main                      # the branch the pull request targets
+    branch: "s-stack-launcher"
+    base: "main"                    # the branch the pull request targets
     depends_on: [79]                # open pull requests this one needs, as numbers
     stacked: true                   # true when it joined its parent's gh stack
 requests:                           # open decision requests, removed once answered
-  - id: launcher-r1
-    question: One sentence.
-    options: [A, B]
-    recommendation: A
-    door: two-way                   # one-way | two-way
-    waiting_work: One sentence.
-    since: 2026-11-21T14:10:00Z
+  - id: "launcher-r1"
+    question: "One sentence, which may contain: colons, and commas."
+    options: ["A. One sentence.", "B. One sentence."]
+    recommendation: "A"
+    door: "two-way"                 # one-way | two-way
+    waiting_work: "One sentence."
+    since: "2026-11-21T14:10:00Z"
 decisions:                          # decisions taken for this phase only
-  - id: launcher-d1
-    decision: One sentence.
-    door: two-way
-    at: 2026-11-21T14:30:00Z
+  - id: "launcher-d1"
+    decision: "One sentence."
+    door: "two-way"
+    at: "2026-11-21T14:30:00Z"
 ---
 ```
 
 The rules:
 
-- **Code head.** It is `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, the latest commit that changes a file outside `.foundry/`. A commit that only records status leaves it unchanged.
+- **Code head.** It is `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry' ':(exclude)**/apm.lock.yaml'`, the latest commit that changes a file outside `.foundry/` other than a lockfile. A commit that only records status, or only regenerates lockfiles, leaves it unchanged. The developer decided this during the run (option B of the generated-files decision request). The rule also covers commits that change only a `version:` line, and the command needs no clause for them, because no phase branch ever runs `versioning.py bump` ([C7](#c7-generated-files-and-versions)). So no version-only commit is ever written on a phase branch. A version change can reach a phase branch only inside its pre-Verify merge of `s-stack-package`, and that merge comes before the gates.
 - **Verdicts.** The list keeps every verdict, newest last. The orchestrator merges only when the newest `verify` verdict is `VERIFIED` and the newest `review` verdict is `CLEAR`, and both name the current code head.
 - **Ids.** A request or decision id is `<phase>-r<n>` or `<phase>-d<n>`, numbered by the phase itself. No list is shared between writers.
 - **Evidence.** Evidence that is not a URL lives in a file the phase owns under `.foundry/plans/2026-11-20_21-37-12-s-stack/status/`, named `<phase>-evidence.md`.
@@ -303,11 +350,27 @@ A phase's verifier adds that phase's behavioural checks in `tests/s-stack/verify
 
 ### C7. Generated files and versions
 
-`packages/s-stack/apm.lock.yaml`, and from the last phase on `packages/default-stack/apm.lock.yaml`, are generated. No phase owns them. A phase that changes a file under `.apm/` regenerates them with `apm install --target cursor,claude,copilot` in each affected package, then `python3 scripts/relativise_lockfiles.py` on each lockfile. It commits the lockfile together with the change, because the pre-commit hook refuses a stale lockfile.
+Two kinds of content are generated. No phase owns either, and nobody edits them by hand.
 
-Parallel phases conflict in the lockfile. [Experiment 1](#experiment-1-manifests-and-tier-1) measured why. Every list in it is sorted by path, so two branches conflict whenever their new paths fall into the same gap between existing paths. All the handbooks, and the template, fall into one gap. The resolution is mechanical. Take either side, reinstall, relativise, commit the lockfile alone, and pass both gates again. The verifier's rerun is the full skill. The review covers only the lockfile commit, so it is cheap.
+- **Lockfiles.** `packages/s-stack/apm.lock.yaml`, and from the last phase on `packages/default-stack/apm.lock.yaml`. They are regenerated with `apm install --target cursor,claude,copilot` in each affected package, then `python3 scripts/relativise_lockfiles.py` on each lockfile.
+- **Version lines.** The `version:` line of each changed package's `apm.yml`, written only by `python3 scripts/versioning.py bump`.
 
-The `version:` line of `packages/s-stack/apm.yml` is also regenerated, by `python3 scripts/versioning.py bump`, and no phase owns it. s-stack is new, so it stays at version `"0.1.0"` on `s-stack-package` while `main` has no s-stack. Once one s-stack pull request has merged into `main`, every later pull request that changes s-stack needs a higher version than `main` has. `main`'s CI check fails a merge that repeats a version. Before the PR creator opens or updates a pull request, the phase session runs `python3 scripts/versioning.py bump` on the phase branch and commits the result, as `AGENTS.md` requires. The bump is then part of the phase diff, and the equality proof still holds. When two open pull requests carry the same version, the one merged second fails its check, and that failure starts an ordinary fix round.
+**On a phase branch.** A phase that changes a file under `.apm/` regenerates the lockfile and commits it together with the change, because the pre-commit hook refuses a stale lockfile. A phase branch never runs `versioning.py bump`. s-stack stays at `"0.1.0"`, the version `foundation` writes, on every phase branch and on `s-stack-package`. Its version moves only on `main`, through pull request branches, and reaches `s-stack-package` when the orchestrator merges `main` in.
+
+**At the orchestrator-branch merge.** Parallel phases conflict in the lockfile. [Experiment 1](#experiment-1-manifests-and-tier-1) measured why. Every list in it is sorted by path, so two branches conflict whenever their new paths fall into the same gap between existing paths, and all the handbooks and the template fall into one gap. The phase session resolves it. It merges `s-stack-package`, takes either side of each conflicted lockfile, reinstalls, relativises, and commits the lockfile alone. That commit leaves the code head unchanged ([C2](#c2-status-file-header)), so the verdicts stand, and the orchestrator merges the phase branch again. The orchestrator's merged-branch check, which runs Tier 1, proves the lockfile. A merge that also brings changes outside lockfiles does move the code head, and the gates run again as usual.
+
+When merging `main` into `s-stack-package` conflicts only in lockfiles, the orchestrator hands it to the live phase session that is nearest to Verify. That session merges `main` into its phase branch in its pre-Verify merge and regenerates. Once the orchestrator merges that phase, `main` merges cleanly.
+
+**On a pull request branch.** A pull request branch is cut from `main` or from a parent pull request branch. Its tree differs from the phase branch, because other phases' files are not on `main` yet. So the phase branch's lockfile hunks are stale there, or do not apply. The PR creator handles both generated kinds this way.
+
+1. It replays each content commit without its lockfile hunks, as `git diff-tree -p --binary <c>^ <c> -- . ':(exclude)**/apm.lock.yaml' | git apply --index`, and commits with the original message and `FOUNDRY_SKIP_LOCKFILE_HOOK=1`.
+2. It ends the branch with one regenerate commit, whose subject is exactly `chore(s-stack): regenerate generated files`. That commit runs `python3 scripts/versioning.py bump` against `origin/main`, then regenerates and relativises every changed package's lockfile. It touches only `**/apm.lock.yaml` and `version:` lines.
+3. When `main` moves under an open pull request, for example because a sibling pull request merged, the pull request's lockfile and version go stale. CI's `pre-commit` and `versions` jobs then fail. The PR creator merges `main` into the branch, never force-pushing. It resolves any conflict confined to generated files by taking `main`'s side, and adds a new regenerate commit.
+4. The equality proof ([Experiment 5](#experiment-5-proving-the-pull-requests-equal-the-phase-diff)) replays every own commit except regenerate commits, and compares trees excluding `.foundry/` and `**/apm.lock.yaml`. It then checks that every regenerate commit touches only lockfiles and `version:` lines. CI's frozen-lockfile check and `versions` check on the pull request are the evidence that the generated content is right.
+
+Step 3 is a regenerate-only fix round, which the developer decided during the run (option B). The orchestrator sends a `fix-round` message that says generated files only. The PR creator repeats steps 3 and 4, the phase stays in PR, and no gate runs again. A failed check for any other reason is an ordinary fix round, as roadmap `workflow.md` defines it.
+
+[Experiment 6](#experiment-6-generated-files-on-a-pull-request-branch) proved steps 1 to 4 on real lockfiles.
 
 ## Phases
 
@@ -323,7 +386,7 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 - `README.md` for the package, in the form of `packages/pr/README.md`. It says the skill needs Claude Code 2.1.224 or later, tmux and workmux.
 - Root wiring. In the root `apm.yml`, add `./packages/s-stack` and remove `./packages/coding-style`, `./packages/planning` and `./packages/p-stack`, which s-stack now reaches.
 - `tests/structural/run-tier1.sh`. Add `s-stack` to `PACK_BLOCKED`.
-- Counts and lists. Run `git grep -n -i -E 'nineteen|eighteen|five packages' -- AGENTS.md README.md docs tests ':!tests/s-stack'`. Fix every hit that counts Foundry's packages or lists the pack-blocked packages. The package count goes from nineteen to twenty, the content-package count from eighteen to nineteen, the 33-byte `.gitignore` count from nineteen to twenty, and `s-stack` joins each pack-blocked list, which grows from five packages to six. On 21 November the hits were `AGENTS.md` lines 3, 4, 131 and 380, `docs/COMPATIBILITY.md` lines 77 and 98, `tests/acceptance.md` lines 21, 23, 39 and 51, and `tests/structural/run-tier1.sh` lines 4 and 40. `docs/DEPENDENCY-CONTRACTS.md` lists the pack-blocked packages by name near line 221 and needs `s-stack` too. Leave `run-tier1.sh` line 40's "nine" alone, because it counts `default-stack`'s packages, which change in the last phase.
+- Counts and lists. Run `git grep -n -i -E 'nineteen|eighteen|five packages' -- AGENTS.md README.md docs tests ':!tests/s-stack'`. Fix every hit that counts Foundry's packages or lists the pack-blocked packages. The package count goes from nineteen to twenty, the content-package count from eighteen to nineteen, the 33-byte `.gitignore` count from nineteen to twenty, and `s-stack` joins each pack-blocked list, which grows from five packages to six. On 21 November the hits were `AGENTS.md` lines 3, 4, 131 and 380, `docs/COMPATIBILITY.md` lines 77 and 98, `tests/acceptance.md` lines 21, 23, 39 and 51, and `tests/structural/run-tier1.sh` lines 4 and 40. `docs/DEPENDENCY-CONTRACTS.md` lists the pack-blocked packages by name near line 221 and needs `s-stack` too. In the same file, add s-stack's own edges to the dependency graph and the capability table, one for each dependency in C1. The `default-stack` phase adds `default-stack`'s new edge later. Leave `run-tier1.sh` line 40's "nine" alone, because it counts `default-stack`'s packages, which change in the last phase.
 - New rows. An `s-stack` row joins the package table in the root `README.md` and the per-package table in `docs/COMPATIBILITY.md`, and a `sam-mode` row joins the root `README.md` skills table.
 - The verification skill in [C6](#c6-verification-skill-and-check-files), written with p-stack's `create-verification-skill`, with its output directed to `tests/s-stack/verify-s-stack/`. Prove it once by running it end to end on this phase's own head.
 
@@ -335,9 +398,9 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 
 **Exclusive resources.** None.
 
-**Pull requests.** Two, both targeting `main`.
+**Pull requests.** Two. The first targets `main`. The second depends on the first and joins its `gh stack`.
 
-1. The package and its wiring. It carries the 5,754-line generated lockfile. [Pull request rules for this run](#pull-request-rules-for-this-run) says how the size limit treats it.
+1. The package and its wiring. It carries the generated lockfile, about 5,300 lines. [Pull request rules for this run](#pull-request-rules-for-this-run) says how the size limit treats it.
 2. The verification skill, depending on the first.
 
 **Done when.**
@@ -357,12 +420,12 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 - The script is Bash, `#!/usr/bin/env bash` with `set -euo pipefail`, executable in git (mode `100755`). [Experiment 1](#experiment-1-manifests-and-tier-1) showed that the mode survives deployment to `.claude/skills/` and `.agents/skills/`.
 - It holds every workmux, tmux and `claude` command line in s-stack. It uses `workmux add` for the feature worktree, `workmux add --headless` for every other worktree, and `claude --name <session name>`, with `--continue` unless `--fresh` is passed.
 - `packages/s-stack/tests/test_launch.py` uses `unittest`, like `packages/foundry-maintenance/tests`. Each test runs a real tmux server under a temporary `TMUX_TMPDIR`, puts stub `workmux` and `claude` commands first on `PATH`, works in a temporary git repository, and asserts on panes, windows, exit codes and standard output. Write one test for each guarantee and one for each outcome row in C4, plus the case after `workmux resurrect`. Use a pane the test creates outside the launcher, running a stub `claude --name <feature>-orchestrator`.
-- `.github/workflows/ci.yml` gains a job `s-stack-launcher-tests` that installs tmux when it is missing, then runs `python3 -m unittest discover -s packages/s-stack/tests`. It is added to the `needs` list of the `tag` job, beside `foundry-maintenance-tests`. `AGENTS.md`'s CI section, which lists every job, is updated by the `default-stack` phase, because `foundation` and `default-stack` own `AGENTS.md`.
+- `.github/workflows/ci.yml` gains a job `s-stack-launcher-tests` that installs tmux when it is missing, then runs `python3 -m unittest discover -s packages/s-stack/tests`. It is added to the `needs` list of the `tag` job, beside `foundry-maintenance-tests`. The job must install tmux with `sudo apt-get update && sudo apt-get install -y tmux`. The runner image lists for Ubuntu 22.04, 24.04 and 26.04 name no tmux, and `ubuntu-latest` moves to 26.04 in November 2026. The phase also adds the job to the CI section of `AGENTS.md`, which lists every job.
 - One live check, recorded in `checks/launcher.md`, runs the real `claude` in a private tmux server, in a scratch clone with a `.foundry/feature-roadmaps/<date-time>-probe/` directory. It shows that the first prompt loads `sam-mode` for a role, and that a second launch reports `alive`. Kill the private server afterwards.
 
 **Depends on.** `foundation`.
 
-**Owns.** `packages/s-stack/.apm/skills/sam-mode/scripts/**`, `packages/s-stack/tests/**`, `.github/workflows/ci.yml` and `tests/s-stack/verify-s-stack/checks/launcher.md`.
+**Owns.** `packages/s-stack/.apm/skills/sam-mode/scripts/**`, `packages/s-stack/tests/**`, `.github/workflows/ci.yml`, `AGENTS.md` while the middle phases run, and `tests/s-stack/verify-s-stack/checks/launcher.md`. No other middle phase edits `AGENTS.md`.
 
 **Exclusive resources.** None. The tests must never use the developer's tmux server or workmux state.
 
@@ -374,6 +437,7 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 - [ ] A deliberately broken launcher fails the matching test. For example, a launcher that calls `select-layout` fails the layout test, and one that ignores a live session fails the `alive` test.
 - [ ] The live check shows `/sam-mode phase` as the first words of a real session's first prompt, and `alive` on the second launch.
 - [ ] `git ls-files -s` shows mode `100755` for `launch.sh`.
+- [ ] At PR, before the PR creator reports, the pull request's `s-stack-launcher-tests` check has passed on a real CI run. Its URL is recorded as evidence in the status file. This is the only proof that the job installs tmux and runs on the runner.
 
 ### Phase `board`
 
@@ -416,7 +480,7 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 
 **Scope.** Write the three handbooks for one phase's gate chain, from roadmap `roles.md` and `workflow.md`.
 
-- `phase-session.md` covers the phase plan, implementing along the planned split, `quick-review` on each layer, the merge of the orchestrator branch before Verify, the gates in order, status commits, fix rounds, and moves back to Plan or Spec.
+- `phase-session.md` covers the phase plan, implementing along the planned split, `quick-review` on each layer, the merge of the orchestrator branch before Verify, the gates in order, status commits, fix rounds, and moves back to Plan or Spec. It says what the session reads again after a restart, namely the phase plan, the status file and the phase branch, from roadmap `coordination.md`'s Restarts table. It also says how the session reports a direct instruction from the developer, from roadmap `roles.md`. The session follows the instruction and sends the orchestrator an `instruction` message when it changes the phase's scope or a recorded decision.
 - `verifier.md` covers the fresh verifier's inputs, which skills it runs, the check file it owns, and its three verdicts. [Experiment 2](#experiment-2-nested-subagents) showed that a subagent can start subagents. So the verifier runs p-stack's verification skills itself, and the handbook says it must not return until every subagent it started has reported.
 - `reviewer.md` holds the brief for p-stack's `interrogate` reviewers. They get the diff and the repository, never a plan or the roadmap, and they do not read `.foundry/`. It defines a significant finding.
 
@@ -433,6 +497,9 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 - [ ] Each handbook is 200 lines or fewer.
 - [ ] A fresh subagent, given `phase-session.md` and a sample status file at Verify with an old verdict, says that the verdict does not cover the new code head and that verification runs again in full.
 - [ ] A fresh subagent, given `verifier.md` and a placeholder diff, names the check file it would write and the verdict it would return for a check that could not run, which is INCONCLUSIVE.
+- [ ] A fresh subagent, given `reviewer.md` and a placeholder diff, says it will not read `.foundry/` or any plan, and classifies two sample findings. A crash on valid input is significant, and a naming preference is not.
+- [ ] A fresh subagent, given `phase-session.md`, says what it reads again after a restart and what it does with a direct instruction from the developer that changes the phase's scope.
+- [ ] `checks/phase-handbooks.md` holds every scenario above with its expected answer in its `## Rerun` section, so a later verifier can rerun it.
 
 ### Phase `pr-handbook`
 
@@ -458,6 +525,7 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 
 - The spec writer interviews with the `deep-interview` skill, asks about every one-way door and every ambiguity, writes the roadmap, and starts the orchestrator with the launcher on approval. A roadmap update runs on its own branch.
 - The planner writes the feature plan with the fields in roadmap `workflow.md`, settles open questions by experiment in throwaway worktrees, makes the verification skill the first phase when none covers the feature, and follows the plan handoff standard. This plan is the worked example the handbook may point to.
+- Each handbook says what its session reads again after a restart, namely its committed files, from roadmap `coordination.md`'s Restarts table.
 
 **Depends on.** `foundation`.
 
@@ -471,14 +539,16 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 
 - [ ] Each handbook is 200 lines or fewer.
 - [ ] A fresh subagent, given `planner.md` and a two-paragraph placeholder roadmap, produces a phase table with every field that roadmap `workflow.md` names for the feature plan.
+- [ ] A fresh subagent, given `spec-writer.md` and a placeholder idea with one one-way door and one ambiguity in it, says it will ask the developer about both, where it records each answer with its door type, and that it starts the orchestrator only after the developer approves.
+- [ ] `checks/spec-planner-handbooks.md` holds both scenarios with their expected answers in its `## Rerun` section.
 
 ### Phase `default-stack`
 
 **Scope.** Make `default-stack` install s-stack, once the package on `main` is complete.
 
-- In `packages/default-stack/apm.yml`, add `../s-stack` and remove `../planning`. Keep the other entries. Run `python3 scripts/versioning.py bump`, which the experiment measured as `default-stack 0.1.9 -> 0.1.10` from the current base, and regenerate and relativise the lockfile.
+- In `packages/default-stack/apm.yml`, add `../s-stack` and remove `../planning`. Keep the other entries. Regenerate and relativise the lockfile. The pull request's regenerate commit (C7) raises the version, which was measured as `0.1.12 -> 0.1.13` at `2c02803`.
 - In `tests/structural/run-tier1.sh`, add `s-stack` to `DEFAULT_STACK_DEPLOYED`.
-- In `docs/DEPENDENCY-CONTRACTS.md`, update the dependency graph and the capability table for s-stack. Record the latent audit failure from [Experiment 1](#experiment-1-manifests-and-tier-1) with its reproduction. In `AGENTS.md`, update the sentence that says which packages `default-stack` reaches twice, and add the `s-stack-launcher-tests` job to the CI section. In `docs/COMPATIBILITY.md`, update the `default-stack` row ("resolves 9 direct and 1 transitive package") and the package count in the sentence after the table. In `docs/DEPENDENCY-CONTRACTS.md`, update the sentence near line 108 that says the meta-package resolves ten packages. In `run-tier1.sh`, update the comment near line 40 that counts the packages `default-stack` deploys. Take each new count from the regenerated lockfile, as the number of distinct `repo_url` values.
+- In `docs/DEPENDENCY-CONTRACTS.md`, replace `default-stack`'s `planning` edge with an `s-stack` edge in the dependency graph. Record the latent audit failure from [Experiment 1](#experiment-1-manifests-and-tier-1) with its reproduction. In `AGENTS.md`, update the sentence that says which packages `default-stack` reaches twice. In `docs/COMPATIBILITY.md`, update the `default-stack` row ("resolves 9 direct and 1 transitive package") and the package count in the sentence after the table. In `docs/DEPENDENCY-CONTRACTS.md`, update the sentence near line 108 that says the meta-package resolves ten packages. In `run-tier1.sh`, update the comment near line 40 that counts the packages `default-stack` deploys. Take each new count from the regenerated lockfile, as the number of distinct `repo_url` values.
 - Check the consumer side. Install `default-stack` by path into an empty scratch directory and run `apm audit --ci` there.
 
 **Depends on.** Every other phase in **Done**.
@@ -495,6 +565,7 @@ Each entry gives the scope, the dependencies, the owned paths, the exclusive res
 - [ ] `python3 scripts/versioning.py check origin/main` prints no package without a version bump.
 - [ ] The consumer audit in the scratch directory passes all its checks.
 - [ ] The strict route check passes. Every `handbooks/<role>.md` that `SKILL.md` names exists.
+- [ ] The scratch consumer's deployed file list, compared with one installed from `default-stack` at `main` before this phase, shows additions only.
 - [ ] `docs/DEPENDENCY-CONTRACTS.md` reproduces the relativised-lockfile drift in commands that a reader can rerun, and states that CI is green because it reinstalls before auditing.
 
 ## Pull request rules for this run
@@ -505,7 +576,8 @@ These apply the roadmap's rules to Foundry.
 - **Base.** `foundation`'s second pull request depends on its first, so it joins the first one's `gh stack`. A middle phase's pull request depends on each `foundation` pull request still open when its PR creator runs, because it needs the package and adds a file under `tests/s-stack/verify-s-stack/checks/`. With both still open, that is two dependencies, so under roadmap `workflow.md`'s base rule it targets `main`, its branch contains their commits, and its description lists them. With only the second still open, it can stack on that one when nothing else is stacked there yet. With neither open, it targets `main` with no dependency. The six middle phases never depend on each other.
 - **Merge order on `main`.** `foundation`'s package pull request merges first. The developer merges the rest in any order, and `default-stack` merges last.
 - **Versions.** See [C7](#c7-generated-files-and-versions).
-- **Equality.** The PR creator runs the proof from Experiment 5 before it reports, and records the output as evidence in the status file.
+- **Equality.** The PR creator runs the proof from Experiment 5, with the generated-file rules in [C7](#c7-generated-files-and-versions), before it reports, and records the output as evidence in the status file.
+- **Generated files.** Every pull request branch that changes a package ends with a regenerate commit, as C7 says.
 
 ## Verification
 
@@ -522,23 +594,23 @@ The prose phases are also proven by the first real feature run, which is outside
 
 ## Experiments
 
-The roadmap's `package.md` lists five questions for the planner. Each was settled by experiment on 21 November 2026 with Claude Code 2.1.330, apm-cli 0.32.0, tmux 3.8 and workmux on macOS. Every experiment ran in a throwaway worktree, a scratch repository or a private tmux server. Nothing was pushed, and the test pages hold placeholder data only.
+The roadmap's `package.md` lists five questions for the planner, and the orchestrator's review raised a sixth. Each was settled by experiment on 21 November 2026 with Claude Code 2.1.330, apm-cli 0.32.0, tmux 3.8 and workmux on macOS. Every experiment ran in a throwaway worktree, a scratch repository or a private tmux server. Nothing was pushed, and the test pages hold placeholder data only.
 
 ### Experiment 1. Manifests and Tier 1
 
 **Question.** Do the manifests in roadmap `package.md` pass the Tier 1 suite?
 
-**Answer.** Yes, with two changes the roadmap did not list. Measured on the throwaway branch `s-stack-exp-manifests`, at commit `11912bf`.
+**Answer.** Yes, with two changes the roadmap did not list. First measured on the throwaway branch `s-stack-exp-manifests` at `11912bf`, which was cut from `6dea88a`, before `main`'s p-stack changes reached the orchestrator branch at `7e04846`. Then re-measured on `s-stack-exp2`, cut from this plan's merge of `s-stack-package` at `2c02803`, with the same placeholder package. Where the two differ, both values are given, and the plan relies on the second.
 
 - `check_root_manifest.py` failed with `./packages/coding-style is listed but is already reached through s-stack`. Removing `coding-style` from the root manifest fixed it, giving `12 listed, 19 reached`.
-- Tier 1 failed with `[x] s-stack pack --dry-run (exit 1)`, which is the documented local-path guardrail. Adding `s-stack` to `PACK_BLOCKED` in `run-tier1.sh` fixed it. Tier 1 then printed `all Tier 1 structural checks passed across 20 packages` in 202 seconds, against 158 seconds at the base.
-- `versioning.py bump` raised `default-stack` from 0.1.9 to 0.1.10 and left the new s-stack at 0.1.0. The CI hook passed.
+- Tier 1 failed with `[x] s-stack pack --dry-run (exit 1)`, which is the documented local-path guardrail. Adding `s-stack` to `PACK_BLOCKED` in `run-tier1.sh` fixed it. Tier 1 then printed `all Tier 1 structural checks passed across 20 packages` in 202 seconds before `7e04846`, against 158 seconds at its base. At `2c02803` it passed again across 20 packages, in 154 seconds.
+- `versioning.py bump` raised `default-stack` from 0.1.9 to 0.1.10 before `7e04846`, and from 0.1.12 to 0.1.13 at `2c02803`. It left the new s-stack at 0.1.0. The CI hook passed before `7e04846`. `check_root_manifest.py` printed `12 listed, 19 reached` on both.
 - `default-stack` does not need to list `p-stack`, `pr`, `review` or `coding-style` directly. Tier 1 passed both ways. The plan keeps them, because the smaller diff only removes `planning`.
 - `launch.sh` stayed executable (`-rwxr-xr-x`) after a path install, under both `.claude/skills/sam-mode/scripts/` and `.agents/skills/sam-mode/scripts/`.
-- Lockfile size. s-stack's lockfile is 5,754 lines, mostly p-stack's deployed tree, and default-stack's lockfile changed by +1,258/-1,115.
+- Lockfile size. s-stack's lockfile is 5,314 lines at `2c02803` (5,754 before `7e04846`), mostly p-stack's deployed tree. default-stack's lockfile changed by +1,158/-1,015 (+1,258/-1,115 before).
 - Lockfile merges. Two branches adding `handbooks/phase-session.md` and `handbooks/planner.md` conflicted in both lockfiles. So did an edit to one handbook beside an addition of another. Two branches adding `assets/a.html` and `scripts/z.sh` merged cleanly, and a reinstall reproduced the merge byte for byte. Taking one side and reinstalling gave a correct lockfile each time.
 - Concurrent installs. A second `apm install` printed `Another APM operation is running; waiting up to 120s.` and then succeeded.
-- **Latent audit failure, reproduced by the planner.** With s-stack in place, `apm audit --ci` in `packages/default-stack` on the committed, relativised lockfile prints `Drift detected: 42 file(s)`, all p-stack skill files. At the base commit, the same command passes all 10 checks. After `apm install --frozen` rewrites absolute paths, the audit passes, and that is the order the hook and Tier 1 use, so CI stays green. The cause is inferred and not confirmed from APM's source. APM rewrites p-stack's cross-skill links into `apm_modules` with a hash in the path when p-stack is reached transitively, and that hash probably comes from `anchored_local_path`, which relativising changes. The `default-stack` phase records it.
+- **Latent audit failure, reproduced by the planner.** With s-stack in place, `apm audit --ci` in `packages/default-stack` on the committed, relativised lockfile prints `Drift detected: 32 file(s)` at `2c02803` (42 before `7e04846`), all p-stack skill files. Without s-stack, at `2c02803` itself, the same command passes all 10 checks. In s-stack's own package, where p-stack is direct, it passes too. After `apm install --frozen` rewrites absolute paths, the audit passes, and that is the order the hook and Tier 1 use, so CI stays green. The cause is inferred and not confirmed from APM's source. APM rewrites p-stack's cross-skill links into `apm_modules` with a hash in the path when p-stack is reached transitively, and that hash probably comes from `anchored_local_path`, which relativising changes. The `default-stack` phase records it.
 
 ### Experiment 2. Nested subagents
 
@@ -604,13 +676,24 @@ git diff --name-only "$default"..."$pr" -- .foundry   # must print nothing
 
 The tree comparison cannot see `.foundry/`, because it excludes that path, so both checks are needed. A pull request's own commits are those reachable from its branch and from none of the default branch and its declared dependencies' branches. The `pr-handbook` phase writes these commands into the handbook.
 
+### Experiment 6. Generated files on a pull request branch
+
+**Question.** Raised in the orchestrator's review of the first commit of this plan. Can a pull request branch carry a phase's change when its tree lacks other phases' files, and stay correct when `main` moves?
+
+**Answer.** Yes, with the steps in [C7](#c7-generated-files-and-versions). Measured on the Experiment 1 worktree with real lockfiles, before `7e04846`. The steps depend on no p-stack content, so the newer p-stack does not change the result (inferred). `sim-main` stood for `main` with s-stack on it. The phase branch `exp-d-adjacent-Y` added `handbooks/planner.md` with its lockfile.
+
+- The content commit was replayed onto a branch from `sim-main` without its lockfile hunks, and a regenerate commit followed. `apm install --frozen` in s-stack and `default-stack`, then relativising, left both lockfiles unchanged.
+- The equality proof, excluding regenerate commits and lockfiles, printed `EQUAL`, and the regenerate commit touched only lockfiles.
+- A sibling branch adding `handbooks/phase-session.md` was then merged into `sim-main`. Merging `sim-main` into the pull request branch conflicted in both lockfiles and nowhere else. Taking `sim-main`'s side and adding a new regenerate commit left the lockfiles current again, and the equality proof again printed `EQUAL`.
+- Not exercised. The version bump stayed a no-op, because the real `origin/main` has no s-stack.
+
 ## Decisions taken by the planner
 
 Each is a two-way door, decided here, with its reason. The orchestrator can overturn any of them.
 
 | Decision | Reason |
 | --- | --- |
-| Generated lockfiles are owned by no phase. A conflict in one is resolved by regeneration and a new pass through both gates. | Every phase that adds a file changes the lockfile, so one owner per file would force the six middle phases to run one at a time. Regeneration is mechanical and was measured to give a correct result. |
+| Generated lockfiles and version lines are owned by no phase. Phase branches never bump. Pull request branches end with a regenerate commit. The developer added option B, under which generated-only commits move no code head and start only regenerate-only fix rounds. | Every phase that adds a file changes the lockfile, so one owner per file would force the six middle phases to run one at a time. Regeneration is mechanical and was measured to give a correct result. |
 | `default-stack` starts only when every other phase is **Done**. | Its lockfile records every s-stack file. If it started earlier, its pull request would depend on all six open s-stack pull requests, and under the base rule its diff would carry their code. Starting late also means `main` never installs a half-built s-stack by default. PR 51 set the precedent that a skill lands whole. |
 | `SKILL.md` lands first and names handbooks in code spans. | The validator rejects a skill directory without `SKILL.md`, so it must be in the first pull request. Code spans keep the validator passing while handbooks are in flight, and the verification skill checks the routes. |
 | The verification skill lives at `tests/s-stack/verify-s-stack/`. | Foundry ignores `.claude/` and `.agents/`, a file under `tests/` changes no lockfile, and no consumer should install a Foundry-only skill. |
@@ -634,14 +717,14 @@ The developer decided one point during the run, relayed by the orchestrator. [Pu
 
 | Risk | Phase | What the owner watches |
 | --- | --- | --- |
-| Lockfile conflicts between middle phases cost extra gate passes | Every middle phase | The orchestrator merges middle phases one per tick, so each later phase merges the newest orchestrator branch before Verify. A phase that conflicts twice tells the orchestrator. |
+| Lockfile conflicts between middle phases cost extra merge rounds | Every middle phase | The orchestrator merges middle phases one per tick, so each later phase merges the newest orchestrator branch before Verify. A phase that conflicts twice tells the orchestrator. |
 | A p-stack change on `main` changes s-stack's lockfile while phases run. A session updating p-stack was busy during planning. | Every phase | After merging `main` into `s-stack-package`, regenerate the lockfile in the next phase that touches `.apm/`. |
 | The relativised `default-stack` lockfile fails `apm audit --ci` without a reinstall | `default-stack` | Record it and do not work around it. If CI's order ever changes, CI turns red. |
 | The launcher's liveness check misses a session that `workmux resurrect` restored | `launcher` | The resurrect case has its own test. |
-| tmux missing on the CI runner | `launcher` | The job installs it when absent. Whether `ubuntu-latest` ships tmux is unverified. |
+| tmux missing on the CI runner | `launcher` | The runner image lists name no tmux, so the job installs it, and the real CI run is the evidence. |
 | Nested subagents report before their children finish | `phase-handbooks`, `pr-handbook` | The handbooks say to wait, and the cold reads check that rule. |
 | Handbook prose is checked only by cold reads until a real run | Every handbook phase | The first real feature run, after this plan, revises the handbooks with `automate-me`. |
-| A version repeated by two open pull requests | Every phase after the first merge to `main` | `main`'s check fails the second merge, and a fix round reruns `versioning.py bump`. |
+| Every merge into `main` makes the other open s-stack pull requests' lockfiles and versions stale | Every phase at PR | The PR creator merges `main` and adds a new regenerate commit in a regenerate-only fix round (C7). |
 
 ## Appendix. Evidence locations
 

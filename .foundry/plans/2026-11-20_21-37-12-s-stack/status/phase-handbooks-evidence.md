@@ -133,3 +133,158 @@ https://github.com/Samuel-Harris/foundry/pull/85 is a draft on branch `s-stack-p
 - Hand-written lines: 372 added and 1 removed against #82's branch, and 682 added and 1 removed against `main`.
 - `gh stack link 81 82 85` also tried to retarget #82 to #81's old branch, and GitHub refused with HTTP 422. #82's base is still `main`.
 - `s-stack-phase-spec-planner-handbooks` checked first and agreed that #84 targets `main`, because #85 is #82's only child.
+
+## Verify: VERIFIED at `515c907896a51762c83dfeb2756981e03bd4b257`
+
+This was the fix round for `pr-handbook-r1` and automatic stacking. A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 17:29 and 17:34 UTC, at HEAD `f194006`. It made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 17:29:45 to 17:34:11 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 17:31:23: 0 matches.
+- One-off cold read: a fix round for a merged dependency. The phase session starts a PR creator that works out the base again and refreshes the branches as `pr-creator.md` says, stays in PR, runs no gate again, and has no `restack` handling. The verifier checked this against `pr-creator.md` on `s-stack-phase-pr-handbook`.
+- Outside this phase: `references/status-and-messages.md` still lists `restack` as an orchestrator message, and its `fix-round` row does not cover a merged dependency.
+
+## Review: CLEAR at `515c907896a51762c83dfeb2756981e03bd4b257`
+
+A later review covered `515c907`, with clean merges `161c7c7`, `0bf2777` and `bd8149e`. Two reviewers, Opus and Fable, each in a detached worktree at `28ba138`, ran five cold reads between them, plus the validator and markdownlint. Neither found anything significant. The last verdict was CLEAR, so no probes were given.
+
+Not significant, recorded only:
+
+- The merged-elsewhere round says nothing about updating `pull_requests` or reporting afterwards. This is borderline, and it is fixed in the next round because a stale base would mislead the status board.
+- "A pull request yours depend on" and the heading "merged elsewhere" read awkwardly when the merged pull request is the phase's own. It is fixed in the same edit.
+- The conflict round never says in words to start a PR creator or to move to PR. Readers inferred both from the fix-round row and the PR section.
+- "The phase stays in PR" assumes the phase is in PR when the round arrives.
+- A conflict found during a refresh, and how a merge commit's resolution reaches a pull request branch, belong to `pr-creator.md`.
+- `versioning.py check origin/main` fails at the phase head, as it does on every phase branch. The pull request's regenerate commit raises the version.
+
+The orchestrator's instruction, received during this review, sends the phase back to Implement in the same round. `phase-session.md` moved a phase to Done on "every pull request has merged" in any state, and moved back only after a failed post-merge check.
+
+## Verify: VERIFIED at `21557166e37a58d905fa420d8b4605584e490bdc`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 17:40 and 17:44 UTC, at HEAD `5703280`. It made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 17:40:40 to 17:43:26 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 17:42:04: 0 matches.
+- One-off cold read, a merge notice while in Implement: the phase does not move to Done, sends `state` with Implement, and passes both gates for its new code. Every required point passed.
+- One-off cold read, #90 merged with #91 stacked on it: the phase starts a PR creator that works out the bases again and refreshes the branches, records each base and `depends_on`, sends `prs-open`, stays in PR and runs no gate. Every required point passed.
+- Gaps the readers noted, outside this check: where fix commits go once every pull request has merged, and whether a merged pull request stays listed in `pull_requests`.
+
+## Review: SIGNIFICANT at `21557166e37a58d905fa420d8b4605584e490bdc`
+
+A later review covered `2155716`, with clean merge `4bf6139`. Two reviewers, Opus and Fable, each in a detached worktree at `c43a4a8`, ran nine cold reads between them. Both reviewers found the same three things.
+
+Significant:
+
+1. The new Verdicts sentence, "Whenever the phase is past Implement and no verdict covers its current code head, move back to Implement", also fires in Verify. No verdict exists on entry to Verify, after the verifier's commit, or on a restart in Verify. Read literally, the phase can never stay in Verify, and the sentence contradicts Verify step 2 and "After a restart". Four cold readers on two models could not choose between the readings.
+2. The Moving back bullet for Implement gives a failed post-merge check as a case of "no verdict covers the current code head". In that case the phase branch has not moved and both verdicts still cover it.
+3. A phase that ignores the every-pull-request-merged notice outside PR has no stated way to reach Done after it returns to PR. The commit created that path.
+
+Not significant, recorded only: the round for a merged pull request does not say what happens to the merged pull request's own `pull_requests` entry; "stays in PR" assumes the phase is in PR (an older gap); which pull request takes commits made after every pull request has merged belongs to `pr-creator.md`; and the `instruction` row routes the notice to PR step 4 in wording a reader followed correctly.
+
+## Verify: VERIFIED at `30f0709ecdfb8865913ac95e1c7f50fcb2e8a9be`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 17:50 and 17:59 UTC, at HEAD `d41b2e5`. It made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 17:50:14 to 17:58:38 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 17:52:35: 0 matches.
+- Five one-off cold reads of the cases the last review broke, all passing:
+  - first entry to Verify starts the verifier;
+  - a restart in Verify reruns the gate;
+  - the orchestrator's `move-back` from PR after a failed check moves back with no contradiction;
+  - the merged notice in Implement is ignored, `state` is sent, and the notice comes again in PR, which leads to Done;
+  - a stale verify verdict in Review moves back to Implement.
+- Outside this phase, all in `references/status-and-messages.md`: its `move-back` and `state` "When" columns and its `instruction` row do not cover a failed check, a reply to an early notice, or the merged notice.
+
+## Review: SIGNIFICANT at `30f0709ecdfb8865913ac95e1c7f50fcb2e8a9be`
+
+A later review covered `30f0709`, with clean merges `4bf6139` and `e826e6a`, the second bringing only a generated `version:` line. Two reviewers, Opus and Fable, each in a detached worktree at `11ba2fc`, ran nine cold reads between them. Probes 1 and 2 pass in both reviews. Probe 3 still dead-ends.
+
+Significant:
+
+1. The narrowed rule, "In Review, PR or Done, if the newest verdicts do not name the current code head, move back to Implement", fires on entry to Review. A phase never holds a review verdict for its current head until the Review gate reports, so the rule contradicts Review step 2 and "After a restart". It is the Verify defect again, one state later.
+2. "Your current code head is merged" does not say merged into which branch. Under one reading, a fix made after every pull request has merged reaches no pull request, and the phase never reaches Done. Line 85 routes commits only to open pull requests or to new ones the phase plan assigns.
+
+Not significant, fixed alongside: the narrowing left Verify no exit for a VERIFIED verdict that names an older head. Recorded only, all older text: the order of moving to PR and starting the PR creator in a fix round, the end of a `blocked` wait, no PR creator step in the conflict round, and restarts in the middle of a state change.
+
+The orchestrator's deferred instruction also goes into this round: a Done phase asked to change code moves back to Implement, and its PR creator opens a new pull request for commits no open pull request carries.
+
+## Verify: VERIFIED at `52afb2aaf8bf4136369f33bbe38aba122e8b1220`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 18:08 and 18:12 UTC, at HEAD `2facd26`. It confirmed the code head under the run decision on `version:` lines, and made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 18:08:51 to 18:11:27 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 18:10: 0 matches.
+- Five one-off cold reads, all passing every required point:
+  - entry to Review after a SIGNIFICANT verdict runs the gate;
+  - entry to Verify and a restart in Verify run the verifier;
+  - a `move-back` from PR after a failed check moves the phase to Implement;
+  - the merged notice in Implement is ignored, comes again once the code head is merged into the orchestrator branch, and leads to Done, with the fix in a new pull request;
+  - a developer's change request in Done moves the phase back to Implement, and the fix goes in a new pull request.
+- Remarks outside the required points: in a fix round, the order of moving to PR and starting the PR creator (older text); the NOT VERIFIED, INCONCLUSIVE and SIGNIFICANT table rows do not repeat "for the current code head"; and the reference file's message rows lag.
+
+## Review: SIGNIFICANT at `52afb2aaf8bf4136369f33bbe38aba122e8b1220`
+
+A later review covered `bbd35bd` and `52afb2a`, with clean merges `e826e6a`, `c56f0bb` and `2facd26`. Two reviewers, Opus and Fable, each in a detached worktree at `c452bff`, ran seven cold reads between them. Both earlier probes pass: entry to Review after a SIGNIFICANT verdict runs the gate, and a fix made after every pull request merged reaches a new pull request.
+
+Significant, and found by both reviewers independently: PR step 4's resend condition ("once your status file shows PR and your current code head is merged into the orchestrator branch") omits the orchestrator's first condition, that every pull request has merged into the default branch, new ones included. Read cold, the phase reaches Done while its new fix pull request is still open, or before it exists.
+
+Not significant, recorded only: the SIGNIFICANT, NOT VERIFIED and INCONCLUSIVE table rows carry no code-head qualifier (readers resolved them from "A verdict covers only the code head it names"); a restart in PR after a merge moved the code head is covered only by the restart and merge-orchestrator-branch sentences (the reader acted correctly); whether merged pull requests stay in `pull_requests`; and the `state` sent on an ignored notice (the reference file's known lag).
+
+## Verify: NOT VERIFIED at `771ac5da563603602759cd6a1b18acd7a6123760`
+
+A fresh verifier ran the whole verification skill on 2026-11-21 between 18:18 and 18:21 UTC, at HEAD `dd80f74`, and made no commit. Everything passed except the one-off cold read of the merged notice, which shows an early Done:
+
+- PR step 1 commits state PR before step 3 records the new pull request.
+- In that window, every recorded pull request has merged, and the reader assumed the orchestrator might already have merged the code head.
+- If the notice arrived then, the phase would move to Done with its fix in no pull request.
+
+The orchestrator's handbook closes the window: it merges a phase only while the phase lists an open pull request (`orchestrator.md` at `131526e`, as the orchestrator stated). But `phase-session.md` does not say so. Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets, package isolation, Tier 1 18:18:37 to 18:21:04, every Rerun cold read of all three check files, the C2 check, and the private-name search (0 hits). Pending, not failing: two routes and the launcher tests.
+
+## Verify: NOT VERIFIED at `8e258caf80c51a48ee2b2c42e7f75ed9a09e17a9`
+
+A fresh verifier ran the whole verification skill on 2026-11-21 between 18:24 and 18:28 UTC, at HEAD `f34346d`, and made no commit. Everything passed except the one-off rerun of the merged-notice cold read. Two independent reads, on different models, found the same dead end:
+
+1. The developer merges the new fix pull request into the default branch before the orchestrator merges the phase branch again.
+2. Under the added sentence, the orchestrator merges a re-merged phase only while it lists an open pull request, so it never merges this one.
+3. The code head never reaches the orchestrator branch, the notice never comes, and the phase waits in PR indefinitely.
+
+Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets, package isolation, Tier 1 18:24:14 to 18:26:43, all four phase-handbooks cold reads, and the private-name search (0 hits). Pending, not failing: two routes and the launcher tests.
+
+## Verify: VERIFIED at `a1c95f1df8eab39ede778ec82f49b025034881da`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-21 between 18:30 and 18:35 UTC, at HEAD `d0c496e`. It made no commit.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 137, verifier 78, reviewer 41 of 200), package isolation, Tier 1 18:30:35 to 18:34:50 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 18:32:11: 0 matches.
+- One-off cold read of the merged notice in Implement, passing every required point: the phase ignores the notice and sends `state`; after both gates its fix goes into a new pull request; it moves to Done only on the notice in PR; the text leaves the notice's timing to `handbooks/orchestrator.md`; and no contradiction.
+- Minor remark: Fix rounds step 3 ("the pull request branch that owns each one") could be read as pointing at a merged pull request's branch, but PR step 2 settles it.
+
+## Review: CLEAR at `a1c95f1df8eab39ede778ec82f49b025034881da`
+
+A later review covered the net change of `771ac5d`, `52bc3da`, `8e258ca` and `a1c95f1`: the last sentence of PR step 4 now leaves the merged notice's timing to `handbooks/orchestrator.md`. The merges `2facd26`, `fede1c5` and `589cc38` are clean. Two reviewers, Opus and Fable, each in a detached worktree at `731c14d`, ran three cold reads between them. The early-Done probe passes in both reviews, and neither found anything significant.
+
+Not significant, recorded only:
+
+- PR step 4's only condition for Done is "in PR", and the phase enters PR before the PR creator opens a new pull request. A notice arriving in that window would move the phase to Done early. That is the notice's timing, which `orchestrator.md` owns, and it was sent to the orchestrator.
+- Fix rounds step 3 ("the pull request branch that owns each one") reads, alone, as sending a fix to a merged branch. PR step 2 settles it, and both readers chose a new pull request. Older text.
+- Fix rounds starts the PR creator before moving to PR; the PR section does the reverse. Older text.
+- The `state` sent on an ignored notice, and the notice having no message kind of its own, are the reference file's known lag.
+
+## PR: pull request 85 rebuilt for code head `a1c95f1df8eab39ede778ec82f49b025034881da`
+
+https://github.com/Samuel-Harris/foundry/pull/85 is still a draft. GitHub retargeted it to `main` when #82 merged, and it now has head `f54b7b8` and `depends_on: []`. It joins no stack. A fresh PR creator rebuilt it under `pr-handbook-r1`, as a plain fast-forward from `2c43b3d`:
+
+- `11aa20a` merges `origin/main` with a tree that replays the pull request's 13 own commits and the 9 fix-round commits (`515c907` to `a1c95f1`) onto `origin/main`.
+- `f54b7b8` is the regenerate commit, which raises s-stack from 0.1.1 to 0.1.2.
+
+The proof printed `EQUAL`, and the hook and `versioning.py check origin/main` passed. GitHub reports it MERGEABLE.
+
+The phase session checked independently. The four files #85 adds over `origin/main` (the three handbooks and `checks/phase-handbooks.md`) are each identical to the phase tip, `apm.yml` changes only its `version:` line, the branch holds no file under `.foundry/`, and `2c43b3d` is an ancestor of the new head. Hand-written lines against `main`: 371 added and 1 removed. The description's Dependencies section now says none.
+
+## Done
+
+#85 merged into main as `6f42b1c` at 18:47:47 UTC on 2026-11-21. GitHub confirms the merge. The orchestrator reports code head `a1c95f1` merged into `s-stack-package` at `986be95`, with its post-merge check VERIFIED on `ce086bb`. The phase is Done.

@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "PR"
-changed_at: "2026-11-21T16:13:07Z"
+state: "Done"
+changed_at: "2026-11-21T17:59:48Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
@@ -36,7 +36,7 @@ pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
     base: "main"
-    depends_on: [81, 82]
+    depends_on: [82]
     stacked: false
 requests: []
 decisions:
@@ -56,4 +56,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Both gates passed for `6f70b37`. Draft pull request 84 is open against `main`, holding exactly the verified phase diff on top of 81 and 82, and its CI passed. The phase waits for the orchestrator's merge and the developer's review.
+Done. Pull request 84 merged into `main` as `0531411`, and the orchestrator merged code head `6f70b37` into `s-stack-package`. Both handbooks and the check file are on `main`.

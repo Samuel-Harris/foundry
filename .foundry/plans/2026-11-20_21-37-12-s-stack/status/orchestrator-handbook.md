@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T17:10:52Z"
+state: "Implement"
+changed_at: "2026-11-21T17:21:39Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "5a2b0473bdcee9e74fc71701cec0158a70449f64"
+code_head: "942257045154f4a7e76c16fa4023a5cf3e656bf5"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -51,6 +51,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "5658aa8edf80e0e427f8afa9568117cc59be86ed"
     at: "2026-11-21T17:09:26Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "942257045154f4a7e76c16fa4023a5cf3e656bf5"
+    at: "2026-11-21T17:21:39Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -114,3 +119,5 @@ The cross-phase stacking change is at `efb61c5`. `s-stack-package` (`bbe44ad`) w
 The eighth Verify gate returned VERIFIED at `5658aa8`. One defect would break a real run, so the phase moved back to Implement. The fix goes in the same round as the merge of `s-stack-package` that brings `phase-handbooks`.
 
 The Finishing a phase fix is at `4289747`. `s-stack-package` (`e801458`, which brings `phase-handbooks` and `main`'s pull request 81) was merged at `5a2b047`, after a lockfile-only conflict that was resolved under C7. The phase moved to Verify at code head `5a2b047`.
+
+The ninth Verify gate returned VERIFIED at `9422570`. Two defects would break a real run, so the phase moved back to Implement. The orchestrator's layout instruction goes in the same round.

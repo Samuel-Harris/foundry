@@ -124,3 +124,14 @@ Defects that sent the phase back to Implement:
 - The pane-close step in Finishing a phase fires on any stop commit. That includes the old one on a session restarted to record Done, so it breaks a real run.
 - "They hold only status" is asserted, not checked. That misleads a reader.
 - The freeze's "start no phase" conflicts with starting a session for Done. That is minor.
+
+## Verify 9, code head `942257045154f4a7e76c16fa4023a5cf3e656bf5`, VERIFIED
+
+A fresh verifier updated the check file for `4289747` and the merge of `phase-handbooks` (commit `9422570`, with a new cold read K) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`170/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: three scripts, and 20 cold reads across four check files. Every **Done when** item was met. The handbook has 170 lines, a case-insensitive grep finds workmux, tmux and claude only in prose, and a private-name grep with a positive control found 0 hits.
+
+Two probes outside the check file, each reading `orchestrator.md` with `phase-session.md`, found defects that break a real run:
+
+1. The orchestrator restarted a session for Done and sent `stop`, but never told it that every pull request had merged. `phase-session.md` moves to Done only on that notice, so the phase loops in PR.
+2. A session woken by a message to an open pane records no new start time. The start-time rule then counts it as stopped and closes its pane mid-work. One example is a Done phase sent `move-back`.
+
+A re-merge at an already merged code head was not excluded, which misleads a reader. The phase moved back to Implement, and "Finishing a phase" is redesigned on the orchestrator's own record of the `stop` messages it sent, not on commit timing.

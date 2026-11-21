@@ -250,3 +250,22 @@ Recorded under the orchestrator's run decision, for its read-through once every 
   - a stalled session's `--close` has no quiet test;
   - "its own status files" is undefined, and a status-file conflict with the orchestrator branch has no fix path;
   - a failing default-branch merge is retried every tick.
+
+## Verify 16, code head `7fc56cf30188c760809d2827c628f575d9564707`, VERIFIED
+
+A fresh verifier updated the check file for the re-merge rule and the merged `phase-session.md` (commit `7fc56cf`, with a new cold read Y) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`169/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. In check 8, three scripts and 33 of 34 cold reads pass. Cold read Q did not report before hand-back, so a second fresh verifier reran Q alone at the same head, and it passed.
+
+Every **Done when** item was met:
+
+- The handbook has 169 lines, and no command line appears.
+- All nine launcher flags appear in `launch.sh` on the `launcher` phase branch.
+- A private-name grep found 0 hits, with a positive control of 5.
+
+The later merge of `s-stack-package` (`7409b48`, `main` up to pull request 85) at `e4cca82` changed only s-stack's `version:` line outside lockfiles, so the code head stays `7fc56cf`.
+
+More for the cross-handbook integration:
+
+- The re-merge test uses commit time as a stand-in for "a pull request holds the new code". It depends on `pr-creator.md`.
+- It is not stated whether phase merges wait while a default-branch merge keeps failing.
+- The repeat "A pull request merged" round for an already set `needs_update` does not say what it names.
+- `stop` and the merged notice can be sent in the same tick.

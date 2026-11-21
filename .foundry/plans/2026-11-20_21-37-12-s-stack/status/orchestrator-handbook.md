@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T18:50:53Z"
+state: "Review"
+changed_at: "2026-11-21T19:05:03Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "1178d03d7f61cfce11636bcd16140925d991f9b7"
+code_head: "7fc56cf30188c760809d2827c628f575d9564707"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -91,6 +91,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "d66a4cb92e56a7c3f70625a3d6b124f71974fb3e"
     at: "2026-11-21T18:49:10Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "7fc56cf30188c760809d2827c628f575d9564707"
+    at: "2026-11-21T19:05:03Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -184,3 +189,5 @@ The quiet test, the message mapping and the new merge condition are at `c19dfe0`
 The fifteenth Verify gate returned VERIFIED at `d66a4cb`. One contradiction in the handbook's own merge rule would break a real run, so the phase moved back to Implement. Items that depend on unmerged handbooks are recorded for the integration read-through.
 
 The re-merge fix is at its own commit before `1178d03`. `s-stack-package` (`ce086bb`, the `phase-handbooks` re-merge) was merged at `1178d03`, after a lockfile-only conflict that was resolved under C7. It brings `phase-session.md`'s "A pull request merged" handler, which resolves the first integration item. The phase moved to Verify at code head `1178d03`.
+
+The sixteenth Verify gate returned VERIFIED at `7fc56cf`. The phase moved to Review, which covers the commits since `03d2899`.

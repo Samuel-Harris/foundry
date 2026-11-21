@@ -62,6 +62,11 @@ verdicts:
     code_head: "98999eef74b7d80f3c83160ef8fa4b439790c2aa"
     at: "2026-11-21T23:48:25Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "74bba4e19e398b0284414bae2e49a9f257c42157"
+    at: "2026-11-21T23:55:24Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
 pull_requests:
   - number: 81
     branch: "s-stack-foundation-package"

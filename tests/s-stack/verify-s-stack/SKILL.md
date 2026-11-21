@@ -157,7 +157,7 @@ PATH="$PWD/.venv-apm/bin:$PATH" APM="$PWD/.venv-apm/bin/apm" bash tests/structur
 Each phase's verifier records that phase's behavioural checks in `tests/s-stack/verify-s-stack/checks/<phase>.md`, and only phase `<phase>` writes that file. It has two sections.
 
 - `## Rerun` holds cheap, repeatable checks that touch nothing outside the machine, such as cold reads, scratch repositories and unit tests. Each states its command or scenario and its expected result.
-- `## Evidence` records one-off checks with their results, such as a published test page or a real `claude` session. Never rerun it.
+- `## Evidence` describes one-off checks, such as a published test page or a real `claude` session. It says what each checks and how, never its results. Results go in the phase's evidence file, `.foundry/plans/2026-11-20_21-37-12-s-stack/status/<phase>-evidence.md`. This skill does not run this section.
 
 List the files in name order, then run every check in each file's `## Rerun` section exactly as written and compare its result with the expected one. Report each check by file and name. A Rerun check may report PENDING when what it needs is absent on the checked-out branch, and that PENDING never fails the verdict. With no files, report "no check files" and PASS.
 

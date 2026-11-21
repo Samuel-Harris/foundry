@@ -100,3 +100,22 @@ The second `interrogate` run used Opus and Fable, with the brief in `handbooks/r
 - A parent's fix next to a child's change cannot be carried, and the stop is clean (Fable 5).
 
 The phase session raised `pr-handbook-r3`, because the common root is defining a pull request by replaying its commits onto a moving base.
+
+## Verify: VERIFIED at `b4da68bfd86af51de95f4abfd87c63225920817e`
+
+An eighth fresh verifier rewrote `checks/pr-handbook.md` for the path overlay in `b4da68b`, on top of `3ccad64`.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING: `orchestrator.md` and the launcher tests.
+- **Check 8.** Every cold read of the three other phases agreed, and so did a new `STOP` cold read on `pr-creator.md`. `pr-handbook.md`'s scratch block printed 46 PASS and `0 failed`, and the phase session reran it with the same result.
+- **Done when.** Every item holds, and so do the guarantees and the repeated, interrupted and forge-rewrite rounds.
+- **The cases against `f5c99ae`.** Nine of the ten round-two finding cases fail there; the adjacent-line stop already stopped cleanly, and d10 keeps it one. The uncarried-commit and identity cases also fail there.
+- **The round-one cases pass at `f5c99ae` too,** because that design already fixed them. d9's wording that they fail on `f5c99ae` cannot hold. They stay as regression cases.
+
+Findings, both misleading a reader:
+
+- A path that landed through a merged pull request, then changed again on `main`, makes the proof say "needs a new pull request" when the merged pull request is not listed. The handbook says merged pull requests need not be listed.
+- A pull request opened for an uncarried fix after its parent was squash-merged fails unless the merged one is named in the spec's fourth field, and the handbook does not say so.
+
+Minor: the proof does not catch a deleted package's lockfile being kept or restored on a pull request, because the head comparison excludes generated files.
+
+Not this phase's: `tests/s-stack/verify-s-stack/SKILL.md` check 8 still says `## Evidence` records results.

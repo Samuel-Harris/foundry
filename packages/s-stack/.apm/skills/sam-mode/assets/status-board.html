@@ -389,7 +389,11 @@ and its checks have passed on that head.
   const UNTIL = ["merged", "done"];
   const MAP = {nodeW: 168, nodeH: 44, colGap: 56, rowGap: 12, pad: 12, lane: 24};
 
-  const dependsOn = (p) => (Array.isArray(p.depends_on) ? p.depends_on : []);
+  function dependsOn(p) {
+    if (Array.isArray(p.depends_on)) return p.depends_on;
+    if (p.depends_on == null) return [];
+    return [p.depends_on];
+  }
   const readableDep = (d) => isObj(d) && typeof d.phase === "string" && UNTIL.includes(d.until);
   const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 

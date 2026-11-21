@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Implement"
-changed_at: "2026-11-21T17:23:01Z"
+state: "Verify"
+changed_at: "2026-11-21T19:20:31Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "15bb919f5f9e85fca556362ac5bdb2897900b955"
+code_head: "13104cc935a923cc9511d71570ac51683a012246"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -86,3 +86,5 @@ Implementation and its quick-review fix round are committed. The phase branch me
 The review fix round (seven findings, 47 tests, also green under `LC_ALL=C`) is committed, and `s-stack-package` is merged at 8839699 with the phase-handbooks phase. Verify runs again at that head.
 
 The developer's pane placement rule (launcher-d9) moved the phase back to Implement after the third Verify.
+
+Placement, pane reuse and their quick-review fixes are committed, with 83 tests passing in both locales. `s-stack-package` is merged at 13104cc. Verify runs again at that head.

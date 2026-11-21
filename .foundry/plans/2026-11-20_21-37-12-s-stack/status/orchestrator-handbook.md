@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T19:14:05Z"
+state: "Verify"
+changed_at: "2026-11-21T19:15:39Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "7fc56cf30188c760809d2827c628f575d9564707"
+code_head: "3276b544c3527656bbedad1a2995ff17f919b4be"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -198,3 +198,5 @@ The re-merge fix is at its own commit before `1178d03`. `s-stack-package` (`ce08
 The sixteenth Verify gate returned VERIFIED at `7fc56cf`. The phase moved to Review, which covers the commits since `03d2899`.
 
 The fourth Review gate returned SIGNIFICANT at `7fc56cf`. The phase moved back to Implement.
+
+The Review 4 fixes are at `3276b54`. `s-stack-package` (`c18fb91`) was merged at `e24bde1`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `3276b54`.

@@ -8,3 +8,12 @@ A fresh verifier committed `tests/s-stack/verify-s-stack/checks/phase-handbooks.
 - Launcher tests pending, as the skill expects before `launcher` merges.
 - Failed: phase-handbooks cold read 4, part 2. Given `phase-session.md` and a direct instruction from the developer that changes scope, the reader recorded it and sent `instruction` and a decision request, but never said it follows the instruction. It read the decision-request sentence as "wait for the answer". Roadmap `roles.md` says a session that receives a direct instruction follows it.
 - Gaps the readers raised outside the checks: `verifier.md` does not say what to do when the skill lacks the step that reruns check files and the phase does not own the skill.
+
+## Verify: VERIFIED at `305a26e4a846d378d2dac65faa47909405a36865`
+
+A second fresh verifier reran the whole verification skill with the check file from `a1c1d83` unchanged, and made no commit.
+
+- Passed: primitives (`94 primitives valid`), root manifest (`12 listed, 19 reached`), markdownlint (9 files, 0 errors), line budgets (`phase-session.md` 138, `reviewer.md` 41, `verifier.md` 78 of 200), package isolation, Tier 1 (`all Tier 1 structural checks passed across 20 packages`, no tracked-file change), `foundation.md`'s three cold reads and C2 check, and all four phase-handbooks cold reads.
+- Cold read 4 part 2 now passes: the reader follows the instruction, records it, commits, sends `instruction` before starting the work, adds a decision request when it conflicts with the feature plan, and builds only what the answer cannot change.
+- Pending, not failing: four handbook routes other phases own, and the launcher tests.
+- Private-name search over the phase diff and commit messages: no hits.

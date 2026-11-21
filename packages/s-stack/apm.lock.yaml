@@ -2483,7 +2483,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9eacc2516ca78e29a030ff08f73469e893e9a494d96a041840f8fdbb591d803b
+  content_hash: sha256:4646719a9e248851c5261a33cc6964b11cf0cc1d921a63dddb6a5814b1a54cb6
 - kind: project-relative
   target: claude
   value: .claude/skills/setup-pstack
@@ -5273,7 +5273,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:9eacc2516ca78e29a030ff08f73469e893e9a494d96a041840f8fdbb591d803b
+  content_hash: sha256:4646719a9e248851c5261a33cc6964b11cf0cc1d921a63dddb6a5814b1a54cb6
 local_deployed_files:
 - .agents/skills/sam-mode
 - .agents/skills/sam-mode/SKILL.md
@@ -5286,7 +5286,7 @@ local_deployed_files:
 local_deployed_file_hashes:
   .agents/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
   .agents/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60
-  .agents/skills/sam-mode/scripts/launch.sh: sha256:9eacc2516ca78e29a030ff08f73469e893e9a494d96a041840f8fdbb591d803b
+  .agents/skills/sam-mode/scripts/launch.sh: sha256:4646719a9e248851c5261a33cc6964b11cf0cc1d921a63dddb6a5814b1a54cb6
   .claude/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
   .claude/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60
-  .claude/skills/sam-mode/scripts/launch.sh: sha256:9eacc2516ca78e29a030ff08f73469e893e9a494d96a041840f8fdbb591d803b
+  .claude/skills/sam-mode/scripts/launch.sh: sha256:4646719a9e248851c5261a33cc6964b11cf0cc1d921a63dddb6a5814b1a54cb6

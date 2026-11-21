@@ -20,7 +20,6 @@
 | `s-stack-phase-board` | `%173` | `../s-stack-phase-board` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-phase-phase-handbooks` | `%181` | `../s-stack-phase-phase-handbooks` | 2026-11-21, resumed for the #85 fix round |
 
 ## Open decision requests
 
@@ -51,7 +50,7 @@ None.
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
 | `s-stack-phase-foundation` | removed, branch kept | 2026-11-21 | Done at `d7a6cb3`, merged; #81 and #82 merged into `main` |
 | `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-21 | Done at `b9429a2`, merged; #84 merged into `main` |
-| `s-stack-phase-phase-handbooks` | `../s-stack-phase-phase-handbooks` | 2026-11-21 | `88ebe79`, merged at `377dc78`; worktree kept for fix rounds |
+| `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-21 | Done at `0cb6af5`, merged; #85 merged into `main` |
 
 ## Queued fix rounds
 

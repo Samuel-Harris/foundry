@@ -1,7 +1,7 @@
 ---
 phase: "board"
-state: "Review"
-changed_at: "2026-11-21T20:31:13Z"
+state: "Implement"
+changed_at: "2026-11-21T20:58:48Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
 code_head: "a5b3a9c8a79a19b3d65691765019a0e6adb28279"
@@ -41,6 +41,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "a5b3a9c8a79a19b3d65691765019a0e6adb28279"
     at: "2026-11-21T20:31:13Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "a5b3a9c8a79a19b3d65691765019a0e6adb28279"
+    at: "2026-11-21T20:58:48Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
 pull_requests: []
 requests: []
@@ -92,3 +97,5 @@ The code head is unchanged at `b2deb4d`. The Verify gate is starting.
 The fourth verifier committed `checks/board.md` at `e21d7e8` and finished two mutation rounds. It was stopped at 20:10 under the orchestrator's 15-minute limit, while it was editing the file again: with fallback fonts it had found a broken word or clipped chip at 1000 px. Its uncommitted edit is saved outside the repository. `s-stack-package` was merged at `cc362c4` under C7, with a lockfile-only conflict. The merge brings `phase-session.md` changes and s-stack 0.1.2, so `cc362c4` is the code head. A fresh verifier is starting there, scoped to one representative mutant per assertion.
 
 The scoped verifier committed `a5b3a9c`, the new code head, and returned VERIFIED. The fallback-font failure was the check, not the template. The Review gate is starting over `b2deb4d..a5b3a9c`.
+
+The fourth Review gate returned SIGNIFICANT at `a5b3a9c`. Both adversaries again found the template correct. Twelve broken templates pass the check, and under `board-d6` each would mislead the developer on the live board or open an injection. No template change is planned. The phase moves through Implement to Verify, where a verifier makes each named mutant fail.

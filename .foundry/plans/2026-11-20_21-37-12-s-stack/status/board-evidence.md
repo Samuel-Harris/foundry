@@ -123,3 +123,40 @@ Known gaps:
 - No browser tool could open the claude.ai viewer.
 - The first verifier's 225-mutant rounds were not re-checked, apart from its three survivors.
 - The cold readers noted that the schema comment shows no batch wire format and names no state for a phase that has not started. Both are minor.
+
+## Review gate, code head `a5b3a9c8a79a19b3d65691765019a0e6adb28279`, SIGNIFICANT
+
+`interrogate` ran Opus and Fable at medium effort under `handbooks/reviewer.md`, over `e21d7e8`, `a5b3a9c` and the resolution of `cc362c4`.
+
+What passed:
+
+- Every earlier probe now exits 1.
+- The busy-loop mutant fails in about 60 s and leaves no Chrome process.
+- The real template passes three times in a row, and six times in parallel.
+- The merge's lockfile hashes match the files.
+
+Both adversaries found the template correct. The phase session reran each mutant below against the Rerun at `a5b3a9c`. Each exits 0 where 1 is required.
+
+Significant under `board-d6`, because each misleads the developer on the live board, or because it is an injection:
+
+- Wrong staleness:
+  - `m01-rerender-once`: the 30-second re-judge runs once, and the board stays Fresh.
+  - `m11-stale-limit-never-below-40`: a `stale_after_min` below 40 is ignored.
+  - `m04-cached-tick-judges-after-live`: a cached tick judges after a live one.
+- Lost or misattributed data:
+  - `m2-no-time-of-day`, `m4-time-an-hour-late` and `m02-absolute-time-is-now`: the visible time text of Recent changes and of the last tick is never asserted.
+  - `m06-normalise-in-place`: on frozen snapshot bodies, as `db.d.ts` describes them, a dependency is lost and the review order changes. The stub hands out mutable bodies.
+- Wrong state:
+  - `m03-no-loading-state`: the sections read "Nothing needs you." and similar before any data has arrived.
+  - `m05-live-without-pane-not-live`: a live session with `pane: null` reads "not live".
+- Injection:
+  - `m1-arch-any-scheme`: a `javascript:` architecture link becomes clickable.
+  - `m23-feature-as-markup`: markup in `board/meta.feature` is parsed into the heading, which sits outside `main`, where the text check does not look.
+
+Minor, recorded:
+
+- The banner rounds minutes where it should floor them. No scenario has a fractional minute of 0.5 or more.
+- An unreadable needs `since` reads "waiting 0 min", or the need is dropped.
+- No scenario covers a page without `window.claude`.
+- A pull request focus key could collide. Its effect was not shown.
+- Ctrl-C waits up to the 30-second Chrome bound before cleanup. Cleanup is complete.

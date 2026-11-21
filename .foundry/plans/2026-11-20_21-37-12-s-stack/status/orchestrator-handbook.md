@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T18:49:10Z"
+state: "Verify"
+changed_at: "2026-11-21T18:50:53Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "d66a4cb92e56a7c3f70625a3d6b124f71974fb3e"
+code_head: "1178d03d7f61cfce11636bcd16140925d991f9b7"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -182,3 +182,5 @@ The fourteenth Verify gate returned INCONCLUSIVE at `ac63295`. The phase moved b
 The quiet test, the message mapping and the new merge condition are at `c19dfe0`. `s-stack-package` (`fafb4c0`) was merged at `7959f0a`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `c19dfe0`.
 
 The fifteenth Verify gate returned VERIFIED at `d66a4cb`. One contradiction in the handbook's own merge rule would break a real run, so the phase moved back to Implement. Items that depend on unmerged handbooks are recorded for the integration read-through.
+
+The re-merge fix is at its own commit before `1178d03`. `s-stack-package` (`ce086bb`, the `phase-handbooks` re-merge) was merged at `1178d03`, after a lockfile-only conflict that was resolved under C7. It brings `phase-session.md`'s "A pull request merged" handler, which resolves the first integration item. The phase moved to Verify at code head `1178d03`.

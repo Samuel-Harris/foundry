@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T18:31:32Z"
+state: "Verify"
+changed_at: "2026-11-21T18:33:10Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "ac632959e2a8aef4ba50e9e4c24b5305017fb475"
+code_head: "c19dfe05d6516c190f8ec8d11ca46539dc33b2ed"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -173,3 +173,5 @@ The third Review gate returned SIGNIFICANT at `03d2899`. The phase moved back to
 The Review 3 fixes are at `bab4569`. `s-stack-package` (`a715ab3`) was merged at `d9e108e`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `bab4569`.
 
 The fourteenth Verify gate returned INCONCLUSIVE at `ac63295`. The phase moved back to Implement.
+
+The quiet test, the message mapping and the new merge condition are at `c19dfe0`. `s-stack-package` (`fafb4c0`) was merged at `7959f0a`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `c19dfe0`.

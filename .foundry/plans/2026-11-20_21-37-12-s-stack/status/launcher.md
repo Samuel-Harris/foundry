@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Implement"
-changed_at: "2026-11-21T21:33:19Z"
+state: "Verify"
+changed_at: "2026-11-21T21:42:57Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "310d2dff457fe1e8e4163280000f93242feab154"
+code_head: "42d3ced56004988cc8e3db84280237636fc19491"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -117,3 +117,5 @@ The developer's pane placement rule (launcher-d9) moved the phase back to Implem
 Placement, pane reuse and their quick-review fixes are committed, with 83 tests passing in both locales. `s-stack-package` is merged at 13104cc. Verify runs again at that head.
 
 The full-height right column, the orchestrator-precedence rule and the second review's fixes are committed, with 95 tests passing in both locales. `s-stack-package` is merged at d73841b. The stale-lock fix (launcher-d13) followed, so Verify runs at 310d2df.
+
+The Verify findings at 310d2df are fixed: the window-lock test and close and remove before tmux has ever run. 100 tests pass on macOS and Ubuntu in both locales. Verify runs at 42d3ced.

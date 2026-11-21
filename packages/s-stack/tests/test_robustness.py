@@ -9,6 +9,8 @@ from pathlib import Path
 
 from launcher_case import LAUNCH, STUBS, LauncherTestCase, conversation
 
+STALE_RECORD = "99999 Mon Jan  1 00:00:00 2001"
+
 
 class RobustnessTests(LauncherTestCase):
     def test_a_non_ascii_repository_path_works_without_a_utf8_locale(self) -> None:
@@ -155,6 +157,90 @@ class StaleLockTests(LauncherTestCase):
 
         self.assertEqual(launch.returncode, 0, err)
         self.assertTrue(out.startswith("started f-planner "), out)
+
+    def launch_all(self, sessions: list[tuple[str, ...]], /) -> list[subprocess.CompletedProcess]:
+        launches = [
+            subprocess.Popen([str(LAUNCH), "--feature", "f", *args, "--window", self.window], env=self.env, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            for args in sessions
+        ]
+        results = []
+        for launch in launches:
+            stdout, stderr = launch.communicate(timeout=120)
+            results.append(subprocess.CompletedProcess(launch.args, launch.returncode, stdout, stderr))
+        return results
+
+    def test_concurrent_launches_past_a_stale_session_lock_start_one_copy(self) -> None:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        for phase in ("a", "b", "c", "d"):
+            name = f"f-phase-{phase}"
+            self.make_worktree(name=name, base="f")
+            self.write_lock(name, record=STALE_RECORD)
+
+            results = self.launch_all([("--role", "phase", "--phase", phase)] * 8)
+
+            self.assertEqual([result.returncode for result in results], [0] * 8, [result.stderr for result in results])
+            self.assertEqual(sorted(result.stdout.split()[0] for result in results), ["alive"] * 7 + ["started"], name)
+            self.assertEqual(len(self.named_claudes(name)), 1, name)
+
+    def test_concurrent_launches_past_a_stale_window_lock_share_one_full_height_column(self) -> None:
+        self.make_feature_worktree()
+        orchestrator = self.make_orchestrator()
+        phases = [f"p{index}" for index in range(6)]
+        for phase in phases:
+            self.make_worktree(name=f"f-phase-{phase}", base="f")
+        self.write_lock(f"window-{self.window.lstrip('@')}", record=STALE_RECORD)
+
+        results = self.launch_all([("--role", "phase", "--phase", phase) for phase in phases])
+
+        new = [self.started(result, name=f"f-phase-{phase}").pane for result, phase in zip(results, phases, strict=True)]
+        after = self.geometry()
+        self.assertEqual(len({(after[pane].left, after[pane].width) for pane in new}), 1, after)
+        self.assertGreater(after[new[0]].left, after[orchestrator].left + after[orchestrator].width)
+        height = int(self.tmux("display-message", "-p", "-t", self.window, "#{window_height}"))
+        self.assertEqual(min(after[pane].top for pane in new), 0, after)
+        self.assertEqual(max(after[pane].top + after[pane].height for pane in new), height, after)
+
+
+class StartTimeTests(LauncherTestCase):
+    """Two launches in different time zones or locales must read each other's lock alike."""
+
+    def environment(self, **settings: str) -> dict[str, str]:
+        kept = {key: value for key, value in self.env.items() if key not in {"LANG", "TZ"} and not key.startswith("LC_")}
+        return {**kept, **settings}
+
+    def skip_unless_ps_differs(self, *, first: dict[str, str], second: dict[str, str], reason: str) -> None:
+        def lstart(env: dict[str, str]) -> str:
+            return subprocess.run(["ps", "-o", "lstart=", "-p", str(os.getpid())], env=env, capture_output=True, text=True, check=True).stdout.strip()
+
+        if lstart(first) == lstart(second):
+            self.skipTest(reason)
+
+    def assert_one_copy(self, *, first: dict[str, str], second: dict[str, str]) -> None:
+        self.make_feature_worktree()
+        self.make_worktree(name="f-planner", base="f")
+        self.make_orchestrator()
+        self.tmux("set-environment", "-g", "STUB_CLAUDE_DELAY", "3")
+        command = [str(LAUNCH), "--feature", "f", "--role", "planner", "--window", self.window]
+        holder = subprocess.Popen(command, env=first, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        self.wait_for(lambda: os.path.lexists(self.lock_path("f-planner")), message="the first launch took no lock")
+        waiter = subprocess.Popen(command, env=second, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        outputs = [launch.communicate(timeout=60) for launch in (holder, waiter)]
+
+        self.assertEqual([holder.returncode, waiter.returncode], [0, 0], outputs)
+        self.assertTrue(outputs[0][0].startswith("started f-planner "), outputs)
+        self.assertTrue(outputs[1][0].startswith("alive f-planner "), outputs)
+        self.assertEqual(len(self.named_claudes("f-planner")), 1)
+
+    def test_a_launch_in_another_time_zone_sees_the_live_holder(self) -> None:
+        first, second = self.environment(LC_ALL="C", TZ="UTC"), self.environment(LC_ALL="C", TZ="Asia/Tokyo")
+        self.skip_unless_ps_differs(first=first, second=second, reason="ps prints the same start time in UTC and Asia/Tokyo here, so the time zone data is missing")
+        self.assert_one_copy(first=first, second=second)
+
+    def test_a_launch_in_another_locale_sees_the_live_holder(self) -> None:
+        first, second = self.environment(LC_ALL="en_GB.UTF-8"), self.environment(LC_ALL="C")
+        self.skip_unless_ps_differs(first=first, second=second, reason="ps prints the same start time in en_GB.UTF-8 and C here: it ignores the locale, or en_GB.UTF-8 is not installed")
+        self.assert_one_copy(first=first, second=second)
 
 
 if __name__ == "__main__":

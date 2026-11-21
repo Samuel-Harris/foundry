@@ -105,6 +105,20 @@ class CloseTests(LauncherTestCase):
         self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
         self.assertIn(pane, self.pane_ids())
 
+    def test_a_command_running_in_the_sessions_left_pane_is_not_closed(self) -> None:
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
+        self.wait_for_claude(pane)
+        self.kill_claude("f-phase-p")
+        self.tmux("send-keys", "-t", pane, "sleep 5432", "Enter")
+        running = lambda: [row for row in self.processes() if row.args == "sleep 5432"]
+        self.wait_for(running, message="the developer's command did not start")
+
+        result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
+
+        self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
+        self.assertIn(pane, self.pane_ids())
+        self.assertTrue(running(), "the developer's command was killed")
+
     def test_absent_when_no_tmux_server_runs(self) -> None:
         self.tmux("kill-server")
 

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import os
+import shutil
+import signal
 import subprocess
 import unittest
 from pathlib import Path
@@ -147,6 +150,20 @@ class StartTests(LauncherTestCase):
 
         self.assertEqual((result.returncode, result.stdout), (0, f"alive f-orchestrator pane={pane}\n"), result.stderr)
 
+    def test_the_first_spec_writer_resumed_by_hand_in_its_own_pane_is_alive(self) -> None:
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        window = self.window_of(pane)
+        self.started(self.launch("--feature", "f", "--role", "orchestrator", "--window", window), name="f-orchestrator")
+        self.wait_for_claude(pane)
+        self.kill_claude("f-spec")
+        self.tmux("respawn-pane", "-k", "-t", pane, "-c", str(self.worktree("f")), "claude --continue")
+        self.wait_for_claude(pane)
+
+        result = self.launch("--feature", "f", "--role", "spec", "--window", window)
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"alive f-spec pane={pane}\n"), result.stderr)
+        self.assertEqual(len(self.claude_processes()), 2)
+
     def test_restart_resumes_its_own_conversation_unless_fresh(self) -> None:
         self.make_feature_worktree()
         self.make_orchestrator()
@@ -224,6 +241,54 @@ class StartTests(LauncherTestCase):
         self.assertNotEqual(restarted, first)
         self.assertIn("--name f-phase-p ", self.wait_for_claude(restarted))
         self.assertTrue(busy(), "the developer's command was killed")
+
+    def test_a_command_the_developer_execs_in_the_sessions_own_pane_is_never_killed(self) -> None:
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        args = ("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window)
+        first, _ = self.started(self.launch(*args), name="f-phase-p")
+        self.wait_for_claude(first)
+        self.kill_claude("f-phase-p")
+        self.tmux("send-keys", "-t", first, "exec sleep 4321", "Enter")
+        running = lambda: [row for row in self.processes() if row.args == "sleep 4321"]
+        self.wait_for(running, message="the developer's command did not start")
+
+        restarted, _ = self.started(self.launch(*args), name="f-phase-p")
+
+        self.assertNotEqual(restarted, first)
+        self.assertTrue(running(), "the developer's command was killed")
+
+    def test_a_restart_reuses_its_pane_while_the_shell_keeps_a_background_helper(self) -> None:
+        zsh = shutil.which("zsh")
+        if zsh is None:
+            self.skipTest("zsh is not installed, so no login zsh can keep a prompt helper running")
+        helpers = self.tmp / "helpers"
+        # Prompt plugins such as gitstatusd keep a child of the shell running at its prompt.
+        (self.tmp / ".zshrc").write_text(f"sleep 86400 &!\necho $! >> {helpers}\n")
+
+        def stop_helpers() -> None:
+            for pid in helpers.read_text().split() if helpers.exists() else []:
+                try:
+                    os.kill(int(pid), signal.SIGTERM)
+                except ProcessLookupError:
+                    pass
+
+        self.addCleanup(stop_helpers)
+        self.make_feature_worktree()
+        self.make_orchestrator()
+        self.tmux("set-option", "-g", "default-shell", zsh)
+        args = ("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window)
+        first, _ = self.started(self.launch(*args), name="f-phase-p")
+        self.wait_for_claude(first)
+        self.kill_claude("f-phase-p")
+        at_prompt = lambda: helpers.exists() and self.tmux("display-message", "-p", "-t", first, "#{pane_current_command}").strip() == "zsh"
+        self.wait_for(at_prompt, message="the login zsh did not reach its prompt")
+        panes = len(self.panes())
+
+        restarted, _ = self.started(self.launch(*args), name="f-phase-p")
+
+        self.assertEqual(restarted, first)
+        self.assertEqual(len(self.panes()), panes)
 
     def test_ten_restarts_keep_the_pane_count(self) -> None:
         self.make_feature_worktree()

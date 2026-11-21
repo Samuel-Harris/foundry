@@ -177,6 +177,17 @@ class LauncherTestCase(unittest.TestCase):
         markers.mkdir(parents=True, exist_ok=True)
         (markers / name).write_text("00000000-0000-4000-8000-000000000000\n")
 
+    def lock_path(self, name: str) -> Path:
+        common = Path(self.git("-C", str(self.root), "rev-parse", "--path-format=absolute", "--git-common-dir").strip())
+        return common / "s-stack-locks" / name
+
+    def write_lock(self, name: str, *, record: str) -> Path:
+        """The lock <name> as a launch holding it leaves it, recording "<pid> <start time>"."""
+        lock = self.lock_path(name)
+        lock.mkdir(parents=True)
+        (lock / "holder").write_text(f"{record}\n")
+        return lock
+
     def worktree(self, name: str) -> Path:
         return Path(f"{self.root}__wt/{name}")
 

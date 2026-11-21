@@ -3,8 +3,8 @@
 This file holds the script the PR creator runs. `handbooks/pr-creator.md` says when to run each command. Copy the block at the end of this file, exactly as it stands, into a file outside the repository, such as `pr.sh` in your scratch directory. Set its parameter lines once, then run it with `bash` from a worktree of the repository. It needs bash and git 2.43 or later.
 
 ```text
-bash pr.sh refresh <phase branch> <default branch> <spec> [<commit> ...]
-bash pr.sh prove <orchestrator branch> <phase branch> <default branch> <spec> ...
+OWN=<own branches> bash pr.sh refresh <phase branch> <default branch> <spec> [<commit> ...]
+OWN=<own branches> bash pr.sh prove <orchestrator branch> <phase branch> <default branch> <spec> ...
 ```
 
 ## The parameters
@@ -37,7 +37,7 @@ Both commands describe a pull request as `<pr>:<base>[:<open deps>[:<merged deps
 | `pr3:main:pr1,pr2` | Targets `main` and carries `pr1` and `pr2` |
 | `pr2:main::pr1` | `pr1` was squash-merged into `main` |
 
-A branch may be written `main` or `origin/main`. The default branch always resolves to `origin/<default>`. Any other branch resolves to the local branch when it exists, holds `origin/<branch>`, and whose newest carried commit names a commit of this phase in its `cherry-pick` trailer, so a child reads its own phase's parent's unpushed head. Another phase's branch always resolves to `origin/<branch>`, the state that phase proved and pushed, whatever its local copy holds. A pull request's own commits are the commits reachable from its branch and from none of the default branch, its base and its dependencies, leaving out merges and regenerate commits.
+A branch may be written `main` or `origin/main`. The default branch always resolves to `origin/<default>`. Any other branch resolves to the local branch only when it is named in the environment variable `OWN`, a comma-separated list of this phase's pull request branches, exists, and holds `origin/<branch>`, so a child reads its own phase's parent's unpushed head. Set `OWN` on every call. Another phase's branch always resolves to `origin/<branch>`, the state that phase proved and pushed, whatever its local copy holds. A pull request's own commits are the commits reachable from its branch and from none of the default branch, its base and its dependencies, leaving out merges and regenerate commits.
 
 ## How the script sees the phase
 
@@ -113,15 +113,9 @@ REGEN='^chore(s-stack): regenerate generated files$'
 GEN=(':(exclude)*apm.lock.yaml')
 LINES=(':(exclude)*apm.yml') LINES_IN='*apm.yml'
 GEN_LINE='^version: '
-mine_branch() {
-  local c t; [ -s "${W:-/nonexistent}/fp" ] || return 1
-  c=$(git rev-list -1 --no-merges --invert-grep --grep="$REGEN" "refs/heads/$1" "^$D"); [ -n "$c" ] || return 1
-  t=$(git log -1 --format=%B "$c" | sed -n 's/^(cherry picked from commit \([0-9a-f]*\))$/\1/p' | tail -1)
-  [ -n "$t" ] && grep -q -x -F "$t" "$W/fp"
-}
 ref() {
   local b=${1#origin/}; git rev-parse -q --verify "refs/remotes/origin/$b" >/dev/null || { echo "$1"; return; }
-  [ "origin/$b" != "${D:-}" ] && git rev-parse -q --verify "refs/heads/$b" >/dev/null && git merge-base --is-ancestor "origin/$b" "refs/heads/$b" && mine_branch "$b" && echo "$b" || echo "origin/$b"
+  [ "origin/$b" != "${D:-}" ] && git rev-parse -q --verify "refs/heads/$b" >/dev/null && git merge-base --is-ancestor "origin/$b" "refs/heads/$b" && [[ ",${OWN:-}," == *",$b,"* ]] && echo "$b" || echo "origin/$b"
 }
 not() { local d r; for d; do for r in "$d" "$(ref "$d")"; do git rev-parse -q --verify "$r^{commit}" >/dev/null && echo "^$r"; done; done; }
 own() { local pr=$1; shift; git rev-list --reverse --no-merges "$pr" $(not "$@") --invert-grep --grep="$REGEN"; }

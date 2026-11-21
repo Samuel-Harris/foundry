@@ -133,6 +133,14 @@ Accepted, not a defect:
 
 - A developer pane spanning the full width under the orchestrator narrows with the full-span split, as `launcher-d11` accepted.
 
+## Verify, code head `061f71e3849fa779879183f90ff825a3071525a2`, NOT VERIFIED
+
+A fresh verifier ran the full skill, Tier 1, the board's rendered check, every cold read, 22 mutations and the live check. Every behaviour it ran passed. That covered all five defects from the third review, fixed in its own reproductions, and the `launcher-d16` idle rule at runtime, with `bash build.sh` and `sh -c` panes surviving and `bash`, `zsh -l` and `-zsh` reused. A real `claude` launched in 0.42 s, reported `alive`, and resumed by id in the same pane.
+
+It failed one check. Deleting the argument rule in `pane_is_idle` left all 113 tests passing, and that launcher kills a developer's shell script on restart and on `--close`, which the verifier reproduced. The busy-shell tests ran `sleep` as a child, and that child made the pane busy by itself.
+
+The phase session fixed the tests. The shells now block in the `read` builtin, and both tests fail against that mutant. `checks/launcher.md` now lists the idle-rule and lock mutations, says to wait for the trust dialog to draw, and checks only that nothing of the check's is left on the developer's server.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

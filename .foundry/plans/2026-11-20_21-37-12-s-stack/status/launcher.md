@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
 state: "Verify"
-changed_at: "2026-11-21T23:11:38Z"
+changed_at: "2026-11-21T23:30:34Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "061f71e3849fa779879183f90ff825a3071525a2"
+code_head: "0ad72927067f8875e5db62d10156c4c867b9291b"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -51,6 +51,11 @@ verdicts:
     result: "SIGNIFICANT"
     code_head: "42d3ced56004988cc8e3db84280237636fc19491"
     at: "2026-11-21T22:20:06Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "061f71e3849fa779879183f90ff825a3071525a2"
+    at: "2026-11-21T23:30:29Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - id: "launcher-r2"
@@ -147,3 +152,5 @@ Merge 90a798c of `s-stack-package` at 3b31462 (board) touched `packages/s-stack/
 The third review's fixes are committed: atomic symlink locks, fixed start times, hand-resumed spec writers, and the shell-only idle rule. 108 tests pass on macOS and Ubuntu in both locales. Merge 132150d of `s-stack-package` at 6bed682 touched only `.foundry/`. Verify runs at 805fccd.
 
 The idle rule now reads argument lists (launcher-d16). 113 tests pass on macOS and Ubuntu in both locales. Merge d4d7224 of `s-stack-package` touched only `.foundry/`. Verify runs at 061f71e.
+
+The verifier at 061f71e found the busy-shell tests too weak, and they are fixed. Verify runs at 0ad7292.

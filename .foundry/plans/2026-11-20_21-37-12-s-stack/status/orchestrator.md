@@ -72,6 +72,7 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 14. `references/status-and-messages.md`: drop the `restack` orchestrator message kind. PR creators now restack themselves (run decision, automatic stacking). Raised by `orchestrator-handbook`. Make the `fix-round` row cover a merged dependency, after which the PR creator works out the base again. Raised by `phase-handbooks`.
 15. `SKILL.md` line 20: a feature name must also not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>` (run decision `launcher-r2`). Raised by `launcher`.
 16. `references/status-and-messages.md`: the code-head rule must ignore version-only changes, as the run decision on version lines says. Its message rows must also cover a failed post-merge check, a `state` reply to an early merged notice, and the merged notice itself (move-back, state and instruction rows). Raised by `phase-handbooks`.
+17. `references/status-and-messages.md` line 61 reads as the whole merge condition and does not mention `prs-open`. Point it to `orchestrator.md`'s merge rule (run decision on `prs-open` re-merges). Raised by `orchestrator-handbook`.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 

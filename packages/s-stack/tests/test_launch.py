@@ -33,7 +33,7 @@ class Started(NamedTuple):
     worktree: str
 
 
-PANE_FORMAT = "#{pane_id}\t#{pane_pid}\t#{pane_width}\t#{pane_height}\t#{window_id}"
+PANE_FORMAT = "#{pane_id} #{pane_pid} #{pane_width} #{pane_height} #{window_id}"
 
 def conversation(args: str, *, flag: str) -> str | None:
     words = args.split()
@@ -135,6 +135,14 @@ class LauncherTestCase(unittest.TestCase):
     def launch(self, *args: str, env: dict[str, str] | None = None) -> subprocess.CompletedProcess:
         return subprocess.run([str(LAUNCH), *args], env=env or self.env, cwd=self.root, capture_output=True, text=True, timeout=60)
 
+    def c_locale(self) -> dict[str, str]:
+        """Python gives its children LC_CTYPE=C.UTF-8 when the locale is C, so only an explicit environment reaches the launcher with no UTF-8 locale."""
+        kept = {key: value for key, value in self.env.items() if key != "LANG" and not key.startswith("LC_")}
+        return {**kept, "LC_ALL": "C"}
+
+    def zoomed(self) -> str:
+        return self.tmux("display-message", "-p", "-t", self.window, "#{window_zoomed_flag}").strip()
+
     def without(self, command: str, /) -> dict[str, str]:
         reduced = self.tmp / f"bin-without-{command}"
         reduced.mkdir(exist_ok=True)
@@ -163,7 +171,7 @@ class LauncherTestCase(unittest.TestCase):
     def panes(self) -> list[dict[str, str]]:
         out = self.tmux("list-panes", "-a", "-F", PANE_FORMAT)
         keys = ("id", "pid", "width", "height", "window")
-        return [dict(zip(keys, line.split("\t"))) for line in out.splitlines()]
+        return [dict(zip(keys, line.split(), strict=True)) for line in out.splitlines()]
 
     def windows(self) -> list[str]:
         return self.tmux("list-windows", "-a", "-F", "#{window_id}").split()
@@ -407,6 +415,37 @@ class StartTests(LauncherTestCase):
         after = {p["id"]: (p["width"], p["height"]) for p in self.panes()}
         self.assertEqual([p for p in before if before[p] != after[p]], [large])
 
+    def test_concurrent_launches_of_an_existing_worktree_start_one_copy(self) -> None:
+        self.make_feature_worktree()
+        self.make_worktree(name="f-planner", base="f")
+        command = [str(LAUNCH), "--feature", "f", "--role", "planner", "--window", self.window]
+        launches = [subprocess.Popen(command, env=self.env, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) for _ in range(2)]
+        outputs = [launch.communicate(timeout=60) for launch in launches]
+
+        self.assertEqual([launch.returncode for launch in launches], [0, 0], outputs)
+        self.assertEqual(sorted(stdout.split()[0] for stdout, _ in outputs), ["alive", "started"], outputs)
+        self.wait_for(lambda: self.named_claudes("f-planner"), message="no f-planner claude started")
+        self.assertEqual(len(self.named_claudes("f-planner")), 1)
+
+    def test_a_zoomed_window_stays_zoomed(self) -> None:
+        self.make_feature_worktree()
+        main = self.panes()[0]["id"]
+        self.tmux("split-window", "-d", "-h", "-l", "40", "-t", main)
+        self.tmux("resize-pane", "-Z", "-t", main)
+        size = next((p["width"], p["height"]) for p in self.panes() if p["id"] == main)
+
+        self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
+
+        self.assertEqual(self.zoomed(), "1")
+        self.assertEqual(next((p["width"], p["height"]) for p in self.panes() if p["id"] == main), size)
+
+    def test_an_unzoomed_window_stays_unzoomed(self) -> None:
+        self.make_feature_worktree()
+
+        self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
+
+        self.assertEqual(self.zoomed(), "0")
+
     def test_full_window_exits_4_with_the_tmux_error(self) -> None:
         self.make_feature_worktree()
         self.tmux("new-session", "-d", "-s", "tiny", "-x", "2", "-y", "2")
@@ -523,6 +562,12 @@ class ArgumentTests(LauncherTestCase):
             ["--print-window", "--feature", "f"],
             ["--feature", "f", "--role", "planner"],
             ["--feature", "f", "--role", "orchestrator"],
+            ["--feature", "a-phase-b", "--role", "spec"],
+            ["--feature", "a-phase", "--role", "spec"],
+            ["--feature", "a-planner", "--role", "spec"],
+            ["--feature", "a-orchestrator", "--role", "spec"],
+            ["--feature", "a-spec", "--role", "spec"],
+            ["--feature", "a-spec-2", "--role", "spec"],
         ]
         for args in cases:
             with self.subTest(args=args):
@@ -530,6 +575,18 @@ class ArgumentTests(LauncherTestCase):
                 self.assertEqual(result.returncode, 2, result.stderr)
                 self.assertIn("Usage:", result.stderr)
                 self.assertEqual(result.stdout, "")
+
+    def test_a_feature_name_that_another_features_session_could_have_is_refused(self) -> None:
+        self.make_feature_worktree()
+        for feature, role, taken in (("a-phase", "planner", ("a", "phase", "planner")), ("query-planner", "spec", ("query", "planner", None))):
+            with self.subTest(feature=feature):
+                result = self.launch("--feature", feature, "--role", role, "--window", self.window)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn("Usage:", result.stderr)
+                taken_feature, taken_role, taken_phase = taken
+                self.run_tool(["workmux", "add", taken_feature, "--headless", "--base", "origin/main"], check=True)
+                phase = ("--phase", taken_phase) if taken_phase else ()
+                self.started(self.launch("--feature", taken_feature, "--role", taken_role, *phase, "--window", self.window), name=f"{taken_feature}-{taken_role}" + (f"-{taken_phase}" if taken_phase else ""))
 
     def test_restarting_the_spec_writer_needs_a_window(self) -> None:
         self.make_feature_worktree()
@@ -554,6 +611,12 @@ class PrintWindowTests(LauncherTestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("not inside tmux", result.stderr)
 
+    def test_a_pane_that_no_longer_exists_exits_1_naming_it(self) -> None:
+        result = self.launch("--print-window", env={**self.env, "TMUX_PANE": "%999"})
+
+        self.assertEqual((result.returncode, result.stdout), (1, ""), result.stderr)
+        self.assertIn("%999", result.stderr)
+
     def test_without_tmux_exits_3(self) -> None:
         result = self.launch("--print-window", env={**self.without("tmux"), "TMUX_PANE": "%0"})
 
@@ -574,6 +637,13 @@ class CloseTests(LauncherTestCase):
 
         self.assertEqual((result.returncode, result.stdout), (0, f"closed f-phase-p pane={pane}\n"), result.stderr)
         self.assertNotIn(pane, [p["id"] for p in self.panes()])
+
+    def test_absent_when_no_tmux_server_runs(self) -> None:
+        self.tmux("kill-server")
+
+        result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
+
+        self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
 
     def test_absent_when_only_another_session_runs(self) -> None:
         other, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "q", "--window", self.window), name="f-phase-q")
@@ -601,10 +671,10 @@ class RemoveTests(LauncherTestCase):
         super().setUp()
         self.make_feature_worktree()
 
-    def assert_refused(self, reason: str) -> None:
+    def assert_refused(self, reason: str, *, env: dict[str, str] | None = None) -> None:
         worktrees_before = self.git("-C", str(self.root), "worktree", "list", "--porcelain")
 
-        result = self.launch(*self.args, "--remove")
+        result = self.launch(*self.args, "--remove", env=env)
 
         self.assertEqual(result.returncode, 5, result.stderr)
         self.assertEqual(result.stdout, "")
@@ -648,8 +718,61 @@ class RemoveTests(LauncherTestCase):
 
         self.assert_refused(pane)
 
+    def test_removes_when_no_tmux_server_runs(self) -> None:
+        worktree = self.make_worktree(name="f-phase-p", base="f")
+        self.tmux("kill-server")
+
+        result = self.launch(*self.args, "--remove")
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"removed f-phase-p worktree={worktree}\n"), result.stderr)
+
+    def test_commits_on_a_detached_head_are_refused(self) -> None:
+        worktree = self.make_worktree(name="f-phase-p", base="f")
+        self.git("-C", str(worktree), "checkout", "-q", "--detach")
+        self.commit_in(worktree, relative="work.txt")
+
+        self.assert_refused("not merged into f")
+        self.assertTrue(worktree.exists())
+
+    def test_another_claude_under_the_worktree_is_refused(self) -> None:
+        worktree = self.make_worktree(name="f-phase-p", base="f")
+        (worktree / "sub").mkdir()
+        pane = self.make_pane(worktree / "sub", command="claude --name someone-else")
+
+        self.assert_refused(pane)
+
     def test_missing_worktree_is_refused(self) -> None:
         self.assert_refused("no such worktree")
+
+
+class LocaleTests(LauncherTestCase):
+    """A tmux client without a UTF-8 locale prints control characters in formats as underscores."""
+
+    args = ("--feature", "f", "--role", "phase", "--phase", "p")
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.make_feature_worktree()
+        self.pane, self.session_worktree = self.started(self.launch(*self.args, "--window", self.window), name="f-phase-p")
+        self.wait_for_claude(self.pane)
+
+    def test_a_live_session_is_alive(self) -> None:
+        result = self.launch(*self.args, "--window", self.window, env=self.c_locale())
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"alive f-phase-p pane={self.pane}\n"), result.stderr)
+        self.assertEqual(len(self.named_claudes("f-phase-p")), 1)
+
+    def test_close_closes_the_live_session(self) -> None:
+        result = self.launch(*self.args, "--close", env=self.c_locale())
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"closed f-phase-p pane={self.pane}\n"), result.stderr)
+
+    def test_remove_refuses_a_live_session(self) -> None:
+        result = self.launch(*self.args, "--remove", env=self.c_locale())
+
+        self.assertEqual(result.returncode, 5, result.stderr)
+        self.assertIn(self.pane, result.stderr)
+        self.assertTrue(Path(self.session_worktree).exists())
 
 
 if __name__ == "__main__":

@@ -35,6 +35,7 @@ None.
 | 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
 | 85 | `phase-handbooks` | merged into `main` as `6f42b1c` | | |
 | 86 | `board` | merged into `main` as `51f334e` | | |
+| 87 | `spec-planner-handbooks` | `s-stack-spec-planner-port-rule` | `main` | none |
 
 ## Merged phases
 
@@ -45,6 +46,7 @@ None.
 | `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
 | `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | VERIFIED on `ce086bb` |
 | `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | VERIFIED on `3ce7d34` |
+| `spec-planner-handbooks` (follow-up) | `b89a458` (tip `40c3e56`) | `47f792f` | running |
 
 ## Closed sessions
 

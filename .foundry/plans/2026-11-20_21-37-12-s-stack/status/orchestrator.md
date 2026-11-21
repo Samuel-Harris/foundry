@@ -16,7 +16,12 @@
 
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
-| `s-stack-phase-foundation` | `%171` | `../s-stack-phase-foundation` | 2026-11-21 |
+| `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
+| `s-stack-phase-board` | `%173` | `../s-stack-phase-board` | 2026-11-21 |
+| `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
+| `s-stack-phase-phase-handbooks` | `%175` | `../s-stack-phase-phase-handbooks` | 2026-11-21 |
+| `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
+| `s-stack-phase-spec-planner-handbooks` | `%177` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 |
 
 ## Open decision requests
 
@@ -33,10 +38,11 @@ None.
 
 | Phase | Merged at | Phase code head | Post-merge check |
 | --- | --- | --- | --- |
-| `foundation` | `7c4f36d` | `50e26ee` | running |
+| `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
 
 ## Closed sessions
 
 | Session | Worktree | Closed | Last commit |
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
+| `s-stack-phase-foundation` | `../s-stack-phase-foundation` | 2026-11-21 | `5df64c0`, merged at `7c4f36d`; worktree kept for fix rounds |

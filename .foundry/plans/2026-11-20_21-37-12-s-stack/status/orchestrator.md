@@ -10,7 +10,7 @@
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `d3dd837` (version 6) |
 | Last tick | 2026-11-21 22:51 |
-| Default branch merged at | `6f42b1c` (#85, into `7409b48`) |
+| Default branch merged at | `51f334e` (#86, into `853a26d`) |
 
 ## Live sessions
 
@@ -21,6 +21,7 @@
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 | `s-stack-phase-foundation` | `%192` | `../s-stack-phase-foundation` | 2026-11-21, follow-up round for the 17 queued items |
 | `s-stack-phase-spec-planner-handbooks` | `%193` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21, follow-up round for the cold-read wording |
+| `s-stack-phase-board` | `%194` | `../s-stack-phase-board` | 2026-11-21, resumed to record Done |
 
 ## Open decision requests
 
@@ -34,7 +35,7 @@ None.
 | 82 | `foundation` | merged into `main` as `e4a18d1` | | |
 | 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
 | 85 | `phase-handbooks` | merged into `main` as `6f42b1c` | | |
-| 86 | `board` | `s-stack-board` | `main` | none |
+| 86 | `board` | merged into `main` as `51f334e` | | |
 
 ## Merged phases
 
@@ -52,7 +53,6 @@ None.
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
 | `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-21 | Done at `0cb6af5`, merged; #85 merged into `main` |
-| `s-stack-phase-board` | `../s-stack-phase-board` | 2026-11-21 | `22e6ab0`, merged at `a606589`; worktree kept for fix rounds on #86 |
 
 ## Queued fix rounds
 

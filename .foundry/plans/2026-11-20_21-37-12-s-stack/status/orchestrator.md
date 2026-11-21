@@ -75,3 +75,5 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 ## Queued roadmap update
 
 At the end of the run, start a spec writer to fold `run-decisions.md` into the roadmap. At least these items: `coordination.md` "The launcher" and "Restarts" and C4 now resume by stored id with `--print-window`, `--close`, `--remove` and exit 5; `roles.md` drops the Orchestrate playbook pointer; the status board gains the dependency map and session labels; the generated-files rules for code heads, conflicts and the line limit. Raised by `launcher`.
+
+Known launcher limits to record in that update: a pane left at its shell after `claude` exits is not reused, and `--close` does not clear it, so a relaunch adds a pane. A restarted spec writer needs `--window`.

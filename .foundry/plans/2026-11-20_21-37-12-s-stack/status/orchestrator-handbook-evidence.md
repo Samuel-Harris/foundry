@@ -487,3 +487,15 @@ No defect breaks the common path. For the cross-handbook integration:
 - The conflict tip is never cleared.
 - "scheduling" is defined only in the board template.
 - `phase-session.md`'s `stop` commit is unclear, and its Moving back timing to Plan is worded wrongly.
+
+## Review 9, code head `5b8a48145a2aa1e0ef5c890d5516da78f7b785a4`, SIGNIFICANT
+
+`interrogate` over the commits since `d5c3d09`, under the common-path bar, with two adversaries on Opus and Fable in their own worktrees, each walking a whole feature. The phase session checked each finding against the text.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| The commit a stalled session makes on `stop` counts as answering its unanswered review round. The `--fresh` replacement gets nothing, and the phase stays in PR for good. | Opus | Two cold reads |
+| The tracker-fact rare history still catches the developer's merge into the default branch and the forge's stack-child rebase. Rated lower. | Opus | Cold read |
+| After a failed post-merge check, the idle-phase `stop` in Finishing a phase can still fire, because it has no passing-check clause. Conditional on one reading. | Fable | Cold read |
+
+The Fable walk otherwise reached Done for all three phases, through a roadmap update, a crash with `workmux resurrect`, a failed check and out-of-order merges.

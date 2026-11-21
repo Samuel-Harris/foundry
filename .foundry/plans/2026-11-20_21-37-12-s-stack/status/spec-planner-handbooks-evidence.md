@@ -163,3 +163,47 @@ The PR creator built `s-stack-spec-planner-port-rule` from `origin/main` (`51f33
 - **What passed.** `git diff 47f792f HEAD` on both files printed nothing. Against `main`, the change is 2 hand-written files with +3/-3, plus the `version:` line. The hook exited 0. `versioning.py check` printed `1 changed package(s), none without a version bump`.
 - **What failed.** `pr.sh prove` printed NOT EQUAL. Every FAIL is about the merged #84 branch. It was built under commit replay before cherry-pick trailers existed, and it carries #81's and #82's pre-merge commits. So the proof cannot match the earlier phase commits on the three owned files to anything, although their content is on `main` through #84's squash.
 - **Where it stopped.** Nothing was pushed, and the local branch was deleted. The PR creator stopped because this history is not in the handbook's STOP table. The phase sent decision request `spec-planner-handbooks-r1`.
+
+## Follow-up round: pull request evidence under `spec-planner-handbooks-r1`, option A
+
+The orchestrator answered `spec-planner-handbooks-r1` with option A: ship on equivalent evidence. A fresh PR creator rebuilt `s-stack-spec-planner-port-rule` from `origin/main` (`51f334e`). It used `pr.sh` refresh, carrying the five phase commits with cherry-pick trailers, then added regenerate commit `5da7f5d`, which bumps s-stack from 0.1.3 to 0.1.4. The branch head is `5da7f5dcd4e4df46c289fec470f409d7996d8fb5`. The phase session checked the stat, the version diff, the byte identity and the `.foundry` check itself.
+
+**Proof FAIL lines.** `OWN=s-stack-spec-planner-port-rule bash pr.sh prove s-stack-package s-stack-phase-spec-planner-handbooks origin/main s-stack-spec-planner-handbooks:main s-stack-spec-planner-port-rule:main::s-stack-spec-planner-handbooks` exited 1 with NOT EQUAL. Every FAIL line is about the merged #84 branch or the phase commits it carries without trailers:
+
+```text
+FAIL packages/s-stack/.apm/skills/sam-mode/handbooks/planner.md: s-stack-spec-planner-port-rule lacks phase commits a6652c7 fix(s-stack): record planner decisions as met, with door and decider, and check visibility on updates;08874f3 fix(s-stack): cover an unavoidable two-parent dependency and the l
+FAIL packages/s-stack/.apm/skills/sam-mode/handbooks/spec-writer.md: s-stack-spec-planner-handbooks lacks phase commits a6652c7 fix(s-stack): record planner decisions as met, with door and decider, and check visibility on updates;08874f3 fix(s-stack): cover an unavoidable two-parent dependency and t
+FAIL s-stack-spec-planner-handbooks: it changes AGENTS.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes apm.yml, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes docs/COMPATIBILITY.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes docs/DEPENDENCY-CONTRACTS.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.apm/skills/sam-mode/references/status-and-messages.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.apm/skills/sam-mode/SKILL.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.gitignore, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/apm.yml, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/README.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes README.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/acceptance.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/s-stack/verify-s-stack/checks/foundation.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/s-stack/verify-s-stack/SKILL.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/structural/run-tier1.sh, which the phase does not
+FAIL s-stack-spec-planner-handbooks: its head differs from its target tree
+FAIL tests/s-stack/verify-s-stack/checks/spec-planner-handbooks.md: s-stack-spec-planner-port-rule lacks phase commits 6f70b37 test(s-stack): check the planner's phase fields against the handbook;0d7b25d test(s-stack): keep the planner cold read's front end in one phase;7c59af5 test(s-stack): add th
+NOT EQUAL
+```
+
+**Head versus target, by direct comparison.** The proof prints no head line for this branch, so the PR creator built the expected tree in a temporary index: `origin/main`, plus the two files' blobs from `47f792f`, plus the regenerate commit's diff. The expected tree and the branch tree are both `96e80cfd84d6a49423a6b3d0b85d80fe0b0868d3`, and `git diff` printed nothing.
+
+**`git diff origin/main 5da7f5d --stat`:**
+
+```text
+ packages/s-stack/.apm/skills/sam-mode/handbooks/planner.md    | 2 +-
+ packages/s-stack/apm.lock.yaml                                | 8 ++++----
+ packages/s-stack/apm.yml                                      | 2 +-
+ tests/s-stack/verify-s-stack/checks/spec-planner-handbooks.md | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+```
+
+The `apm.yml` change is only `version: "0.1.3"` to `version: "0.1.4"`.
+
+**Byte identity with `47f792f`.** `git diff 47f792f 5da7f5d` over both files printed nothing. The blobs are `planner.md` `3bf6a664668eb38b78dabb8e929189110027b9f3` and `spec-planner-handbooks.md` `c625d6763c55a8ab9c1a1e38117e95129bb6cb7e` on both sides. No `.foundry/` path is on the branch. The hook exited 0, and `versioning.py check origin/main` printed `1 changed package(s), none without a version bump`. The full command log is the PR creator's `r1-evidence.md` in the phase session's scratchpad.

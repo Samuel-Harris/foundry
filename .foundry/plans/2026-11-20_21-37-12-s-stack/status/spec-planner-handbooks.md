@@ -5,7 +5,7 @@ changed_at: "2026-11-21T23:36:16Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
-waits_for: "The orchestrator's answer to spec-planner-handbooks-r1."
+waits_for: null
 verdicts:
   - gate: "verify"
     result: "VERIFIED"
@@ -62,12 +62,7 @@ verdicts:
     code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
     at: "2026-11-21T23:36:16Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
-pull_requests:
-  - number: 84
-    branch: "s-stack-spec-planner-handbooks"
-    base: "main"
-    depends_on: [82]
-    stacked: false
+pull_requests: []
 requests:
   - id: "spec-planner-handbooks-r1"
     question: "The pr-handbook overlay proof prints NOT EQUAL for this round's new pull request only because the merged #84 was built before cherry-pick trailers existed and carries #81 and #82 in its history; how should the pull request ship?"
@@ -97,8 +92,12 @@ decisions:
     decision: "planner.md's exclusive-resources bullet says that phases sharing an exclusive resource never run at the same time, as roadmap roles.md line 46 says of the orchestrator. Cold read 1's point 3 requires those phases to run one after the other. A real planner run claimed such phases could run together, and graders split on it."
     door: "two-way"
     at: "2026-11-21T23:25:34Z"
+  - id: "spec-planner-handbooks-d6"
+    decision: "Answer to spec-planner-handbooks-r1, option A, from the orchestrator. The follow-up pull request ships on direct-comparison evidence: its tree equals main with both files from 47f792f plus generated lines. pr-handbook's proof cannot account for #84, which predates its cherry-pick trailers."
+    door: "two-way"
+    at: "2026-11-21T23:43:47Z"
 ---
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Both gates passed for `47f792f`. A PR creator is opening a new draft pull request against `main` with the `planner.md` sentence and the reworded points 3 and 5.
+Follow-up round. Both gates passed for `47f792f`. The evidence for the pull request branch `s-stack-spec-planner-port-rule` (`5da7f5d`) is recorded under option A of `spec-planner-handbooks-r1`, and a PR creator is pushing it and opening the draft pull request.

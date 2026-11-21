@@ -45,6 +45,63 @@ Expected answer:
 3. Only when the newest `verify` verdict is `VERIFIED` and the newest `review` verdict is `CLEAR`, and both name the current code head.
 4. `chore(billing-export): launcher Verify`.
 
+### Status header matches C2
+
+The reference ships the feature plan's C2 with two kinds of change, both decided by the orchestrator (request `foundation-r1`, option A). This run's example values become placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. The code-head rule states the general command with only `.foundry/` excluded, a sentence to run it from the worktree root, and a sentence that a feature plan may name generated paths to exclude too. Any other difference, such as a new or reworded rule, is a contract change and fails. The check reads the feature plan under `.foundry/`, so it runs on the orchestrator branch and the phase branches, where the skill runs.
+
+```bash
+python3 - <<'EOF'
+import difflib, pathlib, re, sys
+plan = pathlib.Path(".foundry/plans/2026-11-20_21-37-12-s-stack/README.md").read_text()
+ref = pathlib.Path("packages/s-stack/.apm/skills/sam-mode/references/status-and-messages.md").read_text()
+
+def header_section(text):
+    start = text.index("The header is")
+    end = text.index("\n", text.index("keeps its own form", start))
+    return [re.sub(r"\s+", " ", l).strip() for l in text[start:end].splitlines() if l.strip()]
+
+placeholders = [
+    ('"s-stack-phase-launcher"', '"<feature>-phase-<phase>"'),
+    ('phase: "launcher"', 'phase: "<phase>"'),
+    ("2026-11-20_21-37-12-s-stack", "<id>"),
+    ("launcher-evidence", "<phase>-evidence"),
+    ('"launcher-r1"', '"<phase>-r1"'),
+    ('"launcher-d1"', '"<phase>-d1"'),
+    ('branch: "s-stack-launcher"', 'branch: "<pull request branch>"'),
+    ('base: "main"', 'base: "<default branch>"'),
+    ("chore(s-stack)", "chore(<feature>)"),
+    ("tracker at `status/orchestrator.md`", "tracker at `.foundry/plans/<id>/status/orchestrator.md`"),
+]
+expected = []
+for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):
+    for old, new in placeholders:
+        line = line.replace(old, new)
+    expected.append(line)
+shipped = header_section(ref)
+
+def without_code_head(lines):
+    hits = [k for k, l in enumerate(lines) if l.startswith("- **Code head.**")]
+    if len(hits) != 1:
+        sys.exit("FAIL: expected exactly one Code head rule")
+    return lines[hits[0]], lines[:hits[0]] + lines[hits[0] + 1:]
+
+rule, shipped_rest = without_code_head(shipped)
+_, expected_rest = without_code_head(expected)
+problems = []
+if "`git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`" not in rule:
+    problems.append("code-head rule lacks the general command")
+if any(s in rule for s in ("apm.lock.yaml", "s-stack-package", "versioning.py")):
+    problems.append("code-head rule carries this run's generated-files exemption")
+if "worktree root" not in rule or "generated paths" not in rule:
+    problems.append("code-head rule lacks the worktree-root or generated-paths sentence")
+problems += difflib.unified_diff(expected_rest, shipped_rest, "C2 with placeholders", "reference", lineterm="", n=0)
+print("\n".join(problems) or "reference matches C2 apart from the allowed differences")
+sys.exit(1 if problems else 0)
+EOF
+```
+
+Expected: exit `0` and `reference matches C2 apart from the allowed differences`. On the reference at `13f835b` it exits `1` and prints the append-only sentences of the **Evidence** rule.
+
 ## Evidence
 
 ### C2 conformance of the reference at `512edd797f497f955ca5a0175faead7c18a8c2d8`

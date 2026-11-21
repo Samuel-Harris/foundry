@@ -1,0 +1,159 @@
+from __future__ import annotations
+
+import unittest
+
+from launcher_case import Geometry, LauncherTestCase
+
+
+class PlacementTests(LauncherTestCase):
+    sidebar = False
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.make_feature_worktree()
+        self.first = self.panes()[0]["id"]
+        if self.sidebar:
+            self.sidebar_pane = self.add_sidebar()
+
+    def start(self, *args: str, name: str, env: dict[str, str] | None = None) -> str:
+        return self.started(self.launch("--feature", "f", *args, "--window", self.window, env=env), name=name).pane
+
+    def assert_split(self, *, before: dict[str, Geometry], target: str, new: str) -> Geometry:
+        """Only target was split: new is the one new pane and every other pane kept its id, size and position."""
+        after = self.geometry()
+        self.assertEqual(set(after) - set(before), {new})
+        self.assertEqual({p: after.get(p) for p in before if p != target}, {p: g for p, g in before.items() if p != target})
+        return after[new]
+
+    def right_of(self, *, pane: str) -> int:
+        g = self.geometry()[pane]
+        return g.left + g.width - 1
+
+    def test_orchestrator_goes_under_the_first_spec_writer(self) -> None:
+        spec = self.split(target=self.first, flags=["-h"], command="claude --name f-spec")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=spec, new=self.start("--role", "orchestrator", name="f-orchestrator"))
+
+        self.assertEqual((new.left, new.width), (before[spec].left, before[spec].width))
+        self.assertGreater(new.top, before[spec].top)
+
+    def test_orchestrator_without_a_spec_writer_goes_under_the_topmost_pane_of_the_first_column(self) -> None:
+        self.split(target=self.first, flags=["-h"])
+        lower = self.split(target=self.first, flags=["-v"])
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=self.first, new=self.start("--role", "orchestrator", name="f-orchestrator"))
+
+        self.assertEqual(new.left, before[self.first].left)
+        self.assertGreater(new.top, before[self.first].top)
+        self.assertLess(new.top, before[lower].top)
+
+    def test_a_planner_splits_the_orchestrator_pane_when_no_session_lies_right_of_its_column(self) -> None:
+        self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "planner", name="f-planner"))
+
+        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+        self.assertLessEqual(new.width, self.geometry()[orchestrator].width)
+        self.assertEqual((new.top, new.height), (before[orchestrator].top, before[orchestrator].height))
+
+    def test_a_phase_splits_the_largest_session_pane_right_of_the_column_and_never_a_developer_pane(self) -> None:
+        self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        planner = self.start("--role", "planner", name="f-planner")
+        phase_p = self.start("--role", "phase", "--phase", "p", name="f-phase-p")
+        self.assertGreater(self.geometry()[phase_p].left, self.right_of(pane=orchestrator))
+        self.tmux("resize-pane", "-t", phase_p, "-y", "5")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=planner, new=self.start("--role", "phase", "--phase", "q", name="f-phase-q"))
+
+        self.assertEqual((new.left, new.width), (before[planner].left, before[planner].width))
+        self.assertGreater(new.top, before[planner].top)
+
+    def test_a_session_pane_wide_enough_for_two_is_split_side_by_side(self) -> None:
+        self.tmux("resize-window", "-t", self.window, "-x", "500", "-y", "50")
+        self.start("--role", "orchestrator", name="f-orchestrator")
+        planner = self.start("--role", "planner", name="f-planner")
+        before = self.geometry()
+        self.assertGreaterEqual(before[planner].width, 161)
+
+        new = self.assert_split(before=before, target=planner, new=self.start("--role", "phase", "--phase", "p", name="f-phase-p"))
+
+        self.assertGreater(new.left, before[planner].left)
+        self.assertEqual((new.top, new.height), (before[planner].top, before[planner].height))
+
+    def test_update_spec_writers_stack_under_the_orchestrator_above_a_developer_pane(self) -> None:
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        developer = self.split(target=orchestrator, flags=["-v"])
+
+        before = self.geometry()
+        first = self.start("--role", "spec", "--update", "1", name="f-spec-1")
+        new = self.assert_split(before=before, target=orchestrator, new=first)
+        self.assertEqual(new.left, before[orchestrator].left)
+        self.assertGreater(new.top, before[orchestrator].top)
+        self.assertLess(new.top, before[developer].top)
+
+        before = self.geometry()
+        new = self.assert_split(before=before, target=first, new=self.start("--role", "spec", "--update", "2", name="f-spec-2"))
+        self.assertGreater(new.top, before[first].top)
+        self.assertLess(new.top, before[developer].top)
+
+    def test_a_developer_pane_in_the_orchestrator_column_is_never_touched(self) -> None:
+        developer = self.split(target=self.first, flags=["-v"])
+        before = self.geometry()[developer]
+        launches = [
+            (("--role", "orchestrator"), "f-orchestrator"),
+            (("--role", "planner"), "f-planner"),
+            (("--role", "phase", "--phase", "p"), "f-phase-p"),
+            (("--role", "spec", "--update", "1"), "f-spec-1"),
+            (("--role", "spec"), "f-spec"),
+        ]
+        for args, name in launches:
+            self.start(*args, name=name)
+            self.assertEqual(self.geometry().get(developer), before, name)
+
+    def test_sessions_the_orchestrator_starts_need_its_pane_in_the_window(self) -> None:
+        self.tmux("new-window", "-d", "-c", str(self.worktree("f")), "claude --name f-orchestrator")
+        self.wait_for(lambda: self.named_claudes("f-orchestrator"), message="no orchestrator in the other window")
+        for args in (("--role", "planner"), ("--role", "phase", "--phase", "p"), ("--role", "spec", "--update", "1")):
+            with self.subTest(args=args):
+                before = self.geometry()
+
+                result = self.launch("--feature", "f", *args, "--window", self.window)
+
+                self.assertEqual((result.returncode, result.stdout), (1, ""), result.stderr)
+                self.assertIn(f"no f-orchestrator pane in {self.window}", result.stderr)
+                self.assertEqual(self.geometry(), before)
+        self.assertEqual([c.args.split()[2] for c in self.claude_processes()], ["f-orchestrator"])
+
+    def test_a_resurrected_orchestrator_places_sessions_like_a_launched_one(self) -> None:
+        orchestrator = self.split(target=self.first, flags=["-v"], command="claude --continue")
+
+        before = self.geometry()
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "phase", "--phase", "p", name="f-phase-p"))
+        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+
+        before = self.geometry()
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "spec", "--update", "1", name="f-spec-1"))
+        self.assertEqual(new.left, before[orchestrator].left)
+        self.assertGreater(new.top, before[orchestrator].top)
+
+    def test_placement_works_without_a_utf8_locale(self) -> None:
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "planner", name="f-planner", env=self.c_locale()))
+
+        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+
+
+class PlacementWithSidebarTests(PlacementTests):
+    sidebar = True
+
+
+if __name__ == "__main__":
+    unittest.main()

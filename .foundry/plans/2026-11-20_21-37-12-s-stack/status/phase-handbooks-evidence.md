@@ -232,3 +232,13 @@ A later review covered `bbd35bd` and `52afb2a`, with clean merges `e826e6a`, `c5
 Significant, and found by both reviewers independently: PR step 4's resend condition ("once your status file shows PR and your current code head is merged into the orchestrator branch") omits the orchestrator's first condition, that every pull request has merged into the default branch, new ones included. Read cold, the phase reaches Done while its new fix pull request is still open, or before it exists.
 
 Not significant, recorded only: the SIGNIFICANT, NOT VERIFIED and INCONCLUSIVE table rows carry no code-head qualifier (readers resolved them from "A verdict covers only the code head it names"); a restart in PR after a merge moved the code head is covered only by the restart and merge-orchestrator-branch sentences (the reader acted correctly); whether merged pull requests stay in `pull_requests`; and the `state` sent on an ignored notice (the reference file's known lag).
+
+## Verify: NOT VERIFIED at `771ac5da563603602759cd6a1b18acd7a6123760`
+
+A fresh verifier ran the whole verification skill on 2026-11-21 between 18:18 and 18:21 UTC, at HEAD `dd80f74`, and made no commit. Everything passed except the one-off cold read of the merged notice, which shows an early Done:
+
+- PR step 1 commits state PR before step 3 records the new pull request.
+- In that window, every recorded pull request has merged, and the reader assumed the orchestrator might already have merged the code head.
+- If the notice arrived then, the phase would move to Done with its fix in no pull request.
+
+The orchestrator's handbook closes the window: it merges a phase only while the phase lists an open pull request (`orchestrator.md` at `131526e`, as the orchestrator stated). But `phase-session.md` does not say so. Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets, package isolation, Tier 1 18:18:37 to 18:21:04, every Rerun cold read of all three check files, the C2 check, and the private-name search (0 hits). Pending, not failing: two routes and the launcher tests.

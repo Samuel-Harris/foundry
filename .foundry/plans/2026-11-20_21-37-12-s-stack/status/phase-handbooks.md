@@ -1,7 +1,7 @@
 ---
 phase: "phase-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T18:17:41Z"
+state: "Implement"
+changed_at: "2026-11-21T18:22:37Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
 code_head: "771ac5da563603602759cd6a1b18acd7a6123760"
@@ -102,6 +102,11 @@ verdicts:
     code_head: "52afb2aaf8bf4136369f33bbe38aba122e8b1220"
     at: "2026-11-21T18:17:18Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "771ac5da563603602759cd6a1b18acd7a6123760"
+    at: "2026-11-21T18:22:37Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
 pull_requests:
   - number: 85
     branch: "s-stack-phase-handbooks"
@@ -142,4 +147,4 @@ Correction from the orchestrator: under the run decision on generated files, a c
 Fix bbd35bd: the move-back rule asks only about gates already passed, a stale VERIFIED in Verify reruns Verify, the resend condition says merged into the orchestrator branch (confirmed by the orchestrator), a Done phase asked to change code moves back to Implement, and the PR creator opens a new pull request for commits no open one carries.
 The orchestrator withdrew the no-verdict move-back rule before any verifier started. Back to Implement to delete it, keeping the resend wording and the rework-after-Done path.
 Fix 52afb2a drops the no-verdict move-back rule. bbd35bd's other fixes stand. Verify returned VERIFIED at 52afb2a. Review returned SIGNIFICANT at 52afb2a: the resend condition omitted that every pull request, new ones included, must have merged into the default branch. Back to Implement.
-Fix 771ac5d: the merged notice is resent only once every pull request, new ones included, has merged into the default branch, the status shows PR and the code head is merged into the orchestrator branch.
+Fix 771ac5d: the merged notice is resent only once every pull request, new ones included, has merged into the default branch, the status shows PR and the code head is merged into the orchestrator branch. Verify returned NOT VERIFIED at 771ac5d: phase-session.md alone allowed an early Done between moving to PR and recording the new pull request. Back to Implement.

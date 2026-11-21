@@ -51,7 +51,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 - The time of the last tick, and when the recurring tick was created.
 - Live sessions: name, pane, worktree, started, the tick in which it began stopping, if it is stopping, and whether you have told it that every pull request merged. Drop a session's row when you close its pane.
 - Open decision requests: id, phase, door, since.
-- Pull requests under watch: number, phase, branch, base, depends on, `needs_update`.
+- Pull requests under watch: number, phase, branch, base, depends on, `needs_update`, and the code head at each phase's last `prs-open`.
 - Merged phases: merge commit, phase code head, post-merge check result.
 
 ## The tick
@@ -83,7 +83,7 @@ The board documents a tick writes:
 
 ## Merging a phase
 
-A phase may merge when its status header lists at least one pull request. If you have merged the phase before, one of them must be open, or merged into the default branch after the phase's current code head was committed, so a pull request the developer reviewed or can review holds its new code. It also needs the reference file's verdict rule to hold for the code head, and a code head you have not already merged. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
+A phase may merge when its status header lists at least one pull request, it has sent `prs-open` since its current code head was committed, the reference file's verdict rule holds for the code head, and you have not already merged that code head. The phase sends `prs-open` only after its PR creator has carried every commit to a pull request, so the message is what shows that a pull request holds its code. Record the code head each `prs-open` arrived at. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
 
 To abort a merge, run `git merge --abort`. If it refuses because a hook or check rewrote a file, run `git checkout -- <path>` for each file it names, and abort again. Then run `git checkout -- <path>` for each file outside `.foundry/` that `git status --porcelain --untracked-files=no` still lists, because a hook can rewrite files the merge did not touch.
 
@@ -108,7 +108,7 @@ Merge the default branch into the orchestrator branch on the orchestrator branch
 
 ## When a feature pull request lands
 
-A pull request's checks do not run again when its base moves. Two pull requests can each pass, merge, and together break the default branch. So in the tick that finds such a merge, for every open pull request of the feature:
+A pull request's checks do not run again when its base moves. Two pull requests can each pass, merge, and together break the default branch. So in the tick that finds such a merge, for every open pull request of the feature whose phase is in PR, and in the first tick a phase is back in PR for those of its pull requests whose `needs_update` is still true:
 
 - Send its phase a `fix-round` of the kind "A pull request merged", naming the merged pull request, or the default branch commit when no feature pull request merged. The phase refreshes its pull requests and works out each base again, without new gates.
 - Set its `needs_update` to true in the tracker and on the board.
@@ -124,7 +124,7 @@ In tick step 4, for each merged phase, do every step below whose condition holds
 - Not every pull request has merged, its status is PR, you have merged its current code head, its pane is open, it is not stopping, its status has no `waits_for`, and it is quiet: send `stop`, because nothing is left for it to do.
 - Every pull request has merged, its status is PR, you have merged its current code head and it passed its post-merge check, and it is not marked told: start its session if its pane is closed, then send an `instruction` saying that every pull request has merged into the default branch, and mark it told. It then moves to Done. Clear the mark whenever its status leaves PR, its code head changes, or it replies to the notice with a `state` other than PR.
 - Its status is Done, its pane is open, it is not stopping, and it is quiet: send `stop`.
-- Its status is Done, its pane is closed, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and is exempt from the merge limits in tick step 4. If it conflicts or a hook refuses it, abort it. When the files at fault are the phase's own status files, start its session and send an `instruction` that names them and says to fix them in a commit that holds only `.foundry/` files and to stay Done. Otherwise tell the developer. Never send `merge-orchestrator-branch` here, because it would move a Done phase's code head. If the code head has changed, start the session and send `move-back` to Implement, because no verdict covers that code. It merges again only once a new pull request holds that code.
+- Its status is Done, its pane is closed, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and is exempt from the merge limits in tick step 4. If it conflicts or a hook refuses it, abort it. When the files at fault are the phase's own status files and this is the first refusal since it reached Done, start its session and send an `instruction` that names them and says to fix them in a commit that holds only `.foundry/` files and to stay Done. Otherwise tell the developer, and do not retry until they answer. Never send `merge-orchestrator-branch` here, because it would move a Done phase's code head. If the code head has changed, start the session and send `move-back` to Implement, because no verdict covers that code. It merges again only once it has sent `prs-open` for that code, as [Merging a phase](#merging-a-phase) says.
 - Its status is Done, its pane is closed, and its branch is fully merged: remove its worktree with `--remove`.
 
 ## Fix rounds
@@ -162,7 +162,7 @@ When the developer asks for a roadmap change, start an update spec writer with `
 
 ## Restarts
 
-When you start again, read the tracker, every status file, workmux's status and every open pull request before you act. Arm the tick, then run a tick. Start each phase session that still has work with the launcher, which resumes its conversation. Facts sent while a session was down are still in the sender's files, and the reconcile step finds them.
+When you start again, read the tracker, every status file, workmux's status and every open pull request before you act. Arm the tick, then run a tick. Start each phase session that still has work with the launcher, which resumes its conversation, and ask each phase in PR, with an `instruction`, to send `prs-open` again. Facts sent while a session was down are still in the sender's files, and the reconcile step finds them.
 
 ## Ending the feature
 

@@ -28,7 +28,7 @@ Run `<this skill's directory>/scripts/launch.sh` from the feature worktree's roo
 | `--close` | Close the session's pane. It changes nothing unless the pane runs that session. |
 | `--remove` | Remove the session's worktree. It refuses unless the worktree is clean and its branch is merged into the orchestrator branch. |
 
-Record each `started` or `alive` pane in the tracker. Exit 4 means the window has no room: start the session when a pane closes. Any other failure prints its cause. Fix it, or tell the developer when a tool is missing.
+The launcher places every pane. Never place or move panes yourself, and leave alone any pane the developer adds to your column. Record each `started` or `alive` pane in the tracker. Exit 4 means the window has no room: start the session when a pane closes. Any other failure prints its cause. Fix it, or tell the developer when a tool is missing.
 
 Before you message a phase whose pane is closed, start its session with the launcher.
 
@@ -49,7 +49,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 - The window, the default branch, the default branch commit last merged, and the default branch commit whose new commits step 2's pull request duties last handled.
 - The board's and the architecture page's addresses, and the orchestrator branch commit the page describes.
 - The time of the last tick, and when the recurring tick was created.
-- Live sessions: name, pane, worktree, started.
+- Live sessions: name, pane, worktree, started, whether it is stopping, and whether you have told it that every pull request merged.
 - Open decision requests: id, phase, door, since.
 - Pull requests under watch: number, phase, branch, base, depends on, `needs_update`.
 - Merged phases: merge commit, phase code head, post-merge check result.
@@ -83,7 +83,7 @@ The board documents a tick writes:
 
 ## Merging a phase
 
-A phase may merge when its status header lists its open pull requests and the reference file's verdict rule holds for the code head. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
+A phase may merge when its status header lists its open pull requests, the reference file's verdict rule holds for the code head, and you have not already merged that code head. Read the phase branch's tip SHA first, then compute the code head yourself from that SHA with the reference file's command and the feature plan's generated-path excludes. Merge only that SHA.
 
 To abort a merge, run `git merge --abort`. If it refuses because a hook or check rewrote a file, run `git checkout -- <path>` for each file it names, and abort again. Then run `git checkout -- <path>` for each file outside `.foundry/` that `git status --porcelain --untracked-files=no` still lists, because a hook can rewrite files the merge did not touch.
 
@@ -93,7 +93,7 @@ To abort a merge, run `git merge --abort`. If it refuses because a hook or check
 4. Have a fresh subagent run the feature's verification skill on the orchestrator branch. Record the result in the tracker.
 5. If the check fails, the orchestrator branch is frozen until a later check passes. Send `move-back` to Implement to the phase, naming the failed check. Before it verifies again it merges the orchestrator branch, which holds the combination that failed. While frozen, start no new phase, merge no other phase and not the default branch, and send `merge-orchestrator-branch` to no other phase. Merge the phase again only when both its newest verdicts name a code head newer than the one that failed.
 6. If it passes, send `merge-orchestrator-branch` to every other live phase that has not reached PR, and start the phases that now have their dependencies.
-7. After a passing check only, send the merged phase `stop`. [Finishing a phase](#finishing-a-phase) closes its pane once the stop commit lands. Its worktree stays until the phase is Done.
+7. After a passing check only, send the merged phase `stop`. [Finishing a phase](#finishing-a-phase) closes its pane once it is idle. Its worktree stays until the phase is Done.
 
 ## Merging the default branch
 
@@ -119,14 +119,13 @@ A pull request is ready for the developer to merge only when its `needs_update` 
 
 ## Finishing a phase
 
-In tick step 4, for each merged phase, do every step below whose condition holds. Each step is safe to repeat, so a step that waits on a commit happens in a later tick.
+In tick step 4, for each merged phase, do every step below whose condition holds. Each step reads the record, so repeating it is safe and a step that waits happens in a later tick. A session is stopping from the moment you send it `stop` until you next send it any other message or start it. Mark that in the tracker.
 
-A stopped session below means one whose branch has a stop commit newer than its start time in the tracker, so a session you have just started again has not stopped. Record each start time when you start a session.
-
-- Its status is not Done, its pane is open, and its session has stopped: close the pane with `--close`.
-- Every pull request has merged, its status is not Done, and its pane is closed: start its session, which moves the phase to Done, and send it `stop`.
-- Its status is Done, its session has stopped, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and does not count against the one-merge limit. If the code head has changed, send `move-back` to Implement, because no verdict covers that code.
-- Its status is Done and its branch is fully merged: close its pane with `--close` if it is open, and remove its worktree with `--remove`.
+- It is stopping and workmux shows it idle: close its pane with `--close`.
+- Every pull request has merged, its status is not Done, and you have not told it so since it last started: start its session if its pane is closed, then send an `instruction` saying that every pull request has merged into the default branch. It then moves to Done.
+- Its status is Done and its pane is open: send `stop` if it is not already stopping.
+- Its status is Done, its pane is closed, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and does not count against the one-merge limit. If the code head has changed, start the session and send `move-back` to Implement, because no verdict covers that code.
+- Its status is Done, its pane is closed, and its branch is fully merged: remove its worktree with `--remove`.
 
 ## Fix rounds
 
@@ -159,7 +158,7 @@ Record the commit it describes in the tracker.
 
 ## Roadmap updates
 
-When the developer asks for a roadmap change, start an update spec writer with `--update <n>`. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, and merge it with `--no-ff`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner when the phases change.
+When the developer asks for a roadmap change, start an update spec writer with `--role spec --update <n>`. The launcher puts it in your column, where the developer talks to it. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, and merge it with `--no-ff`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner when the phases change.
 
 ## Restarts
 

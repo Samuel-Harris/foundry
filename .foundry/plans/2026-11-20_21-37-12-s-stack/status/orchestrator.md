@@ -8,9 +8,9 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 21:52 |
-| Default branch merged at | `6f42b1c` (#85, into `7409b48`) |
+| Architecture page describes | `d3dd837` (version 6) |
+| Last tick | 2026-11-21 23:52 |
+| Default branch merged at | `51f334e` (#86, into `853a26d`) |
 
 ## Live sessions
 
@@ -19,6 +19,7 @@
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
+| `s-stack-phase-foundation` | `%192` | `../s-stack-phase-foundation` | 2026-11-21, follow-up round for the 17 queued items |
 
 ## Open decision requests
 
@@ -32,7 +33,8 @@ None.
 | 82 | `foundation` | merged into `main` as `e4a18d1` | | |
 | 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
 | 85 | `phase-handbooks` | merged into `main` as `6f42b1c` | | |
-| 86 | `board` | `s-stack-board` | `main` | none |
+| 86 | `board` | merged into `main` as `51f334e` | | |
+| 87 | `spec-planner-handbooks` | `s-stack-spec-planner-port-rule` | `main` | none |
 
 ## Merged phases
 
@@ -43,16 +45,15 @@ None.
 | `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
 | `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | VERIFIED on `ce086bb` |
 | `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | VERIFIED on `3ce7d34` |
+| `spec-planner-handbooks` (follow-up) | `b89a458` (tip `40c3e56`) | `47f792f` | VERIFIED on `8f735d6` |
 
 ## Closed sessions
 
 | Session | Worktree | Closed | Last commit |
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
-| `s-stack-phase-foundation` | removed, branch kept | 2026-11-21 | Done at `d7a6cb3`, merged; #81 and #82 merged into `main` |
-| `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-21 | Done at `b9429a2`, merged; #84 merged into `main` |
 | `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-21 | Done at `0cb6af5`, merged; #85 merged into `main` |
-| `s-stack-phase-board` | `../s-stack-phase-board` | 2026-11-21 | `22e6ab0`, merged at `a606589`; worktree kept for fix rounds on #86 |
+| `s-stack-phase-board` | removed, branch kept | 2026-11-21 | Done at `c7dcf1a`, merged; #86 merged into `main` |
 
 ## Queued fix rounds
 
@@ -104,3 +105,17 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 - `spec-planner-handbooks` (Done, needs a follow-up round): in `checks/spec-planner-handbooks.md`, reword cold read 1's expected point 5 to "Port 5432 is named as an exclusive resource of the sharing back-end phase. Naming it for another phase under a stated assumption neither passes nor fails this point." A check passed 5 of 5 runs on `s-stack-package`, but strict graders can fail it, which would wrongly fail a post-merge check. `planner.md` needs no change.
 - `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` must say a delegate's work lands on the phase branch by `git cherry-pick -x`, never by merging the delegate's branch. The only merges on a phase branch's first-parent line are merges of the orchestrator branch. `pr-creator.md` fails its proof on any other merge there (raised by `pr-handbook`'s tenth verification at `345764c`).
 - `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` line 111, the "A conflict with the default branch" round, should do nothing when the branch already holds the named commit, not restart Implement and both gates. `orchestrator.md` at `b33f4a5` no longer repeats that round, so this only hardens against a duplicate message.
+
+## Follow-ups after foundation's round merges
+
+Raised by `foundation`'s follow-up review. They point at text that round adds, so they wait for it to merge.
+
+- `phase-handbooks` and `spec-planner-handbooks`: `phase-session.md` line 26 and `planner.md` line 54 mention only generated paths. Say "generated paths and generated lines", because the reference's code head now excludes plan-named lines such as `^version:`. (Medium.)
+- `spec-planner-handbooks`: `spec-writer.md` lines 36 to 43 copy the launch steps. Point to `SKILL.md`'s "Starting a session", keeping the failure handling in one place.
+- `board` (Done): `assets/status-board.html` lines 77 and 283 still offer a "restack" need, but the restack kind is gone under automatic stacking.
+- Low: `planner.md` lines 21 and 61 and `spec-writer.md` line 54 restate payloads the reference owns. Point to it instead.
+- `phase-handbooks`: `phase-session.md`'s "Feedback on a pull request" round must handle commits a developer made on a pull request branch. Cherry-pick each into the phase branch with `-x`, pass both gates, then have the PR creator refresh. `pr-creator.md` reports them as `DEVELOPER-COMMITS`. (Medium, common path.)
+
+## Post-merge check briefs
+
+Tell the post-merge verifier to grade every cold read with Opus subagents, not Sonnet. `spec-planner-handbooks` found Sonnet graders flaky on a correct answer to its point 3.

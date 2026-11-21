@@ -33,3 +33,15 @@ Minor, to be fixed in the current Implement round:
 Minor, recorded and not fixed:
 
 - A `tick_at` with no time zone (`2026-11-21T16:03:00`) is read as local time, so the stale verdict depends on the viewer's time zone. The schema requires UTC with `Z`, and the orchestrator writes `Z` times.
+
+## Verify gate, code head `a678a49d30e83b4d65ce068b8120ac192e61595c`, VERIFIED
+
+A fresh verifier rewrote `tests/s-stack/verify-s-stack/checks/board.md` at `a678a49` and verified the template as of `2f575c8`, which is unchanged since.
+
+- The `## Rerun` check runs 19 scenarios. They assert every section's content, `stale_after_min` at its boundaries (39 and 41 minutes with the default, 50 and 61 minutes with 60 sent), the no-database, unreachable and subscription-error states, that the page never writes, the OS dark theme, no page scroll at 400 px, no broken word at 1000 px, the dependency map in this run's shape (three columns, 13 edges, 7 dashed, no crossings), unknown nodes, cycles and unreadable entries, digit-string numbers, focus and `scrollLeft` surviving a snapshot, and no injection.
+- 53 single-replacement mutants of the template each make the Rerun exit 1, including all twelve mutations listed by the earlier Review gate. The phase session checked the mutant summary (53 rows, every exit code 1) and reran the Rerun at 2026-11-21T16:53:47Z: exit 0, tree clean.
+- Verification skill: checks 1, 2, 3, 5, 7 and 8 PASS. Tier 1 passed across 20 packages. Checks 4 and 6 are PENDING, as the skill allows.
+- Second private test page: https://claude.ai/artifact/G7cbKuJYQXZruLTazZqpLJ, placeholder rows only. Batch 1 wrote 15 documents, including this run's eight-phase dependency shape. Batch 2 set `tick_at` 39 minutes back and then the page showed 41 minutes stale, with the version unchanged. The page was read the same way as before (served HTML, view-level reads, the rows rendered in the served skeleton).
+- A cold reader given only the schema comment wrote a valid first batch with `depends_on`. `grep innerHTML` finds nothing. `apm audit --ci` passes.
+
+Known gap, unchanged: no browser tool was available, so nobody has watched the claude.ai viewer render either test page.

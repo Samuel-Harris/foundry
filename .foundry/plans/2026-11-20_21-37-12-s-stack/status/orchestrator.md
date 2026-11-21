@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 18:11 |
+| Last tick | 2026-11-21 18:38 |
 | Default branch merged at | `e4a18d1` (#82, #84, into `321f333`) |
 
 ## Live sessions
@@ -33,7 +33,7 @@ None.
 | 81 | `foundation` | merged into `main` as `d7e036c` | | |
 | 82 | `foundation` | merged into `main` as `e4a18d1` | | |
 | 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
-| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `main` | none; needs a refresh |
+| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `main` | none; rebuilt at `f54b7b8` |
 
 ## Merged phases
 
@@ -42,6 +42,7 @@ None.
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
 | `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
 | `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
+| `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | running |
 
 ## Closed sessions
 
@@ -93,3 +94,5 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 ## Deferred follow-ups for live phases
 
 - `phase-handbooks`: widen "a Done phase asked to change code moves back to Implement" to any state past Implement (Verify, Review, PR, Done). It covers a phase in PR whose code changes after its pull requests merged, for example from a direct instruction from the developer. Fold this into its next Implement round, or send it as a follow-up fix round. It fails safe meanwhile. Raised by `orchestrator-handbook` at `03d2899`.
+- After every handbook phase is merged, have a fresh subagent do one cross-handbook read-through on `s-stack-package`: orchestrator, phase-session, verifier, reviewer, pr-creator, spec-writer and planner, plus the reference file. Collect the recorded handshake edge cases from each phase's evidence file. Route the fixes to the owning phases, or to the foundation round for the reference file.
+  - Include: can `orchestrator.md` send the merged notice to a phase that has just entered PR (PR step 1) before `prs-open` lists its new pull request? Check against the re-merge guard and the notice's conditions. Raised by `phase-handbooks`' reviewers at `a1c95f1`.

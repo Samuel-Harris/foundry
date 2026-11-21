@@ -16,3 +16,7 @@ A fresh verifier subagent wrote `tests/s-stack/verify-s-stack/checks/spec-planne
 | 8. Check files | PASS. Three foundation cold reads, the C2 comparison and both spec-planner-handbooks cold reads |
 
 Verdict: VERIFIED. The verifier noted two small gaps, which the phase session fixes in a new code head: `planner.md` did not say what happens when a phase must depend on two open phases, and `spec-writer.md` did not say which command's output to report.
+
+## Verify, code head `08874f390fa5e43df00cb90946b113b92f1fb1e0`
+
+A second fresh verifier ran the full skill again at HEAD `8d22ba0` and left the check file unchanged. Checks 1, 2, 3, 5, 7 and 8 passed. Check 4 is pending on the five handbooks other phases own, and check 6 is pending on the launcher's tests. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0, which the phase session confirmed in the log. All four Done-when items passed, and both cold reads matched their expected answers point by point. Verdict: VERIFIED. Minor note: in `planner.md` the sentence that gives every phase its own check file sits inside the "no existing verification skill" bullet.

@@ -9,7 +9,7 @@
 | Status board | not yet published |
 | Architecture page | not yet published |
 | Architecture page describes | none |
-| Last tick | 2026-11-21 13:11 |
+| Last tick | 2026-11-21 13:32 |
 
 ## Live sessions
 

@@ -7,7 +7,7 @@ description: "Verifies the s-stack package in Foundry: structural validation, ma
 
 This skill proves the `s-stack` package on the checked-out branch. It lives under `tests/` because Foundry ignores `.claude/` and `.agents/`, so it is not a deployed primitive and agents read it by path.
 
-Run every command from the repository root, in the order below. Run check 7 outside the agent sandbox. APM creates `.cursor/` directories in its staging areas whatever the targets, and the sandbox denies writes beneath `.cursor` and to `$HOME/.apm/`, so Tier 1 fails there for reasons unrelated to the package.
+Run every command from the repository root, in the order below. Run check 7 outside the agent sandbox; `AGENTS.md`, "Run it outside the agent sandbox", says why.
 
 ## Before you start
 
@@ -20,16 +20,17 @@ uv venv .venv-apm && uv pip install --python .venv-apm/bin/python apm-cli==0.32.
 ```bash
 git rev-parse --show-toplevel && git rev-parse HEAD && git branch --show-current
 .venv-apm/bin/apm --version
-git status --short --ignored > "${TMPDIR:-/tmp}/verify-s-stack-$(basename "$PWD").txt"
 ```
 
-The first line must be the working directory. Record the HEAD SHA in the report. The `apm` line must print version `0.32.0`. The last command snapshots the worktree for cleanup, so it runs after the venv exists.
+`git rev-parse --show-toplevel` must print the current directory. Record the HEAD SHA in the report. The `apm` line must print version `0.32.0`.
 
 ## Checks
 
 Report each check with its command, its output and one of PASS, FAIL or PENDING. Unless a check says otherwise, PASS means every command in it exits `0`.
 
 ### 1. Primitives and root manifest
+
+A fast pre-flight. Tier 1 in check 7 runs the same two scripts again. The venv's `python3` goes first on `PATH` because it has the PyYAML that `validate_primitives.py` needs and the system `python3` lacks.
 
 ```bash
 PATH="$PWD/.venv-apm/bin:$PATH" python3 tests/structural/validate_primitives.py
@@ -38,8 +39,10 @@ python3 tests/structural/check_root_manifest.py
 
 ### 2. Markdown lint
 
+`.githooks/pre-commit` owns the linter pin, and `MARKDOWNLINT_CLI2_VERSION` overrides it.
+
 ```bash
-npx --yes markdownlint-cli2@0.14.0 "packages/s-stack/**/*.md" "tests/s-stack/**/*.md"
+npx --yes "markdownlint-cli2@${MARKDOWNLINT_CLI2_VERSION:-0.14.0}" "packages/s-stack/**/*.md" "tests/s-stack/**/*.md"
 ```
 
 ### 3. Line budgets
@@ -64,12 +67,12 @@ EOF
 
 ### 4. Handbook routes
 
-Every `handbooks/<role>.md` code span in `SKILL.md` names a handbook. PASS when every one exists, PENDING when any is missing, FAIL when the command prints nothing. A missing route never fails here. The strict form, in which a missing route fails, belongs to the `default-stack` phase.
+Every `handbooks/<role>.md` code span in `SKILL.md` names a handbook. Judge this check on its printed output, not its exit code: PASS when every line is `present`, PENDING when any line is `PENDING`, FAIL when it prints nothing. A missing route never fails here. The strict form, in which a missing route fails, belongs to the `default-stack` phase.
 
 ```bash
 bash <<'EOF'
 d=packages/s-stack/.apm/skills/sam-mode
-grep -o '`handbooks/[a-z0-9-]*\.md`' "$d/SKILL.md" | tr -d '`' | sort -u | while read -r route; do
+grep -oE '`handbooks/[a-z0-9-]+\.md`' "$d/SKILL.md" | tr -d '`' | sort -u | while read -r route; do
   if [ -f "$d/$route" ]; then echo "present $route"; else echo "PENDING $route"; fi
 done
 EOF
@@ -77,7 +80,7 @@ EOF
 
 ### 5. Package isolation
 
-No relative Markdown link inside `sam-mode` resolves outside `packages/s-stack/`, and no file under `packages/p-stack` differs from the default branch. Never assume the default branch is `main`. PASS when the first command exits `0` and the `git diff` prints nothing.
+No relative Markdown link inside `sam-mode` resolves outside `packages/s-stack/`, and no file under `packages/p-stack` changed on this branch. Never assume the default branch is `main`. PASS when both commands exit `0` and the diff prints nothing.
 
 ```bash
 python3 - <<'EOF'
@@ -99,10 +102,16 @@ EOF
 ```
 
 ```bash
-base="$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name 2>/dev/null)"
-[ -n "$base" ] || base="$(git symbolic-ref --short refs/remotes/origin/HEAD | sed 's#^origin/##')"
+bash <<'EOF'
+set -euo pipefail
+base="$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name 2>/dev/null || true)"
+[ -n "$base" ] || base="$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##' || true)"
+if [ -z "$base" ]; then echo "FAIL: cannot resolve the default branch" >&2; exit 1; fi
 echo "default branch: $base"
-git diff --name-only "$(git merge-base "origin/$base" HEAD)" -- packages/p-stack
+git fetch -q origin "$base"
+merge_base="$(git merge-base "origin/$base" HEAD)" || { echo "FAIL: no merge-base between origin/$base and HEAD" >&2; exit 1; }
+git diff --name-only "$merge_base" -- packages/p-stack
+EOF
 ```
 
 ### 6. Launcher tests
@@ -150,13 +159,10 @@ List the HEAD SHA, then each check with its command, output and result. End with
 
 ## Cleanup
 
-Tier 1 removes its scratch directory on exit but leaves gitignored deploy output, such as `.agents/`, `.claude/` and `dist/`, in each package. Remove every ignored path that is new since the snapshot, unless it holds a tracked file, then confirm the worktree matches the snapshot. Kill only processes you started.
+Tier 1 leaves gitignored deploy output in each package. Remove only that, with this command, which deletes ignored files under those paths and never a tracked file:
 
 ```bash
-bash <<'EOF'
-before="${TMPDIR:-/tmp}/verify-s-stack-$(basename "$PWD").txt"
-new=$(git status --short --ignored | diff "$before" - | sed -n 's/^> !! //p')
-if [ -n "$new" ] && [ -z "$(git ls-files -- $new)" ]; then rm -rf -- $new; fi
-git status --short --ignored | diff "$before" - && echo "worktree matches the snapshot"
-EOF
+git clean -fdX -- 'packages/*/apm_modules' 'packages/*/.agents' 'packages/*/.claude' 'packages/*/.claude-plugin' 'packages/*/.cursor' 'packages/*/.github' 'packages/*/dist'
 ```
+
+Then `git status --short` must show no change the run made. Kill only processes you started.

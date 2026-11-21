@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Done"
-changed_at: "2026-11-21T17:59:48Z"
+state: "PR"
+changed_at: "2026-11-21T23:36:16Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
+code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -32,11 +32,46 @@ verdicts:
     code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
     at: "2026-11-21T16:13:07Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
+    at: "2026-11-21T23:10:01Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
+    at: "2026-11-21T23:14:37Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "ba02397c72378fd5d5a54389d49b9ee7011f52ee"
+    at: "2026-11-21T23:19:32Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "1f6216019e8b1c657d52e1c360285e2bc2516ef5"
+    at: "2026-11-21T23:25:34Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
+    at: "2026-11-21T23:31:04Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
+    at: "2026-11-21T23:36:16Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
     base: "main"
     depends_on: [82]
+    stacked: false
+  - number: 87
+    branch: "s-stack-spec-planner-port-rule"
+    base: "main"
+    depends_on: []
     stacked: false
 requests: []
 decisions:
@@ -52,8 +87,20 @@ decisions:
     decision: "Instruction from the orchestrator: a CLEAR review moves the phase straight to PR. Minor findings go in the evidence file, and only one that would mislead a reader or break a real run is fixed. The cycle at a6652c7 finishes first."
     door: "two-way"
     at: "2026-11-21T16:08:21Z"
+  - id: "spec-planner-handbooks-d4"
+    decision: "Point 5 keeps the orchestrator's intent but not its exact wording. It restores 'or the local test database on it', and it fails an answer whose own assumptions put a concurrent phase on that database without naming it there. Review at 49f2959 showed the given wording passed such an answer, which the old point failed."
+    door: "two-way"
+    at: "2026-11-21T23:14:37Z"
+  - id: "spec-planner-handbooks-d5"
+    decision: "planner.md's exclusive-resources bullet says that phases sharing an exclusive resource never run at the same time, as roadmap roles.md line 46 says of the orchestrator. Cold read 1's point 3 requires those phases to run one after the other. A real planner run claimed such phases could run together, and graders split on it."
+    door: "two-way"
+    at: "2026-11-21T23:25:34Z"
+  - id: "spec-planner-handbooks-d6"
+    decision: "Answer to spec-planner-handbooks-r1, option A, from the orchestrator. The follow-up pull request ships on direct-comparison evidence: its tree equals main with both files from 47f792f plus generated lines. pr-handbook's proof cannot account for #84, which predates its cherry-pick trailers."
+    door: "two-way"
+    at: "2026-11-21T23:43:47Z"
 ---
 
 # Phase `spec-planner-handbooks` status
 
-Done. Pull request 84 merged into `main` as `0531411`, and the orchestrator merged code head `6f70b37` into `s-stack-package`. Both handbooks and the check file are on `main`.
+Follow-up round. Both gates passed for `47f792f`. The evidence for the pull request branch `s-stack-spec-planner-port-rule` (`5da7f5d`) is recorded under option A of `spec-planner-handbooks-r1`, and a PR creator is pushing it and opening the draft pull request.

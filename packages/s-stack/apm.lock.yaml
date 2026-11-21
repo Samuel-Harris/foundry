@@ -2474,7 +2474,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:280f5b75d4c6ef764f577a4fa88ceeda914952d272f0b3b08032d7e57aa33250
+  content_hash: sha256:844aebd1790c6f963786cf19352e0ba0eac3838e80ac34d3fff72bb26b7210b1
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/references/status-and-messages.md
@@ -5264,7 +5264,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:280f5b75d4c6ef764f577a4fa88ceeda914952d272f0b3b08032d7e57aa33250
+  content_hash: sha256:844aebd1790c6f963786cf19352e0ba0eac3838e80ac34d3fff72bb26b7210b1
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/references/status-and-messages.md
@@ -5285,8 +5285,8 @@ local_deployed_files:
 - .claude/skills/sam-mode/references/status-and-messages.md
 local_deployed_file_hashes:
   .agents/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
-  .agents/skills/sam-mode/assets/status-board.html: sha256:280f5b75d4c6ef764f577a4fa88ceeda914952d272f0b3b08032d7e57aa33250
+  .agents/skills/sam-mode/assets/status-board.html: sha256:844aebd1790c6f963786cf19352e0ba0eac3838e80ac34d3fff72bb26b7210b1
   .agents/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60
   .claude/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
-  .claude/skills/sam-mode/assets/status-board.html: sha256:280f5b75d4c6ef764f577a4fa88ceeda914952d272f0b3b08032d7e57aa33250
+  .claude/skills/sam-mode/assets/status-board.html: sha256:844aebd1790c6f963786cf19352e0ba0eac3838e80ac34d3fff72bb26b7210b1
   .claude/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60

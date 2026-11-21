@@ -83,7 +83,7 @@ and its checks have passed on that head.
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-  /* One narrow column: header, notices, then six sections split by hairlines. */
+  /* One column up to 960 px wide: header, notices, then six sections split by hairlines. */
   :root {
     --bg: #f5f7fa;
     --fg: #1a2130;
@@ -185,7 +185,8 @@ and its checks have passed on that head.
     font-size: 0.78rem;
     font-weight: 500;
     line-height: 1.6;
-    white-space: nowrap;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
   .chip.good { background: var(--good-bg); color: var(--good); }
   .chip.warn { background: var(--warn-bg); color: var(--warn); }
@@ -213,7 +214,8 @@ and its checks have passed on that head.
   }
 
   ol.recent { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-  ol.recent > li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; }
+  ol.recent > li { display: grid; grid-template-columns: minmax(0, max-content) minmax(8em, 1fr); gap: 12px; }
+  ol.recent > li > :first-child { overflow-wrap: anywhere; }
   .heartbeat { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
 </style>
 
@@ -241,18 +243,24 @@ and its checks have passed on that head.
   const DEFAULT_STALE_MIN = 40;
   const MINUTE = 60000;
 
+  const SOURCES = {
+    meta: (db) => db.doc("board/meta"),
+    recent: (db) => db.doc("board/recent"),
+    phases: (db) => db.collection("phases"),
+    prs: (db) => db.collection("prs"),
+    needs: (db) => db.collection("needs"),
+  };
+
   const state = {
     meta: null,
     recent: null,
     phases: [],
     prs: [],
     needs: [],
-    loaded: {meta: false, recent: false, phases: false, prs: false, needs: false},
-    errors: {},
+    status: Object.fromEntries(Object.keys(SOURCES).map((source) => [source, "loading"])),
+    noDatabase: false,
+    waitedLong: false,
   };
-  const confirmed = new Set();
-  let unreachable = false;
-  let unreachableTimer;
 
   const $ = (id) => document.getElementById(id);
 
@@ -309,7 +317,11 @@ and its checks have passed on that head.
     const tone = {passing: "good", pending: "warn", failing: "crit"}[checks];
     return chip(str(checks) || "none", tone);
   }
-  const updateChip = (pr) => (pr.needs_update === true ? chip("Needs update", "warn") : chip("Up to date", "good"));
+  function updateChip(pr) {
+    if (pr.needs_update === true) return chip("Needs update", "warn");
+    if (pr.needs_update === false) return chip("Up to date", "good");
+    return null;
+  }
 
   function phaseStateChip(s) {
     if (!STATE_NAMES.includes(s)) return chip("unknown: " + str(s), "crit");
@@ -323,16 +335,18 @@ and its checks have passed on that head.
     return (Number(a.number) || 0) - (Number(b.number) || 0);
   }
 
+  const unmergedNumbers = (prs) =>
+    new Set(prs.filter((p) => p.state === "draft" || p.state === "open").map((p) => p.number));
+
   // A dependency cycle falls back to rank order, so no draft drops off the list.
   function reviewOrder(prs) {
-    const unmerged = new Set(prs.filter((p) => p.state !== "merged").map((p) => p.number));
     const remaining = prs.filter((p) => p.state === "draft").sort(byRankThenNumber);
     const inList = new Set(remaining.map((p) => p.number));
     const emitted = new Set();
     const ordered = [];
     while (remaining.length) {
       const next = remaining.findIndex((p) =>
-        numbers(p.depends_on).every((n) => !unmerged.has(n) || !inList.has(n) || emitted.has(n)));
+        numbers(p.depends_on).every((n) => !inList.has(n) || emitted.has(n)));
       if (next === -1) {
         ordered.push(...remaining);
         break;
@@ -341,7 +355,7 @@ and its checks have passed on that head.
       emitted.add(pr.number);
       ordered.push(pr);
     }
-    return {ordered, unmerged};
+    return ordered;
   }
 
   function staleness() {
@@ -361,14 +375,17 @@ and its checks have passed on that head.
     return section;
   }
 
-  function sourceStatus(section, source) {
-    const code = state.errors[source];
-    if (code) {
+  const isLoaded = (source) => state.status[source] === "cached" || state.status[source] === "live";
+
+  function renderLoadState(section, source) {
+    const status = state.status[source];
+    if (isObj(status)) {
       section.append(el("p", {class: "section-error"},
-        "This section stopped updating (" + code + "). Reload the page to try again."));
+        "This section stopped updating (" + status.error + "). Reload the page to try again."));
+      return false;
     }
-    if (!state.loaded[source]) {
-      if (!code) section.append(el("p", {class: "empty"}, "Loading."));
+    if (status === "loading") {
+      section.append(el("p", {class: "empty"}, "Loading."));
       return false;
     }
     return true;
@@ -381,7 +398,7 @@ and its checks have passed on that head.
         el("tr", {}, ...cells.map((cell, i) => el("td", {"data-label": columns[i]}, cell))))));
   }
 
-  function renderHeader() {
+  function renderHeader({stale, age}) {
     const meta = state.meta || {};
     const feature = str(meta.feature);
     $("feature").textContent = feature || "Status board";
@@ -390,13 +407,10 @@ and its checks have passed on that head.
     line.replaceChildren();
     if (str(meta.orchestrator_branch)) line.append(el("span", {}, "orchestrator ", el("span", {class: "mono"}, str(meta.orchestrator_branch))));
     if (str(meta.default_branch)) line.append(el("span", {}, "default ", el("span", {class: "mono"}, str(meta.default_branch))));
-    if (typeof meta.architecture_url === "string" && meta.architecture_url.startsWith("https://")) {
-      line.append(link("Architecture", meta.architecture_url));
-    }
+    if (str(meta.architecture_url)) line.append(link("Architecture", meta.architecture_url));
 
     const banner = $("stale-banner");
-    const {stale, age} = staleness();
-    banner.hidden = !(state.loaded.meta && stale);
+    banner.hidden = !(state.status.meta === "live" && stale);
     if (age === null) banner.textContent = "The orchestrator has not recorded a readable tick yet.";
     else banner.textContent = "The orchestrator has not ticked for " + Math.floor(age / MINUTE) + " minutes.";
   }
@@ -405,9 +419,12 @@ and its checks have passed on that head.
     const kindRank = (k) => (NEED_KINDS.includes(k) ? NEED_KINDS.indexOf(k) : NEED_KINDS.length);
     const sinceKey = (n) => parseTime(n.since) ?? Infinity;
     const needs = state.needs.slice().sort((a, b) => kindRank(a.kind) - kindRank(b.kind) || sinceKey(a) - sinceKey(b));
-    const section = sectionShell("s-needs", "Needs you", state.loaded.needs ? needs.length : null);
-    if (!sourceStatus(section, "needs")) return;
-    if (!needs.length) return section.append(el("p", {class: "empty"}, "Nothing needs you."));
+    const section = sectionShell("s-needs", "Needs you", isLoaded("needs") ? needs.length : null);
+    if (!renderLoadState(section, "needs")) return;
+    if (!needs.length) {
+      section.append(el("p", {class: "empty"}, "Nothing needs you."));
+      return;
+    }
     section.append(el("ul", {class: "items"}, ...needs.map((n) => {
       const since = parseTime(n.since);
       const waiting = since === null ? "since " + (str(n.since) || "unknown") : "waiting " + formatAge(Date.now() - since);
@@ -423,10 +440,14 @@ and its checks have passed on that head.
   }
 
   function renderReview() {
-    const {ordered, unmerged} = reviewOrder(state.prs);
-    const section = sectionShell("s-review", "Ready for your review", state.loaded.prs ? ordered.length : null);
-    if (!sourceStatus(section, "prs")) return;
-    if (!ordered.length) return section.append(el("p", {class: "empty"}, "No draft pull requests yet."));
+    const ordered = reviewOrder(state.prs);
+    const unmerged = unmergedNumbers(state.prs);
+    const section = sectionShell("s-review", "Ready for your review", isLoaded("prs") ? ordered.length : null);
+    if (!renderLoadState(section, "prs")) return;
+    if (!ordered.length) {
+      section.append(el("p", {class: "empty"}, "No draft pull requests yet."));
+      return;
+    }
     section.append(el("ul", {class: "items", id: "review-list"}, ...ordered.map((p) => {
       const after = numbers(p.depends_on).filter((n) => unmerged.has(n));
       return el("li", {"data-number": str(p.number)},
@@ -443,9 +464,12 @@ and its checks have passed on that head.
 
   function renderPrs() {
     const prs = state.prs.slice().sort((a, b) => (Number(a.number) || 0) - (Number(b.number) || 0));
-    const section = sectionShell("s-prs", "Pull requests", state.loaded.prs ? prs.length : null);
-    if (!sourceStatus(section, "prs")) return;
-    if (!prs.length) return section.append(el("p", {class: "empty"}, "No pull requests yet."));
+    const section = sectionShell("s-prs", "Pull requests", isLoaded("prs") ? prs.length : null);
+    if (!renderLoadState(section, "prs")) return;
+    if (!prs.length) {
+      section.append(el("p", {class: "empty"}, "No pull requests yet."));
+      return;
+    }
     const deps = (p) => numbers(p.depends_on);
     section.append(table(
       ["Number", "Title", "Phase", "State", "Checks", "Base", "Depends on", "Update"],
@@ -463,10 +487,11 @@ and its checks have passed on that head.
 
   function renderPhases() {
     const phases = state.phases.slice().sort((a, b) => str(a.phase).localeCompare(str(b.phase)));
-    const section = sectionShell("s-phases", "Phases", state.loaded.phases ? phases.length : null);
-    if (!sourceStatus(section, "phases")) return;
+    const section = sectionShell("s-phases", "Phases", isLoaded("phases") ? phases.length : null);
+    if (!renderLoadState(section, "phases")) return;
     if (!phases.length) {
-      return section.append(el("p", {class: "empty"}, "No phases yet. The orchestrator adds them once the feature plan exists."));
+      section.append(el("p", {class: "empty"}, "No phases yet. The orchestrator adds them once the feature plan exists."));
+      return;
     }
     section.append(table(
       ["Phase", "State", "Scheduling", "Waits for", "Session", "Last change"],
@@ -484,9 +509,12 @@ and its checks have passed on that head.
 
   function renderRecent() {
     const items = isObj(state.recent) && Array.isArray(state.recent.items) ? state.recent.items.filter(isObj).slice(0, 20) : [];
-    const section = sectionShell("s-recent", "Recent changes", state.loaded.recent ? items.length : null);
-    if (!sourceStatus(section, "recent")) return;
-    if (!items.length) return section.append(el("p", {class: "empty"}, "No state changes yet."));
+    const section = sectionShell("s-recent", "Recent changes", isLoaded("recent") ? items.length : null);
+    if (!renderLoadState(section, "recent")) return;
+    if (!items.length) {
+      section.append(el("p", {class: "empty"}, "No state changes yet."));
+      return;
+    }
     section.append(el("ol", {class: "recent"}, ...items.map((item) =>
       el("li", {},
         timeEl(item.at, "absolute"),
@@ -495,73 +523,70 @@ and its checks have passed on that head.
           el("span", {}, (str(item.from) ? str(item.from) + " → " : "→ ") + str(item.to)))))));
   }
 
-  function renderHeartbeat() {
+  function renderHeartbeat({stale, age}) {
     const section = sectionShell("s-heartbeat", "Heartbeat", null);
-    if (!sourceStatus(section, "meta")) return;
-    const {stale} = staleness();
+    if (!renderLoadState(section, "meta")) return;
     const tickAt = state.meta && state.meta.tick_at;
-    const status = stale ? chip("Stale", "crit") : chip("Fresh", "good");
-    if (tickAt == null) return section.append(el("div", {class: "heartbeat"}, status, el("span", {class: "empty"}, "No tick recorded yet.")));
-    const tick = parseTime(tickAt);
+    let status = null;
+    if (state.status.meta === "live") status = stale ? chip("Stale", "crit") : chip("Fresh", "good");
+    if (age === null) {
+      section.append(el("div", {class: "heartbeat"},
+        status,
+        el("span", {class: "empty"}, "No tick recorded yet."),
+        tickAt == null ? null : el("span", {class: "mono"}, str(tickAt) || "unknown")));
+      return;
+    }
     section.append(el("div", {class: "heartbeat"},
       status,
       el("span", {}, "last tick ", timeEl(tickAt, "absolute")),
-      tick === null ? null : el("span", {class: "sub num"}, formatAge(Date.now() - tick) + " ago")));
+      el("span", {class: "sub num"}, formatAge(age) + " ago")));
+  }
+
+  function renderNotice() {
+    const waiting = Object.values(state.status).some((s) => s === "loading" || s === "cached");
+    let message = null;
+    if (state.noDatabase) {
+      message = "This board reads its data from the page's database, which this view cannot open. Open the board in Claude.";
+    } else if (state.waitedLong && waiting) {
+      message = "The board's data can't be reached yet. What is shown may be out of date.";
+    }
+    $("sections").hidden = state.noDatabase;
+    $("notice").hidden = message === null;
+    $("notice").textContent = message || "";
   }
 
   function render() {
-    renderHeader();
+    const tick = staleness();
+    renderHeader(tick);
     renderNeeds();
     renderReview();
     renderPrs();
     renderPhases();
     renderRecent();
-    renderHeartbeat();
-    const notice = $("notice");
-    notice.hidden = !unreachable;
-    notice.textContent = "The board's data can't be reached yet. What is shown may be out of date.";
-  }
-
-  const SOURCES = {
-    meta: (db) => db.doc("board/meta"),
-    recent: (db) => db.doc("board/recent"),
-    phases: (db) => db.collection("phases"),
-    prs: (db) => db.collection("prs"),
-    needs: (db) => db.collection("needs"),
-  };
-
-  function settled(source) {
-    confirmed.add(source);
-    if (Object.keys(SOURCES).every((s) => confirmed.has(s))) {
-      clearTimeout(unreachableTimer);
-      unreachable = false;
-    }
+    renderHeartbeat(tick);
+    renderNotice();
   }
 
   async function start() {
     render();
     const db = window.claude ? await window.claude.use("db") : null;
     if (!db) {
-      $("sections").hidden = true;
-      const notice = $("notice");
-      notice.hidden = false;
-      notice.textContent = "This board reads its data from the page's database, which this view cannot open. Open the board in Claude.";
+      state.noDatabase = true;
+      render();
       return;
     }
-    unreachableTimer = setTimeout(() => {
-      unreachable = true;
+    setTimeout(() => {
+      state.waitedLong = true;
       render();
     }, 10000);
     for (const [source, ref] of Object.entries(SOURCES)) {
       ref(db).onSnapshot((snap) => {
         if ("docs" in snap) state[source] = snap.docs.map((d) => d.data()).filter(isObj);
         else state[source] = snap.exists ? snap.data() : null;
-        state.loaded[source] = true;
-        if (!snap.metadata.fromCache) settled(source);
+        state.status[source] = snap.metadata.fromCache ? "cached" : "live";
         render();
       }, (error) => {
-        state.errors[source] = str(error && error.code) || "unavailable";
-        settled(source);
+        state.status[source] = {error: str(error && error.code) || "unavailable"};
         render();
       });
     }

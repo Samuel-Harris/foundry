@@ -8,9 +8,9 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `dcdda28` (version 3) |
-| Last tick | 2026-11-21 16:11 |
-| Default branch merged at | `f7772cc` (into `7e04846`) |
+| Architecture page describes | `1a97298` (version 4) |
+| Last tick | 2026-11-21 16:32 |
+| Default branch merged at | `d7e036c` (#81, into `8093a85`) |
 
 ## Live sessions
 
@@ -19,7 +19,6 @@
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
 | `s-stack-phase-board` | `%173` | `../s-stack-phase-board` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
-| `s-stack-phase-phase-handbooks` | `%175` | `../s-stack-phase-phase-handbooks` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 
 ## Open decision requests
@@ -30,9 +29,10 @@ None.
 
 | Number | Phase | Branch | Base | Depends on |
 | --- | --- | --- | --- | --- |
-| 81 | `foundation` | `s-stack-foundation-package` | `main` | none |
-| 82 | `foundation` | `s-stack-verify-skill` | `s-stack-foundation-package` | 81 |
+| 81 | `foundation` | merged into `main` as `d7e036c` | | |
+| 82 | `foundation` | `s-stack-verify-skill` | `main` | none |
 | 84 | `spec-planner-handbooks` | `s-stack-spec-planner-handbooks` | `main` | 81, 82 |
+| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `s-stack-verify-skill` (stacked on 82) | 82 |
 
 ## Merged phases
 
@@ -40,6 +40,7 @@ None.
 | --- | --- | --- | --- |
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
 | `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
+| `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
 
 ## Closed sessions
 
@@ -48,6 +49,7 @@ None.
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
 | `s-stack-phase-foundation` | `../s-stack-phase-foundation` | 2026-11-21 | `5df64c0`, merged at `7c4f36d`; worktree kept for fix rounds |
 | `s-stack-phase-spec-planner-handbooks` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 | `22340be`, merged at `4739703`; worktree kept for fix rounds |
+| `s-stack-phase-phase-handbooks` | `../s-stack-phase-phase-handbooks` | 2026-11-21 | `88ebe79`, merged at `377dc78`; worktree kept for fix rounds |
 
 ## Queued fix rounds
 
@@ -64,6 +66,9 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 9. `SKILL.md`: a commit never mixes `.foundry/` with other files, except a merge of the orchestrator branch, which always does. `phase-session.md` already states this exception. Raised by `phase-handbooks`.
 10. `references/status-and-messages.md`: the orchestrator table also needs a kind for "every pull request merged". Raised by `phase-handbooks` (extends item 5).
 11. `references/status-and-messages.md`: the code-head command follows git history simplification, so after a merge it can resolve to a commit off the phase branch's first-parent line. Add `--first-parent`, and check that a pre-Verify merge that brings in code still moves the code head. Raised by `phase-handbooks`.
+12. `references/status-and-messages.md`: write generated-path exclusions with glob magic, `':(exclude,glob)**/<name>'`. The plain `':(exclude)**/<name>'` does not match a file at the repository root. Foundry is safe only because its root `apm.lock.yaml` is gitignored. Raised by `orchestrator-handbook`.
+13. `tests/s-stack/verify-s-stack/SKILL.md` check 8: `## Evidence` must not "record one-off checks with their results". Results go in the phase's evidence file under `.foundry/`, as the no evidence-exception run decision says. The feature plan's C6 has the same wording, and that run decision overrides it. Raised by `phase-handbooks`.
+14. `references/status-and-messages.md`: drop the `restack` orchestrator message kind. PR creators now restack themselves (run decision, automatic stacking). Raised by `orchestrator-handbook`. Also remove the `restack` row from `phase-session.md` (line 97 at `c666afd`) in `phase-handbooks`' next fix round.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
@@ -71,3 +76,9 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 - After the pre-commit hook has rewritten a staged lockfile, `git merge --abort` exits 128 and leaves `MERGE_HEAD`. Recover with `git reset --merge`, then check `git status`. Found by `orchestrator-handbook` (review of `e0a51a2`).
 - Read a phase's tip and its code head in one step, and merge that tip SHA, not the branch name, so no commit added after the verdicts check can slip in.
+
+## Queued roadmap update
+
+At the end of the run, start a spec writer to fold `run-decisions.md` into the roadmap. At least these items: `coordination.md` "The launcher" and "Restarts" and C4 now resume by stored id with `--print-window`, `--close`, `--remove` and exit 5; `roles.md` drops the Orchestrate playbook pointer; the status board gains the dependency map and session labels; the generated-files rules for code heads, conflicts and the line limit. Raised by `launcher`.
+
+Known launcher limits to record in that update: a pane left at its shell after `claude` exits is not reused, and `--close` does not clear it, so a relaunch adds a pane. A restarted spec writer needs `--window`.

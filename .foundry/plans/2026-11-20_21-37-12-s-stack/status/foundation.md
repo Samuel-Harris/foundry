@@ -4,7 +4,7 @@ state: "Verify"
 changed_at: "2026-11-21T23:21:51Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
-code_head: "829f3b1dd5c4d6c2b6a2a5d5d6b8c1fbd4a9c9c3"
+code_head: "829f3b1982124399b5ea54f8b597d62b7c8779a9"
 waits_for: null
 verdicts:
   - gate: "verify"

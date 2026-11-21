@@ -49,7 +49,7 @@ One-off checks. Each touches something outside a unit test, such as the real `cl
 
 ### Mutations
 
-Apply each change to `launch.sh`, run the unit suite, and restore the file with `git checkout --`. Use at least these: add `tmux select-layout tiled` after the split; make liveness never match; drop the session lock; drop `--resume`; put a planner or phase session in the orchestrator's column; split the workmux sidebar; drop the window placement lock; measure a zoomed window without unzooming it; skip the re-zoom when the split fails; never reuse a session's own idle pane; reuse a busy own pane; never take over a stale lock; split without `-f`; skip the width restore after the full-span split; let an unnamed `claude` count beside a named orchestrator; drop `-u` from tmux.
+Apply each change to `launch.sh`, run the unit suite, and restore the file with `git checkout --`. Use at least these: add `tmux select-layout tiled` after the split; make liveness never match; drop the session lock; drop `--resume`; put a planner or phase session in the orchestrator's column; split the workmux sidebar; drop the window placement lock; measure a zoomed window without unzooming it; skip the re-zoom when the split fails; never reuse a session's own idle pane; reuse a busy own pane; never take over a stale lock; split without `-f`; skip the width restore after the full-span split; let an unnamed `claude` count beside a named orchestrator; drop `-u` from tmux; delete the argument rule in `pane_is_idle`, so a shell running a script or `-c` command counts as idle; break a stale lock without the breaker; read start times in the local time zone; ignore an unnamed `claude` in the session's own tagged pane; let `--close` close a busy tagged pane.
 
 It passes when every mutation makes at least one named test fail and the unmutated suite passes.
 
@@ -77,7 +77,7 @@ It passes when the launcher accepts every form.
 
 ### Live session
 
-Use the real `claude`, `workmux` and tmux on a private server, in a scratch repository outside this one. The repository needs a bare `origin` with `main`, a clone whose `refs/remotes/origin/HEAD` is set, and a branch holding `.foundry/feature-roadmaps/2026-11-21_00-00-00-probe/`. Start the orchestrator's pane first, because a phase session is placed to its right. Then launch one phase session, accepting the folder-trust dialog of the scratch folder in the private pane if it appears. Its cursor starts on "No, exit", so press Down and then Enter. Launch the same command again. Exit the session with `/exit` and launch once more. Afterwards, remove the scratch worktree with `workmux remove <name> --keep-branch --force` in the scratch repository and kill the private server.
+Use the real `claude`, `workmux` and tmux on a private server, in a scratch repository outside this one. The repository needs a bare `origin` with `main`, a clone whose `refs/remotes/origin/HEAD` is set, and a branch holding `.foundry/feature-roadmaps/2026-11-21_00-00-00-probe/`. Start the orchestrator's pane first, because a phase session is placed to its right. Then launch one phase session, accepting the folder-trust dialog of the scratch folder in the private pane if it appears. Wait until the dialog has drawn, because a key sent earlier chooses "No, exit". Its cursor starts on "No, exit", so press Down and then Enter. Launch the same command again. Exit the session with `/exit` and launch once more. Afterwards, remove the scratch worktree with `workmux remove <name> --keep-branch --force` in the scratch repository and kill the private server.
 
 It passes when all of these hold:
 
@@ -85,4 +85,4 @@ It passes when all of these hold:
 - The second launch prints `alive <name> pane=<pane id>` and changes no pane.
 - The relaunch after `/exit` runs `claude --name <name> --resume <id>`, where `<id>` is the id stored at `s-stack-sessions/<name>` in the worktree's git directory, and the pane shows the earlier conversation.
 - The relaunch after `/exit` prints the same `pane=<pane id>` as the first launch, and the window's pane count is unchanged.
-- The developer's own tmux server still has exactly the sessions it had before.
+- Nothing the check started is left on the developer's own tmux server: no window, pane or `@s-stack-session` tag from the check. The server may have gained windows the developer opened.

@@ -211,3 +211,15 @@ Recorded and not fixed: a phase still in PR whose code moved after every pull re
 | A refused status-only merge sends a Done phase `merge-orchestrator-branch`. That moves its code head with no code of its own (probe D) and strands it. | Fable | Scratch-repository script, rerun; cold read |
 | A pull request whose `needs_update` was already true gets two generated-only rounds in a tick where a feature pull request lands. | Fable | Cold read |
 | The base `fix-round` and the developer's restack request have no handler that matches across the handbooks. | Opus, Fable | Cold reads |
+
+## Verify 14, code head `ac632959e2a8aef4ba50e9e4c24b5305017fb475`, INCONCLUSIVE
+
+A fresh verifier updated the check file for `bab4569` (commit `ac63295`, with new cold reads R to V) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`170/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. In check 8, all three scripts pass and 30 of 31 cold reads pass. Cold read Q had not reported at hand-back, so the verdict is INCONCLUSIVE.
+
+Defects it named:
+
+- The idle-phase `stop` fired on one idle reading, so a session mid-round could be stopped. This breaks a real run, and is inferred.
+- A Done phase reopened for a fix round was stopped with no idle check, which misleads a reader.
+- A refused status-only merge whose cause is not the phase's own file loops, which misleads a reader.
+
+The phase moved back to Implement. The redesign replaces every single idle reading with one "quiet" test: idle at this tick and the previous tick, with no new commit between them. It folds in the orchestrator's message mapping onto `phase-session.md`'s handlers and its new merge condition for a phase whose fix pull request merged first.

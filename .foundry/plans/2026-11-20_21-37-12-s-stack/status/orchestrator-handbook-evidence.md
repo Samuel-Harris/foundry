@@ -182,3 +182,19 @@ One-off results at `5831c24`:
 - A private-name grep found 0 hits, with a positive control of 3.
 
 One defect breaks a real run. A phase sent back after Done, whose pull requests have all merged, returns to PR with no open pull request for its new code. Whether it then merges, or waits for good, depended on how "lists its open pull requests" is read. The orchestrator side is fixed by requiring at least one open pull request. Opening one for that code belongs to `phase-session.md` and the PR creator, and was reported to the orchestrator. The phase moved back to Implement.
+
+## Verify 13, code head `03d289910511be372577e92aa690b0088836b4a5`, VERIFIED
+
+A fresh verifier updated cold reads F, M, N and Q for `131526e` (commit `03d2899`) and ran every check to completion. The code head was computed under the run's generated-files rule: `af6d5ff` changed only a `version:` line outside lockfiles. C6 checks 1, 2, 3, 5 and 7 PASS (`169/200 handbooks/orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: three scripts and 26 cold reads across four check files.
+
+Every **Done when** item was met:
+
+- The handbook has 169 lines, and no code span or fenced block starts with workmux, tmux or claude.
+- All nine launcher flags appear in `launch.sh`'s usage text on the `launcher` phase branch.
+- A private-name grep found 0 hits, with a positive control of 6.
+
+Recorded and not fixed: a phase still in PR whose code moved after every pull request merged has no step. It is the same cross-phase gap as Verify 12's. `phase-session.md` neither moves back on its own new code nor opens a pull request for it, and a `move-back` from the orchestrator would only turn the wait into a loop until it does. It was reported to the orchestrator for `phase-handbooks` and `pr-handbook`. Other minor notes:
+
+- A docs-only default-branch move leaves an already cleared `needs_update`, which matches C7.
+- No action is given for a failing planner path check.
+- The architecture page's commit is recorded after the tracker commit.

@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T18:01:38Z"
+state: "Review"
+changed_at: "2026-11-21T18:09:55Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "131526ee513334a57717b2299ef871a6a1879918"
+code_head: "03d289910511be372577e92aa690b0088836b4a5"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -71,6 +71,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "5831c24172b69250013c6355b521cd195a755958"
     at: "2026-11-21T18:00:53Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "03d289910511be372577e92aa690b0088836b4a5"
+    at: "2026-11-21T18:09:55Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -150,3 +155,5 @@ The Verify 11 fixes are at `b5cc777`, and the orchestrator's told-mark instructi
 The twelfth Verify gate returned VERIFIED at `5831c24`. One defect in a cross-phase contract would break a real run, so the phase moved back to Implement for its side of the fix.
 
 The open-pull-request requirement is at `131526e`. `s-stack-package` (`d7aac72`) was merged at `af6d5ff`. Outside lockfiles, that merge changed only s-stack's version line, 0.1.0 to 0.1.1, from `main`, so under the run's generated-files decision the code head stays at `131526e`. Both `foundation` pull requests have merged into `main`. The phase moved to Verify at code head `131526e`.
+
+The thirteenth Verify gate returned VERIFIED at `03d2899`. The phase moved to Review, which covers the commits since `7ccd3ee`.

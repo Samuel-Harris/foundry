@@ -1,10 +1,10 @@
 ---
 phase: "phase-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T16:37:03Z"
+state: "Verify"
+changed_at: "2026-11-21T16:37:34Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
-code_head: "d32a56ae3096f5df29e5608aa6b6c146183c7dd6"
+code_head: "e592b60a89859ab19e1ba2f298e9f7a34d047cae"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -65,3 +65,4 @@ The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/phase-ha
 Fix 305a26e says the session follows a direct instruction and builds what an open request cannot change, and gives the verifier a verdict for a skill without the check-file step. s-stack-package merged again (only .foundry/ came in). The second Verify gate returned VERIFIED at 305a26e. The first Review gate returned SIGNIFICANT at 305a26e, with four findings in verifier.md, reviewer.md and phase-session.md. Back to Implement.
 Fix 6b60476 addresses the four significant review findings. s-stack-package merged at d88dfe0 (only .foundry/). The third Verify gate returned VERIFIED at 6758c7d, the verifier's evidence commit. The second Review gate returned SIGNIFICANT at 6758c7d, with three findings. Back to Implement, with the orchestrator's merge-orchestrator-branch request for spec-planner-handbooks taken in the same round.
 Fix 73b5410 addresses the three findings of the second review. s-stack-package merged at cddb4b0 with the C7 procedure; it brought spec-planner-handbooks (planner.md, spec-writer.md, their check file) and a lockfile-only conflict, resolved by regenerating. The merge moved the code head to cddb4b0. The fourth Verify gate returned VERIFIED at d32a56a. The third Review gate returned SIGNIFICANT at d32a56a: a stale expected answer in the check file and a Verdicts sentence in phase-session.md. Back to Implement.
+Fix e592b60 addresses the third review's handbook findings. The stale expected answer in the check file goes to the next verifier. s-stack-package merged again (only .foundry/).

@@ -1,10 +1,10 @@
 ---
 phase: "foundation"
-state: "Implement"
-changed_at: "2026-11-21T23:05:52Z"
+state: "Verify"
+changed_at: "2026-11-21T23:21:51Z"
 session: "s-stack-phase-foundation"
 branch: "s-stack-phase-foundation"
-code_head: "50e26eebaa31524a81e0cc00d99edf4bdad0e2dc"
+code_head: "829f3b1dd5c4d6c2b6a2a5d5d6b8c1fbd4a9c9c3"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -71,7 +71,7 @@ decisions:
 
 # Phase `foundation` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The first Review gate returned SIGNIFICANT at 0f4bf86. The fix round (ce16529, c68877a, b27c4f1) repaired the verification files and added the foundation-d2 sentence. s-stack-package was merged at 5b346fa. The third Verify gate returned VERIFIED at b27c4f1. The second Review gate, over the commits since 0f4bf86, returned SIGNIFICANT at b27c4f1: the link checker's new fence stripping hides real links. Fix round 50e26ee parses Markdown with markdown-it-py (foundation-d3), compares the code-head rule on every branch, and narrows the cleanup. s-stack-package was merged at 7f51eff. The fourth Verify gate returned VERIFIED at 50e26ee. The third Review gate, over b27c4f1..50e26ee, returned CLEAR. Both verdicts cover 50e26ee. Draft pull requests 81 (the package and its wiring) and 82 (the verification skill, stacked on 81 in GitHub stack 83) are open. The equality proof shows that together they hold exactly the verified phase diff. Both merged into main, #81 as d7e036c and #82 as e4a18d1. The phase reached Done, then moved back to Implement for the orchestrator's follow-up round of 17 queued items in SKILL.md, the status reference and the verification skill. s-stack-package was merged at 9feaae9.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/foundation.md`. The first Verify gate returned NOT VERIFIED: the shipped reference added an append-only evidence rule that C2 and foundation-d1 do not allow. The fix, 0eba66d, removes it. The second Verify gate returned VERIFIED at 0f4bf86, the verifier's commit that adds a C2 conformance check. The first Review gate returned SIGNIFICANT at 0f4bf86. The fix round (ce16529, c68877a, b27c4f1) repaired the verification files and added the foundation-d2 sentence. s-stack-package was merged at 5b346fa. The third Verify gate returned VERIFIED at b27c4f1. The second Review gate, over the commits since 0f4bf86, returned SIGNIFICANT at b27c4f1: the link checker's new fence stripping hides real links. Fix round 50e26ee parses Markdown with markdown-it-py (foundation-d3), compares the code-head rule on every branch, and narrows the cleanup. s-stack-package was merged at 7f51eff. The fourth Verify gate returned VERIFIED at 50e26ee. The third Review gate, over b27c4f1..50e26ee, returned CLEAR. Both verdicts cover 50e26ee. Draft pull requests 81 (the package and its wiring) and 82 (the verification skill, stacked on 81 in GitHub stack 83) are open. The equality proof shows that together they hold exactly the verified phase diff. Both merged into main, #81 as d7e036c and #82 as e4a18d1. The phase reached Done, then moved back to Implement for the orchestrator's follow-up round of 17 queued items in SKILL.md, the status reference and the verification skill. s-stack-package was merged at 9feaae9 and again at eb3ad81. The round's commits are 28fb827, 4e35b4a, b02556c and 829f3b1, after one quick-review fix pass. The follow-up Verify gate is running.
 
 ## Notes
 

@@ -240,6 +240,7 @@ and its checks have passed on that head.
   ol.recent > li { display: grid; grid-template-columns: minmax(0, max-content) minmax(8em, 1fr); gap: 12px; }
   ol.recent > li > :first-child { overflow-wrap: anywhere; }
   .deps { max-width: 100%; }
+  .deps .chip { white-space: normal; overflow-wrap: anywhere; border-radius: 6px; }
   .map-heading { margin: 6px 0 0; font-size: 0.85rem; font-weight: 600; }
   .map { overflow-x: auto; max-width: 100%; min-width: 0; }
   .map svg { display: block; }
@@ -297,6 +298,7 @@ and its checks have passed on that head.
 
   const state = {
     meta: null,
+    liveMeta: undefined,
     recent: null,
     phases: [],
     prs: [],
@@ -387,7 +389,8 @@ and its checks have passed on that head.
 
   const SVG_NS = "http://www.w3.org/2000/svg";
   const UNTIL = ["merged", "done"];
-  const MAP = {nodeW: 168, nodeH: 44, colGap: 56, rowGap: 12, pad: 12, lane: 24};
+  // charW is the advance of a 12 px mono character with a margin for the fallback faces.
+  const MAP = {nodeW: 168, nodeH: 44, colGap: 56, rowGap: 12, pad: 12, lane: 24, charW: 7.4, maxLabel: 40};
 
   function dependsOn(p) {
     if (Array.isArray(p.depends_on)) return p.depends_on;
@@ -437,15 +440,20 @@ and its checks have passed on that head.
   }
 
   function drawMap({nodes, edges}) {
-    const {nodeW, nodeH, colGap, rowGap, pad, lane} = MAP;
+    const {nodeH, colGap, rowGap, pad, lane, charW, maxLabel} = MAP;
+    const longest = Math.min(maxLabel, Math.max(...nodes.map((n) => n.id.length)));
+    const nodeW = Math.max(MAP.nodeW, 20 + Math.ceil(longest * charW));
     const columns = [];
     for (const n of nodes) (columns[n.layer] ||= []).push(n);
     const colHeight = (col) => col.length * nodeH + (col.length - 1) * rowGap;
     const tallest = Math.max(...columns.map(colHeight));
     const byId = new Map(nodes.map((n) => [n.id, n]));
-    const laned = (e) => byId.get(e.to).layer - byId.get(e.from).layer !== 1;
-    const top = pad + (edges.some(laned) ? lane : 0);
-    const laneY = pad + lane / 2;
+    const col = (id) => byId.get(id).layer;
+    // A lane of its own per edge, so two graphs that differ only in a skipping edge's ends never draw alike.
+    const lanes = edges.filter((e) => col(e.to) - col(e.from) !== 1).sort((a, b) =>
+      col(a.from) - col(b.from) || col(a.to) - col(b.to) || a.from.localeCompare(b.from) || a.to.localeCompare(b.to));
+    const laneY = new Map(lanes.map((e, i) => [e, pad + lane * (i + 0.5)]));
+    const top = pad + lanes.length * lane;
     const width = 2 * pad + columns.length * nodeW + (columns.length - 1) * colGap;
     const height = top + tallest + pad;
 
@@ -460,7 +468,7 @@ and its checks have passed on that head.
     const arrival = new Map();
     for (const node of nodes) {
       const incoming = edges.filter((e) => e.to === node.id);
-      const fromY = (e) => (laned(e) ? -Infinity : box.get(e.from).y);
+      const fromY = (e) => (laneY.has(e) ? laneY.get(e) : box.get(e.from).y);
       incoming.sort((a, b) => fromY(a) - fromY(b));
       incoming.forEach((e, k) => arrival.set(e, box.get(node.id).y + nodeH * (k + 1) / (incoming.length + 1)));
     }
@@ -468,13 +476,14 @@ and its checks have passed on that head.
     const edgePath = (e) => {
       const a = box.get(e.from), b = box.get(e.to);
       const x0 = a.x + nodeW, y0 = a.y + nodeH / 2, x3 = b.x, y3 = arrival.get(e);
-      if (!laned(e)) {
+      if (!laneY.has(e)) {
         const mid = (x0 + x3) / 2;
         return `M${x0},${y0} C${mid},${y0} ${mid},${y3} ${x3},${y3}`;
       }
       // One curve with both control points on the lane dips back into the middle column, so rise and fall inside the gaps.
-      return `M${x0},${y0} C${x0 + colGap / 2},${y0} ${x0 + colGap / 2},${laneY} ${x0 + colGap},${laneY} ` +
-        `H${x3 - colGap} C${x3 - colGap / 2},${laneY} ${x3 - colGap / 2},${y3} ${x3},${y3}`;
+      const y = laneY.get(e);
+      return `M${x0},${y0} C${x0 + colGap / 2},${y0} ${x0 + colGap / 2},${y} ${x0 + colGap},${y} ` +
+        `H${x3 - colGap} C${x3 - colGap / 2},${y} ${x3 - colGap / 2},${y3} ${x3},${y3}`;
     };
 
     return svg("svg", {width, height, viewBox: `0 0 ${width} ${height}`, "aria-hidden": "true"},
@@ -484,7 +493,7 @@ and its checks have passed on that head.
       ...nodes.map((n) => svg("g", {transform: `translate(${box.get(n.id).x},${box.get(n.id).y})`},
         svg("title", {}, n.id),
         svg("rect", {class: "node " + stateLook(n.state).tone, width: nodeW, height: nodeH, rx: 6}),
-        svg("text", {x: 10, y: 19}, truncate(n.id, 20)),
+        svg("text", {x: 10, y: 19}, truncate(n.id, maxLabel)),
         svg("text", {class: "node-state", x: 10, y: 35}, truncate(stateLook(n.state).label, 24)))));
   }
 
@@ -518,8 +527,8 @@ and its checks have passed on that head.
     return ordered;
   }
 
-  function staleness() {
-    const meta = state.meta || {};
+  function staleness(body) {
+    const meta = body || {};
     const limit = typeof meta.stale_after_min === "number" ? meta.stale_after_min : DEFAULT_STALE_MIN;
     const tick = parseTime(meta.tick_at);
     if (tick === null) return {stale: true, age: null};
@@ -536,8 +545,8 @@ and its checks have passed on that head.
   }
 
   const isLoaded = (source) => state.status[source] === "cached" || state.status[source] === "live";
-  // A cached tick may be old, so only a live one, or the last one before the listener died, can call the board stale or fresh.
-  const tickTrusted = () => state.status.meta === "live" || (isObj(state.status.meta) && state.status.meta.last === "live");
+  // A cached tick may be old, so only the last live meta body can call the board stale or fresh.
+  const verdict = () => (state.liveMeta === undefined ? null : staleness(state.liveMeta));
 
   function renderLoadState(section, source) {
     const status = state.status[source];
@@ -560,7 +569,7 @@ and its checks have passed on that head.
         el("tr", {}, ...cells.map((cell, i) => el("td", {"data-label": columns[i]}, cell)))))));
   }
 
-  function renderHeader({stale, age}) {
+  function renderHeader(judged) {
     const meta = state.meta || {};
     const feature = str(meta.feature);
     $("feature").textContent = feature || "Status board";
@@ -572,9 +581,9 @@ and its checks have passed on that head.
     if (str(meta.architecture_url)) line.append(link("Architecture", meta.architecture_url, "architecture"));
 
     const banner = $("stale-banner");
-    banner.hidden = !(tickTrusted() && stale);
-    if (age === null) banner.textContent = "The orchestrator has not recorded a readable tick yet.";
-    else banner.textContent = "The orchestrator has not ticked for " + Math.floor(age / MINUTE) + " minutes.";
+    banner.hidden = !(judged && judged.stale);
+    if (!judged || judged.age === null) banner.textContent = "The orchestrator has not recorded a readable tick yet.";
+    else banner.textContent = "The orchestrator has not ticked for " + Math.floor(judged.age / MINUTE) + " minutes.";
   }
 
   function renderNeeds() {
@@ -705,12 +714,12 @@ and its checks have passed on that head.
           el("span", {}, (str(item.from) ? str(item.from) + " → " : "→ ") + str(item.to)))))));
   }
 
-  function renderHeartbeat({stale, age}) {
+  function renderHeartbeat({age}, judged) {
     const section = sectionShell("s-heartbeat", "Heartbeat", null);
     if (!renderLoadState(section, "meta")) return;
     const tickAt = state.meta && state.meta.tick_at;
     let status = null;
-    if (tickTrusted()) status = stale ? chip("Stale", "crit") : chip("Fresh", "good");
+    if (judged) status = judged.stale ? chip("Stale", "crit") : chip("Fresh", "good");
     if (age === null) {
       section.append(el("div", {class: "heartbeat"},
         status,
@@ -749,14 +758,14 @@ and its checks have passed on that head.
 
   function render() {
     keepViewState(() => {
-      const tick = staleness();
-      renderHeader(tick);
+      const judged = verdict();
+      renderHeader(judged);
       renderNeeds();
       renderReview();
       renderPrs();
       renderPhases();
       renderRecent();
-      renderHeartbeat(tick);
+      renderHeartbeat(staleness(state.meta), judged);
       renderNotice();
     });
   }
@@ -778,6 +787,7 @@ and its checks have passed on that head.
         if ("docs" in snap) state[source] = snap.docs.map((d) => d.data()).filter(isObj).map(normalise);
         else state[source] = snap.exists ? snap.data() : null;
         state.status[source] = snap.metadata.fromCache ? "cached" : "live";
+        if (source === "meta" && !snap.metadata.fromCache) state.liveMeta = state.meta;
         render();
       }, (error) => {
         state.status[source] = {error: str(error && error.code) || "unavailable", last: state.status[source]};

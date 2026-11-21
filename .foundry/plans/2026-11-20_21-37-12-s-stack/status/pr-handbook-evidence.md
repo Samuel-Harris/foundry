@@ -222,3 +222,27 @@ Findings, carried to the round after Review:
 
 - **Minor, could mislead.** `pr-creator.md` defines `<own branches>` as "the ones you create", but a fresh PR creator in a later fix round did not create the earlier branches. Leaving them out gives a false `STOP`, or a child pushed without its parent's new head, which the next round heals. Suggested wording: every pull request branch of this phase, including those opened in earlier rounds.
 - **Minor.** An empty or missing `OWN` is accepted silently. The script could refuse a refresh whose `<pr>` is not in `OWN`.
+
+## Review: SIGNIFICANT at `697c739bd6e0f74b9de3e8d918196ea947afd469`
+
+The fourth `interrogate` run used Opus and Fable, with the brief in `handbooks/reviewer.md`. Its scope was the eleven commits from `9b1493c` to `697c739`. The earlier findings' probe, the check file's scratch block, passed for both adversaries, with 85 and 86 PASS and `0 failed`.
+
+**Significant, in the implementation.**
+
+- **Carry before merge** (Fable 1, 2 and 3). The refresh carries new commits before it brings in the base. So a child's fix that builds on its parent's fix in the same round, a new third-row pull request that edits its dependency's file, and a fix commit that spans two pull requests all get a false permanent shared-path `STOP`. Two refreshes, the first with no commits, go through. A fix that spans two unchained pull requests is also misdiagnosed as a permanent stop, when it is a split fault.
+- **`outside()` still infers phase ownership from trailers** (Opus 1). A child stacked on another phase's branch that itself sits on our branch silently reverts that phase's later change to a file the child owns, and the proof prints `EQUAL`.
+- **Paths with glob characters are expanded** (Opus 2, Fable 8). `app/[id]/page.tsx` becomes `app/i/page.tsx` when that file exists. The real file is never carried, and the proof prints `EQUAL`.
+
+**Significant, in the premise, and silent.**
+
+- **A developer's commit on a pull request branch is reverted with `EQUAL`** (Fable 4), as for GitHub's "Apply suggestions" button.
+- **A hand edit made inside the phase's merge of the orchestrator branch reaches no pull request, and the proof prints `EQUAL`** (Fable 5). This holds on a shared path or on a path no phase commit touches.
+
+**Not significant alone.**
+
+- `not()` excludes a stale local copy of another phase's branch, so the documented forge-rewrite `STOP` does not fire and the round pushes. The pushed tree is right (Fable 6).
+- A merged pull request reverted on the default branch still proves `EQUAL` (Fable 7).
+- A never-pushed local branch outside `OWN` is read locally.
+- The handbook does not say to skip merged pull requests in a round.
+
+**Fallback.** Under d9 condition 4 and d11 the design is not changed. The implementation bugs are fixed. The two premise defects are turned into proof `FAIL`s that push nothing and are documented as unhandled histories, because a wrong `EQUAL` is never acceptable.

@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Review"
-changed_at: "2026-11-21T16:08:21Z"
+state: "PR"
+changed_at: "2026-11-21T16:13:07Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
@@ -27,6 +27,11 @@ verdicts:
     code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
     at: "2026-11-21T16:08:21Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
+    at: "2026-11-21T16:13:07Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -46,4 +51,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Verify passed at `6f70b37`. The Review gate covers the commits since the last reviewed code head, `08874f3`.
+Both gates passed for `6f70b37`. A PR creator subagent is opening one draft pull request against `main`. It depends on foundation's pull requests 81 and 82, both open, so it carries their commits.

@@ -48,3 +48,7 @@ Minor notes, recorded and not fixed, under the orchestrator's instruction to fix
 - `spec-writer.md` does not define `<this skill's directory>`. `SKILL.md` lines 16 and 24 do.
 - `spec-writer.md` does not say who to record as decider for a two-way door the spec writer decides itself.
 - `planner.md` does not say where each phase's check file lives. The plan names it.
+
+## Review, code head `6f70b3707c6c24f174c333817b3a17f37a5d9f63`
+
+p-stack's `interrogate` skill ran again with two adversaries, on Opus and on Fable, over the commits since `08874f3`. Each worked in its own detached worktree at `6f70b37`, got only the diff and the repository, and was told not to read `.foundry/`. Neither found anything, significant or minor. Their seven cold reads covered decisions met before the plan existed, a request still open at the end of planning, a restart mid-request, a restarted planner with an old-format plan, an update spec writer in a public repository given private names, and the check file's cold read 1. Every session acted correctly. Fable's mechanical checks found the lockfile hashes in step and `versioning.py check` clean. Verdict: CLEAR.

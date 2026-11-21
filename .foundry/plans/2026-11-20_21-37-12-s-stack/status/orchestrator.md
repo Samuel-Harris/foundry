@@ -89,3 +89,7 @@ Known launcher limits to record in that update: a pane left at its shell after `
 ## Window layout
 
 The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. Start planner and phase sessions by hand to the right of that column: split the largest session pane there, with `-v` unless both halves stay at least 80 columns wide. Start a spec writer in `%165`'s column. Never move a pane the developer adds to that column, and never run `select-layout`.
+
+## Deferred follow-ups for live phases
+
+- `phase-handbooks` and `pr-handbook`: rework after Done. A Done phase asked to change code moves back to Implement, and its PR creator opens a new pull request for commits no open pull request carries. Fold this into each phase's next Implement round. If either reaches PR without one, send it as a fix round. `orchestrator.md` at `131526e` fails safe meanwhile. Raised by `orchestrator-handbook`.

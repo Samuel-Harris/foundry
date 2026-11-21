@@ -14,6 +14,10 @@ Roles: spec, orchestrator, planner, phase. --phase is required with --role phase
 and refused otherwise. --update is allowed only with --role spec. --window is
 required for every session except the first spec writer of a feature.
 
+Features and phases are kebab-case. A feature name may not contain -phase- or
+end with -phase, -planner, -orchestrator, -spec or -spec-<n>, because another
+feature's session could have that name.
+
 Standard output is one line:
   started <name> pane=<pane id> worktree=<path>   started the session
   alive <name> pane=<pane id>                     the session already runs; nothing changed
@@ -88,6 +92,8 @@ if [ "$mode" = print-window ]; then
   [ -z "$feature$role$phase$update$window$fresh" ] || usage
 else
   [[ $feature =~ $kebab ]] || usage
+  case "$feature" in *-phase-*|*-phase|*-planner|*-orchestrator|*-spec) usage ;; esac
+  [[ ! $feature =~ -spec-[0-9]+$ ]] || usage
   case "$role" in spec|orchestrator|planner|phase) ;; *) usage ;; esac
   if [ "$role" = phase ]; then
     [[ $phase =~ $kebab ]] || usage

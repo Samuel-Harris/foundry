@@ -382,7 +382,7 @@ and its checks have passed on that head.
     if (isObj(status)) {
       section.append(el("p", {class: "section-error"},
         "This section stopped updating (" + status.error + "). Reload the page to try again."));
-      return false;
+      return status.hadData;
     }
     if (status === "loading") {
       section.append(el("p", {class: "empty"}, "Loading."));
@@ -586,7 +586,7 @@ and its checks have passed on that head.
         state.status[source] = snap.metadata.fromCache ? "cached" : "live";
         render();
       }, (error) => {
-        state.status[source] = {error: str(error && error.code) || "unavailable"};
+        state.status[source] = {error: str(error && error.code) || "unavailable", hadData: isLoaded(source)};
         render();
       });
     }

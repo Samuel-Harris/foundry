@@ -32,6 +32,7 @@ Each case prints `PASS <case>` or `FAIL <case>: <output>`, and the block ends wi
 | `other-pr` squash-merged into `main`, then `main` changes line 11 of `shared.txt` and sets `version: "0.3.0"`; `pr1` merges `main`, so `apm.yml` conflicts only on `version:` while `pr1` has a hand edit elsewhere in it | merge completes, `description: pr1` kept, `version: "0.3.1"` after regenerating, `EQUAL`, exit `0` |
 | `pr2` merges `main` passing `other-pr` as the squash-merged parent, then regenerates | `shared.txt` keeps `line 2 child` and `line 11 main` |
 | The proof after that, with `other-pr` excluded through its kept branch ref | `EQUAL`, exit `0` |
+| In a second repository, a parent that adds `pkg/apm.yml` is squash-merged into `main`, `main` then raises its `version:`, and a child cut from the parent merges `main` with the merge procedure, passing the parent | exit `0`, and the staged `pkg/apm.yml` equals `main`'s, because the two sides differ only in `version:` |
 
 ```bash
 /bin/bash <<'CHECK'
@@ -166,6 +167,17 @@ if [ $code = 0 ] && (cd "$S/pr2" && regen && git commit -q --no-edit && regen_co
 else
   fail "merge after squash-merged parent aborted: $out"
 fi
+
+A="$S/added"; git init -q -b main "$A"; cd "$A" || exit 1
+echo readme > README; commit 'initial'
+git checkout -q -b parent; mkdir pkg; printf 'name: pkg\nversion: "0.1.0"\n' > pkg/apm.yml; echo lock > pkg/apm.lock.yaml; commit 'feat: add pkg'
+git checkout -q -b child; echo c > c.txt; commit 'feat: child'
+git checkout -q main; git diff main...parent | git apply --index && git commit -q -m 'feat: add pkg (#1)'
+sed 's/^version: .*/version: "0.1.1"/' pkg/apm.yml > "$S/y" && cat "$S/y" > pkg/apm.yml; echo lock2 > pkg/apm.lock.yaml; commit 'chore: bump pkg'
+git checkout -q child
+run merge main parent
+[ $code = 0 ] && [ "$(git show :pkg/apm.yml 2>&1)" = "$(git show main:pkg/apm.yml)" ] && pass "squash-merged parent that added apm.yml, then main bumps its version: main's apm.yml staged" || fail "squash-merged parent that added apm.yml: exit $code, staged pkg/apm.yml is $(git show :pkg/apm.yml 2>/dev/null | wc -c | tr -d ' ') bytes: $out"
+git merge --abort 2>/dev/null
 
 cd "$root"
 echo "$fails failed"

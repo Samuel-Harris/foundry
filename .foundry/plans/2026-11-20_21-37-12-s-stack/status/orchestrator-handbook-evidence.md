@@ -440,3 +440,18 @@ Defects that mislead a reader:
 - Step 7's `stop` is cancelled in the same tick by the merged notice.
 
 Minor: it is unclear whether reconcile and board writes continue for paused phases.
+
+## Verify 24, code head `d5c3d09a02a0fde2e434bd62895c1b3f7c888769`, VERIFIED
+
+A fresh verifier updated the check file for `b33f4a5` (commit `d5c3d09`, with new cold reads AL and AM, and its own Verify 23 flaws fixed) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`182/200 handbooks/orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: three scripts and 48 cold reads across four check files. One cold read, AK, was rerun because of an ungrounded side argument.
+
+Every **Done when** item was met:
+
+- The handbook has 182 lines, and no command line appears.
+- A private-name grep of the phase files, diff and commit messages found 0 hits.
+
+One item misleads a reader, and the run converges past it. In the tick a phase returns to PR after a hand-written default-branch conflict, the default-branch retry runs before the phase merges, so one redundant conflict round goes out. Minor: the conflict tip is never cleared, and a phase just sent a conflict round can literally meet the stall test in the same tick.
+
+## Merge of `s-stack-package` at `7daf642`, under run decision `launcher-r3`
+
+`s-stack-package` (`a606589`, which brings `board`) was merged at `7daf642`. Outside `.foundry/` the merge touched `packages/s-stack/.apm/skills/sam-mode/assets/status-board.html` and `tests/s-stack/verify-s-stack/checks/board.md`, both owned by `board`, plus the generated `packages/s-stack/apm.lock.yaml`, whose lockfile-only conflict was resolved under C7. None is an owned path of this phase, so the code head and verdicts stay at `d5c3d09`.

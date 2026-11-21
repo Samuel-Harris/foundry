@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T23:19:32Z"
+state: "Verify"
+changed_at: "2026-11-21T23:19:42Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "ba02397c72378fd5d5a54389d49b9ee7011f52ee"
+code_head: "1f6216019e8b1c657d52e1c360285e2bc2516ef5"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -75,4 +75,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Verify failed at `ba02397`, because cold read 1's point 3 rejected a correct answer that serialises two phases sharing an exclusive resource. The phase is fixing point 3.
+Follow-up round. Point 3 is fixed at `1f62160`. A fresh verifier runs in full, and the review then covers the commits since `49f2959`.

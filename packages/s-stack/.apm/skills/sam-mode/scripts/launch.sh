@@ -216,6 +216,10 @@ take_lock() {
 }
 
 release_window() {
+  if [ -n "$zoomed_pane" ]; then
+    tmux resize-pane -Z -t "$zoomed_pane" || true
+    zoomed_pane=''
+  fi
   [ -z "$window_lock" ] || rmdir "$window_lock"
   window_lock=''
 }
@@ -230,16 +234,24 @@ lock_session() {
   mkdir -p "$locks" || die "cannot create $locks"
   take_lock "$locks/$name" "$name"
   session_lock=$locks/$name
-  window_lock=''
+  window_lock='' zoomed_pane=''
   trap 'release_window; rmdir "$session_lock"' EXIT
 }
 
 # Held from reading the window's layout until the new pane is tagged, so a
 # concurrent launch of another session into the same window measures the
-# layout after this split, not before it.
+# layout after this split, not before it. tmux reports a zoomed pane as the
+# whole window, so the window is unzoomed while it is measured and split, and
+# release_window zooms the same pane again.
 lock_window() {
+  local zoomed
   take_lock "$locks/window-${window#@}" "a session into $window"
   window_lock=$locks/window-${window#@}
+  zoomed=$(tmux list-panes -t "$window" -F '#{window_zoomed_flag} #{pane_active} #{pane_id}' | awk '$1 == 1 && $2 == 1 { print $3 }') || die "tmux list-panes -t $window failed"
+  if [ -n "$zoomed" ]; then
+    tmux resize-pane -Z -t "$zoomed" || die "tmux resize-pane -Z -t $zoomed failed"
+    zoomed_pane=$zoomed
+  fi
 }
 
 # A claude shows in ps a moment after its pane opens.
@@ -445,9 +457,6 @@ cmd_start() {
     split=1
     lock_window
     choose_split
-    # split-window unzooms a zoomed window unless given -Z, which zooms an unzoomed one.
-    zoom=''
-    if [ "$(tmux display-message -p -t "$target_pane" '#{window_zoomed_flag}')" = 1 ]; then zoom=-Z; fi
   fi
 
   roadmap_pattern='^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}-(.*)$'
@@ -479,7 +488,7 @@ cmd_start() {
   pane_command="claude --name $(printf %q "$name") $conversation_flag $(printf %q "$conversation_id") $(printf %q "$prompt"); exec \"\${SHELL:-/bin/sh}\" -l"
 
   if [ -n "$split" ]; then
-    target_pane=$(tmux split-window -d $zoom -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" ${split_size:+-l "$split_size"} /bin/sh -c "$pane_command") || cannot_split
+    target_pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" ${split_size:+-l "$split_size"} /bin/sh -c "$pane_command") || cannot_split
   else
     tmux respawn-pane -k -t "$target_pane" -c "$worktree" /bin/sh -c "$pane_command" || die "tmux respawn-pane -t $target_pane failed"
   fi

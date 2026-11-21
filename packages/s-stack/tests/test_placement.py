@@ -176,6 +176,26 @@ class PlacementTests(LauncherTestCase):
 
         self.assertGreater(new.left, self.right_of(pane=orchestrator))
 
+    def assert_phase_splits_the_planner_while_zoomed(self, *, zoomed: str) -> None:
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        planner = self.start("--role", "planner", name="f-planner")
+        before = self.geometry()
+        pane = {"orchestrator": orchestrator, "planner": planner}[zoomed]
+        self.tmux("resize-pane", "-Z", "-t", pane)
+
+        new = self.start("--role", "phase", "--phase", "p", name="f-phase-p")
+
+        self.assertEqual(self.zoomed(), "1")
+        self.assertEqual(self.tmux("display-message", "-p", "-t", self.window, "#{pane_id}").strip(), pane)
+        self.tmux("resize-pane", "-Z", "-t", pane)
+        self.assert_split(before=before, target=planner, new=new)
+
+    def test_a_zoomed_orchestrator_is_measured_unzoomed_and_stays_zoomed(self) -> None:
+        self.assert_phase_splits_the_planner_while_zoomed(zoomed="orchestrator")
+
+    def test_a_zoomed_session_pane_is_measured_unzoomed_and_stays_zoomed(self) -> None:
+        self.assert_phase_splits_the_planner_while_zoomed(zoomed="planner")
+
     def test_placement_works_without_a_utf8_locale(self) -> None:
         orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
         before = self.geometry()

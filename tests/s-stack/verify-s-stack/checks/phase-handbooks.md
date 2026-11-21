@@ -109,10 +109,10 @@ Expected answer:
 
 ## Evidence
 
-### Private names at `6b6047634a138cba75093ebe15bfcad33716e594`
+### Private names at `cddb4b09f57776a82487c11e24c4622964a7ccb3`
 
-A case-insensitive `grep -ciE -f <patterns>` over every file in `git diff --name-only s-stack-package...s-stack-phase-phase-handbooks -- . ':(exclude).foundry'` (the three handbooks, `packages/s-stack/apm.lock.yaml` and this file), over that diff's text, and over the messages of the 18 commits in `s-stack-package..s-stack-phase-phase-handbooks` up to `ca7e8d1`. The patterns cover the private repository's name, its feature's name and both prototype page ids, taken from the developer's private notes and not reproduced here. The same patterns hit the private notes themselves, so the search can find them. Result: no hit in any file, the diff or a commit message. PASS.
+A case-insensitive `grep -ciE -f <patterns>` over every file in `git diff --name-only s-stack-package...s-stack-phase-phase-handbooks -- . ':(exclude).foundry'` (the three handbooks, `packages/s-stack/apm.lock.yaml` and this file), over that diff's text, and over the messages of the 24 commits in `s-stack-package..s-stack-phase-phase-handbooks` up to `a721dc6`. The patterns cover the private repository's name, its feature's name and both prototype page ids, taken from the developer's private notes and not reproduced here. The same patterns hit the private notes themselves, so the search can find them. Result: no hit in any file, the diff or a commit message. PASS.
 
-### Tier 1 at `ca7e8d1`, code head `6b6047634a138cba75093ebe15bfcad33716e594`
+### Tier 1 at `a721dc6`, code head `cddb4b09f57776a82487c11e24c4622964a7ccb3`
 
-`PATH="$PWD/.venv-apm/bin:$PATH" APM="$PWD/.venv-apm/bin/apm" bash tests/structural/run-tier1.sh`, outside the sandbox, with `apm` 0.32.0 from `.venv-apm`. It exited `0`, and its last line was `all Tier 1 structural checks passed across 20 packages`. The skill's cleanup then left `git status --short` empty. PASS. The verification skill's check 7 runs Tier 1 again at the head that includes this file.
+`PATH="$PWD/.venv-apm/bin:$PATH" APM="$PWD/.venv-apm/bin/apm" bash tests/structural/run-tier1.sh`, outside the sandbox, with `apm` 0.32.0 from `.venv-apm`. It exited `0`, and its last line was `all Tier 1 structural checks passed across 20 packages`. The skill's cleanup then left `git status --short` empty. PASS. This change to `## Evidence` is committed alone after the run and needs no new run.

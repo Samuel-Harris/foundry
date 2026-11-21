@@ -35,3 +35,18 @@ The review ran p-stack's `interrogate` skill with two adversaries, on Opus and o
 5. `--print-window` with a stale `TMUX_PANE` prints `window=` and exits 0. Found by Fable.
 6. With no tmux server running, `--close` and `--remove` exit 1 instead of `absent` and a normal removal. Found by Fable.
 7. `--remove` removes a worktree whose detached HEAD holds commits that are on no branch, and a worktree in which another `claude` is still working. Found by Fable.
+
+## Verify, code head `15bb919f5f9e85fca556362ac5bdb2897900b955`, VERIFIED
+
+A third fresh verifier ran after the review fix round and the merge of phase-handbooks. Its results are under "Rerun at 8839699" in `tests/s-stack/verify-s-stack/checks/launcher.md`.
+
+- The full skill passed, with Tier 1 across 20 packages and nine cold reads. 47 tests pass, and they pass again under `LC_ALL=C`.
+- Each of the seven review defects was reproduced against the fixed launcher with stubs and is fixed.
+- Six mutations each failed named tests. All three launcher calls in `SKILL.md` and the handbooks were accepted.
+- Live check with the real `claude`. The first launch took 0.75 s, then `alive`, then `/exit` and a relaunch with `--resume <stored id>` showing the earlier conversation.
+- Minor findings, recorded:
+  - `verifier.md` says `## Evidence` holds no results, which contradicts C6.
+  - With no tmux server, tmux's own `no server running` line reaches standard error.
+  - Cold readers found small ambiguities in `SKILL.md` and `phase-session.md`.
+
+This verdict is superseded. The developer's pane placement rule (`launcher-d9`) is a scope change, so the phase moves back to Implement.

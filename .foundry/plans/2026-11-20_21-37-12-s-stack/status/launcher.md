@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Verify"
-changed_at: "2026-11-21T17:09:43Z"
+state: "Implement"
+changed_at: "2026-11-21T17:23:01Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "88396997824f501b98b94b255cd3e7cf0341f832"
+code_head: "15bb919f5f9e85fca556362ac5bdb2897900b955"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -21,6 +21,11 @@ verdicts:
     result: "SIGNIFICANT"
     code_head: "2726205c5a71584501fb366f588125c64af9cfbd"
     at: "2026-11-21T16:49:21Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "15bb919f5f9e85fca556362ac5bdb2897900b955"
+    at: "2026-11-21T17:23:01Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - id: "launcher-r2"
@@ -64,6 +69,10 @@ decisions:
     decision: "Answer to launcher-r2, option A, from the orchestrator: the launcher exits 2 for a feature name that is not kebab-case, contains -phase-, or ends with -phase, -planner, -orchestrator, -spec or -spec-<n>, so derived names never collide."
     door: "two-way"
     at: "2026-11-21T16:44:12Z"
+  - id: "launcher-d9"
+    decision: "From the developer, relayed by the orchestrator, with the edge cases decided here and accepted: launcher panes carry @s-stack-session tags, the orchestrator holds the first column after the workmux sidebar, update spec writers go in its column, planner and phase sessions go to its right, a resurrected orchestrator found by liveness counts as the launcher's, an orchestrator with no spec pane splits the topmost pane of the leftmost column, and a planner, phase or update spec writer with no orchestrator pane is exit 1."
+    door: "two-way"
+    at: "2026-11-21T17:23:01Z"
 ---
 
 # Phase launcher status
@@ -71,3 +80,5 @@ decisions:
 Implementation and its quick-review fix round are committed. The phase branch merged `s-stack-package` at 0b0938f before Verify, and again at 2ecc9f0 (bringing spec-planner-handbooks), which is a new code head, so Verify ran again and passed at 2726205. The suite has 35 tests and passes on macOS (tmux 3.8) and, per the fix-round delegate, in an Ubuntu 24.04 container (tmux 3.4).
 
 The review fix round (seven findings, 47 tests, also green under `LC_ALL=C`) is committed, and `s-stack-package` is merged at 8839699 with the phase-handbooks phase. Verify runs again at that head.
+
+The developer's pane placement rule (launcher-d9) moved the phase back to Implement after the third Verify.

@@ -363,3 +363,21 @@ Minor items:
 | A roadmap update merged during a freeze lets the architecture page show a merge that failed its check as built. | Fable | Cold read |
 
 Together with the three queued `needs_update` items, these show the flag's design was wrong: it tracked one fixed commit, and one level of a stack. The fix replaces it with one readiness rule based on current state.
+
+## Verify 20, code head `5976721323ca91e4e3b2cdd071c45fe731215e9d`, NOT VERIFIED
+
+A fresh verifier rewrote the check file for the `needs_update` redesign (commit `5976721`, with new cold reads AE to AH) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`170/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 FAILS: all scripts pass, and 42 of 43 cold reads pass. Cold read AH fails, and B and AD passed only on assumptions their readers named.
+
+Defects that break a real run, on merged contracts:
+
+- Tick step 4 told only a quiet phase about flagged pull requests, and a closed pane is never quiet. Merged phases' pull requests would never be refreshed.
+- A roadmap update that changes a phase's behaviour, but adds or removes no phase, left that phase in Spec for good.
+
+One defect misleads a reader: the refresh instruction was sent for a pull request flagged only by pending or failed checks.
+
+Minor items:
+
+- The test followed only direct `depends_on`.
+- The round named "the feature pull request that landed", which is no longer recorded.
+
+For the integration read-through: C5's `needs_update` wording, and the board template's schema comment, should match the up-to-date test.

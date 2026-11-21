@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `dcdda28` (version 3) |
-| Last tick | 2026-11-21 15:32 |
+| Last tick | 2026-11-21 15:52 |
 | Default branch merged at | `f7772cc` (into `7e04846`) |
 
 ## Live sessions
@@ -46,3 +46,15 @@ None.
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
 | `s-stack-phase-foundation` | `../s-stack-phase-foundation` | 2026-11-21 | `5df64c0`, merged at `7c4f36d`; worktree kept for fix rounds |
+
+## Queued fix rounds
+
+One `foundation` fix round, sent once the middle phases reach Verify, so pull requests 81 and 82 change once. Raised by `spec-planner-handbooks` at `f054264`.
+
+1. `references/status-and-messages.md`: planner requests are `planner-r<n>`, kept in an "Open requests" section of the feature plan, because the planner has no status file.
+2. `references/status-and-messages.md`: the `done-planning` row lists the phases whose plan entry changed, and the `roadmap-update` row lists the `run-decisions.md` rows it folded in.
+3. `SKILL.md` branch table: add rows for the planner's and the update spec writer's branches. Say that `run-decisions.md` amends the roadmap until an update folds it in.
+4. One home for the launch steps (`--print-window`, then `--window`, run from a main session) in `SKILL.md`. `spec-writer.md` and `orchestrator.md` then point to it, and their owning phases remove their copies.
+5. `references/status-and-messages.md` orchestrator rows, raised by `orchestrator-handbook` at `6c34228`. Two uses of `fix-round`: generated files only, with the phase staying in PR, and a hand-written conflict from the default branch, with the phase going back to Implement. `move-back` to Implement after a failed post-merge check. `stop` before closing a pane, which also covers replacing a stalled session.
+
+For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".

@@ -49,7 +49,7 @@ The orchestrator starts you when the developer asks for a change to the approved
 
 1. Send the orchestrator a `started` message with your session name and branch.
 2. Read the approved roadmap with `run-decisions.md`, which records the decisions the developer made during the run.
-3. Interview the developer about the change in the same way, and ask about every one-way door and every ambiguity it brings.
+3. Interview the developer about the change in the same way, and ask about every one-way door and every ambiguity it brings. Check the repository's visibility before your first commit, as for a new roadmap.
 4. Edit the roadmap on your branch and commit as each part is written. Fold each decision in `run-decisions.md` that the update covers into the main text and into `decisions.md`.
 5. When the developer approves, commit and send the orchestrator a `roadmap-update` message. Add a detail line that names each `run-decisions.md` row you folded in, so the orchestrator can retire it.
 6. Stop. Do not merge your branch. The orchestrator does.

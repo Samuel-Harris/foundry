@@ -1,10 +1,10 @@
 ---
 phase: "board"
-state: "Verify"
-changed_at: "2026-11-21T17:12:06Z"
+state: "Review"
+changed_at: "2026-11-21T17:42:45Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
-code_head: "eff112da063ff5156ee3cc09e7a50adb8453ed95"
+code_head: "b2deb4dc95214b6039608c7c3b7f949aae752bce"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -26,6 +26,11 @@ verdicts:
     result: "SIGNIFICANT"
     code_head: "a678a49d30e83b4d65ce068b8120ac192e61595c"
     at: "2026-11-21T17:05:18Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "b2deb4dc95214b6039608c7c3b7f949aae752bce"
+    at: "2026-11-21T17:42:45Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
 pull_requests: []
 requests: []
@@ -63,3 +68,5 @@ The verifier rewrote `checks/board.md` at `a678a49`, the new code head, and retu
 The second Review gate returned SIGNIFICANT at `a678a49`: the dependency map draws different graphs alike, and the Rerun check still passes broken templates. The phase is back in Implement for that.
 
 The fix `66118de` gives each skipping edge its own lane, keeps map labels whole up to 40 characters, wraps unknown dependency chips, and keeps a live stale verdict through a cached snapshot. `s-stack-package` was merged at `eff112d` under C7 with a lockfile-only conflict, bringing `phase-handbooks` and `main`'s merge of #81. The Verify gate is starting for `eff112d`.
+
+A first verifier for `eff112d` was stopped before it committed, when the orchestrator relayed the rule that check files hold no results. A fresh verifier rewrote `checks/board.md` at `b2deb4d`, the new code head, under that rule and returned VERIFIED. The Review gate is starting over `a678a49..b2deb4d`.

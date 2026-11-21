@@ -66,3 +66,17 @@ Minor, recorded and not fixed:
 - Text selection is lost on each re-render.
 - `review_rank` and `stale_after_min` sent as digit strings are ignored. The schema says number for both.
 - At 700 px the Pull requests table scrolls sideways by 4 px inside its own wrapper.
+
+## Verify gate, code head `b2deb4dc95214b6039608c7c3b7f949aae752bce`, VERIFIED
+
+A fresh verifier, following `handbooks/verifier.md`, rewrote `checks/board.md` at `b2deb4d`. Its `## Evidence` section now describes the one-off checks without their results, as the run decision on check files requires. The template is unchanged since `66118de`.
+
+- `## Rerun`: 26 scenarios plus a comparison of the two lane graphs. It exits 0 on the real template, prints PENDING and exits 0 without Chrome, and leaves the tree clean. The phase session reran it at 2026-11-21T17:42:45Z and got exit 0.
+- Mutation proof: 73 single-replacement mutants of the current template, written outside the repository. Every one makes the Rerun exit 1. They include every surviving mutant from both Review gates (two of them rewritten by hand because their target code had changed) and four for this round: shared lanes, labels cut at 20 characters, unknown chips that do not wrap, and a live stale verdict lost to a cached snapshot. The phase session ran one, the OS dark-text mutant, directly: it printed two FAIL lines and exited 1.
+- Verification skill: checks 1, 2, 3, 5, 7 and 8 PASS. Tier 1 passed across 20 packages. Check 4 is PENDING for `orchestrator.md` and `pr-creator.md`, and check 6 is PENDING with no launcher tests yet; the skill allows both.
+- Third private test page: https://claude.ai/artifact/G9DR3pgSxrcgiWkPRh897c, placeholder rows only, with this run's eight-phase shape. Batch 1 wrote 15 documents. Batch 2 set `tick_at` 41 minutes back. The page then showed the stale banner, and its version was unchanged. It was read from the served HTML and from view-level reads, and its rows were rendered in the served skeleton in light and dark. A write at `interact` level was refused.
+- A cold reader given only the schema comment wrote a valid six-write first batch with `depends_on`. `grep innerHTML` finds nothing. `apm audit --ci` passes, and the lockfile holds no absolute path.
+
+Known gap, unchanged: no browser tool was available, so nobody has watched the claude.ai viewer render a test page.
+
+Found by the verifier, outside this phase's paths: `tests/s-stack/verify-s-stack/SKILL.md` check 8 and feature plan C6 still say `## Evidence` records results, which contradicts the run decision and `verifier.md`.

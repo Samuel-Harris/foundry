@@ -17,3 +17,10 @@ A second fresh verifier reran everything at `f66ec2c` (status commit `3710a1d`),
 - **The proof is path-relative.** Run from a subdirectory, its `-- .` pathspecs cover only that subdirectory, so a dropped root-level file prints `EQUAL`. The carry loop has the same weakness.
 
 Every other verify-s-stack check passed. Checks 4 and 6 are PENDING, as expected.
+
+## Verify: NOT VERIFIED at `d7efc941b0d361189e023ccb4846dfca78c5c186`
+
+A fourth fresh verifier covered `40334e4` plus its own check-file commit `d7efc94`, which adds a `rounds` scratch repository for repeated generated-only rounds. Checks 1, 2, 3, 5 and 7 passed, Tier 1 among them (`all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 were PENDING. Check 8 passed for `foundation.md` and `spec-planner-handbooks.md`. Every **Done when** case passed, and so did the four repeated-round cases the orchestrator asked for. `pr-handbook.md` failed one added case.
+
+- **A later round discards a default-branch change.** The round said to pass the squash-merged parent with no limit to the first merge after the squash. In a later round, the squash step then kept the child's side of a real conflict with a newer `main` change, and the proof printed `EQUAL`, because the merge check compares against `merge-tree -X ours`.
+- **Minor: an interrupted round never finishes.** If a round stops after its merge commit, the next round's up-to-date test passes, so the regenerate commit and the push never happen.

@@ -20,7 +20,6 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 | `s-stack-phase-foundation` | `%192` | `../s-stack-phase-foundation` | 2026-11-21, follow-up round for the 17 queued items |
-| `s-stack-phase-spec-planner-handbooks` | `%193` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21, follow-up round for the cold-read wording |
 
 ## Open decision requests
 
@@ -46,7 +45,7 @@ None.
 | `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
 | `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | VERIFIED on `ce086bb` |
 | `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | VERIFIED on `3ce7d34` |
-| `spec-planner-handbooks` (follow-up) | `b89a458` (tip `40c3e56`) | `47f792f` | running |
+| `spec-planner-handbooks` (follow-up) | `b89a458` (tip `40c3e56`) | `47f792f` | VERIFIED on `8f735d6` |
 
 ## Closed sessions
 

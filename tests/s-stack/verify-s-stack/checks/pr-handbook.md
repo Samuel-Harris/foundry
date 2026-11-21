@@ -30,7 +30,7 @@ The block builds throwaway repositories under `$TMPDIR` with git's global and sy
 
 `main` holds a package `pkg/` whose `apm.yml` has `version:` on its second line and `description:` on its third, an `apm.lock.yaml` beside each `apm.yml` that lists the package's other files, a twelve-line `shared.txt` and a `README`. The stand-in regenerate command sets `pkg`'s `version:` to the patch after `origin/main`'s and rewrites every lockfile from the tree, and commits with the regenerate subject when that changed anything. The script's parameter lines stay as the reference file ships them.
 
-Each case follows the handbook's round for each branch, bottom of the stack first. It runs `git fetch origin`, then `git worktree add --no-track -B <branch> <path> origin/<branch>`, or `-b <branch> <path> origin/<base>` for a new branch. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` and the regenerate command, then `git push -u origin <branch>` when `origin/<branch>` is missing or differs from `HEAD`, and removes the worktree. The proof runs from the clone as `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request and no merged one. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
+Each case follows the handbook's round for each branch, bottom of the stack first. It runs `git fetch origin`, then `git worktree add --no-track -B <branch> <path> origin/<branch>`, or `-b <branch> <path> origin/<base>` for a new branch. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` and the regenerate command, then `git push -u origin <branch>` when `origin/<branch>` is missing or differs from `HEAD`, and removes the worktree. The proof runs from the clone as `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request, and with a merged one only where a case lists it. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
 
 A round keeps the guarantees when the old `origin/<branch>` is an ancestor of the new one, `origin/main` is an ancestor of it, and it adds at most one merge commit and one regenerate commit. Each case prints `PASS <case>` or `FAIL <case>: <output>`, and the block ends with `<n> failed` and exits `0` only when no case failed.
 
@@ -78,6 +78,17 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `assumption, fast-forward` | The phase fast-forwards to the orchestrator branch after the orchestrator merged it | `FAIL pr1: it changes a.txt, which the phase does not` |
 | `assumption, orchestrator commit` | The orchestrator commits `orch-fix.txt` before the phase branches | `FAIL orch-fix.txt has not landed and is in no open pull request, so it needs a new pull request` |
 | `missing branch` | Specs naming a merged dependency `gone` and an open dependency `gone2`, neither a branch | each exits `1` with `STOP <branch> is not a branch here`, `origin/pr1` unchanged |
+| `wrong result, revert` | Phase commit `a` adds `debug.txt` and edits `README`; a later phase commit reverts both. `pr1` carries only `a` | `FAIL debug.txt: pr1 lacks phase commits <sha> fix: revert debug;, so they need a pull request`, the same for `README`, `NOT EQUAL`. After a fix round carrying the revert, `EQUAL` and no `debug.txt` on `pr1`. |
+| `wrong result, origin/ names` | A same-phase stack `pr1:main`, `pr2:pr1` sharing `shared.txt` | the proof prints `EQUAL` with plain names, with `origin/` on the pull requests, and with `origin/` everywhere |
+| `stop, shared path` | Stack `pr1` (line 5) and `pr2` (line 9) of `shared.txt`; `main` changes line 5. A round; the phase merges `main` and resolves line 5 in the merge; a round; the phase commits a further resolution; a round with that commit | each round exits `1` with exactly `STOP shared.txt conflicts outside generated content`, `STOP <sha> <subject> does not apply` and `STOP shared.txt is a shared path, so the stop is permanent: no merge or commit on the phase clears it, and it needs a decision`, the last followed by `STOP the branch is back at <old head>`. `pr1` and `origin/pr1` unchanged throughout. |
+| `stop, owned path changed cleanly` | Another phase's pull request changes `shared.txt` line 10 and is squash-merged; `pr1` owns `shared.txt` (line 3). A round; then the phase merges `main` and a round | first: exit `1` with exactly `STOP shared.txt changed on origin/main after the phase last took it, so the phase must merge it first`, `pr1` and `origin/pr1` unchanged. Then: guarantees kept, lines 3 and 10 both present, `EQUAL`. |
+| `stop, forge-rewritten row 3` | `ours:main:x2`, where another phase's `x2` is stacked on `x1` and has `x3` stacked on it. `x1` is squash-merged and the forge rewrites `x2`. Rounds as `ours:main:x2:x1`, then `x2` is squash-merged and a round as `ours:main::x2,x1` | the proof prints `FAIL ours: it changes x2.txt, which the phase does not` and `NOT EQUAL` after each round. The round in which it first fails leaves `origin/ours` where it started, as the handbook says. |
+| `stop, delegate merge` | The phase merges a delegate branch adding `d.txt` with `git merge --no-ff`; `pr1:main` built from the session's commit and the delegate's | the proof prints `FAIL pr1: it changes d.txt, which the phase does not` and `NOT EQUAL`, and nothing was pushed to `origin/pr1` |
+| `stop, file to directory` | `main` has a file `notes`; the phase replaces it with `notes/one.md`; `pr1:main` | the refresh prints `git checkout-index: notes is not in the cache`, the proof prints `FAIL pr1: it changes notesone.md, which the phase does not` and `NOT EQUAL`, and nothing was pushed to `origin/pr1` |
+| `stop, directory to file` | The reverse: `main` has `notes/one.md`; the phase replaces the directory with a file `notes` | the outputs that the handbook documents for the same row: the refresh prints `git checkout-index: notes is not in the cache`, the proof a `FAIL pr1: it changes <path>, which the phase does not` line and `NOT EQUAL`, and nothing was pushed to `origin/pr1` |
+| `chained rule` | `pr1` (line 2 and `a.txt`) and `pr2` (line 11 and `b.txt`) both change `shared.txt`; built as `pr1:main` and `pr2:main`, then `pr2`'s round as `pr2:pr1` | unchained: `FAIL shared.txt is in pr1 and pr2, which are not in one stack`, in either order, and `NOT EQUAL`. Chained: guarantees kept over the old `origin/pr2`, `pr2`'s diff against `pr1` is `b.txt shared.txt`, `EQUAL`. |
+| `merged listed, parent` | Stack `parent` (line 2), `child` (`c.txt`); `parent` squash-merged, then `main` changes line 2; `child`'s round as `child:main::parent` | proof `child:main::parent` prints `FAIL shared.txt has not landed and is in no open pull request, so it needs a new pull request`; proof `parent:main child:main::parent` prints `EQUAL` |
+| `merged listed, new pull request` | `pr1` squash-merged, then a fix to `a.txt`; a new pull request `pr1b:main::pr1` carrying the fix | its round exits `0` with `a fixed`, and proof `pr1:main pr1b:main::pr1` prints `EQUAL` |
 
 ```bash
 /bin/bash <<'CHECK'
@@ -515,9 +526,149 @@ c_missing() {
     && pass "a spec naming a missing branch: STOP, branch unchanged" || fail "missing branch: $o1; $o2"
 }
 
+unchanged() { [ "$(git rev-parse "origin/$1")" = "$2" ] && [ "$(git rev-parse "$1")" = "$2" ]; }
+unpushed() { ! git rev-parse -q --verify "refs/remotes/origin/$1" >/dev/null; }
+SHARED_STOP='STOP shared.txt is a shared path, so the stop is permanent: no merge or commit on the phase clears it, and it needs a decision'
+other_on() { local at=$1; shift; git fetch -q origin; in_wt "$at" other_commit "$@"; }
+
+c_revert() {
+  init revert; orch; phase
+  echo a > a.txt; echo debug > debug.txt; readme phase; commit 'feat: a'; c1=$(sha)
+  rm debug.txt; echo readme > README; commit 'fix: revert debug'; f1=$(sha)
+  round pr1 pr1:main "$c1" || fail "revert build: $out"
+  f=$(git rev-parse --short "$f1")
+  not_equal pr1:main && has "FAIL debug.txt: pr1 lacks phase commits $f fix: revert debug;, so they need a pull request" && has "FAIL README: pr1 lacks phase commits $f fix: revert debug;, so they need a pull request" \
+    && pass "wrong result, revert: a pull request that still holds a change the phase reverted is NOT EQUAL" || fail "wrong result, revert: $out"
+  round pr1 pr1:main "$f1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && ! git cat-file -e origin/pr1:debug.txt 2>/dev/null && [ "$(git show origin/pr1:README)" = readme ] && equal pr1:main \
+    && pass "wrong result, revert: carrying the revert gives EQUAL" || fail "wrong result, revert carried: $o; proof $out"
+}
+
+c_origin_names() {
+  init origin-names; orch; phase
+  line 2 'line 2 pr1' shared.txt; commit 'feat: pr1'; c1=$(sha)
+  line 11 'line 11 pr2' shared.txt; commit 'feat: pr2'; c2=$(sha)
+  round pr1 pr1:main "$c1" && round pr2 pr2:pr1 "$c2" || fail "origin-names build: $out"
+  equal pr1:main pr2:pr1 && equal origin/pr1:main origin/pr2:pr1 && equal origin/pr1:origin/main origin/pr2:origin/pr1 \
+    && pass "wrong result, origin/ names: origin/<pr> proves the same as <pr>" || fail "wrong result, origin/ names: $out"
+}
+
+c_stop_shared() {
+  init stop-shared; orch; phase
+  line 5 'line 5 pr1' shared.txt; commit 'feat: pr1'; c1=$(sha)
+  line 9 'line 9 pr2' shared.txt; commit 'feat: pr2'; c2=$(sha)
+  round pr1 pr1:main "$c1" && round pr2 pr2:pr1 "$c2" || fail "stop-shared build: $out"
+  on_main 'feat: another pull request edits line 5' put_line 5 'line 5 main' shared.txt
+  h=$(git rev-parse origin/pr1) want=$(printf '%s\n' 'STOP shared.txt conflicts outside generated content' "STOP $(git rev-parse --short "$c1") feat: pr1 does not apply" "$SHARED_STOP")
+  round pr1 pr1:main; o1="$code $out"
+  [ "$o1" = "1 $want" ] && unchanged pr1 "$h" || { fail "stop, shared path, after main moved: $o1"; return; }
+  git checkout -q phase; git merge -q --no-ff --no-commit origin/main >/dev/null 2>&1
+  { for i in 1 2 3 4; do echo "line $i"; done; echo 'line 5 pr1 and main'; for i in 6 7 8; do echo "line $i"; done; echo 'line 9 pr2'; for i in 10 11 12; do echo "line $i"; done; } > shared.txt
+  git checkout -q origin/main -- pkg; relock; git add -A; git commit -q --no-edit
+  round pr1 pr1:main; o2="$code $out"
+  [ "$o2" = "1 $want" ] && unchanged pr1 "$h" || { fail "stop, shared path, after the phase merged main: $o2"; return; }
+  line 5 'line 5 resolved' shared.txt; commit 'fix: resolve line 5'; f1=$(sha)
+  round pr1 pr1:main "$f1"; o3="$code $out"
+  [ "$o3" = "1 $(printf '%s\n' 'STOP shared.txt conflicts outside generated content' "STOP $(git rev-parse --short "$f1") fix: resolve line 5 does not apply" "$SHARED_STOP" "STOP the branch is back at $h")" ] && unchanged pr1 "$h" \
+    && pass "stop, shared path: permanent through a phase merge and a resolution commit, branch unchanged" || fail "stop, shared path, resolution commit: $o3"
+}
+
+c_stop_owned() {
+  init stop-owned; orch; phase
+  line 3 'line 3 phase' shared.txt; echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "stop-owned build: $out"
+  other other-pr 'feat: other phase edits line 10' put_line 10 'line 10 other' shared.txt
+  squash other-pr; h=$(git rev-parse origin/pr1)
+  round pr1 pr1:main; o="$code $out"
+  [ "$o" = '1 STOP shared.txt changed on origin/main after the phase last took it, so the phase must merge it first' ] && unchanged pr1 "$h" \
+    && pass "stop, owned path changed cleanly: STOP, branch unchanged" || fail "stop, owned path changed cleanly: $o"
+  git checkout -q phase; take origin/main
+  round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr1 && [ "$(at origin/pr1 shared.txt 3) $(at origin/pr1 shared.txt 10)" = 'line 3 phase line 10 other' ] && equal pr1:main \
+    && pass "stop, owned path changed cleanly: cleared once the phase merges main, EQUAL" || fail "stop, owned path cleared: $o; proof $out"
+}
+
+xphase_in() { echo x1 > x1.txt && commit 'feat: x1' && echo x2 > x2.txt && commit 'feat: x2' && echo x3 > x3.txt && commit 'feat: x3' && git push -q origin HEAD:refs/heads/xphase; }
+c_stop_forge() {
+  init stop-forge
+  other x1 'feat: x1' write x1.txt x1
+  other_on origin/x1 x2 'feat: x2' write x2.txt x2
+  other_on origin/x2 x3 'feat: x3' write x3.txt x3
+  git fetch -q origin; in_wt origin/main xphase_in
+  orch; take origin/xphase; phase
+  echo a > a.txt; commit 'feat: a, needs x2'; c1=$(sha)
+  round ours ours:main:x2 "$c1" && equal ours:main:x2 || fail "stop-forge build: $out"
+  squash x1; forge x2 origin/x1 || { fail "stop-forge: the simulated rewrite changed the tree"; return; }
+  h=$(git rev-parse origin/ours); round ours ours:main:x2:x1; o1="$code $out"; not_equal ours:main:x2:x1; p1=$out; h1=$(git rev-parse origin/ours)
+  round ours ours:main:x2:x1; not_equal ours:main:x2:x1; p2=$out
+  squash x2; round ours ours:main::x2,x1; not_equal ours:main::x2,x1; p3=$out
+  fl='FAIL ours: it changes x2.txt, which the phase does not'
+  for p in "$p1" "$p2" "$p3"; do out=$p; has "$fl" && [ "$(echo "$p" | tail -1)" = 'NOT EQUAL' ] || { fail "stop, forge-rewritten row 3, documented output: $p"; return; }; done
+  pass "stop, forge-rewritten row 3: the documented FAIL in every round, also after the dependency merged"
+  [ "$h1" = "$h" ] && pass "stop, forge-rewritten row 3: the branch is left where it started, and nothing is pushed" || fail "stop, forge-rewritten row 3: the round pushed $(git log --oneline -1 "$h1") over $(git rev-parse --short "$h"): $o1"
+}
+
+c_stop_delegate() {
+  init stop-delegate; orch; phase
+  git checkout -q -b delegate; echo d > d.txt; commit 'feat: delegate work'; cd_=$(sha)
+  git checkout -q phase; echo z > z.txt; commit 'feat: session work'; c0=$(sha)
+  git merge -q --no-ff --no-edit delegate
+  round pr1 pr1:main "$c0" "$cd_"; o="$code $out"
+  not_equal pr1:main && has 'FAIL pr1: it changes d.txt, which the phase does not' \
+    && pass "stop, delegate merge: the documented FAIL" || fail "stop, delegate merge, documented output: $out"
+  unpushed pr1 && pass "stop, delegate merge: nothing is pushed" || fail "stop, delegate merge: the round pushed origin/pr1 with $(hand origin/main origin/pr1)and without d.txt: $o"
+}
+
+c_stop_dir() {
+  init "stop-$1"
+  if [ "$1" = dir ]; then on_main 'docs: notes' write notes 'some notes'; else on_main 'docs: notes' sh -c 'mkdir notes && echo one > notes/one.md'; fi
+  orch; phase
+  if [ "$1" = dir ]; then git rm -q notes; mkdir notes; echo one > notes/one.md; else git rm -rq notes; echo 'a file' > notes; fi
+  commit "docs: notes becomes a $1"; c1=$(sha)
+  round pr1 pr1:main "$c1"; r=$out o="$code $(echo "$out" | grep -v -E '^hint:|^warning: index entry')"
+  prove pr1:main; p=$out
+  out=$r; has 'git checkout-index: notes is not in the cache' && out=$p && [ "$(echo "$p" | tail -1)" = 'NOT EQUAL' ] \
+    && if [ "$1" = dir ]; then has 'FAIL pr1: it changes notesone.md, which the phase does not'; else has 'FAIL pr1: it changes .*, which the phase does not'; fi \
+    && pass "stop, $2: the documented refresh line and FAIL" || fail "stop, $2, documented output: refresh $o; proof $p"
+  unpushed pr1 && pass "stop, $2: nothing is pushed" || fail "stop, $2: the round pushed origin/pr1"
+}
+c_stop_file_to_dir() { c_stop_dir dir "file to directory"; }
+c_stop_dir_to_file() { c_stop_dir file "directory to file"; }
+
+c_chain() {
+  init chain; orch; phase
+  line 2 'line 2 pr1' shared.txt; echo a > a.txt; commit 'feat: pr1'; k1=$(sha)
+  line 11 'line 11 pr2' shared.txt; echo b > b.txt; commit 'feat: pr2'; k2=$(sha)
+  round pr1 pr1:main "$k1" && round pr2 pr2:main "$k2" || fail "chain build: $out"
+  not_equal pr1:main pr2:main && has 'FAIL shared.txt is in (pr1 and pr2|pr2 and pr1), which are not in one stack' \
+    && pass "chained rule: two unchained pull requests on one hand-written path are NOT EQUAL" || fail "chained rule, unchained: $out"
+  h=$(git rev-parse origin/pr2); round pr2 pr2:pr1; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr2 && anc origin/pr1 origin/pr2 && [ "$(hand origin/pr1 origin/pr2)" = 'b.txt shared.txt ' ] && equal pr1:main pr2:pr1 \
+    && pass "chained rule: the later one restacked on the earlier one, EQUAL" || fail "chained rule, chained: $o; diff $(hand origin/pr1 origin/pr2); proof $out"
+}
+
+c_merged_listed() {
+  init merged-parent; orch; phase
+  line 2 'line 2 parent' shared.txt; commit 'feat: parent'; c1=$(sha)
+  echo c > c.txt; commit 'feat: child'; c2=$(sha)
+  round parent parent:main "$c1" && round child child:parent "$c2" || fail "merged-parent build: $out"
+  squash parent; on_main 'fix: another pull request fixes line 2' put_line 2 'line 2 fixed' shared.txt
+  round child child:main::parent || fail "merged-parent child round: $out"
+  not_equal child:main::parent && has 'FAIL shared.txt has not landed and is in no open pull request, so it needs a new pull request' && equal parent:main child:main::parent \
+    && pass "merged listed: a merged parent listed as the handbook says gives EQUAL" || fail "merged listed, parent: $out"
+  cd "$S"; init merged-new; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "merged-new build: $out"
+  squash pr1; echo 'a fixed' > a.txt; commit 'fix: a'; f2=$(sha)
+  round pr1b pr1b:main::pr1 "$f2"; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(git show origin/pr1b:a.txt)" = 'a fixed' ] && equal pr1:main pr1b:main::pr1 \
+    && pass "merged listed: a new pull request for a fix after its merge, with the merged one listed, EQUAL" || fail "merged listed, new pull request: $o; proof $out"
+}
+
 for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_version_build c_r1_orch_merged c_r1_two_squashed c_r1_stack_moves c_r1_spaces \
   c_r2_conflict_commit c_r2_conflict_merge c_r2_clean_merge c_r2_orch_line c_r2_orch_delete c_r2_merge_commit c_r2_row3_to_row2 c_r2_grandchild \
-  c_r2_delete_package c_r2_undeclared c_r2_adjacent c_uncarried c_leak c_identity c_assumptions c_missing; do
+  c_r2_delete_package c_r2_undeclared c_r2_adjacent c_uncarried c_leak c_identity c_assumptions c_missing \
+  c_revert c_origin_names c_stop_shared c_stop_owned c_stop_forge c_stop_delegate c_stop_file_to_dir c_stop_dir_to_file c_chain c_merged_listed; do
   (cd "$S" && "$c") || fail "$c ended early"
 done
 n=$(wc -l < "$S/failed" | tr -d ' ')
@@ -543,18 +694,21 @@ CHECK
 
 A `STOP` line hands work to someone, and the PR creator acts on the handbook's prose, so this check is a cold read. Start a fresh subagent, give it only `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`, tell it to read nothing else, and ask the question. Its answer passes when it agrees in substance with every point of the expected answer. Wait for it to finish before reporting.
 
-Prompt: "Read only the file `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md` and nothing else, not even files it links to or names. Answer from it alone. You are the PR creator for phase `widgets`. The default branch is `main`. Your pull request #12 is on branch `widgets-pr`. Each item below is output you see in a round. For each, say what it means, who acts next and what they do, what you do, and in what state the branch is left. (1) The refresh prints `STOP shared.txt changed on origin/main after the phase last took it, so the phase must merge it first` and exits 1. (2) The same line, but naming `gadgets-pr`, another phase's open pull request that #12 depends on, instead of `origin/main`. (3) The refresh prints `STOP shared.txt conflicts outside generated content`, then `STOP 1a2b3c4 feat: widgets does not apply`, while a parent pull request of your own phase had a fix round on the line next to your change. (4) The refresh prints `STOP gadgets-pr does not hold origin/main, so widgets-pr must target it with gadgets-pr merged in`. Answer twice: (a) `widgets-pr` is a new pull request; (b) `widgets-pr` is already stacked on an open parent and the base table now gives another base. (5) The refresh prints `STOP gone is not a branch here`, where `gone` is a dependency that merged last week. (6) A carry stops and also prints `the branch is back at 9f8e7d6`. What has happened to the branch and to `origin/widgets-pr`? (7) The proof prints `FAIL a.txt has not landed and is in no open pull request, so it needs a new pull request`. Answer twice: (a) `a.txt` changed in a fix the phase made after its pull request merged; (b) the named path is `orch-fix.txt`, which the orchestrator committed on the orchestrator branch outside `.foundry/`. (8) May you resolve any of these conflicts yourself by editing files?"
+Prompt: "Read only the file `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md` and nothing else, not even files it links to or names. Answer from it alone. You are the PR creator for phase `widgets`. The default branch is `main`. Your pull request #12 is on branch `widgets-pr`. Each item below is output you see in a round. For each, say what it means, who acts next and what they do, what you do, and in what state the branch is left. (1) The refresh prints `STOP shared.txt changed on origin/main after the phase last took it, so the phase must merge it first` and exits 1. (2) The same line, but naming `gadgets-pr`, another phase's open pull request that #12 depends on, instead of `origin/main`. (3) The refresh prints `STOP shared.txt conflicts outside generated content`, then `STOP 1a2b3c4 feat: widgets does not apply`, then `STOP shared.txt is a shared path, so the stop is permanent: no merge or commit on the phase clears it, and it needs a decision`, while a parent pull request of your own phase had a fix round on the line next to your change. (4) The refresh prints `STOP gadgets-pr does not hold origin/main, so widgets-pr must target it with gadgets-pr merged in`. Answer twice: (a) `widgets-pr` is a new pull request; (b) `widgets-pr` is already stacked on an open parent and the base table now gives another base. (5) The refresh prints `STOP gone is not a branch here`, where `gone` is a dependency that merged last week. (6) A carry stops and also prints `the branch is back at 9f8e7d6`. What has happened to the branch and to `origin/widgets-pr`? (7) The proof prints `FAIL a.txt has not landed and is in no open pull request, so it needs a new pull request`. Answer twice: (a) `a.txt` changed in a fix the phase made after its pull request merged; (b) the named path is `orch-fix.txt`, which the orchestrator committed on the orchestrator branch outside `.foundry/`. (8) May you resolve any of these conflicts yourself by editing files? (9) `widgets-pr` targets `main` and carries `gadgets-pr`, which was stacked on `gizmos-pr`. After `gizmos-pr` merged, every round's proof prints `FAIL widgets-pr: it changes gadgets.txt, which the phase does not`, where `gadgets.txt` is one of `gadgets-pr`'s files, and it still does after `gadgets-pr` merges. (10) The phase session merged a delegate's branch into the phase with a merge commit, and the proof prints `FAIL widgets-pr: it changes d.txt, which the phase does not` for the delegate's file `d.txt`. (11) The refresh prints `git checkout-index: notes is not in the cache`, and the proof prints `FAIL widgets-pr: it changes notesone.md, which the phase does not`, after the phase replaced the file `notes` with a directory `notes/` holding `one.md`. For (1), (2), (3), (9), (10) and (11), also say who decides, and what the options or the action are that would clear it."
 
 Expected answer:
 
-1. The default branch changed a path the pull request owns after the phase last took it. The PR creator reports it to the phase session, which merges the default branch into the phase and resolves any conflict there. The next round then goes through. The branch is left where it started, nothing is pushed.
-2. The same stale path, on another phase's pull request. The PR creator reports it to the phase session as a decision, and never writes that phase's branch.
-3. A shared path's own commits do not apply on this base. The PR creator reports both lines to the phase session and does not resolve the conflict. The branch is back where it started.
+1. The default branch changed a path the pull request owns after the phase last took it, even without a conflict, such as another pull request landing an edit elsewhere in the file. The PR creator does not work around it. It reports the output to the phase session, which sends it to the orchestrator as a decision request. Clearing it needs the phase to merge `origin/main` and resolve any conflict there, which moves the phase's code head and so needs Verify and Review again; it is not a gate-free round. The decision is whether the phase merges now. The branch is left where it started, nothing is pushed.
+2. The same stale path, changed by the phase that owns `gadgets-pr`. The same decision request goes through the phase session to the orchestrator. Clearing it needs this phase to merge `gadgets-pr` and resolve any conflict there, with both gates again. The PR creator never writes `gadgets-pr`'s branch.
+3. A shared path's own commits do not apply on this base, and the stop is permanent: neither a merge resolution nor a resolution commit on the phase reaches the pull request. The PR creator reports the lines to the phase session and does not resolve the conflict, and the phase session sends the orchestrator a decision request. The options are a one-off rebuild of the branch from its base, which force-pushes and needs the developer's approval, or a replacement pull request on a new branch. The branch is back where it started, nothing is pushed.
 4. (a) Use the third row of the base table: target `main` with `gadgets-pr` merged in, a spec such as `widgets-pr:main:gadgets-pr`, and no `gh stack link`. (b) This is leaving a stack. Do not refresh it onto the new base, and do not run `gh stack unstack`. Report it to the phase session.
 5. A branch in the spec is missing. Fetch again, restore the merged dependency's ref with `git fetch origin pull/<number>/head:gone`, or correct the spec, then run the round again. Never prune remote-tracking refs.
 6. The carry failed and the branch was reset to the head it started from. `origin/widgets-pr` is untouched, because pushing comes after a successful refresh.
 7. (a) An uncarried phase change. Open a new draft pull request for it, with its base from the base table and a new branch, run its round and the three checks again. (b) A broken assumption of the proof, not the phase's own work. Open no pull request. Report it to the phase session with the `FAIL` lines, and the phase session raises it with the orchestrator.
 8. No. The PR creator never resolves a hand-written conflict and never changes what the code does.
+9. GitHub rewrote `gadgets-pr`'s head when its parent merged, so `widgets-pr` holds the old head and the proof stays `NOT EQUAL` in every round, even after `gadgets-pr` merges. The PR creator does not work around it and opens no pull request for it. It reports the output to the phase session, which sends the orchestrator a decision request with the same two options as (3): a one-off rebuild that force-pushes with the developer's approval, or a replacement pull request on a new branch.
+10. A delegate's branch merged into the phase breaks the proof's assumption that the phase's own commits sit on its first-parent line, so the delegate's commits are not phase commits. The PR creator opens no pull request for it and reports it with the `FAIL` lines to the phase session, which sends the orchestrator a decision request. Taking the delegate's commits with `git cherry-pick -x` instead of a merge works.
+11. The phase replaced a file with a directory of the same name, which the design does not handle. The PR creator reports it to the phase session, which sends the orchestrator a decision request: whether to split that change by hand, or to undo it in the phase.
 
 ## Evidence
 

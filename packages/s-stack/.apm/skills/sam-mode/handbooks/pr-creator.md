@@ -139,7 +139,7 @@ It prints `EQUAL` and exits 0, or prints a `FAIL` line for each fault, then `NOT
 
 ## The merge procedure
 
-Every merge into a pull request branch stops before committing, so the hook sees the merge commit, and regenerates first. `<other>` is a dependency's branch, `origin/<default>` or the pull request's own remote branch. Pass a squash-merged parent's branch as the second argument, or leave it out.
+Every merge into a pull request branch stops before committing, so the hook sees the merge commit, and regenerates first. `<other>` is a dependency's branch, `origin/<default>` or the pull request's own remote branch. Pass a squash-merged parent's branch as the second argument, or leave it out. The squash step runs only while the branch's merge base with `<other>` is still in the parent's history, which is true only on the first merge after the squash, so passing the parent in a later round changes nothing.
 
 ```bash
 bash -s -- <other> <squash-merged parent branch> <<'EOF'
@@ -152,7 +152,7 @@ take() { side "$1" "$2" > "$2.side" && cat "$2.side" > "$2" && rm "$2.side" && g
 sides_differ_by_hand() { diff -U0 <(side ours "$1") <(side theirs "$1") | grep -E '^[-+]' | grep -v -E '^(\+\+\+|---) ' | grep -q -v -E "$LINE_OK"; }
 git merge --no-ff --no-commit "$1"; status=$?
 git rev-parse -q --verify MERGE_HEAD >/dev/null || exit "$status"
-if [ -n "$2" ]; then
+if [ -n "$2" ] && git merge-base --is-ancestor "$(git merge-base HEAD "$1")" "$2"; then
   for f in $(git diff --name-only "$1...$2" -- . "${GEN[@]}" "${LINES[@]}"); do
     git ls-files -u -- "$f" | grep -q . || continue
     take ours "$f" || abort "$f cannot be resolved hunk by hunk"
@@ -174,10 +174,10 @@ A pull request's branch and description have one writer, the phase session, thro
 
 - **A fix round.** Carry the fix commits to the branch that owns them with the carry loop, add a new regenerate commit, push, and repeat the three checks.
 - **The default branch moved, or a regenerate-only round.** These rounds repeat while the default branch keeps moving, so each one converges:
-  1. Run `git fetch origin`. If `git merge-base --is-ancestor origin/<default> HEAD` succeeds, the branch already contains the default branch's tip. Change nothing, push nothing, and report that the branch is up to date at that tip.
-  2. Otherwise merge `origin/<default>` with the merge procedure, passing the parent's branch when a parent was squash-merged. That is the round's one merge commit.
+  1. Run `git fetch origin`. If `git merge-base --is-ancestor origin/<default> HEAD` succeeds, the branch already contains the default branch's tip, so skip step 2.
+  2. Merge `origin/<default>` with the merge procedure, passing the parent's branch when a parent was squash-merged. That is the round's one merge commit.
   3. Run the regenerate command and add one new regenerate commit when it changes anything. Never revert or amend an earlier regenerate commit. The new one starts from the merged tree, so regenerate commits never cancel each other.
-  4. Push, and run the equality proof.
+  4. If `HEAD` differs from `origin/<branch>`, push and run the equality proof. Otherwise the round changed nothing, so report that the branch is up to date at the default branch's tip. A round that stopped part-way therefore finishes on the next one.
 - **A restack, only when the phase session asks.** Merge the new base's branch with the merge procedure, then `gh pr edit <number> --base <new base>`. When the pull request joins a stack, link it with `gh stack link <parent number> <child number>`. When it would leave a stack, report that to the phase session instead of running `gh stack unstack`, which unstacks the whole stack. When it moves to the default branch, merge `origin/<default>` first. Then repeat the three checks.
 
 ## Report

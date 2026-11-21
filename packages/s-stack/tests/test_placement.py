@@ -145,6 +145,18 @@ class PlacementTests(LauncherTestCase):
         self.assertEqual(new.left, before[orchestrator].left)
         self.assertGreater(new.top, before[orchestrator].top)
 
+    def test_a_nameless_claude_in_a_tagged_pane_is_not_the_orchestrator(self) -> None:
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        spec = self.start("--role", "spec", name="f-spec")
+        self.kill_claude("f-spec")
+        self.tmux("respawn-pane", "-k", "-t", spec, "-c", str(self.worktree("f")), "claude")
+        self.wait_for_claude(spec)
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "planner", name="f-planner"))
+
+        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+
     def test_placement_works_without_a_utf8_locale(self) -> None:
         orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
         before = self.geometry()

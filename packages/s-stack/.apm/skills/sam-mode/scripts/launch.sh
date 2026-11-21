@@ -181,10 +181,12 @@ pane_inventory() {
 
 # Reads pane_inventory for <session> and prints the one pane that runs it, or
 # nothing. With <allow_nameless> 1, a nameless claude in the inventory's
-# worktree counts as the session resumed by workmux resurrect.
+# worktree counts as the session resumed by workmux resurrect, but only in an
+# untagged pane: resurrect makes new panes, and a nameless claude in a pane the
+# launcher tagged was started there by hand after that session ended.
 live_pane_of() {
   local session=$1 allow_nameless=$2 matches
-  matches=$(awk -v allow="$allow_nameless" '$4 == "strict" || (allow && $4 == "nameless" && $5 == 1) { print $1 }')
+  matches=$(awk -v allow="$allow_nameless" '$4 == "strict" || (allow && $4 == "nameless" && $5 == 1 && $3 == "-") { print $1 }')
   at_most_one "pane runs $session" "$matches"
   [ -z "$matches" ] || printf '%s\n' "$matches"
 }

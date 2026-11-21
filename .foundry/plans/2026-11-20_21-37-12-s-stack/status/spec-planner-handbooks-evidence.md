@@ -154,3 +154,12 @@ Minor findings, recorded and not fixed under `spec-planner-handbooks-d3`:
 
 - Point 3 passes an answer that serialises the two phases through a made-up dependency. That plan can still be scheduled, just later.
 - Sonnet graders failed one correct answer on point 3 in two of three runs. Their reasons were not in point 3 (open pull requests, a note about a falsified assumption), and Opus and default graders passed it. Use Opus graders for this check.
+
+## Follow-up round: PR creator STOP
+
+The PR creator built `s-stack-spec-planner-port-rule` from `origin/main` (`51f334e`) with the pr-handbook phase's `pr.sh`, which it ran unchanged.
+
+- **The branch.** It carried the five phase commits with cherry-pick trailers, then added regenerate commit `25173f8`, which bumps s-stack from 0.1.3 to 0.1.4 and refreshes the lockfile hashes.
+- **What passed.** `git diff 47f792f HEAD` on both files printed nothing. Against `main`, the change is 2 hand-written files with +3/-3, plus the `version:` line. The hook exited 0. `versioning.py check` printed `1 changed package(s), none without a version bump`.
+- **What failed.** `pr.sh prove` printed NOT EQUAL. Every FAIL is about the merged #84 branch. It was built under commit replay before cherry-pick trailers existed, and it carries #81's and #82's pre-merge commits. So the proof cannot match the earlier phase commits on the three owned files to anything, although their content is on `main` through #84's squash.
+- **Where it stopped.** Nothing was pushed, and the local branch was deleted. The PR creator stopped because this history is not in the handbook's STOP table. The phase sent decision request `spec-planner-handbooks-r1`.

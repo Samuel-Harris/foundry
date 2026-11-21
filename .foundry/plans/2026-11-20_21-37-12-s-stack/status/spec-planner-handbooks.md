@@ -5,7 +5,7 @@ changed_at: "2026-11-21T23:36:16Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
-waits_for: null
+waits_for: "The orchestrator's answer to spec-planner-handbooks-r1."
 verdicts:
   - gate: "verify"
     result: "VERIFIED"
@@ -68,7 +68,14 @@ pull_requests:
     base: "main"
     depends_on: [82]
     stacked: false
-requests: []
+requests:
+  - id: "spec-planner-handbooks-r1"
+    question: "The pr-handbook overlay proof prints NOT EQUAL for this round's new pull request only because the merged #84 was built before cherry-pick trailers existed and carries #81 and #82 in its history; how should the pull request ship?"
+    options: ["A. Ship it on equivalent evidence: its head-versus-target check passed, its two hand-written files equal the verified head 47f792f, its diff against main is exactly those two files plus generated lines, and the hook and versioning check passed.", "B. Wait for pr-handbook to teach the proof to accept a phase commit whose path content already equals main, then rerun it."]
+    recommendation: "A"
+    door: "two-way"
+    waiting_work: "Pushing branch s-stack-spec-planner-port-rule and opening its draft pull request against main."
+    since: "2026-11-21T23:40:04Z"
 decisions:
   - id: "spec-planner-handbooks-d1"
     decision: "planner.md does not point to this run's feature plan as a worked example, because that file lives under .foundry/ on Foundry's orchestrator branch and never reaches a consuming repository. The feature plan allows the pointer but does not require it."

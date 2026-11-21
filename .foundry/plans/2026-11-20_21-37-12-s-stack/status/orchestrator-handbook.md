@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T23:17:21Z"
+state: "Verify"
+changed_at: "2026-11-21T23:18:26Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "ac3d7c0e7e46869167b4774f4a3094d37318d745"
+code_head: "3743f4c5fb20cb081555217d83c7421a69aeacf3"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -325,3 +325,5 @@ The Review 9 fixes are at `07e5d30`. `s-stack-package` was already merged. The p
 The twenty-sixth Verify gate returned VERIFIED at `ac3d7c0`. The phase moved to Review, which covers the commits since `5b8a481`.
 
 The tenth Review gate returned SIGNIFICANT at `ac3d7c0`, under the common-path bar. The phase moved back to Implement.
+
+The Review 10 fix is at `3743f4c`. `s-stack-package` (`a4d130f`) was merged at `fb0784d`, and outside `.foundry/` it touched only s-stack's `version:` line, so the code head is unchanged. The phase moved to Verify at code head `3743f4c`.

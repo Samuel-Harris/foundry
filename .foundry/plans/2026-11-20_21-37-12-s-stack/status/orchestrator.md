@@ -71,3 +71,7 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 - After the pre-commit hook has rewritten a staged lockfile, `git merge --abort` exits 128 and leaves `MERGE_HEAD`. Recover with `git reset --merge`, then check `git status`. Found by `orchestrator-handbook` (review of `e0a51a2`).
 - Read a phase's tip and its code head in one step, and merge that tip SHA, not the branch name, so no commit added after the verdicts check can slip in.
+
+## Queued roadmap update
+
+At the end of the run, start a spec writer to fold `run-decisions.md` into the roadmap. At least these items: `coordination.md` "The launcher" and "Restarts" and C4 now resume by stored id with `--print-window`, `--close`, `--remove` and exit 5; `roles.md` drops the Orchestrate playbook pointer; the status board gains the dependency map and session labels; the generated-files rules for code heads, conflicts and the line limit. Raised by `launcher`.

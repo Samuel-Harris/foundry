@@ -77,3 +77,15 @@ A fresh PR creator rebuilt #84 under `pr-handbook-r1`.
   - GitHub reports #84 as mergeable and CLEAN.
 - **Size.** 167 added and 1 removed against `s-stack-verify-skill`.
 - **CI at `49df8c3`.** Pre-commit checks, Package versions, Detect changed paths and both tools test jobs passed.
+
+## Follow-up round: Verify, code head `49f295936b38922510b53242717c6098f6ea5ec2`
+
+The round rewords cold read 1's expected point 5 so it requires port 5432 only on the sharing back-end phase. A fresh verifier ran the full skill at HEAD `1580847`, where only `.foundry/` differs from `49f2959`.
+
+- Checks 1, 2, 3, 5, 7 and 8 passed. Check 4 is pending on `orchestrator.md` and `pr-creator.md`, and check 6 on the launcher's tests.
+- Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0, which the phase session confirmed in the log.
+- Check 8 covered every check file's Rerun section: `board.md`'s headless Chrome script, `foundation.md`, `phase-handbooks.md` and this phase's file. All passed.
+- This phase's cold read 1 ran three times, and point 5 passed in all three. Two runs named the port for a second phase under a stated assumption, which the new wording treats as neutral.
+- All Done-when items passed. Verdict: VERIFIED.
+
+Minor note, recorded and not fixed under `spec-planner-handbooks-d3`. Point 3 does not say that port contention under a stated assumption leaves "can run at the same time" intact. One run hedged on it and was graded PASS.

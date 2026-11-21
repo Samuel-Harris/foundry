@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T23:05:42Z"
+state: "Review"
+changed_at: "2026-11-21T23:10:01Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
@@ -32,6 +32,11 @@ verdicts:
     code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
     at: "2026-11-21T16:13:07Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
+    at: "2026-11-21T23:10:01Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
@@ -56,4 +61,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Cold read 1's point 5 is reworded at `49f2959`, and `s-stack-package` is merged at `9533cf9`. A fresh verifier runs in full. The change is one sentence of check text, so it had no `quick-review`, and the Review gate covers it.
+Follow-up round. Verify passed at `49f2959`. The Review gate covers the commits since `6f70b37`.

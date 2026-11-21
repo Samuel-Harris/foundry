@@ -169,3 +169,16 @@ Minor items:
 - It was not stated whether status-only merges are exempt from the default-branch-tick rule, or whether an aborted default-branch merge counts.
 - The tracker did not record when stopping began, or clear the mark.
 - Resizing panes was not ruled out.
+
+## Verify 12, code head `5831c24172b69250013c6355b521cd195a755958`, VERIFIED
+
+A fresh verifier updated the check file for `b5cc777` and `0f37a7b` (commit `5831c24`, with a new cold read Q) and ran every check to completion. C6 checks 1, 2, 3, 5 and 7 PASS (`169/200 handbooks/orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: three scripts and 26 cold reads across four check files. Every **Done when** item was met.
+
+One-off results at `5831c24`:
+
+- The handbook has 169 lines.
+- A case-insensitive grep finds workmux, tmux and claude only in prose.
+- All nine launcher flags appear in `launch.sh`'s usage text on the `launcher` phase branch.
+- A private-name grep found 0 hits, with a positive control of 3.
+
+One defect breaks a real run. A phase sent back after Done, whose pull requests have all merged, returns to PR with no open pull request for its new code. Whether it then merges, or waits for good, depended on how "lists its open pull requests" is read. The orchestrator side is fixed by requiring at least one open pull request. Opening one for that code belongs to `phase-session.md` and the PR creator, and was reported to the orchestrator. The phase moved back to Implement.

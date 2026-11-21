@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T17:50:04Z"
+state: "Implement"
+changed_at: "2026-11-21T18:00:53Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "0f37a7b5e7be061859099573ceeb82e610f8c755"
+code_head: "5831c24172b69250013c6355b521cd195a755958"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -66,6 +66,11 @@ verdicts:
     result: "INCONCLUSIVE"
     code_head: "aa1691c294db133b3d809d901732719cc55b6097"
     at: "2026-11-21T17:47:40Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "5831c24172b69250013c6355b521cd195a755958"
+    at: "2026-11-21T18:00:53Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -141,3 +146,5 @@ The fixes are at `63e2e35`. `s-stack-package` (`1e9e4bb`) was merged at `34d639f
 The eleventh Verify gate returned INCONCLUSIVE at `aa1691c`, and two defects would break a real run. The phase moved back to Implement.
 
 The Verify 11 fixes are at `b5cc777`, and the orchestrator's told-mark instruction is at `0f37a7b`. `s-stack-package` was already merged. The phase moved to Verify at code head `0f37a7b`.
+
+The twelfth Verify gate returned VERIFIED at `5831c24`. One defect in a cross-phase contract would break a real run, so the phase moved back to Implement for its side of the fix.

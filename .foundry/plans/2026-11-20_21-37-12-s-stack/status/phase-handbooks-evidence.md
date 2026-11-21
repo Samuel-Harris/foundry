@@ -17,3 +17,26 @@ A second fresh verifier reran the whole verification skill with the check file f
 - Cold read 4 part 2 now passes: the reader follows the instruction, records it, commits, sends `instruction` before starting the work, adds a decision request when it conflicts with the feature plan, and builds only what the answer cannot change.
 - Pending, not failing: four handbook routes other phases own, and the launcher tests.
 - Private-name search over the phase diff and commit messages: no hits.
+
+## Review: SIGNIFICANT at `305a26e4a846d378d2dac65faa47909405a36865`
+
+p-stack's `interrogate`, scope `git diff s-stack-package...HEAD -- . ':(exclude).foundry' ':(exclude)**/apm.lock.yaml'`, intent from commit messages and code. Two reviewers, Opus and Fable, each in a detached worktree at `20dbdbf`. The Gemini seat is unavailable on this host and was dropped. Each finding below was checked by the phase session against the handbook text or by rerunning the reproduction.
+
+Significant:
+
+1. `verifier.md` gives INCONCLUSIVE for results that `tests/s-stack/verify-s-stack/SKILL.md` calls VERIFIED. The skill says "VERIFIED when no check is FAIL ... PENDING never fails the verdict". The handbook's table has no place for PENDING, and "A check you skipped is a check that could not run" reads as covering it. One cold reader returned INCONCLUSIVE, and another returned VERIFIED but was only 60% sure. Both reviewers found it.
+   Probe: cold read of `verifier.md` and the skill, with checks 4 and 6 printing PENDING and every other check passing. The expected verdict is VERIFIED.
+2. `reviewer.md`'s later-review range `<last reviewed code head>..<code head>` can end on the orchestrator branch. The code head command follows git's history simplification, and after the orchestrator has merged the phase, a merge of the orchestrator branch makes it pick an orchestrator merge commit. The range then walks the orchestrator's first-parent line and shows its conflict resolution as the phase's work. Rerun in the reviewer's scratch repository `scratch-codehead-conflict`: the code head is `e78a928 merge phase b (orchestrator resolved uv.lock)`, NOT on the phase's first-parent line.
+   Probe: in that repository, the scope commands must list nothing from the orchestrator's merge of phase b.
+3. `phase-session.md`'s `merge-orchestrator-branch` row moves the phase back to Implement whenever it is in Verify or later, even when the merge brought only `.foundry/` files and left the code head and the verdicts unchanged. Re-entering PR then reads as starting a new PR creator for pull requests that are already open.
+   Probe: cold read in which a phase in Review gets a merge that brings only `.foundry/` files. Expected: it stays in Review, keeps its VERIFIED verdict, and starts no verifier.
+4. `verifier.md`'s "None" bullet says the verdict is then VERIFIED, while "Run the whole verification skill", "You write one file" and the verdict table point elsewhere. A reader cannot tell whether a None phase still reruns the merged phases' checks.
+   Probe: cold read of `verifier.md` with a diff that renames private variables only. Expected: run the whole skill, write no check file, and let the table decide the verdict.
+
+Not significant, recorded only:
+
+- An orchestrator `instruction` is reported back to the orchestrator as an `instruction` message. This is redundant and harmless.
+- `phase-session.md`'s message cases go beyond `references/status-and-messages.md`'s orchestrator table: `move-back` for a failed orchestrator-branch check, the three `fix-round` kinds, and no kind for "every pull request merged". The orchestrator directed this wording and queued the reference change for a `foundation` fix round. The file is outside this phase.
+- `SKILL.md` says a commit never mixes `.foundry/` with other files, while `phase-session.md` states the merge exception. `SKILL.md` belongs to `foundation`.
+- Minor gaps: Plan sends only `started`; the INCONCLUSIVE row does not name the state while a decision request waits; a voluntary fix after CLEAR has no stated path.
+- `checks/phase-handbooks.md`'s `## Evidence` section holds no results.

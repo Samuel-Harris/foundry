@@ -212,6 +212,74 @@ wait_for_started_claude() {
   done
 }
 
+# Sets target_pane, direction and split_size for a session started by splitting
+# a pane of $window. The orchestrator holds the first column after the workmux
+# sidebar, spec writers stack in its column and every other session goes to its
+# right. A pane without the @s-stack-session tag belongs to the developer or to
+# workmux and is never split, except the orchestrator's pane, which a resurrect
+# leaves untagged, and the first column's top pane when the orchestrator starts
+# with no spec writer.
+choose_split() {
+  local panes feature_worktree orchestrator_pane='' spec_pane='' choice
+  # Spaces separate the fields, as in session_panes, and the command goes last.
+  panes=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_left} #{pane_right} #{pane_top} #{pane_width} #{pane_height} #{?@s-stack-session,#{@s-stack-session},-} #{pane_current_command}') || die "tmux list-panes -t $window failed"
+  if [ "$role" = orchestrator ]; then
+    spec_pane=$(session_panes "$feature-spec" '' | awk '$5 == "strict"')
+    at_most_one "pane runs $feature-spec" "$spec_pane"
+    spec_pane=${spec_pane%% *}
+  else
+    feature_worktree=$(workmux path "$feature" 2>/dev/null) || feature_worktree=''
+    orchestrator_pane=$(session_panes "$feature-orchestrator" "$feature_worktree" | awk '$5 == "strict" || ($5 == "nameless" && $6 == 1)')
+    at_most_one "pane runs $feature-orchestrator" "$orchestrator_pane"
+    orchestrator_pane=${orchestrator_pane%% *}
+  fi
+  choice=$(printf '%s\n' "$panes" | awk -v role="$role" -v feature="$feature" -v orchestrator="$orchestrator_pane" -v spec="$spec_pane" -v first_spec="$first_spec" '
+    {
+      n++
+      id[n] = $1; left[n] = $2; right[n] = $3; top[n] = $4; width[n] = $5; height[n] = $6; tag[n] = $7
+      sidebar[n] = NF == 8 && $8 == "workmux"
+      if ($1 == orchestrator) o = n
+      if ($1 == spec) s = n
+    }
+    function first_column_top(   i, best) {
+      for (i = 1; i <= n; i++) {
+        if (sidebar[i]) continue
+        if (!best || left[i] < left[best] || (left[i] == left[best] && top[i] < top[best])) best = i
+      }
+      return best ? id[best] " -v" : "none"
+    }
+    END {
+      if (role == "orchestrator") { print s ? id[s] " -v" : first_column_top(); exit }
+      if (!o) { print (role == "spec" && first_spec) ? first_column_top() : "no-orchestrator"; exit }
+      if (role == "spec") {
+        best = 0
+        for (i = 1; i <= n; i++) {
+          if (left[i] < left[o] || right[i] > right[o]) continue
+          if (i != o && tag[i] != feature "-spec" && tag[i] !~ ("^" feature "-spec-[0-9]+$")) continue
+          if (!best || top[i] > top[best]) best = i
+        }
+        print id[best] " -v"
+        exit
+      }
+      best = 0
+      for (i = 1; i <= n; i++) {
+        if (tag[i] == "-" || left[i] <= right[o]) continue
+        if (!best || width[i] * height[i] > width[best] * height[best]) best = i
+      }
+      # Each -l keeps the orchestrator at least as wide as the new pane: the
+      # divider takes one column of the orchestrator pane.
+      if (!best) print id[o] " -h " int((width[o] - 1) / 2)
+      else print id[best] " " (width[best] >= 161 ? "-h" : "-v")
+    }')
+  case "$choice" in
+    none) die "no pane to split in $window" ;;
+    no-orchestrator) die "no $feature-orchestrator pane in $window" ;;
+  esac
+  read -r target_pane direction split_size <<EOF
+$choice
+EOF
+}
+
 default_branch() {
   local ref
   if ref=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null); then
@@ -307,13 +375,7 @@ cmd_start() {
 
   if [ -z "$target_pane" ]; then
     split=1
-    window_panes=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_width} #{pane_height} #{window_id}') || die "tmux list-panes -t $window failed"
-    candidates=$(session_panes "$name" '' | awk -v window="$window" '$4 == window')
-    [ -n "$candidates" ] || candidates=$window_panes
-    read -r target_pane width height _ <<EOF
-$(printf '%s\n' "$candidates" | awk '{ area = $2 * $3; if (area > best) { best = area; line = $0 } } END { print line }')
-EOF
-    if [ "$width" -gt $((2 * height)) ]; then direction=-h; else direction=-v; fi
+    choose_split
     # split-window unzooms a zoomed window unless given -Z, which zooms an unzoomed one.
     zoom=''
     if [ "$(tmux display-message -p -t "$target_pane" '#{window_zoomed_flag}')" = 1 ]; then zoom=-Z; fi
@@ -348,10 +410,11 @@ EOF
   pane_command="claude --name $(printf %q "$name") $conversation_flag $(printf %q "$conversation_id") $(printf %q "$prompt"); exec \"\${SHELL:-/bin/sh}\" -l"
 
   if [ -n "$split" ]; then
-    target_pane=$(tmux split-window -d $zoom -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" /bin/sh -c "$pane_command") || cannot_split
+    target_pane=$(tmux split-window -d $zoom -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" ${split_size:+-l "$split_size"} /bin/sh -c "$pane_command") || cannot_split
   else
     tmux respawn-pane -k -t "$target_pane" -c "$worktree" /bin/sh -c "$pane_command" || die "tmux respawn-pane -t $target_pane failed"
   fi
+  tmux set-option -p -t "$target_pane" @s-stack-session "$name" || die "tmux set-option -p -t $target_pane @s-stack-session failed"
 
   if [ "$conversation_flag" = --session-id ]; then
     mkdir -p "$markers" && printf '%s\n' "$conversation_id" > "$marker" || die "cannot write the session marker $marker"

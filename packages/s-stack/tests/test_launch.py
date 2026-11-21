@@ -4,6 +4,7 @@ import os
 import shutil
 import signal
 import subprocess
+import sys
 import tempfile
 import time
 import unittest
@@ -33,7 +34,15 @@ class Started(NamedTuple):
     worktree: str
 
 
+class Geometry(NamedTuple):
+    left: int
+    top: int
+    width: int
+    height: int
+
+
 PANE_FORMAT = "#{pane_id} #{pane_pid} #{pane_width} #{pane_height} #{window_id}"
+GEOMETRY_FORMAT = "#{pane_id} #{pane_left} #{pane_top} #{pane_width} #{pane_height}"
 
 def conversation(args: str, *, flag: str) -> str | None:
     words = args.split()
@@ -229,6 +238,42 @@ class LauncherTestCase(unittest.TestCase):
         self.wait_for_claude(pane)
         return pane
 
+    def make_orchestrator(self, feature: str = "f", /) -> str:
+        """An orchestrator pane the launcher did not start, so it carries no tag."""
+        return self.make_pane(self.worktree(feature), command=f"claude --name {feature}-orchestrator")
+
+    def split(self, *, target: str, flags: list[str], command: str | None = None) -> str:
+        """A pane the developer adds by hand, untagged."""
+        cwd = ["-c", str(self.worktree("f"))] if self.worktree("f").is_dir() else []
+        pane = self.tmux("split-window", "-d", "-P", "-F", "#{pane_id}", "-t", target, *cwd, *flags, *([command] if command else [])).strip()
+        if command and command.startswith("claude"):
+            self.wait_for_claude(pane)
+        return pane
+
+    def add_sidebar(self) -> str:
+        """A narrow, full-height leftmost pane whose foreground process is named workmux, as tmux reports the sidebar."""
+        sidebar_bin = self.tmp / "sidebar"
+        sidebar_bin.mkdir()
+        program = sidebar_bin / "workmux"
+        shutil.copy(os.path.realpath(shutil.which("sleep", path=str(self.system_bin))), program)
+        if sys.platform == "darwin":
+            # macOS kills a copied system binary until it is signed again.
+            subprocess.run(["codesign", "-f", "-s", "-", str(program)], check=True, capture_output=True)
+        pane = self.tmux("split-window", "-d", "-h", "-b", "-f", "-l", "20", "-P", "-F", "#{pane_id}", "-t", self.window, f"{program} 86400").strip()
+        self.wait_for(lambda: self.tmux("display-message", "-p", "-t", pane, "#{pane_current_command}").strip() == "workmux", message="the sidebar stub does not read as workmux")
+        return pane
+
+    def geometry(self) -> dict[str, Geometry]:
+        out = self.tmux("list-panes", "-t", self.window, "-F", GEOMETRY_FORMAT)
+        rows = {}
+        for line in out.splitlines():
+            pane, left, top, width, height = line.split()
+            rows[pane] = Geometry(left=int(left), top=int(top), width=int(width), height=int(height))
+        return rows
+
+    def tag_of(self, pane: str, /) -> str:
+        return self.tmux("show-options", "-p", "-v", "-t", pane, "@s-stack-session").strip()
+
     def started(self, result: subprocess.CompletedProcess, *, name: str) -> Started:
         self.assertEqual(result.returncode, 0, result.stderr)
         words = result.stdout.split()
@@ -251,6 +296,7 @@ class StartTests(LauncherTestCase):
         first_pane = next(p for p in self.panes() if p["window"] == new_windows[0])
         self.assertEqual(pane, first_pane["id"])
         self.assertIn("--name f-spec ", self.wait_for_claude(pane))
+        self.assertEqual(self.tag_of(pane), "f-spec")
         self.assertEqual(Path(worktree), self.worktree("f"))
         self.assertIn("add f --base origin/main -C", self.workmux_log.read_text().splitlines())
         self.assertEqual(self.prompt_of("f-spec"), "/sam-mode spec feature=f phase=- update=- roadmap=- plan=- orchestrator=f-orchestrator")
@@ -268,6 +314,7 @@ class StartTests(LauncherTestCase):
     def test_phase_session_gets_a_pane_in_the_window_and_its_prompt(self) -> None:
         feature = self.make_feature_worktree()
         self.commit_in(feature, relative=f".foundry/feature-roadmaps/{ROADMAP_ID}/README.md")
+        self.make_orchestrator()
         windows = self.windows()
 
         pane, worktree = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
@@ -284,6 +331,7 @@ class StartTests(LauncherTestCase):
 
     def test_planner_and_update_spec_writer_names(self) -> None:
         self.make_feature_worktree()
+        self.make_orchestrator()
 
         _, planner_worktree = self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
         _, update_worktree = self.started(self.launch("--feature", "f", "--role", "spec", "--update", "2", "--window", self.window), name="f-spec-2")
@@ -296,6 +344,7 @@ class StartTests(LauncherTestCase):
 
     def test_second_launch_reports_alive_and_changes_nothing(self) -> None:
         self.make_feature_worktree()
+        self.make_orchestrator()
         args = ("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window)
         pane, _ = self.started(self.launch(*args), name="f-phase-p")
         self.wait_for_claude(pane)
@@ -323,6 +372,7 @@ class StartTests(LauncherTestCase):
 
     def test_a_name_later_in_the_arguments_is_not_the_session(self) -> None:
         self.make_feature_worktree()
+        self.make_orchestrator()
         decoy = self.make_pane(self.tmp, command="claude --model m --continue say --name f-phase-p")
         args = ("--feature", "f", "--role", "phase", "--phase", "p")
 
@@ -335,6 +385,7 @@ class StartTests(LauncherTestCase):
 
     def test_the_session_starts_whatever_the_default_shell(self) -> None:
         self.make_feature_worktree()
+        self.make_orchestrator()
         self.tmux("set-option", "-g", "default-shell", "/usr/bin/false")
 
         pane, _ = self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
@@ -352,6 +403,7 @@ class StartTests(LauncherTestCase):
 
     def test_restart_resumes_its_own_conversation_unless_fresh(self) -> None:
         self.make_feature_worktree()
+        self.make_orchestrator()
         args = ("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window)
         first, _ = self.started(self.launch(*args), name="f-phase-p")
         first_id = conversation(self.wait_for_claude(first), flag="--session-id")
@@ -379,45 +431,23 @@ class StartTests(LauncherTestCase):
         }
         self.assertNotEqual(ids["f-spec"], ids["f-orchestrator"])
 
+        panes = [spec_pane, orchestrator_pane]
         for order in ((orchestrator, spec), (spec, orchestrator)):
             self.kill_claude("f-spec")
             self.kill_claude("f-orchestrator")
+            for pane in panes:
+                self.tmux("kill-pane", "-t", pane)
+            panes = []
             for args in order:
                 name = f"f-{args[3]}"
                 pane, _ = self.started(self.launch(*args), name=name)
+                panes.append(pane)
                 self.assertEqual(conversation(self.wait_for_claude(pane), flag="--resume"), ids[name], order)
-
-    def test_panes_other_than_the_split_one_keep_their_size(self) -> None:
-        self.make_feature_worktree()
-        main = self.panes()[0]["id"]
-        self.tmux("split-window", "-d", "-h", "-l", "20", "-t", main)
-        self.tmux("split-window", "-d", "-v", "-l", "10", "-t", main)
-        before = {p["id"]: (p["width"], p["height"]) for p in self.panes()}
-
-        pane, _ = self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
-
-        after = {p["id"]: (p["width"], p["height"]) for p in self.panes()}
-        changed = [p for p in before if before[p] != after[p]]
-        self.assertEqual(changed, [main])
-        self.assertEqual(set(after) - set(before), {pane})
-
-    def test_largest_session_pane_is_split(self) -> None:
-        self.make_feature_worktree()
-        main = self.panes()[0]["id"]
-        large = self.tmux("split-window", "-d", "-P", "-F", "#{pane_id}", "-h", "-l", "40", "-t", main, "claude --name other-a").strip()
-        small = self.tmux("split-window", "-d", "-P", "-F", "#{pane_id}", "-v", "-l", "15", "-t", large, "claude --name other-b").strip()
-        self.wait_for_claude(large)
-        self.wait_for_claude(small)
-        before = {p["id"]: (p["width"], p["height"]) for p in self.panes()}
-
-        self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
-
-        after = {p["id"]: (p["width"], p["height"]) for p in self.panes()}
-        self.assertEqual([p for p in before if before[p] != after[p]], [large])
 
     def test_concurrent_launches_of_an_existing_worktree_start_one_copy(self) -> None:
         self.make_feature_worktree()
         self.make_worktree(name="f-planner", base="f")
+        self.make_orchestrator()
         self.tmux("set-environment", "-g", "STUB_CLAUDE_DELAY", "0.5")
         command = [str(LAUNCH), "--feature", "f", "--role", "planner", "--window", self.window]
         launches = [subprocess.Popen(command, env=self.env, cwd=self.root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) for _ in range(2)]
@@ -431,7 +461,7 @@ class StartTests(LauncherTestCase):
     def test_a_zoomed_window_stays_zoomed(self) -> None:
         self.make_feature_worktree()
         main = self.panes()[0]["id"]
-        self.tmux("split-window", "-d", "-h", "-l", "40", "-t", main)
+        self.make_orchestrator()
         self.tmux("resize-pane", "-Z", "-t", main)
         size = next((p["width"], p["height"]) for p in self.panes() if p["id"] == main)
 
@@ -442,6 +472,7 @@ class StartTests(LauncherTestCase):
 
     def test_an_unzoomed_window_stays_unzoomed(self) -> None:
         self.make_feature_worktree()
+        self.make_orchestrator()
 
         self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
 
@@ -452,14 +483,164 @@ class StartTests(LauncherTestCase):
         self.tmux("new-session", "-d", "-s", "tiny", "-x", "2", "-y", "2")
         tiny = self.tmux("list-windows", "-t", "tiny", "-F", "#{window_id}").strip()
 
-        result = self.launch("--feature", "f", "--role", "planner", "--window", tiny)
+        result = self.launch("--feature", "f", "--role", "orchestrator", "--window", tiny)
 
         self.assertEqual(result.returncode, 4, result.stderr)
         self.assertIn("no space for", result.stderr)
         self.assertEqual(self.claude_processes(), [])
 
-        retry, _ = self.started(self.launch("--feature", "f", "--role", "planner", "--window", self.window), name="f-planner")
+        retry, _ = self.started(self.launch("--feature", "f", "--role", "orchestrator", "--window", self.window), name="f-orchestrator")
         self.assertIsNotNone(conversation(self.wait_for_claude(retry), flag="--session-id"))
+
+
+class PlacementTests(LauncherTestCase):
+    sidebar = False
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.make_feature_worktree()
+        self.first = self.panes()[0]["id"]
+        if self.sidebar:
+            self.sidebar_pane = self.add_sidebar()
+
+    def start(self, *args: str, name: str, env: dict[str, str] | None = None) -> str:
+        return self.started(self.launch("--feature", "f", *args, "--window", self.window, env=env), name=name).pane
+
+    def assert_split(self, *, before: dict[str, Geometry], target: str, new: str) -> Geometry:
+        """Only target was split: new is the one new pane and every other pane kept its id, size and position."""
+        after = self.geometry()
+        self.assertEqual(set(after) - set(before), {new})
+        self.assertEqual({p: after.get(p) for p in before if p != target}, {p: g for p, g in before.items() if p != target})
+        return after[new]
+
+    def right_of(self, *, pane: str) -> int:
+        g = self.geometry()[pane]
+        return g.left + g.width - 1
+
+    def test_orchestrator_goes_under_the_first_spec_writer(self) -> None:
+        spec = self.split(target=self.first, flags=["-h"], command="claude --name f-spec")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=spec, new=self.start("--role", "orchestrator", name="f-orchestrator"))
+
+        self.assertEqual((new.left, new.width), (before[spec].left, before[spec].width))
+        self.assertGreater(new.top, before[spec].top)
+
+    def test_orchestrator_without_a_spec_writer_goes_under_the_topmost_pane_of_the_first_column(self) -> None:
+        self.split(target=self.first, flags=["-h"])
+        lower = self.split(target=self.first, flags=["-v"])
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=self.first, new=self.start("--role", "orchestrator", name="f-orchestrator"))
+
+        self.assertEqual(new.left, before[self.first].left)
+        self.assertGreater(new.top, before[self.first].top)
+        self.assertLess(new.top, before[lower].top)
+
+    def test_a_planner_splits_the_orchestrator_pane_when_no_session_lies_right_of_its_column(self) -> None:
+        self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "planner", name="f-planner"))
+
+        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+        self.assertLessEqual(new.width, self.geometry()[orchestrator].width)
+        self.assertEqual((new.top, new.height), (before[orchestrator].top, before[orchestrator].height))
+
+    def test_a_phase_splits_the_largest_session_pane_right_of_the_column_and_never_a_developer_pane(self) -> None:
+        self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        planner = self.start("--role", "planner", name="f-planner")
+        phase_p = self.start("--role", "phase", "--phase", "p", name="f-phase-p")
+        self.assertGreater(self.geometry()[phase_p].left, self.right_of(pane=orchestrator))
+        self.tmux("resize-pane", "-t", phase_p, "-y", "5")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=planner, new=self.start("--role", "phase", "--phase", "q", name="f-phase-q"))
+
+        self.assertEqual((new.left, new.width), (before[planner].left, before[planner].width))
+        self.assertGreater(new.top, before[planner].top)
+
+    def test_a_session_pane_wide_enough_for_two_is_split_side_by_side(self) -> None:
+        self.tmux("resize-window", "-t", self.window, "-x", "500", "-y", "50")
+        self.start("--role", "orchestrator", name="f-orchestrator")
+        planner = self.start("--role", "planner", name="f-planner")
+        before = self.geometry()
+        self.assertGreaterEqual(before[planner].width, 161)
+
+        new = self.assert_split(before=before, target=planner, new=self.start("--role", "phase", "--phase", "p", name="f-phase-p"))
+
+        self.assertGreater(new.left, before[planner].left)
+        self.assertEqual((new.top, new.height), (before[planner].top, before[planner].height))
+
+    def test_update_spec_writers_stack_under_the_orchestrator_above_a_developer_pane(self) -> None:
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        developer = self.split(target=orchestrator, flags=["-v"])
+
+        before = self.geometry()
+        first = self.start("--role", "spec", "--update", "1", name="f-spec-1")
+        new = self.assert_split(before=before, target=orchestrator, new=first)
+        self.assertEqual(new.left, before[orchestrator].left)
+        self.assertGreater(new.top, before[orchestrator].top)
+        self.assertLess(new.top, before[developer].top)
+
+        before = self.geometry()
+        new = self.assert_split(before=before, target=first, new=self.start("--role", "spec", "--update", "2", name="f-spec-2"))
+        self.assertGreater(new.top, before[first].top)
+        self.assertLess(new.top, before[developer].top)
+
+    def test_a_developer_pane_in_the_orchestrator_column_is_never_touched(self) -> None:
+        developer = self.split(target=self.first, flags=["-v"])
+        before = self.geometry()[developer]
+        launches = [
+            (("--role", "orchestrator"), "f-orchestrator"),
+            (("--role", "planner"), "f-planner"),
+            (("--role", "phase", "--phase", "p"), "f-phase-p"),
+            (("--role", "spec", "--update", "1"), "f-spec-1"),
+            (("--role", "spec"), "f-spec"),
+        ]
+        for args, name in launches:
+            self.start(*args, name=name)
+            self.assertEqual(self.geometry().get(developer), before, name)
+
+    def test_sessions_the_orchestrator_starts_need_its_pane_in_the_window(self) -> None:
+        self.tmux("new-window", "-d", "-c", str(self.worktree("f")), "claude --name f-orchestrator")
+        self.wait_for(lambda: self.named_claudes("f-orchestrator"), message="no orchestrator in the other window")
+        for args in (("--role", "planner"), ("--role", "phase", "--phase", "p"), ("--role", "spec", "--update", "1")):
+            with self.subTest(args=args):
+                before = self.geometry()
+
+                result = self.launch("--feature", "f", *args, "--window", self.window)
+
+                self.assertEqual((result.returncode, result.stdout), (1, ""), result.stderr)
+                self.assertIn(f"no f-orchestrator pane in {self.window}", result.stderr)
+                self.assertEqual(self.geometry(), before)
+        self.assertEqual([c.args.split()[2] for c in self.claude_processes()], ["f-orchestrator"])
+
+    def test_a_resurrected_orchestrator_places_sessions_like_a_launched_one(self) -> None:
+        orchestrator = self.split(target=self.first, flags=["-v"], command="claude --continue")
+
+        before = self.geometry()
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "phase", "--phase", "p", name="f-phase-p"))
+        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+
+        before = self.geometry()
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "spec", "--update", "1", name="f-spec-1"))
+        self.assertEqual(new.left, before[orchestrator].left)
+        self.assertGreater(new.top, before[orchestrator].top)
+
+    def test_placement_works_without_a_utf8_locale(self) -> None:
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        before = self.geometry()
+
+        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "planner", name="f-planner", env=self.c_locale()))
+
+        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+
+
+class PlacementWithSidebarTests(PlacementTests):
+    sidebar = True
 
 
 class RoadmapTests(LauncherTestCase):
@@ -468,6 +649,7 @@ class RoadmapTests(LauncherTestCase):
 
     def test_no_roadmap_gives_dashes(self) -> None:
         self.make_feature_worktree()
+        self.make_orchestrator()
 
         self.started(self.launch_planner(), name="f-planner")
 
@@ -477,16 +659,18 @@ class RoadmapTests(LauncherTestCase):
         feature = self.make_feature_worktree()
         self.commit_in(feature, relative=".foundry/feature-roadmaps/2026-11-20_21-37-12-f/README.md")
         self.commit_in(feature, relative=".foundry/feature-roadmaps/2026-11-21_08-00-00-f/README.md")
+        self.make_orchestrator()
 
         result = self.launch_planner()
 
         self.assertEqual(result.returncode, 1, result.stdout)
         self.assertIn("2026-11-21_08-00-00-f", result.stderr)
-        self.assertEqual(self.claude_processes(), [])
+        self.assertEqual(self.named_claudes("f-planner"), [])
 
     def test_a_longer_feature_name_is_not_matched(self) -> None:
         self.run_tool(["workmux", "add", "stack", "--headless", "--base", "origin/main"], check=True)
         self.commit_in(self.worktree("stack"), relative=".foundry/feature-roadmaps/2026-11-20_21-37-12-s-stack/README.md")
+        self.make_orchestrator("stack")
 
         self.started(self.launch("--feature", "stack", "--role", "planner", "--window", self.window), name="stack-planner")
 
@@ -586,6 +770,7 @@ class ArgumentTests(LauncherTestCase):
                 self.assertIn("Usage:", result.stderr)
                 taken_feature, taken_role, taken_phase = taken
                 self.run_tool(["workmux", "add", taken_feature, "--headless", "--base", "origin/main"], check=True)
+                self.make_orchestrator(taken_feature)
                 phase = ("--phase", taken_phase) if taken_phase else ()
                 self.started(self.launch("--feature", taken_feature, "--role", taken_role, *phase, "--window", self.window), name=f"{taken_feature}-{taken_role}" + (f"-{taken_phase}" if taken_phase else ""))
 
@@ -629,6 +814,7 @@ class CloseTests(LauncherTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.make_feature_worktree()
+        self.make_orchestrator()
 
     def test_closes_the_sessions_own_pane(self) -> None:
         pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
@@ -671,6 +857,7 @@ class RemoveTests(LauncherTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.make_feature_worktree()
+        self.make_orchestrator()
 
     def assert_refused(self, reason: str, *, env: dict[str, str] | None = None) -> None:
         worktrees_before = self.git("-C", str(self.root), "worktree", "list", "--porcelain")
@@ -754,6 +941,7 @@ class LocaleTests(LauncherTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.make_feature_worktree()
+        self.make_orchestrator()
         self.pane, self.session_worktree = self.started(self.launch(*self.args, "--window", self.window), name="f-phase-p")
         self.wait_for_claude(self.pane)
 

@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T17:01:34Z"
+state: "Verify"
+changed_at: "2026-11-21T17:02:42Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "d53722e71a1204960fe0546156dbfe1832c2407e"
+code_head: "efb61c5b680ff59847b3676dd702535c872beb17"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -103,3 +103,5 @@ The sixth Verify gate returned VERIFIED at `5af4618`. One item would mislead a r
 The Finishing a phase fix is at `d53722e`. `s-stack-package` (`7dc1bc7`) was merged at `3a27576`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `d53722e`.
 
 The seventh Verify gate was stopped without a verdict when the orchestrator relayed the developer's cross-phase stacking instruction. Its partial check-file commit `b494dbd` stays for the next verifier to judge. The phase moved back to Implement.
+
+The cross-phase stacking change is at `efb61c5`. `s-stack-package` (`bbe44ad`) was merged at `83f7f38`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `efb61c5`.

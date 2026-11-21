@@ -1,7 +1,7 @@
 ---
 phase: "launcher"
-state: "Review"
-changed_at: "2026-11-21T19:49:26Z"
+state: "Implement"
+changed_at: "2026-11-21T20:08:23Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
 code_head: "13104cc935a923cc9511d71570ac51683a012246"
@@ -31,6 +31,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "13104cc935a923cc9511d71570ac51683a012246"
     at: "2026-11-21T19:49:26Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "13104cc935a923cc9511d71570ac51683a012246"
+    at: "2026-11-21T20:08:23Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - id: "launcher-r2"
@@ -82,6 +87,14 @@ decisions:
     decision: "A restart reuses the session's own tagged pane when no claude runs in it, and --close closes a pane tagged with the session's name even when nothing runs in it, so repeated restarts never shrink the columns until tmux has no room."
     door: "two-way"
     at: "2026-11-21T17:55:43Z"
+  - id: "launcher-d11"
+    decision: "From the developer, relayed by the orchestrator: the first column right of the orchestrator's column spans the window's full height, made with a full-span split, after which the sidebar and every untagged pane outside the orchestrator's column get back their earlier width."
+    door: "two-way"
+    at: "2026-11-21T20:08:23Z"
+  - id: "launcher-d12"
+    decision: "From the orchestrator: the orchestrator is found by its name or its tagged pane first. An unnamed claude counts only when neither is alive, when it is the only candidate in the feature worktree, and when the launcher has started an orchestrator there before. Two or more candidates give exit 1 naming the panes."
+    door: "two-way"
+    at: "2026-11-21T20:08:23Z"
 ---
 
 # Phase launcher status

@@ -67,6 +67,27 @@ A fourth fresh verifier ran after the placement rule, pane reuse, their quick-re
   - `checks/launcher.md` has no one-off layout reproduction, though the unit tests cover each case.
   - `tests/s-stack/verify-s-stack/SKILL.md` check 8 still says `## Evidence` holds results.
 
+## Review, code head `13104cc935a923cc9511d71570ac51683a012246`, SIGNIFICANT
+
+p-stack's `interrogate` skill ran with two adversaries, on Opus and on Fable. The Gemini seat was dropped, because this host has none. The phase session reran each finding below, and each reproduced. Repros are in the adversaries' worktrees under `.claude/worktrees/` in the main checkout.
+
+1. A restart in the session's own pane kills a command the developer runs there. The pane counted as idle when no `claude` ran in it. Found by both.
+2. A plain `claude` in the feature worktree beside the named orchestrator makes every planner, phase and update spec writer launch exit 1. With no orchestrator ever launched, the same plain `claude` is reported as the orchestrator, `alive`. Found by both.
+3. Under `LC_ALL=C`, tmux prints a non-ASCII character in `#{pane_current_path}` as `_`, so a worktree under such a path never matches. The first launch fails after `workmux add`, and a resurrected orchestrator is duplicated. Found by both.
+4. The first spec writer is respawned into the workmux sidebar when the sidebar is the new window's first pane. Modelled with a stub workmux. Found by both.
+5. Two launches that each add a worktree fail when `workmux add` takes over 10 seconds, because the worktree lock waits 10 seconds. Found by Fable.
+6. A `claude` that exits at once is reported as `started` with exit 0, after a wait of about 15 seconds. Found by Fable.
+7. `--close` in a zoomed window unzooms it. Found by Fable.
+8. Run outside a git repository, the launcher creates its lock directory in the working directory. Found by Fable.
+
+Recorded, not fixed:
+
+- A `claude` running outside tmux is invisible to liveness and to `--remove`. The launcher manages tmux sessions only. Found by both.
+
+Dismissed:
+
+- `scripts/versioning.py check` fails on the phase branch. Under C7 a phase branch never bumps, and the PR creator's regenerate commit raises the version on the pull request branch.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

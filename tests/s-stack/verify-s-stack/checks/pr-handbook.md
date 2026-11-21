@@ -14,7 +14,7 @@ The check builds a throwaway repository under `$TMPDIR` with git's global and sy
 - `phase`, cut from `orch`. Its commits are `a.txt` plus a `description:` line in `apm.yml` plus a stale lockfile hunk; a `.foundry/` status commit; line 2 of `shared.txt` again plus `b.txt` plus a lockfile hunk; a binary `img.bin`; and a commit that changes only the lockfile and `.foundry/`.
 - `pr1`, cut from `main` with no dependency, carries the first content commit. `pr2`, stacked on `other-pr`, carries the other three. Each ends with a regenerate commit whose subject is `chore(s-stack): regenerate generated files`.
 
-A third repository, `rounds`, drives the handbook's generated-only round. `parent` is another phase's open pull request that edits line 2 of `shared.txt`, adds `p.txt` and ends with a regenerate commit. `child` is cut from `parent` and carries the phase's commit, which edits line 2 of `shared.txt` again and adds `c.txt`. `parent` is then squash-merged into `main`. The harness follows the numbered round steps in "Update an open pull request": it extracts the up-to-date test from step 1 and runs it with `main` for `origin/<default>`, runs the extracted merge procedure passing `parent`, as step 2 says once a parent was squash-merged, relocks and commits the merge with no version bump, then makes a regenerate commit only when the stand-in regenerate command changes anything. Commits a round adds are counted along the first-parent chain.
+A third repository, `rounds`, drives the handbook's generated-only round. `parent` is another phase's open pull request that edits line 2 of `shared.txt`, adds `p.txt` and ends with a regenerate commit. `child` is cut from `parent` and carries the phase's commit, which edits line 2 of `shared.txt` again and adds `c.txt`. `parent` is then squash-merged into `main`. The harness follows the numbered round steps in "Update an open pull request": it extracts the up-to-date test from step 1 and runs it with `main` for `origin/<default>`; unless that test succeeds, it runs the extracted merge procedure passing `parent`, as step 2 says once a parent was squash-merged, then relocks and commits the merge with no version bump; it makes a regenerate commit only when the stand-in regenerate command changes anything (step 3); and it pushes, by moving `refs/remotes/origin/child` to `HEAD`, only when `HEAD` differs from it, and otherwise prints `up to date` (step 4). Commits a round adds are counted along the first-parent chain.
 
 Each case prints `PASS <case>` or `FAIL <case>: <output>`, and the block ends with `<n> failed` and exits `0` only when no case fails. Expected results:
 
@@ -37,10 +37,13 @@ Each case prints `PASS <case>` or `FAIL <case>: <output>`, and the block ends wi
 | In a second repository, a parent that adds `pkg/apm.yml` is squash-merged into `main`, `main` then raises its `version:`, and a child cut from the parent merges `main` with the merge procedure, passing the parent | exit `0`, and the staged `pkg/apm.yml` equals `main`'s, because the two sides differ only in `version:` |
 | Rounds: the first round after `parent` was squash-merged and `main` changed line 11 | one merge and one regenerate commit, `shared.txt` keeps `line 2 child` and `line 11 main`, `version: "0.1.2"` |
 | Rounds: the proof after it, `child:parent` | `EQUAL`, exit `0` |
-| Rounds: an immediate second round | prints `up to date`, adds no commit |
+| Rounds: an immediate second round | prints `up to date`, adds no commit, pushes nothing |
 | Rounds: `main` moves again and raises `version:` to the branch's own `"0.1.2"` | one merge and one regenerate commit, `version: "0.1.3"`, proof `EQUAL` |
 | Rounds: `main` moves again with no version change | one merge and no regenerate commit, proof `EQUAL` |
 | Rounds: no regenerate commit reverts an earlier one | each regenerate commit raises `version:`, and none restores a file to its state before an earlier regenerate commit |
+| Rounds: `main` moves again and raises `version:` to `"0.1.3"`, and a round stops after its merge commit, before regenerating or pushing | one merge commit, `origin/child` unchanged |
+| Rounds: the next round | skips the merge, adds one regenerate commit with `version: "0.1.4"`, pushes, proof `EQUAL` |
+| Rounds: the round after that | prints `up to date`, adds no commit, pushes nothing |
 | Rounds: `main` then changes line 2 of `shared.txt`, the line `child` also changed, and a round passes `parent` as step 2 says | the merge stops on `shared.txt` as a hand-written conflict, or keeps `main`'s `line 2 later pr`; it must not keep `line 2 child` silently |
 
 ```bash
@@ -193,11 +196,11 @@ REGEN_SUBJECT='^chore(s-stack): regenerate generated files$'
 relock() { git ls-files -s -- . ':(exclude)*apm.lock.yaml' > pkg/apm.lock.yaml && git add pkg/apm.lock.yaml; }
 up_to_date=$(grep -o -E 'git merge-base --is-ancestor origin/<default> HEAD' "$hb" | head -1 | sed 's#origin/<default>#main#')
 [ -n "$up_to_date" ] || { echo "FAIL no up-to-date test in the round steps of $hb"; exit 1; }
+merge_main() { bash -s -- main "$@" < "$S/merge.sh" && relock && git commit -q --no-edit; }
 round() {
-  if $up_to_date; then echo "up to date at $(git rev-parse main)"; return 0; fi
-  bash -s -- main "$@" < "$S/merge.sh" || return 1
-  relock && git commit -q --no-edit || return 1
+  if ! $up_to_date; then merge_main "$@" || return 1; fi
   regen_commit
+  if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/child)" ]; then git update-ref refs/remotes/origin/child HEAD; echo "pushed $(git rev-parse HEAD)"; else echo "up to date at $(git rev-parse main)"; fi
 }
 added() { echo "$(git rev-list --first-parent --merges --count "$1"..HEAD) $(git rev-list --first-parent --count --grep="$REGEN_SUBJECT" "$1"..HEAD) $(git rev-list --first-parent --count "$1"..HEAD)"; }
 equal() { run prove child:parent; [ $code = 0 ] && [ "$(echo "$out" | tail -1)" = EQUAL ]; }
@@ -213,7 +216,7 @@ line 2 'line 2 child' shared.txt; echo c > c.txt; echo stale >> pkg/apm.lock.yam
 echo s > .foundry/status.md; commit 'chore: status'
 git checkout -q orch
 git worktree add -q --no-track -b child "$S/child" parent
-(cd "$S/child" && carry "$c1" && regen_commit)
+(cd "$S/child" && carry "$c1" && regen_commit && git update-ref refs/remotes/origin/child HEAD)
 git checkout -q main; git diff main...parent | git apply --index && git commit -q -m 'feat: parent (#1)'
 line 11 'line 11 main' shared.txt; commit 'feat: main moves'; git checkout -q orch
 
@@ -222,7 +225,7 @@ h=$(git rev-parse HEAD); run round parent
 [ $code = 0 ] && [ "$(added "$h")" = '1 1 2' ] && [ "$(git show HEAD:shared.txt | sed -n '2p;11p' | tr '\n' ' ')" = 'line 2 child line 11 main ' ] && git show HEAD:pkg/apm.yml | grep -q '^version: "0.1.2"$' && pass "first round after a squash-merged parent: one merge, one regenerate commit, both changes kept" || fail "first round after a squash-merged parent: exit $code, merges regenerates commits $(added "$h"): $out"
 equal && pass "proof after the first round: EQUAL" || fail "proof after the first round: $out"
 h=$(git rev-parse HEAD); run round parent
-[ $code = 0 ] && echo "$out" | grep -q 'up to date' && [ "$(git rev-parse HEAD)" = "$h" ] && pass "immediate second round: up to date, no commit" || fail "immediate second round: exit $code, merges regenerates commits $(added "$h"): $out"
+[ $code = 0 ] && echo "$out" | grep -q 'up to date' && [ "$(git rev-parse HEAD)" = "$h" ] && [ "$(git rev-parse origin/child)" = "$h" ] && pass "immediate second round: up to date, no commit, no push" || fail "immediate second round: exit $code, merges regenerates commits $(added "$h"): $out"
 
 cd "$W" && git checkout -q main && echo 'readme 2' > README && sed 's/^version: .*/version: "0.1.2"/' pkg/apm.yml > "$S/y" && cat "$S/y" > pkg/apm.yml && commit 'feat: another pull request raises the version' && git checkout -q orch
 cd "$S/child" || exit 1
@@ -244,6 +247,15 @@ for r in $(git rev-list --reverse --first-parent --grep="$REGEN_SUBJECT" HEAD ^m
   prev=$v; seen="$seen $r"
 done
 [ -z "$reverts" ] && [ "$(echo $seen | wc -w | tr -d ' ')" = 3 ] && pass "no regenerate commit reverts an earlier one" || fail "regenerate commits cancel:$reverts ($seen)"
+
+cd "$W" && git checkout -q main && echo 'readme 4' > README && sed 's/^version: .*/version: "0.1.3"/' pkg/apm.yml > "$S/y" && cat "$S/y" > pkg/apm.yml && commit 'feat: another pull request raises the version again' && git checkout -q orch
+cd "$S/child" || exit 1
+h=$(git rev-parse HEAD); run merge_main parent
+[ $code = 0 ] && [ "$(added "$h")" = '1 0 1' ] && [ "$(git rev-parse origin/child)" = "$h" ] || fail "interrupted round did not leave one unpushed merge commit: exit $code, merges regenerates commits $(added "$h"): $out"
+run round parent
+[ $code = 0 ] && [ "$(added "$h")" = '1 1 2' ] && git show HEAD:pkg/apm.yml | grep -q '^version: "0.1.4"$' && [ "$(git rev-parse origin/child)" = "$(git rev-parse HEAD)" ] && equal && pass "round after one interrupted after its merge commit: one regenerate commit, pushed, EQUAL" || fail "round after an interrupted round: exit $code, merges regenerates commits $(added "$h"), origin/child $(git rev-parse --short origin/child): $out"
+h=$(git rev-parse HEAD); run round parent
+[ $code = 0 ] && echo "$out" | grep -q 'up to date' && [ "$(git rev-parse HEAD)" = "$h" ] && [ "$(git rev-parse origin/child)" = "$h" ] && pass "round after the finished one: up to date, no commit, no push" || fail "round after the finished one: exit $code, merges regenerates commits $(added "$h"): $out"
 
 cd "$W" && git checkout -q main && line 2 'line 2 later pr' shared.txt && commit 'feat: a later pull request edits line 2' && git checkout -q orch
 cd "$S/child" || exit 1

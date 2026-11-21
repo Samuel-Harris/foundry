@@ -62,7 +62,17 @@ verdicts:
     code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
     at: "2026-11-21T23:36:16Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
-pull_requests: []
+pull_requests:
+  - number: 84
+    branch: "s-stack-spec-planner-handbooks"
+    base: "main"
+    depends_on: [82]
+    stacked: false
+  - number: 87
+    branch: "s-stack-spec-planner-port-rule"
+    base: "main"
+    depends_on: []
+    stacked: false
 requests: []
 decisions:
   - id: "spec-planner-handbooks-d1"

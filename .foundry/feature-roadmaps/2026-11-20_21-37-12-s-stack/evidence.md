@@ -118,6 +118,8 @@ The next three tests ran on 21 November 2026 in a separate tmux server, so the d
 
 **T6. How `workmux resurrect` works.** Checked in `workmux docs`. It reads workmux's agent state files, "Matches each state file's working directory to a git worktree in the current repo", "Skips worktrees that are already open or no longer exist", and "Opens each matched worktree with `--continue` to resume the agent". That it restarts an agent only where the project's pane layout starts one is an inference from R2, not a test.
 
+**T7. A window can hold a workmux sidebar.** Checked. The window in which this roadmap was written has three panes. One of them runs `workmux _sidebar-run` and is 54 columns wide.
+
 ## Foundry
 
 All entries were checked on `origin/main` at commit `9ce8870` and confirmed again at `72f6d88`. The roadmap was written on the branch `s-stack-package` while that branch was four commits behind `origin/main`. Those commits renamed the `pstack` package to `p-stack` and added it to `default-stack`. The branch was fast-forwarded before the roadmap was committed.

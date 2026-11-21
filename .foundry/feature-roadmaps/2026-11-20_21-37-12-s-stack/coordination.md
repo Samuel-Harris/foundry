@@ -23,7 +23,7 @@ The launcher is one script. It is the only part of s-stack that knows the workmu
 It takes the feature, the role, the phase for a phase session, and the tmux window to use. It then does this:
 
 1. It creates the role's worktree when the worktree does not exist. For the feature worktree it uses `workmux add`, which also opens the feature's own tmux window. For every other role it uses `workmux add --headless`. Both run the project's workmux file operations and hooks. It cuts the feature worktree from the default branch and every other worktree from the orchestrator branch.
-2. For every session after the feature's first, it splits a new pane in the feature window and tiles the window again.
+2. For every session after the feature's first, it splits a new pane in the feature window. It splits the largest pane that holds a session.
 3. It starts `claude --name <session name>` in the pane with the role's first prompt.
 
 The first prompt is fixed text built from the launcher's inputs. It is `/sam-mode <role>`, followed by the feature, the phase, the roadmap path, the plan path and the orchestrator's session name. The orchestrator writes no brief. Everything specific to a phase is in the feature plan.
@@ -31,6 +31,7 @@ The first prompt is fixed text built from the launcher's inputs. It is `/sam-mod
 The launcher guarantees these things:
 
 - It opens one tmux window for a feature, the feature worktree's own. Every other session is a pane in that window.
+- It changes no pane that it did not create, and it never applies a layout to the whole window. A window can hold a workmux sidebar, which a new layout would resize.
 - It starts at most one live session for a name. When one is alive, it reports the pane and changes nothing.
 - When the worktree exists and no session is alive, it starts a session there under the same name. It resumes the last conversation with `claude --continue`, unless it is told to start a fresh session.
 - It takes the window as an input. The orchestrator records its own window when it starts, because a command run from a subagent or a background task can lack `$TMUX_PANE`.

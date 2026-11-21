@@ -10,7 +10,7 @@ The phase session's brief gives you the roadmap, the feature plan, the phase pla
 
 - **Check the gates.** The status file's newest `verify` verdict must be `VERIFIED` and its newest `review` verdict `CLEAR`, both for the current code head. [references/status-and-messages.md](../references/status-and-messages.md) defines the code head. If either fails, stop and report which.
 - **Resolve the default branch** with `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`, then run `git fetch origin`. Base everything on `origin/<default>`, never on a local copy. Never prune remote-tracking refs, because a merged dependency's ref keeps its commits out of your pull requests.
-- **Get the script.** `references/pr-commands.md`, relative to the `sam-mode` skill's directory, holds the one script you run, with its specs and outputs. Copy its block into a file named `pr.sh` outside the repository, and set the parameter lines from the feature plan.
+- **Get the script.** `references/pr-commands.md`, relative to the `sam-mode` skill's directory, holds the one script you run, with its specs, its outputs and the terms this handbook uses, such as owned and shared paths. Copy its block into a file named `pr.sh` outside the repository, and set the parameter lines from the feature plan.
 
 Run every command under bash, and call the script through `bash`. zsh does not split an unquoted `$(...)` into words, so a loop over one there runs once over the whole list. The script needs git 2.43 or later.
 
@@ -29,6 +29,8 @@ The phase diff is `git diff <orchestrator branch>...<phase branch> -- . ':(exclu
 
 Each pull request is one atomic change within the repository's own scope and size rules. In Foundry, the coding-style package's software engineering rules give them in section 11. Where the rules exclude generated files from the size limit, the proof prints each pull request's hand-written diff against its base.
 
+A pull request holds the phase's content for its paths. A path that only one pull request changes takes the phase tip's version. A path that two pull requests of one stack both change, or that another phase's commits changed, takes only the commits each pull request carries.
+
 ## Dependencies and base
 
 For each pull request, work out exactly which open pull requests it needs, including other phases' open pull requests. A pull request needs another when its change does not build or pass its checks without that one's change. The base follows from the open dependencies.
@@ -36,10 +38,10 @@ For each pull request, work out exactly which open pull requests it needs, inclu
 | Open dependencies | Base and form | Spec |
 | --- | --- | --- |
 | None | Targets the default branch | `<branch>:<default>` |
-| One, with no other pull request stacked on it | Joins that pull request's stack. Its diff shows only its own change. | `<branch>:<parent branch>` |
-| Two or more, or one that already has a pull request stacked on it | Targets the default branch, and its branch contains each dependency's commits | `<branch>:<default>:<dep branch>,<dep branch>` |
+| One, with no other pull request stacked on it, whose branch holds `origin/<default>` | Joins that pull request's stack. Its diff shows only its own change. | `<branch>:<parent branch>` |
+| Any other case | Targets the default branch, and its branch contains each dependency's commits | `<branch>:<default>:<dep branch>,<dep branch>` |
 
-The last row exists because a `gh stack` is one linear chain. A pull request has one parent and at most one child, and belongs to one stack. Name each branch by the repository's convention.
+The last row exists because a `gh stack` is one linear chain. A pull request has one parent and at most one child, and belongs to one stack. It also holds when the one dependency's branch does not hold `origin/<default>`: check with `git merge-base --is-ancestor origin/<default> origin/<parent branch>` after the parent's own round, and otherwise stay in the third row with the parent merged in. The refresh refuses a stacked spec on such a parent. Name each branch by the repository's convention.
 
 Append every dependency that has merged into the default branch as the spec's fourth field, such as `<branch>:<default>::<merged branch>`. If its branch ref is gone, restore it with `git fetch origin pull/<number>/head:<merged branch>`.
 
@@ -50,7 +52,7 @@ Work the base out again on every round, including every fix round and every roun
 The first build, every fix round, a moved default branch, a merged dependency, a new base and a regenerate-only round all take the same steps. Take the branches bottom of the stack first, and finish each one before its child starts.
 
 1. **Start from the remote head.** Make a worktree for the branch, so the phase branch stays checked out where the phase session works. For a new branch, run `git worktree add --no-track -b <branch> <path> origin/<base>`. Otherwise run `git worktree add --no-track -B <branch> <path> origin/<branch>`, which starts from `origin/<branch>`'s current head.
-2. **Refresh.** In that worktree, run `bash pr.sh refresh origin/<default> <spec> <commits>`. The commits are those the phase plan assigns to this pull request that the branch does not hold yet, oldest first: all of them on the first build, the fix commits in a fix round, and none otherwise. The refresh rebuilds the branch's own commits on its base, records any change as one merge commit and carries the new commits.
+2. **Refresh.** In that worktree, run `bash pr.sh refresh <phase branch> origin/<default> <spec> <commits>`. The commits are those the phase plan assigns to this pull request that the branch does not carry yet, oldest first: all of them on the first build, the fix commits in a fix round, and none otherwise. The refresh carries the new commits, each with a `(cherry picked from commit <sha>)` line that names its phase commit. It then sets each of the pull request's paths to the phase's content on its base, and records any change as one merge commit.
 3. **Regenerate.** Run the feature plan's regenerate command against `origin/<default>`, stage only the files it changed, and commit with the regenerate subject and the hook on. The commit touches only generated files and generated lines. If the command changes nothing, there is no regenerate commit. Never revert or amend an earlier regenerate commit.
 4. **Push.** If `origin/<branch>` is missing or differs from `HEAD`, run `git push -u origin <branch>`. A refresh only adds commits on top of `origin/<branch>`, so the push is a fast-forward. Push a parent before its child refreshes, because the child reads `origin/<parent branch>`.
 
@@ -63,16 +65,22 @@ A round guarantees these:
 - At most one merge commit and one regenerate commit for each branch.
 - A round on a branch that is already up to date changes nothing.
 
-A round that stopped part-way is redone in full by the next one, because the next one starts from `origin/<branch>`.
+A round that stopped part-way is finished by the next one, because the next one starts from `origin/<branch>`.
 
-**GitHub may rewrite a branch head.** When a stack parent merges, GitHub rebases the child onto the default branch with a force-push from the developer's account. The tree stays the same and the commits change. Take a head you did not write as the starting point. Never treat it as an error, and never merge your old local head back in.
+**GitHub may rewrite a branch head.** When a stack parent merges, GitHub rebases the child onto the default branch with a force-push from the developer's account. The tree stays the same and the commits change, but each keeps its message, so the script still matches it to its phase commit. Take a head you did not write as the starting point. Never treat it as an error, and never merge your old local head back in.
 
 **Hooks.** The refresh's merge commit comes from `git commit-tree`, and it carries commits with `--no-verify`, so neither runs a hook. The regenerate commit runs with the hook on, and the second check runs the repository's checks on each branch.
 
-**When the refresh stops.** It prints a `STOP` line, puts the branch back where it started and exits 1. Report the line to the phase session.
+## When the refresh stops
 
-- A hand-written conflict between a commit and the base belongs to the phase that owns the paths. Never resolve one yourself.
-- A merge on the phase branch whose hand-made resolution a carried commit needs cannot be carried. The refresh names the file. The phase session turns the resolution into an ordinary commit, and the next round carries it.
+It prints a `STOP` line, leaves the branch where it started and exits 1. Never resolve a hand-written conflict yourself.
+
+- **`<path> changed on <branch> after the phase last took it`.** The default branch changed a path that the pull request owns, after the phase last took it. Report it to the phase session. It merges the default branch into the phase and resolves any conflict in that merge, as `handbooks/phase-session.md` says for a conflict with the default branch. The next round then goes through, with or without a separate resolution commit. When the branch named is another phase's pull request, report it as a decision for the phase session.
+- **`<path> conflicts outside generated content`**, then **`<commit> does not apply`**. A shared path's commits do not apply on this base, such as a parent's fix on the line next to its child's change. Report both lines to the phase session.
+- **`<base> does not hold origin/<default>`.** You gave a stacked spec on a parent that has not taken the default branch. For a new pull request, use the third row of the base table with the parent merged in. For one already in a stack, follow [Leaving a stack](#change-the-base).
+- **`<branch> is not a branch here`.** A branch the spec names is missing. Fetch again, restore a merged dependency's ref as [Dependencies and base](#dependencies-and-base) says, or correct the spec.
+
+A carry that stops also prints `the branch is back at <commit>`.
 
 ## Open the drafts
 
@@ -110,7 +118,11 @@ Read the pr package's `summarise-pr` skill at `../summarise-pr/SKILL.md`, relati
 
 Run all three before you report, in every round.
 
-**1. The pull requests equal the phase.** Run `bash pr.sh prove <orchestrator branch> <phase branch> origin/<default> <spec> ...`, with every pull request of the phase, merged ones included, bottom of the stack first. It checks that the pull requests' own commits together equal the phase, and that each pull request's head equals its own commits replayed onto its base, apart from generated files and generated lines. It also checks the regenerate commits and `.foundry/`. It prints `EQUAL` and exits 0, or prints a `FAIL` line for each fault, then `NOT EQUAL`, and exits 1. Fix the split and run it again until it prints `EQUAL`.
+**1. The pull requests equal the phase.** Run `bash pr.sh prove <orchestrator branch> <phase branch> origin/<default> <spec> ...`, with every open pull request of the phase, bottom of the stack first. Merged pull requests need not be listed. It checks that each head equals its own commits overlaid on its base, and that every phase path that differs from the default branch belongs to open pull requests in one dependency chain, which carry every phase commit on it. It also checks the regenerate commits and `.foundry/`. It prints `EQUAL` and exits 0, or prints a `FAIL` line for each fault, then `NOT EQUAL`, and exits 1. Fix the split and run it again until it prints `EQUAL`.
+
+**A pull request for uncarried commits.** When the proof names phase paths or commits that no open pull request carries, such as a fix made after its pull request merged, open a new draft pull request for them. Choose its base from the base table, give it a new branch, run its round, and run the three checks again.
+
+**When the proof's assumptions break.** The proof assumes that the phase merges the orchestrator branch with `git merge --no-ff`, and that the orchestrator commits nothing outside `.foundry/`. `references/pr-commands.md` shows what the proof prints when either breaks. When a named path is not the phase's own work, it is one of these, not an uncarried commit. Open no pull request for it. Report it to the phase session with the `FAIL` lines. A fast-forward is the phase session's to undo, and a commit outside `.foundry/` on the orchestrator branch is for the phase session to raise with the orchestrator.
 
 **2. Each branch passes the repository's checks on its own**, bottom of the stack first. The repository's agent guide names them. In Foundry they are `.githooks/pre-commit` with `FOUNDRY_DIFF_RANGE=origin/<base>...HEAD`, `python3 scripts/versioning.py check origin/<default>`, and Tier 1 outside the sandbox.
 
@@ -124,4 +136,4 @@ Report to the phase session:
 - each refresh's output, and the proof's full output;
 - each repository check's result for each branch;
 - any change to the phase plan's split or to a base, and why;
-- anything you stopped on, such as a failed gate, a `STOP` line or a code change a branch needs.
+- anything you stopped on, such as a failed gate, a `STOP` line, a broken proof assumption or a code change a branch needs.

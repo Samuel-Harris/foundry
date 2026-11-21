@@ -135,7 +135,11 @@ session_panes() {
   local session=$1 worktree_path=$2 panes pane_id pane_pid width height current_path window_id in_worktree resolved_worktree=''
   # Spaces, not tabs, separate the fields: a tmux client without a UTF-8 locale
   # prints a tab in a format as "_". The path goes last so read keeps its spaces.
-  panes=$(tmux list-panes -a -F '#{pane_id} #{pane_pid} #{pane_width} #{pane_height} #{window_id} #{pane_current_path}') || die 'tmux list-panes failed'
+  if ! panes=$(tmux list-panes -a -F '#{pane_id} #{pane_pid} #{pane_width} #{pane_height} #{window_id} #{pane_current_path}'); then
+    # With no server no session runs, which --close and --remove may rely on; start mode needs a window.
+    [ "$mode" != start ] && [[ $(tmux list-sessions 2>&1) == 'no server running'* ]] || die 'tmux list-panes failed'
+    panes=''
+  fi
   [ -z "$worktree_path" ] || resolved_worktree=$(resolve "$worktree_path")
   {
     printf '%s\n' "$panes" | while read -r pane_id pane_pid width height window_id current_path; do

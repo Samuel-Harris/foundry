@@ -262,3 +262,14 @@ A fresh verifier ran the whole verification skill and this phase's `## Evidence`
 - Private-name search at 18:32:11: 0 matches.
 - One-off cold read of the merged notice in Implement, passing every required point: the phase ignores the notice and sends `state`; after both gates its fix goes into a new pull request; it moves to Done only on the notice in PR; the text leaves the notice's timing to `handbooks/orchestrator.md`; and no contradiction.
 - Minor remark: Fix rounds step 3 ("the pull request branch that owns each one") could be read as pointing at a merged pull request's branch, but PR step 2 settles it.
+
+## Review: CLEAR at `a1c95f1df8eab39ede778ec82f49b025034881da`
+
+A later review covered the net change of `771ac5d`, `52bc3da`, `8e258ca` and `a1c95f1`: the last sentence of PR step 4 now leaves the merged notice's timing to `handbooks/orchestrator.md`. The merges `2facd26`, `fede1c5` and `589cc38` are clean. Two reviewers, Opus and Fable, each in a detached worktree at `731c14d`, ran three cold reads between them. The early-Done probe passes in both reviews, and neither found anything significant.
+
+Not significant, recorded only:
+
+- PR step 4's only condition for Done is "in PR", and the phase enters PR before the PR creator opens a new pull request. A notice arriving in that window would move the phase to Done early. That is the notice's timing, which `orchestrator.md` owns, and it was sent to the orchestrator.
+- Fix rounds step 3 ("the pull request branch that owns each one") reads, alone, as sending a fix to a merged branch. PR step 2 settles it, and both readers chose a new pull request. Older text.
+- Fix rounds starts the PR creator before moving to PR; the PR section does the reverse. Older text.
+- The `state` sent on an ignored notice, and the notice having no message kind of its own, are the reference file's known lag.

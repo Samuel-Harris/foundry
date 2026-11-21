@@ -112,7 +112,6 @@ Merge the default branch into the orchestrator branch on the orchestrator branch
 A pull request's checks do not run again when the default branch, or a pull request it depends on, moves. Two pull requests can each pass, merge, and together break the default branch. `needs_update` marks each open pull request that has to be refreshed.
 
 - An open pull request is up to date when, after `git fetch origin`, its head contains the default branch's tip and the current head of every open pull request it depends on, directly or through another, and every required check has passed on that head. A merged or closed pull request has no flag.
-- A pull request it depends on that closed without merging, or whose new head does not contain its recorded head, may have left rejected commits in it. Flag it, start its phase's session if the pane is closed, and send an `instruction` to rebuild it without those commits. If the phase reports that it cannot, tell the developer.
 - In tick step 1, set `needs_update` on each open pull request that is not up to date, and clear it on each that is. Write each change to the tracker and the board.
 - In tick step 4, tell each phase in PR that has a pull request it must refresh, once a tick: start its session if its pane is closed, and otherwise wait until it is quiet. If the pull request lacks the default branch's tip, send a `fix-round` of the kind "A pull request merged", naming that tip. Otherwise, if it lacks the head of a pull request it depends on, send an `instruction` to refresh it onto that pull request, naming its current head. A pull request flagged only because its checks are pending or failed needs no message here. Step 5 handles a failed check. Send nothing here to a phase that step 2 sent a `fix-round` this tick. A phase in another state is told once it is back in PR, because those handlers expect PR.
 
@@ -128,6 +127,18 @@ In tick step 4, for each merged phase, do every step below whose condition holds
 - Its status is Done, its pane is open, it is not stopping, and it is quiet: send `stop`.
 - Its status is Done, its pane is closed, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and is exempt from the merge limits in tick step 4. If it conflicts or a hook refuses it, abort it. When the files at fault are the phase's own status files and this is the first refusal since it reached Done, start its session and send an `instruction` that names them and says to fix them in a commit that holds only `.foundry/` files and to stay Done. Otherwise tell the developer, and do not retry until they answer. Never send `merge-orchestrator-branch` here, because it would move a Done phase's code head. If the code head has changed, start the session and send `move-back` to Implement, because no verdict covers that code. It merges again only once it has sent `prs-open` for that code, as [Merging a phase](#merging-a-phase) says.
 - Its status is Done, its pane is closed, and its branch is fully merged: remove its worktree with `--remove`.
+
+## Histories handled by asking
+
+Some histories are rare, and the handbook does not handle them:
+
+- a pull request whose new head does not contain the head you recorded;
+- a pull request closed without merging;
+- a pull request merged into a branch other than the default branch;
+- a forge rewrite other than the rebase of a stack child after its parent merges;
+- a tracker fact that git or the forge contradicts.
+
+When the reconcile step finds one, record what you saw in the tracker, and stop acting on every phase it touches. Send the developer a decision request with the options you see and your recommendation. Act on those phases again once the developer answers.
 
 ## Fix rounds
 

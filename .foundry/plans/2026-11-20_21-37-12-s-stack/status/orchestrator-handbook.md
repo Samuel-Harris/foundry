@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T21:13:05Z"
+state: "Verify"
+changed_at: "2026-11-21T21:14:15Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "2056fdb0eddb65fc8b574b1981a81d8e3938b1a3"
+code_head: "e1e79170cae9275cfb6e491e4e09f78507c019f2"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -268,3 +268,5 @@ The seventh Review gate returned SIGNIFICANT at `038cdc4`. The phase moved back 
 The Review 7 fixes and the queued architecture-brief item are at `2056fdb`. `s-stack-package` was already merged. The phase moved to Verify at code head `2056fdb`.
 
 The twenty-second Verify gate was stopped without a verdict or commit, because the orchestrator set a new significance bar and asked for a "Histories handled by asking" section. The phase moved back to Implement.
+
+The "Histories handled by asking" section is at `e1e7917`. `s-stack-package` (`968a97a`, which records the review-scope cap) was merged at `70f89a1`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `e1e7917`.

@@ -455,3 +455,17 @@ One item misleads a reader, and the run converges past it. In the tick a phase r
 ## Merge of `s-stack-package` at `7daf642`, under run decision `launcher-r3`
 
 `s-stack-package` (`a606589`, which brings `board`) was merged at `7daf642`. Outside `.foundry/` the merge touched `packages/s-stack/.apm/skills/sam-mode/assets/status-board.html` and `tests/s-stack/verify-s-stack/checks/board.md`, both owned by `board`, plus the generated `packages/s-stack/apm.lock.yaml`, whose lockfile-only conflict was resolved under C7. None is an owned path of this phase, so the code head and verdicts stay at `d5c3d09`.
+
+## Review 8, code head `d5c3d09a02a0fde2e434bd62895c1b3f7c888769`, SIGNIFICANT
+
+`interrogate` over the commits since `038cdc4`, under the orchestrator's common-path bar, with two adversaries on Opus and Fable in their own worktrees. Each walked a whole feature lifecycle. The phase session checked each finding against the text.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| A stalled phase replaced with `--fresh` loses its unanswered `fix-round`, so the review comment is never addressed and the replacement repeats. | Opus | Cold read |
+| After a hand-written default-branch conflict, the retry runs before the phase re-merges, and merge step 7's same-tick `stop` leaves the phase in Implement with a closed pane for good. | Opus, Fable | Git probe; three cold reads |
+| On a guarded tick, the default-branch merge runs before the guard and is never aborted, so later merges fail with unmerged files. | Fable | Git probe; cold read |
+| A phase sent to Spec by a roadmap update stays there if the restarted planner leaves its entry unchanged. | Fable | Cold read |
+| A crash just after the "every pull request merged" notice leaves the phase marked told, with the notice lost, so it stays in PR. Lower confidence. | Fable | Cold read |
+
+Both lifecycle walks otherwise reached Done for every phase, with each merged code head covered by both verdicts and no stale pull request shown as ready.

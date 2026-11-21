@@ -31,7 +31,9 @@ Exit codes:
   2  bad arguments
   3  tmux, workmux or claude is not on PATH
   4  tmux could not split a pane; tmux's error is on standard error
-  5  --remove refused: no such worktree, a live session, a dirty worktree or an unmerged branch
+  5  --remove refused: no such worktree, a claude running in or under it or
+     under the session's name, a dirty worktree, or a branch or HEAD not merged
+     into the feature
 EOF
   exit 2
 }
@@ -130,7 +132,7 @@ resolve() {
 # prompt never matches. It is nameless when no argument is --name, which is how
 # workmux resurrect restarts a session, and other otherwise. A pane running
 # several claudes reports the closest match. in_worktree is 1 when the pane's
-# directory is <worktree>.
+# directory is <worktree> or under it.
 session_panes() {
   local session=$1 worktree_path=$2 panes pane_id pane_pid width height current_path window_id in_worktree resolved_worktree=''
   # Spaces, not tabs, separate the fields: a tmux client without a UTF-8 locale
@@ -145,7 +147,7 @@ session_panes() {
     printf '%s\n' "$panes" | while read -r pane_id pane_pid width height window_id current_path; do
       [ -n "$pane_id" ] || continue
       in_worktree=0
-      if [ -n "$resolved_worktree" ] && [ "$(resolve "$current_path")" = "$resolved_worktree" ]; then in_worktree=1; fi
+      if [ -n "$resolved_worktree" ] && [[ "$(resolve "$current_path")/" == "$resolved_worktree"/* ]]; then in_worktree=1; fi
       printf 'pane %s %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$width" "$height" "$window_id" "$in_worktree"
     done
     ps -A -o pid=,ppid=,args=
@@ -250,13 +252,14 @@ cmd_close() {
 
 cmd_remove() {
   require workmux tmux
-  local dirty
+  local claudes dirty
   worktree=$(workmux path "$worktree_name" 2>/dev/null) || refuse 'no such worktree'
-  find_live_pane
-  [ -z "$live_pane" ] || refuse "a live session in pane $live_pane"
+  claudes=$(session_panes "$name" "$worktree" | awk '$5 == "strict" || $6 == 1')
+  [ -z "$claudes" ] || refuse "a live session in pane ${claudes%% *}"
   dirty=$(git -C "$worktree" status --porcelain) || die "git -C $worktree status failed"
   [ -z "$dirty" ] || refuse "dirty worktree $worktree"
   git merge-base --is-ancestor "$worktree_name" "$feature" || refuse "branch $worktree_name not merged into $feature"
+  git -C "$worktree" merge-base --is-ancestor HEAD "$feature" || refuse "HEAD of $worktree not merged into $feature"
   workmux remove "$worktree_name" --keep-branch --force >&2 || die "workmux remove $worktree_name failed"
   printf 'removed %s worktree=%s\n' "$name" "$worktree"
 }

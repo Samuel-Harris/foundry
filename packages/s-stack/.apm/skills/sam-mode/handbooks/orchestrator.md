@@ -49,6 +49,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 - The window, the default branch, the default branch commit last merged, and the default branch commit whose new commits step 2's pull request duties last handled.
 - The board's and the architecture page's addresses, and the orchestrator branch commit the page describes.
 - The time of the last tick, and when the recurring tick was created.
+- Done phases whose status-only merge was refused, and whether the developer has been told.
 - Live sessions: name, pane, worktree, started, the tick in which it began stopping, if it is stopping, and whether you have told it that every pull request merged. Drop a session's row when you close its pane.
 - Open decision requests: id, phase, door, since.
 - Pull requests under watch: number, phase, branch, base, depends on, `needs_update`, and the code head at each phase's last `prs-open`.
@@ -65,7 +66,7 @@ Run the tick checklist in sam-mode's orchestrator handbook.
 Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip the default-branch merge in step 2 and the starts in step 3, and in step 4 merge only the frozen phase and the status-only merges of Finishing a phase. Still run step 2's pull request duties, and still replace stalled sessions.
 
 1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick.
-2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says. Then, if it has moved past the last handled commit, run the pull request duties once and record its tip as handled. The duties are: if any of the new commits came from one of the feature's pull requests, or changed a package that the feature's generated files depend on, run [When a feature pull request lands](#when-a-feature-pull-request-lands); and send another "A pull request merged" `fix-round` for each open pull request whose `needs_update` was already true. Send at most one such round to a phase in a tick.
+2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says. Then, if it has moved past the last handled commit, run the pull request duties once and record its tip as handled. The duties are: if any of the new commits came from one of the feature's pull requests, or changed a package that the feature's generated files depend on, run [When a feature pull request lands](#when-a-feature-pull-request-lands); and send another "A pull request merged" `fix-round` for each open pull request whose `needs_update` was already true and whose phase is in PR. Send at most one such round to a phase in a tick.
 3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
 4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, and none in a tick whose default-branch merge committed, so a failing post-merge check names one change. Finishing a phase's status-only merges are exempt from both limits. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
 5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
@@ -108,10 +109,10 @@ Merge the default branch into the orchestrator branch on the orchestrator branch
 
 ## When a feature pull request lands
 
-A pull request's checks do not run again when its base moves. Two pull requests can each pass, merge, and together break the default branch. So in the tick that finds such a merge, for every open pull request of the feature whose phase is in PR, and in the first tick a phase is back in PR for those of its pull requests whose `needs_update` is still true:
+A pull request's checks do not run again when its base moves. Two pull requests can each pass, merge, and together break the default branch. So in the tick that finds such a merge, for every open pull request of the feature:
 
-- Send its phase a `fix-round` of the kind "A pull request merged", naming the merged pull request, or the default branch commit when no feature pull request merged. The phase refreshes its pull requests and works out each base again, without new gates.
 - Set its `needs_update` to true in the tracker and on the board.
+- Send its phase a `fix-round` of the kind "A pull request merged", naming the merged pull request, or the default branch commit when no feature pull request merged. The phase refreshes its pull requests and works out each base again, without new gates. The handler expects the phase to be in PR, so send it only to a phase in PR. A phase in another state gets it in the first tick it is back in PR, while any of its pull requests still has `needs_update` set.
 - Clear `needs_update` only when, after `git fetch origin`, `git merge-base --is-ancestor origin/<default branch> <pull request head SHA>` succeeds and every required check has passed on that head.
 
 A pull request is ready for the developer to merge only when its `needs_update` is false.
@@ -129,7 +130,7 @@ In tick step 4, for each merged phase, do every step below whose condition holds
 
 ## Fix rounds
 
-Feedback reaches a phase only through you. When the developer asks for a change, or a tick finds a new review comment or a failed check, send the phase a `fix-round` with the pull request and the comments or the check. When it reports both verdicts for the new code head, merge it again. Then set `needs_update` on the pull requests of every phase that builds on the changed code.
+Feedback reaches a phase only through you. When the developer asks for a change, or a tick finds a new review comment or a failed check, send the phase a `fix-round` with the pull request and the comments or the check. Merge it again as [Merging a phase](#merging-a-phase) says. Then set `needs_update` on the pull requests of every phase that builds on the changed code.
 
 PR creators choose and change their pull requests' bases themselves, across phases. You never offer or send `restack`. When the developer asks for a restack, pass it to the phase as an `instruction`. When a stack parent merges, the forge rebases its child with a force-push from the developer's account. That is expected, not a second writer on the branch.
 
@@ -162,7 +163,7 @@ When the developer asks for a roadmap change, start an update spec writer with `
 
 ## Restarts
 
-When you start again, read the tracker, every status file, workmux's status and every open pull request before you act. Arm the tick, then run a tick. Start each phase session that still has work with the launcher, which resumes its conversation, and ask each phase in PR, with an `instruction`, to send `prs-open` again. Facts sent while a session was down are still in the sender's files, and the reconcile step finds them.
+When you start again, read the tracker, every status file, workmux's status and every open pull request before you act. Arm the tick, then run a tick. Start each phase session that still has work with the launcher, which resumes its conversation, and ask each phase in PR, with an `instruction`, to send `prs-open` again once a pull request holds its current code head. Facts sent while a session was down are still in the sender's files, and the reconcile step finds them.
 
 ## Ending the feature
 

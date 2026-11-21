@@ -1,6 +1,6 @@
 ---
 phase: "board"
-state: "Implement"
+state: "Verify"
 changed_at: "2026-11-21T20:58:48Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
@@ -99,3 +99,5 @@ The fourth verifier committed `checks/board.md` at `e21d7e8` and finished two mu
 The scoped verifier committed `a5b3a9c`, the new code head, and returned VERIFIED. The fallback-font failure was the check, not the template. The Review gate is starting over `b2deb4d..a5b3a9c`.
 
 The fourth Review gate returned SIGNIFICANT at `a5b3a9c`. Both adversaries again found the template correct. Twelve broken templates pass the check, and under `board-d6` each would mislead the developer on the live board or open an injection. No template change is planned. The phase moves through Implement to Verify, where a verifier makes each named mutant fail.
+
+The code head is unchanged at `a5b3a9c`. The Verify gate is starting.

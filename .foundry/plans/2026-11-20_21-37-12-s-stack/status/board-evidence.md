@@ -188,6 +188,20 @@ Known gaps:
 - The en-GB locale is pinned in the stub, because headless Chrome on macOS ignores `--lang` for `Intl`.
 - After a cached tick, the heartbeat shows the cached tick's time while the verdict stays live. The check does not assert that time.
 
+
+## Review gate, code head `afd3f270ba9c2ddc689b0afe12927591941ccc7f`, CLEAR
+
+`interrogate` ran Opus and Fable at medium effort under `handbooks/reviewer.md`, over `afd3f27` and the template it checks. Under `board-d7`, only a template defect is significant.
+
+- Both adversaries ran the Rerun on the real template and got exit 0 with 50 `ok` lines.
+- Both ran all eleven probe mutants from the fourth Review gate. Each exits 1, on the assertion that names its fault.
+- Neither found a template defect. The Fable adversary also exercised these on the real template, and none rendered markup or failed:
+  - markup in `waits_for`;
+  - `javascript:…//https://` URLs;
+  - 90-character unbroken strings in every field at 320 and 1000 px;
+  - duplicate edges, future times and digit-string numbers.
+- Every finding is a minor template behaviour or a check gap. Both are listed in the check hardening backlog. The phase session took the adversaries' exit codes as reported and did not rerun these findings, because none of them holds the phase.
+
 ## Check hardening backlog
 
 `board-d7` sends every check gap found from the fifth Review gate on to this list, for a future hardening pass. These are not fixed in this phase.
@@ -209,3 +223,12 @@ Known gaps:
 - From the Verify gate at `afd3f27`:
   - After a cached tick, the heartbeat's tick time is not asserted.
   - The `interact`-level write probe was not run.
+- From the fifth Review gate (template behaviours, minor):
+  - A dependency cycle among draft pull requests turns off dependency order for drafts outside the cycle.
+  - After every source has been live once, a store that falls silent with no error makes the banner blame the orchestrator, and no notice appears. The db API gives the page no way to tell the two apart.
+  - Text selection is lost on each re-render.
+- From the fifth Review gate (check gaps):
+  - Markup is tested only in `feature`, a pull request title, a need summary and the dependency ids. A template that parses markup from `waits_for`, a recent item's states or `orchestrator_branch` passes, and so does the `grep innerHTML` check.
+  - A link test of "contains https://" passes, because no unsafe fixture URL contains `https://`.
+  - Times are checked only under `TZ=UTC`, so forcing UTC passes.
+  - The stub freezes snapshot bodies but not the snapshot or its `docs` array.

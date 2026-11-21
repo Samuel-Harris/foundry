@@ -32,7 +32,7 @@ The skill's own files, its `SKILL.md` and its feature map, are shared by every p
 
 ## The check file
 
-You write one file, `checks/<phase>.md`, in the verification skill's directory beside its `SKILL.md`. Only this phase writes it. The verification skill must run the `## Rerun` section of every check file beside it, in name order. When you own the skill's files and it lacks that step, add it. When you do not own them and it lacks that step, your verdict is INCONCLUSIVE, and your report names the missing step.
+You write one file, `checks/<phase>.md`, in the verification skill's directory beside its `SKILL.md`, unless the phase needs no checks of its own. Only this phase writes it. The verification skill must run the `## Rerun` section of every check file beside it, in name order. When you own the skill's files and it lacks that step, add it. When you do not own them and it lacks that step, your verdict is INCONCLUSIVE, and your report names the missing step.
 
 The check file has two sections.
 
@@ -43,14 +43,14 @@ The check file has two sections.
 
 Each check is one behaviour from the phase's **Done when** list or the phase plan's verification section. A check earns its place only if wrong behaviour can fail it. A check that only finds a file, a heading or a fixed string is not a check.
 
-Commit the check file, and any change to the skill, before you run anything. Such a commit holds no file under `.foundry/`, so it moves the code head, and your verdict names the head that includes it.
+Commit the check file with its `## Rerun` checks, and any change to the skill, before you run anything. Such a commit holds no file under `.foundry/`, so it moves the code head. After the run, write the one-off results into `## Evidence` and commit that change alone. Nothing runs `## Evidence`, so that commit needs no new run. Your verdict names the code head after your last commit.
 
 If a run shows that a check is wrong, fix it, commit again, and run everything again. Never weaken a check so that it passes. A check is wrong only when it misstates what the roadmap or the plans require.
 
 ## Run the checks
 
 1. Run the whole verification skill on the phase branch, including the `## Rerun` section of every check file.
-2. Work through the phase's **Done when** list. Each item needs a check that ran, or a recorded reason why it could not run.
+2. Work through the phase's **Done when** list. Each item needs a check that ran, or a recorded reason why it could not run. For a phase that needs no checks of its own, the reason it needs none stands in for each item.
 3. Keep the command, its output and the expected output for every check.
 
 Do not return until every subagent you started has reported. A nested subagent runs in the background and can still be running when you are ready to write your report.

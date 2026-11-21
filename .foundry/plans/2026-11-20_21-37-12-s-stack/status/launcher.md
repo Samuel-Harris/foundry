@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Implement"
-changed_at: "2026-11-21T20:08:23Z"
+state: "Verify"
+changed_at: "2026-11-21T20:50:02Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "13104cc935a923cc9511d71570ac51683a012246"
+code_head: "bfd2503f511b5d9241c751bfcc53f1e9d4af4de2"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -106,3 +106,5 @@ The review fix round (seven findings, 47 tests, also green under `LC_ALL=C`) is 
 The developer's pane placement rule (launcher-d9) moved the phase back to Implement after the third Verify.
 
 Placement, pane reuse and their quick-review fixes are committed, with 83 tests passing in both locales. `s-stack-package` is merged at 13104cc. Verify runs again at that head.
+
+The full-height right column, the orchestrator-precedence rule and the second review's fixes are committed, with 95 tests passing in both locales. `s-stack-package` is merged at d73841b. Verify runs again at bfd2503.

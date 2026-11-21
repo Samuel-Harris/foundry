@@ -328,3 +328,25 @@ Minor items:
 | `phase-session.md`'s code-changing fix rounds ("Feedback on a pull request", "A conflict with the default branch") never send `prs-open`, so the phase can never merge again under the `prs-open` rule. | Opus | Three cold reads |
 | A deferred "A pull request merged" round goes out in the same tick as the re-merge's `stop`. The phase ends its turn without refreshing, and the round is never resent. | Fable | Three cold reads |
 | A stacked child pull request flagged after its parent's fix round gets no round, and the clearing test passes on a head that lacks the parent's fix. | Fable | Scratch-repository script, rerun; cold read |
+
+## Verify 19, code head `92b307924868de977ec658b79820b92557ef752e`, VERIFIED
+
+A fresh verifier updated the check file for `caafc7f` (commits `fd7658e` and `92b3079`, with new cold reads AB, AC and AD) and ran every check at the final head. C6 checks 1, 2, 3, 5 and 7 PASS (`170/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: three scripts and 39 cold reads across four check files. One cold read, J, gave an answer that contradicted the file, and passed on a fresh rerun.
+
+Every **Done when** item was met:
+
+- The handbook has 170 lines, and no command line appears.
+- All nine launcher flags appear in `launch.sh` on the `launcher` phase branch.
+- A private-name grep found 0 hits, with a positive control of 3.
+
+Queued for the next fix round:
+
+- A stacked child's flag has a second clearing rule that can never hold once its parent is squash-merged. This breaks a run, in an edge case, and is inferred.
+- A flag on a pull request that has since merged never clears, and blocks `stop`. This misleads a reader.
+- No tick step owns clearing `needs_update`. This misleads a reader.
+
+Minor items:
+
+- The step 4 requests repeat every quiet tick.
+- Merge step 7's `stop` has no quiet condition.
+- Cold read V's instruction conflicts with its point 5.

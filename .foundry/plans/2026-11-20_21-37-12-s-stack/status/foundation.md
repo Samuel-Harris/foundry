@@ -8,15 +8,12 @@ code_head: "f7772cca88da57b5984cbff6ca125ae783c440ec"
 waits_for: null
 verdicts: []
 pull_requests: []
-requests:
-  - id: "foundation-r1"
-    question: "Should the shipped references/status-and-messages.md copy C2 word for word, including this run's lockfile exclusion from the code head, or state the general rule with placeholders?"
-    options: ["A. General rule: code head excludes only .foundry/, a feature plan may name generated paths that also move no code head, and paths use <id> and <feature>. This run keeps using C2 from the feature plan.", "B. Copy C2 word for word, with this run's paths and the lockfile exclusion."]
-    recommendation: "A"
+requests: []
+decisions:
+  - id: "foundation-d1"
+    decision: "Answer to foundation-r1, option A, from the orchestrator. The shipped references/status-and-messages.md states the general code-head rule (only .foundry/ excluded, a feature plan may name generated paths that also move no code head) and uses <id>, <feature> and <phase> placeholders. Every other part of C2 is copied unchanged."
     door: "two-way"
-    waiting_work: "The code-head paragraph of references/status-and-messages.md. Everything else proceeds."
-    since: "2026-11-21T13:56:21Z"
-decisions: []
+    at: "2026-11-21T14:05:00Z"
 ---
 
 # Phase `foundation` status

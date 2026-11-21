@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T15:52:54Z"
+state: "Verify"
+changed_at: "2026-11-21T15:53:42Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "0d7b25d0a0156ac524a6a32e7e221ad4fed9e1ee"
+code_head: "08874f390fa5e43df00cb90946b113b92f1fb1e0"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -27,4 +27,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Verify passed at `0d7b25d`. The phase moved back to Implement to close two small gaps the verifier found. Verification then runs again in full on the new code head.
+The verifier's two gaps are fixed at `08874f3`. That delta is two sentences, so it had no second quick-review, because the layer's quick-review ran at `f054264`. `s-stack-package` is merged at `cb3526f`. A fresh verifier runs in full on the new code head.

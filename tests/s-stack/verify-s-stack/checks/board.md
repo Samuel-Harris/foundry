@@ -6,20 +6,20 @@ Phase `board` ships `packages/s-stack/.apm/skills/sam-mode/assets/status-board.h
 
 ### Rendered board in headless Chrome
 
-The script writes its harness to a fresh `mktemp` directory and never writes into the repository. It wraps the template in the skeleton the Artifact tool publishes, which includes `[hidden]{display:none!important}`, and defines `window.claude.use("db")` as a stub. The stub serves placeholder documents, live (`fromCache: false`) or cached (`fromCache: true`), on a timeline the scenario sets. The database and every reference are proxies: `onSnapshot`, `get`, `doc`, `collection`, `where`, `orderBy`, `limit`, `id` and `path` read, and any other member, such as `set`, `update`, `delete`, `add`, `acquire` or one not yet in the API, records a write. The stub also records each subscription. The page's clock starts at 2026-01-31T09:05:00Z and runs with Chrome's virtual time, or stands still with `freeze`, so every age is exact. Headless Chrome will not make a window narrower than 500 px, so the page runs in an `iframe` of width `w` (400 by default) and height `h` (1400 by default), and the script reads that frame's own sizes. Chrome resolves no host name, so the run touches nothing outside the machine, the template's web fonts never load, and every measurement uses the fallback faces a viewer sees when Google Fonts does not answer. A line break inside a word counts only between two letters or digits, because the browser may break between punctuation marks such as `>` and `<` and the line still reads.
+The script writes its harness to a fresh `mktemp` directory and never writes into the repository. It wraps the template in the skeleton the Artifact tool publishes, which includes `[hidden]{display:none!important}`, and defines `window.claude.use("db")` as a stub. The stub serves placeholder documents, live (`fromCache: false`) or cached (`fromCache: true`), on a timeline the scenario sets, and deep-freezes every body it delivers, so a page that edits delivered data in place fails. The database and every reference are proxies: `onSnapshot`, `get`, `doc`, `collection`, `where`, `orderBy`, `limit`, `id` and `path` read, and any other member, such as `set`, `update`, `delete`, `add`, `acquire` or one not yet in the API, records a write. The stub also records each subscription. The page's clock starts at 2026-01-31T09:05:00Z and runs with Chrome's virtual time, or stands still with `freeze`, so every age is exact. Chrome runs under `TZ=UTC` and the stub makes `en-GB` the default date locale, so every visible time is exact text. Headless Chrome will not make a window narrower than 500 px, so the page runs in an `iframe` of width `w` (400 by default) and height `h` (1400 by default), and the script reads that frame's own sizes. Chrome resolves no host name, so the run touches nothing outside the machine, the template's web fonts never load, and every measurement uses the fallback faces a viewer sees when Google Fonts does not answer. A line break inside a word counts only between two letters or digits, because the browser may break between punctuation marks such as `>` and `<` and the line still reads.
 
 Every Chrome call runs under a 30-second wall-clock bound, through `timeout`, `gtimeout` or a `perl` fallback that runs Chrome in its own process group, in the order `tests/structural/run-tier1.sh` uses. A call that times out has its process group killed and runs once more. A second timeout fails that scenario, and every later scenario is reported as skipped and fails. An exit trap kills any Chrome process still using the run's profile directories and removes the directory, also after an interrupt.
 
 Each line of the `LIST` block is one scenario: a virtual-time budget in milliseconds, extra Chrome flags (`-` for none) and the query string the stub and collector read.
 
 - `theme` is `light` or `dark`, set as `data-theme`, or `os`, which sets no `data-theme` and runs Chrome with `--blink-settings=preferredColorScheme=0` so the page's own `prefers-color-scheme: dark` block must apply.
-- `tick` is the age of `tick_at` in minutes (5 by default), `tickms` the age in milliseconds, or `bad` for an unreadable 71-character string. `stale` sends `stale_after_min`; without it the field is absent.
-- `fixture` names the first data set (`full` by default). `deliver` is `live` (data after 20 ms), `silent` (never), `late` (after 11 s), `cached` (cached only), `live-cached` (live, then the same data cached at 300 ms), `live-cached-error` (that, then the failing listeners fail at 600 ms), `nodb` (`use("db")` resolves `null`), `error-before` or `error-after` (at 300 ms). `error` lists the sources whose listeners fail with `permission-denied`. `swap` sends every source the data of another fixture, live, at 300 ms, and `tick2` sends the same fixture again at 300 ms with a new tick age.
+- `tick` is the age of `tick_at` in minutes (5 by default), `tickms` the age in milliseconds, or `bad` for an unreadable 71-character string. `stale` sends `stale_after_min`; without it the field is absent. `hostile` sends a `feature` carrying markup and a `javascript:` architecture URL.
+- `fixture` names the first data set (`full` by default). `deliver` is `live` (data after 20 ms), `silent` (never), `late` (after 11 s), `cached` (cached only), `live-cached` (live, then the same data cached at 300 ms, or with a tick `ctick` minutes old when `ctick` is set), `live-cached-error` (that, then the failing listeners fail at 600 ms), `nodb` (`use("db")` resolves `null`), `error-before` or `error-after` (at 300 ms). `error` lists the sources whose listeners fail with `permission-denied`. `swap` sends every source the data of another fixture, live, at 300 ms, and `tick2` sends the same fixture again at 300 ms with a new tick age.
 - `at` lists the virtual times at which the page is read. `interact=focus` focuses the `#11` link in Ready for your review, scrolls the map to 80 px and the page to its end, then sends every listener a second, identical snapshot, and reads the page again after it and after the 30-second re-render. `interact=scroll` widens both tables to 1200 px with a test style, scrolls the Pull requests table to its end, the Phases table to 37 px and the map to its end, then does the same. `words` checks word breaks.
 
 | Fixture | Holds |
 | --- | --- |
-| `full` | A 66-character orchestrator branch with no hyphen or other break point. This run's phase shape: `foundation` with `[]`, six middle phases on `foundation` until `merged`, `default-stack` on the other seven until `done`, unsorted, every state tone and all four scheduling values. Drafts #11 (rank 1, on `12`), `"12"` (rank 2, a digit string) and #13 (rank 3, on `[11, "12", 100, 9]`, markup in its title, a `javascript:` URL), open `"100"` with an `http:` URL, merged #9. Four needs out of order, one with a `javascript:` link in its summary, one prompt with a 61-character pane, a decision with a pane and a restack with a door. 22 recent items, two out of time order. |
+| `full` | A 66-character orchestrator branch with no hyphen or other break point. This run's phase shape: `foundation` with `[]`, six middle phases on `foundation` until `merged`, `default-stack` on the other seven until `done`, unsorted, every state tone and all four scheduling values. Drafts #11 (rank 1, on `12`), `"12"` (rank 2, a digit string) and #13 (rank 3, on `[11, "12", 100, 9]`, markup in its title, a `javascript:` URL), open `"100"` with an `http:` URL, merged #9. `board` live with `pane: null`. Four needs out of order, one with a `javascript:` link in its summary, one prompt with a 61-character pane, a decision with a pane and a restack with a door. 22 recent items, two out of time order. |
 | `review` | Seven pull requests, unsorted: null rank, a rank tie between two drafts that can go, a two-draft dependency cycle, a dependency on a closed pull request and a missing `needs_update`. |
 | `lanes-a`, `lanes-b` | Five phases in three columns and two skipping edges. They differ only in which first-column phase each skipping edge leaves from. |
 | `share` | Four columns and three skipping edges: two share a source, two share a target, and two overlap without sharing an end. Solid and dashed edges share each end. |
@@ -30,22 +30,22 @@ Each line of the `LIST` block is one scenario: a virtual-time budget in millisec
 | --- | --- |
 | Six sections, in order, under exact headings | every scenario |
 | No `<title>` element, and the tab title from `board/meta.feature` | every scenario; `full` |
-| Header: feature, both branches, an `https` architecture link | `full` |
+| Header: feature, both branches, an `https` architecture link; markup in `feature` shown as text and a non-`https` architecture link shown as plain text | `full`, `hostile` |
 | Needs you: every item, sorted by kind then oldest first, door chip only on decisions, pane only on prompts, waiting time, count, empty state | `full`, `empty`, `swap` |
 | Ready for your review: drafts only, rank order with null last and ties by number, dependencies first, cycle fallback, "after" notes for draft and open dependencies, chips, empty state | `full`, `review`, `empty` |
 | Pull requests: every row and cell, ordered by number, digit strings read as numbers, empty state | `full`, `review`, `empty` |
-| Phases: every row and cell, scheduling phrases, unknown values, Depends on, relative time with its `datetime`, empty state | `full`, `missing`, `unreadable`, `cycle`, `flat`, `empty` |
-| Recent changes: first 20 in stored order, each time's `datetime`, null `from`, empty state | `full`, `empty` |
-| Heartbeat: last tick's `datetime`, age, Fresh or Stale chip, banner minutes, no tick, unreadable tick | every scenario with `board/meta` |
-| Staleness: more than 40 minutes by default and more than `stale_after_min` when sent, exact to the millisecond | `tickms` scenarios with `freeze` |
-| Staleness re-judged every 30 seconds with no write | `tickms=2380000` read at 29.9 s and 30.1 s |
-| A later live tick replaces the verdict either way; a cached tick never judges; a live verdict survives cached data and a dead listener | `tick2`, `cached`, `live-cached`, `live-cached-error`, `error-after`, `error-before` with `meta` |
+| Phases: every row and cell, scheduling phrases, unknown values, Depends on, a live session with and without a pane, relative time with its `datetime`, empty state | `full`, `missing`, `unreadable`, `cycle`, `flat`, `empty` |
+| Recent changes: first 20 in stored order, each time's visible text and `datetime`, null `from`, empty state | `full`, `empty` |
+| Heartbeat: last tick's visible time and `datetime`, age, Fresh or Stale chip, banner minutes, no tick, unreadable tick | every scenario with `board/meta` |
+| Staleness: more than 40 minutes by default and more than `stale_after_min` when sent, above or below 40, exact to the millisecond | `freeze` scenarios |
+| Staleness re-judged every 30 seconds with no write | `tickms=2380000` read at 29.9 s and 30.1 s; `stale=10&tickms=555000` read at 59.9 s and 60.1 s |
+| A later live tick replaces the verdict either way; a cached tick never judges; a live verdict survives cached data, also with another tick, and a dead listener | `tick2`, `cached`, `live-cached`, `ctick`, `live-cached-error`, `error-after`, `error-before` with `meta` |
 | Every section follows later snapshots | `swap` both ways |
-| No database, data unreachable after 10 s and cleared by data, cached data counted as unreachable | `nodb`, `silent`, `late`, `cached`, `live-cached` |
+| Every section reads Loading before data and while the store is silent; no database, data unreachable after 10 s and cleared by data, cached data counted as unreachable | `nodb`, `silent`, `late`, `cached`, `live-cached` |
 | A failed subscription marks only its section, before and after data, for every source | `error-before`, `error-after` |
 | Exactly one subscription per source, never renewed | every scenario |
 | The page never writes | every scenario |
-| Only text, never markup, from data; only `https://` links | every scenario |
+| Only text, never markup, from data, anywhere on the page; only `https://` links | every scenario |
 | Chip tones, the same palette for state chips and map nodes, in light, dark and OS dark | every scenario |
 | Phone tables show column names; wider tables show a header | every scenario |
 | No page scroll at 320, 400, 601, 700 and 1000 px; at 1000 px no line break between two letters or digits of a word of up to 16 characters, and no clipped chip | width scenarios, `words` |
@@ -99,6 +99,8 @@ cat > "$dir/stub.js" <<'JS'
     constructor(...args) { super(...(args.length ? args : [now()])); }
     static now() { return now(); }
   };
+  const toLocale = RealDate.prototype.toLocaleString;
+  RealDate.prototype.toLocaleString = function (locale, options) { return toLocale.call(this, locale ?? "en-GB", options); };
   window.__T0 = T0;
   const iso = (ms) => new RealDate(T0 - ms).toISOString();
   const ago = (min) => iso(Math.round(min * 60000));
@@ -107,6 +109,7 @@ cat > "$dir/stub.js" <<'JS'
       architecture_url: "https://example.com/architecture",
       tick_at: tickms != null ? iso(Number(tickms)) : tick === "bad" ? "unreadable-" + "0123456789".repeat(6) : ago(Number(tick || 5))};
     if (q.has("stale")) meta.stale_after_min = Number(q.get("stale"));
+    if (q.has("hostile")) Object.assign(meta, {feature: "placeholder-feature <b>bold</b><img src=x>", architecture_url: "javascript:alert(3)"});
     return meta;
   };
   const dep = (phase, until) => ({phase, until});
@@ -131,7 +134,7 @@ cat > "$dir/stub.js" <<'JS'
         phase("default-stack", "Spec", "blocked", 90, ["foundation", ...middle].map((p) => dep(p, "done"))),
         phase("foundation", "PR", "closed", 120, []),
         phase("launcher", "Implement", "live", 3, onFoundation, {session_live: true, pane: "%12"}),
-        phase("board", "Verify", "live", 20, onFoundation, {session_live: true, pane: "%14"}),
+        phase("board", "Verify", "live", 20, onFoundation, {session_live: true, pane: null}),
         phase("orchestrator-handbook", "Review", "queued", 30, onFoundation),
         phase("phase-handbooks", "Spec", "blocked", 45, onFoundation, {waits_for: "a decision on the handbook layout"}),
         phase("spec-planner-handbooks", "Done", "closed", 240, onFoundation)],
@@ -167,16 +170,18 @@ cat > "$dir/stub.js" <<'JS'
   });
   const name = q.get("fixture") || "full";
   const data = build(metaWith(q.get("tick"), q.get("tickms")))[name];
+  const cachedData = q.has("ctick") ? build(metaWith(q.get("ctick"), null))[name] : data;
   const later = q.has("swap") || q.has("tick2") ? build(metaWith(q.get("tick2") ?? q.get("tick"), null))[q.get("swap") || name] : null;
   const deliver = q.get("deliver") || "live";
   const failing = (q.get("error") || "").split(",").map((s) => ({meta: "board/meta", recent: "board/recent"}[s] || s));
   window.__writes = [];
   window.__subs = [];
   const listeners = [];
+  const frozen = (v) => { if (v && typeof v === "object") { Object.values(v).forEach(frozen); Object.freeze(v); } return v; };
   const snapshotOf = (set, path, fromCache) => {
     const metadata = {fromCache, hasPendingWrites: false};
-    if (path.includes("/")) return {id: path.split("/")[1], exists: path in set, data: () => structuredClone(set[path]), metadata};
-    const docs = (set[path] || []).map((body, i) => ({id: String(i), exists: true, data: () => structuredClone(body), metadata}));
+    if (path.includes("/")) return {id: path.split("/")[1], exists: path in set, data: () => frozen(structuredClone(set[path])), metadata};
+    const docs = (set[path] || []).map((body, i) => ({id: String(i), exists: true, data: () => frozen(structuredClone(body)), metadata}));
     return {docs, size: docs.length, empty: !docs.length, docChanges: () => [], metadata};
   };
   const ref = (path) => ({
@@ -192,7 +197,7 @@ cat > "$dir/stub.js" <<'JS'
       if (deliver === "error-before") setTimeout(fails ? error : emit(data), 20);
       if (deliver === "cached") setTimeout(emit(data, true), 20);
       if (deliver === "late") setTimeout(emit(data), 11000);
-      if (deliver.startsWith("live-cached")) setTimeout(emit(data, true), 300);
+      if (deliver.startsWith("live-cached")) setTimeout(emit(cachedData, true), 300);
       if (deliver === "error-after" && fails) setTimeout(error, 300);
       if (deliver === "live-cached-error" && fails) setTimeout(error, 600);
       if (later) setTimeout(emit(later), 300);
@@ -351,7 +356,7 @@ cat > "$dir/collect.js" <<'JS'
       notices: [...document.querySelectorAll("body *")].filter((n) => shown(n) && !n.closest("main") && !n.closest("header") && n.children.length === 0 && n.textContent.trim()).map(text),
       sections,
       headerChips: chips(document.querySelector("header")),
-      injected: document.querySelectorAll("main b, main img, main script, main a:not([href^='https://'])").length,
+      injected: document.querySelectorAll("b, img, main script, header script, a:not([href^='https://'])").length,
       links: [...document.querySelectorAll("a")].map((a) => a.getAttribute("href")),
       tokens: tokens(),
       depChips: depChips(),
@@ -454,11 +459,16 @@ done > "$dir/out.txt" <<'LIST'
 5000 - theme=light&freeze=1&stale=60&tickms=3600000
 5000 - theme=light&freeze=1&stale=60&tickms=3600001
 35000 - theme=light&tickms=2380000&at=1500,29900,30100
+65000 - theme=light&stale=10&tickms=555000&at=1500,59900,60100
+5000 - theme=light&freeze=1&stale=10&tick=11
+5000 - theme=dark&hostile=1
 5000 - theme=dark&tick=bad
 5000 - theme=light&tick=41&tick2=5&at=100,1500
 5000 - theme=light&tick=5&tick2=41&at=100,1500
 20000 - theme=light&deliver=cached&tick=180&at=5000,12000
 20000 - theme=dark&deliver=live-cached&tick=41&at=5000,12000
+5000 - theme=light&deliver=live-cached&tick=41&ctick=5
+5000 - theme=light&deliver=live-cached&tick=5&ctick=41
 5000 - theme=light&deliver=live-cached-error&error=meta&tick=41
 5000 - theme=light&deliver=error-after&error=meta&tick=41
 5000 - theme=light&deliver=error-before&error=meta
@@ -523,7 +533,7 @@ PRS_FIXTURE = [[f"#{n}", f"Review fixture {n}", "alpha", state, checks, "main", 
     (36, "draft", "passing", "none", "Up to date")]]
 MIDDLE = ["launcher", "board", "orchestrator-handbook", "phase-handbooks", "pr-handbook", "spec-planner-handbooks"]
 PHASES = [
-    ["board", "Verify", "session live", "nothing", "foundation (merged)", "live in pane %14", "20 min ago"],
+    ["board", "Verify", "session live", "nothing", "foundation (merged)", "live", "20 min ago"],
     ["default-stack", "Spec", "blocked", "nothing", " | ".join(p + " (done)" for p in ["foundation"] + MIDDLE), "not live", "1 h 30 min ago"],
     ["foundation", "PR", "session closed", "nothing", "none", "not live", "2 h 0 min ago"],
     ["launcher", "Implement", "session live", "nothing", "foundation (merged)", "live in pane %12", "3 min ago"],
@@ -588,6 +598,11 @@ MAPS = {
     "unreadable": {"columns": [["alpha", "beta"], ["gamma"]], "lanes": 0, "edges": edges([("alpha", "gamma")])},
 }
 NODE_W, NODE_H, COL_GAP, ROW_GAP, PAD, LANE = 168, 44, 56, 12, 12, 24
+
+
+def local(t0, ms):
+    d = datetime.fromtimestamp((t0 - ms) // 1000, timezone.utc)
+    return f"{d.day} {d:%b %Y, %H:%M}"
 
 
 def iso(t0, ms):
@@ -727,7 +742,8 @@ def full_content(c, s):
     c("Phases: every row with scheduling labels and Depends on", phases["rows"] == PHASES and phases["count"] == "8")
     c("Phases: each last change dated", phases["times"] == [iso(t0, a * 60000) for a in PHASE_AGES])
     recent = sec(s, "Recent changes")
-    c("Recent changes: first 20 in stored order", [i.split(" | ", 1)[1] for i in recent["items"]] == RECENT and recent["count"] == "20")
+    c("Recent changes: first 20 in stored order, each at its UTC time", recent["items"] == [local(t0, a * 60000) + " | " + r
+      for a, r in zip(RECENT_AGES, RECENT)] and recent["count"] == "20")
     c("Recent changes: each time dated", recent["times"] == [iso(t0, a * 60000) for a in RECENT_AGES])
 
 
@@ -738,7 +754,7 @@ def age_text(minutes):
 def heartbeat(c, s, label, tick_ms, verdict, age_ms=None):
     hb = sec(s, "Heartbeat")
     chips = {"stale": ["Stale"], "fresh": ["Fresh"], None: []}[verdict]
-    ok = [x["text"] for x in hb["chips"]] == chips and hb["times"] == [iso(s["T0"], tick_ms)]
+    ok = [x["text"] for x in hb["chips"]] == chips and hb["times"] == [iso(s["T0"], tick_ms)] and f"last tick {local(s['T0'], tick_ms)} | " in hb["text"]
     if age_ms is None:
         ok = ok and (s["banner"] == [] if verdict != "stale" else len(s["banner"]) == 1)
     else:
@@ -761,18 +777,25 @@ def check(name, r):
     fixture = q.get("fixture", "full")
     tick_ms = int(q["tickms"]) if "tickms" in q else round(float(q.get("tick", 5)) * 60000) if q.get("tick") != "bad" else None
     limit = float(q.get("stale", 40)) * 60000
-    plain_live = deliver == "live" and fixture == "full" and "swap" not in q and "tick2" not in q
+    plain_live = deliver == "live" and fixture == "full" and "swap" not in q and "tick2" not in q and "hostile" not in q
     if plain_live and tick_ms is not None:
-        full_content(c, s)
+        full_content(c, snaps[0])
         c("no notice once every source is live", s["notices"] == [])
         if "at" not in q:
             heartbeat(c, s, "heartbeat", tick_ms, "stale" if tick_ms > limit else "fresh", tick_ms)
     if deliver in ("cached", "live-cached"):
         full_content(c, snaps[0])
+    if "hostile" in q:
+        c("markup in feature stays text and a javascript: architecture URL is no link", s["h1"] == "placeholder-feature <b>bold</b><img src=x>"
+          and s["title"] == "placeholder-feature <b>bold</b><img src=x> status board" and s["headerLinks"] == []
+          and s["metaLine"].endswith(" | default main | Architecture"))
     if q.get("at") == "1500,29900,30100":
         heartbeat(c, snaps[0], "before the 30-second re-render", tick_ms, "fresh", tick_ms)
         heartbeat(c, snaps[1], "just before 30 s", tick_ms, "fresh")
         heartbeat(c, snaps[2], "after the 30-second re-render", tick_ms, "stale", tick_ms + 30000)
+    if q.get("at") == "1500,59900,60100":
+        heartbeat(c, snaps[1], "after the first 30-second re-render", tick_ms, "fresh", tick_ms + 30000)
+        heartbeat(c, snaps[2], "after the second 30-second re-render, 10-minute limit", tick_ms, "stale", tick_ms + 60000)
     if q.get("tick") == "bad":
         c("an unreadable tick is stale and shown raw", s["banner"] == [NO_TICK] and [x["text"] for x in sec(s, "Heartbeat")["chips"]] == ["Stale"]
           and sec(s, "Heartbeat")["text"].endswith("No tick recorded yet. | unreadable-" + "0123456789" * 6))
@@ -836,10 +859,13 @@ def check(name, r):
         c("every unknown entry is a chip", len(s["depChips"]) == 5)
     if deliver == "nodb":
         c("no database: one notice and no sections", s["notices"] == [NODB] and not any(x["shown"] for x in s["sections"]))
+    loading = [t.upper() + " | Loading." for t in HEADINGS]
     if deliver == "silent":
+        c("every section says Loading before data and while the store stays silent", all([x["text"] for x in y["sections"]] == loading for y in snaps))
         c("no notice before 10 s", snaps[0]["notices"] == [])
         c("unreachable notice after 10 s", s["notices"] == [SLOW])
     if deliver == "late":
+        c("every section says Loading until data arrives", all([x["text"] for x in y["sections"]] == loading for y in snaps[:2]))
         c("no notice before 10 s", snaps[0]["notices"] == [])
         c("unreachable notice after 10 s", snaps[1]["notices"] == [SLOW])
         c("the first live data clears the notice", s["notices"] == [] and sec(s, "Ready for your review")["items"] == REVIEW)
@@ -871,10 +897,14 @@ def check(name, r):
         c("a cached tick never calls the board stale or fresh", all(x["banner"] == [] and sec(x, "Heartbeat")["chips"] == [] for x in snaps)
           and sec(s, "Heartbeat")["text"].endswith(age_text(180)))
         c("cached data: no notice before 10 s, the unreachable notice after", snaps[0]["notices"] == [] and s["notices"] == [SLOW])
-    if deliver in ("live-cached", "live-cached-error"):
+    if "ctick" in q:
+        want = "stale" if tick_ms > limit else "fresh"
+        c(f"a cached tick after a live one keeps the live {want} verdict", [x["text"] for x in sec(s, "Heartbeat")["chips"]]
+          == [want.title()] and s["banner"] == ([STALE(tick_ms // 60000)] if want == "stale" else []))
+    elif deliver in ("live-cached", "live-cached-error"):
         for x in snaps:
             heartbeat(c, x, "live verdict kept after cached data", tick_ms, "stale", tick_ms + (10000 if x is s and len(snaps) > 1 else 0))
-    if deliver == "live-cached":
+    if deliver == "live-cached" and "ctick" not in q:
         c("cached data after live: no notice before 10 s, the unreachable notice after", snaps[0]["notices"] == [] and s["notices"] == [SLOW])
     if deliver == "live-cached-error":
         c("the heartbeat shows the error after cached data", STOPPED in sec(s, "Heartbeat")["text"])
@@ -913,7 +943,7 @@ python3 "$dir/check.py" "$dir/out.txt"
 EOF
 ```
 
-Expected: exit `0`, one `ok` line for each of the 44 scenarios and one for `lanes-a against lanes-b`, then `board renders as specified`. A failing assertion prints `FAIL`, the scenario and the name of each failed check, then `<n> failed checks`, and exits `1`. A page that crashes, produces no result or times out twice fails its scenario the same way.
+Expected: exit `0`, one `ok` line for each of the 49 scenarios and one for `lanes-a against lanes-b`, then `board renders as specified`. A failing assertion prints `FAIL`, the scenario and the name of each failed check, then `<n> failed checks`, and exits `1`. A page that crashes, produces no result or times out twice fails its scenario the same way.
 
 ## Evidence
 

@@ -1,7 +1,7 @@
 ---
 phase: "phase-handbooks"
-state: "Review"
-changed_at: "2026-11-21T18:01:42Z"
+state: "Implement"
+changed_at: "2026-11-21T18:06:43Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
 code_head: "30f0709ecdfb8865913ac95e1c7f50fcb2e8a9be"
@@ -87,6 +87,11 @@ verdicts:
     code_head: "30f0709ecdfb8865913ac95e1c7f50fcb2e8a9be"
     at: "2026-11-21T18:00:10Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "30f0709ecdfb8865913ac95e1c7f50fcb2e8a9be"
+    at: "2026-11-21T18:06:43Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
 pull_requests:
   - number: 85
     branch: "s-stack-phase-handbooks"
@@ -123,4 +128,4 @@ Fix 515c907 removes the restack row, has every fix round re-derive the base, and
 Fix 2155716: Done only from PR, back to Implement whenever no verdict covers the current code head, and a pull-request-merged round records bases and sends prs-open. Verify returned VERIFIED at 2155716. Review returned SIGNIFICANT at 2155716: the new move-back rule also fired in Verify, the Moving back example did not fit it, and a phase that ignored the merged notice had no route to Done. Back to Implement.
 Fix 30f0709: the no-verdict move-back applies in Review, PR and Done only; the Implement move-back applies whenever the orchestrator sends it; the merged notice ignored outside PR comes again once the status shows PR and the code head is merged, in the orchestrator's words. Verify returned VERIFIED at 30f0709. The orchestrator's merge-orchestrator-branch request, which brings #82 and #84 from main, comes before Review.
 s-stack-package merged at e826e6a with #82 and #84 from main. It changed only packages/s-stack/apm.yml's version line (0.1.0 to 0.1.1) outside .foundry/, but that moves the code head, so the phase moves back to Implement and both gates run again.
-Correction from the orchestrator: under the run decision on generated files, a change to a packages/*/apm.yml version: line does not move the code head. Merge e826e6a changed only that line outside .foundry/ and lockfiles, so the code head is still 30f0709, and its VERIFIED verdict stands. The fresh verifier started for e826e6a was stopped before it committed anything. phase-session.md points to the reference file and the feature plan for the code head and states no command of its own, so it needs no change. On to Review of 30f0709.
+Correction from the orchestrator: under the run decision on generated files, a change to a packages/*/apm.yml version: line does not move the code head. Merge e826e6a changed only that line outside .foundry/ and lockfiles, so the code head is still 30f0709, and its VERIFIED verdict stands. The fresh verifier started for e826e6a was stopped before it committed anything. phase-session.md points to the reference file and the feature plan for the code head and states no command of its own, so it needs no change. On to Review of 30f0709. Review returned SIGNIFICANT at 30f0709: the move-back rule fired on entry to Review, and an ambiguous 'merged' left a dead end. Back to Implement, with the orchestrator's deferred Done-rework instruction in the same round.

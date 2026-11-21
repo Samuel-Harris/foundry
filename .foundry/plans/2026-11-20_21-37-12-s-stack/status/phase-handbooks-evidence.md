@@ -196,3 +196,16 @@ A fresh verifier ran the whole verification skill and this phase's `## Evidence`
   - the merged notice in Implement is ignored, `state` is sent, and the notice comes again in PR, which leads to Done;
   - a stale verify verdict in Review moves back to Implement.
 - Outside this phase, all in `references/status-and-messages.md`: its `move-back` and `state` "When" columns and its `instruction` row do not cover a failed check, a reply to an early notice, or the merged notice.
+
+## Review: SIGNIFICANT at `30f0709ecdfb8865913ac95e1c7f50fcb2e8a9be`
+
+A later review covered `30f0709`, with clean merges `4bf6139` and `e826e6a`, the second bringing only a generated `version:` line. Two reviewers, Opus and Fable, each in a detached worktree at `11ba2fc`, ran nine cold reads between them. Probes 1 and 2 pass in both reviews. Probe 3 still dead-ends.
+
+Significant:
+
+1. The narrowed rule, "In Review, PR or Done, if the newest verdicts do not name the current code head, move back to Implement", fires on entry to Review. A phase never holds a review verdict for its current head until the Review gate reports, so the rule contradicts Review step 2 and "After a restart". It is the Verify defect again, one state later.
+2. "Your current code head is merged" does not say merged into which branch. Under one reading, a fix made after every pull request has merged reaches no pull request, and the phase never reaches Done. Line 85 routes commits only to open pull requests or to new ones the phase plan assigns.
+
+Not significant, fixed alongside: the narrowing left Verify no exit for a VERIFIED verdict that names an older head. Recorded only, all older text: the order of moving to PR and starting the PR creator in a fix round, the end of a `blocked` wait, no PR creator step in the conflict round, and restarts in the middle of a state change.
+
+The orchestrator's deferred instruction also goes into this round: a Done phase asked to change code moves back to Implement, and its PR creator opens a new pull request for commits no open pull request carries.

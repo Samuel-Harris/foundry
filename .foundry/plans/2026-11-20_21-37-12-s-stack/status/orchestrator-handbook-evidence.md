@@ -529,3 +529,24 @@ No defect breaks the common path. For the cross-handbook integration:
 | A `move-back` lost in a crash after a failed post-merge check is never resent, because the tracker records only `fix-round` and `instruction`. The orchestrator branch stays frozen for good. | Fable | Two cold reads |
 
 Both walks otherwise reached Done for every phase, with no deadlock or loop and no unverified code merged.
+
+## Verify 27, stopped without a verdict
+
+The verifier for `3743f4c` was stopped before it committed anything, so that the orchestrator's instruction on developer commits could fold into the round.
+
+## Verify 28, code head `7b34b57159794ec529b4f0246d2daedcf1c85c5b`, NOT VERIFIED
+
+A fresh verifier updated the check file for `3743f4c` and `7d40d4e` (commit `7b34b57`, with new cold reads AU to AX) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`185/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 FAILS: all scripts pass, including the board's 50 Chrome scenarios, and 58 of 59 cold reads pass. Cold read AX case 2 fails.
+
+The defect breaks the common path. A refresh round was answered by a push, and the developer-commit rule relied on "nothing unanswered" to mean the PR creator was not mid-push. So a tick between a PR creator's refresh push and its `prs-open` took the phase's own commits for a developer's. That gap opens after every merge into the default branch.
+
+Defects that mislead a reader:
+
+- A developer-commit round was not named among the rounds that need a `prs-open` at a newer code head.
+- `prs-open` carries no heads, so "the head its phase last reported" was undefined.
+
+Minor items:
+
+- GitHub's "Update branch" merge counts as a developer commit.
+- The order of restart messages is not stated.
+- Check-file gaps: AT point 1 and Z's tick 2.

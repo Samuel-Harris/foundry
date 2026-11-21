@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T23:22:30Z"
+state: "Implement"
+changed_at: "2026-11-21T23:38:56Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "7d40d4e3e9374d0739447078adec631d203b13ca"
+code_head: "7b34b57159794ec529b4f0246d2daedcf1c85c5b"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -177,6 +177,11 @@ verdicts:
     code_head: "ac3d7c0e7e46869167b4774f4a3094d37318d745"
     at: "2026-11-21T23:17:21Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "7b34b57159794ec529b4f0246d2daedcf1c85c5b"
+    at: "2026-11-21T23:38:56Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -331,3 +336,5 @@ The Review 10 fix is at `3743f4c`. `s-stack-package` (`a4d130f`) was merged at `
 The twenty-seventh Verify gate was stopped without a verdict or commit, so that the orchestrator's instruction on developer commits could fold into this round. The phase moved back to Implement.
 
 The developer-commit rule is at `7d40d4e`, on top of the Review 10 fix at `3743f4c`. `s-stack-package` (`ad63912`) was merged at `1ef3ee2`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `7d40d4e`.
+
+The twenty-eighth Verify gate returned NOT VERIFIED at `7b34b57`. The phase moved back to Implement.

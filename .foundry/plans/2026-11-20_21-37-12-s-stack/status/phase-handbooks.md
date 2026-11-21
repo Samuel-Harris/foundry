@@ -1,6 +1,6 @@
 ---
 phase: "phase-handbooks"
-state: "Implement"
+state: "Verify"
 changed_at: "2026-11-21T18:00:55Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"

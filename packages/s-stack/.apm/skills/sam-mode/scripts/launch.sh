@@ -127,33 +127,34 @@ resolve() {
   (cd "$1" 2>/dev/null && pwd -P) || true
 }
 
-# Prints "pane_id width height window_id kind in_worktree" for each pane with a
-# claude process among its descendants. kind is strict when that claude's first
-# argument is --name <name>, as the launcher writes it, so a --name inside a
-# prompt never matches. It is nameless when no argument is --name, which is how
-# workmux resurrect restarts a session, and other otherwise. A pane running
-# several claudes reports the closest match. in_worktree is 1 when the pane's
-# directory is <worktree> or under it.
-session_panes() {
-  local session=$1 worktree_path=$2 panes pane_id pane_pid width height current_path window_id in_worktree resolved_worktree=''
+# Prints "pane_id window_id tag kind in_worktree" for every pane, in tmux's
+# order. tag is the pane's @s-stack-session option, or - when unset. kind
+# describes the claude processes among the pane's descendants: strict when a
+# claude's first argument is --name <session>, as the launcher writes it, so a
+# --name inside a prompt never matches; nameless when no argument is --name,
+# which is how workmux resurrect restarts a session; other for any other
+# claude; none without one. A pane running several claudes reports the closest
+# match. in_worktree is 1 when the pane's directory is <worktree> or under it.
+pane_inventory() {
+  local session=$1 worktree_path=$2 panes pane_id pane_pid window_id tag current_path in_worktree resolved_worktree=''
   # Spaces, not tabs, separate the fields: a tmux client without a UTF-8 locale
   # prints a tab in a format as "_". The path goes last so read keeps its spaces.
-  if ! panes=$(tmux list-panes -a -F '#{pane_id} #{pane_pid} #{pane_width} #{pane_height} #{window_id} #{pane_current_path}'); then
+  if ! panes=$(tmux list-panes -a -F '#{pane_id} #{pane_pid} #{window_id} #{?@s-stack-session,#{@s-stack-session},-} #{pane_current_path}'); then
     # With no server no session runs, which --close and --remove may rely on; start mode needs a window.
     [ "$mode" != start ] && [[ $(tmux list-sessions 2>&1) == 'no server running'* ]] || die 'tmux list-panes failed'
     panes=''
   fi
   [ -z "$worktree_path" ] || resolved_worktree=$(resolve "$worktree_path")
   {
-    printf '%s\n' "$panes" | while read -r pane_id pane_pid width height window_id current_path; do
+    printf '%s\n' "$panes" | while read -r pane_id pane_pid window_id tag current_path; do
       [ -n "$pane_id" ] || continue
       in_worktree=0
       if [ -n "$resolved_worktree" ] && [[ "$(resolve "$current_path")/" == "$resolved_worktree"/* ]]; then in_worktree=1; fi
-      printf 'pane %s %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$width" "$height" "$window_id" "$in_worktree"
+      printf 'pane %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$window_id" "$tag" "$in_worktree"
     done
     ps -A -o pid=,ppid=,args=
   } | awk -v name="$session" '
-    $1 == "pane" { pane_pid[$3] = $2; info[$2] = $2 " " $4 " " $5 " " $6; in_worktree[$2] = $7; next }
+    $1 == "pane" { order[++n] = $3; pane_pid[$3] = $2; info[$2] = $2 " " $4 " " $5; in_worktree[$2] = $6; next }
     {
       parent[$1] = $2
       program = $3; sub(/.*\//, "", program)
@@ -164,7 +165,8 @@ session_panes() {
       claude[$1] = strict ? "strict" : (named ? "other" : "nameless")
     }
     END {
-      rank["other"] = 1; rank["nameless"] = 2; rank["strict"] = 3
+      rank["none"] = 0; rank["other"] = 1; rank["nameless"] = 2; rank["strict"] = 3
+      for (i = 1; i <= n; i++) kind[pane_pid[order[i]]] = "none"
       for (pid in claude) {
         for (p = pid; p != "" && p > 1; p = parent[p]) {
           if (!(p in pane_pid)) continue
@@ -173,37 +175,33 @@ session_panes() {
           break
         }
       }
-      for (pane in kind) print info[pane], kind[pane], in_worktree[pane]
+      for (i = 1; i <= n; i++) { pane = pane_pid[order[i]]; print info[pane], kind[pane], in_worktree[pane] }
     }'
 }
 
+# Reads pane_inventory for <session> and prints the one pane that runs it, or
+# nothing. With <allow_nameless> 1, a nameless claude in the inventory's
+# worktree counts as the session resumed by workmux resurrect.
+live_pane_of() {
+  local session=$1 allow_nameless=$2 matches
+  matches=$(awk -v allow="$allow_nameless" '$4 == "strict" || (allow && $4 == "nameless" && $5 == 1) { print $1 }')
+  at_most_one "pane runs $session" "$matches"
+  [ -z "$matches" ] || printf '%s\n' "$matches"
+}
+
 find_live_pane() {
-  local matches resumed=1
+  local resumed=1
   # workmux resurrect restores only the orchestrator, and the spec writer has
   # ended by then, so a nameless claude in the feature worktree is the orchestrator.
   [ -z "$first_spec" ] || resumed=0
-  matches=$(session_panes "$name" "$worktree" | awk -v resumed="$resumed" '$5 == "strict" || (resumed && $5 == "nameless" && $6 == 1)')
-  at_most_one "pane runs $name" "$matches"
-  live_pane=${matches%% *}
+  printf '%s\n' "$inventory" | live_pane_of "$name" "$resumed"
 }
 
-tagged_panes() {
-  local panes
-  panes=$(tmux list-panes "$@" -F '#{pane_id} #{@s-stack-session}') || return 1
-  printf '%s\n' "$panes" | awk -v name="$name" '$2 == name { print $1 }'
-}
-
-# Sets own_pane to the first pane of $window tagged with the session's name in
-# which no claude runs: the session's pane, left at its shell after claude
-# exited. Restarting there keeps restarts from shrinking the columns.
+# Reads pane_inventory and prints the first pane of $window tagged with the
+# session's name in which no claude runs: the session's pane, left at its shell
+# after claude exited. Restarting there keeps restarts from shrinking the columns.
 find_own_pane() {
-  local tagged busy pane
-  own_pane=''
-  tagged=$(tagged_panes -t "$window") || die "tmux list-panes -t $window failed"
-  busy=" $(session_panes "$name" '' | awk '{ print $1 }' | tr '\n' ' ') "
-  for pane in $tagged; do
-    case "$busy" in *" $pane "*) ;; *) own_pane=$pane; return ;; esac
-  done
+  awk -v window="$window" -v name="$name" '$2 == window && $3 == name && $4 == "none" { print $1; exit }'
 }
 
 # Held until the launcher exits, so a concurrent launch of the same session
@@ -225,11 +223,50 @@ lock_session() {
 # A claude shows in ps a moment after its pane opens.
 wait_for_started_claude() {
   local tries=0
-  until session_panes "$name" '' | awk -v pane="$target_pane" '$1 == pane && $5 == "strict" { found = 1 } END { exit !found }'; do
+  until pane_inventory "$name" '' | awk -v pane="$target_pane" '$1 == pane && $4 == "strict" { found = 1 } END { exit !found }'; do
     tries=$((tries + 1))
     [ "$tries" -lt 100 ] || return 0
     sleep 0.1
   done
+}
+
+# Two panes of at least 80 columns each, and the divider between them.
+side_by_side_width=161
+
+# Each placement policy reads the window's pane table from choose_split.
+top_of_first_column() {
+  awk '!(NF == 8 && $8 == "workmux") && (best == "" || $2 < left || ($2 == left && $4 < top)) { best = $1; left = $2; top = $4 }
+    END { if (best != "") print best }'
+}
+
+bottom_of_column() {
+  awk -v anchor="$1" -v feature="$feature" '
+    { n++; id[n] = $1; left[n] = $2; right[n] = $3; top[n] = $4; tag[n] = $7; if ($1 == anchor) a = n }
+    END {
+      if (!a) exit
+      for (i = 1; i <= n; i++) {
+        if (left[i] < left[a] || right[i] > right[a]) continue
+        if (i != a && tag[i] != feature "-spec" && tag[i] !~ ("^" feature "-spec-[0-9]+$")) continue
+        if (!best || top[i] > top[best]) best = i
+      }
+      print id[best]
+    }'
+}
+
+right_of_column() {
+  awk -v anchor="$1" -v wide="$side_by_side_width" '
+    { n++; id[n] = $1; right[n] = $3; left[n] = $2; width[n] = $5; height[n] = $6; tag[n] = $7; if ($1 == anchor) a = n }
+    END {
+      if (!a) exit
+      for (i = 1; i <= n; i++) {
+        if (tag[i] == "-" || left[i] <= right[a]) continue
+        if (!best || width[i] * height[i] > width[best] * height[best]) best = i
+      }
+      # Each -l keeps the orchestrator at least as wide as the new pane: the
+      # divider takes one column of the orchestrator pane.
+      if (!best) print id[a] " -h " int((width[a] - 1) / 2)
+      else print id[best] " " (width[best] >= wide ? "-h" : "-v")
+    }'
 }
 
 # Sets target_pane, direction and split_size for a session started by splitting
@@ -240,64 +277,34 @@ wait_for_started_claude() {
 # leaves untagged, and the first column's top pane when the orchestrator starts
 # with no spec writer.
 choose_split() {
-  local panes feature_worktree orchestrator_pane='' spec_pane='' choice
-  # Spaces separate the fields, as in session_panes, and the command goes last.
+  local panes anchor feature_worktree
+  # Spaces separate the fields, as in pane_inventory, and the command goes last.
   panes=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_left} #{pane_right} #{pane_top} #{pane_width} #{pane_height} #{?@s-stack-session,#{@s-stack-session},-} #{pane_current_command}') || die "tmux list-panes -t $window failed"
-  if [ "$role" = orchestrator ]; then
-    spec_pane=$(session_panes "$feature-spec" '' | awk '$5 == "strict"')
-    at_most_one "pane runs $feature-spec" "$spec_pane"
-    spec_pane=${spec_pane%% *}
-  else
-    feature_worktree=$(workmux path "$feature" 2>/dev/null) || feature_worktree=''
-    orchestrator_pane=$(session_panes "$feature-orchestrator" "$feature_worktree" | awk '$5 == "strict" || ($5 == "nameless" && $6 == 1)')
-    at_most_one "pane runs $feature-orchestrator" "$orchestrator_pane"
-    orchestrator_pane=${orchestrator_pane%% *}
-  fi
-  choice=$(printf '%s\n' "$panes" | awk -v role="$role" -v feature="$feature" -v orchestrator="$orchestrator_pane" -v spec="$spec_pane" -v first_spec="$first_spec" '
-    {
-      n++
-      id[n] = $1; left[n] = $2; right[n] = $3; top[n] = $4; width[n] = $5; height[n] = $6; tag[n] = $7
-      sidebar[n] = NF == 8 && $8 == "workmux"
-      if ($1 == orchestrator) o = n
-      if ($1 == spec) s = n
-    }
-    function first_column_top(   i, best) {
-      for (i = 1; i <= n; i++) {
-        if (sidebar[i]) continue
-        if (!best || left[i] < left[best] || (left[i] == left[best] && top[i] < top[best])) best = i
-      }
-      return best ? id[best] " -v" : "none"
-    }
-    END {
-      if (role == "orchestrator") { print s ? id[s] " -v" : first_column_top(); exit }
-      if (!o) { print (role == "spec" && first_spec) ? first_column_top() : "no-orchestrator"; exit }
-      if (role == "spec") {
-        best = 0
-        for (i = 1; i <= n; i++) {
-          if (left[i] < left[o] || right[i] > right[o]) continue
-          if (i != o && tag[i] != feature "-spec" && tag[i] !~ ("^" feature "-spec-[0-9]+$")) continue
-          if (!best || top[i] > top[best]) best = i
-        }
-        print id[best] " -v"
-        exit
-      }
-      best = 0
-      for (i = 1; i <= n; i++) {
-        if (tag[i] == "-" || left[i] <= right[o]) continue
-        if (!best || width[i] * height[i] > width[best] * height[best]) best = i
-      }
-      # Each -l keeps the orchestrator at least as wide as the new pane: the
-      # divider takes one column of the orchestrator pane.
-      if (!best) print id[o] " -h " int((width[o] - 1) / 2)
-      else print id[best] " " (width[best] >= 161 ? "-h" : "-v")
-    }')
-  case "$choice" in
-    none) die "no pane to split in $window" ;;
-    no-orchestrator) die "no $feature-orchestrator pane in $window" ;;
-  esac
-  read -r target_pane direction split_size <<EOF
-$choice
+  direction=-v split_size=''
+  case "$role" in
+    orchestrator)
+      anchor=$(pane_inventory "$feature-spec" '' | live_pane_of "$feature-spec" 0)
+      target_pane=$(printf '%s\n' "$panes" | awk -v anchor="$anchor" '$1 == anchor { print $1 }')
+      [ -n "$target_pane" ] || target_pane=$(printf '%s\n' "$panes" | top_of_first_column)
+      [ -n "$target_pane" ] || die "no pane to split in $window"
+      ;;
+    spec|planner|phase)
+      feature_worktree=$(workmux path "$feature" 2>/dev/null) || feature_worktree=''
+      anchor=$(pane_inventory "$feature-orchestrator" "$feature_worktree" | live_pane_of "$feature-orchestrator" 1)
+      if [ "$role" = spec ]; then
+        target_pane=$(printf '%s\n' "$panes" | bottom_of_column "$anchor")
+        if [ -z "$target_pane" ] && [ -n "$first_spec" ]; then
+          target_pane=$(printf '%s\n' "$panes" | top_of_first_column)
+          [ -n "$target_pane" ] || die "no pane to split in $window"
+        fi
+      else
+        read -r target_pane direction split_size <<EOF
+$(printf '%s\n' "$panes" | right_of_column "$anchor")
 EOF
+      fi
+      [ -n "$target_pane" ] || die "no $feature-orchestrator pane in $window"
+      ;;
+  esac
 }
 
 default_branch() {
@@ -329,19 +336,12 @@ cmd_print_window() {
 
 cmd_close() {
   require tmux
-  local busy claudes matches tagged panes pane
-  claudes=$(session_panes "$name" '')
-  matches=$(printf '%s\n' "$claudes" | awk '$5 == "strict"')
-  at_most_one "pane runs $name" "$matches"
-  tagged=$(tagged_panes -a) || [[ $(tmux list-sessions 2>&1) == 'no server running'* ]] || die 'tmux list-panes failed'
+  local inventory panes pane
+  inventory=$(pane_inventory "$name" '')
+  panes=$(printf '%s\n' "$inventory" | live_pane_of "$name" 0)
   # A tagged pane where another claude now runs belongs to whoever started it there.
-  busy=" $(printf '%s\n' "$claudes" | awk '{print $1}' | tr '\n' ' ') "
-  panes=${matches%% *}
-  for pane in $tagged; do
-    [[ $busy == *" $pane "* ]] && continue
-    [[ " $panes " == *" $pane "* ]] || panes="$panes $pane"
-  done
-  [ -n "$panes" ] || { printf 'absent %s\n' "$name"; return; }
+  panes="$panes $(printf '%s\n' "$inventory" | awk -v name="$name" '$3 == name && $4 == "none" { print $1 }')"
+  [ -n "${panes// /}" ] || { printf 'absent %s\n' "$name"; return; }
   for pane in $panes; do
     tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
     printf 'closed %s pane=%s\n' "$name" "$pane"
@@ -352,7 +352,7 @@ cmd_remove() {
   require workmux tmux
   local claudes dirty
   worktree=$(workmux path "$worktree_name" 2>/dev/null) || refuse 'no such worktree'
-  claudes=$(session_panes "$name" "$worktree" | awk '$5 == "strict" || $6 == 1')
+  claudes=$(pane_inventory "$name" "$worktree" | awk '$4 == "strict" || ($4 != "none" && $5 == 1)')
   [ -z "$claudes" ] || refuse "a live session in pane ${claudes%% *}"
   dirty=$(git -C "$worktree" status --porcelain) || die "git -C $worktree status failed"
   [ -z "$dirty" ] || refuse "dirty worktree $worktree"
@@ -370,13 +370,15 @@ cmd_start() {
   fi
 
   lock_session
-  find_live_pane
+  inventory=$(pane_inventory "$name" "$worktree")
+  live_pane=$(find_live_pane)
   if [ -n "$live_pane" ]; then
     printf 'alive %s pane=%s\n' "$name" "$live_pane"
     return
   fi
 
   target_pane=''
+  [ -z "$window" ] || target_pane=$(printf '%s\n' "$inventory" | find_own_pane)
   split=''
   if [ -z "$worktree" ]; then
     if [ "$role" = orchestrator ]; then
@@ -403,10 +405,6 @@ cmd_start() {
     fi
   fi
 
-  if [ -z "$target_pane" ]; then
-    find_own_pane
-    target_pane=$own_pane
-  fi
   if [ -z "$target_pane" ]; then
     split=1
     choose_split

@@ -284,3 +284,7 @@ https://github.com/Samuel-Harris/foundry/pull/85 is still a draft. GitHub retarg
 The proof printed `EQUAL`, and the hook and `versioning.py check origin/main` passed. GitHub reports it MERGEABLE.
 
 The phase session checked independently. The four files #85 adds over `origin/main` (the three handbooks and `checks/phase-handbooks.md`) are each identical to the phase tip, `apm.yml` changes only its `version:` line, the branch holds no file under `.foundry/`, and `2c43b3d` is an ancestor of the new head. Hand-written lines against `main`: 371 added and 1 removed. The description's Dependencies section now says none.
+
+## Done
+
+#85 merged into main as `6f42b1c` at 18:47:47 UTC on 2026-11-21. GitHub confirms the merge. The orchestrator reports code head `a1c95f1` merged into `s-stack-package` at `986be95`, with its post-merge check VERIFIED on `ce086bb`. The phase is Done.

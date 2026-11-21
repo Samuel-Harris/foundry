@@ -137,3 +137,20 @@ A fresh verifier ran the full skill, apart from checks 4 and 6, which are pendin
   - E and F pass.
 
 Verdict: VERIFIED.
+
+## Follow-up round: Review, code head `47f792f2110fc8b49158a7305c703ec5de9f6c91`
+
+Two adversaries ran `interrogate`, on Opus and on Fable, scoped by the orchestrator to `49f2959..47f792f` on this phase's owned paths. They produced 8 real planner answers and 13 hand-written answers, and graded them with more than 30 fresh graders.
+
+- **Planner runs.** Every real plan could be scheduled. Every plan that put port 5432 on two phases ran them one after the other, without a made-up dependency.
+- **Wrong answers failed.** These included:
+  - a concurrent phase on the database with "none" listed;
+  - the same, argued as "shared, not exclusive";
+  - the same, with the use implicit in Done when;
+  - "test runs take turns" with the phases running together.
+- **Correct answers passed.** These included the database named without the number. Verdict: CLEAR.
+
+Minor findings, recorded and not fixed under `spec-planner-handbooks-d3`:
+
+- Point 3 passes an answer that serialises the two phases through a made-up dependency. That plan can still be scheduled, just later.
+- Sonnet graders failed one correct answer on point 3 in two of three runs. Their reasons were not in point 3 (open pull requests, a note about a falsified assumption), and Opus and default graders passed it. Use Opus graders for this check.

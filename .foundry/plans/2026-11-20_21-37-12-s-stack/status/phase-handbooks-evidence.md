@@ -61,3 +61,12 @@ Significant:
 3. `phase-session.md`'s "opens no new ones" contradicts a phase plan that adds a pull request after a scope change. A cold read would push new-scope commits into an unrelated open pull request.
 
 Not significant, but fixed with finding 1 because it is one sentence: the None case is missing from the check-file and run sections. Recorded only: whether `prs-open` is resent on re-entering PR, the order of starting the PR creator and moving to PR, the state for a scope change received in PR, and "once nothing is half done" being undefined.
+
+## Verify: VERIFIED at `d32a56ae3096f5df29e5608aa6b6c146183c7dd6`
+
+A fourth fresh verifier ran the whole verification skill at `a721dc6`, code head `cddb4b0`, then committed this run's one-off results to the check file's `## Evidence` alone at `d32a56a`, with no new run, as `verifier.md` now says.
+
+- Passed: primitives, root manifest, markdownlint (12 files, 0 errors), line budgets (phase-session 138, reviewer 41, verifier 78 of 200), package isolation, Tier 1 (`all Tier 1 structural checks passed across 20 packages`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search over the phase diff, its text and 24 commit messages: 0 hits.
+- Minor, recorded: point 2 of phase-handbooks cold read 2's expected answer still says any later change to the check file needs a full rerun, while `verifier.md` now exempts an Evidence-only commit. The reader followed the handbook, and the verifier judged it a pass.

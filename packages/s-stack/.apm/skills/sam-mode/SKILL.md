@@ -17,12 +17,14 @@ Read `../poteto-mode/SKILL.md`, relative to this skill's directory, before anyth
 
 ## The invocation
 
+Three placeholders recur. `<feature>` is the feature's kebab-case name, `<id>` is the roadmap's directory name `<date-time>-<feature>`, and `<phase>` is a phase id from the feature plan.
+
 There are two forms.
 
-- `/sam-mode start <feature>`. With the repository root as the working directory, run `scripts/launch.sh --feature <feature> --role spec` from this skill's directory and report its output. Do nothing else.
+- `/sam-mode start <feature>`. Run `<this skill's directory>/scripts/launch.sh --feature <feature> --role spec` with the repository root as the working directory and report its output. Do nothing else.
 - `/sam-mode <role> feature=<feature> phase=<phase> update=<n> roadmap=<path> plan=<path> orchestrator=<feature>-orchestrator`. This is the first prompt the launcher types, and `-` means an empty value. Take the role, read its handbook, then read the roadmap and the plan the prompt names.
 
-`<feature>` is the feature's kebab-case name. `<phase>` is a phase id from the feature plan. `update` is a roadmap update number, set only for a spec writer that edits an existing roadmap. `orchestrator` is the orchestrator's session name, the address for every report.
+`update` is a roadmap update number, set only for a spec writer that edits an existing roadmap. `orchestrator` is the orchestrator's session name, the address for every report.
 
 ## Roles and handbooks
 
@@ -40,15 +42,12 @@ Main sessions take the role from their first prompt. Subagent roles have no laun
 
 ## Rules for every main session
 
-- Work the way `poteto-mode` says. Your handbook adds only what s-stack needs.
 - Orchestrate your own part. Hand bulk reading and writing to subagents and keep their summaries in your own context.
 - Write only the files your role owns. The artefact table below names each owner.
 - The developer talks to the spec writer and the orchestrator. Every other session sends its questions for the developer to the orchestrator.
 - The developer can still type into any session. Follow a direct instruction. Report it to the orchestrator when it changes the phase's scope or a recorded decision.
 
-## Shared rules
-
-Three placeholders recur. `<feature>` is the feature's name, `<id>` is the roadmap's directory name `<date-time>-<feature>`, and `<phase>` is a phase id.
+## Rules for every session, subagents included
 
 ### Artefacts
 
@@ -71,8 +70,7 @@ Every phase moves through Spec, Plan, Implement, Verify, Review, PR and Done.
 
 - A phase moves forward one state at a time and skips none. It can move back any number of states.
 - Only the phase session changes its phase's state, by committing its status file.
-- A verdict names the code head it covers. A new code head needs new verdicts. The reference file defines the code head.
-- The orchestrator merges a phase only when the newest verify verdict is VERIFIED and the newest review verdict is CLEAR, both for the current code head.
+- A verdict names the code head it covers. A new code head needs new verdicts. The reference file defines the code head and when a phase may merge.
 
 ### Branches
 
@@ -84,6 +82,8 @@ Every phase moves through Spec, Plan, Implement, Verify, Review, PR and Done.
 | Pull request branch | The repository's convention | The default branch, or the branch of the pull request it depends on |
 
 Never assume the default branch is `main`. Resolve it, for example with `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`.
+
+The orchestrator branch and every phase branch carry `.foundry/`. Push neither to a public remote unless the developer says so. Only pull request branches, which never contain `.foundry/`, are pushed.
 
 ### Pull requests
 

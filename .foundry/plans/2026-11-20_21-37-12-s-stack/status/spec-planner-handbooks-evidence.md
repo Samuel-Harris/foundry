@@ -207,3 +207,7 @@ NOT EQUAL
 The `apm.yml` change is only `version: "0.1.3"` to `version: "0.1.4"`.
 
 **Byte identity with `47f792f`.** `git diff 47f792f 5da7f5d` over both files printed nothing. The blobs are `planner.md` `3bf6a664668eb38b78dabb8e929189110027b9f3` and `spec-planner-handbooks.md` `c625d6763c55a8ab9c1a1e38117e95129bb6cb7e` on both sides. No `.foundry/` path is on the branch. The hook exited 0, and `versioning.py check origin/main` printed `1 changed package(s), none without a version bump`. The full command log is the PR creator's `r1-evidence.md` in the phase session's scratchpad.
+
+## Pull request 87
+
+https://github.com/Samuel-Harris/foundry/pull/87 is a draft with base `main`, head `5da7f5d`, no dependencies, and not stacked. Its description carries the direct-comparison sentence. CI run 44963276937 passed: Pre-commit checks, Package versions, Detect changed paths and both tools test jobs. The p-stack suites and the tag job were skipped by their conditions.

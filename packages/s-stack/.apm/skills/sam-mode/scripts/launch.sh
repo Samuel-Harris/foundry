@@ -126,12 +126,13 @@ resolve() {
 # several claudes reports the closest match. in_worktree is 1 when the pane's
 # directory is <worktree>.
 session_panes() {
-  local session=$1 worktree_path=$2 tab panes pane_id pane_pid width height current_path window_id in_worktree resolved_worktree=''
-  tab=$(printf '\t')
-  panes=$(tmux list-panes -a -F "#{pane_id}${tab}#{pane_pid}${tab}#{pane_width}${tab}#{pane_height}${tab}#{pane_current_path}${tab}#{window_id}") || die 'tmux list-panes failed'
+  local session=$1 worktree_path=$2 panes pane_id pane_pid width height current_path window_id in_worktree resolved_worktree=''
+  # Spaces, not tabs, separate the fields: a tmux client without a UTF-8 locale
+  # prints a tab in a format as "_". The path goes last so read keeps its spaces.
+  panes=$(tmux list-panes -a -F '#{pane_id} #{pane_pid} #{pane_width} #{pane_height} #{window_id} #{pane_current_path}') || die 'tmux list-panes failed'
   [ -z "$worktree_path" ] || resolved_worktree=$(resolve "$worktree_path")
   {
-    printf '%s\n' "$panes" | while IFS="$tab" read -r pane_id pane_pid width height current_path window_id; do
+    printf '%s\n' "$panes" | while read -r pane_id pane_pid width height window_id current_path; do
       [ -n "$pane_id" ] || continue
       in_worktree=0
       if [ -n "$resolved_worktree" ] && [ "$(resolve "$current_path")" = "$resolved_worktree" ]; then in_worktree=1; fi

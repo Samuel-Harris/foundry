@@ -91,7 +91,7 @@ To abort a merge, run `git merge --abort`. If it refuses because a hook or check
 2. If it conflicts anywhere, run `git merge --abort` and send the phase `merge-orchestrator-branch`. Never resolve the conflict.
 3. Regenerate with the feature plan's command, stage the result, and commit with the hooks on. If a hook refuses, abort the merge and send the phase `merge-orchestrator-branch`.
 4. Have a fresh subagent run the feature's verification skill on the orchestrator branch. Record the result in the tracker.
-5. If the check fails, the orchestrator branch is frozen until a later check passes. Send `move-back` to Implement to the phase, naming the failed check. Before it verifies again it merges the orchestrator branch, which holds the combination that failed. While frozen, start no phase, merge no other phase and not the default branch, and send `merge-orchestrator-branch` to no other phase. Merge the phase again only when both its newest verdicts name a code head newer than the one that failed.
+5. If the check fails, the orchestrator branch is frozen until a later check passes. Send `move-back` to Implement to the phase, naming the failed check. Before it verifies again it merges the orchestrator branch, which holds the combination that failed. While frozen, start no new phase, merge no other phase and not the default branch, and send `merge-orchestrator-branch` to no other phase. Merge the phase again only when both its newest verdicts name a code head newer than the one that failed.
 6. If it passes, send `merge-orchestrator-branch` to every other live phase that has not reached PR, and start the phases that now have their dependencies.
 7. After a passing check only, send the merged phase `stop`. [Finishing a phase](#finishing-a-phase) closes its pane once the stop commit lands. Its worktree stays until the phase is Done.
 
@@ -121,9 +121,11 @@ A pull request is ready for the developer to merge only when its `needs_update` 
 
 In tick step 4, for each merged phase, do every step below whose condition holds. Each step is safe to repeat, so a step that waits on a commit happens in a later tick.
 
-- Its pane is open and the newest commit on its branch is a stop commit: close the pane with `--close`.
-- Every pull request has merged and its status is not Done: start its session, which moves the phase to Done, and send it `stop`.
-- Its status is Done, the newest commit on its branch is a stop commit, and the branch has commits the orchestrator branch lacks: merge them as [Merging a phase](#merging-a-phase) steps 1 to 3 say. They hold only status, so this merge runs while frozen and does not count against the one-merge limit.
+A stopped session below means one whose branch has a stop commit newer than its start time in the tracker, so a session you have just started again has not stopped. Record each start time when you start a session.
+
+- Its status is not Done, its pane is open, and its session has stopped: close the pane with `--close`.
+- Every pull request has merged, its status is not Done, and its pane is closed: start its session, which moves the phase to Done, and send it `stop`.
+- Its status is Done, its session has stopped, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and does not count against the one-merge limit. If the code head has changed, send `move-back` to Implement, because no verdict covers that code.
 - Its status is Done and its branch is fully merged: close its pane with `--close` if it is open, and remove its worktree with `--remove`.
 
 ## Fix rounds

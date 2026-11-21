@@ -169,3 +169,15 @@ A fresh verifier ran the whole verification skill and this phase's `## Evidence`
 - One-off cold read, a merge notice while in Implement: the phase does not move to Done, sends `state` with Implement, and passes both gates for its new code. Every required point passed.
 - One-off cold read, #90 merged with #91 stacked on it: the phase starts a PR creator that works out the bases again and refreshes the branches, records each base and `depends_on`, sends `prs-open`, stays in PR and runs no gate. Every required point passed.
 - Gaps the readers noted, outside this check: where fix commits go once every pull request has merged, and whether a merged pull request stays listed in `pull_requests`.
+
+## Review: SIGNIFICANT at `21557166e37a58d905fa420d8b4605584e490bdc`
+
+A later review covered `2155716`, with clean merge `4bf6139`. Two reviewers, Opus and Fable, each in a detached worktree at `c43a4a8`, ran nine cold reads between them. Both reviewers found the same three things.
+
+Significant:
+
+1. The new Verdicts sentence, "Whenever the phase is past Implement and no verdict covers its current code head, move back to Implement", also fires in Verify. No verdict exists on entry to Verify, after the verifier's commit, or on a restart in Verify. Read literally, the phase can never stay in Verify, and the sentence contradicts Verify step 2 and "After a restart". Four cold readers on two models could not choose between the readings.
+2. The Moving back bullet for Implement gives a failed post-merge check as a case of "no verdict covers the current code head". In that case the phase branch has not moved and both verdicts still cover it.
+3. A phase that ignores the every-pull-request-merged notice outside PR has no stated way to reach Done after it returns to PR. The commit created that path.
+
+Not significant, recorded only: the round for a merged pull request does not say what happens to the merged pull request's own `pull_requests` entry; "stays in PR" assumes the phase is in PR (an older gap); which pull request takes commits made after every pull request has merged belongs to `pr-creator.md`; and the `instruction` row routes the notice to PR step 4 in wording a reader followed correctly.

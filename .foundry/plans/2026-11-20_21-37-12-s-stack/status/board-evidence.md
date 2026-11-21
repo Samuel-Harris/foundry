@@ -161,6 +161,33 @@ Minor, recorded:
 - A pull request focus key could collide. Its effect was not shown.
 - Ctrl-C waits up to the 30-second Chrome bound before cleanup. Cleanup is complete.
 
+
+## Verify gate, code head `afd3f270ba9c2ddc689b0afe12927591941ccc7f`, VERIFIED
+
+A narrowly scoped verifier closed the twelve gaps of the fourth Review gate in `checks/board.md` at `afd3f27`. The template is unchanged since `66118de`.
+
+- What the Rerun now asserts:
+  - the exact visible time text, under UTC and `en-GB`;
+  - a Fresh-to-Stale change that needs a second 30-second render;
+  - a `stale_after_min` of 10;
+  - cached ticks after live ones, both ways round;
+  - a live session with no pane;
+  - the loading text while the store is silent;
+  - frozen snapshot bodies in every scenario;
+  - a `javascript:` architecture link shown as plain text;
+  - no markup anywhere on the page, including the heading.
+- It runs 49 scenarios plus the lanes comparison.
+- Every one of the twelve mutants exits 1, and so do all 41 mutants from the previous Verify gate. The phase session reran four of the twelve at 2026-11-21T21:28:58Z and each exited 1. The real template exited 0, and no Chrome process was left behind.
+- Verification skill: checks 1, 2, 3, 5, 7 and 8 PASS. Tier 1 passed across 20 packages. Checks 4 and 6 are PENDING, which the skill allows.
+- Live page https://claude.ai/artifact/G9DR3pgSxrcgiWkPRh897c showed Fresh, then the stale banner, with no publish in between. The verifier skipped the write probe at `interact` level because the auto-mode classifier denied it, so the stored `write: "admin"` rule is the evidence that viewers cannot write.
+- `grep innerHTML` finds nothing. `apm audit --ci` passes.
+
+Known gaps:
+
+- No browser view of claude.ai.
+- The en-GB locale is pinned in the stub, because headless Chrome on macOS ignores `--lang` for `Intl`.
+- After a cached tick, the heartbeat shows the cached tick's time while the verdict stays live. The check does not assert that time.
+
 ## Check hardening backlog
 
 `board-d7` sends every check gap found from the fifth Review gate on to this list, for a future hardening pass. These are not fixed in this phase.
@@ -179,3 +206,6 @@ Minor, recorded:
   - Text selection is lost on re-render.
   - `review_rank` and `stale_after_min` sent as digit strings are ignored.
   - At 700 px the Pull requests table scrolls by 4 px inside its wrapper.
+- From the Verify gate at `afd3f27`:
+  - After a cached tick, the heartbeat's tick time is not asserted.
+  - The `interact`-level write probe was not run.

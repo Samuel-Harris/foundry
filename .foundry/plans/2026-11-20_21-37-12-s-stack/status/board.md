@@ -1,10 +1,10 @@
 ---
 phase: "board"
-state: "Verify"
-changed_at: "2026-11-21T20:58:48Z"
+state: "Review"
+changed_at: "2026-11-21T21:28:58Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
-code_head: "a5b3a9c8a79a19b3d65691765019a0e6adb28279"
+code_head: "afd3f270ba9c2ddc689b0afe12927591941ccc7f"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -46,6 +46,11 @@ verdicts:
     result: "SIGNIFICANT"
     code_head: "a5b3a9c8a79a19b3d65691765019a0e6adb28279"
     at: "2026-11-21T20:58:48Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "afd3f270ba9c2ddc689b0afe12927591941ccc7f"
+    at: "2026-11-21T21:28:58Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
 pull_requests: []
 requests: []
@@ -105,3 +110,5 @@ The scoped verifier committed `a5b3a9c`, the new code head, and returned VERIFIE
 The fourth Review gate returned SIGNIFICANT at `a5b3a9c`. Both adversaries again found the template correct. Twelve broken templates pass the check, and under `board-d6` each would mislead the developer on the live board or open an injection. No template change is planned. The phase moves through Implement to Verify, where a verifier makes each named mutant fail.
 
 The code head is unchanged at `a5b3a9c`. The Verify gate is starting.
+
+The verifier closed the twelve gaps at `afd3f27`, the new code head, and returned VERIFIED. The fifth Review gate is starting over `a5b3a9c..afd3f27`, under `board-d7`.

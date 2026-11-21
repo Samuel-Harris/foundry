@@ -1,8 +1,8 @@
 # Phase `launcher` checks
 
-Phase `launcher` ships `packages/s-stack/.apm/skills/sam-mode/scripts/launch.sh`, its unit suite `packages/s-stack/tests/test_launch.py` with stub `workmux` and `claude` commands in `packages/s-stack/tests/stubs/`, and the CI job `s-stack-launcher-tests`.
+Phase `launcher` ships `packages/s-stack/.apm/skills/sam-mode/scripts/launch.sh`, its unit suite, which is the suite in `packages/s-stack/tests/`, with stub `workmux` and `claude` commands in `packages/s-stack/tests/stubs/`, and the CI job `s-stack-launcher-tests`.
 
-Every tmux command in these checks, and every launcher run, goes under `env -u TMUX -u TMUX_PANE` with a private `TMUX_TMPDIR` from `mktemp -d`. When `$TMUX` is set, tmux ignores `TMUX_TMPDIR` and talks to the developer's own server.
+Every tmux command in these checks, and every launcher run, goes under `env -u TMUX -u TMUX_PANE` with a private `TMUX_TMPDIR` from `mktemp -d`. When `$TMUX` is set, tmux ignores `TMUX_TMPDIR` and talks to the developer's own server. Before the first launch on a private server, confirm `#{socket_path}` lies under that directory, resolved with `pwd -P`.
 
 ## Rerun
 
@@ -47,8 +47,6 @@ Expected: three lines, each starting `100755`, and exit `0`.
 
 One-off checks. Each touches something outside a unit test, such as the real `claude` or `workmux`. Run each once per code head. Report the result in the verifier's report, never in this file.
 
-Every tmux command and every launcher run below goes under `env -u TMUX -u TMUX_PANE` with a private `TMUX_TMPDIR` from `mktemp -d`. Confirm `#{socket_path}` lies under that directory, resolved with `pwd -P`, before the first launch.
-
 ### Mutations
 
 Apply each change to `launch.sh`, run the unit suite, and restore the file with `git checkout --`. Use at least these: add `tmux select-layout tiled` after the split; make liveness never match; drop the session lock; drop `--resume`; put a planner or phase session in the orchestrator's column; split the workmux sidebar.
@@ -70,4 +68,5 @@ It passes when all of these hold:
 - The first prompt in the phase pane begins `/sam-mode phase`.
 - The second launch prints `alive <name> pane=<pane id>` and changes no pane.
 - The relaunch after `/exit` runs `claude --name <name> --resume <id>`, where `<id>` is the id stored at `s-stack-sessions/<name>` in the worktree's git directory, and the pane shows the earlier conversation.
+- The relaunch after `/exit` prints the same `pane=<pane id>` as the first launch, and the window's pane count is unchanged.
 - The developer's own tmux server still has exactly the sessions it had before.

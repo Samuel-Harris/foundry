@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T16:27:33Z"
+state: "Verify"
+changed_at: "2026-11-21T16:28:32Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "ca4e3b67d6a3a79db36ecb8895578bdbba310c2e"
+code_head: "22a1695494372d464719da0f52c6909cbc1cd84f"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -74,3 +74,5 @@ The third Verify gate returned VERIFIED at `60e66c4`. It named three gaps that w
 The fixes are at `693d8b2`. `s-stack-package` (`fd342b4`, which brings `spec-planner-handbooks`) was merged at `cfb2bf3`, after a lockfile-only conflict that was resolved by taking the incoming lockfile and regenerating. The phase moved to Verify at code head `cfb2bf3`.
 
 The fourth Verify gate returned VERIFIED at `ca4e3b6`. One item would mislead a reader, so the phase moved back to Implement.
+
+The fix is at `22a1695`. `s-stack-package` (`22a0112`) was merged at `26c3ecd`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `22a1695`.

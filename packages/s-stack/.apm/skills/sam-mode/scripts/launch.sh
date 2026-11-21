@@ -181,12 +181,12 @@ pane_inventory() {
 
 # Reads pane_inventory for <session> and prints the one pane that runs it, or
 # nothing. With <allow_nameless> 1, a nameless claude in the inventory's
-# worktree counts as the session resumed by workmux resurrect, but only in an
-# untagged pane: resurrect makes new panes, and a nameless claude in a pane the
-# launcher tagged was started there by hand after that session ended.
+# worktree counts as the session resumed, but only in an untagged pane, as
+# workmux resurrect makes, or in the session's own tagged pane, as a developer
+# resuming it by hand does. In a pane tagged for another session it is not this one.
 live_pane_of() {
   local session=$1 allow_nameless=$2 matches
-  matches=$(awk -v allow="$allow_nameless" '$4 == "strict" || (allow && $4 == "nameless" && $5 == 1 && $3 == "-") { print $1 }')
+  matches=$(awk -v allow="$allow_nameless" -v session="$session" '$4 == "strict" || (allow && $4 == "nameless" && $5 == 1 && ($3 == "-" || $3 == session)) { print $1 }')
   at_most_one "pane runs $session" "$matches"
   [ -z "$matches" ] || printf '%s\n' "$matches"
 }
@@ -224,6 +224,18 @@ release_window() {
   window_lock=''
 }
 
+# git worktree add reads every sibling worktree's commondir file, and a
+# concurrent add can catch one half written and fail.
+lock_worktrees() {
+  take_lock "$locks/worktrees" "a session adding a worktree"
+  worktrees_lock=$locks/worktrees
+}
+
+release_worktrees() {
+  [ -z "$worktrees_lock" ] || rmdir "$worktrees_lock"
+  worktrees_lock=''
+}
+
 # Held until the launcher exits, so a concurrent launch of the same session
 # checks liveness only after ps shows this one's claude.
 lock_session() {
@@ -234,8 +246,8 @@ lock_session() {
   mkdir -p "$locks" || die "cannot create $locks"
   take_lock "$locks/$name" "$name"
   session_lock=$locks/$name
-  window_lock='' zoomed_pane=''
-  trap 'release_window; rmdir "$session_lock"' EXIT
+  window_lock='' zoomed_pane='' worktrees_lock=''
+  trap 'release_worktrees; release_window; rmdir "$session_lock"' EXIT
 }
 
 # Held from reading the window's layout until the new pane is tagged, so a
@@ -436,10 +448,13 @@ cmd_start() {
       git fetch -q origin "$branch" || die "git fetch origin $branch failed"
       windows_before=" $(tmux list-windows -a -F '#{window_id}' | tr '\n' ' ') "
       # workmux resurrect restores only sessions that ran in their worktree's own workmux window.
+      lock_worktrees
       workmux add "$feature" --base "origin/$branch" -C >&2 || die "workmux add $feature failed"
     else
+      lock_worktrees
       workmux add "$worktree_name" --headless --base "$feature" >&2 || die "workmux add $worktree_name failed"
     fi
+    release_worktrees
     worktree=$(workmux path "$worktree_name") || die "workmux path $worktree_name failed after workmux add"
     if [ -n "$first_spec" ]; then
       resolved_worktree=$(resolve "$worktree")

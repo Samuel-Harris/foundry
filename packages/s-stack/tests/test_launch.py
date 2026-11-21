@@ -123,6 +123,20 @@ class StartTests(LauncherTestCase):
         self.assertEqual((result.returncode, result.stdout), (0, f"alive f-orchestrator pane={pane}\n"), result.stderr)
         self.assertEqual(len(self.claude_processes()), 1)
 
+    def test_a_claude_resumed_by_hand_in_the_sessions_own_pane_is_alive(self) -> None:
+        spec_pane, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        window = self.window_of(spec_pane)
+        orchestrator = ("--feature", "f", "--role", "orchestrator", "--window", window)
+        pane, _ = self.started(self.launch(*orchestrator), name="f-orchestrator")
+        self.wait_for_claude(pane)
+        self.kill_claude("f-orchestrator")
+        self.tmux("respawn-pane", "-k", "-t", pane, "-c", str(self.worktree("f")), "claude --continue")
+        self.wait_for_claude(pane)
+
+        result = self.launch(*orchestrator)
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"alive f-orchestrator pane={pane}\n"), result.stderr)
+
     def test_restart_resumes_its_own_conversation_unless_fresh(self) -> None:
         self.make_feature_worktree()
         self.make_orchestrator()
@@ -253,6 +267,19 @@ class StartTests(LauncherTestCase):
 
         self.assertEqual(self.zoomed(), "1")
         self.assertEqual(self.geometry()[main], size)
+
+    def test_a_failed_split_leaves_a_zoomed_window_zoomed(self) -> None:
+        self.make_feature_worktree()
+        self.tmux("new-session", "-d", "-s", "tiny", "-x", "4", "-y", "5")
+        tiny = self.tmux("list-windows", "-t", "tiny", "-F", "#{window_id}").strip()
+        top = self.tmux("list-panes", "-t", tiny, "-F", "#{pane_id}").strip()
+        self.tmux("split-window", "-d", "-v", "-t", top)
+        self.tmux("resize-pane", "-Z", "-t", top)
+
+        result = self.launch("--feature", "f", "--role", "orchestrator", "--window", tiny)
+
+        self.assertEqual(result.returncode, 4, result.stderr)
+        self.assertEqual(self.tmux("display-message", "-p", "-t", top, "#{window_zoomed_flag} #{pane_active}").strip(), "1 1")
 
     def test_an_unzoomed_window_stays_unzoomed(self) -> None:
         self.make_feature_worktree()

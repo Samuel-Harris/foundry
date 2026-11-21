@@ -89,3 +89,13 @@ The round rewords cold read 1's expected point 5 so it requires port 5432 only o
 - All Done-when items passed. Verdict: VERIFIED.
 
 Minor note, recorded and not fixed under `spec-planner-handbooks-d3`. Point 3 does not say that port contention under a stated assumption leaves "can run at the same time" intact. One run hedged on it and was graded PASS.
+
+## Follow-up round: Review, code head `49f295936b38922510b53242717c6098f6ea5ec2`
+
+Two adversaries ran `interrogate`, on Opus and on Fable, scoped to the one-line point 5 change. They graded real planner answers and hand-written variants with fresh grader subagents.
+
+- **Significant (Opus).** Answer C names the port on the sharing phase and lists none for the import phase. Its own stated assumption has the import tests use that database, and it still runs the two phases at the same time. The new point passed it, while the old point failed it ("P2's tests use port 5432 and the port is not named as P2's exclusive resource"). An orchestrator following that plan would schedule a port collision.
+- **Minor (both).** An answer that names "the local test database" on the sharing phase but not the number 5432 now fails. The old point accepted it with "or the local test database on it".
+- Both reviewers confirmed the change's aims hold. Answers with the port off the sharing phase, or with no port at all, fail. Real answers that give the port to a second phase under an assumption pass.
+
+Verdict: SIGNIFICANT. The phase moves back to Implement. The fix restores the database alternative and fails an answer whose own assumptions put a concurrent phase on the database without naming it there.

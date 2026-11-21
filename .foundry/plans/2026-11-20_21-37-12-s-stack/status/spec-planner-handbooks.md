@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Review"
-changed_at: "2026-11-21T23:10:01Z"
+state: "Implement"
+changed_at: "2026-11-21T23:14:37Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
@@ -37,6 +37,11 @@ verdicts:
     code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
     at: "2026-11-21T23:10:01Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "49f295936b38922510b53242717c6098f6ea5ec2"
+    at: "2026-11-21T23:14:37Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
@@ -57,8 +62,12 @@ decisions:
     decision: "Instruction from the orchestrator: a CLEAR review moves the phase straight to PR. Minor findings go in the evidence file, and only one that would mislead a reader or break a real run is fixed. The cycle at a6652c7 finishes first."
     door: "two-way"
     at: "2026-11-21T16:08:21Z"
+  - id: "spec-planner-handbooks-d4"
+    decision: "Point 5 keeps the orchestrator's intent but not its exact wording. It restores 'or the local test database on it', and it fails an answer whose own assumptions put a concurrent phase on that database without naming it there. Review at 49f2959 showed the given wording passed such an answer, which the old point failed."
+    door: "two-way"
+    at: "2026-11-21T23:14:37Z"
 ---
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Verify passed at `49f2959`. The Review gate covers the commits since `6f70b37`.
+Follow-up round. Review found a significant gap in the new point 5 at `49f2959`, and the phase is fixing it.

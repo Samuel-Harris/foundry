@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T17:35:40Z"
+state: "Verify"
+changed_at: "2026-11-21T17:36:36Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "7b4f0a3362f57084a329061311644e9d05559bc4"
+code_head: "63e2e35681dd7c589c4dc2a4af5db114cac6d774"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -130,3 +130,5 @@ The ninth Verify gate returned VERIFIED at `9422570`. Two defects would break a 
 The Finishing a phase redesign and the layout lines are at `13fe92c`. `s-stack-package` (`e096e48`) was merged at `9435921`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `13fe92c`.
 
 The tenth Verify gate returned NOT VERIFIED at `7b4f0a3`, and the phase moved back to Implement.
+
+The fixes are at `63e2e35`. `s-stack-package` (`1e9e4bb`) was merged at `34d639f`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `63e2e35`.

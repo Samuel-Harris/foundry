@@ -6,10 +6,12 @@ disable-model-invocation: true
 
 # Type System Discipline
 
-Make the compiler reject impossible states, mismatched primitives, and unhandled variants. Prefer defining errors and special cases out of existence over proliferating handlers. For TypeScript syntax, see the `typescript-best-practices` skill.
+Make the compiler reject impossible states, mismatched primitives, and unhandled variants.
 
 - **One variant, one tag.** When fields only make sense together, or one field decides which others apply, model a tagged union with a literal tag. Never parallel optional fields, flags, sentinels or positional tuples that can disagree. Narrow by the tag, not by which field is present.
 - **Exhaust every variant.** A `switch` or `match` over a union or enum handles every member and ends in a never or `assert_never` arm, so adding a member fails the build. A catch-all arm that returns a default hides the new member.
-- **Brand semantic primitives.** `UserId` and `OrderId` are strings underneath but should not be interchangeable. Give each its own type, such as a branded intersection in TypeScript or a newtype elsewhere. Validate once at creation, trust the type downstream. If two arguments share a primitive type but mean different things, brand them.
-- **External data is untyped until parsed.** RPC payloads, JSON, IPC messages, CLI args, config files, environment variables, database rows. Have a parse function at every boundary that turns unstructured input into the typed model. The **boundary-discipline** principle skill says where to put validation.
-- **Derive types from authoritative schemas.** When a protocol buffer, OpenAPI spec, GraphQL schema, database migration, design-token file, or another file owns a shape, derive from it instead of hand-rolling a parallel type. See the **encode-lessons-in-structure** principle skill.
+- **Brand semantic primitives.** If two arguments share a primitive type but mean different things, give each its own type. Validate once at creation.
+- **External data is untyped until parsed.** JSON, RPC payloads, CLI args, config, environment variables, and database rows go through a parse function at the boundary that returns the typed model.
+- **Derive types from authoritative schemas.** When a schema file owns a shape, derive the type from it instead of hand-rolling a parallel one.
+
+For TypeScript syntax, see the **typescript-best-practices** skill.

@@ -38,3 +38,13 @@ Findings dismissed, with reasons:
 - A restarted planner can still find answers. The orchestrator records each decision in `run-decisions.md` (roadmap `coordination.md`, tick step 5), and the planner reads that file after a restart.
 - The spec writer asks the developer directly and sends no decision request, as roadmap `roles.md` and `workflow.md` design it. The reference file still lists the spec writer as a sender, and that gap is with the orchestrator as a `foundation` follow-up.
 - Session names and branch names belong to the launcher.
+
+## Verify, code head `6f70b3707c6c24f174c333817b3a17f37a5d9f63`
+
+A third fresh verifier made the check-file fix the review asked for at `6f70b37`. Cold read 1's expected fields now come from `planner.md`'s own table and include **Must not touch**. It then ran the full skill. Checks 1, 2, 3, 5, 7 and 8 passed. Checks 4 and 6 are pending, as the skill allows. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0, which the phase session confirmed in the log. All Done-when items passed. Verdict: VERIFIED.
+
+Minor notes, recorded and not fixed, under the orchestrator's instruction to fix only what would mislead a reader or break a real run:
+
+- `spec-writer.md` does not define `<this skill's directory>`. `SKILL.md` lines 16 and 24 do.
+- `spec-writer.md` does not say who to record as decider for a two-way door the spec writer decides itself.
+- `planner.md` does not say where each phase's check file lives. The plan names it.

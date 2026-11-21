@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T16:03:52Z"
+state: "Review"
+changed_at: "2026-11-21T16:08:21Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "a6652c758b48c78942e9054516463bb35075d180"
+code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -22,6 +22,11 @@ verdicts:
     code_head: "08874f390fa5e43df00cb90946b113b92f1fb1e0"
     at: "2026-11-21T16:03:22Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
+    at: "2026-11-21T16:08:21Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -33,8 +38,12 @@ decisions:
     decision: "Answer to launcher-r1, option A, from the orchestrator. spec-writer.md gets its own window from launch.sh --print-window, run from the main session, before it passes --window to start the orchestrator, and names no tmux command."
     door: "two-way"
     at: "2026-11-21T15:39:10Z"
+  - id: "spec-planner-handbooks-d3"
+    decision: "Instruction from the orchestrator: a CLEAR review moves the phase straight to PR. Minor findings go in the evidence file, and only one that would mislead a reader or break a real run is fixed. The cycle at a6652c7 finishes first."
+    door: "two-way"
+    at: "2026-11-21T16:08:21Z"
 ---
 
 # Phase `spec-planner-handbooks` status
 
-The review's minor findings are fixed at `a6652c7`, and `s-stack-package` is merged. A fresh verifier runs in full on the new code head. The review that follows covers the commits since `08874f3`.
+Verify passed at `6f70b37`. The Review gate covers the commits since the last reviewed code head, `08874f3`.

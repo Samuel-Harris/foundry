@@ -259,7 +259,7 @@ class LauncherTestCase(unittest.TestCase):
         if sys.platform == "darwin":
             # macOS kills a copied system binary until it is signed again.
             subprocess.run(["codesign", "-f", "-s", "-", str(program)], check=True, capture_output=True)
-        pane = self.tmux("split-window", "-d", "-h", "-b", "-f", "-l", "20", "-P", "-F", "#{pane_id}", "-t", self.window, f"{program} 86400").strip()
+        pane = self.tmux("split-window", "-d", "-h", "-b", "-f", "-l", "20", "-P", "-F", "#{pane_id}", "-t", self.window, f"exec {program} 86400").strip()
         self.wait_for(lambda: self.tmux("display-message", "-p", "-t", pane, "#{pane_current_command}").strip() == "workmux", message="the sidebar stub does not read as workmux")
         return pane
 

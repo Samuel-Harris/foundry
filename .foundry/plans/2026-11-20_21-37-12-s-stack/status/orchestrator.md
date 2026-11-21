@@ -59,5 +59,8 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 6. `SKILL.md`: list `gh stack` among the tools s-stack needs. Raised by `pr-handbook`.
 7. `references/status-and-messages.md`: the spec writer is listed as a sender of decision requests, but it asks the developer directly by design. Raised by `spec-planner-handbooks`.
 8. `SKILL.md` line 16 says to read `poteto-mode` "before anything else", but the start form says "Do nothing else". Make the two consistent. Raised by `board`.
+9. `SKILL.md`: a commit never mixes `.foundry/` with other files, except a merge of the orchestrator branch, which always does. `phase-session.md` already states this exception. Raised by `phase-handbooks`.
+10. `references/status-and-messages.md`: the orchestrator table also needs a kind for "every pull request merged". Raised by `phase-handbooks` (extends item 5).
+11. `references/status-and-messages.md`: the code-head command follows git history simplification, so after a merge it can resolve to a commit off the phase branch's first-parent line. Add `--first-parent`, and check that a pre-Verify merge that brings in code still moves the code head. Raised by `phase-handbooks`.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".

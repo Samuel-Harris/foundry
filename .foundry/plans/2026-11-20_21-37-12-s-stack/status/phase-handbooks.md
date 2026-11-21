@@ -1,7 +1,7 @@
 ---
 phase: "phase-handbooks"
-state: "PR"
-changed_at: "2026-11-21T16:58:22Z"
+state: "Implement"
+changed_at: "2026-11-21T17:27:50Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
 code_head: "c666afdc929b1e05e49decda745d79b469f0333f"
@@ -93,3 +93,4 @@ Fix 73b5410 addresses the three findings of the second review. s-stack-package m
 Fix e592b60 addresses the third review's handbook findings. The stale expected answer in the check file goes to the next verifier. s-stack-package merged again (only .foundry/).
 The fifth verifier was stopped before it committed, on the orchestrator's instruction to remove the evidence-only exception. Commit 691ea62 removes it: the check file holds only checks, and results go in this phase's evidence file. Verification restarts at the new code head. The sixth Verify gate returned VERIFIED at 691ea62. The fourth Review gate returned SIGNIFICANT at 691ea62: whether a phase's own one-off checks rerun at a new code head, and a cold-read prompt that does not ask what its expected answer requires.
 Fix c666afd: the phase's own verifier runs its one-off checks at every code head it verifies, and cold read 2 asks what its expected answer requires. s-stack-package merged at 161c7c7 (only .foundry/). The seventh Verify gate returned VERIFIED at c666afd. The fifth Review gate returned CLEAR at c666afd. Both verdicts cover c666afd. Draft pull request 85 is open, stacked on #82 in GitHub stack 83, and the equality proof shows it holds exactly the verified phase diff.
+Fix round from the orchestrator: phase-session.md still told the PR creator to merge the default branch into pull request branches (replaced by run decision pr-handbook-r1's rebuild) and kept a restack row (replaced by automatic stacking). Back to Implement.

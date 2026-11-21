@@ -49,19 +49,19 @@ LINES=(':(exclude)*apm.yml') LINES_IN='*apm.yml'         # files in which some l
 LINE_OK='^[-+]version: '                                # the generated lines, as diff lines
 ```
 
-A repository with no generated files sets `GEN=()` and `LINES=()`, and leaves `REGEN` set to a subject that no commit uses. Run every multi-line command under `bash -s`, as shown. zsh does not split an unquoted `$(...)` into words, so a loop over one there runs once over the whole list.
+A repository with no generated files sets `GEN=()` and `LINES=()`, sets `LINES_IN` to a path that does not exist, and leaves `REGEN` set to a subject that no commit uses. The commands need bash and git 2.43 or later, for `merge-file --object-id` and `merge-tree -X`. Run every multi-line command under `bash -s`, as shown. zsh does not split an unquoted `$(...)` into words, so a loop over one there runs once over the whole list.
 
 ## Build each branch
 
-Build each branch in its own worktree, `git worktree add <path> -b <branch> <start>`, so the phase branch stays checked out where the phase session works. Then carry the commits the phase plan assigns to the pull request, oldest first, without generated hunks or `.foundry/`.
+Build each branch in its own worktree, `git worktree add --no-track -b <branch> <path> <start>`, so the phase branch stays checked out where the phase session works. Then carry the commits the phase plan assigns to the pull request, oldest first, without generated hunks or `.foundry/`.
 
 ```bash
 bash -s -- <commits, oldest first> <<'EOF'
 <the parameter block>
+paths=(. "${GEN[@]}" ':(exclude).foundry')
 for c in $(git rev-list --no-merges --no-walk=unsorted "$@" -- . ':(exclude).foundry'); do
-  d=$(git diff-tree -p --binary "$c^" "$c" -- . "${GEN[@]}" ':(exclude).foundry')
-  [ -n "$d" ] || continue
-  printf '%s\n' "$d" | git apply --index && git commit -q -C "$c" || exit 1
+  git diff-tree --quiet "$c^" "$c" -- "${paths[@]}" && continue
+  git diff-tree -p --binary "$c^" "$c" -- "${paths[@]}" | git apply --index --whitespace=nowarn && git commit -q -C "$c" || exit 1
 done
 EOF
 ```
@@ -81,7 +81,7 @@ gh stack link <parent number> <child number>   # only for the second row of the 
 gh pr view <number> --json isDraft,baseRefName,url
 ```
 
-When the parent is already in a stack, link with `gh stack link <stack number> <child number>`, where the stack number is the one GitHub shows on the parent. Confirm that `isDraft` is `true` and the base is the one you chose.
+When the parent is already in a stack, the same command adds the child to that stack. Confirm that `isDraft` is `true` and the base is the one you chose.
 
 ## Descriptions
 
@@ -109,15 +109,17 @@ for spec in "$@"; do
   pr=${spec%%:*} deps=${spec#*:}; excl=("^$default")
   for d in ${deps//,/ }; do excl+=("^$d"); done
   for c in $(git rev-list --reverse --no-merges "$pr" "${excl[@]}" --invert-grep --grep="$REGEN"); do
-    p=$(git diff-tree -p --binary "$c^" "$c" -- . "${GEN[@]}")
-    [ -z "$p" ] || printf '%s\n' "$p" | GIT_INDEX_FILE=$idx git apply --cached || { echo "FAIL $pr: $c does not apply"; fail=1; }
+    git diff-tree --quiet "$c^" "$c" -- . "${GEN[@]}" && continue
+    git diff-tree -p --binary "$c^" "$c" -- . "${GEN[@]}" | GIT_INDEX_FILE=$idx git apply --cached --whitespace=nowarn || { echo "FAIL $pr: $c does not apply"; fail=1; }
   done
   for c in $(git rev-list --no-merges "$pr" "${excl[@]}" --grep="$REGEN"); do
     for f in $(git diff-tree --no-commit-id --name-only -r "$c" -- . "${GEN[@]}" "${LINES[@]}"); do echo "FAIL $pr: regenerate commit $c changes $f"; fail=1; done
     l=$(only_lines "$c^" "$c"); [ -z "$l" ] || { echo "FAIL $pr: regenerate commit $c changes $l"; fail=1; }
   done
   for m in $(git rev-list --merges "$pr" "${excl[@]}"); do
-    for f in $(git diff-tree --cc --name-only --no-commit-id "$m" -- . "${GEN[@]}" "${LINES[@]}"); do echo "FAIL $pr: merge $m changes $f by hand"; fail=1; done
+    t=$(git merge-tree --write-tree -X ours "$m^1" "$m^2" | head -1)
+    for f in $(git diff --name-only "$t" "$m" -- . "${GEN[@]}" "${LINES[@]}"); do echo "FAIL $pr: merge $m changes $f by hand"; fail=1; done
+    l=$(only_lines "$t" "$m"); [ -z "$l" ] || { echo "FAIL $pr: merge $m changes $l"; fail=1; }
   done
   for f in $(git diff --name-only "$default...$pr" -- .foundry); do echo "FAIL $pr: contains $f"; fail=1; done
 done
@@ -128,7 +130,7 @@ l=$(only_lines "$r" "$phase"); [ -z "$l" ] || { echo "FAIL generated-line files 
 EOF
 ```
 
-It prints `EQUAL` and exits 0, or prints a `FAIL` line for each fault, then `NOT EQUAL`, and exits 1. A file listed by `--stat` was dropped or added by the split. A merge commit may only take one side of each hand-written file, so a merge that names a file changed it by hand. Fix the split and run it again until it prints `EQUAL`.
+It prints `EQUAL` and exits 0, or prints a `FAIL` line for each fault, then `NOT EQUAL`, and exits 1. A file listed by `--stat` was dropped or added by the split. A merge must equal git's own merge of its parents, with this branch's side taken in each conflicting hunk, apart from generated files and generated lines. A merge it names was changed by hand or reverts a change. Fix the split and run it again until it prints `EQUAL`.
 
 **2. Each branch passes the repository's checks on its own**, bottom of the stack first. The repository's agent guide names them. In Foundry they are `.githooks/pre-commit` with `FOUNDRY_DIFF_RANGE=origin/<base>...HEAD`, `python3 scripts/versioning.py check origin/<default>`, and Tier 1 outside the sandbox.
 
@@ -141,21 +143,27 @@ Every merge into a pull request branch stops before committing, so the hook sees
 ```bash
 bash -s -- <other> <squash-merged parent branch> <<'EOF'
 <the parameter block>
-is() { [ -z "$(git ls-files -- "$1" "${@:2}")" ]; }
-git merge --no-ff --no-commit "$1"; git rev-parse -q --verify MERGE_HEAD >/dev/null || exit 0
-[ -z "$2" ] || for f in $(git diff --name-only "$1...$2" -- . "${GEN[@]}" "${LINES[@]}"); do
-  git ls-files -u -- "$f" | grep -q . && git checkout --ours -- "$f" && git add -- "$f"
-done
+is_generated() { [ -z "$(git ls-files -- "$1" "${GEN[@]}")" ]; }
+has_generated_lines() { [ -z "$(git ls-files -- "$1" "${LINES[@]}")" ]; }
+side() { git merge-file -p "--$1" --object-id ":2:$2" ":1:$2" ":3:$2"; }
+sides_differ_by_hand() { diff -U0 <(side ours "$1") <(side theirs "$1") | grep -E '^[-+]' | grep -v -E '^(\+\+\+|---) ' | grep -q -v -E "$LINE_OK"; }
+git merge --no-ff --no-commit "$1"; status=$?
+git rev-parse -q --verify MERGE_HEAD >/dev/null || exit "$status"
+if [ -n "$2" ]; then
+  for f in $(git diff --name-only "$1...$2" -- . "${GEN[@]}" "${LINES[@]}"); do
+    git ls-files -u -- "$f" | grep -q . && side ours "$f" > "$f" && git add -- "$f"
+  done
+fi
 for f in $(git diff --name-only --diff-filter=U); do
-  if is "$f" "${GEN[@]}"; then :
-  elif is "$f" "${LINES[@]}" && ! diff <(git show ":2:$f") <(git show ":3:$f") | grep -E '^[<>]' | sed 's/^[<>] /+/' | grep -q -v -E "$LINE_OK"; then :
+  if is_generated "$f"; then git checkout --theirs -- "$f"
+  elif has_generated_lines "$f" && ! sides_differ_by_hand "$f"; then side theirs "$f" > "$f"
   else echo "FAIL $f conflicts outside generated content"; git merge --abort; exit 1; fi
-  git checkout --theirs -- "$f" && git add -- "$f"
+  git add -- "$f"
 done
 EOF
 ```
 
-When a parent was squash-merged into the default branch, the child no longer descends from it, so the merge conflicts on the parent's hand-written files. The child's branch already holds that change, so the squash step keeps its side. Any other hand-written conflict aborts. Report it, and the phase that owns the paths resolves it. After the script, run the feature plan's regenerate command, stage the generated files, and run `git commit --no-edit` with the hook on.
+When a parent was squash-merged into the default branch, the child no longer descends from it, so the merge conflicts on the parent's hand-written files. The child's branch already holds that change, so the squash step keeps the child's side in each conflicting hunk and the default branch's later changes elsewhere in the file. A file with generated lines takes the other side in each conflicting hunk when the two sides differ only in generated lines, and the regenerate command rewrites those lines. When a generated line and a hand-written line fall in one hunk, the script aborts, which is a safe stop to report. Any other hand-written conflict aborts. When the merge never starts, the script exits with `git merge`'s status, 0 when already up to date. Report it, and the phase that owns the paths resolves it. After the script, run the feature plan's regenerate command, stage the generated files, and run `git commit --no-edit` with the hook on.
 
 ## Update an open pull request
 
@@ -164,11 +172,11 @@ A pull request's branch and description have one writer, the phase session, thro
 - **A fix round.** Carry the fix commits to the branch that owns them with the carry loop, add a new regenerate commit, push, and repeat the three checks.
 - **The default branch moved.** Merge `origin/<default>` with the merge procedure, passing the parent's branch when a parent was squash-merged. Add a new regenerate commit when the regenerate command changes anything, push, and run the equality proof.
 - **A regenerate-only round.** Do only the default-branch step above.
-- **A restack, only when the phase session asks.** Merge the new base's branch with the merge procedure, then `gh pr edit <number> --base <new base>`. When the pull request joins a stack, link it with `gh stack link`. When it moves to the default branch, merge `origin/<default>` first. Then repeat the three checks.
+- **A restack, only when the phase session asks.** Merge the new base's branch with the merge procedure, then `gh pr edit <number> --base <new base>`. When the pull request joins a stack, link it with `gh stack link <parent number> <child number>`. When it would leave a stack, report that to the phase session instead of running `gh stack unstack`, which unstacks the whole stack. When it moves to the default branch, merge `origin/<default>` first. Then repeat the three checks.
 
 ## Report
 
-Report to the phase session, after every subagent you started has finished:
+Report to the phase session:
 
 - each pull request's number, URL, branch, base, `depends_on` and `stacked`, as the status header in [references/status-and-messages.md](../references/status-and-messages.md) records them, and its hand-written line count;
 - the equality proof's full output;

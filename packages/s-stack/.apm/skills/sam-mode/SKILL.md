@@ -17,7 +17,7 @@ Read `../poteto-mode/SKILL.md`, relative to this skill's directory, before anyth
 
 ## The invocation
 
-Three placeholders recur. `<feature>` is the feature's kebab-case name. It must not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>`, because session names join their parts with hyphens, so a name ending in a role suffix or containing `-phase-` cannot be told apart from another session's name. `<id>` is the roadmap's directory name `<date-time>-<feature>`, and `<phase>` is a phase id from the feature plan.
+Three placeholders recur. `<feature>` is the feature's kebab-case name. It must not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>`, because session names join their parts with hyphens, so a name ending in a role suffix or containing `-phase-` cannot be told apart from another session's name. The launcher refuses such a name. `<id>` is the roadmap's directory name `<date-time>-<feature>`, and `<phase>` is a phase id from the feature plan.
 
 There are two forms.
 
@@ -82,7 +82,7 @@ Every phase moves through Spec, Plan, Implement, Verify, Review, PR and Done.
 
 - A phase moves forward one state at a time and skips none. It can move back any number of states.
 - Only the phase session changes its phase's state, by committing its status file.
-- A verdict names the code head it covers. A new code head needs new verdicts. The reference file defines the code head and the verdict condition, and `handbooks/orchestrator.md` owns the merge rule.
+- A verdict names the code head it covers. A new code head needs new verdicts. The reference file defines the code head and the merge rule, which a phase checks before it moves to PR. `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges.
 
 ### Branches
 

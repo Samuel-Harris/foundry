@@ -2528,7 +2528,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:3f720314e60dface455a26fe6b593a73f3a4369127f83dad7940a482c3dd7849
+  content_hash: sha256:49be314f32fa0be5496b75beeeb3a16a67973d5026bffeea82ce962438b96543
 - kind: project-relative
   target: claude
   value: .claude/skills/setup-pstack
@@ -5363,7 +5363,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:3f720314e60dface455a26fe6b593a73f3a4369127f83dad7940a482c3dd7849
+  content_hash: sha256:49be314f32fa0be5496b75beeeb3a16a67973d5026bffeea82ce962438b96543
 local_deployed_files:
 - .agents/skills/sam-mode
 - .agents/skills/sam-mode/SKILL.md
@@ -5391,7 +5391,7 @@ local_deployed_file_hashes:
   .agents/skills/sam-mode/handbooks/spec-writer.md: sha256:ab76ce1e7b190c899fa78c3fa04aef68af0bf94564a829b0c0ff3a60ff573683
   .agents/skills/sam-mode/handbooks/verifier.md: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
   .agents/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60
-  .agents/skills/sam-mode/scripts/launch.sh: sha256:3f720314e60dface455a26fe6b593a73f3a4369127f83dad7940a482c3dd7849
+  .agents/skills/sam-mode/scripts/launch.sh: sha256:49be314f32fa0be5496b75beeeb3a16a67973d5026bffeea82ce962438b96543
   .claude/skills/sam-mode/SKILL.md: sha256:34767dcf9c098dee6ed90fa86d430e21378802b5a340980dc23bcfcd2be86126
   .claude/skills/sam-mode/handbooks/phase-session.md: sha256:cbeaf11dd71fa3a9bd938eee9d137e9c24cf6b289ec9039fe24fac02434b2cd0
   .claude/skills/sam-mode/handbooks/planner.md: sha256:ebf2a3e49084d906ad9e1e1a2ca6d76fb9e795c6a6e2b1693237e81cae89962f
@@ -5399,4 +5399,4 @@ local_deployed_file_hashes:
   .claude/skills/sam-mode/handbooks/spec-writer.md: sha256:ab76ce1e7b190c899fa78c3fa04aef68af0bf94564a829b0c0ff3a60ff573683
   .claude/skills/sam-mode/handbooks/verifier.md: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
   .claude/skills/sam-mode/references/status-and-messages.md: sha256:e7b534feae5f80c0ac6eec84da7fda8d07f7658c4e19895c44725074fc68aa60
-  .claude/skills/sam-mode/scripts/launch.sh: sha256:3f720314e60dface455a26fe6b593a73f3a4369127f83dad7940a482c3dd7849
+  .claude/skills/sam-mode/scripts/launch.sh: sha256:49be314f32fa0be5496b75beeeb3a16a67973d5026bffeea82ce962438b96543

@@ -128,3 +128,5 @@ Placement, pane reuse and their quick-review fixes are committed, with 83 tests 
 The full-height right column, the orchestrator-precedence rule and the second review's fixes are committed, with 95 tests passing in both locales. `s-stack-package` is merged at d73841b. The stale-lock fix (launcher-d13) followed, so Verify runs at 310d2df.
 
 The Verify findings at 310d2df are fixed: the window-lock test and close and remove before tmux has ever run. 100 tests pass on macOS and Ubuntu in both locales. Verify runs at 42d3ced.
+
+Merge 90a798c of `s-stack-package` at 3b31462 (board) touched `packages/s-stack/.apm/skills/sam-mode/assets/status-board.html`, `tests/s-stack/verify-s-stack/checks/board.md` and the generated `packages/s-stack/apm.lock.yaml`. None of these is a launcher-owned path, so under launcher-d14 the code head stays 42d3ced and the Verify verdict stands.

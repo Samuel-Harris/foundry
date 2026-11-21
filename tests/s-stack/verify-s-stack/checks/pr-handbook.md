@@ -30,7 +30,7 @@ The block builds throwaway repositories under `$TMPDIR` with git's global and sy
 
 `main` holds a package `pkg/` whose `apm.yml` has `version:` on its second line and `description:` on its third, an `apm.lock.yaml` beside each `apm.yml` that lists the package's other files, a twelve-line `shared.txt` and a `README`. The stand-in regenerate command sets `pkg`'s `version:` to the patch after `origin/main`'s and rewrites every lockfile from the tree, and commits with the regenerate subject when that changed anything. The script's parameter lines stay as the reference file ships them.
 
-Each case follows the handbook's round order. A round starts with `git fetch origin` and records every branch on `origin`. Then, for each branch it builds, bottom of the stack first, it removes any worktree a stopped round left at the branch's path and runs `git worktree add --no-track -B <branch> <path> origin/<branch>`, or `origin/main` in place of `origin/<branch>` for a new branch. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` and the regenerate command, and removes the worktree. When every branch has had that, the round proves the local branches with `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request, and with a merged one only where a case lists it. Only when the proof prints `EQUAL` does it run `git push -u origin <branch>`, bottom first, for each branch whose `origin/<branch>` is missing or differs. On any `STOP` or on `NOT EQUAL` it pushes nothing, resets each branch it built to `origin/<branch>` or deletes a new one, and fails the case if any branch on `origin` moved. A crashed round stops after the refresh and regenerate of a branch, with no proof and no reset. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
+Each case follows the handbook's round order. A round starts with `git fetch origin` and records every branch on `origin`. Then, for each branch it builds, bottom of the stack first, it removes any worktree a stopped round left at the branch's path and runs `git worktree add --no-track -B <branch> <path> origin/<branch>`. A new branch starts instead from its base as the refresh reads it: the local branch of a parent this round built, `origin/<parent>` for any other parent, or `origin/main` when the base is `main`. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` and the regenerate command, and removes the worktree. When every branch has had that, the round proves the local branches with `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request, and with a merged one only where a case lists it. Only when the proof prints `EQUAL` does it run `git push -u origin <branch>`, bottom first, for each branch whose `origin/<branch>` is missing or differs. On any `STOP` or on `NOT EQUAL` it pushes nothing, resets each branch it built to `origin/<branch>` or deletes a new one, and fails the case if any branch on `origin` moved. A crashed round stops after the refresh and regenerate of a branch, with no proof and no reset. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
 
 A round keeps the guarantees when the old `origin/<branch>` is an ancestor of the new one, `origin/main` is an ancestor of it, and it adds at most one merge commit and one regenerate commit. Each case prints `PASS <case>` or `FAIL <case>: <output>`, and the block ends with `<n> failed` and exits `0` only when no case failed.
 
@@ -95,6 +95,9 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `own-phase stack, unpushed parent` | A first build of `parent:main` and `child:parent` in one round, where `child`'s round reads the unpushed `parent`; then a fix to `parent`'s line 2 in a round of both | neither branch is on `origin` before the proof. After it, `child` holds `parent`, diff `c.txt`. In the fix round `origin/parent` is unchanged until the proof; then both keep the guarantees, `child` has the fix on line 2 and diff `c.txt`. |
 | `another phase's local parent` | Another phase's `other-pr` is on `origin`, and a local `other-pr` is ahead of it with an unproved commit adding `u.txt`; `child:other-pr` | exit `0`; `child` holds `origin/other-pr` and not the local `other-pr`, has `o.txt` as `origin` has it and no `u.txt`, diff `c.txt`, `EQUAL` |
 | `retry after a stopped build` | A first build as `pr1:main::gone` stops; a build crashes after its refresh, leaving the local `pr1` and a worktree checked out on it; then a full build | the stop prints exactly `STOP gone is not a branch here`, nothing pushed and no local `pr1`. The full build starts again, diff `a.txt`, exactly one commit with `(cherry picked from commit <a>)`, `EQUAL`. |
+| `own-phase child extends its parent's file` | Parent adds a two-line `f.txt`; the child extends it to five lines; a first build of `parent:main` and `child:parent` in one round | all three exit `0`, `EQUAL`, `child` holds `parent`, `child`'s diff against `parent` is `f.txt`, `parent` has two lines and `child` five |
+| `another phase stacked on ours, local ahead` | Own `pr1` is pushed. Another phase's `x` is stacked on `pr1` and carries its own commit with `git cherry-pick -x`, and a local `x` is ahead of `origin/x` with another carried commit adding `u.txt`. Then `pr2:x` | exit `0`; `origin/pr2` holds `origin/x` and not the local `x`, has no `u.txt`, diff against `origin/x` is `b.txt`, proof `pr1:main pr2:x` `EQUAL` |
+| `delegate after the orchestrator merged` | `pr1` is built and pushed; the phase merges a delegate branch adding `d.txt` and adds `y.txt`; the orchestrator merges the phase; a fix round with the `y.txt` commit | exit `1`, the delegate `FAIL` line naming the merge and the delegate commit, `NOT EQUAL`, `pr1` and `origin/pr1` unchanged, no `d.txt` on `origin/pr1` |
 | `stale owned path, another phase's branch` | `pr1` owns `shared.txt` line 3 and depends on another phase's `other-pr`, first stacked as `child:other-pr`, then as `child:main:other-pr`. `other-pr` then changes line 10; a round; the phase merges `origin/other-pr`; a round | the first round exits `1` with exactly `STOP shared.txt changed on <other-pr> after the phase last took it, so the phase must merge it first` and leaves `child` and `origin/child` unchanged. The second prints no delegate `FAIL`, keeps the guarantees, holds lines 3 and 10, and proves `EQUAL`. |
 
 ```bash
@@ -154,13 +157,19 @@ sha() { git rev-parse HEAD; }
 snap() { git -C "$O" for-each-ref --format='%(objectname) %(refname)' refs/heads; }
 has_local() { git rev-parse -q --verify "refs/heads/$1" >/dev/null; }
 IN_ROUND= RB=() R_OUT= SNAP=
+start_of() {
+  local p r; p=$(echo "$1" | cut -d: -f2); p=${p#origin/}
+  [ "$p" = main ] && { echo origin/main; return; }
+  for r in "${RB[@]}"; do [ "$r" = "$p" ] && has_local "$p" && { echo "$p"; return; }; done
+  echo "origin/$p"
+}
 step() {
   local b=$1 spec=$2 wt="$S/wt.$1"; shift 2
   [ "$IN_ROUND" = x ] && return 1
   [ -n "$IN_ROUND" ] || { IN_ROUND=1 RB=() R_OUT=; git fetch -q origin; SNAP=$(snap); }
   RB+=("$b"); [ ! -d "$wt" ] || git worktree remove --force "$wt"
   if git rev-parse -q --verify "refs/remotes/origin/$b" >/dev/null; then git worktree add -q --no-track -B "$b" "$wt" "origin/$b"
-  else git worktree add -q --no-track -B "$b" "$wt" "${START_AT:-origin/main}"; fi || { out="worktree add failed"; code=1; abort; return 1; }
+  else git worktree add -q --no-track -B "$b" "$wt" "${START_AT:-$(start_of "$spec")}"; fi || { out="worktree add failed"; code=1; abort; return 1; }
   out=$(cd "$wt" && "$BASH" "$S/pr.sh" refresh phase origin/main "$spec" "$@" 2>&1 && regen 2>&1); code=$?
   git worktree remove --force "$wt"; R_OUT="$R_OUT${R_OUT:+$'\n'}$out"
   [ $code = 0 ] || { abort; return 1; }
@@ -790,13 +799,53 @@ c_stale_other() {
     && pass "stale owned path, $1: cleared once the phase merges the other phase's branch, no delegate FAIL, EQUAL" || fail "stale-other $1 cleared: $o; proof $out"
 }
 c_stale_other_stacked() { c_stale_other stacked child:other-pr; }
+
+c_extend() {
+  init extend; orch; phase
+  printf 'one\ntwo\n' > f.txt; commit 'feat: parent adds f'; c1=$(sha)
+  printf 'one\ntwo\nthree\nfour\nfive\n' > f.txt; commit 'feat: child extends f'; c2=$(sha)
+  step parent parent:main "$c1"; o1="$code $out"; step child child:parent "$c2"; o2="$code $out"; finish parent:main child:parent; o3="$code $out"
+  [ "${o1%% *} ${o2%% *} ${o3%% *}" = '0 0 0' ] && [ "$(echo "$o3" | tail -1)" = EQUAL ] && anc origin/parent origin/child && [ "$(hand origin/parent origin/child)" = 'f.txt ' ] \
+    && [ "$(git show origin/parent:f.txt | wc -l | tr -d ' ') $(git show origin/child:f.txt | wc -l | tr -d ' ')" = '2 5' ] && equal parent:main child:parent \
+    && pass "own-phase child extends its parent's file: built on the parent's unpushed head, EQUAL" || fail "own-phase child extends its parent's file: parent $o1; child $o2; proof $o3"
+}
+
+c_foreign_above() {
+  init foreign-above; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "foreign-above build: $out"
+  git checkout -q -b xphase orch; echo x > x.txt; commit 'feat: x phase'; xc=$(sha); echo u > u.txt; commit 'feat: x phase, later'; xu=$(sha)
+  git checkout -q orch; git merge -q --no-ff --no-edit "$xc"; git checkout -q phase; take orch
+  echo b > b.txt; commit 'feat: b, needs x'; c2=$(sha)
+  git fetch -q origin; git worktree add -q -b x "$S/wt.x" origin/pr1
+  (cd "$S/wt.x" && git cherry-pick -x "$xc" >/dev/null && git push -q origin x && git cherry-pick -x "$xu" >/dev/null); git worktree remove --force "$S/wt.x"; git fetch -q origin
+  anc origin/x x && [ "$(git rev-parse x)" != "$(git rev-parse origin/x)" ] || fail "foreign-above: the other phase's local branch is not ahead of origin"
+  PROOF="pr1:main pr2:x" round pr2 pr2:x "$c2"; o="$code $out"
+  [ "${o%% *}" = 0 ] && anc origin/x origin/pr2 && ! anc x origin/pr2 && ! git cat-file -e origin/pr2:u.txt 2>/dev/null && [ "$(hand origin/x origin/pr2)" = 'b.txt ' ] && equal pr1:main pr2:x \
+    && pass "another phase's branch stacked on ours, local ahead of origin: not read, its file stays out of our pull request" || fail "foreign-above: $o; diff $(hand origin/x origin/pr2); proof $out"
+}
+
+c_delegate_after_orch() {
+  init delegate-after-orch; orch; phase
+  echo z > z.txt; commit 'feat: session work'; c0=$(sha)
+  round pr1 pr1:main "$c0" || fail "delegate-after-orch build: $out"
+  h=$(git rev-parse origin/pr1)
+  git checkout -q -b delegate; echo d > d.txt; commit 'feat: delegate fix'; cd_=$(sha)
+  git checkout -q phase; git merge -q --no-ff --no-edit delegate; mg=$(sha)
+  echo y > y.txt; commit 'fix: session fix'; c3=$(sha)
+  git checkout -q orch; take phase; git checkout -q phase
+  round pr1 pr1:main "$c3"; o="$code $out"
+  [ "${o%% *}" = 1 ] && has "$(delegate_fail "$mg" "$cd_")" && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] && unchanged pr1 "$h" && ! git cat-file -e origin/pr1:d.txt 2>/dev/null \
+    && pass "delegate merge after the orchestrator merged the phase: the delegate FAIL, nothing pushed" || fail "delegate after the orchestrator merged: $o"
+}
 c_stale_other_row3() { c_stale_other row3 child:main:other-pr; }
 
 for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_version_build c_r1_orch_merged c_r1_two_squashed c_r1_stack_moves c_r1_spaces \
   c_r2_conflict_commit c_r2_conflict_merge c_r2_clean_merge c_r2_orch_line c_r2_orch_delete c_r2_merge_commit c_r2_row3_to_row2 c_r2_grandchild \
   c_r2_delete_package c_r2_undeclared c_r2_adjacent c_uncarried c_leak c_identity c_assumptions c_missing \
   c_revert c_origin_names c_stop_shared c_stop_owned c_stop_forge c_stop_delegate c_stop_file_to_dir c_stop_dir_to_file c_chain c_merged_listed \
-  c_delegate_first_parent c_delegate_after_push c_stack_local c_foreign_local c_retry c_stale_other_stacked c_stale_other_row3; do
+  c_delegate_first_parent c_delegate_after_push c_stack_local c_foreign_local c_retry c_stale_other_stacked c_stale_other_row3 \
+  c_extend c_foreign_above c_delegate_after_orch; do
   (cd "$S" && "$c") || fail "$c ended early"
 done
 n=$(wc -l < "$S/failed" | tr -d ' ')
@@ -835,7 +884,7 @@ Expected answer:
 7. (a) An uncarried phase change. Open a new draft pull request for it, with its base from the base table and a new branch, run its round and the three checks again. (b) A broken assumption of the proof, not the phase's own work. Open no pull request. Report it to the phase session with the `FAIL` lines, and the phase session raises it with the orchestrator.
 8. No. The PR creator never resolves a hand-written conflict and never changes what the code does.
 9. GitHub rewrote `gadgets-pr`'s head when its parent merged, so `widgets-pr` holds the old head, whose commits now count as its own, and the stop recurs in every round, even after `gadgets-pr` merges. The PR creator does not work around it and opens no pull request for it. It reports the output to the phase session, which sends the orchestrator a decision request with the same two options as (3): a one-off rebuild that force-pushes with the developer's approval, or a replacement pull request on a new branch. The branch is left where it started, nothing is pushed.
-10. A delegate's branch merged into the phase leaves its commits off the phase's first-parent line, so they are not phase commits. The PR creator opens no pull request for it and reports the output to the phase session, which sends the orchestrator a decision request: whether the phase session reverts that merge and takes the delegate's commits with `git cherry-pick -x` instead, which makes them phase commits that the next round carries. The branch is left where it started, nothing is pushed.
+10. A delegate's branch merged into the phase leaves its commits off the phase's first-parent line, so they are not phase commits. The PR creator opens no pull request for it and reports the output to the phase session, which sends the orchestrator a decision request. Either the phase session rebuilds its phase branch locally without that merge, taking the delegate's commits with `git cherry-pick -x` so they become phase commits that the next round carries, a local rewrite that needs Verify and Review again, or the orchestrator decides otherwise. The branch is left where it started, nothing is pushed.
 11. The phase replaced a file with a directory of the same name, which the design does not handle. The PR creator reports it to the phase session, which sends the orchestrator a decision request: whether to split that change by hand, or to undo it in the phase. The branch is left where it started, nothing is pushed.
 
 ## Evidence

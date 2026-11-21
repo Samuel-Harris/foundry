@@ -50,7 +50,14 @@ pull_requests:
     door: "two-way"
     waiting_work: "The launcher's feature-name validation and its test. Every other review fix goes ahead."
     since: "2026-11-21T16:43:47Z"
-requests: []
+requests:
+  - id: "launcher-r3"
+    question: "May a merge of s-stack-package that touches none of launcher's owned paths, other than generated files, keep launcher's code head and verdicts?"
+    options: ["A. Yes. The orchestrator's post-merge check on s-stack-package covers integration.", "B. No. Keep States rule 5 and run both gates after every such merge."]
+    recommendation: "A"
+    door: "two-way"
+    waiting_work: "Whether both gates run again after merging a606589 (board)."
+    since: "2026-11-21T21:51:45Z"
 decisions:
   - id: "launcher-d1"
     decision: "Answer to launcher-r1, option A, from the orchestrator: launch.sh --print-window prints window=<window id> for $TMUX_PANE, exit 3 without tmux and exit 1 outside tmux."

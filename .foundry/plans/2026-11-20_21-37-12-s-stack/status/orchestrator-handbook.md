@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T22:47:05Z"
+state: "Verify"
+changed_at: "2026-11-21T22:47:55Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "5b8a48145a2aa1e0ef5c890d5516da78f7b785a4"
+code_head: "07e5d30027a7e5d64f564e1d7a9f82deaf4c7083"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -309,3 +309,5 @@ The Review 8 fixes are at `37d9146`. `s-stack-package` (`3b31462`) was merged at
 The twenty-fifth Verify gate returned VERIFIED at `5b8a481`. The phase moved to Review, which covers the commits since `d5c3d09`.
 
 The ninth Review gate returned SIGNIFICANT at `5b8a481`, under the common-path bar. The phase moved back to Implement.
+
+The Review 9 fixes are at `07e5d30`. `s-stack-package` was already merged. The phase moved to Verify at code head `07e5d30`.

@@ -10,7 +10,7 @@ verdicts:
   - gate: "verify"
     result: "NOT VERIFIED"
     code_head: "13f835b7a61f0f3287cdd307b712338ae8751cde"
-    at: "2026-11-21T14:50:00Z"
+    at: "2026-11-21T14:26:36Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/foundation-evidence.md"
 pull_requests: []
 requests: []

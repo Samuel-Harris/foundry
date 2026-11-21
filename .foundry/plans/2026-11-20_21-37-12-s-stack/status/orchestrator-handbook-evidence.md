@@ -154,3 +154,18 @@ One-off results at `7b4f0a3`:
 - The handbook has 169 lines, and the launcher-call script passes.
 - All nine launcher flags match `launch.sh`'s usage text on the `launcher` phase branch.
 - A private-name grep found 0 hits, with a positive control of 3.
+
+## Verify 11, code head `aa1691c294db133b3d809d901732719cc55b6097`, INCONCLUSIVE
+
+A fresh verifier updated the check file for `63e2e35` (commit `aa1691c`, with a new cold read P) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS. Checks 4 and 6 are PENDING, which is allowed. In check 8, all three scripts pass and 24 of 25 cold reads pass. Cold read K was still running when the verifier handed back, so the verdict is INCONCLUSIVE. Every **Done when** item that ran was met (169 lines; a private-name grep found 0 hits, with a positive control of 3).
+
+Two defects would break a real run:
+
+- The "every pull request merged" notice did not check that the phase's current code head was merged, so a Done phase with new code but no new pull request could loop.
+- A stalled session got `stop` and `--close` in the same tick, the race already fixed for merged phases.
+
+Minor items:
+
+- It was not stated whether status-only merges are exempt from the default-branch-tick rule, or whether an aborted default-branch merge counts.
+- The tracker did not record when stopping began, or clear the mark.
+- Resizing panes was not ruled out.

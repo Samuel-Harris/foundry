@@ -1,12 +1,17 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T15:44:39Z"
+state: "Implement"
+changed_at: "2026-11-21T15:52:54Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "f0542648c3b4372b8b8b4d05cb306c58ac8303a0"
+code_head: "0d7b25d0a0156ac524a6a32e7e221ad4fed9e1ee"
 waits_for: null
-verdicts: []
+verdicts:
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "0d7b25d0a0156ac524a6a32e7e221ad4fed9e1ee"
+    at: "2026-11-21T15:52:54Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -22,4 +27,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-The phase plan is `phases/spec-planner-handbooks.md`. Both handbooks are built, quick-review findings are fixed at `f054264`, and `s-stack-package` is merged at `3bb77e4`. The Verify gate is running.
+Verify passed at `0d7b25d`. The phase moved back to Implement to close two small gaps the verifier found. Verification then runs again in full on the new code head.

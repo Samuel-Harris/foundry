@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-21T21:12:27Z"
+state: "Implement"
+changed_at: "2026-11-21T21:13:05Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "2056fdb0eddb65fc8b574b1981a81d8e3938b1a3"
@@ -266,3 +266,5 @@ The twenty-first Verify gate returned VERIFIED at `038cdc4`. The phase moved to 
 The seventh Review gate returned SIGNIFICANT at `038cdc4`. The phase moved back to Implement.
 
 The Review 7 fixes and the queued architecture-brief item are at `2056fdb`. `s-stack-package` was already merged. The phase moved to Verify at code head `2056fdb`.
+
+The twenty-second Verify gate was stopped without a verdict or commit, because the orchestrator set a new significance bar and asked for a "Histories handled by asking" section. The phase moved back to Implement.

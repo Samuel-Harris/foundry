@@ -318,3 +318,13 @@ Minor items:
 
 - The new tracker field never says when it clears.
 - A pull request opened after the landing tick has no starting `needs_update`.
+
+## Review 5, code head `912605a97e15e20e50353ec451f3cc1b870a1a01`, SIGNIFICANT
+
+`interrogate` over the commits since `7fc56cf`, with two adversaries on Opus and Fable in their own worktrees. The phase session checked each cold read against the text and reran the git probe.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| `phase-session.md`'s code-changing fix rounds ("Feedback on a pull request", "A conflict with the default branch") never send `prs-open`, so the phase can never merge again under the `prs-open` rule. | Opus | Three cold reads |
+| A deferred "A pull request merged" round goes out in the same tick as the re-merge's `stop`. The phase ends its turn without refreshing, and the round is never resent. | Fable | Three cold reads |
+| A stacked child pull request flagged after its parent's fix round gets no round, and the clearing test passes on a head that lacks the parent's fix. | Fable | Scratch-repository script, rerun; cold read |

@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 19:12 |
+| Last tick | 2026-11-21 20:31 |
 | Default branch merged at | `6f42b1c` (#85, into `7409b48`) |
 
 ## Live sessions
@@ -72,6 +72,7 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 14. `references/status-and-messages.md`: drop the `restack` orchestrator message kind. PR creators now restack themselves (run decision, automatic stacking). Raised by `orchestrator-handbook`. Make the `fix-round` row cover a merged dependency, after which the PR creator works out the base again. Raised by `phase-handbooks`.
 15. `SKILL.md` line 20: a feature name must also not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>` (run decision `launcher-r2`). Raised by `launcher`.
 16. `references/status-and-messages.md`: the code-head rule must ignore version-only changes, as the run decision on version lines says. Its message rows must also cover a failed post-merge check, a `state` reply to an early merged notice, and the merged notice itself (move-back, state and instruction rows). Raised by `phase-handbooks`.
+17. `references/status-and-messages.md` line 61 reads as the whole merge condition and does not mention `prs-open`. Point it to `orchestrator.md`'s merge rule (run decision on `prs-open` re-merges). Raised by `orchestrator-handbook`.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
@@ -95,3 +96,6 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 - `phase-handbooks`: widen "a Done phase asked to change code moves back to Implement" to any state past Implement (Verify, Review, PR, Done). It covers a phase in PR whose code changes after its pull requests merged, for example from a direct instruction from the developer. Fold this into its next Implement round, or send it as a follow-up fix round. It fails safe meanwhile. Raised by `orchestrator-handbook` at `03d2899`.
 - After every handbook phase is merged, have a fresh subagent do one cross-handbook read-through on `s-stack-package`: orchestrator, phase-session, verifier, reviewer, pr-creator, spec-writer and planner, plus the reference file. Collect the recorded handshake edge cases from each phase's evidence file. Route the fixes to the owning phases, or to the foundation round for the reference file.
   - Include: can `orchestrator.md` send the merged notice to a phase that has just entered PR (PR step 1) before `prs-open` lists its new pull request? Check against the re-merge guard and the notice's conditions. Raised by `phase-handbooks`' reviewers at `a1c95f1`.
+- `phase-handbooks` (Done, needs a follow-up round): in `phase-session.md`, fix-round step 4's "Move to PR and report" must say to send `prs-open` once the PR creator has carried the fix. The same applies to line 111's "A conflict with the default branch" round, which also ends without a PR creator or `prs-open`. Under the `prs-open` re-merge rule, a phase that never sends it cannot merge again. `orchestrator.md` at `caafc7f` asks a quiet phase for it meanwhile. Raised by `orchestrator-handbook`'s fifth review.
+- `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` line 109, the "A pull request merged" round, runs no gate. Add that if the PR creator reports a STOP, the phase sends the orchestrator a decision request naming the STOP and stays in PR. Raised by `pr-handbook`'s review at `b4da68b`.
+  - Include: the board template's schema comment (C5) describes `needs_update` as containing main's tip with passing checks. `orchestrator.md` at `20c031a` also requires the heads of open dependencies. Make the comment match. Raised by `orchestrator-handbook`.

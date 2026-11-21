@@ -5,7 +5,7 @@ changed_at: "2026-11-21T18:25:52Z"
 session: "s-stack-phase-pr-handbook"
 branch: "s-stack-phase-pr-handbook"
 code_head: "f5c99ae57b1715a0ceb8f5442426c74d433af3c9"
-waits_for: null
+waits_for: "pr-handbook-r3, how a pull request's content is defined"
 verdicts:
   - gate: "verify"
     result: "NOT VERIFIED"
@@ -48,7 +48,14 @@ verdicts:
     at: "2026-11-21T18:25:52Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/pr-handbook-evidence.md"
 pull_requests: []
-requests: []
+requests:
+  - id: "pr-handbook-r3"
+    question: "Should a pull request's content be defined by the phase's content for the paths it owns, instead of by replaying its own commits onto its base, which is option A of pr-handbook-r1?"
+    options: ["A. Path overlay. A pull request owns the paths its own commits touch. Its tree is its base with each owned path set to the phase tip's version, with generated lines kept from the base. A refresh stops only when the base changed an owned path after the phase last absorbed the base, and the phase then merges the default branch as it already must. The proof checks two things: each phase path changed outside generated files is either owned by exactly one open pull request or already equal on the default branch, and each pull request's tree equals its base overlaid with its owned paths. A row-2 parent must contain the default tip, or the child stays in row 3. A path shared by two pull requests of one stack keeps commit replay, and a conflict there is a reported stop.", "B. Keep commit replay and patch each case: replay resolution commits, find the phase's own base for the proof, handle true merges, and list grandparents.", "C. Ship the current design with each of these histories as a documented stop that the phase session escalates to the developer."]
+    recommendation: "A"
+    door: "two-way"
+    waiting_work: "The fix round for the second Review's findings, then both gates again."
+    since: "2026-11-21T18:26:07Z"
 decisions:
   - id: "pr-handbook-d1"
     decision: "The PR creator reads ../summarise-pr/SKILL.md relative to the sam-mode skill directory and follows it, because summarise-pr sets disable-model-invocation: true."

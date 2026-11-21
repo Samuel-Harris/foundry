@@ -8,20 +8,17 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `1a97298` (version 4) |
-| Last tick | 2026-11-21 16:32 |
-| Default branch merged at | `d7e036c` (#81, into `8093a85`) |
+| Architecture page describes | `d3dd837` (version 6) |
+| Last tick | 2026-11-21 22:51 |
+| Default branch merged at | `6f42b1c` (#85, into `7409b48`) |
 
 ## Live sessions
 
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
-| `s-stack-phase-board` | `%173` | `../s-stack-phase-board` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
-| `s-stack-phase-phase-handbooks` | `%175` | `../s-stack-phase-phase-handbooks` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-phase-spec-planner-handbooks` | `%180` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21, resumed for the #84 fix round |
 
 ## Open decision requests
 
@@ -31,9 +28,11 @@ None.
 
 | Number | Phase | Branch | Base | Depends on |
 | --- | --- | --- | --- | --- |
-| 81 | `foundation` | `s-stack-foundation-package` | `main` | none |
-| 82 | `foundation` | `s-stack-verify-skill` | `s-stack-foundation-package` | 81 |
-| 84 | `spec-planner-handbooks` | `s-stack-spec-planner-handbooks` | `main` | 81, 82 |
+| 81 | `foundation` | merged into `main` as `d7e036c` | | |
+| 82 | `foundation` | merged into `main` as `e4a18d1` | | |
+| 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
+| 85 | `phase-handbooks` | merged into `main` as `6f42b1c` | | |
+| 86 | `board` | `s-stack-board` | `main` | none |
 
 ## Merged phases
 
@@ -41,14 +40,19 @@ None.
 | --- | --- | --- | --- |
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
 | `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
+| `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
+| `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | VERIFIED on `ce086bb` |
+| `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | VERIFIED on `3ce7d34` |
 
 ## Closed sessions
 
 | Session | Worktree | Closed | Last commit |
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
-| `s-stack-phase-foundation` | `../s-stack-phase-foundation` | 2026-11-21 | `5df64c0`, merged at `7c4f36d`; worktree kept for fix rounds |
-| `s-stack-phase-spec-planner-handbooks` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21 | `22340be`, merged at `4739703`; worktree kept for fix rounds |
+| `s-stack-phase-foundation` | removed, branch kept | 2026-11-21 | Done at `d7a6cb3`, merged; #81 and #82 merged into `main` |
+| `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-21 | Done at `b9429a2`, merged; #84 merged into `main` |
+| `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-21 | Done at `0cb6af5`, merged; #85 merged into `main` |
+| `s-stack-phase-board` | `../s-stack-phase-board` | 2026-11-21 | `22e6ab0`, merged at `a606589`; worktree kept for fix rounds on #86 |
 
 ## Queued fix rounds
 
@@ -67,6 +71,10 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 11. `references/status-and-messages.md`: the code-head command follows git history simplification, so after a merge it can resolve to a commit off the phase branch's first-parent line. Add `--first-parent`, and check that a pre-Verify merge that brings in code still moves the code head. Raised by `phase-handbooks`.
 12. `references/status-and-messages.md`: write generated-path exclusions with glob magic, `':(exclude,glob)**/<name>'`. The plain `':(exclude)**/<name>'` does not match a file at the repository root. Foundry is safe only because its root `apm.lock.yaml` is gitignored. Raised by `orchestrator-handbook`.
 13. `tests/s-stack/verify-s-stack/SKILL.md` check 8: `## Evidence` must not "record one-off checks with their results". Results go in the phase's evidence file under `.foundry/`, as the no evidence-exception run decision says. The feature plan's C6 has the same wording, and that run decision overrides it. Raised by `phase-handbooks`.
+14. `references/status-and-messages.md`: drop the `restack` orchestrator message kind. PR creators now restack themselves (run decision, automatic stacking). Raised by `orchestrator-handbook`. Make the `fix-round` row cover a merged dependency, after which the PR creator works out the base again. Raised by `phase-handbooks`.
+15. `SKILL.md` line 20: a feature name must also not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>` (run decision `launcher-r2`). Raised by `launcher`.
+16. `references/status-and-messages.md`: the code-head rule must ignore version-only changes, as the run decision on version lines says. Its message rows must also cover a failed post-merge check, a `state` reply to an early merged notice, and the merged notice itself (move-back, state and instruction rows). Raised by `phase-handbooks`.
+17. `references/status-and-messages.md` line 61 reads as the whole merge condition and does not mention `prs-open`. Point it to `orchestrator.md`'s merge rule (run decision on `prs-open` re-merges). Raised by `orchestrator-handbook`.
 
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
@@ -80,3 +88,19 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 At the end of the run, start a spec writer to fold `run-decisions.md` into the roadmap. At least these items: `coordination.md` "The launcher" and "Restarts" and C4 now resume by stored id with `--print-window`, `--close`, `--remove` and exit 5; `roles.md` drops the Orchestrate playbook pointer; the status board gains the dependency map and session labels; the generated-files rules for code heads, conflicts and the line limit. Raised by `launcher`.
 
 Known launcher limits to record in that update: a pane left at its shell after `claude` exits is not reused, and `--close` does not clear it, so a relaunch adds a pane. A restarted spec writer needs `--window`.
+
+## Window layout
+
+The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. Start planner and phase sessions by hand to the right of that column: split the largest session pane there, with `-v` unless both halves stay at least 80 columns wide. Start a spec writer in `%165`'s column. Never move a pane the developer adds to that column, and never run `select-layout`.
+
+## Deferred follow-ups for live phases
+
+- `phase-handbooks`: widen "a Done phase asked to change code moves back to Implement" to any state past Implement (Verify, Review, PR, Done). It covers a phase in PR whose code changes after its pull requests merged, for example from a direct instruction from the developer. Fold this into its next Implement round, or send it as a follow-up fix round. It fails safe meanwhile. Raised by `orchestrator-handbook` at `03d2899`.
+- After every handbook phase is merged, have a fresh subagent do one cross-handbook read-through on `s-stack-package`: orchestrator, phase-session, verifier, reviewer, pr-creator, spec-writer and planner, plus the reference file. Collect the recorded handshake edge cases from each phase's evidence file. Route the fixes to the owning phases, or to the foundation round for the reference file.
+  - Include: can `orchestrator.md` send the merged notice to a phase that has just entered PR (PR step 1) before `prs-open` lists its new pull request? Check against the re-merge guard and the notice's conditions. Raised by `phase-handbooks`' reviewers at `a1c95f1`.
+- `phase-handbooks` (Done, needs a follow-up round): in `phase-session.md`, fix-round step 4's "Move to PR and report" must say to send `prs-open` once the PR creator has carried the fix. The same applies to line 111's "A conflict with the default branch" round, which also ends without a PR creator or `prs-open`. Under the `prs-open` re-merge rule, a phase that never sends it cannot merge again. `orchestrator.md` at `caafc7f` asks a quiet phase for it meanwhile. Raised by `orchestrator-handbook`'s fifth review.
+- `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` line 109, the "A pull request merged" round, runs no gate. Add that if the PR creator reports a STOP, the phase sends the orchestrator a decision request naming the STOP and stays in PR. Raised by `pr-handbook`'s review at `b4da68b`.
+  - Include: the board template's schema comment (C5) describes `needs_update` as containing main's tip with passing checks. `orchestrator.md` at `20c031a` also requires the heads of open dependencies. Make the comment match. Raised by `orchestrator-handbook`.
+- `spec-planner-handbooks` (Done, needs a follow-up round): in `checks/spec-planner-handbooks.md`, reword cold read 1's expected point 5 to "Port 5432 is named as an exclusive resource of the sharing back-end phase. Naming it for another phase under a stated assumption neither passes nor fails this point." A check passed 5 of 5 runs on `s-stack-package`, but strict graders can fail it, which would wrongly fail a post-merge check. `planner.md` needs no change.
+- `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` must say a delegate's work lands on the phase branch by `git cherry-pick -x`, never by merging the delegate's branch. The only merges on a phase branch's first-parent line are merges of the orchestrator branch. `pr-creator.md` fails its proof on any other merge there (raised by `pr-handbook`'s tenth verification at `345764c`).
+- `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` line 111, the "A conflict with the default branch" round, should do nothing when the branch already holds the named commit, not restart Implement and both gates. `orchestrator.md` at `b33f4a5` no longer repeats that round, so this only hardens against a duplicate message.

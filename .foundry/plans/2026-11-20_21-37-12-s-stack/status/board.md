@@ -1,10 +1,10 @@
 ---
 phase: "board"
-state: "Implement"
-changed_at: "2026-11-21T15:39:03Z"
+state: "Verify"
+changed_at: "2026-11-21T15:54:47Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
-code_head: "50e26eebaa31524a81e0cc00d99edf4bdad0e2dc"
+code_head: "f3d0e320e924679e78a3e08f3e2903853d36f060"
 waits_for: null
 verdicts: []
 pull_requests: []
@@ -26,4 +26,4 @@ decisions:
 
 # Phase `board` status
 
-The phase plan is committed at `8f55e96`, at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/board.md`. The template is being written.
+The phase plan is committed at `8f55e96`. The template landed at `fef789b`. `quick-review` (bug and code-quality passes) found overflow from untrusted values, a false "Up to date" chip, closed pull requests counted as dependencies, staleness judged from cached data and scattered load state. Fixed in `68f7ab7` and `f3d0e32`. Dismissed with reasons: the no-database `hidden` finding (the publish skeleton ships `[hidden]{display:none!important}`), a single owner for review order (C5 requires both `review_rank` and the dependency rule), the duplicated dark token block (the page contract requires it), a guard for a `window.claude` without `use`, and focus loss on the 30-second re-render. `s-stack-package` was merged at `f0d9c7e` with no conflict and no change outside `.foundry/`. The Verify gate is starting for code head `f3d0e32`.

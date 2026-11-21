@@ -90,3 +90,14 @@ A sixth fresh verifier ran the whole verification skill on 2026-11-21 between 16
 - Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
 - One-off private-name search at 16:42:15 over the five files of the phase diff, the diff text and 33 commit messages: 0 matches.
 - Outside this phase: `tests/s-stack/verify-s-stack/SKILL.md` check 8 and feature plan C6 still say `## Evidence` records results, against the newer run decision.
+
+## Review: SIGNIFICANT at `691ea624c93b5dbf1e8f33cd9b9dc1021d38308c`
+
+A later review covered `e592b60` and `691ea62`, with clean merges `5a33f9e` and `ed38da7`. Two reviewers, Opus and Fable, each in a detached worktree at `c82b67e`. Nine probes, seven from earlier findings and two for the removed exception, all pass. The exception is the one Fable's strict run of cold read 2 tripped, below.
+
+Significant:
+
+1. `verifier.md`'s `## Evidence` row says one-off checks are ones "nobody runs again", and "Run the checks" step 1 names only `## Rerun`. Yet every new code head needs a full run. Two cold readers given the same scenario took opposite actions: one reran the one-off check, and the other returned VERIFIED without it. Both reviewers found it.
+2. `checks/phase-handbooks.md` cold read 2 expects, in point 2, the general rule that any later change outside `.foundry/` means a full rerun. Its prompt never asks about that, so a correct handbook can fail a strict judge.
+
+Recorded only: a single verifier commit that checks the work of two pull requests has no stated home. `pr-creator.md`, which owns the split and does not exist yet, should settle it.

@@ -61,3 +61,19 @@ https://github.com/Samuel-Harris/foundry/pull/84. Draft, branch `s-stack-spec-pl
 - **Regenerate commit.** `dede1c5` changes only `packages/s-stack/apm.lock.yaml`. `versioning.py bump` raised no version, because s-stack is not on `main` yet.
 - **Size.** 166 hand-written lines against `s-stack-verify-skill`, and 802 added and 26 removed against `main` including both parents, lockfiles excluded.
 - **CI.** Pre-commit checks, Package versions, Detect changed paths, data-visualisation tools tests and foundry-maintenance script tests passed. The p-stack tests and Tag package versions were skipped by their path and event conditions.
+
+## Fix round after #81 merged, generated files only
+
+#81 was squash-merged into `main` as `d7e036c`, and #84 conflicted with `main`. The phase branch merged `s-stack-package` at `2dff76b`. That merge changed nothing outside `.foundry/`, so the code head stays `6f70b37` and no gate ran.
+
+A fresh PR creator rebuilt #84 under `pr-handbook-r1`.
+
+- **Rebuild.** It replayed the eight own commits with `git apply --3way` onto `origin/s-stack-verify-skill` (`04e239a`), with no conflict. The rebuilt tree differed only in `packages/s-stack/apm.lock.yaml`. It recorded the tree as merge commit `3b15a0a` (`git commit-tree -p dede1c5 -p origin/s-stack-verify-skill`), then added regenerate commit `49df8c3`, which raised s-stack from 0.1.0 to 0.1.1. It pushed as a fast-forward, with no force.
+- **Base.** #85 is already stacked on #82, so #84 keeps base `main` and carries #82's commits. It depends on [82] and is not stacked.
+- **Equality proof.** The rebuild-form proof printed `EQUAL`. The phase session confirmed four things:
+  - The three content files are byte-identical to `6f70b37`.
+  - The diff against `s-stack-verify-skill` adds only `packages/s-stack/apm.lock.yaml` and the `version:` line of `packages/s-stack/apm.yml`.
+  - No `.foundry/` path is on the branch.
+  - GitHub reports #84 as mergeable and CLEAN.
+- **Size.** 167 added and 1 removed against `s-stack-verify-skill`.
+- **CI at `49df8c3`.** Pre-commit checks, Package versions, Detect changed paths and both tools test jobs passed.

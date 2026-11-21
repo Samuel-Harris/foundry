@@ -10,7 +10,7 @@
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `1a97298` (version 4) |
 | Last tick | 2026-11-21 16:32 |
-| Default branch merged at | `f7772cc` (into `7e04846`) |
+| Default branch merged at | `d7e036c` (#81, into `8093a85`) |
 
 ## Live sessions
 
@@ -21,6 +21,7 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-phase-handbooks` | `%175` | `../s-stack-phase-phase-handbooks` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
+| `s-stack-phase-spec-planner-handbooks` | `%180` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-21, resumed for the #84 fix round |
 
 ## Open decision requests
 

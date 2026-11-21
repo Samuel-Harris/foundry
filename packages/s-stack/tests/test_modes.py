@@ -8,7 +8,7 @@ from launcher_case import LauncherTestCase
 
 class PrintWindowTests(LauncherTestCase):
     def test_prints_the_window_of_the_calling_pane(self) -> None:
-        pane = self.panes()[0]["id"]
+        pane = self.panes()[0].id
 
         result = self.launch("--print-window", env={**self.env, "TMUX_PANE": pane})
 
@@ -46,7 +46,7 @@ class CloseTests(LauncherTestCase):
         result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
 
         self.assertEqual((result.returncode, result.stdout), (0, f"closed f-phase-p pane={pane}\n"), result.stderr)
-        self.assertNotIn(pane, [p["id"] for p in self.panes()])
+        self.assertNotIn(pane, self.pane_ids())
 
     def test_closes_the_sessions_pane_after_its_claude_exits(self) -> None:
         pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
@@ -56,7 +56,7 @@ class CloseTests(LauncherTestCase):
         result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
 
         self.assertEqual((result.returncode, result.stdout), (0, f"closed f-phase-p pane={pane}\n"), result.stderr)
-        self.assertNotIn(pane, [p["id"] for p in self.panes()])
+        self.assertNotIn(pane, self.pane_ids())
 
     def test_closes_both_the_sessions_left_pane_and_a_pane_running_it(self) -> None:
         left, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
@@ -68,7 +68,7 @@ class CloseTests(LauncherTestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(sorted(result.stdout.splitlines()), sorted([f"closed f-phase-p pane={left}", f"closed f-phase-p pane={running}"]))
-        self.assertFalse({left, running} & {p["id"] for p in self.panes()})
+        self.assertFalse({left, running} & set(self.pane_ids()))
 
     def test_a_pane_left_by_another_session_is_not_closed(self) -> None:
         other, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "q", "--window", self.window), name="f-phase-q")
@@ -78,7 +78,7 @@ class CloseTests(LauncherTestCase):
         result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
 
         self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
-        self.assertIn(other, [p["id"] for p in self.panes()])
+        self.assertIn(other, self.pane_ids())
 
     def test_another_claude_started_in_the_sessions_left_pane_is_not_closed(self) -> None:
         pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
@@ -90,7 +90,7 @@ class CloseTests(LauncherTestCase):
         result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
 
         self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
-        self.assertIn(pane, [p["id"] for p in self.panes()])
+        self.assertIn(pane, self.pane_ids())
 
     def test_absent_when_no_tmux_server_runs(self) -> None:
         self.tmux("kill-server")
@@ -106,7 +106,7 @@ class CloseTests(LauncherTestCase):
         result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
 
         self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
-        self.assertIn(other, [p["id"] for p in self.panes()])
+        self.assertIn(other, self.pane_ids())
 
     def test_a_resumed_nameless_claude_is_not_closed(self) -> None:
         worktree = self.make_worktree(name="f-phase-p", base="f")
@@ -115,7 +115,7 @@ class CloseTests(LauncherTestCase):
         result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
 
         self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
-        self.assertIn(resumed, [p["id"] for p in self.panes()])
+        self.assertIn(resumed, self.pane_ids())
 
 
 class RemoveTests(LauncherTestCase):

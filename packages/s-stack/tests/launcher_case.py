@@ -34,17 +34,20 @@ class Started(NamedTuple):
     worktree: str
 
 
-class Geometry(NamedTuple):
+class Pane(NamedTuple):
+    id: str
+    pid: int
+    window: str
     left: int
     top: int
     width: int
     height: int
 
 
-PANE_FORMAT = "#{pane_id} #{pane_pid} #{pane_width} #{pane_height} #{window_id}"
-GEOMETRY_FORMAT = "#{pane_id} #{pane_left} #{pane_top} #{pane_width} #{pane_height}"
+PANE_FORMAT = "#{pane_id} #{pane_pid} #{window_id} #{pane_left} #{pane_top} #{pane_width} #{pane_height}"
 
-def conversation(args: str, *, flag: str) -> str | None:
+
+def conversation(*, args: str, flag: str) -> str | None:
     words = args.split()
     return words[words.index(flag) + 1] if flag in words else None
 
@@ -177,10 +180,18 @@ class LauncherTestCase(unittest.TestCase):
         self.git("-C", str(worktree), "add", relative)
         self.git("-C", str(worktree), "commit", "-q", "-m", relative)
 
-    def panes(self) -> list[dict[str, str]]:
-        out = self.tmux("list-panes", "-a", "-F", PANE_FORMAT)
-        keys = ("id", "pid", "width", "height", "window")
-        return [dict(zip(keys, line.split(), strict=True)) for line in out.splitlines()]
+    def panes(self) -> list[Pane]:
+        rows = []
+        for line in self.tmux("list-panes", "-a", "-F", PANE_FORMAT).splitlines():
+            pane, pid, window, left, top, width, height = line.split()
+            rows.append(Pane(id=pane, pid=int(pid), window=window, left=int(left), top=int(top), width=int(width), height=int(height)))
+        return rows
+
+    def pane_ids(self) -> list[str]:
+        return [p.id for p in self.panes()]
+
+    def window_of(self, pane: str, /) -> str:
+        return next(p.window for p in self.panes() if p.id == pane)
 
     def windows(self) -> list[str]:
         return self.tmux("list-windows", "-a", "-F", "#{window_id}").split()
@@ -198,7 +209,7 @@ class LauncherTestCase(unittest.TestCase):
         """Claude processes under the private server's panes, never the developer's own sessions."""
         rows = self.processes()
         parent = {row.pid: row.ppid for row in rows}
-        pane_of_pid = {int(p["pid"]): p["id"] for p in self.panes()}
+        pane_of_pid = {p.pid: p.id for p in self.panes()}
         found = []
         for row in rows:
             if os.path.basename(row.args.split()[0]) != "claude":
@@ -263,13 +274,8 @@ class LauncherTestCase(unittest.TestCase):
         self.wait_for(lambda: self.tmux("display-message", "-p", "-t", pane, "#{pane_current_command}").strip() == "workmux", message="the sidebar stub does not read as workmux")
         return pane
 
-    def geometry(self) -> dict[str, Geometry]:
-        out = self.tmux("list-panes", "-t", self.window, "-F", GEOMETRY_FORMAT)
-        rows = {}
-        for line in out.splitlines():
-            pane, left, top, width, height = line.split()
-            rows[pane] = Geometry(left=int(left), top=int(top), width=int(width), height=int(height))
-        return rows
+    def geometry(self) -> dict[str, Pane]:
+        return {p.id: p for p in self.panes() if p.window == self.window}
 
     def tag_of(self, pane: str, /) -> str:
         return self.tmux("show-options", "-p", "-v", "-t", pane, "@s-stack-session").strip()

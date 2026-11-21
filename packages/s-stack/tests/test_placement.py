@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from launcher_case import Geometry, LauncherTestCase
+from launcher_case import Pane, LauncherTestCase
 
 
 class PlacementTests(LauncherTestCase):
@@ -11,14 +11,14 @@ class PlacementTests(LauncherTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.make_feature_worktree()
-        self.first = self.panes()[0]["id"]
+        self.first = self.panes()[0].id
         if self.sidebar:
             self.sidebar_pane = self.add_sidebar()
 
     def start(self, *args: str, name: str, env: dict[str, str] | None = None) -> str:
         return self.started(self.launch("--feature", "f", *args, "--window", self.window, env=env), name=name).pane
 
-    def assert_split(self, *, before: dict[str, Geometry], target: str, new: str) -> Geometry:
+    def assert_split(self, *, before: dict[str, Pane], target: str, new: str) -> Pane:
         """Only target was split: new is the one new pane and every other pane kept its id, size and position."""
         after = self.geometry()
         self.assertEqual(set(after) - set(before), {new})
@@ -128,7 +128,7 @@ class PlacementTests(LauncherTestCase):
                 self.assertEqual((result.returncode, result.stdout), (1, ""), result.stderr)
                 self.assertIn(f"no f-orchestrator pane in {self.window}", result.stderr)
                 self.assertEqual(self.geometry(), before)
-        self.assertEqual([c.args.split()[2] for c in self.claude_processes()], ["f-orchestrator"])
+        self.assertEqual(self.claude_processes(), self.named_claudes("f-orchestrator"))
 
     def test_a_resurrected_orchestrator_places_sessions_like_a_launched_one(self) -> None:
         orchestrator = self.split(target=self.first, flags=["-v"], command="claude --continue")

@@ -47,7 +47,7 @@ Expected answer:
 
 ### Status header matches C2
 
-The reference ships the feature plan's C2 with two kinds of change, both decided by the orchestrator (request `foundation-r1`, option A). This run's example values become placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. The code-head rule states the general command with only `.foundry/` excluded, a sentence to run it from the worktree root, and a sentence that a feature plan may name generated paths to exclude too. The check compares that code-head rule, whole, with the wording the orchestrator approved. Any other difference, such as a new or reworded rule, is a contract change and fails. The check reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. On a pull request branch or the default branch it prints `PENDING: .foundry/ is absent, so the feature plan's C2 cannot be read here` and exits `0`.
+The reference ships the feature plan's C2 with three kinds of change, all decided by the orchestrator. Request `foundation-r1`, option A, set the first two. Request `foundation-r2`, option A, added one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. This run's example values become placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. The code-head rule states the general command with only `.foundry/` excluded, a sentence to run it from the worktree root, and a sentence that a feature plan may name generated paths to exclude too. The check compares that code-head rule, whole, with the wording the orchestrator approved. Any other difference, such as a new or reworded rule, is a contract change and fails. The check reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. On a pull request branch or the default branch it prints `PENDING: .foundry/ is absent, so the feature plan's C2 cannot be read here` and exits `0`.
 
 ```bash
 python3 - <<'EOF'
@@ -75,6 +75,7 @@ placeholders = [
     ('base: "main"', 'base: "<default branch>"'),
     ("chore(s-stack)", "chore(<feature>)"),
     ("tracker at `status/orchestrator.md`", "tracker at `.foundry/plans/<id>/status/orchestrator.md`"),
+    ("cannot break the YAML.", "cannot break the YAML. Keep characters outside the Basic Multilingual Plane, such as emoji, out of header strings, because `json.dumps` writes them as surrogate pairs that a YAML reader does not join."),
 ]
 expected = []
 for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):

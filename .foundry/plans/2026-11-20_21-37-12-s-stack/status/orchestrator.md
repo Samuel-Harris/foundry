@@ -33,7 +33,7 @@ None.
 | 81 | `foundation` | merged into `main` as `d7e036c` | | |
 | 82 | `foundation` | merged into `main` as `e4a18d1` | | |
 | 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
-| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `main` | none; needs a refresh |
+| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `main` | none; rebuilt at `f54b7b8` |
 
 ## Merged phases
 
@@ -42,6 +42,7 @@ None.
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
 | `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
 | `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | VERIFIED on `0d1eb74` (no code change since `377dc78`) |
+| `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | running |
 
 ## Closed sessions
 

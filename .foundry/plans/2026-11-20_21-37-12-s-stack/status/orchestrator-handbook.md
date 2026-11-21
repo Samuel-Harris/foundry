@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T16:19:43Z"
+state: "Verify"
+changed_at: "2026-11-21T16:20:54Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "60e66c4203ece3b7a049358bdbb05eff9ab95f07"
+code_head: "cfb2bf33c907d6e835858487ded4fa238b7a362d"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -65,3 +65,5 @@ The first Review gate returned SIGNIFICANT at `e0a51a2`. The phase moved back to
 The review fixes and the `depends_on` instruction are at `fc9c6cd`, the lockfile was regenerated at `e4b6773`, and `s-stack-package` (`fbd548d`) was merged at `85df12d`. The phase moved to Verify at code head `fc9c6cd`.
 
 The third Verify gate returned VERIFIED at `60e66c4`. It named three gaps that would break a real run, so the phase moved back to Implement.
+
+The fixes are at `693d8b2`. `s-stack-package` (`fd342b4`, which brings `spec-planner-handbooks`) was merged at `cfb2bf3`, after a lockfile-only conflict that was resolved by taking the incoming lockfile and regenerating. The phase moved to Verify at code head `cfb2bf3`.

@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T16:03:22Z"
+state: "Verify"
+changed_at: "2026-11-21T16:03:52Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "08874f390fa5e43df00cb90946b113b92f1fb1e0"
+code_head: "a6652c758b48c78942e9054516463bb35075d180"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -37,4 +37,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Review returned CLEAR at `08874f3`, with minor findings only. The phase moved back to Implement to fix four of them in one last small round. Both gates then run again on the new code head.
+The review's minor findings are fixed at `a6652c7`, and `s-stack-package` is merged. A fresh verifier runs in full on the new code head. The review that follows covers the commits since `08874f3`.

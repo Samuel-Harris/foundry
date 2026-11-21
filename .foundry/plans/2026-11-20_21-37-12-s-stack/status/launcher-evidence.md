@@ -119,6 +119,20 @@ A fresh verifier ran with nothing committed. Its report, summarised:
   - It does not say how to make a macOS sidebar stub (codesign the copied `sleep`).
   - It still asks for the developer's server to have exactly its earlier sessions, not just none of the verifier's.
 
+## Review, code head `42d3ced56004988cc8e3db84280237636fc19491`, SIGNIFICANT
+
+p-stack's `interrogate` skill ran with adversaries on Opus and Fable. The Gemini seat was dropped, because this host has none. The phase session reran each finding below, and each reproduced. Repros are in the adversaries' worktrees under `.claude/worktrees/` in the main checkout.
+
+1. **Stale-lock takeover races.** A waiter can move aside a fresh lock that another launch has just taken. With a stale session lock and eight concurrent launches, two or three copies of one session started, and other launches exited 1 with `cannot record the holder`. With a stale window lock and six phase launches, several full-span columns opened, some 1 column wide. Found by Fable.
+2. **Start times depend on time zone and locale.** `ps -o lstart=` is formatted in the caller's time zone, and on macOS in its locale too. Two launches with different `TZ` or locale each misread the other's live lock as stale and both started the session. Found by both.
+3. **The first spec writer is duplicated after a hand resume.** Resumed by hand with `claude --continue` in its own tagged pane, it is not seen as alive, and a relaunch starts a second copy. Found by Opus.
+4. **Prompt helpers make an idle pane look busy.** A zsh helper such as gitstatusd gives the shell a background child at its prompt, so the pane counts as busy and every restart splits a new pane. Found by Opus.
+5. **A developer's command can still be killed.** `--close` kills a command the developer runs in the session's left-over pane. A restart kills a command started with `exec` in that pane. Found by Fable.
+
+Accepted, not a defect:
+
+- A developer pane spanning the full width under the orchestrator narrows with the full-span split, as `launcher-d11` accepted.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

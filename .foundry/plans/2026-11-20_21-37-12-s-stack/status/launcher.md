@@ -1,7 +1,7 @@
 ---
 phase: "launcher"
-state: "Review"
-changed_at: "2026-11-21T22:05:57Z"
+state: "Implement"
+changed_at: "2026-11-21T22:20:06Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
 code_head: "42d3ced56004988cc8e3db84280237636fc19491"
@@ -46,6 +46,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "42d3ced56004988cc8e3db84280237636fc19491"
     at: "2026-11-21T22:05:57Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "42d3ced56004988cc8e3db84280237636fc19491"
+    at: "2026-11-21T22:20:06Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - id: "launcher-r2"
@@ -113,6 +118,10 @@ decisions:
     decision: "Answer to launcher-r3, option A, from the orchestrator for every phase: a merge of s-stack-package or main whose diff against its first parent touches none of launcher's owned paths, apart from generated files, keeps the code head and verdicts. Each such merge and the paths it touched are recorded in the status notes."
     door: "two-way"
     at: "2026-11-21T21:52:03Z"
+  - id: "launcher-d15"
+    decision: "A pane counts as idle when its foreground process is a shell (pane_current_command is sh, bash, zsh, dash, fish, ksh, tcsh or csh). That replaces the no-child rule, so background prompt helpers do not make it busy and an exec'd command does. Restart reuse and --close both use it. A lock is a symlink whose target is the holder's PID and start time, read with LC_ALL=C TZ=UTC. A stale lock is removed only under a breaker lock, after the record is read again."
+    door: "two-way"
+    at: "2026-11-21T22:20:06Z"
 ---
 
 # Phase launcher status

@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Implement"
-changed_at: "2026-11-21T15:39:10Z"
+state: "Verify"
+changed_at: "2026-11-21T15:44:39Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "50e26eebaa31524a81e0cc00d99edf4bdad0e2dc"
+code_head: "f0542648c3b4372b8b8b4d05cb306c58ac8303a0"
 waits_for: null
 verdicts: []
 pull_requests: []
@@ -22,4 +22,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-The session started on 21 November 2026 on `s-stack-package` at `dcdda28`. The phase plan is committed at `phases/spec-planner-handbooks.md`, and the session is writing the two handbooks.
+The phase plan is `phases/spec-planner-handbooks.md`. Both handbooks are built, quick-review findings are fixed at `f054264`, and `s-stack-package` is merged at `3bb77e4`. The Verify gate is running.

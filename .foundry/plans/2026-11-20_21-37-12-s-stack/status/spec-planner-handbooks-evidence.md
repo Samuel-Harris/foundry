@@ -20,3 +20,21 @@ Verdict: VERIFIED. The verifier noted two small gaps, which the phase session fi
 ## Verify, code head `08874f390fa5e43df00cb90946b113b92f1fb1e0`
 
 A second fresh verifier ran the full skill again at HEAD `8d22ba0` and left the check file unchanged. Checks 1, 2, 3, 5, 7 and 8 passed. Check 4 is pending on the five handbooks other phases own, and check 6 is pending on the launcher's tests. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0, which the phase session confirmed in the log. All four Done-when items passed, and both cold reads matched their expected answers point by point. Verdict: VERIFIED. Minor note: in `planner.md` the sentence that gives every phase its own check file sits inside the "no existing verification skill" bullet.
+
+## Review, code head `08874f390fa5e43df00cb90946b113b92f1fb1e0`
+
+p-stack's `interrogate` skill ran with two adversaries, on Opus and on Fable, each in its own detached worktree at `08874f3`. Each got only the diff and the repository and was told not to read `.foundry/`. The configured Gemini seat is not available on this host. Neither adversary found a significant issue. Their cold reads covered roadmap updates, soft approvals, launcher failures, one-way doors, a typed developer instruction and a restart, and in every one the session acted correctly. The phase session reran each minor finding's command and confirmed it. Verdict: CLEAR.
+
+Minor findings fixed in the next code head:
+
+- The planner sent decision requests only after writing the plan.
+- The planner's record of a developer's answer lacked the door type and who decided.
+- Nothing stopped the planner sending `done-planning` while a request was open.
+- An update spec writer skipped the visibility check.
+- In the check file, the first cold read cites roadmap `workflow.md`, which never ships, and leaves out **Must not touch**. The next verifier fixes that.
+
+Findings dismissed, with reasons:
+
+- A restarted planner can still find answers. The orchestrator records each decision in `run-decisions.md` (roadmap `coordination.md`, tick step 5), and the planner reads that file after a restart.
+- The spec writer asks the developer directly and sends no decision request, as roadmap `roles.md` and `workflow.md` design it. The reference file still lists the spec writer as a sender, and that gap is with the orchestrator as a `foundation` follow-up.
+- Session names and branch names belong to the launcher.

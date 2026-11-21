@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Review"
-changed_at: "2026-11-21T15:58:31Z"
+state: "Implement"
+changed_at: "2026-11-21T16:03:22Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "08874f390fa5e43df00cb90946b113b92f1fb1e0"
@@ -16,6 +16,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "08874f390fa5e43df00cb90946b113b92f1fb1e0"
     at: "2026-11-21T15:58:31Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "08874f390fa5e43df00cb90946b113b92f1fb1e0"
+    at: "2026-11-21T16:03:22Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests: []
 requests: []
@@ -32,4 +37,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Verify passed at `08874f3`. The Review gate is running with p-stack's `interrogate` skill and two adversaries, on Opus and on Fable. The configured Gemini seat is not available on this host.
+Review returned CLEAR at `08874f3`, with minor findings only. The phase moved back to Implement to fix four of them in one last small round. Both gates then run again on the new code head.

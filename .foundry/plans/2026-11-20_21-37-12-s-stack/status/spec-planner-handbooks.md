@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Done"
-changed_at: "2026-11-21T17:59:48Z"
+state: "Implement"
+changed_at: "2026-11-21T23:05:25Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "6f70b3707c6c24f174c333817b3a17f37a5d9f63"
@@ -56,4 +56,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Done. Pull request 84 merged into `main` as `0531411`, and the orchestrator merged code head `6f70b37` into `s-stack-package`. Both handbooks and the check file are on `main`.
+A follow-up round from the orchestrator, after #84 merged. Cold read 1's expected point 5 is reworded so that a strict grader cannot fail an answer that also gives port 5432 to another phase under a stated assumption. `planner.md` does not change. `s-stack-package` is merged at `9533cf9`. That merge touched none of this phase's owned paths, so under `launcher-r3` the code head stays `6f70b37`.

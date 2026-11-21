@@ -62,11 +62,11 @@ Arm it with Claude Code's recurring scheduled task, every 20 minutes, off the ho
 Run the tick checklist in sam-mode's orchestrator handbook.
 ```
 
-Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip steps 2 and 3, and in step 4 merge only the frozen phase.
+Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip step 2 and the starts in step 3, and in step 4 merge only the frozen phase. Still replace stalled sessions.
 
 1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick.
 2. **Default branch.** If `origin/<default branch>` has moved since the tracker's commit, merge it as [Merging the default branch](#merging-the-default-branch) says. If any of its new commits came from one of the feature's pull requests, or changed a package that the feature's generated files depend on, run [When a feature pull request lands](#when-a-feature-pull-request-lands).
-3. **Start.** Start each phase whose dependencies are merged into the orchestrator branch and passed their post-merge check, and whose exclusive resources in the feature plan are free. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
+3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
 4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, so a failing post-merge check names one phase.
 5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
 6. **Record.** Update the tracker with the tick time, and commit it.
@@ -112,6 +112,7 @@ A pull request's checks do not run again when its base moves. Two pull requests 
 
 - Send its phase a `fix-round` marked generated files only. The phase brings its pull request up to date with the default branch and regenerates, without new gates.
 - Set its `needs_update` to true in the tracker and on the board.
+- While its `needs_update` is true, send another such `fix-round` each time the default branch moves.
 - Clear `needs_update` only when, after `git fetch origin`, `git merge-base --is-ancestor origin/<default branch> <pull request head SHA>` succeeds and every required check has passed on that head.
 
 A pull request is ready for the developer to merge only when its `needs_update` is false.
@@ -134,7 +135,7 @@ From the reconcile summary, and whenever a session reports `blocked`, find each 
 
 ## The status board
 
-Publish the board once for each feature from the template `assets/status-board.html`, with the `db` capability, and record its address in the tracker. Never publish it again. Update it only through its database with `ArtifactData`, in one batch per tick of at most 50 writes. The comment at the top of the template is the schema. Read it before your first write. When you publish, write a `phases` document for every phase in the feature plan, with `depends_on` taken from each phase's entry. Write `depends_on` again for each phase that a later `done-planning` changes. Every value comes from a status file, workmux's status or a pull request's live state. Write no free-text status.
+Publish the board once for each feature from the template `assets/status-board.html`, with the `db` capability, and record its address in the tracker. Never publish it again. Update it only through its database with `ArtifactData`, in one batch per tick of at most 50 writes. The comment at the top of the template is the schema. Read it before your first write. When the planner's first `done-planning` merges, write a `phases` document for every phase in the feature plan, with `depends_on` taken from each phase's entry. Write `depends_on` again for each phase that a later `done-planning` changes. Every value comes from a status file, workmux's status or a pull request's live state. Write no free-text status.
 
 ## The architecture page
 

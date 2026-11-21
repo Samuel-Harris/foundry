@@ -23,7 +23,7 @@ A merge of another branch is the one commit that may bring files under `.foundry
 
 ## Verdicts
 
-Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. The one exception is the verifier's own commit of its `## Evidence` results, which its verdict already covers. Never carry an old verdict forward because the change looks small.
+Compute the code head as the reference file says, with an exclude clause for each generated path the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small.
 
 ## Changing state
 
@@ -60,7 +60,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 1. Move to Verify.
 2. Start a fresh verifier subagent. Its brief gives the absolute path of `handbooks/verifier.md` in the skill directory you read this handbook from, the roadmap, the feature plan, your phase plan, the phase branch, the orchestrator branch and the verification skill. Give it no summary of how you built the phase.
 3. Wait for its report. When the verifier commits, its verdict names the code head that includes its commits.
-4. Record the verdict in `verdicts` and its evidence in `.foundry/plans/<id>/status/<phase>-evidence.md`.
+4. Record the verdict in `verdicts`, and the report's results, outputs and dates in `.foundry/plans/<id>/status/<phase>-evidence.md`. A `.foundry/`-only commit moves no code head.
 
 | Verdict | Next state |
 | --- | --- |

@@ -106,6 +106,52 @@ Each row shows `#number` linked to `url`, the title, the phase, the checks chip,
 
 A 30-second interval re-renders relative times and the stale state. It never writes.
 
+### Dependency map (added by `board-d4`)
+
+The developer asked, through the orchestrator, for a dependency map of the phases. The orchestrator recorded the C5 change in `run-decisions.md` on 21 November. Each `phases` document gains one field:
+
+| Field | Type |
+| --- | --- |
+| `depends_on` | A list of `{phase, until}` objects. `phase` is a phase id. `until` is `"merged"` (the dependency must be merged into the orchestrator branch) or `"done"` (every pull request of the dependency must be merged into the default branch). A phase with no dependencies has `[]`. |
+
+The schema comment gains this field under `phases/<phase id>`, worded for a cold reader with no access to this plan.
+
+**Where it goes.** Inside the Phases section, directly after the Phases table, under a small subheading "Dependency map" (an `<h3>`, so the six `<h2>` sections and their order stay unchanged). It is drawn only when at least one phase has a non-empty `depends_on`. Otherwise it is left out, and the table's Depends on column reads "none" for every row.
+
+**The Phases table gains a column.** "Depends on", between "Waits for" and "Session", listing each entry as `<phase> (merged)` or `<phase> (done)`, comma-separated, or "none". It is the readable equivalent of the map, so everything the map shows can be read on a phone without scrolling the diagram, and by a screen reader.
+
+**Data shape.**
+
+```js
+// nodes: one per phase document, plus one per depends_on id with no phases document
+// edges: {from: depId, to: phaseId, until: "merged" | "done"}; entries with another until value are dropped
+// layer(p) = 0 when p has no edges in, else 1 + max(layer(from)) over its edges in
+```
+
+The layer is computed by a depth-first walk with an in-progress set. An edge that would close a cycle is ignored for layering and still drawn. A `depends_on` value that is not a list, an entry that is not an object, or a `phase` that is not a string is skipped. An id with no `phases` document becomes a node with the state "unknown", drawn like an unknown state.
+
+**Layout.** Layers run left to right, one column per layer. Nodes within a column are sorted by phase id and stacked top to bottom, and each column is centred vertically. Constants: node 168 × 44 units, column gap 56, row gap 12, padding 12. The label is the phase id in the mono face at 12 px, cut to 20 characters with "…" when longer, with the full id in an SVG `<title>`. A second line in the text face at 11 px names the state. Colour is never the only signal.
+
+**Edges.** A cubic Bézier from the right middle of the source to the left middle of the target. `until: "merged"` is a solid line. `until: "done"` is a dashed line (`stroke-dasharray: 5 4`). Each ends in an arrowhead marker. An edge that skips one or more layers would cross the nodes between, so it is routed through a lane above every node. The SVG adds 24 units of top padding for the lane when any such edge exists. The two control points sit at the lane's height, at the source's and target's x.
+
+**Node colour by state.** Drawn with CSS classes on the node `<rect>`, using theme tokens only, so both themes work:
+
+| State | Fill | Stroke |
+| --- | --- | --- |
+| Spec, Plan | `--chip-bg` | `--line` |
+| Implement | an accent tint, new token `--accent-bg` | `--accent` |
+| Verify, Review | `--warn-bg` | `--warn` |
+| PR, Done | `--good-bg` | `--good` |
+| unknown, or a value outside the seven names | `--crit-bg` | `--crit` |
+
+`--accent-bg` is defined on bare `:root` and in both dark blocks, like every token.
+
+**Size and phone.** The SVG is drawn at natural size (`width` and `height` attributes equal to the viewBox) inside a `<div class="map">` with `overflow-x: auto` and `max-width: 100%`. The page contract allows a diagram to scroll inside its own container. The page body never scrolls sideways. For this run's data (three layers) the diagram is about 650 units wide, so a phone shows two columns and the developer swipes inside the map. A one-line legend under the map reads "Solid line: needed merged into the orchestrator branch. Dashed line: needed with every pull request merged into the default branch."
+
+**Build.** `document.createElementNS("http://www.w3.org/2000/svg", ...)` for every element, and `textContent` for every label. No data reaches `innerHTML` or an attribute other than `class`, `x`, `y`, `width`, `height`, `d`, `transform` and `marker-end`, all numeric or fixed except the class, which comes from a fixed state-to-class table.
+
+**Rejected for the map.** Scaling the SVG to the container width: at 400 px this run's diagram shrinks to about 0.55, so 12 px labels fall to about 7 px. Layers running top to bottom: six middle phases in one row need about 1,100 units, which is worse. A graph library: a CDN dependency for some 80 lines of layout.
+
 ### Loading, absence and errors
 
 - `await claude.use("db")` resolving `null` shows one notice in place of the sections: "This board reads its data from the page's database, which this view cannot open. Open the board in Claude." No other script runs.
@@ -138,6 +184,7 @@ A utilitarian treatment. Inter for text and JetBrains Mono for numbers, ids, pan
 | `board-d1` | The template has no `<title>`. The schema comment tells the orchestrator to publish with `title: "<feature> status board"`, and the script sets `document.title` from `meta.feature` for the tab. | Two-way |
 | `board-d2` | The page declares only `db`, with the root rule `read: "view", write: "admin"`, and never writes. | Two-way |
 | `board-d3` | Ready for your review lists only `draft` pull requests, as C5 says. A pull request the developer marked ready leaves that list and stays in Pull requests. | Two-way |
+| `board-d4` | The developer's instruction, relayed by the orchestrator: add a dependency map of the phases from a new `depends_on` field. See [Dependency map](#dependency-map-added-by-board-d4). | Two-way |
 
 ## Blast radius
 
@@ -185,3 +232,6 @@ The feature plan's four **Done when** items for `board`, plus these:
 - [ ] The schema comment matches C5 field for field, and a fresh subagent given only the template's comment can write a valid first `ArtifactData` batch for a two-phase feature.
 - [ ] No data value reaches `innerHTML`: `grep -n innerHTML` on the template finds no line that assigns data.
 - [ ] `apm audit --ci` passes in `packages/s-stack` on the committed, relativised lockfile.
+- [ ] With this run's eight phases (`foundation` with `[]`, the six middle phases each with `foundation` until `merged`, `default-stack` with the other seven until `done`), the map shows three columns. The seven edges into `default-stack` are dashed, and the six from `foundation` into the middle phases are solid. The `foundation` to `default-stack` edge runs through the top lane and crosses no node. Every node names its state. The page body has no horizontal scroll at 400 px in light and dark.
+- [ ] A `depends_on` naming a phase with no document draws an "unknown" node, and a cycle renders without hanging.
+- [ ] The verifier extends `checks/board.md`'s `## Rerun` with the map cases above, and the published test page gains `depends_on` rows.

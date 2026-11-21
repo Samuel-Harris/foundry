@@ -49,7 +49,7 @@ One-off checks. Each touches something outside a unit test, such as the real `cl
 
 ### Mutations
 
-Apply each change to `launch.sh`, run the unit suite, and restore the file with `git checkout --`. Use at least these: add `tmux select-layout tiled` after the split; make liveness never match; drop the session lock; drop `--resume`; put a planner or phase session in the orchestrator's column; split the workmux sidebar.
+Apply each change to `launch.sh`, run the unit suite, and restore the file with `git checkout --`. Use at least these: add `tmux select-layout tiled` after the split; make liveness never match; drop the session lock; drop `--resume`; put a planner or phase session in the orchestrator's column; split the workmux sidebar; drop the window placement lock; measure a zoomed window without unzooming it; skip the re-zoom when the split fails; never reuse a session's own idle pane.
 
 It passes when every mutation makes at least one named test fail and the unmutated suite passes.
 

@@ -1,0 +1,573 @@
+<!--
+Status board template for one s-stack feature. This comment is the one home
+of the board's data schema and of the publish call that goes with it; other
+documents point here instead of copying it.
+
+PUBLISHING
+
+Publish this file once per feature with the Artifact tool, and never publish
+it again. Every later change goes into the page's database. Pass:
+
+  capabilities: {db: {rules: [{path: "", read: "view", write: "admin"}]}}
+  icon: "status"
+  title: "<feature> status board"
+
+The file has no <title> element on purpose, so the gallery takes the publish
+title. The page sets the browser tab's title from board/meta.feature. The page
+never writes. Only an editor writes, through ArtifactData, and every viewer
+reads.
+
+DOCUMENTS
+
+A time is a UTC ISO 8601 string, such as "2026-01-31T09:05:00Z". A state name
+is one of the seven names Spec, Plan, Implement, Verify, Review, PR and Done.
+
+board/meta, one document:
+  feature              string, the feature's name
+  orchestrator_branch  string
+  default_branch       string
+  architecture_url     https URL of the architecture page, or null
+  tick_at              time of the orchestrator's last tick
+  stale_after_min      number, normally 40. The page marks itself stale when
+                       tick_at is more than this many minutes old, and uses
+                       40 when the field is absent.
+
+board/recent, one document:
+  items  list of at most 20 {at, phase, from, to} objects, newest first. at is
+         a time, phase is a phase id, from and to are state names, and from is
+         null for a phase's first state.
+
+phases/<phase id>, one document per phase:
+  phase         string, the phase id, equal to the document id
+  state         a state name
+  scheduling    "queued", "blocked", "live" or "closed"
+  waits_for     string naming what the phase waits for, or null
+  session_live  boolean, true while the phase's session runs
+  pane          string naming the session's pane, or null
+  changed_at    time of the phase's last state change
+
+prs/<number>, one document per pull request, its document id the number
+written as a string, such as prs/42:
+  number        number
+  url           https URL of the pull request
+  title         string
+  phase         string, the phase id
+  state         "draft", "open", "merged" or "closed"
+  checks        "passing", "failing", "pending" or "none"
+  base          string, the base branch
+  depends_on    list of pull request numbers, empty when there are none
+  review_rank   number, the lowest reviewed first, or null
+  needs_update  boolean, explained below
+
+needs/<id>, one document per item waiting on the developer, its document id
+chosen by the orchestrator:
+  kind     "decision", "prompt" or "restack"
+  phase    string, the phase id
+  summary  string, one line
+  door     "one-way", "two-way" or null
+  pane     string naming the pane that shows a waiting prompt, or null
+  since    time the item started waiting
+
+WRITING
+
+Write once per tick, as one ArtifactData batch of at most 50 writes that holds
+only the documents that changed. Keep recent as one document: replace its
+items with the new list, trimmed to 20. When a needs item is resolved, delete
+its document rather than flag it.
+
+needs_update is true until the pull request contains the default branch's tip
+and its checks have passed on that head.
+-->
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* One narrow column: header, notices, then six sections split by hairlines. */
+  :root {
+    --bg: #f5f7fa;
+    --fg: #1a2130;
+    --muted: #5a6476;
+    --line: #dbe0e8;
+    --accent: #3b5788;
+    --chip-bg: #e9edf3;
+    --chip-fg: #374255;
+    --good: #1c6e46;
+    --good-bg: #ddf1e5;
+    --warn: #7d5300;
+    --warn-bg: #f9ecd0;
+    --crit: #a82418;
+    --crit-bg: #fbe4e1;
+    --font-text: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10141b;
+      --fg: #e2e6ed;
+      --muted: #98a2b3;
+      --line: #29303c;
+      --accent: #92acd8;
+      --chip-bg: #1e242f;
+      --chip-fg: #c2c9d5;
+      --good: #74d3a0;
+      --good-bg: #16352a;
+      --warn: #e9b95e;
+      --warn-bg: #3a2c12;
+      --crit: #ff8f85;
+      --crit-bg: #45201c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10141b;
+    --fg: #e2e6ed;
+    --muted: #98a2b3;
+    --line: #29303c;
+    --accent: #92acd8;
+    --chip-bg: #1e242f;
+    --chip-fg: #c2c9d5;
+    --good: #74d3a0;
+    --good-bg: #16352a;
+    --warn: #e9b95e;
+    --warn-bg: #3a2c12;
+    --crit: #ff8f85;
+    --crit-bg: #45201c;
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.5 var(--font-text);
+  }
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding-block: 24px 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 28px;
+  }
+  .sections { display: grid; gap: 28px; min-width: 0; }
+  .mono, time, .num { font-family: var(--font-mono); font-size: 0.92em; }
+  time, .num, .count { font-variant-numeric: tabular-nums; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  header { display: grid; gap: 6px; }
+  h1 { margin: 0; font-size: 1.5rem; font-weight: 600; line-height: 1.25; text-wrap: balance; overflow-wrap: anywhere; }
+  .meta-line { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); font-size: 0.9rem; }
+  .meta-line > * { min-width: 0; overflow-wrap: anywhere; }
+
+  .banner, .notice {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.92rem;
+  }
+  .banner { background: var(--crit-bg); color: var(--crit); font-weight: 500; }
+  .notice { background: var(--warn-bg); color: var(--warn); }
+
+  section { display: grid; gap: 10px; padding-top: 20px; border-top: 1px solid var(--line); min-width: 0; }
+  .section-head { display: flex; align-items: baseline; gap: 10px; }
+  h2 { margin: 0; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .empty { margin: 0; color: var(--muted); }
+  .section-error { margin: 0; color: var(--crit); font-size: 0.9rem; }
+
+  .chip {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--chip-bg);
+    color: var(--chip-fg);
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+  .chip.good { background: var(--good-bg); color: var(--good); }
+  .chip.warn { background: var(--warn-bg); color: var(--warn); }
+  .chip.crit { background: var(--crit-bg); color: var(--crit); }
+
+  ul.items { list-style: none; margin: 0; padding: 0; display: grid; }
+  ul.items > li { display: grid; gap: 4px; padding-block: 10px; border-bottom: 1px solid var(--line); min-width: 0; }
+  ul.items > li:last-child { border-bottom: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; min-width: 0; }
+  .row > * { min-width: 0; overflow-wrap: anywhere; }
+  .summary { overflow-wrap: anywhere; }
+  .sub { color: var(--muted); font-size: 0.88rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th { text-align: left; font-weight: 500; color: var(--muted); font-size: 0.8rem; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); }
+  td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
+  tr:last-child td { border-bottom: 0; }
+  @media (max-width: 600px) {
+    table, tbody, tr, td { display: block; }
+    thead { display: none; }
+    tr { padding-block: 8px; border-bottom: 1px solid var(--line); }
+    tr:last-child { border-bottom: 0; }
+    td { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); justify-items: start; gap: 8px; padding: 3px 0; border: 0; }
+    td::before { content: attr(data-label); color: var(--muted); font-size: 0.8rem; }
+  }
+
+  ol.recent { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  ol.recent > li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; }
+  .heartbeat { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+</style>
+
+<div class="page">
+  <header>
+    <h1 id="feature">Status board</h1>
+    <div class="meta-line" id="meta-line"></div>
+    <div class="banner" id="stale-banner" hidden></div>
+  </header>
+  <div class="notice" id="notice" hidden></div>
+  <main id="sections" class="sections">
+    <section id="s-needs"></section>
+    <section id="s-review"></section>
+    <section id="s-prs"></section>
+    <section id="s-phases"></section>
+    <section id="s-recent"></section>
+    <section id="s-heartbeat"></section>
+  </main>
+</div>
+
+<script>
+(() => {
+  const STATE_NAMES = ["Spec", "Plan", "Implement", "Verify", "Review", "PR", "Done"];
+  const NEED_KINDS = ["decision", "prompt", "restack"];
+  const DEFAULT_STALE_MIN = 40;
+  const MINUTE = 60000;
+
+  const state = {
+    meta: null,
+    recent: null,
+    phases: [],
+    prs: [],
+    needs: [],
+    loaded: {meta: false, recent: false, phases: false, prs: false, needs: false},
+    errors: {},
+  };
+  const confirmed = new Set();
+  let unreachable = false;
+  let unreachableTimer;
+
+  const $ = (id) => document.getElementById(id);
+
+  function el(tag, attrs, ...children) {
+    const node = document.createElement(tag);
+    for (const [key, value] of Object.entries(attrs || {})) {
+      if (key === "class") node.className = value;
+      else node.setAttribute(key, value);
+    }
+    for (const child of children) {
+      if (child == null || child === false) continue;
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    }
+    return node;
+  }
+
+  const str = (v) => (typeof v === "string" ? v : typeof v === "number" ? String(v) : "");
+  const isObj = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
+  const chip = (text, tone) => el("span", {class: tone ? "chip " + tone : "chip"}, text);
+
+  function link(text, url) {
+    if (typeof url === "string" && url.startsWith("https://")) {
+      return el("a", {href: url, target: "_blank", rel: "noopener noreferrer"}, text);
+    }
+    return el("span", {}, text);
+  }
+
+  function parseTime(v) {
+    if (typeof v !== "string") return null;
+    const ms = Date.parse(v);
+    return Number.isNaN(ms) ? null : ms;
+  }
+
+  function formatAge(ms) {
+    const min = Math.max(0, Math.floor(ms / MINUTE));
+    if (min < 60) return min + " min";
+    const h = Math.floor(min / 60);
+    if (h < 48) return h + " h " + (min % 60) + " min";
+    return Math.floor(h / 24) + " d " + (h % 24) + " h";
+  }
+
+  function timeEl(v, mode) {
+    const ms = parseTime(v);
+    if (ms === null) return el("span", {class: "mono"}, str(v) || "unknown");
+    const local = new Date(ms).toLocaleString(undefined, {dateStyle: "medium", timeStyle: "short"});
+    const text = mode === "relative" ? formatAge(Date.now() - ms) + " ago" : local;
+    return el("time", {datetime: new Date(ms).toISOString(), title: local}, text);
+  }
+
+  const numbers = (v) => (Array.isArray(v) ? v.filter((n) => typeof n === "number") : []);
+  const prLabel = (n) => "#" + n;
+
+  function checksChip(checks) {
+    const tone = {passing: "good", pending: "warn", failing: "crit"}[checks];
+    return chip(str(checks) || "none", tone);
+  }
+  const updateChip = (pr) => (pr.needs_update === true ? chip("Needs update", "warn") : chip("Up to date", "good"));
+
+  function phaseStateChip(s) {
+    if (!STATE_NAMES.includes(s)) return chip("unknown: " + str(s), "crit");
+    return chip(s, s === "PR" || s === "Done" ? "good" : "");
+  }
+
+  function byRankThenNumber(a, b) {
+    const ra = typeof a.review_rank === "number" ? a.review_rank : Infinity;
+    const rb = typeof b.review_rank === "number" ? b.review_rank : Infinity;
+    if (ra !== rb) return ra < rb ? -1 : 1;
+    return (Number(a.number) || 0) - (Number(b.number) || 0);
+  }
+
+  // A dependency cycle falls back to rank order, so no draft drops off the list.
+  function reviewOrder(prs) {
+    const unmerged = new Set(prs.filter((p) => p.state !== "merged").map((p) => p.number));
+    const remaining = prs.filter((p) => p.state === "draft").sort(byRankThenNumber);
+    const inList = new Set(remaining.map((p) => p.number));
+    const emitted = new Set();
+    const ordered = [];
+    while (remaining.length) {
+      const next = remaining.findIndex((p) =>
+        numbers(p.depends_on).every((n) => !unmerged.has(n) || !inList.has(n) || emitted.has(n)));
+      if (next === -1) {
+        ordered.push(...remaining);
+        break;
+      }
+      const [pr] = remaining.splice(next, 1);
+      emitted.add(pr.number);
+      ordered.push(pr);
+    }
+    return {ordered, unmerged};
+  }
+
+  function staleness() {
+    const meta = state.meta || {};
+    const limit = typeof meta.stale_after_min === "number" ? meta.stale_after_min : DEFAULT_STALE_MIN;
+    const tick = parseTime(meta.tick_at);
+    if (tick === null) return {stale: true, age: null};
+    const age = Date.now() - tick;
+    return {stale: age > limit * MINUTE, age};
+  }
+
+  function sectionShell(id, title, count) {
+    const section = $(id);
+    section.replaceChildren(el("div", {class: "section-head"},
+      el("h2", {}, title),
+      count == null ? null : el("span", {class: "count"}, String(count))));
+    return section;
+  }
+
+  function sourceStatus(section, source) {
+    const code = state.errors[source];
+    if (code) {
+      section.append(el("p", {class: "section-error"},
+        "This section stopped updating (" + code + "). Reload the page to try again."));
+    }
+    if (!state.loaded[source]) {
+      if (!code) section.append(el("p", {class: "empty"}, "Loading."));
+      return false;
+    }
+    return true;
+  }
+
+  function table(columns, rows) {
+    return el("table", {},
+      el("thead", {}, el("tr", {}, ...columns.map((c) => el("th", {scope: "col"}, c)))),
+      el("tbody", {}, ...rows.map((cells) =>
+        el("tr", {}, ...cells.map((cell, i) => el("td", {"data-label": columns[i]}, cell))))));
+  }
+
+  function renderHeader() {
+    const meta = state.meta || {};
+    const feature = str(meta.feature);
+    $("feature").textContent = feature || "Status board";
+    document.title = feature ? feature + " status board" : "Status board";
+    const line = $("meta-line");
+    line.replaceChildren();
+    if (str(meta.orchestrator_branch)) line.append(el("span", {}, "orchestrator ", el("span", {class: "mono"}, str(meta.orchestrator_branch))));
+    if (str(meta.default_branch)) line.append(el("span", {}, "default ", el("span", {class: "mono"}, str(meta.default_branch))));
+    if (typeof meta.architecture_url === "string" && meta.architecture_url.startsWith("https://")) {
+      line.append(link("Architecture", meta.architecture_url));
+    }
+
+    const banner = $("stale-banner");
+    const {stale, age} = staleness();
+    banner.hidden = !(state.loaded.meta && stale);
+    if (age === null) banner.textContent = "The orchestrator has not recorded a readable tick yet.";
+    else banner.textContent = "The orchestrator has not ticked for " + Math.floor(age / MINUTE) + " minutes.";
+  }
+
+  function renderNeeds() {
+    const kindRank = (k) => (NEED_KINDS.includes(k) ? NEED_KINDS.indexOf(k) : NEED_KINDS.length);
+    const sinceKey = (n) => parseTime(n.since) ?? Infinity;
+    const needs = state.needs.slice().sort((a, b) => kindRank(a.kind) - kindRank(b.kind) || sinceKey(a) - sinceKey(b));
+    const section = sectionShell("s-needs", "Needs you", state.loaded.needs ? needs.length : null);
+    if (!sourceStatus(section, "needs")) return;
+    if (!needs.length) return section.append(el("p", {class: "empty"}, "Nothing needs you."));
+    section.append(el("ul", {class: "items"}, ...needs.map((n) => {
+      const since = parseTime(n.since);
+      const waiting = since === null ? "since " + (str(n.since) || "unknown") : "waiting " + formatAge(Date.now() - since);
+      return el("li", {},
+        el("div", {class: "row"},
+          chip(str(n.kind) || "unknown"),
+          n.kind === "decision" && str(n.door) ? chip(str(n.door), n.door === "one-way" ? "crit" : "") : null,
+          el("span", {class: "mono"}, str(n.phase)),
+          el("span", {class: "sub num"}, waiting)),
+        el("div", {class: "summary"}, str(n.summary)),
+        n.kind === "prompt" && str(n.pane) ? el("div", {class: "sub"}, "pane ", el("span", {class: "mono"}, str(n.pane))) : null);
+    })));
+  }
+
+  function renderReview() {
+    const {ordered, unmerged} = reviewOrder(state.prs);
+    const section = sectionShell("s-review", "Ready for your review", state.loaded.prs ? ordered.length : null);
+    if (!sourceStatus(section, "prs")) return;
+    if (!ordered.length) return section.append(el("p", {class: "empty"}, "No draft pull requests yet."));
+    section.append(el("ul", {class: "items", id: "review-list"}, ...ordered.map((p) => {
+      const after = numbers(p.depends_on).filter((n) => unmerged.has(n));
+      return el("li", {"data-number": str(p.number)},
+        el("div", {class: "row"},
+          el("span", {class: "num"}, link(prLabel(str(p.number)), p.url)),
+          el("span", {class: "summary"}, str(p.title))),
+        el("div", {class: "row"},
+          el("span", {class: "mono sub"}, str(p.phase)),
+          checksChip(p.checks),
+          updateChip(p),
+          after.length ? el("span", {class: "sub num"}, "after " + after.map(prLabel).join(", ")) : null));
+    })));
+  }
+
+  function renderPrs() {
+    const prs = state.prs.slice().sort((a, b) => (Number(a.number) || 0) - (Number(b.number) || 0));
+    const section = sectionShell("s-prs", "Pull requests", state.loaded.prs ? prs.length : null);
+    if (!sourceStatus(section, "prs")) return;
+    if (!prs.length) return section.append(el("p", {class: "empty"}, "No pull requests yet."));
+    const deps = (p) => numbers(p.depends_on);
+    section.append(table(
+      ["Number", "Title", "Phase", "State", "Checks", "Base", "Depends on", "Update"],
+      prs.map((p) => [
+        el("span", {class: "num"}, link(prLabel(str(p.number)), p.url)),
+        str(p.title),
+        el("span", {class: "mono"}, str(p.phase)),
+        chip(str(p.state) || "unknown", p.state === "merged" ? "good" : ""),
+        checksChip(p.checks),
+        el("span", {class: "mono"}, str(p.base)),
+        el("span", {class: "num"}, deps(p).length ? deps(p).map(prLabel).join(", ") : "none"),
+        updateChip(p),
+      ])));
+  }
+
+  function renderPhases() {
+    const phases = state.phases.slice().sort((a, b) => str(a.phase).localeCompare(str(b.phase)));
+    const section = sectionShell("s-phases", "Phases", state.loaded.phases ? phases.length : null);
+    if (!sourceStatus(section, "phases")) return;
+    if (!phases.length) {
+      return section.append(el("p", {class: "empty"}, "No phases yet. The orchestrator adds them once the feature plan exists."));
+    }
+    section.append(table(
+      ["Phase", "State", "Scheduling", "Waits for", "Session", "Last change"],
+      phases.map((p) => [
+        el("span", {class: "mono"}, str(p.phase)),
+        phaseStateChip(p.state),
+        str(p.scheduling),
+        str(p.waits_for) || "nothing",
+        p.session_live === true
+          ? (str(p.pane) ? el("span", {}, "live in pane ", el("span", {class: "mono"}, str(p.pane))) : "live")
+          : "not live",
+        timeEl(p.changed_at, "relative"),
+      ])));
+  }
+
+  function renderRecent() {
+    const items = isObj(state.recent) && Array.isArray(state.recent.items) ? state.recent.items.filter(isObj).slice(0, 20) : [];
+    const section = sectionShell("s-recent", "Recent changes", state.loaded.recent ? items.length : null);
+    if (!sourceStatus(section, "recent")) return;
+    if (!items.length) return section.append(el("p", {class: "empty"}, "No state changes yet."));
+    section.append(el("ol", {class: "recent"}, ...items.map((item) =>
+      el("li", {},
+        timeEl(item.at, "absolute"),
+        el("div", {class: "row"},
+          el("span", {class: "mono"}, str(item.phase)),
+          el("span", {}, (str(item.from) ? str(item.from) + " → " : "→ ") + str(item.to)))))));
+  }
+
+  function renderHeartbeat() {
+    const section = sectionShell("s-heartbeat", "Heartbeat", null);
+    if (!sourceStatus(section, "meta")) return;
+    const {stale} = staleness();
+    const tickAt = state.meta && state.meta.tick_at;
+    const status = stale ? chip("Stale", "crit") : chip("Fresh", "good");
+    if (tickAt == null) return section.append(el("div", {class: "heartbeat"}, status, el("span", {class: "empty"}, "No tick recorded yet.")));
+    const tick = parseTime(tickAt);
+    section.append(el("div", {class: "heartbeat"},
+      status,
+      el("span", {}, "last tick ", timeEl(tickAt, "absolute")),
+      tick === null ? null : el("span", {class: "sub num"}, formatAge(Date.now() - tick) + " ago")));
+  }
+
+  function render() {
+    renderHeader();
+    renderNeeds();
+    renderReview();
+    renderPrs();
+    renderPhases();
+    renderRecent();
+    renderHeartbeat();
+    const notice = $("notice");
+    notice.hidden = !unreachable;
+    notice.textContent = "The board's data can't be reached yet. What is shown may be out of date.";
+  }
+
+  const SOURCES = {
+    meta: (db) => db.doc("board/meta"),
+    recent: (db) => db.doc("board/recent"),
+    phases: (db) => db.collection("phases"),
+    prs: (db) => db.collection("prs"),
+    needs: (db) => db.collection("needs"),
+  };
+
+  function settled(source) {
+    confirmed.add(source);
+    if (Object.keys(SOURCES).every((s) => confirmed.has(s))) {
+      clearTimeout(unreachableTimer);
+      unreachable = false;
+    }
+  }
+
+  async function start() {
+    render();
+    const db = window.claude ? await window.claude.use("db") : null;
+    if (!db) {
+      $("sections").hidden = true;
+      const notice = $("notice");
+      notice.hidden = false;
+      notice.textContent = "This board reads its data from the page's database, which this view cannot open. Open the board in Claude.";
+      return;
+    }
+    unreachableTimer = setTimeout(() => {
+      unreachable = true;
+      render();
+    }, 10000);
+    for (const [source, ref] of Object.entries(SOURCES)) {
+      ref(db).onSnapshot((snap) => {
+        if ("docs" in snap) state[source] = snap.docs.map((d) => d.data()).filter(isObj);
+        else state[source] = snap.exists ? snap.data() : null;
+        state.loaded[source] = true;
+        if (!snap.metadata.fromCache) settled(source);
+        render();
+      }, (error) => {
+        state.errors[source] = str(error && error.code) || "unavailable";
+        settled(source);
+        render();
+      });
+    }
+    setInterval(render, 30000);
+  }
+
+  start();
+})();
+</script>

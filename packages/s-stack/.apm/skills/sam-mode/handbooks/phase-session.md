@@ -93,8 +93,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 | `answer` | Record the outcome in `decisions`, commit, and continue the work that waited. |
 | `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. |
 | `merge-orchestrator-branch` | Merge as in [Merge the orchestrator branch](#merge-the-orchestrator-branch), once nothing is half done. If the merge moved the code head and the phase was in Verify or later, move back to Implement. If the code head did not move, the phase keeps its state and its verdicts. |
-| `fix-round` | Run the fix round below that matches it. |
-| `restack` | Start a PR creator to make the change. The phase stays in PR. |
+| `fix-round` | Run the fix round below that matches it. In every fix round, the PR creator works out each pull request's base again, as `pr-creator.md` says. |
 | `move-back` | Move back as in [Moving back](#moving-back). |
 | `stop` | Commit unfinished code to the planned pull request it belongs to, then commit your status file, then end your turn. A fresh session may continue later from the phase plan and the status file. |
 
@@ -107,7 +106,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 3. Start a PR creator to carry the fix commits to the pull request branch that owns each one.
 4. Move to PR and report. The orchestrator merges the phase branch again.
 
-**Generated files only.** A pull request of another phase has landed on the default branch, and your pull requests' generated files are stale. Start a PR creator to merge the default branch into each of your pull request branches and to add a new regenerate commit, as `pr-creator.md` says. The phase branch does not change, so the phase stays in PR and no gate runs again.
+**A pull request merged elsewhere.** A pull request yours depend on has merged, or another phase's pull request has landed on the default branch and left your generated files stale. Start a PR creator to refresh each of your pull request branches, as `pr-creator.md` says. The phase branch does not change, so the phase stays in PR and no gate runs again.
 
 **A conflict with the default branch.** The message names the conflicting paths, which you own, and the default branch commit. Move back to Implement, merge that commit into the phase branch, resolve the conflict in your own paths, and pass both gates again before you report.
 

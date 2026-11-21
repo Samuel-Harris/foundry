@@ -50,7 +50,7 @@ The phase leaves Implement when the plan is built and committed, and every layer
 
 ## Merge the orchestrator branch
 
-Before you move to Verify, merge the current orchestrator branch into the phase branch. Verification then covers your phase together with every phase merged so far. Use the merge procedure the feature plan gives, if it gives one.
+Before you move to Verify, merge the current orchestrator branch into the phase branch with `git merge --no-ff`. A fast-forward would put the orchestrator's own merges on the phase's first-parent line, and the review scope would then take them for the phase's work. Verification then covers your phase together with every phase merged so far. Use the merge procedure the feature plan gives, if it gives one.
 
 - Resolve a conflict only in your owned paths or in generated files that the feature plan tells you to regenerate.
 - A conflict in a file another phase owns is not yours. Abort the merge, send a `blocked` message that names the file, and wait.
@@ -82,7 +82,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 ## PR
 
 1. Move to PR once the reference file's merge rule holds for the current code head.
-2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When the phase's pull requests are already open, the PR creator carries the new commits to them, as in [Fix rounds](#fix-rounds), and opens no new ones.
+2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). It opens a new pull request only for commits that the phase plan assigns to a new one.
 3. Record each pull request in `pull_requests`, then send `prs-open` with each number and its `depends_on` list.
 4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done.
 

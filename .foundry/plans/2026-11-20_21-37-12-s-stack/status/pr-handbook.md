@@ -1,10 +1,10 @@
 ---
 phase: "pr-handbook"
-state: "Verify"
-changed_at: "2026-11-21T16:32:39Z"
+state: "Review"
+changed_at: "2026-11-21T16:38:32Z"
 session: "s-stack-phase-pr-handbook"
 branch: "s-stack-phase-pr-handbook"
-code_head: "25e6ef4b438b5091d0f3368fd9e7fb3d93eb017b"
+code_head: "412a91d852ac3d59e38fa95a6aa366d5e59a3e91"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -21,6 +21,11 @@ verdicts:
     result: "NOT VERIFIED"
     code_head: "d7efc941b0d361189e023ccb4846dfca78c5c186"
     at: "2026-11-21T16:31:44Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/pr-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "412a91d852ac3d59e38fa95a6aa366d5e59a3e91"
+    at: "2026-11-21T16:38:32Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/pr-handbook-evidence.md"
 pull_requests: []
 requests: []
@@ -49,7 +54,7 @@ decisions:
 
 # Phase `pr-handbook` status
 
-The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/pr-handbook.md`. Implement is complete. `2fbf1cd` added the handbook. `27785f0` added a merge check to the equality proof and corrected why `gh stack submit` is not used. `quick-review` then found four defects in the merge and binary handling, and `589411b` fixed them, with every scratch case rerun from the handbook's own commands. `391d9a8` reorders one sentence. The handbook is 185 lines. `s-stack-package` was merged at `e69b6ee`, bringing only `.foundry/` changes. The first Verify gate returned NOT VERIFIED at `a42cd47`, the verifier's check-file commit: `git diff-tree --quiet` without `-r` breaks the carry loop and the proof on a commit that changes only a nested lockfile. `f66ec2c` adds `-r` to both checks, and the check file's Rerun block then printed `0 failed`. The second Verify gate returned NOT VERIFIED at `e5f37b8`, the verifier's extended check file: an add/add conflict on a squash-merged parent's new `apm.yml` stages an empty file, and the proof is path-relative when run from a subdirectory. `3b89160` fixes both: the merge procedure uses the empty blob as a missing base and aborts when a resolution fails, and the parameter block moves to the repository root. The check file's 15 Rerun cases then printed `0 failed`, and the proof run from a subdirectory failed a dropped root-level file. The code head is `3b89160`, and Verify started again, but the third verifier was stopped before any verdict, because the orchestrator asked for idempotent generated-only fix rounds, which means a new code head. `d17dd6b` makes those rounds idempotent. A round on a branch that already contains the default branch's tip changes nothing, and a round after a further move adds one merge and at most one new regenerate commit. A scratch run of three rounds confirmed both, with the proof `EQUAL` each time. `s-stack-package` was merged at `40334e4` after `spec-planner-handbooks` merged. The only conflict was the lockfile, which was regenerated. The fourth Verify gate returned NOT VERIFIED at `d7efc94`: a later generated-only round reapplies the squash step and drops a newer default-branch change, and an interrupted round cannot resume. `25e6ef4` fixes both. The squash step runs only while the branch's merge base with the merged branch is in the parent's history, and an up-to-date round skips only its merge. The check file's 22 Rerun cases then printed `0 failed`, and a round interrupted after its merge finished on the next one. The code head is `25e6ef4`, and Verify runs again in full.
+The phase plan is at `.foundry/plans/2026-11-20_21-37-12-s-stack/phases/pr-handbook.md`. Implement is complete. `2fbf1cd` added the handbook. `27785f0` added a merge check to the equality proof and corrected why `gh stack submit` is not used. `quick-review` then found four defects in the merge and binary handling, and `589411b` fixed them, with every scratch case rerun from the handbook's own commands. `391d9a8` reorders one sentence. The handbook is 185 lines. `s-stack-package` was merged at `e69b6ee`, bringing only `.foundry/` changes. The first Verify gate returned NOT VERIFIED at `a42cd47`, the verifier's check-file commit: `git diff-tree --quiet` without `-r` breaks the carry loop and the proof on a commit that changes only a nested lockfile. `f66ec2c` adds `-r` to both checks, and the check file's Rerun block then printed `0 failed`. The second Verify gate returned NOT VERIFIED at `e5f37b8`, the verifier's extended check file: an add/add conflict on a squash-merged parent's new `apm.yml` stages an empty file, and the proof is path-relative when run from a subdirectory. `3b89160` fixes both: the merge procedure uses the empty blob as a missing base and aborts when a resolution fails, and the parameter block moves to the repository root. The check file's 15 Rerun cases then printed `0 failed`, and the proof run from a subdirectory failed a dropped root-level file. The code head is `3b89160`, and Verify started again, but the third verifier was stopped before any verdict, because the orchestrator asked for idempotent generated-only fix rounds, which means a new code head. `d17dd6b` makes those rounds idempotent. A round on a branch that already contains the default branch's tip changes nothing, and a round after a further move adds one merge and at most one new regenerate commit. A scratch run of three rounds confirmed both, with the proof `EQUAL` each time. `s-stack-package` was merged at `40334e4` after `spec-planner-handbooks` merged. The only conflict was the lockfile, which was regenerated. The fourth Verify gate returned NOT VERIFIED at `d7efc94`: a later generated-only round reapplies the squash step and drops a newer default-branch change, and an interrupted round cannot resume. `25e6ef4` fixes both. The squash step runs only while the branch's merge base with the merged branch is in the parent's history, and an up-to-date round skips only its merge. The check file's 22 Rerun cases then printed `0 failed`, and a round interrupted after its merge finished on the next one. The fifth Verify gate returned VERIFIED at `412a91d`, the verifier's check-file commit on top of `25e6ef4`. It raised one finding that misleads a reader and three minor ones, carried to a fix round after Review so that both gates run once more over one combined fix.
 
 ## Notes
 

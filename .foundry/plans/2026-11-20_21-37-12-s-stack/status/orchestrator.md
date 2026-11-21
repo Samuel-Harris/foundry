@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 20:51 |
+| Last tick | 2026-11-21 21:32 |
 | Default branch merged at | `6f42b1c` (#85, into `7409b48`) |
 
 ## Live sessions
@@ -99,3 +99,6 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 - `phase-handbooks` (Done, needs a follow-up round): in `phase-session.md`, fix-round step 4's "Move to PR and report" must say to send `prs-open` once the PR creator has carried the fix. The same applies to line 111's "A conflict with the default branch" round, which also ends without a PR creator or `prs-open`. Under the `prs-open` re-merge rule, a phase that never sends it cannot merge again. `orchestrator.md` at `caafc7f` asks a quiet phase for it meanwhile. Raised by `orchestrator-handbook`'s fifth review.
 - `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` line 109, the "A pull request merged" round, runs no gate. Add that if the PR creator reports a STOP, the phase sends the orchestrator a decision request naming the STOP and stays in PR. Raised by `pr-handbook`'s review at `b4da68b`.
   - Include: the board template's schema comment (C5) describes `needs_update` as containing main's tip with passing checks. `orchestrator.md` at `20c031a` also requires the heads of open dependencies. Make the comment match. Raised by `orchestrator-handbook`.
+- `spec-planner-handbooks` (Done, needs a follow-up round): in `checks/spec-planner-handbooks.md`, reword cold read 1's expected point 5 to "Port 5432 is named as an exclusive resource of the sharing back-end phase. Naming it for another phase under a stated assumption neither passes nor fails this point." A check passed 5 of 5 runs on `s-stack-package`, but strict graders can fail it, which would wrongly fail a post-merge check. `planner.md` needs no change.
+- `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` must say a delegate's work lands on the phase branch by `git cherry-pick -x`, never by merging the delegate's branch. The only merges on a phase branch's first-parent line are merges of the orchestrator branch. `pr-creator.md` fails its proof on any other merge there (raised by `pr-handbook`'s tenth verification at `345764c`).
+- `phase-handbooks` (Done, needs a follow-up round): `phase-session.md` line 111, the "A conflict with the default branch" round, should do nothing when the branch already holds the named commit, not restart Implement and both gates. `orchestrator.md` at `b33f4a5` no longer repeats that round, so this only hardens against a duplicate message.

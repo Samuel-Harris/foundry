@@ -64,7 +64,7 @@ https://github.com/Samuel-Harris/foundry/pull/84. Draft, branch `s-stack-spec-pl
 
 ## Fix round after #81 merged, generated files only
 
-#81 was squash-merged into `main` as `d7e036c`, and #84 conflicted with `main`. The phase branch merged `s-stack-package` at `2dff76b`. That merge changed nothing outside `.foundry/`, so the code head stays `6f70b37` and no gate ran.
+Pull request #81 was squash-merged into `main` as `d7e036c`, and #84 conflicted with `main`. The phase branch merged `s-stack-package` at `2dff76b`. That merge changed nothing outside `.foundry/`, so the code head stays `6f70b37` and no gate ran.
 
 A fresh PR creator rebuilt #84 under `pr-handbook-r1`.
 

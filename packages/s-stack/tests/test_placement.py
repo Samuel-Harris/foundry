@@ -209,9 +209,7 @@ class PlacementTests(LauncherTestCase):
         self.wait_for_claude(spec)
         before = self.geometry()
 
-        new = self.assert_split(before=before, target=orchestrator, new=self.start("--role", "planner", name="f-planner"))
-
-        self.assertGreater(new.left, self.right_of(pane=orchestrator))
+        self.assert_full_height_column(before=before, orchestrator=orchestrator, new=self.start("--role", "planner", name="f-planner"))
 
     def assert_phase_splits_the_planner_while_zoomed(self, *, zoomed: str) -> None:
         orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")

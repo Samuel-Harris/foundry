@@ -100,7 +100,7 @@ class StartTests(LauncherTestCase):
         pane, _ = self.started(self.launch("--feature", "f", "--role", "orchestrator", "--window", self.window), name="f-orchestrator")
 
         self.assertIn("--name f-orchestrator ", self.wait_for_claude(pane))
-        self.assertEqual(self.claude_in_pane(plain), "claude")
+        self.assertEqual((self.claude_in_pane(plain) or "").split(), ["claude"])
 
     def test_a_name_later_in_the_arguments_is_not_the_session(self) -> None:
         self.make_feature_worktree()

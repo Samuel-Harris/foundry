@@ -6,7 +6,7 @@ Phase `board` ships `packages/s-stack/.apm/skills/sam-mode/assets/status-board.h
 
 ### Rendered board in headless Chrome
 
-The script writes its harness to a fresh `mktemp` directory and never writes into the repository. It wraps the template in the skeleton the Artifact tool publishes, which includes `[hidden]{display:none!important}`, and defines `window.claude.use("db")` as a stub. The stub serves placeholder documents, live (`fromCache: false`) or cached (`fromCache: true`), on a timeline the scenario sets. The database and every reference are proxies: `onSnapshot`, `get`, `doc`, `collection`, `where`, `orderBy`, `limit`, `id` and `path` read, and any other member, such as `set`, `update`, `delete`, `add`, `acquire` or one not yet in the API, records a write. The stub also records each subscription. The page's clock starts at 2026-01-31T09:05:00Z and runs with Chrome's virtual time, or stands still with `freeze`, so every age is exact. Headless Chrome will not make a window narrower than 500 px, so the page runs in an `iframe` of width `w` (400 by default) and height `h` (1400 by default), and the script reads that frame's own sizes.
+The script writes its harness to a fresh `mktemp` directory and never writes into the repository. It wraps the template in the skeleton the Artifact tool publishes, which includes `[hidden]{display:none!important}`, and defines `window.claude.use("db")` as a stub. The stub serves placeholder documents, live (`fromCache: false`) or cached (`fromCache: true`), on a timeline the scenario sets. The database and every reference are proxies: `onSnapshot`, `get`, `doc`, `collection`, `where`, `orderBy`, `limit`, `id` and `path` read, and any other member, such as `set`, `update`, `delete`, `add`, `acquire` or one not yet in the API, records a write. The stub also records each subscription. The page's clock starts at 2026-01-31T09:05:00Z and runs with Chrome's virtual time, or stands still with `freeze`, so every age is exact. Headless Chrome will not make a window narrower than 500 px, so the page runs in an `iframe` of width `w` (400 by default) and height `h` (1400 by default), and the script reads that frame's own sizes. Chrome resolves no host name, so the run touches nothing outside the machine, the template's web fonts never load, and every measurement uses the fallback faces a viewer sees when Google Fonts does not answer. A line break inside a word counts only between two letters or digits, because the browser may break between punctuation marks such as `>` and `<` and the line still reads.
 
 Every Chrome call runs under a 30-second wall-clock bound, through `timeout`, `gtimeout` or a `perl` fallback that runs Chrome in its own process group, in the order `tests/structural/run-tier1.sh` uses. A call that times out has its process group killed and runs once more. A second timeout fails that scenario, and every later scenario is reported as skipped and fails. An exit trap kills any Chrome process still using the run's profile directories and removes the directory, also after an interrupt.
 
@@ -48,7 +48,7 @@ Each line of the `LIST` block is one scenario: a virtual-time budget in millisec
 | Only text, never markup, from data; only `https://` links | every scenario |
 | Chip tones, the same palette for state chips and map nodes, in light, dark and OS dark | every scenario |
 | Phone tables show column names; wider tables show a header | every scenario |
-| No page scroll at 320, 400, 601, 700 and 1000 px; no broken word or clipped chip at 1000 px | width scenarios, `words` |
+| No page scroll at 320, 400, 601, 700 and 1000 px; at 1000 px no line break between two letters or digits of a word of up to 16 characters, and no clipped chip | width scenarios, `words` |
 | Map columns by layer, ids sorted in each column, columns centred, 168 by 44 nodes, gaps 56 and 12, padding 12 | every map |
 | One 24-unit lane per skipping edge, including shared sources, shared targets and overlaps, above every node | `full`, `lanes-a`, `lanes-b`, `share` |
 | SVG size equal to the layout and holding every node and edge; nodes as wide as labels up to 40 characters and at most 20 units wider; a cut with "…" above 40 | every map, `long` |
@@ -305,7 +305,15 @@ cat > "$dir/collect.js" <<'JS'
         const range = document.createRange();
         range.setStart(node, m.index);
         range.setEnd(node, m.index + m[0].length);
-        if (new Set([...range.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top))).size > 1) broken.push(m[0]);
+        if (new Set([...range.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top))).size < 2) continue;
+        const tops = [...m[0]].map((_, k) => {
+          const one = document.createRange();
+          one.setStart(node, m.index + k);
+          one.setEnd(node, m.index + k + 1);
+          return Math.round(one.getBoundingClientRect().top);
+        });
+        const inWord = (k) => /[\p{L}\p{N}]/u.test(m[0][k - 1]) && /[\p{L}\p{N}]/u.test(m[0][k]);
+        if (tops.some((top, k) => k > 0 && top !== tops[k - 1] && inWord(k))) broken.push(m[0]);
       }
     }
     return broken;
@@ -424,7 +432,8 @@ while read -r budget flags scenario; do
   for attempt in 1 2; do
     profile="$dir/p$n-$attempt"
     code=0
-    TZ=UTC bounded "$chrome" --headless --disable-gpu --hide-scrollbars --user-data-dir="$profile" $flags --window-size=1100,1500 \
+    TZ=UTC bounded "$chrome" --headless --disable-gpu --hide-scrollbars --host-resolver-rules="MAP * ~NOTFOUND" \
+      --user-data-dir="$profile" $flags --window-size=1100,1500 \
       --virtual-time-budget="$budget" --dump-dom "file://$dir/frame.html?$scenario" < /dev/null > "$dir/dom" 2>/dev/null || code=$?
     pkill -KILL -f "user-data-dir=$profile( |$)" 2>/dev/null || true
     [ "$code" -eq 124 ] || [ "$code" -eq 137 ] || break
@@ -789,7 +798,7 @@ def check(name, r):
             c(f"map scroll kept after the {k} render", a["scrollers"]["map"]["replaced"] and a["scrollers"]["map"]["left"] == 80)
             c(f"page scroll kept after the {k} render", a["scrollY"] == b["scrollY"])
     if q.get("words"):
-        c("no short word broken and no chip clipped at 1000 px", s["broken"] == []
+        c("no short word broken between letters and no chip clipped at 1000 px", s["broken"] == []
           and not any(ch["clipped"] for x in s["sections"] for ch in x["chips"]))
     if fixture == "empty" and "swap" not in q:
         c("every section shows its empty state", [x["text"].split(" | ")[-1] for x in s["sections"]] == EMPTIES and s["banner"] == [NO_TICK])

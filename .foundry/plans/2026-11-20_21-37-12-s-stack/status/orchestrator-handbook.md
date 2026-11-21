@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T15:55:07Z"
+state: "Verify"
+changed_at: "2026-11-21T15:56:05Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "019c8a14316585c687fe3cc3434ea67428e9afb3"
+code_head: "b4844d83cc41b138242a4c9e81efca6d230265fa"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -23,6 +23,10 @@ decisions:
     decision: "Answer to orchestrator-handbook-r2 from the orchestrator, option A with guards. C4 gains --close (closes the named session's pane only when that pane runs that session) and --remove (removes the session's worktree only when it is clean and its branch is merged into the orchestrator branch), with the same --feature, --role, --phase and --update as a launch. The handbook calls both by flag: --close after a phase merges, --remove at Done and at the feature's end. The launcher phase builds them."
     door: "two-way"
     at: "2026-11-21T15:41:18Z"
+  - id: "orchestrator-handbook-d3"
+    decision: "While a post-merge check on the orchestrator branch fails, the handbook starts no phase and sends no merge-orchestrator-branch, which is stricter than roadmap workflow.md (only dependants wait), because any phase started or updated then would be cut from the failing branch. It also merges at most one phase per tick, from the feature plan's risk table, and records it as general behaviour."
+    door: "two-way"
+    at: "2026-11-21T15:56:05Z"
 ---
 
 # Phase `orchestrator-handbook` status
@@ -36,3 +40,5 @@ The handbook was committed at `8bf296b` and the lockfile regenerated at `d021335
 quick-review ran on the single pull request layer, and its findings were fixed at `6c34228`. `s-stack-package` (`080d4df`) was merged at `25089d5`. The phase moved to Verify at code head `44efc92`.
 
 The first Verify gate returned VERIFIED at `019c8a1`, the verifier's check-file commit. Its report named three handbook defects that would fail in a real run, so the phase moved back to Implement to fix them before Review.
+
+The fixes are at `b4844d8`, the lockfile regenerated at `62a0fd2`, and `s-stack-package` (`1b3b3de`) merged. The phase moved to Verify at code head `b4844d8`.

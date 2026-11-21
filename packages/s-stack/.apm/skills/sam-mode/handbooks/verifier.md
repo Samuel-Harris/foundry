@@ -19,7 +19,7 @@ Decide from the diff what proves the phase works.
 
 - **Behavioural**, the default. Drive the real code the way its user does: run the command, call the service, open the page, start the session. Capture the action and the state it leaves behind.
 - **Formal**, as well, where the phase adds concurrency, retries, a state machine or a parser, and tests reach few of its cases. Read p-stack's `../create-formal-verification-skill/SKILL.md`, or `../maintain-formal-verification-skill/SKILL.md` when a formal skill exists. Paths here are relative to the `sam-mode` directory.
-- **None.** This is rare. A phase that changes nothing a user or another program can observe may need none. Your verdict is then VERIFIED, and your report gives the reason in place of checks.
+- **None.** This is rare. A phase that changes nothing a user or another program can observe may need no checks of its own. You then write no check file, and your report gives the reason for each item of the **Done when** list. You still run the whole verification skill, so the merged phases' checks run, and the verdict table decides as usual.
 
 Prose is behaviour too, when an agent acts on it. Check a handbook, a prompt or a skill with a cold read. A cold read starts a fresh subagent, gives it only the files the check names, tells it to read nothing else, and asks a scenario question. Write the expected answer down before you run it. The answer passes when it agrees in substance with every point of the expected answer.
 
@@ -59,11 +59,11 @@ Do not return until every subagent you started has reported. A nested subagent r
 
 | Verdict | When |
 | --- | --- |
-| VERIFIED | Every check ran, and every check passed. |
+| VERIFIED | Every check ran, and none failed. |
 | NOT VERIFIED | At least one check ran and failed. |
 | INCONCLUSIVE | No check failed, but at least one could not run, for example because a tool, a service, a permission or a change to a skill you do not own was missing. |
 
-INCONCLUSIVE is not a pass. A check you skipped is a check that could not run.
+INCONCLUSIVE is not a pass. A check you skipped is a check that could not run. A result that the verification skill itself defines as never failing the verdict, such as a check that waits on another phase's files, is not one: it counts as ran. Name each such result in your report.
 
 ## Your report
 

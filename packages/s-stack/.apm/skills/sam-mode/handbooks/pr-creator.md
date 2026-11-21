@@ -16,7 +16,7 @@ Hard rules:
 
 - Push only pull request branches, with a plain `git push`. Never push the phase branch or the orchestrator branch.
 - Open every pull request as a draft. Never mark one ready, never merge one, and never force-push unless the developer says so.
-- Use only `gh pr create --draft`, `gh pr edit` and `gh stack link` with pull request numbers. `gh stack sync`, `rebase` and `push` force-push after a rebase, `gh stack submit` opens pull requests as ready, and `gh stack link` with branch names pushes those branches.
+- Use only `gh pr create --draft`, `gh pr edit` and `gh stack link` with pull request numbers. `gh stack sync`, `rebase` and `push` force-push after a rebase, and `gh stack submit`, or `gh stack link` with branch names, pushes branches itself.
 - Write no file under `.foundry/`. The phase session records what you report.
 - Wait for every subagent you start to finish before you report.
 
@@ -116,6 +116,9 @@ for spec in "$@"; do
     for f in $(git diff-tree --no-commit-id --name-only -r "$c" -- . "${GEN[@]}" "${LINES[@]}"); do echo "FAIL $pr: regenerate commit $c changes $f"; fail=1; done
     l=$(only_lines "$c^" "$c"); [ -z "$l" ] || { echo "FAIL $pr: regenerate commit $c changes $l"; fail=1; }
   done
+  for m in $(git rev-list --merges "$pr" "${excl[@]}"); do
+    for f in $(git diff-tree --cc --name-only --no-commit-id "$m" -- . "${GEN[@]}" "${LINES[@]}"); do echo "FAIL $pr: merge $m changes $f by hand"; fail=1; done
+  done
   for f in $(git diff --name-only "$default...$pr" -- .foundry); do echo "FAIL $pr: contains $f"; fail=1; done
 done
 r=$(GIT_INDEX_FILE=$idx git write-tree); rm -f "$idx"
@@ -125,7 +128,7 @@ l=$(only_lines "$r" "$phase"); [ -z "$l" ] || { echo "FAIL generated-line files 
 EOF
 ```
 
-It prints `EQUAL` and exits 0, or prints a `FAIL` line for each fault, then `NOT EQUAL`, and exits 1. A file listed by `--stat` was dropped or added by the split. Fix the split and run it again until it prints `EQUAL`.
+It prints `EQUAL` and exits 0, or prints a `FAIL` line for each fault, then `NOT EQUAL`, and exits 1. A file listed by `--stat` was dropped or added by the split. A merge commit may only take one side of each hand-written file, so a merge that names a file changed it by hand. Fix the split and run it again until it prints `EQUAL`.
 
 **2. Each branch passes the repository's checks on its own**, bottom of the stack first. The repository's agent guide names them. In Foundry they are `.githooks/pre-commit` with `FOUNDRY_DIFF_RANGE=origin/<base>...HEAD`, `python3 scripts/versioning.py check origin/<default>`, and Tier 1 outside the sandbox.
 

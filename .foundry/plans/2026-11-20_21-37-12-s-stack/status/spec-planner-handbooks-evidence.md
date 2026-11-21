@@ -113,3 +113,14 @@ A fresh verifier ran the full skill and four point 5 probes, each graded by a fr
 - **Failure.** One of three extra runs of cold read 1 failed point 3. It gave the port to both the sharing and import phases under a stated assumption, and so ran them one after the other. Roadmap `roles.md` says the orchestrator "never runs two phases that need the same exclusive resource", so that reading is right, and point 3 was too strict.
 
 Verdict: NOT VERIFIED. Fix: point 3 also accepts the two phases running one after the other when the answer's own stated assumption gives both the same exclusive resource. `planner.md` does not change.
+
+## Follow-up round: Verify, code head `1f6216019e8b1c657d52e1c360285e2bc2516ef5`
+
+A fresh verifier ran the full skill. It passed, apart from checks 4 and 6, which are pending by design. Tier 1 passed across 20 packages, and every check file's Rerun passed.
+
+- **Point 5 probes.** A and C fail and E passes, as required. F passes points 3 and 5: it gives the port to both phases under an assumption and runs them one after the other.
+- **Planner runs.** All five real runs of cold read 1 pass point 5.
+
+Verdict: VERIFIED.
+
+**Gap the verifier found.** Probe D and real run 3 give the port to both phases and still say they run at the same time. Two graders out of two failed D on point 3, while the literal first sentence of point 3 would pass it. Roadmap `roles.md` line 46 says the orchestrator never runs two phases that need the same exclusive resource, so D's claim is wrong. The source is `planner.md`: it asks for exclusive resources but never says they serialise the phases that share them. That misled run 3 into saying test runs "take turns". The phase moves back to Implement. `planner.md`'s exclusive-resources bullet gets that sentence, and point 3 says outright that phases sharing an exclusive resource run one after the other.

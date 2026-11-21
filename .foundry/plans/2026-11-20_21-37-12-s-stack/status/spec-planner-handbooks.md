@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Verify"
-changed_at: "2026-11-21T23:19:42Z"
+state: "Implement"
+changed_at: "2026-11-21T23:25:34Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "1f6216019e8b1c657d52e1c360285e2bc2516ef5"
@@ -47,6 +47,11 @@ verdicts:
     code_head: "ba02397c72378fd5d5a54389d49b9ee7011f52ee"
     at: "2026-11-21T23:19:32Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "1f6216019e8b1c657d52e1c360285e2bc2516ef5"
+    at: "2026-11-21T23:25:34Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
@@ -71,8 +76,12 @@ decisions:
     decision: "Point 5 keeps the orchestrator's intent but not its exact wording. It restores 'or the local test database on it', and it fails an answer whose own assumptions put a concurrent phase on that database without naming it there. Review at 49f2959 showed the given wording passed such an answer, which the old point failed."
     door: "two-way"
     at: "2026-11-21T23:14:37Z"
+  - id: "spec-planner-handbooks-d5"
+    decision: "planner.md's exclusive-resources bullet says that phases sharing an exclusive resource never run at the same time, as roadmap roles.md line 46 says of the orchestrator. Cold read 1's point 3 requires those phases to run one after the other. A real planner run claimed such phases could run together, and graders split on it."
+    door: "two-way"
+    at: "2026-11-21T23:25:34Z"
 ---
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Point 3 is fixed at `1f62160`. A fresh verifier runs in full, and the review then covers the commits since `49f2959`.
+Follow-up round. Verify passed at `1f62160`, but it exposed a gap in `planner.md`: it does not say that a shared exclusive resource serialises the phases that need it. The phase is fixing that and point 3.

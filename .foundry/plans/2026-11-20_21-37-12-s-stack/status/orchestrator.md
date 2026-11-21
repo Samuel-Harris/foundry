@@ -31,9 +31,10 @@ None.
 
 | Number | Phase | Branch | Base | Depends on |
 | --- | --- | --- | --- | --- |
-| 81 | `foundation` | `s-stack-foundation-package` | `main` | none |
-| 82 | `foundation` | `s-stack-verify-skill` | `s-stack-foundation-package` | 81 |
+| 81 | `foundation` | merged into `main` as `d7e036c` | | |
+| 82 | `foundation` | `s-stack-verify-skill` | `main` | none |
 | 84 | `spec-planner-handbooks` | `s-stack-spec-planner-handbooks` | `main` | 81, 82 |
+| 85 | `phase-handbooks` | `s-stack-phase-handbooks` | `s-stack-verify-skill` (stacked on 82) | 82 |
 
 ## Merged phases
 
@@ -41,6 +42,7 @@ None.
 | --- | --- | --- | --- |
 | `foundation` | `7c4f36d` | `50e26ee` | VERIFIED on `1ca289c` (no code change since `7c4f36d`) |
 | `spec-planner-handbooks` | `4739703` (tip `22340be`) | `6f70b37` | VERIFIED on `fd342b4` (no code change since `4739703`) |
+| `phase-handbooks` | `377dc78` (tip `88ebe79`) | `c666afd` | running |
 
 ## Closed sessions
 

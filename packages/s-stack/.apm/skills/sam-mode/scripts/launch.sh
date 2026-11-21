@@ -329,11 +329,18 @@ cmd_print_window() {
 
 cmd_close() {
   require tmux
-  local matches tagged panes pane
-  matches=$(session_panes "$name" '' | awk '$5 == "strict"')
+  local busy claudes matches tagged panes pane
+  claudes=$(session_panes "$name" '')
+  matches=$(printf '%s\n' "$claudes" | awk '$5 == "strict"')
   at_most_one "pane runs $name" "$matches"
   tagged=$(tagged_panes -a) || [[ $(tmux list-sessions 2>&1) == 'no server running'* ]] || die 'tmux list-panes failed'
-  panes=$(printf '%s\n%s\n' "${matches%% *}" "$tagged" | awk 'NF && !seen[$1]++')
+  # A tagged pane where another claude now runs belongs to whoever started it there.
+  busy=" $(printf '%s\n' "$claudes" | awk '{print $1}' | tr '\n' ' ') "
+  panes=${matches%% *}
+  for pane in $tagged; do
+    [[ $busy == *" $pane "* ]] && continue
+    [[ " $panes " == *" $pane "* ]] || panes="$panes $pane"
+  done
   [ -n "$panes" ] || { printf 'absent %s\n' "$name"; return; }
   for pane in $panes; do
     tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"

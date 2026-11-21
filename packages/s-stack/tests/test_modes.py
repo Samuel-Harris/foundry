@@ -80,6 +80,18 @@ class CloseTests(LauncherTestCase):
         self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
         self.assertIn(other, [p["id"] for p in self.panes()])
 
+    def test_another_claude_started_in_the_sessions_left_pane_is_not_closed(self) -> None:
+        pane, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
+        self.wait_for_claude(pane)
+        self.kill_claude("f-phase-p")
+        self.tmux("respawn-pane", "-k", "-t", pane, "claude --name someone-else")
+        self.wait_for_claude(pane)
+
+        result = self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--close")
+
+        self.assertEqual((result.returncode, result.stdout), (0, "absent f-phase-p\n"), result.stderr)
+        self.assertIn(pane, [p["id"] for p in self.panes()])
+
     def test_absent_when_no_tmux_server_runs(self) -> None:
         self.tmux("kill-server")
 

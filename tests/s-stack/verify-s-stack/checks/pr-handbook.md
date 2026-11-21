@@ -52,6 +52,7 @@ Each case prints `PASS <case>` or `FAIL <case>: <output>`. The block ends with `
 | `split` | No regenerate commit on `pr1` reverts an earlier one | no regenerate commit sets a file back to its content before an earlier regenerate commit changed it |
 | `split` | `main` moves, and `pr1h` merges it by hand with an extra edit to `a.txt` inside the merge commit | `a.txt` listed, `FAIL pr1h: its head differs from its own commits on its base`, exit `1` |
 | `split` | `other-pr` squash-merged into `main`, then a round on `pr2` as `pr2:main::other-pr` | one merge and one regenerate commit, `shared.txt` line 2 is `line 2 child`, hand-written diff against `main` is `b.txt`, `img.bin` and `shared.txt`, proof `pr1:main pr2:main::other-pr` `EQUAL` with `other-pr` excluded through its kept ref |
+| `undeclared` | A branch cut from another phase's open pull request `other-pr`, so its own commits carry `other-pr`'s change, which the orchestrator branch already holds, given as `pr2:main` with no dependency | its hand-written diff against `main` holds `o.txt`, which is not in the phase, so `NOT EQUAL`, exit `1` |
 | `review1` | Another pull request's fix to a squash-merged parent's line, which the child never touched, after the child's round as `child:main::parent` | line 2 is `main`'s fix, the hand-written diff against `main` is `c.txt` only, proof `EQUAL` |
 | `review2a` | A fix round whose fix edits `apm.yml`'s `description:`, next to a `version:` line that the branch's regenerate commit changed | exit `0`, the new description carried, `version: "0.1.1"` kept, proof `EQUAL` |
 | `review2b` | A first build whose commit edits `description:`, while the orchestrator branch holds another phase's `version:` raise | exit `0`, the new description carried, proof `EQUAL` |
@@ -210,6 +211,14 @@ h=$(git rev-parse origin/pr2); round pr2 pr2:main::other-pr; o="$code: $out"
 [ "${o%%:*}" = 0 ] && [ "$(added "$h" origin/pr2)" = '1 1 2' ] && ancestor origin/main origin/pr2 && [ "$(git show origin/pr2:shared.txt | sed -n 2p)" = 'line 2 child' ] \
   && [ "$(hand origin/main origin/pr2)" = 'b.txt img.bin shared.txt ' ] && equal pr1:main pr2:main::other-pr \
   && pass "parent squash-merged, the child's round and regenerate commit, parent excluded through its kept ref: EQUAL" || fail "squash-merged parent: $o; adds $(added "$h" origin/pr2); diff $(hand origin/main origin/pr2); proof $out"
+
+cd "$S"; init undeclared
+other other-pr 'feat: other phase' feat_other_pr
+start_orch; merge_dep origin/other-pr; git checkout -q -b phase orch
+echo b > b.txt; commit 'feat: b'; c1=$(git rev-parse HEAD)
+git worktree add -q --no-track -b pr2 "$S/wt.pr2" origin/other-pr && (cd "$S/wt.pr2" && bash "$S/pr.sh" refresh origin/main pr2:main "$c1" >/dev/null && regen_commit && push)
+git worktree remove --force "$S/wt.pr2"; git fetch -q origin
+not_equal pr2:main && pass "a split whose own commits carry another phase's change from the orchestrator branch: NOT EQUAL" || fail "undeclared dependency: diff against main $(hand origin/main origin/pr2); proof exit $code: $out"
 
 feat_parent() { line 2 'line 2 parent' shared.txt; }
 fix_line2() { line 2 'line 2 fixed by a later pull request' shared.txt; }

@@ -63,7 +63,7 @@ new file mode 100644
 +Run `scripts/report.sh`, then publish its output as a page.
 ```
 
-Prompt: "Read only the handbook file at the path below and nothing else, not even files it links to. Answer from it and the placeholder diff below alone. You are the verifier for phase `widgets` of feature `demo`. The phase session's brief says the verification skill is `tests/demo/verify-demo/SKILL.md`, and the feature plan does not give your phase that skill's files. One check you need publishes a test page, and the publishing tool is not available in your environment. Every other check ran and passed. (1) Which file do you write, as a path from the repository root, and which sections does it have? (2) When do you commit it, relative to running the checks? (3) What verdict do you return, and is it a pass? (4) May you return while a subagent you started is still running?"
+Prompt: "Read only the handbook file at the path below and nothing else, not even files it links to. Answer from it and the placeholder diff below alone. You are the verifier for phase `widgets` of feature `demo`. The phase session's brief says the verification skill is `tests/demo/verify-demo/SKILL.md`, and the feature plan does not give your phase that skill's files. One check you need publishes a test page, and the publishing tool is not available in your environment. Every other check ran and passed. (1) Which file do you write, as a path from the repository root, and which sections does it have? (2) When do you commit it, relative to running the checks, and what must happen after any later change outside `.foundry/`, this file included? (3) What verdict do you return, and is it a pass? (4) May you return while a subagent you started is still running?"
 
 Expected answer:
 

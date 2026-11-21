@@ -39,7 +39,7 @@ The check file has two sections.
 | Section | Holds |
 | --- | --- |
 | `## Rerun` | Checks that are cheap and repeatable and touch nothing outside the machine, such as cold reads, scratch repositories and unit tests. Each states its command or prompt and its expected result. Later verifiers and the orchestrator's merged-branch check run them again. |
-| `## Evidence` | One-off checks that nobody runs again, such as a published test page or a real session: what each checks and how. Never their results. |
+| `## Evidence` | Checks too costly or too far outside the machine to run after every merge, such as a published test page or a real session: what each checks and how, never their results. The phase's own verifier runs them at every code head it verifies. The orchestrator's merged-branch check does not. |
 
 Each check is one behaviour from the phase's **Done when** list or the phase plan's verification section. A check earns its place only if wrong behaviour can fail it. A check that only finds a file, a heading or a fixed string is not a check.
 
@@ -49,7 +49,7 @@ If a run shows that a check is wrong, fix it, commit again, and run everything a
 
 ## Run the checks
 
-1. Run the whole verification skill on the phase branch, including the `## Rerun` section of every check file.
+1. Run the whole verification skill on the phase branch, including the `## Rerun` section of every check file. Then run the `## Evidence` checks of your own check file.
 2. Work through the phase's **Done when** list. Each item needs a check that ran, or a recorded reason why it could not run. For a phase that needs no checks of its own, the reason it needs none stands in for each item.
 3. Keep the command, its output and the expected output for every check.
 

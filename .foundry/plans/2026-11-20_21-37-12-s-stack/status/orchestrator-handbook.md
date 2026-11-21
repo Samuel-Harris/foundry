@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-21T23:40:35Z"
+state: "Verify"
+changed_at: "2026-11-21T23:41:32Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "df8b53297d51ff7b250ecd6c4de7a8df4069341f"
+code_head: "90f463d34e0c5299c35bd323fbc548075f7d655a"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -342,3 +342,5 @@ The twenty-eighth Verify gate returned NOT VERIFIED at `7b34b57`. The phase move
 The Verify 28 fix is at `df8b532`. `s-stack-package` (`9676c01`) was merged at `7f50db8`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `df8b532`.
 
 The twenty-ninth Verify gate was stopped without a verdict or commit, so that the orchestrator's instruction on GitHub's "Update branch" merge could fold into the round. The phase moved back to Implement.
+
+The "Update branch" exemption is at `90f463d`, on top of the Verify 28 fix at `df8b532`. `s-stack-package` (`0bd1efe`) was merged at `1cab41c`, and that merge brought only `.foundry/` files. The phase moved to Verify at code head `90f463d`.

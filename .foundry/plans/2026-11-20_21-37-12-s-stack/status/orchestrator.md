@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `2b5a9b6` (version 5) |
-| Last tick | 2026-11-21 17:59 |
+| Last tick | 2026-11-21 18:11 |
 | Default branch merged at | `e4a18d1` (#82, #84, into `321f333`) |
 
 ## Live sessions
@@ -93,3 +93,4 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 ## Deferred follow-ups for live phases
 
 - `pr-handbook` (`phase-handbooks` folded it in at its `30f0709` review round): rework after Done. A Done phase asked to change code moves back to Implement, and its PR creator opens a new pull request for commits no open pull request carries. Fold this into each phase's next Implement round. If either reaches PR without one, send it as a fix round. `orchestrator.md` at `131526e` fails safe meanwhile. Raised by `orchestrator-handbook`.
+- `phase-handbooks`: widen "a Done phase asked to change code moves back to Implement" to any state past Implement (Verify, Review, PR, Done). It covers a phase in PR whose code changes after its pull requests merged, for example from a direct instruction from the developer. Fold this into its next Implement round, or send it as a follow-up fix round. It fails safe meanwhile. Raised by `orchestrator-handbook` at `03d2899`.

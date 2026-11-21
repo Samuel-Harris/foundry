@@ -282,3 +282,19 @@ More for the cross-handbook integration:
 | "A pull request merged" rounds go to phases not in PR, while `phase-session.md`'s handler assumes PR. A PR creator could carry unverified commits. | Opus | Cold read |
 
 The fix replaces the time test with the roadmap's own trigger: a phase merges once it has reported its pull requests open (`prs-open`) at its current code head.
+
+## Verify 17, code head `ed173c2ca71aa2787219af0a31b9b79144a76b7b`, NOT VERIFIED
+
+A fresh verifier updated the check file for `3276b54` (commit `ed173c2`, with new cold reads Z and AA) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`169/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 FAILS: the three scripts pass and 34 cold reads pass, but cold read Z fails and cold read T was unfinished at hand-back.
+
+Defects that break a real run, on merged contracts:
+
+- Limiting rounds to phases in PR also stopped `needs_update` being set for pull requests of other phases, so the deferred round never fires and a stale pull request shows as ready.
+- The resend for a `needs_update` already true had no in-PR condition.
+
+Defects that mislead a reader:
+
+- The restart request for `prs-open` did not say "once a pull request holds your code head".
+- The fix-round sentence's "merge it again" left out the `prs-open` condition.
+
+Minor: the tracker had no field for a status-only refusal awaiting the developer.

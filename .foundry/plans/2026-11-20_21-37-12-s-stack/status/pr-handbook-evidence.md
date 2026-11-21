@@ -194,3 +194,17 @@ Defects:
 - **Significant, rare: d12 breached.** `mine_branch` treats a branch that carries even one of this phase's commits as this phase's own. Another phase's branch stacked on ours, left ahead of `origin` by a crash, was read locally. The child then pushed the other phase's unproved file, and the proof printed `EQUAL`.
 - **Minor: the delegate check is exempted once the orchestrator branch holds the delegate merge.** A fix round after that proves `EQUAL` without the delegate's file.
 - **Check file, for the next verifier.** Cold-read expected point 10 still says "reverts that merge".
+
+## Verify: NOT VERIFIED at `e57cbea4424987fc86c14904b0ea81839b3fa895`
+
+A thirteenth fresh verifier covered `cd15544` plus its own check-file commit `e57cbea`. That commit makes the harness follow the new start point, corrects cold-read point 10, and adds `c_extend`, `c_foreign_above` and `c_delegate_after_orch`.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING. Check 8 passed for every file, and `pr-handbook.md`'s scratch block printed 82 PASS and `0 failed`.
+- **The cases.** The three previous reproductions now give their required results. `c_foreign_above` and `c_delegate_after_orch` fail against the `2168718` script.
+
+Defects, both significant, both in `mine_branch`:
+
+- **Defect 1: a false `STOP` that recurs every round, or a stale child.** In the stack `x` (another phase) ← `pr1` (ours) ← `pr2` (ours), `pr1`'s round can merge `x` without carrying a commit. Its newest reachable commit is then `x`'s, so `pr1` is read from `origin`. `pr2` stops with `pr1 does not hold origin/main` every round. When `main` has not moved, `pr2` is pushed without `pr1`'s new head.
+- **Defect 2: another phase's unproved local branch reaches our pushed pull request.** In the stack `pr1` (ours) ← `x` (another phase) ← `pr2` (ours), `x`'s newest reachable non-merge commit can be our carried fix. A crashed round that left `x` ahead with `u.txt` is then read locally, the proof prints `EQUAL`, and `origin/pr2` holds `u.txt`.
+
+The phase session's judgement: two heuristics for "this phase's branch" have failed. The PR creator creates its own branches, so the round should name them instead of inferring them.

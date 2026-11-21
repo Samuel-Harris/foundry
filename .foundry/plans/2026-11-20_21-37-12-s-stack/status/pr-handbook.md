@@ -5,7 +5,7 @@ changed_at: "2026-11-21T16:48:29Z"
 session: "s-stack-phase-pr-handbook"
 branch: "s-stack-phase-pr-handbook"
 code_head: "412a91d852ac3d59e38fa95a6aa366d5e59a3e91"
-waits_for: null
+waits_for: "pr-handbook-r2, where the rebuild commands live"
 verdicts:
   - gate: "verify"
     result: "NOT VERIFIED"
@@ -33,7 +33,14 @@ verdicts:
     at: "2026-11-21T16:48:29Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/pr-handbook-evidence.md"
 pull_requests: []
-requests: []
+requests:
+  - id: "pr-handbook-r2"
+    question: "Option A's rebuild and proof need about 70 lines of bash plus wrappers, and the PR creator handbook is at 191 of its 200-line budget, so where should those commands live?"
+    options: ["A. A reference file, packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md, owned by pr-handbook. It holds the commands as fenced bash blocks, which the check file extracts and tests as it does now. pr-creator.md keeps the rules and points to it. Roadmap package.md rule 6 holds, because these are commands, not a script, and the handbook keeps its budget.", "B. A script, packages/s-stack/.apm/skills/sam-mode/scripts/pr-branch.sh, with refresh and prove subcommands, which the check file's scratch cases call directly. It is easier to test and lint, but it is a third piece of code under rule 6 and needs the developer's agreement. The named failure it removes: five Verify rounds found defects in untested shell written inside Markdown.", "C. Raise the handbook budget for pr-creator.md to about 260 lines and keep everything in it."]
+    recommendation: "A"
+    door: "two-way"
+    waiting_work: "Placing the rebuild and proof commands. The prose rewrite, the developer's stacking rules and the gh stack link rule continue meanwhile."
+    since: "2026-11-21T17:08:09Z"
 decisions:
   - id: "pr-handbook-d1"
     decision: "The PR creator reads ../summarise-pr/SKILL.md relative to the sam-mode skill directory and follows it, because summarise-pr sets disable-model-invocation: true."

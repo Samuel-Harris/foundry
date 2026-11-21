@@ -80,19 +80,20 @@ EOF
 
 ### 5. Package isolation
 
-No relative Markdown link inside `sam-mode` resolves outside `packages/s-stack/`, and no file under `packages/p-stack` changed on this branch. Never assume the default branch is `main`. PASS when both commands exit `0` and the diff prints nothing.
+No relative link inside `sam-mode` resolves outside `packages/s-stack/`, and no file under `packages/p-stack` changed on this branch. The first command reads inline links, with or without angle brackets or a title, reference definitions and HTML `href` and `src` attributes, and skips code spans and fenced blocks. Never assume the default branch is `main`. PASS when both commands exit `0` and the diff prints nothing.
 
 ```bash
 python3 - <<'EOF'
 import pathlib, re, sys
 package = pathlib.Path("packages/s-stack").resolve()
 leaks = []
+link = r"""\]\(\s*<([^>\n]*)>|\]\(\s*([^)\s]+)|^ {0,3}\[[^\]]+\]:\s*<([^>\n]*)>|^ {0,3}\[[^\]]+\]:\s*(\S+)|(?:href|src)\s*=\s*["']([^"']*)"""
 for md in sorted(pathlib.Path("packages/s-stack/.apm/skills/sam-mode").rglob("*.md")):
-    text = re.sub(r"```.*?```", "", md.read_text(), flags=re.S)
+    text = re.sub(r"(```|~~~).*?\1", "", md.read_text(), flags=re.S)
     text = re.sub(r"`[^`\n]*`", "", text)
-    targets = re.findall(r"\]\(([^)\s]+)", text) + re.findall(r"^\[[^\]]+\]:\s*(\S+)", text, flags=re.M)
-    for target in targets:
-        if re.match(r"[a-z][a-z0-9+.-]*:|#", target):
+    for groups in re.findall(link, text, flags=re.M):
+        target = "".join(groups)
+        if not target or re.match(r"[a-z][a-z0-9+.-]*:|#", target):
             continue
         if not (md.parent / target.split("#")[0]).resolve().is_relative_to(package):
             leaks.append(f"{md}: {target}")
@@ -143,7 +144,7 @@ Each phase's verifier records that phase's behavioural checks in `tests/s-stack/
 - `## Rerun` holds cheap, repeatable checks that touch nothing outside the machine, such as cold reads, scratch repositories and unit tests. Each states its command or scenario and its expected result.
 - `## Evidence` records one-off checks with their results, such as a published test page or a real `claude` session. Never rerun it.
 
-List the files in name order, then run every check in each file's `## Rerun` section exactly as written and compare its result with the expected one. Report each check by file and name. With no files, report "no check files" and PASS.
+List the files in name order, then run every check in each file's `## Rerun` section exactly as written and compare its result with the expected one. Report each check by file and name. A Rerun check may report PENDING when what it needs is absent on the checked-out branch, and that PENDING never fails the verdict. With no files, report "no check files" and PASS.
 
 ```bash
 bash <<'EOF'
@@ -165,4 +166,10 @@ Tier 1 leaves gitignored deploy output in each package. Remove only that, with t
 git clean -fdX -- 'packages/*/apm_modules' 'packages/*/.agents' 'packages/*/.claude' 'packages/*/.claude-plugin' 'packages/*/.cursor' 'packages/*/.github' 'packages/*/dist'
 ```
 
-Then `git status --short` must show no change the run made. Kill only processes you started.
+`git clean` leaves each package's `.cursor/` and `.github/` behind once empty, and an empty `.cursor/` makes `apm targets` report cursor as active. No package tracks a file there, so remove the empty directories:
+
+```bash
+find packages -mindepth 2 -maxdepth 3 -type d -empty \( -path 'packages/*/.cursor*' -o -path 'packages/*/.github*' \) -delete
+```
+
+Then `find packages -mindepth 2 -maxdepth 2 -type d -empty` must print nothing the run left, and `git status --short` must show no change the run made. Kill only processes you started.

@@ -273,3 +273,14 @@ Not significant, recorded only:
 - Fix rounds step 3 ("the pull request branch that owns each one") reads, alone, as sending a fix to a merged branch. PR step 2 settles it, and both readers chose a new pull request. Older text.
 - Fix rounds starts the PR creator before moving to PR; the PR section does the reverse. Older text.
 - The `state` sent on an ignored notice, and the notice having no message kind of its own, are the reference file's known lag.
+
+## PR: pull request 85 rebuilt for code head `a1c95f1df8eab39ede778ec82f49b025034881da`
+
+https://github.com/Samuel-Harris/foundry/pull/85 is still a draft. GitHub retargeted it to `main` when #82 merged, and it now has head `f54b7b8` and `depends_on: []`. It joins no stack. A fresh PR creator rebuilt it under `pr-handbook-r1`, as a plain fast-forward from `2c43b3d`:
+
+- `11aa20a` merges `origin/main` with a tree that replays the pull request's 13 own commits and the 9 fix-round commits (`515c907` to `a1c95f1`) onto `origin/main`.
+- `f54b7b8` is the regenerate commit, which raises s-stack from 0.1.1 to 0.1.2.
+
+The proof printed `EQUAL`, and the hook and `versioning.py check origin/main` passed. GitHub reports it MERGEABLE.
+
+The phase session checked independently. The four files #85 adds over `origin/main` (the three handbooks and `checks/phase-handbooks.md`) are each identical to the phase tip, `apm.yml` changes only its `version:` line, the branch holds no file under `.foundry/`, and `2c43b3d` is an ancestor of the new head. Hand-written lines against `main`: 371 added and 1 removed. The description's Dependencies section now says none.

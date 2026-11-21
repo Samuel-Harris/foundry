@@ -125,9 +125,9 @@ verdicts:
 pull_requests:
   - number: 85
     branch: "s-stack-phase-handbooks"
-    base: "s-stack-verify-skill"
-    depends_on: [82]
-    stacked: true
+    base: "main"
+    depends_on: []
+    stacked: false
 requests: []
 decisions:
   - id: "phase-handbooks-d4"
@@ -167,4 +167,4 @@ Fix bbd35bd: the move-back rule asks only about gates already passed, a stale VE
 The orchestrator withdrew the no-verdict move-back rule before any verifier started. Back to Implement to delete it, keeping the resend wording and the rework-after-Done path.
 Fix 52afb2a drops the no-verdict move-back rule. bbd35bd's other fixes stand. Verify returned VERIFIED at 52afb2a. Review returned SIGNIFICANT at 52afb2a: the resend condition omitted that every pull request, new ones included, must have merged into the default branch. Back to Implement.
 Fix 771ac5d: the merged notice is resent only once every pull request, new ones included, has merged into the default branch, the status shows PR and the code head is merged into the orchestrator branch. Verify returned NOT VERIFIED at 771ac5d: phase-session.md alone allowed an early Done between moving to PR and recording the new pull request. Back to Implement.
-Fixes 52bc3da and 8e258ca: PR step 4 now says the orchestrator merges a phase it has merged before only while that phase lists an open pull request, in the orchestrator's words, so the notice cannot come before the new pull request is recorded. Verify returned NOT VERIFIED at 8e258ca: the orchestrator's re-merge guard and its resend condition, restated in phase-session.md, leave a dead end. Decision request phase-handbooks-r1 sent. phase-handbooks-r1 answered with option A (phase-handbooks-d4). Fix a1c95f1 replaces the restated resend conditions and the guard sentence with a pointer to orchestrator.md. Verify returned VERIFIED at a1c95f1. Review returned CLEAR at a1c95f1. Both verdicts cover a1c95f1. A PR creator now rebuilds #85 against main under run decision pr-handbook-r1.
+Fixes 52bc3da and 8e258ca: PR step 4 now says the orchestrator merges a phase it has merged before only while that phase lists an open pull request, in the orchestrator's words, so the notice cannot come before the new pull request is recorded. Verify returned NOT VERIFIED at 8e258ca: the orchestrator's re-merge guard and its resend condition, restated in phase-session.md, leave a dead end. Decision request phase-handbooks-r1 sent. phase-handbooks-r1 answered with option A (phase-handbooks-d4). Fix a1c95f1 replaces the restated resend conditions and the guard sentence with a pointer to orchestrator.md. Verify returned VERIFIED at a1c95f1. Review returned CLEAR at a1c95f1. Both verdicts cover a1c95f1. A PR creator now rebuilds #85 against main under run decision pr-handbook-r1. #85 was rebuilt onto main at f54b7b8, with no dependency, and the proof shows it holds exactly the verified phase diff.

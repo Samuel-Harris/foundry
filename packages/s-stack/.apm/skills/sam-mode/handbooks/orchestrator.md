@@ -10,7 +10,7 @@ Your workers are main sessions that the launcher starts, not subagents, and each
 
 - Read the evidence, not the report. A status file, a commit and a pull request's live state outrank a message, including one that says a phase is done.
 - Check a pull request's live state before you report on it or act on it.
-- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR is never stalled, because tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported has no work.
+- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR has work only while a `fix-round` or `instruction` you sent it is unanswered by a commit or a state change. Otherwise tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported since you last started it has no work.
 - Retry by cause. A session that ended or lost its connection resumes with the launcher. A session whose conversation is the problem, because it loops, its context is full or it has stalled, gets `stop`, then in the next tick `--close` and a launch with `--fresh`.
 - Ask the developer only for a real decision: a one-way door, a product or preference call, or a blocker that survived a restart. Merge mechanics, retries and fix rounds never reach the developer.
 - Never read a phase plan, a diff or long pane output yourself. Give it to a fresh subagent and keep its conclusion. Send your own messages, never through a subagent.
@@ -52,7 +52,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 - Done phases whose status-only merge was refused, and whether the developer has been told.
 - Live sessions: name, pane, worktree, started, the tick in which it began stopping, if it is stopping, and whether you have told it that every pull request merged. Drop a session's row when you close its pane.
 - Open decision requests: id, phase, door, since.
-- Pull requests under watch: number, phase, branch, base, depends on, `needs_update`, and the code head at each phase's last `prs-open`.
+- Pull requests under watch: number, phase, branch, base, head, depends on, `needs_update`, and the code head at each phase's last `prs-open`.
 - Merged phases: merge commit, phase code head, post-merge check result.
 
 ## The tick
@@ -112,17 +112,18 @@ Merge the default branch into the orchestrator branch on the orchestrator branch
 A pull request's checks do not run again when the default branch, or a pull request it depends on, moves. Two pull requests can each pass, merge, and together break the default branch. `needs_update` marks each open pull request that has to be refreshed.
 
 - An open pull request is up to date when, after `git fetch origin`, its head contains the default branch's tip and the current head of every open pull request it depends on, directly or through another, and every required check has passed on that head. A merged or closed pull request has no flag.
+- A pull request it depends on that closed without merging, or whose new head does not contain its recorded head, may have left rejected commits in it. Flag it, start its phase's session if the pane is closed, and send an `instruction` to rebuild it without those commits. If the phase reports that it cannot, tell the developer.
 - In tick step 1, set `needs_update` on each open pull request that is not up to date, and clear it on each that is. Write each change to the tracker and the board.
-- In tick step 4, tell each phase in PR that has a pull request it must refresh, once a tick: start its session if its pane is closed, and otherwise wait until it is quiet. If the pull request lacks the default branch's tip, send a `fix-round` of the kind "A pull request merged", naming that tip. If it lacks the head of a pull request it depends on, send an `instruction` to refresh it onto that pull request, naming its current head. A pull request flagged only because its checks are pending or failed needs no message here. Step 5 handles a failed check. A phase in another state is told once it is back in PR, because those handlers expect PR.
+- In tick step 4, tell each phase in PR that has a pull request it must refresh, once a tick: start its session if its pane is closed, and otherwise wait until it is quiet. If the pull request lacks the default branch's tip, send a `fix-round` of the kind "A pull request merged", naming that tip. Otherwise, if it lacks the head of a pull request it depends on, send an `instruction` to refresh it onto that pull request, naming its current head. A pull request flagged only because its checks are pending or failed needs no message here. Step 5 handles a failed check. Send nothing here to a phase that step 2 sent a `fix-round` this tick. A phase in another state is told once it is back in PR, because those handlers expect PR.
 
-A pull request is ready for the developer to merge only when it is up to date.
+A pull request is ready for the developer to merge only when it is up to date and its base is the default branch. Only a merge into the default branch counts as merged, in this handbook and on the board.
 
 ## Finishing a phase
 
 In tick step 4, for each merged phase, do every step below whose condition holds. Each step reads the record, so repeating it is safe and a step that waits happens in a later tick. A session is stopping from the moment you send it `stop` until you next send it any other message or start it. Mark that in the tracker.
 
 - It has been stopping since an earlier tick and is quiet: close its pane with `--close`.
-- Not every pull request has merged, its status is PR, you have merged its current code head, its pane is open, it is not stopping, its status has no `waits_for`, none of its pull requests has `needs_update` set, and it is quiet: send `stop`, because nothing is left for it to do.
+- Not every pull request has merged, its status is PR, you have merged its current code head, its pane is open, it is not stopping, its status has no `waits_for`, none of its pull requests has `needs_update` set, nothing you sent it is unanswered, and it is quiet: send `stop`, because nothing is left for it to do.
 - Every pull request has merged, its status is PR, you have merged its current code head and it passed its post-merge check, and it is not marked told: start its session if its pane is closed, then send an `instruction` saying that every pull request has merged into the default branch, and mark it told. It then moves to Done. Clear the mark whenever its status leaves PR, its code head changes, or it replies to the notice with a `state` other than PR.
 - Its status is Done, its pane is open, it is not stopping, and it is quiet: send `stop`.
 - Its status is Done, its pane is closed, and the branch has commits the orchestrator branch lacks: compute the tip's code head as [Merging a phase](#merging-a-phase) says. If it is the code head you merged, the new commits hold only status, so merge them with steps 1 to 3. This merge runs while frozen and is exempt from the merge limits in tick step 4. If it conflicts or a hook refuses it, abort it. When the files at fault are the phase's own status files and this is the first refusal since it reached Done, start its session and send an `instruction` that names them and says to fix them in a commit that holds only `.foundry/` files and to stay Done. Otherwise tell the developer, and do not retry until they answer. Never send `merge-orchestrator-branch` here, because it would move a Done phase's code head. If the code head has changed, start the session and send `move-back` to Implement, because no verdict covers that code. It merges again only once it has sent `prs-open` for that code, as [Merging a phase](#merging-a-phase) says.
@@ -148,7 +149,7 @@ Publish the board once for each feature from the template `assets/status-board.h
 
 ## The architecture page
 
-The page says what is being built, and the board says how the work is going. A fresh subagent writes the page and each update. Its brief names the roadmap, `run-decisions.md`, the orchestrator branch and the commit the page last described.
+The page says what is being built, and the board says how the work is going. A fresh subagent writes the page and each update. Its brief names the roadmap, `run-decisions.md`, the orchestrator branch, the commit the page last described, and the phase merges whose post-merge check passed.
 
 - It takes the intended design from the roadmap and `run-decisions.md`, and the built design from the code on the orchestrator branch.
 - It shows a map of the system, the feature's components and boundaries, the data model and main flows, the rules from the roadmap's decisions, each part as planned or built, and the commit and time it describes. A part is built once its phase has merged into the orchestrator branch and that merge passed its post-merge check.
@@ -159,7 +160,7 @@ Record the commit it describes in the tracker.
 
 ## Roadmap updates
 
-When the developer asks for a roadmap change, start an update spec writer with `--role spec --update <n>`. The launcher puts it in your column, where the developer talks to it. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, merge it with `--no-ff`, and close its pane with `--close`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner so that it revises those phases' entries. Its `done-planning` then names them, and they move back to Plan.
+When the developer asks for a roadmap change, start an update spec writer with `--role spec --update <n>`. The launcher puts it in your column, where the developer talks to it. When it sends `roadmap-update`, check that its branch changes nothing outside the roadmap directory, merge it with `--no-ff`, and close its pane with `--close`. Delete from `run-decisions.md` the rows the message says the update folded in, and commit. Send `move-back` to Spec to each phase whose behaviour the change affects, and restart the planner with an `instruction` that names the update and those phases, so that it revises their entries. Its `done-planning` then names them, and they move back to Plan.
 
 ## Restarts
 

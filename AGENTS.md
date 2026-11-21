@@ -1,7 +1,7 @@
 # Working in this repository
 
-Operational notes for agents editing Foundry. This repository publishes nineteen
-[APM](https://microsoft.github.io/apm/) packages — eighteen content packages plus
+Operational notes for agents editing Foundry. This repository publishes twenty
+[APM](https://microsoft.github.io/apm/) packages — nineteen content packages plus
 a meta-package. Almost everything surprising about it comes from the pinned CLI,
 so this file records **empirically verified APM 0.32.0 behaviour**, not a
 restatement of the design. For what each package contains, see `README.md`; for
@@ -128,8 +128,8 @@ dependencies:
   Local dependencies are for development only. Replace them with remote references (e.g., 'owner/repo') before packing.
   ```
 
-  The five packages that declare one — `default-stack`, `execution`,
-  `planning`, `repo-init` and `skill-creation` — are
+  The six packages that declare one — `default-stack`, `execution`,
+  `planning`, `repo-init`, `s-stack` and `skill-creation` — are
   therefore **pack-blocked** from their committed manifests. The local Tier 1
   suite asserts that guardrail instead of skipping those packages silently.
 - **Keep the `path:` form permanently.** A remote install rewrites each
@@ -286,9 +286,11 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
   parents another local package, the drift replay fails with `ambiguous
   resolved_by parent ...: 2 local dependencies share that repo_url`. Re-running
   `apm install` rewrites the same duplicate. No package here triggers it:
-  `default-stack` reaches `pr` and `repo-maintenance` twice, but neither has
-  a dependency of its own. Giving either one a sibling dependency would break
-  `default-stack`'s own audit. The repro is in `docs/DEPENDENCY-CONTRACTS.md`.
+  `default-stack` reaches `pr` and `repo-maintenance` twice, and `s-stack`
+  reaches `deep-interview` and `review` twice, but none of the four has a
+  dependency of its own. Giving any of them a sibling dependency would break
+  the audit of the package that reaches it twice. The repro is in
+  `docs/DEPENDENCY-CONTRACTS.md`.
 - `apm pack --archive -o ./dist` emits a **Claude plugin bundle** (default
   format) as a `.zip`; installing it round-trips the file inventory but not
   per-target instruction translation. `apm pack --format apm` is not a
@@ -377,7 +379,7 @@ further workflow runs.
   `.gitignore` already ignores `apm_modules/`. `apm install` appends
   `# APM dependencies` and `apm_modules/` to the `.gitignore` in its working
   directory whenever that exact line is absent there, so a package without one
-  grows an untracked file on the next install and dirties the tree. Nineteen
+  grows an untracked file on the next install and dirties the tree. Twenty
   byte-identical 33-byte files are the expected end state.
 - Never commit deploy output. `.gitignore` excludes `apm_modules/`, `dist/`,
   `build/`, `.claude/`, `.agents/`, `.cursor/rules/`, `.cursor/agents/`,

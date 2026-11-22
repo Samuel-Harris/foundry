@@ -59,7 +59,8 @@ def build_system_bin(target: Path) -> None:
     for directory in ("/usr/bin", "/bin"):
         for entry in os.listdir(directory):
             link = target / entry
-            if entry not in withheld and not link.exists():
+            # A dangling link in /usr/bin would pass an exists() check and collide.
+            if entry not in withheld and not os.path.lexists(link):
                 link.symlink_to(os.path.join(directory, entry))
     for tool in ("git", "python3", "perl"):
         found = shutil.which(tool)

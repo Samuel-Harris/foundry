@@ -13,7 +13,7 @@ The two files, relative to the repository root:
 
 Files: both files above.
 
-Prompt: "Read only these two files and nothing else, not even files they link to. Answer from them alone. (1) For each of these roles say which handbook path you would read, relative to the repository root: spec writer, orchestrator, planner, phase session, verifier, reviewer, PR creator. (2) Write the exact first prompt that a phase session of feature `<feature>` and phase `<phase>` receives, with placeholders for values you cannot know."
+Prompt: "Read only these two files and nothing else, not even files they link to. Answer from them alone. (1) For each of these roles say which handbook path you would read, relative to the repository root: spec writer, orchestrator, planner, phase session, verifier, reviewer, PR creator. For each, also say whether it receives a first prompt of its own and, if it does not, who points it at its handbook. (2) Write the exact first prompt that a phase session of feature `<feature>` and phase `<phase>` receives, with placeholders for values you cannot know."
 
 Expected answer:
 

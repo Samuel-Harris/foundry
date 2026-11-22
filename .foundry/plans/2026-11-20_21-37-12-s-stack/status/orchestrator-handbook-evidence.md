@@ -671,3 +671,18 @@ Minor defects, none on the common path:
 ## For the cross-handbook integration: draft pull requests in the up-to-date rule
 
 The board template now says "a draft or open pull request" in its `needs_update` rule. `orchestrator.md` lines 113 to 116 say "open pull request". Every phase pull request is a draft, and GitHub reports a draft's state as open. Readers took it that way in 65 cold reads. Align the wording at integration, as the orchestrator's integration list already plans.
+
+## Review 13, code head `9c1e21fa51e5829bc7402596bea8e863bcd7ab2d`, SIGNIFICANT
+
+`interrogate` over the commits since `8fff7f3`, under the common-path bar. Two adversaries ran, on Opus and Fable, each in its own worktree. The phase session reran both proofs.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| The developer-commit check marks the PR creator's own carried commits `+`. A phase commit regenerates the lockfile in the commit that makes it stale (`phase-session.md` line 47). The carried copy holds only the hand-written paths, and a separate regenerate commit follows it, so the patch ids differ. The carried commit is not reachable from the default branch and touches hand-written files, so neither drop rule removes it. This sends a false "Feedback on a pull request" round after every carried fix, and after a stack parent merges and the forge rebases the child. | Opus, Fable | On real branches, `git cherry -v s-stack-phase-board origin/s-stack-board-follow-up origin/main` marks the carried copies of `73251d3` and `5fc142f` `+`. The patch ids match once `apm.lock.yaml` is excluded. Scratch walks and three cold reads give the same result. Two readers avoided the round only by departing from line 148. |
+
+Each carried commit ends with `(cherry picked from commit <sha>)`, which names its phase commit. A developer's commit has no such line. The `pr-handbook` branch's `references/pr-commands.md` line 46 matches carried commits by that line. Both walks otherwise held:
+- suggestions before and after "Update branch", including on stacked pull requests;
+- refresh merges and regenerate commits;
+- a suggestion the phase has taken;
+- the checked-head start;
+- "every pull request of the phase".

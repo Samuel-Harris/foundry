@@ -951,7 +951,7 @@ Expected: exit `0`, one `ok` line for each of the 49 scenarios and one for `lane
 
 ## Evidence
 
-The phase's verifier runs these at every code head it verifies and puts every result in its report, never in this file. Every page, row and name is placeholder data.
+The phase's verifier runs these when they are in its blast radius and puts every result in its report, never in this file. Every page, row and name is placeholder data.
 
 ### Mutation proof
 

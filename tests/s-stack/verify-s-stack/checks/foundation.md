@@ -13,7 +13,7 @@ The two files, relative to the repository root:
 
 Files: both files above.
 
-Prompt: "Read only these two files and nothing else, not even files they link to. Answer from them alone. (1) For each of these roles say which handbook path you would read, relative to the repository root: spec writer, orchestrator, planner, phase session, verifier, reviewer, PR creator. (2) Write the exact first prompt that a phase session of feature `<feature>` and phase `<phase>` receives, with placeholders for values you cannot know."
+Prompt: "Read only these two files and nothing else, not even files they link to. Answer from them alone. (1) For each of these roles say which handbook path you would read, relative to the repository root: spec writer, orchestrator, planner, phase session, verifier, reviewer, PR creator. For each, also say whether it receives a first prompt of its own and, if it does not, who points it at its handbook. (2) Write the exact first prompt that a phase session of feature `<feature>` and phase `<phase>` receives, with placeholders for values you cannot know."
 
 Expected answer:
 
@@ -36,19 +36,19 @@ Expected answer:
 
 Files: `references/status-and-messages.md` only.
 
-Prompt: "Read only this file and nothing else. Answer from it alone. (1) How does a phase session compute its code head, and which commits leave it unchanged? (2) Phase `launcher` of feature `billing-export` has just moved to Verify. Write the message its session sends to the orchestrator, and say what it does before sending it. (3) When may the orchestrator merge a phase? (4) What is the commit subject of that phase's status commit? (5) Which message does the orchestrator send when (a) every pull request of a phase in PR has merged into the default branch, (b) only generated files on one of its pull requests are stale, and (c) a check on the orchestrator branch fails after the phase merged?"
+Prompt: "Read only this file and nothing else. Answer from it alone. (1) How does a phase session compute its code head, and which commits leave it unchanged? (2) Phase `launcher` of feature `billing-export` has just moved to Verify. Write the message its session sends to the orchestrator, and say what it does before sending it. (3) When may the orchestrator merge a phase? (4) What is the commit subject of that phase's status commit? (5) Which message does the orchestrator send when (a) every pull request of a phase in PR has merged into the default branch, (b) a pull request of the phase lacks the default branch's tip, because the default branch moved, and (c) a check on the orchestrator branch fails after the phase merged?"
 
 Expected answer:
 
-1. Walk the phase branch's first-parent line, newest first, diff each commit against its own first parent, and take the newest that changes something outside `.foundry/`, leaving out the generated paths and lines the feature plan names. So a merge that brings in code moves the code head and one that brings only `.foundry/` changes does not. A commit that only records status, or changes only those generated paths and lines, leaves it unchanged.
+1. Walk the phase branch's first-parent line, newest first, diff each commit against its own first parent, and take the newest that changes something outside `.foundry/`, leaving out the generated paths and lines the feature plan names. A clean merge of the orchestrator branch leaves it unchanged. A merge is clean when its tree equals git's automatic merge of its two parents outside `.foundry/`. Any other merge that brings in code moves it, including a merge of the default branch and a conflict resolution. A merge that brings only `.foundry/` changes leaves it unchanged. A commit that only records status, or changes only those generated paths and lines, leaves it unchanged.
 2. It first commits its status file (state `Verify`, the code head) on its own branch. Then it sends a message whose first line is `billing-export-phase-launcher: state: <one sentence>`, carrying the new state `Verify` and the code head, with any detail lines below being facts already committed.
-3. The newest `verify` verdict must be `VERIFIED` and the newest `review` verdict `CLEAR`, and both must name the current code head. That is the merge rule, and the phase moves to PR once it holds. `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges.
+3. The newest `verify` verdict is `VERIFIED` or `WAIVED`, and the newest `review` verdict is `CLEAR` or `WAIVED`. Both name the current code head. A `WAIVED` verdict counts only when the newest earlier verdict of the same gate that is not `WAIVED` is `VERIFIED` or `CLEAR`. That is the merge rule, and the phase moves to PR once it holds. `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges.
 4. `chore(billing-export): launcher Verify`.
-5. (a) An `instruction` carrying the merged pull request numbers. (b) `fix-round`. (c) `move-back`, naming the state to move back to and the failed check.
+5. (a) An `instruction` carrying the merged pull request numbers. (b) `fix-round`, naming the pull request and the default branch tip. (c) `move-back`, naming the state to move back to and the failed check.
 
 ### Status header matches C2
 
-The reference ships the feature plan's C2 with these changes, each set by a run decision in `run-decisions.md` or by an item the orchestrator queued in its tracker. Request `foundation-r1`, option A, turns this run's example values into placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. Request `foundation-r2`, option A, adds one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. The code-head rule follows `foundation-r1`, which keeps it general with only `.foundry/` excluded, and the run decision that the code head is the newest first-parent commit whose diff against its first parent changes a line outside the excluded paths and lines. It gives that rule as one bash loop over `git rev-list --first-parent`, run from the worktree root, and says how a feature plan's generated paths and lines are excluded. The check compares that code-head rule, whole, with the approved wording. Queued item 1, raised by `spec-planner-handbooks`, adds the planner's `planner-r<n>` exception to the **Ids** rule. The run decision on `prs-open` re-merges and the follow-up round's review make the **Verdicts** rule state the merge rule, which a phase checks before it moves to PR, and point to `handbooks/orchestrator.md` for the orchestrator's further checks before it merges. Any other difference, such as a new or reworded rule, is a contract change and fails. The check runs from the repository root wherever it is started, and always compares the code-head rule, which needs only the reference. The rest of the comparison reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. Without the plan, as on a pull request branch or the default branch, it prints `PENDING: .foundry/plans/2026-11-20_21-37-12-s-stack/README.md not found, so the reference cannot be compared with C2 here` and skips that part. It exits `1` whenever the code-head rule differs, and otherwise `0`, with the PENDING line when only the plan is missing.
+The reference ships the feature plan's C2 with these changes, each set by a run decision in `run-decisions.md` or by an item the orchestrator queued in its tracker. Request `foundation-r1`, option A, turns this run's example values into placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. Request `foundation-r2`, option A, adds one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. The code-head rule follows `foundation-r1`, which keeps it general with only `.foundry/` excluded, and the run decision that the code head is the newest first-parent commit whose diff against its first parent changes a line outside the excluded paths and lines. It gives that rule as a bash loop over `git rev-list --first-parent`, run under bash from the worktree root, and says how a feature plan's generated paths and lines are excluded. The check leaves that rule out of the comparison, and "Code head in a scratch repository" below runs it. Queued item 1, raised by `spec-planner-handbooks`, adds the planner's `planner-r<n>` exception to the **Ids** rule. The run decision on `prs-open` re-merges and the follow-up round's review make the **Verdicts** rule state the merge rule, which a phase checks before it moves to PR, and point to `handbooks/orchestrator.md` for the orchestrator's further checks before it merges. The integration fix round adds `WAIVED` to both verdict lists and to the merge rule, and adds the `pushed` key and the **Waivers** and **Pushed heads** rules, which the reference owns and the comparison leaves out. Any other difference, such as a new or reworded rule, is a contract change and fails. The check runs from the repository root wherever it is started. The comparison reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. Without the plan, as on a pull request branch or the default branch, it prints `PENDING: .foundry/plans/2026-11-20_21-37-12-s-stack/README.md not found, so the reference cannot be compared with C2 here`. It exits `1` on any other difference, and otherwise `0`, with the PENDING line when the plan is missing.
 
 ```bash
 python3 - <<'EOF'
@@ -62,16 +62,17 @@ def header_section(text):
     end = text.index("\n", text.index("keeps its own form", start))
     return [re.sub(r"\s+", " ", l).strip() for l in text[start:end].splitlines() if l.strip()]
 
-code_head = """- **Code head.** It is the newest commit on the phase branch's first-parent line whose diff against its own first parent changes a file outside `.foundry/`, so a merge that brings in code moves it. Run `for c in $(git rev-list --first-parent <phase branch>); do git diff --quiet "$c^" "$c" -- . ':(exclude).foundry' || { echo "$c"; break; }; done` from the worktree root. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, and generated lines, such as a `version:` line, whose changes also move no code head. Its sessions then add `':(exclude,glob)**/<name>'` to the `git diff` pathspecs for each such path, and `-I '<regex>'` before its `--` for each such line. Without `glob`, `**/<name>` misses a file at the repository root. A generated-line regex must match only generated lines, because `-I` applies to every file. A correct run prints one 40-character SHA and nothing on standard error, so any error output means the result cannot be trusted."""
-
 def without_code_head(lines):
     hits = [k for k, l in enumerate(lines) if l.startswith("- **Code head.**")]
     if len(hits) != 1:
         sys.exit("FAIL: expected exactly one Code head rule")
-    return lines[hits[0]], lines[:hits[0]] + lines[hits[0] + 1:]
+    end = next((k for k in range(hits[0] + 1, len(lines)) if lines[k].startswith("- **")), len(lines))
+    return lines[hits[0]:end], lines[:hits[0]] + lines[end:]
 
-rule, shipped_rest = without_code_head(header_section(ref))
-problems = [] if rule == code_head else [f"code-head rule differs from the approved wording:\n-{code_head}\n+{rule}"]
+_, shipped_rest = without_code_head(header_section(ref))
+added_rules = ("pushed: ", "- **Waivers.**", "- **Pushed heads.**")
+shipped_rest = [l for l in shipped_rest if not l.startswith(added_rules)]
+problems = []
 if plan_path.is_file():
     plan = plan_path.read_text()
     placeholders = [
@@ -86,9 +87,10 @@ if plan_path.is_file():
         ("chore(s-stack)", "chore(<feature>)"),
         ("tracker at `status/orchestrator.md`", "tracker at `.foundry/plans/<id>/status/orchestrator.md`"),
         ("cannot break the YAML.", "cannot break the YAML. Keep characters outside the Basic Multilingual Plane, such as emoji, out of header strings, because `json.dumps` writes them as surrogate pairs that a YAML reader does not join."),
-        ("The orchestrator merges only when", "The merge rule is that"),
+        ('The orchestrator merges only when the newest `verify` verdict is `VERIFIED` and the newest `review` verdict is `CLEAR`, and both name the current code head.', 'The merge rule is that the newest `verify` verdict is `VERIFIED` or `WAIVED`, the newest `review` verdict is `CLEAR` or `WAIVED`, and both name the current code head. A `WAIVED` verdict counts only when the newest earlier verdict of the same gate that is not `WAIVED` is `VERIFIED` or `CLEAR`. A phase moves to PR once the rule holds, and `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges.'),
+        ('# verify: VERIFIED | NOT VERIFIED | INCONCLUSIVE', '# verify: VERIFIED | NOT VERIFIED | INCONCLUSIVE | WAIVED'),
+        ('# review: CLEAR | SIGNIFICANT', '# review: CLEAR | SIGNIFICANT | WAIVED'),
         ("numbered by the phase itself.", "numbered by the phase itself. The planner numbers its requests `planner-r<n>`, and `handbooks/planner.md` says where it keeps them."),
-        ("and both name the current code head.", "and both name the current code head. A phase moves to PR once it holds, and `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges."),
     ]
     expected = []
     for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):
@@ -108,6 +110,48 @@ EOF
 ```
 
 Expected: exit `0` and `reference matches C2 apart from the allowed differences`. On the reference at `13f835b` it exits `1`, and among the differences it prints the append-only sentences of the **Evidence** rule.
+
+### Code head in a scratch repository
+
+The reference's **Code head** rule ships a bash loop. This check takes that loop from the reference as written, fills in its two branch placeholders, and runs it in a throwaway repository under `mktemp -d` with a hermetic git configuration. The history has a phase commit, a clean `--no-ff` merge of the orchestrator branch that brings another phase's code, a status-only commit, a merge of the orchestrator branch with a resolved conflict, and a clean merge of the default branch. After each step it compares the loop's output with the commit the rule names: the phase commit after the clean merge and the status commit, then the conflicted merge, then the default-branch merge.
+
+```bash
+bash <<'SCRIPT'
+set -euo pipefail
+ref="$(git rev-parse --show-toplevel)/packages/s-stack/.apm/skills/sam-mode/references/status-and-messages.md"
+loop=$(awk '/^- \*\*Code head\.\*\*/{f=1;next} f&&/^  ```bash/{b=1;next} b&&/^  ```/{exit} b{sub(/^  /,"");print}' "$ref")
+[ -n "$loop" ] || { echo "FAIL: no bash block in the Code head rule"; exit 1; }
+loop=${loop//<orchestrator branch>/feat}
+loop=${loop//<phase branch>/feat-phase-x}
+d=$(mktemp -d); trap 'rm -rf "$d"' EXIT; cd "$d"
+export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@example.invalid GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@example.invalid
+git init -q -b trunk .
+c() { printf '%s\n' "$2" > "$1"; git add "$1"; git commit -q -m "$3"; }
+c base.txt base "base"
+git checkout -q -b feat
+git checkout -q -b feat-phase-x
+c p.txt one "phase work"; p1=$(git rev-parse HEAD)
+git checkout -q feat; c o.txt other "another phase merged"
+git checkout -q feat-phase-x; git merge -q --no-ff feat -m "merge feat, clean"
+mkdir .foundry; c .foundry/status.md PR "status"
+check() { got=$(bash -c "$loop" 2>"$d/err"); [ ! -s "$d/err" ] || { echo "FAIL: $1 wrote to standard error"; cat "$d/err"; exit 1; }; [ "$got" = "$2" ] || { echo "FAIL: $1: expected $2, got $got"; exit 1; }; echo "ok: $1"; }
+check "clean orchestrator merge and a status commit keep the phase commit" "$p1"
+c p.txt two "phase fix"
+git checkout -q feat; c p.txt three "another phase edits p.txt"
+git checkout -q feat-phase-x
+git merge -q --no-ff feat -m "merge feat, conflicted" >/dev/null 2>&1 || true
+printf 'two and three\n' > p.txt; git add p.txt; git commit -q --no-edit
+m2=$(git rev-parse HEAD)
+check "conflicted orchestrator merge moves the code head" "$m2"
+git checkout -q trunk; c t.txt trunk "default branch moves"
+git checkout -q feat-phase-x; git merge -q --no-ff trunk -m "merge trunk, clean"
+m3=$(git rev-parse HEAD)
+check "clean default-branch merge moves the code head" "$m3"
+echo "code head loop passed"
+SCRIPT
+```
+
+Expected: exit `0`, three `ok:` lines, and a last line `code head loop passed`. If the loop's clean-merge test, the line ending in `&& continue`, is removed, the first comparison fails, because the clean merge of `feat` is printed instead of the phase commit.
 
 ## Evidence
 

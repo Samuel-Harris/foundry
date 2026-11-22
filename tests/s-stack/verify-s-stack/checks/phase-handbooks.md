@@ -37,13 +37,13 @@ decisions: []
 ---
 ```
 
-Prompt: "Read only the handbook file at the path below and nothing else, not even files it links to. Answer from it and the sample status file below alone. You are the phase session for phase `widgets`. Since the verdict below was recorded you merged the orchestrator branch into the phase branch, and the code head command now prints `bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb`. The only change your merge brought into your own paths is a one-line typo fix. (1) Does the `VERIFIED` verdict in the status file cover the current code head? (2) May the phase move on to Review on the strength of it? (3) What must happen for verification, and how much of it runs?"
+Prompt: "Read only the handbook file at the path below and nothing else, not even files it links to. Answer from it and the sample status file below alone. You are the phase session for phase `widgets`. Since the verdict below was recorded you merged the orchestrator branch into the phase branch and resolved a conflict in one of your own files. The resolution is a one-line typo fix, and the code head command now prints `bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb`. (1) Does the `VERIFIED` verdict in the status file cover the current code head? (2) May the phase move on to Review on the strength of it? (3) What must happen for verification, and how much of it runs?"
 
 Expected answer:
 
-1. No. The verdict names code head `aaaa…`, and a verdict covers only the code head it names. The current code head is `bbbb…`, which the merge moved.
-2. No. The phase moves to Review only on a `VERIFIED` verdict for the current code head. The size of the change does not matter, and an old verdict is never carried forward.
-3. A fresh verifier subagent runs, and verification runs again in full for the new code head. Its verdict is recorded in the status file before the phase can move on.
+1. No. The verdict names code head `aaaa…`, and a verdict covers only the code head it names. The current code head is `bbbb…`, the conflicted merge.
+2. No. The phase moves to Review only on a `VERIFIED` or `WAIVED` verdict for the current code head. An old verdict is never carried forward, and the phase session never decides itself that a change needs no gate.
+3. A fresh verifier subagent runs for `bbbb…`. Its brief names `aaaa…` as the newest `VERIFIED` code head. It covers the phase's own work since then, here the conflict resolution, and runs only the checks in that blast radius. It may return `WAIVED` under the reference file's waiver rule. Its verdict is recorded in the status file before the phase can move on.
 
 ### Cold read 2. The verifier's check file and a check that could not run
 
@@ -68,7 +68,7 @@ Prompt: "Read only the handbook file at the path below and nothing else, not eve
 Expected answer:
 
 1. `tests/demo/verify-demo/checks/widgets.md`, beside the verification skill's `SKILL.md`, with a `## Rerun` section for cheap, repeatable, local checks and an `## Evidence` section that describes one-off checks without their results. It does not edit the skill's `SKILL.md`, which its phase does not own.
-2. Before running anything. The commit moves the code head, and the verdict must come from a run at that head. Any later change outside `.foundry/`, this file included, means a new commit and a full rerun.
+2. Before running anything. The commit moves the code head, and the verdict must come from a run at that head. Any later change outside `.foundry/`, this file included, means a new commit, and the checks in the blast radius run again at that head.
 3. INCONCLUSIVE, because no check failed but one could not run. INCONCLUSIVE is not a pass.
 4. No. It waits until every subagent it started has reported.
 

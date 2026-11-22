@@ -48,7 +48,7 @@ Expected answer:
 
 ### Status header matches C2
 
-The reference ships the feature plan's C2 with these changes, each set by a run decision in `run-decisions.md` or by an item the orchestrator queued in its tracker. Request `foundation-r1`, option A, turns this run's example values into placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. Request `foundation-r2`, option A, adds one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. The code-head rule follows `foundation-r1`, which keeps it general with only `.foundry/` excluded, and the run decision that the code head is the newest first-parent commit whose diff against its first parent changes a line outside the excluded paths and lines. It gives that rule as a bash loop over `git rev-list --first-parent`, run under bash from the worktree root, and says how a feature plan's generated paths and lines are excluded. The check compares that code-head rule, whole, with the approved wording. Queued item 1, raised by `spec-planner-handbooks`, adds the planner's `planner-r<n>` exception to the **Ids** rule. The run decision on `prs-open` re-merges and the follow-up round's review make the **Verdicts** rule state the merge rule, which a phase checks before it moves to PR, and point to `handbooks/orchestrator.md` for the orchestrator's further checks before it merges. The integration fix round replaces the code-head rule with one that skips clean merges of the orchestrator branch, adds `WAIVED` to both verdict lists and to the merge rule, adds the `pushed` key, and adds the **Waivers** and **Pushed heads** rules. Any other difference, such as a new or reworded rule, is a contract change and fails. The check runs from the repository root wherever it is started, and always compares the code-head rule, which needs only the reference. The rest of the comparison reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. Without the plan, as on a pull request branch or the default branch, it prints `PENDING: .foundry/plans/2026-11-20_21-37-12-s-stack/README.md not found, so the reference cannot be compared with C2 here` and skips that part. It exits `1` whenever the code-head rule differs, and otherwise `0`, with the PENDING line when only the plan is missing.
+The reference ships the feature plan's C2 with these changes, each set by a run decision in `run-decisions.md` or by an item the orchestrator queued in its tracker. Request `foundation-r1`, option A, turns this run's example values into placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. Request `foundation-r2`, option A, adds one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. The code-head rule follows `foundation-r1`, which keeps it general with only `.foundry/` excluded, and the run decision that the code head is the newest first-parent commit whose diff against its first parent changes a line outside the excluded paths and lines. It gives that rule as a bash loop over `git rev-list --first-parent`, run under bash from the worktree root, and says how a feature plan's generated paths and lines are excluded. The check leaves that rule out of the comparison, and "Code head in a scratch repository" below runs it. Queued item 1, raised by `spec-planner-handbooks`, adds the planner's `planner-r<n>` exception to the **Ids** rule. The run decision on `prs-open` re-merges and the follow-up round's review make the **Verdicts** rule state the merge rule, which a phase checks before it moves to PR, and point to `handbooks/orchestrator.md` for the orchestrator's further checks before it merges. The integration fix round adds `WAIVED` to both verdict lists and to the merge rule, and adds the `pushed` key and the **Waivers** and **Pushed heads** rules, which the reference owns and the comparison leaves out. Any other difference, such as a new or reworded rule, is a contract change and fails. The check runs from the repository root wherever it is started. The comparison reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. Without the plan, as on a pull request branch or the default branch, it prints `PENDING: .foundry/plans/2026-11-20_21-37-12-s-stack/README.md not found, so the reference cannot be compared with C2 here`. It exits `1` on any other difference, and otherwise `0`, with the PENDING line when the plan is missing.
 
 ```bash
 python3 - <<'EOF'
@@ -62,21 +62,6 @@ def header_section(text):
     end = text.index("\n", text.index("keeps its own form", start))
     return [re.sub(r"\s+", " ", l).strip() for l in text[start:end].splitlines() if l.strip()]
 
-code_head = [re.sub(r"\s+", " ", l).strip() for l in """- **Code head.** It is the newest commit on the phase branch's first-parent line whose diff against its own first parent changes a file outside `.foundry/`, with one exception. A clean merge of the orchestrator branch moves no code head, because code merged in from it counts as verified and reviewed. A merge of the orchestrator branch is one whose second parent is on the orchestrator branch's first-parent line. It is clean when its tree equals git's automatic merge of its two parents outside `.foundry/`. Any other merge that brings in code moves the code head, a merge of the default branch and a conflict resolution included. Run this under bash from the worktree root:
-
-  \x60\x60\x60bash
-  ob=$(git rev-list --first-parent <orchestrator branch>)
-  for c in $(git rev-list --first-parent <phase branch>); do
-    if p2=$(git rev-parse -q --verify "$c^2") && grep -qx "$p2" <<<"$ob"; then
-      t=$(git merge-tree --write-tree "$c^1" "$p2" | head -n 1)
-      git diff --quiet "$t" "$c" -- . ':(exclude).foundry' && continue
-    fi
-    git diff --quiet "$c^" "$c" -- . ':(exclude).foundry' || { echo "$c"; break; }
-  done
-  \x60\x60\x60
-
-  A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, and generated lines, such as a `version:` line, whose changes also move no code head. Its sessions then add `':(exclude,glob)**/<name>'` to both `git diff` pathspecs for each such path, and `-I '<regex>'` before each `--` for each such line. Without `glob`, `**/<name>` misses a file at the repository root. A generated-line regex must match only generated lines, because `-I` applies to every file. A correct run prints one 40-character SHA and nothing on standard error, so any error output means the result cannot be trusted.""".splitlines() if l.strip()]
-
 def without_code_head(lines):
     hits = [k for k, l in enumerate(lines) if l.startswith("- **Code head.**")]
     if len(hits) != 1:
@@ -84,8 +69,10 @@ def without_code_head(lines):
     end = next((k for k in range(hits[0] + 1, len(lines)) if lines[k].startswith("- **")), len(lines))
     return lines[hits[0]:end], lines[:hits[0]] + lines[end:]
 
-rule, shipped_rest = without_code_head(header_section(ref))
-problems = [] if rule == code_head else ["code-head rule differs from the approved wording:"] + list(difflib.unified_diff(code_head, rule, "approved", "reference", lineterm="", n=0))
+_, shipped_rest = without_code_head(header_section(ref))
+added_rules = ("pushed: ", "- **Waivers.**", "- **Pushed heads.**")
+shipped_rest = [l for l in shipped_rest if not l.startswith(added_rules)]
+problems = []
 if plan_path.is_file():
     plan = plan_path.read_text()
     placeholders = [
@@ -105,19 +92,11 @@ if plan_path.is_file():
         ('# review: CLEAR | SIGNIFICANT', '# review: CLEAR | SIGNIFICANT | WAIVED'),
         ("numbered by the phase itself.", "numbered by the phase itself. The planner numbers its requests `planner-r<n>`, and `handbooks/planner.md` says where it keeps them."),
     ]
-    insertions = [
-        ("stacked: true", 'pushed: "<branch>=<sha>,<branch>=<sha>" # the PR creator\'s last RECORD line, else null'),
-        ("- **Verdicts.**", "- **Waivers.** A fresh gate agent, the verifier or the first reviewer, may return `WAIVED` instead of running its gate, with its reason. It may do so only when the diff in its scope changes nothing that a user, a program or an agent reading the file would act on differently. Waivable: generated files only; formatting, import order or a linter's auto-fix; a complete rename of a local variable or private function; comments, docstrings, log wording, or a typo in a user-facing string that no test asserts; a small, isolated change whose whole effect the agent can state from the diff and that no check or probe exercises. Never waivable: any change to logic or control flow; a change to a public interface or contract; a dependency added or bumped by hand; anything touching authentication, permissions, secrets, input handling or the commands the code runs; a test or check change that alters an expected result; a change to instructions an agent follows, such as a prompt, skill or handbook. An empty scope is waivable. A waiver never moves a gate's baseline: the next scoped Verify covers everything since the last `VERIFIED` code head, and the next Review everything since the last `CLEAR` or `SIGNIFICANT` one."),
-        ("- **Evidence.**", "- **Pushed heads.** `pushed` holds the `RECORD` line of the PR creator's last proof that printed `EQUAL` and whose pushes all succeeded, without the word `RECORD`, exactly as printed. It is `null` before the first push. The phase passes it unchanged as the PR creator's `PUSHED`. `pull_requests` keeps every pull request once opened, merged ones included, because the PR creator's `OWN` lists them all."),
-    ]
     expected = []
     for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):
         for old, new in placeholders:
             line = line.replace(old, new)
         expected.append(line)
-        for anchor, added in insertions:
-            if line.startswith(anchor):
-                expected.append(added)
     _, expected_rest = without_code_head(expected)
     problems += difflib.unified_diff(expected_rest, shipped_rest, "C2 with placeholders", "reference", lineterm="", n=0)
 else:
@@ -131,6 +110,48 @@ EOF
 ```
 
 Expected: exit `0` and `reference matches C2 apart from the allowed differences`. On the reference at `13f835b` it exits `1`, and among the differences it prints the append-only sentences of the **Evidence** rule.
+
+### Code head in a scratch repository
+
+The reference's **Code head** rule ships a bash loop. This check takes that loop from the reference as written, fills in its two branch placeholders, and runs it in a throwaway repository under `mktemp -d` with a hermetic git configuration. The history has a phase commit, a clean `--no-ff` merge of the orchestrator branch that brings another phase's code, a status-only commit, a merge of the orchestrator branch with a resolved conflict, and a clean merge of the default branch. After each step it compares the loop's output with the commit the rule names: the phase commit after the clean merge and the status commit, then the conflicted merge, then the default-branch merge.
+
+```bash
+bash <<'SCRIPT'
+set -euo pipefail
+ref="$(git rev-parse --show-toplevel)/packages/s-stack/.apm/skills/sam-mode/references/status-and-messages.md"
+loop=$(awk '/^- \*\*Code head\.\*\*/{f=1;next} f&&/^  ```bash/{b=1;next} b&&/^  ```/{exit} b{sub(/^  /,"");print}' "$ref")
+[ -n "$loop" ] || { echo "FAIL: no bash block in the Code head rule"; exit 1; }
+loop=${loop//<orchestrator branch>/feat}
+loop=${loop//<phase branch>/feat-phase-x}
+d=$(mktemp -d); trap 'rm -rf "$d"' EXIT; cd "$d"
+export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_AUTHOR_NAME=t GIT_AUTHOR_EMAIL=t@example.invalid GIT_COMMITTER_NAME=t GIT_COMMITTER_EMAIL=t@example.invalid
+git init -q -b trunk .
+c() { printf '%s\n' "$2" > "$1"; git add "$1"; git commit -q -m "$3"; }
+c base.txt base "base"
+git checkout -q -b feat
+git checkout -q -b feat-phase-x
+c p.txt one "phase work"; p1=$(git rev-parse HEAD)
+git checkout -q feat; c o.txt other "another phase merged"
+git checkout -q feat-phase-x; git merge -q --no-ff feat -m "merge feat, clean"
+mkdir .foundry; c .foundry/status.md PR "status"
+check() { got=$(bash -c "$loop" 2>"$d/err"); [ ! -s "$d/err" ] || { echo "FAIL: $1 wrote to standard error"; cat "$d/err"; exit 1; }; [ "$got" = "$2" ] || { echo "FAIL: $1: expected $2, got $got"; exit 1; }; echo "ok: $1"; }
+check "clean orchestrator merge and a status commit keep the phase commit" "$p1"
+c p.txt two "phase fix"
+git checkout -q feat; c p.txt three "another phase edits p.txt"
+git checkout -q feat-phase-x
+git merge -q --no-ff feat -m "merge feat, conflicted" >/dev/null 2>&1 || true
+printf 'two and three\n' > p.txt; git add p.txt; git commit -q --no-edit
+m2=$(git rev-parse HEAD)
+check "conflicted orchestrator merge moves the code head" "$m2"
+git checkout -q trunk; c t.txt trunk "default branch moves"
+git checkout -q feat-phase-x; git merge -q --no-ff trunk -m "merge trunk, clean"
+m3=$(git rev-parse HEAD)
+check "clean default-branch merge moves the code head" "$m3"
+echo "code head loop passed"
+SCRIPT
+```
+
+Expected: exit `0`, three `ok:` lines, and a last line `code head loop passed`. If the loop's clean-merge test, the line ending in `&& continue`, is removed, the first comparison fails, because the clean merge of `feat` is printed instead of the phase commit.
 
 ## Evidence
 

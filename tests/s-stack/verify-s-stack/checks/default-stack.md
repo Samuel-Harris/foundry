@@ -1,6 +1,6 @@
 # Phase `default-stack` checks
 
-Phase `default-stack` makes the meta-package install `s-stack` in place of `planning`, which it now reaches through `s-stack`. It adds `s-stack` and `p-stack` to the Tier 1 scratch-consumer inventory, and documents the new dependency graph and the drift that `apm audit --ci` reports on `default-stack`'s relativised lockfile.
+Phase `default-stack` makes the meta-package install `s-stack` in place of `planning`, which it now reaches through `s-stack`. It adds `s-stack` and `p-stack` to the Tier 1 scratch-consumer inventory, documents the new dependency graph and the drift that `apm audit --ci` reports on `default-stack`'s relativised lockfile, and makes `scripts/relativise_lockfiles.py` write the same lockfile from every checkout path.
 
 Run every check from the repository root, outside the agent sandbox, with the pinned CLI. `APM` names it, and defaults to `.venv-apm/bin/apm`. Each check bounds every `apm` call as `AGENTS.md` requires. Scratch consumers go under `mktemp -d`. Afterwards, run the verification skill's Cleanup, and `git status --short` must show nothing the checks left.
 
@@ -84,9 +84,9 @@ EOF
 
 Expected: `install exit 0`, two `present` lines, two `executable` lines, an audit line `[*] All 10 check(s) passed`, `audit exit 0`, and exit `0`.
 
-### The documented drift on `default-stack`'s relativised lockfile
+### `default-stack`'s lockfile is the same from another checkout path
 
-`docs/DEPENDENCY-CONTRACTS.md`, section "`apm audit --ci` reports drift on `default-stack`'s relativised lockfile", gives commands that a reader can rerun. This runs them as written, bounded, in the same order. It fails when the relativised lockfile audits clean, when the audit after a fresh install does not, when the drifted file count differs from the number the section states, or when the lockfile does not return to its committed form.
+Check out `HEAD` in a second worktree at a fresh `mktemp -d` path, install `packages/default-stack` there with `--frozen`, relativise its lockfile and diff it against the committed one. APM writes the checkout's absolute path into the lockfile and into the name of the directory that p-stack's deployed links point at, so any part of the committed lockfile that still depends on the path it was generated at shows up as a diff. The second worktree holds only `HEAD`, so commit the work first.
 
 ```bash
 bash <<'EOF'
@@ -99,26 +99,65 @@ bounded() {
   else perl -e 'alarm shift; exec @ARGV' "$@"; fi
 }
 t=$(mktemp -d)
-stated=$(grep -oE 'Drift detected: [0-9]+ file' docs/DEPENDENCY-CONTRACTS.md | head -n 1 | grep -oE '[0-9]+')
-cd packages/default-stack || exit 1
-bounded 300 "$APM" install --frozen --target cursor,claude,copilot >/dev/null 2>&1; i1=$?
-python3 ../../scripts/relativise_lockfiles.py apm.lock.yaml
-git diff --exit-code --stat apm.lock.yaml; d1=$?
-bounded 300 "$APM" audit --ci > "$t/audit1.log" 2>&1; a1=$?
-drift=$(grep -oE 'Drift detected: [0-9]+ file' "$t/audit1.log" | head -n 1 | grep -oE '[0-9]+')
-bounded 300 "$APM" install --frozen --target cursor,claude,copilot >/dev/null 2>&1; i2=$?
-bounded 300 "$APM" audit --ci > "$t/audit2.log" 2>&1; a2=$?
-last=$(grep -E 'check\(s\) passed' "$t/audit2.log" | tail -n 1)
-python3 ../../scripts/relativise_lockfiles.py apm.lock.yaml
-git diff --exit-code --stat apm.lock.yaml; d2=$?
-rm -rf "$t"
-echo "install=$i1 diff=$d1 audit=$a1 drift=$drift stated=$stated reinstall=$i2 audit=$a2 [$last] restored=$d2"
-[ "$i1" -eq 0 ] && [ "$d1" -eq 0 ] && [ "$a1" -ne 0 ] && [ -n "$drift" ] && [ "$drift" = "$stated" ] \
-  && [ "$i2" -eq 0 ] && [ "$a2" -eq 0 ] && [ "$d2" -eq 0 ]
+git worktree add -q --detach "$t/x" HEAD || exit 1
+cd "$t/x/packages/default-stack" || exit 1
+bounded 300 "$APM" install --frozen --target cursor,claude,copilot >/dev/null 2>&1; i=$?
+python3 ../../scripts/relativise_lockfiles.py apm.lock.yaml; r=$?
+git diff --exit-code --stat apm.lock.yaml; d=$?
+cd "$repo" && git worktree remove --force "$t/x" && rm -rf "$t"
+echo "install=$i relativise=$r diff=$d"
+[ "$i" -eq 0 ] && [ "$r" -eq 0 ] && [ "$d" -eq 0 ]
 EOF
 ```
 
-Expected: `install=0 diff=0`, a non-zero first `audit`, `drift` equal to `stated` (32 with apm-cli 0.32.0), `reinstall=0 audit=0` with `[*] All 10 check(s) passed`, `restored=0`, and exit `0`. Run the verification skill's Cleanup afterwards, because the installs deploy into `packages/default-stack`.
+Expected: no `--stat` output, the last line `install=0 relativise=0 diff=0`, and exit `0`. Any changed line in `apm.lock.yaml` fails the check.
+
+### The documented drift on `default-stack`'s relativised lockfile
+
+`docs/DEPENDENCY-CONTRACTS.md`, section "`apm audit --ci` reports drift on `default-stack`'s relativised lockfile", gives commands that a reader can rerun, with the line each `apm audit --ci` ends on in a comment. This runs them as written, bounded, in the same order. On the same tree as the first audit, it also runs `apm audit --ci --format json` to read which checks failed and which files drifted. It fails when the relativised lockfile is not the committed one, when the first audit does not print the summary line the section states, when the failed checks are not the ones the section names in brackets after that line, when the number of drifted files differs from the number of p-stack files the section says carry the hashed directory, when the audit after a fresh install does not print the second line the section states, or when the lockfile does not return to its committed form.
+
+```bash
+bash <<'EOF'
+set -u
+repo=$PWD
+APM="${APM:-$repo/.venv-apm/bin/apm}"
+bounded() {
+  if command -v timeout >/dev/null; then timeout "$@"
+  elif command -v gtimeout >/dev/null; then gtimeout "$@"
+  else perl -e 'alarm shift; exec @ARGV' "$@"; fi
+}
+t=$(mktemp -d)
+doc=docs/DEPENDENCY-CONTRACTS.md
+stated1=$(sed -nE 's/^apm audit --ci +# (\[x\] [0-9]+ of [0-9]+ check\(s\) failed) \(.*$/\1/p' "$doc" | head -n 1)
+stated_failed=$(sed -nE 's/^apm audit --ci +# \[x\] .* failed \(([^)]*)\)$/\1/p' "$doc" | head -n 1 | tr -d ' ' | tr ',' '\n' | LC_ALL=C sort | paste -sd, -)
+stated_files=$(grep -oE 'so [0-9]+ deployed p-stack skill files' "$doc" | head -n 1 | grep -oE '[0-9]+')
+stated2=$(sed -nE 's/^apm audit --ci +# (\[\*\] .*)$/\1/p' "$doc" | head -n 1)
+cd packages/default-stack || exit 1
+bounded 300 "$APM" install --frozen --target cursor,claude,copilot >/dev/null 2>&1; i1=$?
+python3 ../../scripts/relativise_lockfiles.py apm.lock.yaml; r1=$?
+git diff --exit-code --stat apm.lock.yaml; d1=$?
+bounded 300 "$APM" audit --ci > "$t/audit1.log" 2>&1; a1=$?
+grep -qF "$stated1" "$t/audit1.log"; s1=$?
+bounded 300 "$APM" audit --ci --format json --output "$t/audit1.json" >/dev/null 2>&1
+failed=$(python3 -c 'import json, sys; print(",".join(sorted(c["name"] for c in json.load(open(sys.argv[1]))["checks"] if not c["passed"])))' "$t/audit1.json")
+files=$(python3 -c 'import json, sys; print(len(json.load(open(sys.argv[1]))["drift"]["drift"]))' "$t/audit1.json")
+bounded 300 "$APM" install --frozen --target cursor,claude,copilot >/dev/null 2>&1; i2=$?
+bounded 300 "$APM" audit --ci > "$t/audit2.log" 2>&1; a2=$?
+grep -qF "$stated2" "$t/audit2.log"; s2=$?
+python3 ../../scripts/relativise_lockfiles.py apm.lock.yaml; r2=$?
+git diff --exit-code --stat apm.lock.yaml; d2=$?
+rm -rf "$t"
+echo "stated [$stated1] ($stated_failed) files=$stated_files, then [$stated2]"
+echo "install=$i1 relativise=$r1 diff=$d1 audit=$a1 summary=$s1 failed=$failed files=$files"
+echo "reinstall=$i2 audit=$a2 summary=$s2 relativise=$r2 restored=$d2"
+[ -n "$stated1" ] && [ -n "$stated_failed" ] && [ -n "$stated_files" ] && [ -n "$stated2" ] \
+  && [ "$i1" -eq 0 ] && [ "$r1" -eq 0 ] && [ "$d1" -eq 0 ] && [ "$a1" -ne 0 ] && [ "$s1" -eq 0 ] \
+  && [ "$failed" = "$stated_failed" ] && [ "$files" = "$stated_files" ] \
+  && [ "$i2" -eq 0 ] && [ "$a2" -eq 0 ] && [ "$s2" -eq 0 ] && [ "$r2" -eq 0 ] && [ "$d2" -eq 0 ]
+EOF
+```
+
+Expected with apm-cli 0.32.0: `stated [[x] 2 of 9 check(s) failed] (content-integrity,drift) files=32, then [[*] All 10 check(s) passed]`, then `install=0 relativise=0 diff=0`, a non-zero first `audit`, `summary=0 failed=content-integrity,drift files=32`, then `reinstall=0 audit=0 summary=0 relativise=0 restored=0`, and exit `0`. Run the verification skill's Cleanup afterwards, because the installs deploy into `packages/default-stack`.
 
 ## Evidence
 
@@ -128,4 +167,4 @@ Expected: `install=0 diff=0`, a non-zero first `audit`, `drift` equal to `stated
 
 ### A consumer of `default-stack` loses no file
 
-Export `main` at the commit before this phase into a `mktemp -d` directory, install its `packages/default-stack` by path into an empty consumer on `--target cursor,claude,copilot`, and record `find . -type f ! -path './apm_modules/*' | LC_ALL=C sort` as `before.txt`. Do the same with a consumer installed from the phase branch, as in the consumer check above, giving `after.txt`. `comm -23 before.txt after.txt` must print nothing. Report the added files grouped by package, and separately each path present in both whose content differs. Only the consumer's `apm.yml`, `apm.lock.yaml` and `.gitignore` may differ, because they record the source path and the resolved packages. The baseline needs a tree from before the phase, so it is not rerun.
+Export `main` at the commit before this phase into a `mktemp -d` directory, install its `packages/default-stack` by path into an empty consumer on `--target cursor,claude,copilot`, and record `find . -type f ! -path './apm_modules/*' | LC_ALL=C sort` as `before.txt`. Do the same with a consumer installed from the phase branch, as in the consumer check above, giving `after.txt`. `comm -23 before.txt after.txt` must print nothing. Report the added files grouped by package. Then compare each path present in both after replacing every `_local/<12 hex digits>/` with `_local/<slot>/` in each copy. APM names p-stack's materialised directory after a hash of the source tree's absolute path, and p-stack's deployed links name that directory, so those files differ between any two consumers installed from trees at different paths while nothing is lost. After the replacement, only the consumer's `apm.yml`, `apm.lock.yaml` and `.gitignore` may differ, because they record the source path and the resolved packages. Report how many files differ only by that directory name. The baseline needs a tree from before the phase, so it is not rerun.

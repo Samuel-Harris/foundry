@@ -873,3 +873,14 @@ Scoped to `9095235..s-stack-phase-default-stack`, own commits `57b0790`, `bba668
 - On a real lockfile, the relativiser exits 1 and leaves the lockfile unchanged when a deployed file is edited or deleted, and exits 0 once the file is restored.
 - Drift section, run as written: `[x] 2 of 9 check(s) failed`, failed `content-integrity,drift`, 32 files; after reinstall, `[*] All 10 check(s) passed`; the lockfile was restored.
 - The skill's checks 1 to 8 pass: launcher 130 tests OK, and Tier 1 at both paths. Every Done-when item passes. Loses no file: 374 files before, 398 after, none lost. 32 files differ only by the slot. After normalising, only `apm.yml` and `apm.lock.yaml` differ.
+
+## Review 2, CLEAR at `acaba0e6fcd36b38e2c6061c6fc7ede046844cae`, 2026-11-22T19:14:58Z
+
+Scope: `git log --first-parent --no-merges 9095235..s-stack-phase-default-stack -- . ':(exclude).foundry'`, which is `57b0790`, `bba668d`, `5f58a7c`, `b94559e`, `9285fa1` and `acaba0e`. The merges in the range bring only `.foundry/`. No waiver allowed. Opus reviewed first, then Fable.
+
+- Review 1's probes, rerun from a fresh worktree at another path by both reviewers, all pass. P1, install, relativise and `git diff --exit-code`, printed nothing. P2, the hook, exited 0. P3, Tier 1, passed with `install and pack leave no tracked-file change`. Fable ran them in three different worktrees, and also under a non-ASCII directory and through a symlink. Opus checked with PyYAML that every deployment `content_hash` in four committed lockfiles has a matching `deployed_file_hashes` entry that the script's pattern sees.
+- The relativiser's refusal on an edited deployed file was confirmed on a real install: exit 1, lockfile byte-identical. `versioning.py bump` in a scratch worktree: `nothing to bump`, tree clean.
+
+**Not significant, recorded as a follow-up (Fable).** A checkout path that contains a space still gives a different lockfile, and the hook fails there. YAML folds the path at the space, and `ABSOLUTE_PATH` and `ABSOLUTE_ANCHOR` match `/\S+`, so the anchor is cut short and left absolute. The script at `9095235`, before this change, gives the identical diff, so it predates the change. The new sentence in `docs/DEPENDENCY-CONTRACTS.md`, "the same from every checkout", is too broad for such a path.
+
+**Unexplained, not a finding (Fable).** One P3 run failed only `s-stack audit --ci`, while the reviewer had other `apm` probes running in parallel. Tier 1 discards the audit output, and the worktree was gone before a rerun. Two later Tier 1 runs and six `apm audit --ci` runs on `packages/s-stack`, alongside looping installs, all passed. No scope commit touches s-stack.

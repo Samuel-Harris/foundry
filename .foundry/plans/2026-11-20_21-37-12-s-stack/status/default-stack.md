@@ -1,7 +1,7 @@
 ---
 phase: "default-stack"
-state: "Review"
-changed_at: "2026-11-22T19:02:05Z"
+state: "PR"
+changed_at: "2026-11-22T19:14:58Z"
 session: "s-stack-phase-default-stack"
 branch: "s-stack-phase-default-stack"
 code_head: "acaba0e6fcd36b38e2c6061c6fc7ede046844cae"
@@ -21,6 +21,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "acaba0e6fcd36b38e2c6061c6fc7ede046844cae"
     at: "2026-11-22T19:02:05Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/default-stack-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "acaba0e6fcd36b38e2c6061c6fc7ede046844cae"
+    at: "2026-11-22T19:14:58Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/default-stack-evidence.md"
 pull_requests: []
 pushed: null

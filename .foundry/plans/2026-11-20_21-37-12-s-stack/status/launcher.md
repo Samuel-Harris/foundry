@@ -1,11 +1,11 @@
 ---
 phase: "launcher"
-state: "PR"
-changed_at: "2026-11-22T12:12:24Z"
+state: "Verify"
+changed_at: "2026-11-22T12:33:31Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "cf378d80b95d4e250c2a5473876db547b2f72d24"
-waits_for: "launcher-r4: the developer decides whether the 2,796-line pull request may exceed the 2,500-line limit"
+code_head: "36ea9023e2a6dc555a8e7d4b65e2d630440fec01"
+waits_for: null
 verdicts:
   - gate: "verify"
     result: "VERIFIED"
@@ -115,14 +115,7 @@ pull_requests:
     door: "two-way"
     waiting_work: "The launcher's feature-name validation and its test. Every other review fix goes ahead."
     since: "2026-11-21T16:43:47Z"
-requests:
-  - id: "launcher-r4"
-    question: "The launcher's pull request is 2,796 hand-written changed lines, over the 2,500-line hard limit, and about 1,980 of them are tests. May it open as one pull request by exception, or must it be split?"
-    options: ["A. One pull request by exception, with the count and the reason stated in its description. It is ready to push.", "B. A stack of two that moves no code: launch.sh with its start and placement tests, then the remaining test files. The first pull request would ship the --close, --remove, lock and some placement behaviour untested until the second merges.", "C. Split launch.sh itself, with the core start, resume and placement path first and the --close, --remove and --print-window modes second. That needs an implement round and both gates again."]
-    recommendation: "A"
-    door: "one-way"
-    waiting_work: "Pushing the PR branch, opening the draft pull request, and the CI run of s-stack-launcher-tests."
-    since: "2026-11-22T12:20:24Z"
+requests: []
 decisions:
   - id: "launcher-d1"
     decision: "Answer to launcher-r1, option A, from the orchestrator: launch.sh --print-window prints window=<window id> for $TMUX_PANE, exit 3 without tmux and exit 1 outside tmux."
@@ -200,6 +193,10 @@ decisions:
     decision: "On --close, only a pane alone in its column hands width back, and the orchestrator's width is set first to its width plus the freed column, then every pane outside its column gets its old width back, left to right. An untagged --continue claude never stands in for a session whose own tagged pane still exists, because a resurrect leaves no tagged panes."
     door: "two-way"
     at: "2026-11-22T11:18:27Z"
+  - id: "launcher-d20"
+    decision: "Answer to launcher-r4, option A, from the developer through the orchestrator: one draft pull request by exception at 2,796 hand-written lines, with the breakdown and the reason in its description."
+    door: "one-way"
+    at: "2026-11-22T12:33:31Z"
 ---
 
 # Phase launcher status
@@ -233,3 +230,5 @@ The fifth review was SIGNIFICANT for e8bc6e1, and both of its findings are fixed
 The sixth review's four findings are fixed (launcher-d18), with 127 tests passing on macOS and Ubuntu in both locales. Merge 54d6139 of `s-stack-package` touched only other phases' files: `status-board.html`, `phase-session.md`, `planner.md`, `spec-writer.md`, `checks/board.md`, `checks/spec-planner-handbooks.md`, the version line and the lockfile. Verify runs at e7405c5.
 
 The seventh review's three findings are fixed (launcher-d19). 130 tests pass on Ubuntu in both locales, and on macOS apart from one test fixture that simulated a resurrect while leaving the tagged pane behind, which is now corrected. Verify runs at cf378d8.
+
+Draft PR #94 opened (branch s-stack-launcher, s-stack 0.1.10). Its CI job s-stack-launcher-tests failed in setUpClass: the GitHub Ubuntu runner has a dangling link in /usr/bin that collided in the test PATH builder. Fixed in the test fixture at 36ea902, which was reproduced in the Ubuntu container with a planted dangling link (18 errors before the fix, 130 passing after). The phase moved PR → Implement → Verify; the commit is a new code head.

@@ -70,6 +70,7 @@ The merge commit and the carried commits run no hook. A stop prints `STOP` lines
 | `<path> conflicts outside generated content` alone | An open dependency conflicts with the base or with another dependency |
 | `<pr> would carry <path>, which the phase does not change` | The pull request's own commits touch a path off the phase's first-parent line: a delegate's branch merged into the phase, or a third-row dependency whose old head GitHub rewrote. The check runs before anything is recorded. When the branch holds a developer commit or merge, by the rule in [Prove the split](#prove-the-split), the refresh prints `DEVELOPER-COMMITS <pr> <sha>...` instead and exits 1, so a file the developer added is not taken for a delegate's |
 | `<pr> was recorded at <sha>, which is not here, so its developer commits cannot be told apart` | `PUSHED` names a head that this repository lacks. Fetch it, or report |
+| `<pr> is at <sha>, which does not descend from its recorded head <sha>, so the branch was rewritten and may hold a developer's edits` | Someone amended, squashed or rebased the branch and force-pushed it, as GitHub does to a stack child after its parent merges. It needs a decision |
 | `<pr> is on origin but has no PUSHED entry, so its developer commits cannot be told apart` | The branch was pushed before, but the brief gave no recorded head for it. Report, and do not guess one |
 | `<path> cannot be written into the tree, as when a file and a directory share its name` | The phase replaced a file with a directory of the same name, or the reverse |
 | `the branch is back at <commit>` | Follows a stopped carry |
@@ -84,7 +85,7 @@ A shared path's stop is permanent because the refresh replays only the phase's o
 - **No own commit is already on the orchestrator branch.** Such a commit belongs to another pull request, so the spec is missing a dependency.
 - **No developer commit or merge.** Each is reported as `DEVELOPER-COMMITS <pr> <sha>...`, which makes the proof `NOT EQUAL`, because the refresh would revert it. The boundary is the last head that `PUSHED` names for the pull request. A branch with no entry and no `origin/<pr>` has not been pushed, so nothing on it is the developer's. A branch on `origin` with no entry stops, because a missing record cannot be told from a first push. The check reads `origin/<pr>` when that ref exists, because a round starts from it. When `PUSHED` names a head that is not here, the proof prints the refresh's `STOP` line for it.
   - A developer commit is an own commit on the pull request's first-parent line after the pushed head that matches no phase commit, such as GitHub's "Apply suggestions from code review".
-  - When the pull request's head does not descend from the pushed head, as after GitHub rebases a stack child, the check first finds where the rebase ended. It merges the pushed head with the point where the head meets its base, using `git merge-tree` with the base the pushed head was built on, the newest merge base of the pushed head with the default branch, the base and the dependencies. When a phase commit's `(cherry picked from commit <sha>)` line names a commit that descends from the pushed head and changes only this pull request's paths, the newest such commit stands in for the pushed head, so a suggestion the phase took before the rebase is not reported. The check then takes the newest commit on the head's first-parent line that holds that merge's version of every path of the pull request's own commits, shared paths included. The commits after it are then checked as above. When no commit holds it, or the merge conflicts, the check reports the head as `DEVELOPER-COMMITS`, and the remedy is the one for a developer merge, with the head's content. A rebase that brings in the default branch's changes to other files reports nothing.
+  - When the pull request's head does not descend from the pushed head, as after an amend, a squash or a rebase that was force-pushed, including GitHub's rebase of a stack child, the refresh and the proof print the `STOP` line for it, and nothing is pushed.
   - A developer merge is a merge after the pushed head, reachable from the pull request and from none of the default branch, its base and its dependencies, whose message does not end with the refresh's `(s-stack refresh)` line. It is reported when its second parent is in none of the default branch, the base and the dependencies, or when it has a hand edit whose version differs from the phase tip's. Its hand edits are the paths where its tree differs from `git merge-tree --write-tree` of its two parents, outside `.foundry/` and wholly generated files, ignoring generated lines. A merge that only brings in the default branch, as GitHub's "Update branch" button makes, is not reported; the refresh starts from it.
   - The remedy for a developer merge is an ordinary phase commit that gives those paths the merge's content. The phase tip then holds the edit, and the next round proves `EQUAL`.
 - **A landed pull request is history.** A pull request is landed when it is in `MERGED`, a listed spec names it as a merged dependency, or the default branch holds its head. It takes neither the developer check, the head check, the check below for paths the phase does not change, nor the ownership check's rule for a version that is neither the phase's nor its base's. Its head is read as `origin/<pr>` whenever that ref exists, not as a local branch, which nobody updates after the merge. Its paths still count in the ownership check, except a path where both the phase tip's version differs from the default branch's and the landed head's version differs from the phase tip's, such as after a developer commit that merged with it.
@@ -261,19 +262,11 @@ pushed_here() {
     { echo "STOP ${1#origin/} is on origin but has no PUSHED entry, so its developer commits cannot be told apart"; return 1; }
   for p in $(entries "$1"); do git cat-file -e "$p^{commit}" 2>/dev/null ||
     { echo "STOP ${1#origin/} was recorded at $p, which is not here, so its developer commits cannot be told apart"; return 1; }; done
+  p=$(pushed "$1"); [ -z "$p" ] || git merge-base --is-ancestor "$p" "$2" ||
+    { echo "STOP ${1#origin/} is at $(git rev-parse --short "$2"), which does not descend from its recorded head $(git rev-parse --short "$p"), so the branch was rewritten and may hold a developer's edits"; return 1; }
 }
 devs() {
-  local p h=$2 c b x e r o; p=$(pin "$1") || return 0; shift 2
-  if ! git merge-base --is-ancestor "$p" "$h"; then
-    b=$(git merge-base "$h" "$(ref "$2")") r= o=$(git merge-base --independent $(for x in $(not "$@"); do git merge-base "$p" "${x#^}"; done) | head -1)
-    paths "${mine[@]}" > "$W/rp"
-    for c in $(cut -d ' ' -f 2 "$W/named"); do git merge-base --is-ancestor "$p" "$c" 2>/dev/null || continue
-      [ -z "$(git diff --name-only "$p" "$c" -- . ':(exclude).foundry' | grep -v -x -F -f "$W/rp")" ] && p=$c; done
-    e=$(git merge-tree --write-tree --merge-base="$o" "$p" "$b" 2>/dev/null) && e=${e%%$'\n'*} || e=
-    [ -z "$e" ] || for c in $(git rev-list --reverse --first-parent "$h" "^$b"); do
-      for x in $(cat "$W/rp"); do [ "$(ver "$c" "$x")" = "$(ver "$e" "$x")" ] || continue 2; done; r=$c; done
-    [ -n "$r" ] || { git rev-parse --short "$h"; return; }; p=$r
-  fi
+  local p h=$2 c b; p=$(pin "$1") || return 0; shift 2; git merge-base --is-ancestor "$p" "$h" || return 0
   for c in $(git rev-list --reverse --first-parent --no-merges "$h" "^$p" $(not "$@") --invert-grep --grep="$REGEN"); do matches "$c" || git rev-parse --short "$c"; done
   for c in $(git rev-list --merges "$h" "^$p" $(not "$@") --invert-grep --grep="$MARK"); do
     for b in $(not "$@"); do git merge-base --is-ancestor "$c^2" "${b#^}" && { hand_edited "$c" && git rev-parse --short "$c"; continue 2; }; done; git rev-parse --short "$c"
@@ -291,7 +284,7 @@ outside() { [ "$(ref "$1")" = "$D" ] || mine_b "$1" || ref "$1"; }
 refresh() {
   local pr base extra merged wt head tips t new m new_c; IFS=: read -r pr base extra merged <<< "$3"; setup "$1" "$2"; shift 3; new_c=("$@")
   mine_b "$pr" || { echo "STOP $pr is not in OWN, so it is not one of this phase's pull request branches"; exit 1; }
-  pushed_here "$pr" || exit 1
+  pushed_here "$pr" HEAD || exit 1
   for t in "$base" $(list "$extra") $(list "$merged"); do git rev-parse -q --verify "$(ref "$t")^{commit}" >/dev/null || { echo "STOP $t is not a branch here"; exit 1; }; done
   [ "$(ref "$base")" = "$D" ] || git merge-base --is-ancestor "$D" "$(ref "$base")" || { echo "STOP $base does not hold $D, so $pr must target it with $base merged in"; exit 1; }
   wt=$(pwd) head=$(git rev-parse HEAD) tips=$(for b in "$base" $(list "$extra"); do ref "$b"; done)
@@ -353,7 +346,7 @@ prove() {
     [ -n "$lp" ] && continue
     accounted "$pr" $(refs "$merged") $(pins "$n")
     h=$pr; git rev-parse -q --verify "refs/remotes/origin/$n" >/dev/null && h=origin/$n
-    pushed_here "$n" || fail=1
+    pushed_here "$n" "$h" || fail=1
     dev=($(devs "$n" "$h" "$D" "$base" $(list "$extra") $(list "$merged"))); [ ${#dev[@]} = 0 ] || { echo "DEVELOPER-COMMITS $pr $(printf '%s ' "${dev[@]}")"; fail=1; }
     at "$(git merge-base "$(ref "$base")" "$pr")"
     merge_in $(for e in $(list "$extra"); do git merge-base "$(ref "$e")" "$pr"; done) && overlay "${mine[@]}" && t=$(git write-tree) || t=

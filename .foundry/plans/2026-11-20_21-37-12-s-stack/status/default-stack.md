@@ -1,7 +1,7 @@
 ---
 phase: "default-stack"
-state: "PR"
-changed_at: "2026-11-22T19:14:58Z"
+state: "Done"
+changed_at: "2026-11-22T19:57:45Z"
 session: "s-stack-phase-default-stack"
 branch: "s-stack-phase-default-stack"
 code_head: "acaba0e6fcd36b38e2c6061c6fc7ede046844cae"

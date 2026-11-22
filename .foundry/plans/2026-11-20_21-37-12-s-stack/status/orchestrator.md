@@ -39,6 +39,7 @@ None.
 | 87 | `spec-planner-handbooks` | merged into `main` as `b440889` | | |
 | 88 | `foundation` | merged into `main` as `054a9e7` | | |
 | 89 | `foundation` | merged into `main` as `5c4d320` | | |
+| 90 | `spec-planner-handbooks` | `s-stack-spec-planner-owner-pointers` | `main` | none |
 
 ## Merged phases
 
@@ -51,6 +52,7 @@ None.
 | `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | VERIFIED on `3ce7d34` |
 | `spec-planner-handbooks` (follow-up) | `b89a458` (tip `40c3e56`) | `47f792f` | VERIFIED on `8f735d6` |
 | `foundation` (follow-up) | `3364856` (tip `8616cb8`) | `74bba4e` | VERIFIED on `3364856` |
+| `spec-planner-handbooks` (second follow-up) | `5c411ce` (tip `d5c4ff2`) | `775a30a` | running |
 
 ## Closed sessions
 

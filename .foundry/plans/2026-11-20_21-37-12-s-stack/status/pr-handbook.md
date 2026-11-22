@@ -187,6 +187,10 @@ decisions:
     decision: "Instruction pr-handbook-r5 from the orchestrator: pr.sh no longer matches developer commits by patch-id or any hunk comparison across commits. The boundary is the head the PR creator last pushed for each pull request, recorded in the status at each push. Commits after it are the developer's, and hashes and trailers still identify the phase's own. When a pull request head no longer descends from the recorded head, a difference in the hand-written paths' trees is reported as DEVELOPER-COMMITS with nothing pushed, and no difference means nothing new. A missing recorded head means nothing is the developer's yet. MERGED and the rest of cef8140 stay."
     door: "two-way"
     at: "2026-11-22T11:00:58Z"
+  - id: "pr-handbook-d19"
+    decision: "Instruction from the orchestrator, run decision gate-cost in run-decisions.md, adopting the 'The change' section of proposals/gate-cost.md on s-stack-package (b4f0dc0 or later), from the gate after the twenty-first verifier, which keeps running. Verify covers the blast radius of the diff since the last VERIFIED head, plus new or changed checks, and its report says what it ran and why the rest are out of scope. Review stays incremental. A fresh verifier or the first reviewer may return WAIVED with a written reason, only for the waivable kinds the proposal lists, and a waiver never moves the baseline. Review starts with one reviewer, who waives, or reviews and is joined by the second. WAIVED counts under the merge rule. Code a merge brings in counts as verified and reviewed, with the proposal's exceptions, replacing launcher-r3. These rules go into the briefs, and the handbook is not edited for them now. s-stack-package is merged in when the current gate returns."
+    door: "two-way"
+    at: "2026-11-22T11:34:10Z"
 ---
 
 # Phase `pr-handbook` status

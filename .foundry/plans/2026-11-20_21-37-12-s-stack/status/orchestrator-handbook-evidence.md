@@ -594,3 +594,7 @@ Recorded for the cross-handbook integration, because it depends on `pr-creator.m
 `s-stack-package` (`c2ee849`, which brings `foundation`'s follow-up round) was merged at `db4f2bf`. Outside `.foundry/` it touched `SKILL.md`, `references/status-and-messages.md`, `tests/s-stack/verify-s-stack/SKILL.md` and `checks/foundation.md`, plus the generated lockfile. None is an owned path, so the code head stays at the phase's own commit `0008162`. The reference's message table now matches this handbook's uses: the `state` reply to the merged notice, `move-back` after a failed post-merge check, the merged notice as an `instruction`, `stop` for a stalled session, and no `restack`.
 
 For the cross-handbook integration: the reference splits the generated-only round and the dependency round into two `fix-round` rows, where this handbook and `phase-session.md` use one kind ("A pull request merged"). It also has no row for the developer-commit round.
+
+## For the cross-handbook integration: package versions across open pull requests
+
+Under the orchestrator's run decision, a PR creator that opens or refreshes a pull request changing s-stack sets s-stack's version above every s-stack version in an open s-stack pull request at that moment, checked with `gh pr list` and each pull request's `apm.yml`, not only above `main`'s. Pull requests #87 and #88 both shipped 0.1.4 and turned `main` red. `pr-creator.md`, and possibly `orchestrator.md`, may need to state this. This phase's PR creator brief will carry it.

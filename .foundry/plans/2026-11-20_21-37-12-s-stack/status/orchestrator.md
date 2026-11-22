@@ -41,8 +41,8 @@ None.
 | 94 | `launcher` | merged into `main` as `0fdbb53` | | |
 | 95 | `pr-handbook` | merged into `main` as `25a6b61` | | |
 | 96 | `integration` | merged into `main` as `7747021` | | |
-| 97 | `default-stack` | `s-stack-relativise-lockfiles` | `main` | none |
-| 98 | `default-stack` | `s-stack-default-stack` | `s-stack-relativise-lockfiles` | 97 |
+| 97 | `default-stack` | merged into `main` as `26f1458` | | |
+| 98 | `default-stack` | merged into `main` as `59bee65` | | |
 
 ## Merged phases
 
@@ -105,6 +105,8 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
 ## Merge cautions
+
+- `main` moved to `59bee65` (#97, #98). Merge it into `s-stack-package` once the final full run on `1983ab2` returns, because that run reads this checkout. Then send default-stack the merged notice if the run passed.
 
 
 

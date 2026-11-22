@@ -118,6 +118,21 @@ class StartTests(LauncherTestCase):
         pane, _ = self.started(self.launch(*args, "--window", self.window), name="f-phase-p")
         self.assertIn("--name f-phase-p ", self.wait_for_claude(pane))
 
+    def test_a_session_restarted_with_options_before_its_name_is_alive_and_closes(self) -> None:
+        self.make_feature_worktree()
+        worktree = self.make_worktree(name="f-phase-a", base="f")
+        args = ("--feature", "f", "--role", "phase", "--phase", "a")
+        for command in ("claude --continue --name f-phase-a", "claude --model m --name f-phase-a"):
+            with self.subTest(command=command):
+                pane = self.make_pane(worktree, command=command)
+
+                alive = self.launch(*args, "--window", self.window)
+                closed = self.launch(*args, "--close")
+
+                self.assertEqual((alive.returncode, alive.stdout), (0, f"alive f-phase-a pane={pane}\n"), alive.stderr)
+                self.assertEqual((closed.returncode, closed.stdout), (0, f"closed f-phase-a pane={pane}\n"), closed.stderr)
+                self.assertNotIn(pane, self.pane_ids())
+
     def test_the_session_starts_whatever_the_default_shell(self) -> None:
         self.make_feature_worktree()
         self.make_orchestrator()

@@ -351,6 +351,46 @@ class DevelopersClaudeTests(LauncherTestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.launch(*orchestrator_args).stdout, f"alive f-orchestrator pane={resurrected}\n")
 
+    def plain_claude_in_place_of(self, name: str, /) -> str:
+        """The developer types a plain claude in the session's own pane after its claude exits; returns the session's stored conversation id."""
+        pane, stored = next((row.pane, conversation(args=row.args, flag="--session-id")) for row in self.named_claudes(name))
+        self.kill_claude(name)
+        self.tmux("respawn-pane", "-k", "-t", pane, "-c", str(self.worktree("f")), "claude")
+        self.wait_for_claude(pane)
+        return stored
+
+    def test_a_plain_claude_in_the_orchestrators_own_pane_is_not_the_orchestrator(self) -> None:
+        spec, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        window = self.window_of(spec)
+        orchestrator_args = ("--feature", "f", "--role", "orchestrator", "--window", window)
+        old, _ = self.started(self.launch(*orchestrator_args), name="f-orchestrator")
+        self.wait_for_claude(old)
+        stored = self.plain_claude_in_place_of("f-orchestrator")
+
+        new, _ = self.started(self.launch(*orchestrator_args), name="f-orchestrator")
+
+        self.assertNotEqual(new, old)
+        self.assertEqual(conversation(args=self.wait_for_claude(new), flag="--resume"), stored)
+        self.assertEqual((self.claude_in_pane(old) or "").split(), ["claude"])
+        self.started(self.launch("--feature", "f", "--role", "planner", "--window", window), name="f-planner")
+        self.assertEqual(self.launch(*orchestrator_args).stdout, f"alive f-orchestrator pane={new}\n")
+
+    def test_a_plain_claude_in_the_spec_writers_own_pane_is_not_the_spec_writer(self) -> None:
+        old, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        window = self.window_of(old)
+        self.wait_for_claude(old)
+        stored = self.plain_claude_in_place_of("f-spec")
+
+        documented = self.launch("--feature", "f", "--role", "spec")
+        self.assertEqual((documented.returncode, documented.stdout), (2, ""), documented.stderr)
+        self.assertIn("--window", documented.stderr)
+        new, _ = self.started(self.launch("--feature", "f", "--role", "spec", "--window", window), name="f-spec")
+
+        self.assertNotEqual(new, old)
+        self.assertEqual(conversation(args=self.wait_for_claude(new), flag="--resume"), stored)
+        self.assertEqual((self.claude_in_pane(old) or "").split(), ["claude"])
+        self.assertEqual(self.launch("--feature", "f", "--role", "spec").stdout, f"alive f-spec pane={new}\n")
+
 
 class SpecWriterRestartTests(LauncherTestCase):
     def test_the_documented_call_restarts_a_crashed_spec_writer_in_its_own_pane(self) -> None:
@@ -380,3 +420,18 @@ class SpecWriterRestartTests(LauncherTestCase):
 
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn("--window", result.stderr)
+
+    def test_a_resurrected_spec_writer_is_alive(self) -> None:
+        spec, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        self.wait_for_claude(spec)
+        self.tmux("kill-window", "-t", self.window_of(spec))
+        resurrected = self.make_pane(self.worktree("f"), command="claude --continue")
+        panes = len(self.panes())
+
+        for args in (("--feature", "f", "--role", "spec"), ("--feature", "f", "--role", "spec", "--window", self.window)):
+            with self.subTest(args=args):
+                result = self.launch(*args)
+
+                self.assertEqual((result.returncode, result.stdout), (0, f"alive f-spec pane={resurrected}\n"), result.stderr)
+                self.assertEqual(len(self.panes()), panes)
+                self.assertEqual(len(self.claude_processes()), 1)

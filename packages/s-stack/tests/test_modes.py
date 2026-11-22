@@ -152,6 +152,28 @@ class CloseTests(LauncherTestCase):
         self.assertIn(resumed, self.pane_ids())
 
 
+class CloseWidthTests(LauncherTestCase):
+    def test_closed_phases_give_their_width_back_to_the_orchestrator(self) -> None:
+        self.make_feature_worktree()
+        first = self.pane_ids()[0]
+        self.add_sidebar()
+        orchestrator, _ = self.started(self.launch("--feature", "f", "--role", "orchestrator", "--window", self.window), name="f-orchestrator")
+        self.tmux("kill-pane", "-t", first)
+        developer = self.split(target=orchestrator, flags=["-h"])
+        before = self.geometry()
+
+        for cycle in range(1, 5):
+            phase = ("--feature", "f", "--role", "phase", "--phase", f"p{cycle}")
+            pane, _ = self.started(self.launch(*phase, "--window", self.window), name=f"f-phase-p{cycle}")
+            self.assertGreaterEqual(self.geometry()[pane].width, 40, f"cycle {cycle}")
+            closed = self.launch(*phase, "--close")
+            self.assertEqual((closed.returncode, closed.stdout), (0, f"closed f-phase-p{cycle} pane={pane}\n"), closed.stderr)
+
+        after = self.geometry()
+        self.assertLessEqual(abs(after[orchestrator].width - before[orchestrator].width), 1, (before, after))
+        self.assertLessEqual(abs(after[developer].width - before[developer].width), 1, (before, after))
+
+
 class RemoveTests(LauncherTestCase):
     args = ("--feature", "f", "--role", "phase", "--phase", "p")
 

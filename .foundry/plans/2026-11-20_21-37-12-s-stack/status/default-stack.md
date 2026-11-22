@@ -1,12 +1,17 @@
 ---
 phase: "default-stack"
-state: "Verify"
-changed_at: "2026-11-22T18:09:58Z"
+state: "Review"
+changed_at: "2026-11-22T18:22:02Z"
 session: "s-stack-phase-default-stack"
 branch: "s-stack-phase-default-stack"
-code_head: "ba68b7263f00e82a94059da26925315a163deb82"
+code_head: "9095235fd831608032a251232927ca6f85496768"
 waits_for: null
-verdicts: []
+verdicts:
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "9095235fd831608032a251232927ca6f85496768"
+    at: "2026-11-22T18:22:02Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/default-stack-evidence.md"
 pull_requests: []
 pushed: null
 requests: []

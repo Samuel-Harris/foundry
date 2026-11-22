@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Implement"
-changed_at: "2026-11-22T00:18:24Z"
+state: "Verify"
+changed_at: "2026-11-22T00:19:17Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
+code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -103,4 +103,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-This is the second follow-up round. #87 merged as `b440889`, and `s-stack-package` is merged in at `7402919`, touching no owned path. There are three items. `planner.md` should say generated paths and generated lines. `spec-writer.md` should point to `SKILL.md`'s "Starting a session" instead of copying the launch steps. Both handbooks should point to the reference for message payloads. #88 has merged, so the pull request targets `main`.
+Second follow-up round. The three items are done at `eabb628`. Cold read 2 now also reads `SKILL.md`, because the launch steps moved there, at `775a30a`. There was no `quick-review`, because the change is pointer swaps and deletions. A fresh verifier runs in full.

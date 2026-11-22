@@ -154,10 +154,12 @@ dependencies:
   (`packages/<name>`), and siblings are outside it, so every install writes
   `/absolute/path/to/packages/<name>`. The committed form is relative
   (`../<name>`): run `python3 scripts/relativise_lockfiles.py
-  packages/<name>/apm.lock.yaml` after any `apm install`, while the deployed
-  files are still there: it also rewrites the content hashes of files whose
-  links name the sibling's hashed `apm_modules/_local/<hash>/` directory. The
-  pre-commit hook and Tier 1 run it before diffing. Both fields must stay relative together;
+  packages/<name>/apm.lock.yaml` straight after any `apm install`. It also
+  rewrites the content hashes of files whose links name the sibling's hashed
+  `apm_modules/_local/<hash>/` directory, so it reads the deployed files and
+  exits `1` when one is missing or edited; reinstall, then rerun it. The
+  pre-commit hook and Tier 1 run it before diffing. `anchored_local_path` and
+  the `local:` owners must stay relative together;
   `apm audit --ci` rejects a relative owner whose `anchored_local_path` is
   absolute.
 - **Only the direct-dependency form dedupes.** When a package is reachable both

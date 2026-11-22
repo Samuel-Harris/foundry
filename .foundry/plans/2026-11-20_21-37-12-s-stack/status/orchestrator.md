@@ -53,7 +53,7 @@ None.
 | `spec-planner-handbooks` (follow-up) | `b89a458` (tip `40c3e56`) | `47f792f` | VERIFIED on `8f735d6` |
 | `foundation` (follow-up) | `3364856` (tip `8616cb8`) | `74bba4e` | VERIFIED on `3364856` |
 | `spec-planner-handbooks` (second follow-up) | `5c411ce` (tip `d5c4ff2`) | `775a30a` | VERIFIED on `a89e044` (no code change since `5c411ce`) |
-| `phase-handbooks` (follow-up) | `4585528` (tip `7e09ef7`) | `148f745` | running |
+| `phase-handbooks` (follow-up) | `4585528` (tip `7e09ef7`) | `148f745` | VERIFIED on `7e0b76d` (no code change since `4585528`) |
 
 ## Closed sessions
 

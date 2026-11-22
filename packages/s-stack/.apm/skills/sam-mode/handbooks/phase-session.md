@@ -11,7 +11,7 @@ Your first prompt names the feature, the phase, the roadmap, the feature plan an
 - The roadmap's `README.md`, then `run-decisions.md` beside it. Where they disagree, `run-decisions.md` is newer.
 - In the feature plan, its rules for every phase, its contracts between phases and your phase's entry. The entry gives the scope, the paths you own, the resources only one phase can use at a time, the planned pull requests and the **Done when** list.
 
-If the feature plan and the roadmap disagree, the roadmap wins, and you tell the orchestrator. If your status file already exists, a session before you worked on this phase. Go to [After a restart](#after-a-restart).
+If the feature plan and the roadmap disagree, the roadmap wins, and you send the orchestrator a decision request that names both texts. If your status file already exists, a session before you worked on this phase. Go to [After a restart](#after-a-restart).
 
 ## What you may write
 
@@ -23,7 +23,7 @@ A merge of another branch is the one commit that may bring files under `.foundry
 
 ## Verdicts
 
-Compute the code head as the reference file says, with an exclude for each generated path and each generated line the feature plan names. A verdict covers only the code head it names. Any commit that moves the code head, a merge included, needs new verdicts: verification runs again in full, and the review covers what [reviewer.md](reviewer.md) says. Never carry an old verdict forward because the change looks small.
+Compute the code head as the reference file says, with an exclude for each generated path and each generated line the feature plan names. A verdict covers only the code head it names. A commit that moves the code head needs new verdicts, each from a fresh gate agent. Verify covers the blast radius of your own work since the last `VERIFIED` code head, as [verifier.md](verifier.md) says, and Review covers what [reviewer.md](reviewer.md) says. A gate agent may return `WAIVED` under the reference file's waiver rule. Record it as the verdict, with its reason in the evidence file. Never decide yourself that a change needs no gate.
 
 ## Changing state
 
@@ -31,6 +31,8 @@ Every change of state is two steps, in this order:
 
 1. Commit the status file with the new `state`, `changed_at` and `code_head`.
 2. Send the orchestrator a `state` message with the new state and the code head.
+
+Whenever you wait, for an answer, a blocked merge or a `move-back`, set `waits_for` to one line saying what for, in the commit that records the request or the state, before you send the message. Set it back to `null` in the commit that ends the wait.
 
 ## Plan
 
@@ -40,7 +42,7 @@ Every change of state is two steps, in this order:
 
 ## Implement
 
-- Build the plan with delegates where that helps. Give each delegate one step, the paths it may edit, and the decisions already made. Take a delegate's work onto the phase branch with `git cherry-pick -x`, never by merging its branch. The only merges on the phase branch's first-parent line are merges of the orchestrator branch and, in a conflict round, of the default-branch commit it names. `pr-creator.md`'s proof fails on a delegate's merged branch.
+- Build the plan with delegates where that helps. Give each delegate one step, the paths it may edit, and the decisions already made. Take a delegate's work onto the phase branch with `git cherry-pick -x`, never by merging its branch. The only merges on the phase branch's first-parent line are merges of the orchestrator branch and, in a conflict round or after the PR creator reports that a path differs from the default branch, of `origin/<default>` or the commit the round names. `pr-creator.md`'s proof fails on a delegate's merged branch.
 - Commit along the planned pull request split, so each commit belongs to one pull request.
 - Run review's `quick-review` skill on each planned pull request layer, and fix its findings before you start the next layer. Pass it the layer's own diff as the packet, `git diff <layer's first commit>^ <layer's last commit> -- . ':(exclude).foundry'`, because the orchestrator branch may not exist on the remote.
 - Run the verification skill yourself whenever it helps. Your own run is not a verdict.
@@ -50,7 +52,7 @@ The phase leaves Implement when the plan is built and committed, and every layer
 
 ## Merge the orchestrator branch
 
-Before you move to Verify, merge the current orchestrator branch into the phase branch with `git merge --no-ff`. A fast-forward would put the orchestrator's own merges on the phase's first-parent line, and the review scope would then take them for the phase's work. Verification then covers your phase together with every phase merged so far. Use the merge procedure the feature plan gives, if it gives one.
+Before you move to Verify, merge the current orchestrator branch into the phase branch with `git merge --no-ff`. A fast-forward would put the orchestrator's own merges on the phase's first-parent line, and the review scope would then take them for the phase's work. Code a clean merge brings in counts as verified and reviewed, and the reference file's code head does not move for it. Your own conflict resolution is your work, and the gates cover it. One exception: after merging, read the orchestrator branch tracker's "Merged phases" table. If the newest post-merge check failed and it touches something your phase builds on or changes, treat the merged-in code as your own: name that check, and the merge, in the verifier's and the reviewers' briefs. A red default branch is the same: ignore it unless it fails in something your phase builds on or changes. Use the merge procedure the feature plan gives, if it gives one.
 
 - Resolve a conflict only in your owned paths or in generated files that the feature plan tells you to regenerate.
 - A conflict in a file another phase owns is not yours. Abort the merge, send a `blocked` message that names the file, and wait.
@@ -58,43 +60,46 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 ## Verify
 
 1. Move to Verify.
-2. Start a fresh verifier subagent. Its brief gives the absolute path of `handbooks/verifier.md` in the skill directory you read this handbook from, the roadmap, the feature plan, your phase plan, the phase branch, the orchestrator branch and the verification skill. Give it no summary of how you built the phase.
+2. Start a fresh verifier subagent. Its brief gives the absolute path of `handbooks/verifier.md` in the skill directory you read this handbook from, the roadmap, the feature plan, your phase plan, the phase branch, the orchestrator branch, the verification skill, the code head of your newest `VERIFIED` verdict, or none, and, after a `move-back` for a failed check, the failed check. Give it no summary of how you built the phase.
 3. Wait for its report. When the verifier commits, its verdict names the code head that includes its commits.
 4. Record the verdict in `verdicts`, and the report's results, outputs and dates in `.foundry/plans/<id>/status/<phase>-evidence.md`. A `.foundry/`-only commit moves no code head.
 
 | Verdict | Next state |
 | --- | --- |
 | VERIFIED, for the current code head | Review |
+| WAIVED, for the current code head | Review |
 | NOT VERIFIED | Implement, to fix what failed |
 | INCONCLUSIVE | Implement, to make the check runnable. If only the developer can supply what is missing, send a decision request and wait in Implement. |
 
 ## Review
 
 1. Move to Review.
-2. Run the gate as [reviewer.md](reviewer.md) says.
+2. Run the gate as [reviewer.md](reviewer.md) says. It starts one reviewer first, who may waive.
 3. Record the verdict and the evidence.
 
 | Verdict | Next state |
 | --- | --- |
 | CLEAR, for the current code head | PR |
+| WAIVED, for the current code head | PR |
 | SIGNIFICANT | Implement |
 
 ## PR
 
 1. Move to PR once the reference file's merge rule holds for the current code head.
-2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request for commits that the phase plan assigns to a new one, and for commits that no open pull request carries, such as a fix made after every pull request has merged. Act on its report:
+2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan, your phase plan, your status file, the phase branch, the local orchestrator branch (never `origin/<orchestrator branch>`, which may lag or not exist), every pull request branch in `pull_requests` as `OWN`, and `pushed` as `PUSHED`. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request for commits that the phase plan assigns to a new one, and for commits that no open pull request carries, such as a fix made after every pull request has merged. Act on its report:
    - A `STOP`: send no `prs-open`. Send the orchestrator a decision request that names the `STOP` line, and stay in your current state.
    - `DEVELOPER-COMMITS`: send no `prs-open`. Run the feedback round below for those commits.
-   - Neither: go on to step 3.
-3. Record each pull request in `pull_requests`, then send `prs-open` with each number and its `depends_on` list.
+   - A `FAIL` line, `NOT EQUAL`, a failed push, a failed gate, a failing repository check or a code change a branch needs: send no `prs-open`. For `<path> differs between the phase and <default>`, merge `origin/<default>` into the phase branch with `git merge --no-ff`, keeping the default branch's version, then pass the gates the new code head needs and run step 2 again. For a code change, move back to Implement and make it. Send a decision request for anything else.
+   - Only a proof that printed `EQUAL`, with every push done: go on to step 3.
+3. Record each pull request in `pull_requests`, and the report's `RECORD` line, without the word `RECORD`, as `pushed`. Commit, then send `prs-open` with each number and its `depends_on` list, the code head and the `pushed` line.
 4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done only if the phase is in PR. In any other state, ignore it and send `state`. When the notice comes again is for `handbooks/orchestrator.md` to decide.
 
 ## Messages from the orchestrator
 
 | Kind | What you do |
 | --- | --- |
-| `answer` | Record the outcome in `decisions`, commit, and continue the work that waited. |
-| `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. A notice that every pull request has merged is handled as [PR](#pr) step 4 says. |
+| `answer` | Remove the request from `requests`, record the outcome in `decisions`, clear `waits_for` if the answer ends the wait, commit, and continue the work that waited. When the answer says a rewritten pull request branch holds no edits of the developer's, or once you have taken them, append `<pr>=<its current head>` to `pushed` and commit, as `pr-creator.md` says. |
+| `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. A notice that every pull request has merged is handled as [PR](#pr) step 4 says. An instruction to refresh a pull request, or to send `prs-open` at your code head, asks for a PR creator round, not new work. In PR, run [PR](#pr) steps 2 and 3. On `DEVELOPER-COMMITS`, run the feedback round. Otherwise the phase stays in PR and no gate runs again. In any other state, reply with `state`. |
 | `merge-orchestrator-branch` | Merge as in [Merge the orchestrator branch](#merge-the-orchestrator-branch), once nothing is half done. If the merge moved the code head and the phase was in Verify or later, move back to Implement. If the code head did not move, the phase keeps its state and its verdicts. |
 | `fix-round` | Run the fix round below that matches it. In every fix round that starts a PR creator, it works out each pull request's base again, as `pr-creator.md` says. |
 | `move-back` | Move back as in [Moving back](#moving-back). |
@@ -104,7 +109,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 
 **Feedback on a pull request.** The developer's review, a failed check, or commits the developer made on a pull request branch, with the pull request and its comments, the check or the commits.
 
-1. Move back to Implement. Take each commit the developer made into the phase branch with `git cherry-pick -x <commit>`, then make any other fix on the phase branch.
+1. Move back to Implement. Take each commit the developer made into the phase branch with `git cherry-pick -x <commit>`. For a developer's merge with hand edits, make an ordinary commit that gives those paths the merge's content. Then make any other fix on the phase branch.
 2. Pass Verify and Review again for the new code head.
 3. Follow [PR](#pr) steps 1 to 3. The PR creator carries the fix commits to the pull request that owns each one. The `prs-open` that step 3 sends answers the round, so the orchestrator can merge the phase branch again.
 
@@ -121,8 +126,8 @@ A `move-back` names the state and what changed.
 3. Record the new state and send `state`.
 4. Then act on the state:
    - **Implement**, whenever the orchestrator sends it, for example after a failed check on the orchestrator branch once your phase merged, when the message names the check. Fix what is needed, then pass both gates again.
-   - **Plan**, after the planner changed your phase's entry. Merge the orchestrator branch, update the phase plan against the new entry, commit it, and move to Implement.
-   - **Spec**, after a roadmap update touched your phase. Wait for a `move-back` to Plan, which the orchestrator sends once the update has merged.
+   - **Plan**, after the planner revised the feature plan. Merge the orchestrator branch, update the phase plan against your entry, which may be unchanged, commit it, and move to Implement.
+   - **Spec**, after a roadmap update touched your phase. Wait, with `waits_for` set, for a `move-back` to Plan, which the orchestrator sends once the planner has revised the plan.
 
 ## Instructions from the developer
 

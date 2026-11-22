@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Verify"
-changed_at: "2026-11-22T00:19:17Z"
+state: "Review"
+changed_at: "2026-11-22T00:25:00Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
@@ -62,6 +62,11 @@ verdicts:
     code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
     at: "2026-11-21T23:36:16Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
+    at: "2026-11-22T00:25:00Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
@@ -103,4 +108,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Second follow-up round. The three items are done at `eabb628`. Cold read 2 now also reads `SKILL.md`, because the launch steps moved there, at `775a30a`. There was no `quick-review`, because the change is pointer swaps and deletions. A fresh verifier runs in full.
+Second follow-up round. Verify passed at `775a30a`. The review covers this phase's owned paths from `47f792f` to `775a30a`.

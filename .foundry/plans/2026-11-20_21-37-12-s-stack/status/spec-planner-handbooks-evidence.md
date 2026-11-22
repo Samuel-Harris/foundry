@@ -211,3 +211,26 @@ The `apm.yml` change is only `version: "0.1.3"` to `version: "0.1.4"`.
 ## Pull request 87
 
 https://github.com/Samuel-Harris/foundry/pull/87 is a draft with base `main`, head `5da7f5d`, no dependencies, and not stacked. Its description carries the direct-comparison sentence. CI run 44963276937 passed: Pre-commit checks, Package versions, Detect changed paths and both tools test jobs. The p-stack suites and the tag job were skipped by their conditions.
+
+## Second follow-up round: Verify, code head `775a30ac0ed9bf848197cd5b4e9499dc9266266a`
+
+The round makes three changes:
+
+- `planner.md` says "generated paths and generated lines".
+- `spec-writer.md` starts the orchestrator through `SKILL.md`'s "Starting a session".
+- Both handbooks leave message payloads to the reference.
+
+Cold read 2 now also reads `SKILL.md`. A fresh verifier ran the full skill. Checks 4 and 6 are pending by design. Tier 1 passed across 20 packages, which the phase session confirmed in the log. Every check file's Rerun passed, including `board.md`'s Chrome script. Cold read 2 passed three times out of three.
+
+Two extra reads took payloads from the reference correctly:
+
+- An update spec writer gave `started` and `roadmap-update`, including the folded `run-decisions.md` rows.
+- A restarted planner gave `done-planning` with the changed phases. It named generated paths and generated lines as the facts the plan gives every phase session.
+
+Verdict: VERIFIED.
+
+Minor note, recorded and not fixed under `spec-planner-handbooks-d3`: `spec-writer.md` step 8 says "Report the launcher's output line" without saying which line. Every run still reported it and stopped.
+
+### For the cross-handbook integration
+
+`references/status-and-messages.md`, owned by `foundation`, says each detail line is "a fact already committed to the sender's own file". That sits awkwardly with two messages. `started` is sent before any commit. A spec writer's folded `run-decisions.md` rows live in the orchestrator's file. Not fixed here.

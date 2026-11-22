@@ -399,3 +399,16 @@ Minor findings, off the common path:
 
 - After a one-off rebuild the developer approved, which is the remedy for the shared-path and rewritten-dependency stops, the rebuilt head no longer descends from its recorded head. The next round therefore gives the rewrite STOP. Neither file says to record the rebuilt head. This is inferred and was not run.
 - If the developer wrongly answers that a rewritten branch holds no edits, the next round can revert those edits. This is by design, because the answer is the developer's.
+
+## Review 7, CLEAR at `27d6f55`
+
+Under run decision `gate-cost`, the first reviewer, on Opus, reviewed instead of waiving, and the second reviewer, on Fable, then joined. The scope was `29bf683`, `74c2411`, `b366e26` and `27d6f55`, ending at phase branch commit `1d87f15`. Every commit after `27d6f55` in that range changes only `.foundry/`.
+
+**Earlier probes.** Both reviewers reran the sixth review's repros. Every rebased history now gives the rewrite STOP, with nothing pushed and the developer's edit kept. The controls without a rebase still give `DEVELOPER-COMMITS`. The check block printed 145 PASS and `0 failed` for both reviewers.
+
+**Findings.** Neither reviewer had any.
+
+**Further probes.**
+- Opus ran the decision path on a grandchild stack. With either the full or the short head sha appended, it proved `EQUAL`, and the next round changed nothing.
+- Fable ran seven end-to-end histories of the decision path: shared paths, suggestions taken before and after the rebase, a later developer commit, and a force-pushed amend. Each gave the result the intent requires.
+- Fable also ran a mutation of the check block. With the new ancestor check removed, it printed 132 PASS and failed the rewrite cases.

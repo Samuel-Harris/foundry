@@ -128,3 +128,14 @@ Fresh Opus verifier. Scope: `82a30d2`. No waiver: the scope changes handbook tex
 - Cold reads AK and V failed a first grader that lacked the scenario, and passed on a regrade with it. V point 2's "two messages" also catches the restack `instruction` that point 4 requires.
 
 Next: restate the quiet test at tick step 4, and narrow V point 2 to refresh messages.
+
+## Verify 5: NOT VERIFIED at `4393405f870f084cb5c54cb825d878f46a3e2cac`, 2026-11-22T17:01:15Z
+
+Fresh Opus verifier. Scope: `82a30d2` and `4393405`. No waiver. No commits. Answers and grades are under the session scratchpad's `verify5/` directory.
+
+- Skill checks 1 to 5 and 7 PASS. The pre-commit hook over `982bdc4...HEAD` exited 0. Three orchestrator scripted checks PASS.
+- 58 cold reads: 57 PASS, including J, V, integration 7, D, F, T, AT and AV.
+- **Orchestrator cold read I, point 1, FAIL.** The reader left `prs/40` out of the tick's board batch, although pull request 40 merged that tick. The text is `orchestrator.md` line 83, from `8bf296b`, which this diff did not change.
+- Under `integration-d3`, the phase session reran I twice, each with a fresh Opus reader and grader (`verify5/rerun/`). Rerun 2 PASS. Rerun 1 FAIL: it wrote `prs/40` only "if it was under watch". The verifier's own diagnostic rerun passed, but it does not count under the rule. One rerun failed, so the text gets fixed at its source.
+
+Next: line 83 says a pull request that merged or closed this tick has changed state.

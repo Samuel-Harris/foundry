@@ -295,3 +295,7 @@ Every line comes from the history of #84, whose 27 untrailered pre-squash commit
 ```
 
 The `apm.yml` change is only `version: "0.1.5"` to `"0.1.6"`. The three owned files are byte-identical to `775a30a`, and no `.foundry/` path is on the branch. The hook exited 0, and `versioning.py check origin/main` printed `1 changed package(s), none without a version bump`. The full log is the PR creator's `r2-evidence.md` in the phase session's scratchpad.
+
+## Pull request 90
+
+https://github.com/Samuel-Harris/foundry/pull/90 is a draft with base `main`, head `561e71c`, no dependencies, and not stacked. Its description carries the direct-comparison sentence. CI run 44967444516 passed: Pre-commit checks, Package versions, Detect changed paths and both tools test jobs. The p-stack suites and the tag job were skipped by their conditions.

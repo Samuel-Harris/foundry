@@ -83,6 +83,11 @@ pull_requests:
     base: "main"
     depends_on: []
     stacked: false
+  - number: 90
+    branch: "s-stack-spec-planner-owner-pointers"
+    base: "main"
+    depends_on: []
+    stacked: false
 requests: []
 decisions:
   - id: "spec-planner-handbooks-d1"
@@ -117,4 +122,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Second follow-up round. Both gates passed for `775a30a`. Under `spec-planner-handbooks-r2`, option A, a PR creator is pushing `s-stack-spec-planner-owner-pointers` (`561e71c`) and opening its draft pull request against `main`.
+Second follow-up round. Both gates passed for `775a30a`. Draft pull request 90 (`s-stack-spec-planner-owner-pointers`, head `561e71c`) is open against `main`, with no dependencies, and its CI passed. It was proved by direct comparison under `spec-planner-handbooks-r2`, option A. The phase waits for the developer's review.

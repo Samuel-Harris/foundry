@@ -80,7 +80,7 @@ The board documents a tick writes:
 - `board/meta`, every tick, for `tick_at`.
 - `board/recent`, when any phase changed state.
 - One `phases/<phase>` for each phase whose state, scheduling, `waits_for`, session or pane changed.
-- One `prs/<number>` for each pull request whose state, checks, base, dependencies or `needs_update` changed.
+- One `prs/<number>` for each pull request whose state, checks, base, dependencies or `needs_update` changed. A pull request that merged or closed this tick has changed state.
 - A `needs` document added for each new decision request or waiting prompt, and removed once it is resolved.
 
 ## Merging a phase

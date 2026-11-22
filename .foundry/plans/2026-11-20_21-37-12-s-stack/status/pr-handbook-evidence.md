@@ -313,3 +313,17 @@ The fifth `interrogate` run used Opus and Fable under the common-path bar of `pr
 
 - A merged pull request is recognised only through a fourth field or ancestry, so independent squash merges are treated as open.
 - Developer commits are matched only by hash and trailer, so a rebased one is not recognised.
+
+## Verify: NOT VERIFIED at `df49f2906ccbdd6bcc56d3ab3ca3415fc1916df9`
+
+An eighteenth fresh verifier covered `cef8140` plus its own check-file commit `df49f29`. That commit adds `MERGED` to the harness and the five fifth-Review findings as cases.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING. Check 8 passed for every file. `pr-handbook.md`'s scratch block printed 115 PASS and `0 failed` in 2 hours 11 minutes on a loaded machine, and the twelve-point cold read agreed.
+- **The five new cases** fail at `d6067a3` and pass now.
+
+Findings:
+
+- **Significant: a regression from `cef8140`.** Patch-id matching ignores line numbers. A later developer commit with the same hunk as a taken one, elsewhere in the same file, matched it, so the round reverted the second change and pushed with `EQUAL`. At `d6067a3` the same history is reported.
+- **Minor.** The handbook says an empty `MERGED` gives a false `FAIL`. It can also give a false `EQUAL` that hides a developer commit merged before the phase took it.
+
+The phase session's fix: a patch-id match counts only when the trailer-named commit is not an ancestor of the candidate, which is true after GitHub's rebase and false for a twin on the same branch. It also adds the `MERGED` wording. The twin probe now reports `DEVELOPER-COMMITS` with nothing pushed, and the distinct-context control is unchanged.

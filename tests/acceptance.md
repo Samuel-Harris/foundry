@@ -38,7 +38,7 @@ Each assertion below must produce recorded evidence.
 
 3. **Archive install into a separate scratch consumer.** Each packable package is packed with `apm pack --archive -o ./dist`, then installed from the archive in a disposable directory with no access to the authoring checkout or its `apm_modules/` cache. The six packages with sibling `path:` dependencies — `default-stack`, `execution`, `planning`, `repo-init`, `s-stack` and `skill-creation` — cannot be packed before the `v0.1.0` tag exists; the suite asserts that documented guardrail instead of skipping them silently (see [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md)).
 
-4. **Deployed inventory matches.** Every expected skill, agent and instruction file for the nine default-stack packages is present after deployment, and no retired item (`pr-contention`, `port-claude-code-artefact`, `sequential-ralplan`, `ralplan`, `explain-pr`, `generate-pr-story`, `optimise-cursor-repo`) is deployed. This is a containment assertion plus a denylist, not a reverse diff: an unexpected extra file in a deploy root would not fail the suite.
+4. **Deployed inventory matches.** Every expected skill, agent and instruction file for the eleven default-stack packages is present after deployment, and no retired item (`pr-contention`, `port-claude-code-artefact`, `sequential-ralplan`, `ralplan`, `explain-pr`, `generate-pr-story`, `optimise-cursor-repo`) is deployed. This is a containment assertion plus a denylist, not a reverse diff: an unexpected extra file in a deploy root would not fail the suite.
 
 5. **Sibling files resolve after deployment.** Every `references/` and `scripts/` path promised by a skill exists after source deployment, and every relative link inside a primitive resolves on disk. The archive consumer asserts the deployed inventory of one bundle and that no sibling file is missing from it.
 
@@ -48,7 +48,7 @@ Each assertion below must produce recorded evidence.
 
 8. **Missing sibling dependency fails actionably.** Removing a declared sibling dependency produces an actionable failure, not a silent skip.
 
-9. **Frozen install and audit.** `apm install --frozen` succeeds and `apm audit --ci` exits `0` for all twenty packages, `default-stack` included. The consumer-side audit of the same manifest is asserted separately in assertion 2. [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md) records the APM 0.32.0 lockfile defect that would break `default-stack`'s own audit if `pr` or `repo-maintenance` gained a sibling dependency, and `s-stack`'s if `deep-interview` or `review` did.
+9. **Frozen install and audit.** `apm install --frozen` succeeds and `apm audit --ci` exits `0` for all twenty packages, `default-stack` included. The consumer-side audit of the same manifest is asserted separately in assertion 2. [`docs/DEPENDENCY-CONTRACTS.md`](../docs/DEPENDENCY-CONTRACTS.md) records the APM 0.32.0 lockfile defect that would break `default-stack`'s own audit if `coding-style`, `p-stack`, `pr`, `repo-maintenance` or `review` gained a sibling dependency, and `s-stack`'s if `deep-interview` or `review` did.
 
 10. **Stability.** Re-running install and pack leaves the working tree unchanged: the suite records the untracked-file list plus `git diff HEAD` before and after, and the two must match. Each lockfile is first normalised with `scripts/relativise_lockfiles.py`, because every install rewrites the paths of transitive sibling dependencies as absolute checkout paths and the committed form is relative.
 

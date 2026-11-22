@@ -161,6 +161,24 @@ A fresh verifier ran with nothing committed. Its report, summarised:
   - The `## Evidence` wording in the verification skill's check 8.
   - The real `sam-mode` does not load in a scratch repository.
 
+## Review, code head `0ad72927067f8875e5db62d10156c4c867b9291b`, SIGNIFICANT
+
+p-stack's `interrogate` skill ran at 481497e with adversaries on Opus and Fable. The Gemini seat was dropped, because this host has none. Findings were judged by the orchestrator's bar: a finding is significant only if it breaks the common path. Anything needing a rare or adversarial setup is recorded here and not fixed.
+
+Significant, to be fixed:
+
+1. **The first right-hand column can be squashed to 1 column.** When a pane spans beyond the orchestrator's pane, the restore after the full-span split gives it back its full width, so the new column ends 1 column wide while the launch reports `started`. Such a pane is the full-width spec writer above an orchestrator with a developer shell opened beside it, or a full-width developer pane above or below the orchestrator. Found by both. Placement is on the common path.
+2. **`COLUMNS` blinds the launcher on Ubuntu.** procps truncates `ps -A -o args=` to `COLUMNS` even into a pipe. A caller that exports `COLUMNS` therefore makes the launcher miss live sessions: every launch fails with `claude did not start` and leaves another copy running. Found by Fable. It is a duplicate session on the common path when the caller's environment exports `COLUMNS`.
+
+Recorded, not fixed (rare or adversarial setups):
+
+- A script fed to bash on standard input (`bash < build.sh`, or `curl … | bash` once the left side exits) in a session's left-over pane reads as idle, so a restart or `--close` kills it. Found by Opus.
+- A stale breaker lock, left only by a SIGKILL inside its brief window, can let two copies start under twelve concurrent launches. Found by Opus.
+- `/sam-mode start` when no tmux server has ever run exits 1 before `workmux add`. It was shown with the stub only, and whether the real workmux would start the server is unverified. Found by Opus.
+- A background or suspended job in a session's left-over pane is killed by a restart or `--close` on macOS, because idleness looks at the foreground group only. Found by Fable.
+- A command started in the left-over pane during a slow `workmux add`, after a `--remove`, is killed, because the idle check ran before the add. Found by Fable.
+- Under a Latin-1 locale on macOS, Bash 3.2's `[a-z]` follows collation, so names that are not kebab-case pass validation. Found by Fable.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

@@ -820,3 +820,19 @@ Before: consumer installed from `default-stack` at `main` `7747021`, 374 files. 
 - Drift: on the relativised lockfile `apm audit --ci` printed `Drift detected: 32 file(s)`; after `apm install --frozen`, `All 10 check(s) passed`. At `7747021` both `default-stack` and `s-stack` pass on their relativised lockfiles.
 - Removing `- path: ../p-stack` from `default-stack` in a throwaway worktree leaves `p-stack` recorded once and still prints `Drift detected: 32 file(s)`. So the drift comes from reaching p-stack through s-stack, not from the duplicate entry.
 - `quick-review` on the whole diff: fixed the acceptance doc's audit order, the stale `deep-interview` via `planning` example, the drift-cause sentence, the hard-coded Tier 1 count, AGENTS.md's audit pointer and wrapping, and the manifest order. Not taken: moving the doubly-reached package list to one owner, because the copies predate this phase.
+
+## Review 1, SIGNIFICANT at `9095235fd831608032a251232927ca6f85496768`, 2026-11-22T18:30:39Z
+
+Scope `git diff s-stack-package...s-stack-phase-default-stack -- . ':(exclude).foundry'`. No waiver allowed. Opus reviewed first and did not waive, so Fable joined. Both found finding 1 independently.
+
+**Finding 1, significant (both reviewers; reproduced by the phase session).** The committed `packages/default-stack/apm.lock.yaml` reproduces only at the author's checkout path. APM 0.32.0 materialises a local dependency that has a declaring parent under `apm_modules/_local/<sha256(anchored_local_path)[:12]>/` (`apm_cli/models/dependency/materialization.py`, the `declaring_parent` branch), and `anchored_local_path` is absolute at install time. p-stack, now reached through s-stack, has its cross-skill links rewritten into that slot, so the deployed text and the `sha256:` content hashes of 32 files (64 lockfile lines) depend on the checkout path. `scripts/relativise_lockfiles.py` does not normalise them.
+
+- Phase session: fresh `git worktree add --detach` at another path, `apm install --frozen`, relativise, `git diff --stat`: `1 file changed, 64 insertions(+), 64 deletions(-)`.
+- Fable: `FOUNDRY_DIFF_RANGE=origin/s-stack-package...HEAD bash .githooks/pre-commit` in a fresh clone: `pre-commit: apm.lock.yaml is stale for: default-stack`, `hook exit 1`. Tier 1 in a fresh worktree: `[x] install and pack leave no tracked-file change`. The merge base passes both.
+- The new DEPENDENCY-CONTRACTS.md claim that CI stays green is therefore false in any checkout but the author's.
+
+**Finding 2, significant only as a symptom of finding 1 (Opus).** The check file's drift check prints `diff=1 restored=1` and exits 1 outside the author's path.
+
+**Finding 3, not significant (Fable).** The check file's Evidence check "A consumer of `default-stack` loses no file" says only `apm.yml`, `apm.lock.yaml` and `.gitignore` may differ in content, but 32 p-stack files always differ by the slot hash between two consumers installed from trees at different paths. The intent, no lost file, holds. The next verifier should fix the wording.
+
+**Prototype of a fix (phase session).** A relativiser that also maps each `_local/<sha256(absolute anchor)[:12]>/` slot to `_local/<sha256(relative anchor)[:12]>/` in the deployed files and recomputes those files' `sha256:` hashes in the lockfile produced byte-identical lockfiles at two different checkout paths. `apm audit --ci` on that relativised lockfile still reports 32 drifted files until `apm install --frozen` runs, as the docs already say.

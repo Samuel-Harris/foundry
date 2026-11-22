@@ -37,7 +37,7 @@ Send a `started` message when you begin. The reference file `references/status-a
 | Field | Holds |
 | --- | --- |
 | Scope | What the phase builds, in enough detail that its session plans without guessing |
-| Depends on | The phases that must be merged into the orchestrator branch before it starts, or none |
+| Depends on | The phases that must be merged into the orchestrator branch before it starts, or that must be Done, with every pull request merged into the default branch, or none. Say which for each. |
 | Owns | Every path the phase may change, its check file included |
 | Must not touch | Paths a reader might expect it to change but which another phase owns |
 | Exclusive resources | Each resource it needs alone, or none |
@@ -58,7 +58,7 @@ The other handbooks read these repository-specific facts from your plan. Give ea
 
 ## When the orchestrator starts you again
 
-The orchestrator starts you again when a roadmap update or a discovery changes the phases. First merge the orchestrator branch into your branch, so you plan against the merged roadmap and code. Then edit only the entries the change affects, and run new experiments for any new open question. Each phase whose entry changed moves back to Plan.
+The orchestrator starts you again, with an `instruction` that names the change, when a roadmap update, a decision or a discovery changes the phases. First merge the orchestrator branch into your branch, so you plan against the merged roadmap and code. Then edit only the entries the change affects, and run new experiments for any new open question. Each phase whose entry changed moves back to Plan.
 
 ## After a restart
 

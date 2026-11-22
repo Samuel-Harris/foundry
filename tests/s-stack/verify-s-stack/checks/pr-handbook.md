@@ -1515,7 +1515,7 @@ Expected answer:
 
 ## Evidence
 
-The phase's own verifier runs these at every code head it verifies. They are never rerun by the merged-branch check.
+The phase's own verifier runs these when they are in its blast radius. They are never rerun by the merged-branch check.
 
 ### `gh stack link` with pull request numbers only links
 

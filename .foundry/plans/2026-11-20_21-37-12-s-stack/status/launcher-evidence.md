@@ -234,6 +234,26 @@ Recorded, not fixed:
 
 - A resurrect leaving both a spec writer and an orchestrator as `claude --continue` in the feature worktree blocks every launch with `more than one pane runs`. `workmux resurrect` compacts recovery to one candidate per working directory, so the real tool does not produce two. Found by Fable.
 
+## Verify, code head `e7405c5c33a60d71a726f857443b44b7587c9fe6`, VERIFIED
+
+A fresh verifier ran with nothing committed. Its report, summarised:
+
+- The full skill passed: 127 tests on macOS in both locales and in the Ubuntu container in both locales (four environmental skips). Tier 1 passed across 20 packages, the board's rendered check passed, and all nine cold reads passed.
+- Of 26 mutants, 25 are killed on macOS. The `-ww` mutant is killed on Ubuntu. The four undone fixes are each killed by their own test.
+- All four fixes reproduced:
+  - `claude --continue --name <s>` and `claude --model m --name <s>` are recognised and closed.
+  - A plain `claude` in the orchestrator's own pane is left running, and the orchestrator restarts with `--resume`.
+  - A resurrected spec writer is reported `alive` by the documented call.
+  - Four open and close cycles leave the sidebar, orchestrator and developer column exactly at their starting widths.
+- Parallel relaunch after a simulated crash: ten launches gave one `started` per name, in its earlier pane with `--resume`, plus one `alive` each.
+- Layout with and without a sidebar, precedence and stale-lock takeover all held.
+- Live check with the real `claude` 2.1.330. The first launch took 1.35 s and `alive` came in 0.37 s. A message got the reply `acknowledged`. A relaunch after `/exit` used the same pane with `--resume` and showed that earlier exchange.
+- Minor gaps recorded:
+  - The check file lacks this round's mutations and a parallel-relaunch recipe.
+  - `-ww` regressions are caught on Linux only.
+  - `sam-mode` does not load in a scratch repository.
+  - After a plain `claude` takes the orchestrator's old pane, the relaunched orchestrator splits that pane, and both panes then carry the `f-orchestrator` tag. The developer's `claude` is untouched and placement uses the new pane.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

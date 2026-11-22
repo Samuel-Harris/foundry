@@ -292,3 +292,24 @@ A seventeenth fresh verifier, under the common-path bar of `pr-handbook-d17`, co
 - **Done when and decisions d1 to d17 hold.**
 - **Independent rerun.** The phase session reran the scratch block: 107 PASS and `0 failed`. It took about 85 minutes, against about 10 earlier, because the machine's load average was about 10 while other sessions ran their own scratch suites. It was not a hang, and every assertion passed in order.
 - **Minor, off the common path.** The rewrite row does not name the "lacks phase commits" `FAIL` that a squash without trailers gives. Nothing is pushed. Carried to the round after Review.
+
+## Review: SIGNIFICANT at `d6067a3f3535f5366eb22b1115b2ce4459a77426`
+
+The fifth `interrogate` run used Opus and Fable under the common-path bar of `pr-handbook-d17`. Its scope was the nine commits from `5538053` to `d6067a3`. The earlier findings' probe, the check file's scratch block, printed 107 PASS and `0 failed` for both adversaries.
+
+**Significant, all where merged pull requests meet developer commits.**
+
+- **A developer commit on a pull request that merged before the phase took it** (Opus 1 and 2). After a squash merge the proof prints a false `EQUAL`, because the merged pull request counts as owning the path. After a true merge it prints "needs a new pull request", which no new pull request clears.
+- **A squash-merged pull request listed in the proof, after `main` changes its file and the phase takes `main`** (Fable 2). The proof prints `neither the phase's nor main's` and a head `FAIL` for good, so later rounds are blocked. The same happens at `697c739`.
+- **An independent merged pull request still takes the developer check** (Fable 3). Its result depends on a local branch nobody updates, and after the phase takes `main` the remedy is an empty pick.
+- **A developer commit the phase took is reported again after GitHub rebases the child onto `main`** (Fable 1). The rebase gives it a new hash, and the documented `cherry-pick -x` remedy is empty.
+
+**Minor.**
+
+- A hand deletion inside a local developer merge, of a file the phase lacks, is reverted (Fable 4).
+- Taking a suggestion on a manifest line next to `version:` conflicts on the phase (Fable 5).
+
+**Root causes.**
+
+- A merged pull request is recognised only through a fourth field or ancestry, so independent squash merges are treated as open.
+- Developer commits are matched only by hash and trailer, so a rebased one is not recognised.

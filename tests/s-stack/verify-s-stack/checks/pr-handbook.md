@@ -128,7 +128,9 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `twin developer commit` | `pr1` carries phase commits `a`, `a2` (`a.txt` from `a` to `a2`) and a revert to `a`. The developer commits `a.txt` from `a` to `a2` on `origin/pr1`, with the same patch-id as the phase's `a2`; a round | exit `1`, `DEVELOPER-COMMITS pr1 <sha>`, `NOT EQUAL`, `pr1` and `origin/pr1` still at the developer's commit, `a.txt` is `a2` |
 | `rebased child, main moved` | Stack `parent:main`, `child:parent`, pushed. `parent` is squash-merged, `main` changes `README`, and the forge rebases `child` onto that `main`, so the tree changes; a round of `child:main::parent` | exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `README` is `main`'s, diff `c.txt`, `EQUAL` |
 | `rebased child with a developer edit` | The same, but the developer commits a suggestion to `c.txt` on `origin/child` before the rebase; a round; then the phase commits the head's `c.txt` and a round carries that commit | first: exit `1`, `DEVELOPER-COMMITS child <rewritten head>`, `NOT EQUAL`, `child` and `origin/child` unchanged, the suggestion kept. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept, the suggestion kept, `EQUAL`. |
-| `no pushed entry` | `pr1` is pushed and the developer commits a suggestion to `a.txt`. A proof with the recorded entry; then `PUSHED` names only `xpr1` and a round | the proof prints `DEVELOPER-COMMITS pr1 <sha>`. The round exits `0` with no `DEVELOPER-COMMITS`, holds the developer's commit, gives `a.txt` the phase's content and proves `EQUAL`: with no entry, nothing on the branch is the developer's. |
+| `taken before the round, child rebased` | Stack `parent:main`, `child:parent`, pushed. The developer commits a suggestion to `c.txt` on `origin/child` and the phase takes it with `git cherry-pick -x`; before any round, `parent` is squash-merged and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent` carrying the taken commit | exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `c.txt` is the suggestion, diff `c.txt`, `EQUAL` |
+| `never pushed, no entry` | A first build of `pr1:main` with `PUSHED` naming only `xpr1` | exit `0`, no `STOP`, diff `a.txt`, `EQUAL` |
+| `pushed, no entry` | `pr1` is pushed. A proof with an empty `PUSHED`; then the developer commits a suggestion to `a.txt` and a proof with the recorded entry; then a round and a proof with an empty `PUSHED`, and again with `PUSHED` naming only `xpr1` | each proof without the entry prints `STOP pr1 is on origin but has no PUSHED entry, so its developer commits cannot be told apart` and `NOT EQUAL`, and never `EQUAL`. The proof with the entry prints `DEVELOPER-COMMITS pr1 <sha>`. Each round exits `1` and prints exactly that `STOP`, and `pr1` and `origin/pr1` stay at the developer's commit with the suggestion. |
 | `pushed head missing` | `pr1` is pushed, then `PUSHED` names a head that the repository lacks; a round, then a proof | the refresh exits `1` and prints exactly `STOP pr1 was last pushed at <sha>, which is not here, so its developer commits cannot be told apart`, `pr1` and `origin/pr1` unchanged; the proof prints the same line and `NOT EQUAL` |
 
 ```bash
@@ -1295,16 +1297,46 @@ c_rebased_dev() {
     && pass "the rebased child's edit taken into the phase as an ordinary commit: EQUAL" || fail "rebased-dev remedy: $o"
 }
 
+c_taken_before_round() {
+  rebased_setup taken-before-round
+  suggest child c.txt 'c, as the reviewer suggested'; s=$(git rev-parse origin/child)
+  git checkout -q phase; git cherry-pick -x "$s" >/dev/null; p=$(sha)
+  squash parent
+  forge child origin/parent || { fail "taken-before-round: the simulated rebase changed the tree"; return; }
+  rw=$(git rev-parse origin/child)
+  PROOF="parent:main child:main::parent" round child child:main::parent "$p"; o="$code $out"
+  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$rw" origin/child && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] \
+    && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal parent:main child:main::parent \
+    && pass "a developer commit taken before any round, then the parent squash-merged and the child rebased: the suggestion kept, EQUAL" || fail "taken-before-round: $o"
+}
+
+c_never_pushed() {
+  init never-pushed; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  PUSHED="xpr1=$(git rev-parse origin/main)"; round pr1 pr1:main "$c1"; o="$code $out"
+  [ "${o%% *}" = 0 ] && ! has 'STOP.*' && [ "$(git show origin/pr1:a.txt)" = a ] && [ "$(hand origin/main origin/pr1)" = 'a.txt ' ] && equal pr1:main \
+    && pass "no PUSHED entry on a branch never pushed: the first build proceeds, EQUAL" || fail "never-pushed: $o"
+}
+
 c_no_entry() {
   init no-entry; orch; phase
   echo a > a.txt; commit 'feat: a'; c1=$(sha)
   round pr1 pr1:main "$c1" || fail "no-entry build: $out"
-  suggest pr1 a.txt "$SUGGESTED"; s=$(git rev-parse origin/pr1)
+  stop="STOP pr1 is on origin but has no PUSHED entry, so its developer commits cannot be told apart"
+  rec=$PUSHED; PUSHED=; prove pr1:main
+  [ $code = 1 ] && has "$stop" && ! has EQUAL && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] \
+    && pass "a pushed branch with an empty PUSHED and no developer commit: the proof STOPs, NOT EQUAL" || fail "no-entry, clean branch: $out"
+  PUSHED=$rec; suggest pr1 a.txt "$SUGGESTED"; s=$(git rev-parse origin/pr1)
   prove pr1:main
   [ $code = 1 ] && has "DEVELOPER-COMMITS pr1 $(git rev-parse --short "$s") ?" && pass "with the recorded entry, the developer's commit is reported" || fail "no-entry, with the entry: $out"
-  PUSHED="xpr1=$(git rev-parse origin/main)"; round pr1 pr1:main; o="$code $out"
-  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && anc "$s" origin/pr1 && [ "$(git show origin/pr1:a.txt)" = a ] && equal pr1:main \
-    && pass "no PUSHED entry for the branch: nothing on it is the developer's, the round proceeds and gives the phase's content, EQUAL" || fail "no-entry: $o"
+  for e in '' "xpr1=$(git rev-parse origin/main)"; do
+    PUSHED=$e; round pr1 pr1:main; o="$code $out"
+    [ "${o%% *}" = 1 ] && [ "$out" = "$stop" ] && unchanged pr1 "$s" && [ "$(git show origin/pr1:a.txt)" = "$SUGGESTED" ] \
+      && pass "a pushed branch with no PUSHED entry ('$e'): the refresh STOPs, the suggestion kept, nothing pushed" || fail "no-entry refresh ('$e'): $o"
+    prove pr1:main
+    [ $code = 1 ] && has "$stop" && ! has EQUAL && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] \
+      && pass "a pushed branch with no PUSHED entry ('$e'): the proof prints the STOP and NOT EQUAL, never EQUAL" || fail "no-entry proof ('$e'): $out"
+  done
 }
 
 c_pushed_missing() {
@@ -1326,7 +1358,7 @@ for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_versio
   c_extend c_foreign_above c_delegate_after_orch c_mixed_below c_mixed_above c_own_missing \
   c_order_stack_fix c_order_row3_edit c_order_span_chained c_span_unchained c_outside_own c_not_own c_glob c_local_only c_own_refusal \
   c_merged_skipped c_merge_edit_shared c_merge_edit_other c_developer c_update_branch c_update_edit c_landed c_developer_file c_update_child \
-  c_dev_merged_squash c_dev_merged_true c_merged_main_edits c_merged_stale_local c_taken_rebased c_twin c_rebased_equal c_rebased_dev c_no_entry c_pushed_missing; do
+  c_dev_merged_squash c_dev_merged_true c_merged_main_edits c_merged_stale_local c_taken_rebased c_twin c_rebased_equal c_rebased_dev c_taken_before_round c_never_pushed c_no_entry c_pushed_missing; do
   (cd "$S" && "$c") || fail "$c ended early"
 done
 n=$(wc -l < "$S/failed" | tr -d ' ')

@@ -1,10 +1,10 @@
 ---
 phase: "board"
-state: "Implement"
-changed_at: "2026-11-22T00:37:11Z"
+state: "Verify"
+changed_at: "2026-11-22T00:41:54Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
-code_head: "afd3f270ba9c2ddc689b0afe12927591941ccc7f"
+code_head: "5fc142fa893c0d4ce4492602b5cd2f99e1764e49"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -134,3 +134,5 @@ Draft pull request #86 (`s-stack-board` into `main`, head `7f233e4`) is open, wi
 Pull request #86 merged into `main` as `51f334e`. The code head `afd3f27` is merged into `s-stack-package` (`a606589`), and the orchestrator's post-merge check returned VERIFIED on `3ce7d34`. Every pull request of the phase is merged, so the phase is Done.
 
 The orchestrator opened a two-item follow-up round (`board-d8`), so the phase moved from Done back to Implement. The worktree was recreated on the phase branch at `c7dcf1a`.
+
+Follow-up round: `s-stack-package` was merged under C7 at `a60b107`, cleanly, bringing s-stack 0.1.5. `73251d3` removes the restack need kind and aligns the `needs_update` rule with `orchestrator.md`, as it stands on `s-stack-phase-orchestrator-handbook`, because that file is not yet on `s-stack-package`. `quick-review` (bug and quality) found no significant defect in the code. Both reviewers flagged that "open" collides with the schema's `open` state, which would leave drafts out. `5fc142f` names draft and open pull requests, says the flag is set and cleared, and says required checks come from the repository. The Verify gate is starting for `5fc142f`.

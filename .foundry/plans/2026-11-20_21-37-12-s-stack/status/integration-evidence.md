@@ -41,3 +41,28 @@ Recorded as minor, not fixed:
 - Quality 3: "the local orchestrator branch" is stated in `pr-commands.md`, `pr-creator.md` and the phase session's brief, as R2 and P2 place it.
 - Quality 5: P15's exception paragraph is dense, the end-of-feature failure does not say which phase the freeze waits on when the owner merged earlier, and the Done-phase status-fix `instruction` has no row of its own. Each is a rare history.
 - Quality 6: small paraphrases of the waiver criterion and of the full-run timing.
+
+## Verify 1: VERIFIED at `faa5b867b5747f43174ad66e5260f3347039c72d`, 2026-11-22T15:29:36Z
+
+Fresh Opus verifier, first Verify, scope the whole phase diff, no waiver allowed. Cold reads were answered by fresh Opus readers and graded by fresh Opus graders. Answers saved in the session scratchpad `coldreads/` directory.
+
+- Commits: `2025699` adds `checks/integration.md`, six cold reads for the fixes no other check file reaches. `0740f25` and `faa5b86` make seven cold reads (foundation 1, integration 2, orchestrator E, N, Y and AH) ask for what their unchanged expected answers score, and give AH the reference. Checked: the three commits touch only `tests/s-stack/verify-s-stack/checks/`, and no expected answer changed.
+- Skill checks 1, 2, 3, 4, 5 and 7 PASS. Tier 1: `all Tier 1 structural checks passed across 20 packages`, at `2025699` and `0740f25`. Check 6 outside the radius: `launch.sh` and `packages/s-stack/tests/` unchanged.
+- foundation: cold reads 1 and 3, the C2 check and the code-head scratch check PASS. Cold read 2 outside the radius (only unchanged `SKILL.md`).
+- phase-handbooks: cold reads 1 to 4 PASS.
+- spec-planner-handbooks: cold read 1 PASS. Cold read 2 outside the radius (`spec-writer.md`, `SKILL.md` unchanged).
+- pr-handbook: script parse, 145 scratch cases (0 failed), line budget and three cold reads PASS.
+- orchestrator-handbook: cold reads A to BD (56) PASS, launcher calls, abort recovery and the head-comparison script PASS.
+- integration: cold reads 1 to 6 PASS.
+- board, launcher: outside the radius.
+- Private names: no match in the phase diff or commit messages.
+- Gap accepted by the phase session: cold reads whose check text and input files were byte-identical between `0740f25` and `faa5b86` kept their `0740f25` result rather than run a third time. Only check files changed between those heads.
+
+Reader remarks, not scored, recorded as minor:
+
+- `orchestrator.md` merge step 7 sends `stop` without a quiet test: decided by `integration-r2`.
+- Whether a failed full run holds back the architecture-page update.
+- `phase-session.md` does not name the message that ends a `blocked` wait.
+- `phase-session.md` line 14 does not say whether to build to the roadmap while its request is open.
+- `reviewer.md`'s opening says Review follows VERIFIED, not VERIFIED or WAIVED.
+- No `phases` board document is written for a phase a later `done-planning` adds.

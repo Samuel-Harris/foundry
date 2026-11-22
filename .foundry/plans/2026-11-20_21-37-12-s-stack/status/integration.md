@@ -6,7 +6,12 @@ session: "s-stack-phase-integration"
 branch: "s-stack-phase-integration"
 code_head: "d8a1a63cda56bbf3e51d46bcc3477c69b9f70a06"
 waits_for: null
-verdicts: []
+verdicts:
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "faa5b867b5747f43174ad66e5260f3347039c72d"
+    at: "2026-11-22T15:29:36Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/integration-evidence.md"
 pull_requests: []
 requests: []
 decisions:

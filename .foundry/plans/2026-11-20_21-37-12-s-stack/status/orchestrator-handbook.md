@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "PR"
-changed_at: "2026-11-22T11:30:35Z"
+state: "Implement"
+changed_at: "2026-11-22T11:59:38Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "ff831156b0c01d2fae94e01031147297ccfa242a"
@@ -440,3 +440,5 @@ The fifteenth Review gate returned CLEAR at `ff83115`, under the common-path bar
 `s-stack-package` (`a209d0e`, with #92 merged into `main` and `board` Done) was merged at `5b0ad24`. Outside `.foundry/` it touched only s-stack's `version:` line, which became `0.1.8`, and the regenerated lockfile, so under `launcher-r3` the code head stays `ff83115`. The PR creator started.
 
 The PR creator opened draft pull request #93 (`s-stack-orchestrator-handbook` into `main`, head `07adeba`), with no open dependency. Its proof printed `EQUAL` against the local `s-stack-package`. s-stack goes to `0.1.9`, and no open pull request changed its version. The pull request holds 1,245 hand-written lines. The phase session checked that the handbook, the check file and the lockfile on the branch equal the phase branch, and that the branch holds no `.foundry/` file and no merge commit. The pushed head for the next round's `PUSHED` is `s-stack-orchestrator-handbook=07adeba657325567e45c983f295bb2c2a87c0936`.
+
+The orchestrator merged the tip `2fbf619` into `s-stack-package` at `7cd7034`. Its scoped post-merge check returned NOT VERIFIED on the check file's cold reads: AP failed twice, AE failed once, and AN, I and Z each failed on the first reader. Every structural check and script passed. `s-stack-package` is frozen. The orchestrator sent `move-back` to Implement, and the phase moved back. `s-stack-package` (`3ac4bf0`) was merged.

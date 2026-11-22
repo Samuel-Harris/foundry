@@ -822,3 +822,50 @@ Both are for `pr-handbook` and the cross-handbook read-through. One change addre
   - the branch holds no `.foundry/` file and no merge commit;
   - a grep of the title, the description and the commit messages finds no private name.
 - Pushed head for the next `PUSHED`: `s-stack-orchestrator-handbook=07adeba657325567e45c983f295bb2c2a87c0936`. The C2 header has no slot for it, as Review 15 recorded.
+
+## Post-merge check at `7cd7034`, NOT VERIFIED, and the phase session's call on AE
+
+The orchestrator's scoped post-merge check failed on the cold reads in this phase's check file. Every structural check and script passed.
+
+- AP failed twice. Its point 1 needs the `done-planning` detail line, which only `references/status-and-messages.md` line 87 states, and AP's Files line does not give that file.
+- AE failed once. Its first reader judged `pe` stalled at tick 4.
+- AN, I and Z each failed on the first reader and passed on the second.
+
+AE: the scenario is wrong, not the handbook. In tick 2, `pe`'s PR creator pushes `h240b…`, but `pe` never sends `prs-open`, while `qof` does for 241. `phase-session.md` ends an "A pull request merged" round with `prs-open` (PR steps 2 and 3). Without it, `pe`'s tick-1 round stays unanswered under `orchestrator.md` line 13. After two ticks with no pull request change, a careful reader can judge `pe` stalled at tick 4, against the expected answer's "told nothing". The fix is to have `pe` send `prs-open` for 240 in tick 2. `orchestrator.md` does not change, so the code head stays `ff83115` until the verifier commits the check file.
+
+## Verify 36 (scoped, gate-cost rule 1), code head `a3f4749585412f4be042c8f479a8971768df5756`, VERIFIED
+
+A fresh verifier changed only the check file, in commit `a3f4749` (10 lines edited):
+
+- **AP.** The reference joins the Files line, and the prompt says "four files".
+- **AE.** Tick 2 says `pe` sent `prs-open` for 240. Point 2 says both `prs-open` messages answer their rounds without making the rewrite expected. Point 4 says `pe` has nothing unanswered and has not stalled. An unscored note covers line 148.
+- **I.** The prompt asks which pull requests are ready and whether `gamma` is told that every pull request has merged. Point 1 states both.
+- **AN.** The prompt asks whether the architecture page changes. Point 7 notes the update, unscored.
+- **Z.** Tick 3 says workmux showed `kaph` working at tick (2). The expected answers are unchanged.
+
+Each changed read ran three times, each with a fresh Opus reader and a fresh Opus grader, and all 15 runs passed. Z's first run was void, because the reader wrote no answer, so it was rerun fresh. markdownlint and the hook passed. Audit: every other read, every script, the other check files and C6 checks 1, 3 to 7 are outside the radius. Their inputs did not change, and the only other change since `ff83115` is the merged-in `version:` line, which is verified under rule 7. The phase session read the diff and found it matches the report.
+
+The verifier's minor note: AE relies on line 136 taking priority over line 148. All three readers applied that priority.
+
+`s-stack-package` (`0bcb8d9`, `.foundry/` only) was merged after the gate.
+
+## Review 16, code head `a3f4749585412f4be042c8f479a8971768df5756`, CLEAR
+
+`interrogate` over the check-file edit since `ff83115`, under the common-path bar. The edit alters expected results, so gate-cost rule 3 does not allow a waiver, and both adversaries ran: Opus and Fable, each in its own worktree.
+
+- The Opus adversary ran each of the five changed reads once, and all passed.
+- The Fable adversary ran each twice, once on Opus and once on Fable, and all ten passed.
+
+Neither found an expected answer that contradicts the handbook, a loosened requirement, or a read still fragile on a first run. AE was probed for a reader taking `pe`'s `prs-open` as accepting the rebase, and neither reader did. What the readers raised about the handbook itself, the close timing for a stalled session and a phase in Spec without `waits_for`, is already known and outside the bar.
+
+## PR creator refresh of #93 after the post-merge round
+
+- `a3f4749` was carried as `044aeca`, a fast-forward from `07adeba` with no regenerate commit (`versioning: nothing to bump`). s-stack stays `0.1.9`, and no open pull request changes it.
+- Proof against the local `s-stack-package`, with `PUSHED=s-stack-orchestrator-handbook=07adeba…`, printed `3 files changed, 1244 insertions(+), 1 deletion(-)` and `EQUAL`. The pre-commit hook, `versioning.py check` and Tier 1 across 20 packages passed on the branch.
+- The description's Verification paragraph was updated for the reworded reads.
+- Phase-session check:
+  - #93 is a draft, base `main`, head `044aeca`;
+  - `07adeba` is an ancestor of the new head;
+  - the handbook, the check file and the lockfile equal the phase branch;
+  - the branch holds no `.foundry/` file and no merge commit.
+- Pushed head for the next `PUSHED`: `s-stack-orchestrator-handbook=044aecaee05aef535d97ec415d50a03711f771e6`.

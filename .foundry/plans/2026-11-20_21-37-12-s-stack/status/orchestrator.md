@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
-| Last tick | 2026-11-22 19:51 |
+| Last tick | 2026-11-22 20:11 |
 | Default branch merged at | `59bee65` (#97, #98, into `3aa3de7`) |
 
 ## Live sessions
@@ -106,6 +106,7 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 ## Merge cautions
 
+- `main` moved to `55e1899` (#100, not an s-stack pull request). Do not merge it while `s-stack-package` is frozen; merge it once the freeze lifts.
 - `s-stack-package` is frozen from 2026-11-22 20:00 until integration's fix for cold read 4 merges and a full run passes again.
 
 

@@ -103,3 +103,17 @@ Fresh Opus verifier. Scope: the phase's work since `faa5b86`, which is `d1cecf7`
 - Five scripted checks PASS.
 - 64 cold reads PASS, including AP, integration 7 and 8, and T and AT.
 - Outside the radius: foundation 2, integration 5 and 6, phase-handbooks, pr-handbook, spec-planner-handbooks, board and launcher. None of their files changed since `faa5b86`.
+
+## Review 2: SIGNIFICANT at `982bdc43a0d05a7638e6a65008062f037c9196e9`, 2026-11-22T16:26:56Z
+
+Scope: `d1cecf7`, `853fe3a`, `ccedb51` and `982bdc4`. First reviewer: Opus, not allowed to waive. The Fable adversary ran beside it. Both re-ran round 1's probes, and both probes now PASS: the changed default is not waived, and the frozen phase re-merges with the failed check run. Repros are under the session scratchpad's `review2-opus/` and `review2-fable/` directories.
+
+Significant:
+
+- **Opus 1, also Fable 1.** `orchestrator.md` step 4's "the check that failed runs on every merge, whatever the merge changes" contradicts Finishing a phase's status-only merge of a Done phase "with steps 1 to 3" while frozen. The Opus cold read of `orchestrator.md` and the reference said the text conflicts. It said a pass on that merge would end the freeze with the failing code unchanged, and that the frozen phase's own re-merge could then be blocked. The three Fable readers took the right action but flagged the same tension. Classified significant: this change introduced it, and it sits on the failed-check path of the orchestrator's common path.
+
+Recorded as minor, not fixed:
+
+- **Fable 2.** Orchestrator cold read AV, points 1 and 2 (lines 786 and 787), still give "names the failed code head" as the reason `beta` does not merge. The scored action (no merge) is right, and AV passed in Verify 3.
+- **Fable 3, Opus.** The waivable examples, a type annotation and a log level, can overlap the never-waivable list, a public interface or a default, and no sentence says which list wins. Every reader chose not to waive.
+- Untested reader remarks: after a `move-back` for a check, the phase's own gates may be waived on an empty scope, which leaves the post-merge rerun as the backstop. "Sent `prs-open` since" does not say since what. An intermittent check can fail again with no bound. "Moving back" does not say to redo the PR step.

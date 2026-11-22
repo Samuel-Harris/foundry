@@ -57,9 +57,9 @@ decisions:                          # decisions taken for this phase only
 
 The rules:
 
-- **Code head.** It is `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, the latest commit on the phase branch that changes a file outside `.foundry/`. Run it from the worktree root. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, whose commits also move no code head. Its sessions then add an exclude clause for each such path to the command.
-- **Verdicts.** The list keeps every verdict, newest last. The orchestrator merges only when the newest `verify` verdict is `VERIFIED` and the newest `review` verdict is `CLEAR`, and both name the current code head.
-- **Ids.** A request or decision id is `<phase>-r<n>` or `<phase>-d<n>`, numbered by the phase itself. No list is shared between writers.
+- **Code head.** It is the newest commit on the phase branch's first-parent line whose diff against its own first parent changes a file outside `.foundry/`, so a merge that brings in code moves it. Run `for c in $(git rev-list --first-parent <phase branch>); do git diff --quiet "$c^" "$c" -- . ':(exclude).foundry' || { echo "$c"; break; }; done` from the worktree root. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, and generated lines, such as a `version:` line, whose changes also move no code head. Its sessions then add `':(exclude,glob)**/<name>'` to the `git diff` pathspecs for each such path, and `-I '<regex>'` before its `--` for each such line. Without `glob`, `**/<name>` misses a file at the repository root. A generated-line regex must match only generated lines, because `-I` applies to every file. A correct run prints one 40-character SHA and nothing on standard error, so any error output means the result cannot be trusted.
+- **Verdicts.** The list keeps every verdict, newest last. The merge rule is that the newest `verify` verdict is `VERIFIED` and the newest `review` verdict is `CLEAR`, and both name the current code head. A phase moves to PR once it holds, and `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges.
+- **Ids.** A request or decision id is `<phase>-r<n>` or `<phase>-d<n>`, numbered by the phase itself. The planner numbers its requests `planner-r<n>`, and `handbooks/planner.md` says where it keeps them. No list is shared between writers.
 - **Evidence.** Evidence that is not a URL lives in a file the phase owns under `.foundry/plans/<id>/status/`, named `<phase>-evidence.md`.
 - **Commits.** A status commit holds files under `.foundry/` and nothing else. Its subject is `chore(<feature>): <phase> <state>`.
 
@@ -79,25 +79,28 @@ A phase session, the planner or a spec writer sends these to the orchestrator:
 | Kind | When | The message carries |
 | --- | --- | --- |
 | `started` | The session starts. The first spec writer skips it, because it starts the orchestrator itself. | Its session name and branch |
-| `state` | A phase changes state | The new state and the code head |
-| `decision-request` | The session needs a decision | The decision request, as [Decision requests](#decision-requests) defines it |
+| `state` | A phase changes state, or the orchestrator says every pull request merged while the phase is not in PR, so its state stays the same | The new or current state and the code head |
+| `decision-request` | A phase session or the planner needs a decision | The decision request, as [Decision requests](#decision-requests) defines it |
 | `blocked` | The session is blocked | What it waits for |
 | `prs-open` | A phase's pull requests are open | Each number with its `depends_on` list |
 | `instruction` | The developer gave it an instruction that changes the phase's scope or a recorded decision | The instruction |
-| `done-planning` | The planner has finished | The branch and commit to merge |
-| `roadmap-update` | A spec writer has an approved update | The branch and commit to merge, what changed, and the behaviour that the change affects |
+| `done-planning` | The planner has finished | The branch and commit to merge, and the phases whose plan entry changed |
+| `roadmap-update` | A spec writer has an approved update | The branch and commit to merge, what changed, the behaviour that the change affects, and the `run-decisions.md` rows it folded in |
 
-The orchestrator sends these:
+The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-session.md) says what the phase does.
 
 | Kind | When | The message carries |
 | --- | --- | --- |
 | `answer` | The developer has decided | The answer and the id of the request that it answers |
 | `instruction` | The developer gave an instruction | The instruction, in the developer's words |
 | `merge-orchestrator-branch` | The orchestrator branch changed under a live phase | A request to merge it |
-| `fix-round` | A fix round starts | The pull request and its comments, or the failed check |
-| `restack` | The developer asked for a restack | The pull request and its new base |
-| `move-back` | A roadmap or plan change touches a phase | The state to move back to and what changed |
-| `stop` | A phase's pane is about to close | A request to commit and stop |
+| `fix-round` | The developer reviewed a pull request, or one of its checks failed | The pull request and its comments, or the failed check |
+| `fix-round` | Only generated files on a pull request are stale | The pull request |
+| `fix-round` | A pull request that one of the phase's pull requests depends on merged, so the PR creator works out the base again | The merged pull request and the dependent one |
+| `fix-round` | A hand-written file the phase owns conflicts with the default branch | The conflicting paths and the default branch commit |
+| `move-back` | A roadmap or plan change touches a phase, or a check on the orchestrator branch failed after the phase merged | The state to move back to, and what changed or the failed check |
+| `instruction` | Every pull request of the phase merged into the default branch | The merged pull request numbers |
+| `stop` | A phase's pane is about to close, or a stalled session is being replaced | A request to commit and stop |
 
 The rules:
 

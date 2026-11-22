@@ -116,8 +116,10 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `edit inside a merge, other path` | The same merge edits `README`, which no phase commit changes | exit `1`, `FAIL <merge> edits README inside the merge, so no pull request carries the edit`, `NOT EQUAL`, `pr1` and `origin/pr1` unchanged |
 | `developer commit` | The developer commits a suggestion to `a.txt` on `origin/pr1`; a round; then the phase takes it with `git cherry-pick -x` and a round carries that commit | first: exit `1`, `DEVELOPER-COMMITS pr1 <sha>`, `NOT EQUAL`, `pr1` and `origin/pr1` still at the developer's commit. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the developer's commit, the suggestion kept, `EQUAL`. |
 | `Update branch` | `main` moves and `origin/pr1` merges it, as GitHub's "Update branch" does; a round | exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over that merge, diff `a.txt`, `EQUAL` |
-| `Update branch with an edit` | The same merge also edits `a.txt` | exit `1`, `NOT EQUAL`, `pr1` and `origin/pr1` unchanged, the developer's `a.txt` kept |
+| `Update branch with an edit` | The same merge also edits `a.txt`; a round; then the phase commits the merge's `a.txt` and a round carries that commit | first: exit `1`, `DEVELOPER-COMMITS pr1 <merge>`, `NOT EQUAL`, `pr1` and `origin/pr1` unchanged, the developer's `a.txt` kept. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the merge, the edit kept, one commit with `(cherry picked from commit <fix>)`, `EQUAL`. |
 | `landed content` | `pr1`, built with no trailer, is squash-merged; a fix to `a.txt` in a new `pr1b:main::pr1` | exit `0`, `a fixed`, diff `a.txt`. The proof `pr1:main pr1b:main::pr1`, which lists the merged one as the handbook says, prints `EQUAL`. |
+| `developer's new file` | The developer commits a new `a_test.txt` on `origin/pr1`; a round; then the phase takes it with `git cherry-pick -x` and a round carries that commit | first: the refresh exits `1` and prints exactly `DEVELOPER-COMMITS pr1 <sha>`, `pr1` and `origin/pr1` still at the developer's commit. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over it, diff `a.txt a_test.txt`, `EQUAL`. |
+| `Update branch on a stacked child` | A same-phase stack `parent:main`, `child:parent`; a fix round of `parent`; `origin/child` merges `origin/parent`, as GitHub's "Update branch" does; a round of both | all three exit `0`, no `DEVELOPER-COMMITS`, `child` holds the merge and `origin/parent`, line 2 is the fix, diff against `parent` `c.txt`, `EQUAL` |
 
 ```bash
 /bin/bash <<'CHECK'
@@ -1119,8 +1121,43 @@ c_update_edit() {
   in_wt origin/pr1 sh -c 'git merge -q --no-ff --no-commit origin/main >/dev/null 2>&1; echo "a, edited in the merge" > a.txt && git add -A && git commit -q --no-edit && git push -q origin HEAD:pr1'
   u=$(git rev-parse origin/pr1)
   round pr1 pr1:main; o="$code $out"
-  [ "${o%% *}" = 1 ] && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] && unchanged pr1 "$u" && [ "$(git show origin/pr1:a.txt)" = 'a, edited in the merge' ] \
-    && pass "a developer's merge of main that also edits a file is reported: NOT EQUAL, nothing pushed or reverted" || fail "update-edit: $o; a.txt on origin/pr1 '$(git show origin/pr1:a.txt)'"
+  [ "${o%% *}" = 1 ] && has "DEVELOPER-COMMITS pr1 $(git rev-parse --short "$u") ?" && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] && unchanged pr1 "$u" && [ "$(git show origin/pr1:a.txt)" = 'a, edited in the merge' ] \
+    && pass "a developer's merge of main that also edits a file: DEVELOPER-COMMITS names the merge, NOT EQUAL, nothing pushed or reverted" || fail "update-edit: $o; a.txt on origin/pr1 '$(git show origin/pr1:a.txt)'"
+  git checkout -q phase; git show "$u:a.txt" > a.txt; commit 'fix: a, as edited in review'; p=$(sha)
+  round pr1 pr1:main "$p"; o="$code $out"
+  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$u" origin/pr1 && [ "$(git show origin/pr1:a.txt)" = 'a, edited in the merge' ] \
+    && [ "$(git log --format=%B "$u..origin/pr1" | grep -c -x -F "(cherry picked from commit $p)")" = 1 ] && equal pr1:main \
+    && pass "the merge's edit taken into the phase as an ordinary commit: the round carries it, keeps the edit, EQUAL" || fail "update-edit remedy: $o"
+}
+
+c_developer_file() {
+  init developer-file; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "developer-file build: $out"
+  in_wt origin/pr1 sh -c 'echo test > a_test.txt && git add -A && git commit -q -m "Add a test, from review" && git push -q origin HEAD:pr1'
+  s=$(git rev-parse origin/pr1)
+  round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 1 ] && [ "$out" = "DEVELOPER-COMMITS pr1 $(git rev-parse --short "$s") " ] && unchanged pr1 "$s" && [ "$(git show origin/pr1:a_test.txt)" = test ] \
+    && pass "a developer's commit adding a file: the refresh prints DEVELOPER-COMMITS, not the delegate STOP, nothing pushed or reverted" || fail "developer-file: $o"
+  git checkout -q phase; git cherry-pick -x "$s" >/dev/null; p=$(sha)
+  round pr1 pr1:main "$p"; o="$code $out"
+  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$s" origin/pr1 && [ "$(git show origin/pr1:a_test.txt)" = test ] && [ "$(hand origin/main origin/pr1)" = 'a.txt a_test.txt ' ] && equal pr1:main \
+    && pass "the developer's new file taken with cherry-pick -x: the next round keeps it, EQUAL" || fail "developer-file remedy: $o"
+}
+
+c_update_child() {
+  init update-child; orch; phase
+  line 2 'line 2 parent' shared.txt; commit 'feat: parent'; c1=$(sha)
+  echo c > c.txt; commit 'feat: child'; c2=$(sha)
+  step parent parent:main "$c1"; step child child:parent "$c2"; finish parent:main child:parent || fail "update-child build: $out"
+  line 2 'line 2 parent, fixed' shared.txt; commit 'fix: parent'; c3=$(sha)
+  PROOF="parent:main child:parent" round parent parent:main "$c3" || fail "update-child parent fix: $out"
+  in_wt origin/child sh -c 'git merge -q --no-ff --no-edit origin/parent && git push -q origin HEAD:child'
+  u=$(git rev-parse origin/child)
+  step parent parent:main; o1="$code $out"; step child child:parent; o2="$code $out"; finish parent:main child:parent; o="$code $out"
+  [ "${o1%% *} ${o2%% *} ${o%% *}" = '0 0 0' ] && ! has 'DEVELOPER-COMMITS.*' && anc "$u" origin/child && anc origin/parent origin/child \
+    && [ "$(at origin/child shared.txt 2)" = 'line 2 parent, fixed' ] && [ "$(hand origin/parent origin/child)" = 'c.txt ' ] \
+    && pass "GitHub's Update branch on a stacked child, merging its parent: not reported, EQUAL" || fail "update-child: $o1 / $o2 / $o"
 }
 
 for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_version_build c_r1_orch_merged c_r1_two_squashed c_r1_stack_moves c_r1_spaces \
@@ -1130,7 +1167,7 @@ for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_versio
   c_delegate_first_parent c_delegate_after_push c_stack_local c_foreign_local c_retry c_stale_other_stacked c_stale_other_row3 \
   c_extend c_foreign_above c_delegate_after_orch c_mixed_below c_mixed_above c_own_missing \
   c_order_stack_fix c_order_row3_edit c_order_span_chained c_span_unchained c_outside_own c_not_own c_glob c_local_only c_own_refusal \
-  c_merged_skipped c_merge_edit_shared c_merge_edit_other c_developer c_update_branch c_update_edit c_landed; do
+  c_merged_skipped c_merge_edit_shared c_merge_edit_other c_developer c_update_branch c_update_edit c_landed c_developer_file c_update_child; do
   (cd "$S" && "$c") || fail "$c ended early"
 done
 n=$(wc -l < "$S/failed" | tr -d ' ')

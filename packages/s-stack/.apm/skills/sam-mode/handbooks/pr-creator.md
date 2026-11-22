@@ -99,6 +99,7 @@ The design cannot finish a round on the histories below. Never work around one. 
 | `STOP <path> cannot be written into the tree, as when a file and a directory share its name`, after git's own error | The phase replaced a file with a directory of the same name, or a directory with a file. | Whether to split that change by hand, or to undo it in the phase. |
 | The proof's `FAIL <merge> edits <path> inside the merge, so no pull request carries the edit` | The phase edited a path inside one of its own merges, and the path is not a phase path, or another phase also changed it. | The phase session makes the edit an ordinary commit on the phase instead, which is a local rewrite of the phase branch and needs both gates again. |
 | None: the proof prints `EQUAL` | The developer reverted a merged pull request on the default branch. The phase still holds the change, and the proof counts the merged pull request as holding it, so it cannot see the revert. Check for reverts of the phase's merged pull requests before each round. | Whether the change goes back in a new pull request, or the phase drops it. |
+| None, or a stop whose remedy has nothing to commit | The developer rewrote the pull request branch: amended, squashed or rebased its commits and force-pushed, as GitHub's "Update with rebase" does. An amended commit keeps its `cherry-pick` line, so the round can put the phase's version back and print `EQUAL`. | Out of scope. Each description asks the developer not to rewrite the branch. If it happens, the phase session reports it to the orchestrator before any round. |
 
 ## Open the drafts
 
@@ -113,6 +114,8 @@ For each new branch, once the three checks pass:
 A pull request's branch and description have one writer, the phase session, through you. Before any update, run `gh pr view <number> --json headRefOid,baseRefName,body,state`. Edit the fetched description and keep every change you did not make. Follow the repository's own stacking skill where one exists.
 
 **Commits the developer made.** A commit on a pull request branch that you did not make, such as GitHub's "Apply suggestions from code review", is ordinary review. So is a merge you did not make that edits a file by hand, or that brings in a branch other than the default branch, the base or a dependency. The proof reports each as `DEVELOPER-COMMITS <pr> <sha>...` and prints `NOT EQUAL`. When one adds a file the phase does not change, the refresh already stops with that line, instead of the delegate or forge `STOP`. Nothing is pushed and nothing is reverted. Report the line to the phase session. It takes each commit into the phase branch with `git cherry-pick -x <sha>`, or, for a merge's hand edits, makes an ordinary phase commit that gives those paths the merge's content. It passes both gates and asks for a round, whose proof is then `EQUAL` because the phase holds the change. A merge that only brings in the default branch, as GitHub's "Update branch" button makes, is not a developer change: the round starts from it like any other head. The refresh marks its own merges with a last line, `(s-stack refresh)`, so the proof does not inspect them.
+
+**Precondition: nobody rewrites a pull request branch.** The developer adds commits on top, uses "Update branch", or comments. An amend, a squash or a rebase that is force-pushed, including GitHub's "Update with rebase", is not detected, as [Histories the design does not handle](#histories-the-design-does-not-handle) says.
 
 ### Change the base
 
@@ -132,6 +135,7 @@ Read the pr package's `summarise-pr` skill at `../summarise-pr/SKILL.md`, relati
 - for the third row of the base table, a sentence saying the diff includes the listed pull requests' changes until they merge;
 - measured detail the phase produced, such as timings or cost savings;
 - the hand-written line count, when the size rules need it;
+- a sentence asking reviewers to add commits on top, use "Update branch" or comment, and never to rewrite the branch with an amend, a squash or "Update with rebase";
 - the repository's attribution lines.
 
 ## The three checks

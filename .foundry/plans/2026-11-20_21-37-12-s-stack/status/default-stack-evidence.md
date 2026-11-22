@@ -836,3 +836,30 @@ Scope `git diff s-stack-package...s-stack-phase-default-stack -- . ':(exclude).f
 **Finding 3, not significant (Fable).** The check file's Evidence check "A consumer of `default-stack` loses no file" says only `apm.yml`, `apm.lock.yaml` and `.gitignore` may differ in content, but 32 p-stack files always differ by the slot hash between two consumers installed from trees at different paths. The intent, no lost file, holds. The next verifier should fix the wording.
 
 **Prototype of a fix (phase session).** A relativiser that also maps each `_local/<sha256(absolute anchor)[:12]>/` slot to `_local/<sha256(relative anchor)[:12]>/` in the deployed files and recomputes those files' `sha256:` hashes in the lockfile produced byte-identical lockfiles at two different checkout paths. `apm audit --ci` on that relativised lockfile still reports 32 drifted files until `apm install --frozen` runs, as the docs already say.
+
+## Fix round after Review 1
+
+Answer to `default-stack-r2`, option B (decision `default-stack-d4`): the relativiser fix ships as its own bottom pull request.
+
+- `57b0790` and `bba668d` change `scripts/relativise_lockfiles.py` and add `tests/versioning/test_relativise_lockfiles.py`. The new tests failed on the script before the fix (four failures of five; the second-run test passes on both) and pass after it (`python3 -m unittest discover -s tests/versioning`, 13 tests OK).
+- No lockfile on `main` changes. In a worktree of `main` at `7747021`, with the fixed script copied in, `apm install --frozen` in all 20 packages, then the relativiser over every lockfile: `git status --short` showed only the copied script. Run twice, before and after the `bba668d` refactor.
+- `5f58a7c` regenerates `default-stack`'s lockfile with the fixed relativiser. The refactored script reproduces it byte for byte from a fresh install, with its hash guard passing.
+- `quick-review` on the bottom layer: no Critical, High or Medium finding. Its Low and quality findings were fixed in `bba668d`: fail on a missing or edited deployed file, one explicit hash map for both hash fields, YAML's explicit-key form, the real lockfile shape in the fixture, keyword-only signatures. `quick-review` on the top-layer docs delta `b94559e` (bug pass only; a 59-line docs diff): one Medium, the drift check's mechanism, and one Low, the script's exit status, both fixed in `9285fa1`. Not taken: Tier 1's `tracked_state` ignores the relativiser's exit status, which predates this phase and surfaces as a stability failure anyway.
+
+### Two checkout paths (the orchestrator's condition for prs-open)
+
+At `bba668d`, Tier 1 in this worktree and in a fresh worktree at `/var/folders/.../tmp.PLgOxg1MGO/elsewhere/foundry`, then the hook there with `FOUNDRY_DIFF_RANGE=s-stack-package...HEAD`:
+
+```text
+here tier1 exit=0
+elsewhere tier1 exit=0
+elsewhere hook exit=0
+  [+] default-stack audit --ci
+  [+] install and pack leave no tracked-file change
+[+] all Tier 1 structural checks passed across 20 packages
+  [+] default-stack audit --ci
+  [+] install and pack leave no tracked-file change
+[+] all Tier 1 structural checks passed across 20 packages
+```
+
+Before the fix, at `b94559e`'s parent tree, the same Tier 1 at the second path failed only `install and pack leave no tracked-file change`, as both reviewers showed. `9285fa1` after `bba668d` changes only docs.

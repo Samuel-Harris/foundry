@@ -254,6 +254,14 @@ A fresh verifier ran with nothing committed. Its report, summarised:
   - `sam-mode` does not load in a scratch repository.
   - After a plain `claude` takes the orchestrator's old pane, the relaunched orchestrator splits that pane, and both panes then carry the `f-orchestrator` tag. The developer's `claude` is untouched and placement uses the new pane.
 
+## Review, code head `e7405c5c33a60d71a726f857443b44b7587c9fe6`, SIGNIFICANT
+
+p-stack's `interrogate` skill ran at 986b6e5 with adversaries on Opus and Fable, under the orchestrator's common-path bar.
+
+1. **An orchestrator started by a resurrected spec writer cannot be restarted.** After a resurrect during the spec phase, the resurrected spec writer (an untagged `claude --continue`) started the orchestrator as `spec-writer.md` says, and kept running. When the orchestrator crashed, a relaunch reported it `alive` at the spec writer's pane, and it could never be restarted. Found by Opus.
+2. **`--close` misplaces freed width with two developer columns.** With two developer columns right of the orchestrator's column, the width a closed phase freed stopped in the developer column nearest the orchestrator. Three open and close cycles left the orchestrator 11 columns wide. Found by Fable.
+3. **`--close` narrows a sibling in a shared column.** Closing a session whose pane the developer had split side by side resized the whole stacked column, so a live phase in the same column lost half its width. Found by Fable.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

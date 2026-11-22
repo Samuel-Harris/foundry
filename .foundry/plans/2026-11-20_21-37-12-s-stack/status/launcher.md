@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Review"
-changed_at: "2026-11-22T10:54:10Z"
+state: "Verify"
+changed_at: "2026-11-22T11:18:27Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "e7405c5c33a60d71a726f857443b44b7587c9fe6"
+code_head: "cf378d80b95d4e250c2a5473876db547b2f72d24"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -92,6 +92,11 @@ verdicts:
     code_head: "e7405c5c33a60d71a726f857443b44b7587c9fe6"
     at: "2026-11-22T10:54:10Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "e7405c5c33a60d71a726f857443b44b7587c9fe6"
+    at: "2026-11-22T11:18:27Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - id: "launcher-r2"
     question: "Session and worktree names are joined with hyphens, so two features can collide: the planner of feature a-phase and phase planner of feature a are both a-phase-planner, and the planner of feature query takes the feature worktree of a feature named query-planner. Should the launcher refuse feature names that can collide?"
@@ -174,6 +179,10 @@ decisions:
     decision: "A claude is the session when --name <session> appears among its leading options, which are scanned until the first argument that is neither an option nor the value of a known option. In the session's own tagged pane, only a --continue claude counts, never a plain one. In the feature worktree, an untagged --continue claude is the first spec writer while no orchestrator has been started there. --close gives the closed pane's width back to the orchestrator's column by restoring the widths of the untagged panes outside it."
     door: "two-way"
     at: "2026-11-22T06:23:50Z"
+  - id: "launcher-d19"
+    decision: "On --close, only a pane alone in its column hands width back, and the orchestrator's width is set first to its width plus the freed column, then every pane outside its column gets its old width back, left to right. An untagged --continue claude never stands in for a session whose own tagged pane still exists, because a resurrect leaves no tagged panes."
+    door: "two-way"
+    at: "2026-11-22T11:18:27Z"
 ---
 
 # Phase launcher status
@@ -205,3 +214,5 @@ Merge 99599dc of `s-stack-package` at 99953ad (foundation's follow-up) touched o
 The fifth review was SIGNIFICANT for e8bc6e1, and both of its findings are fixed (launcher-d17). 122 tests pass on Ubuntu in both locales, and on macOS apart from one test that asserted the old behaviour, which is now deleted. Verify runs at 5ba7c2d.
 
 The sixth review's four findings are fixed (launcher-d18), with 127 tests passing on macOS and Ubuntu in both locales. Merge 54d6139 of `s-stack-package` touched only other phases' files: `status-board.html`, `phase-session.md`, `planner.md`, `spec-writer.md`, `checks/board.md`, `checks/spec-planner-handbooks.md`, the version line and the lockfile. Verify runs at e7405c5.
+
+The seventh review's three findings are fixed (launcher-d19). 130 tests pass on Ubuntu in both locales, and on macOS apart from one test fixture that simulated a resurrect while leaving the tagged pane behind, which is now corrected. Verify runs at cf378d8.

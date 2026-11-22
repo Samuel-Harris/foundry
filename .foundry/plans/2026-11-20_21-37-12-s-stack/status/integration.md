@@ -48,6 +48,10 @@ decisions:
     decision: "Request integration-r2, renumbered by the orchestrator from this file's integration-r1, answered A: only the line-14 half of fix O6 is made, and Merging a phase step 7 keeps sending stop without a quiet test."
     door: "two-way"
     at: "2026-11-22T14:58:03Z"
+  - id: "integration-d3"
+    decision: "Orchestrator instruction, in run-decisions.md: a cold read that fails on text the phase diff did not change is rerun twice with fresh Opus readers and graders; two passes are recorded as reader variance and do not fail the verdict, and any rerun failure is fixed at its source. Verify 5 started before it, so the phase session runs those reruns itself on the verifier's report."
+    door: "two-way"
+    at: "2026-11-22T16:47:07Z"
 ---
 
 Phase created by the developer on 2026-11-22 for one round of cross-handbook fixes. Input: `.foundry/plans/2026-11-20_21-37-12-s-stack/integration-fixes.md`. The scope, owned paths and gate rules come from the phase's first prompt and run-decisions rows 65 to 71.

@@ -173,3 +173,16 @@ PR creator, fresh Opus. One draft pull request, https://github.com/Samuel-Harris
 - On the branch, the pre-commit hook over `origin/main...HEAD`, `versioning.py check origin/main` and Tier 1 all exited 0.
 - 436 hand-written lines (320 added, 116 deleted) against `origin/main`, including the `version:` line.
 - Phase session check: `gh pr view` shows a draft against `main` at `3d668db`. `git diff 90f855a origin/s-stack-integration` outside `.foundry/` changes only the `version:` line. The branch holds no `.foundry/` path.
+
+## Move-back after the final full run, and Verify 7: NOT VERIFIED at `4e19585e4dbcb850624a6cb57258435265146dc1`, 2026-11-22T20:05:16Z
+
+The orchestrator's final full run at `1983ab2` failed integration cold read 4 on two of three runs. Run 1 dropped point 2's starts after `done-planning`. Run 2 dropped point 5's `merge-orchestrator-branch`. The phase moved from Done back to Implement (`b070f31`), merged `s-stack-package` cleanly (`fb12e85`), and split the read into 4a to 4d (`4e19585`).
+
+Verify 7, fresh Opus verifier, scope `4e19585`, no waiver:
+
+- Markdown lint: 21 files, 0 errors.
+- Substance check by script: all eight scenarios and points are present. Seven points are byte-identical. Point 4's freeze clause now matches `orchestrator.md` line 96.
+- Twelve runs, each with its own reader and grader: 11 PASS. **4a run 2 FAIL**: the reader again left out "start each phase whose dependencies are met" after a later `done-planning`.
+- Cause: in `orchestrator.md` line 43, Starting the feature step 5, only the `move-back` clause is marked as applying to a later `done-planning`, so the starts read as first-time only.
+
+Next: line 43 applies the starts to every `done-planning`.

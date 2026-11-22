@@ -26,7 +26,7 @@ CHECK
 
 ### Scratch repositories
 
-The block builds throwaway repositories under `$TMPDIR` with git's global and system configuration switched off, and deletes them on exit. Each repository has a bare `origin` that refuses every non-fast-forward push and every branch deletion, so a force-push by the script or by a round fails its case. A forge rewrite, as GitHub makes when a stack parent merges, is written straight into the bare repository instead. A forge rebase onto a `main` that moved since the parent merged changes the tree as well.
+The block builds throwaway repositories under `$TMPDIR` with git's global and system configuration switched off, and deletes them on exit. Each repository has a bare `origin` that refuses every non-fast-forward push and every branch deletion, so a force-push by the script or by a round fails its case. A forge rewrite, as GitHub makes when a stack parent merges, is written straight into the bare repository instead. A forge rebase onto a `main` that moved since the parent merged changes the tree as well. The rewrite `STOP` for a branch `<pr>` is exactly `STOP <pr> is at <head>, which does not descend from its recorded head <entry>, so the branch was rewritten and may hold a developer's edits`, where `<entry>` is the last `PUSHED` entry for `<pr>`. A case that expects it expects the refresh to print only that line and exit `1`, the proof to print it and `NOT EQUAL`, nothing pushed, and `<pr>` and `origin/<pr>` left at the rewritten head.
 
 `main` holds a package `pkg/` whose `apm.yml` has `version:` on its second line and `description:` on its third, an `apm.lock.yaml` beside each `apm.yml` that lists the package's other files, a twelve-line `shared.txt` and a `README`. The stand-in regenerate command sets `pkg`'s `version:` to the patch after `origin/main`'s and rewrites every lockfile from the tree, and commits with the regenerate subject when that changed anything. The script's parameter lines stay as the reference file ships them.
 
@@ -51,7 +51,7 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `guarantee repeated` | Two more rounds | `origin/pr1` unchanged |
 | `guarantee fix rerun` | A fix round, then the same round again with the same fix commit | the second leaves `origin/pr1` unchanged |
 | `hand edit in a merge` | `pr1h` merges `main` by hand and edits `a.txt` inside the merge commit | `FAIL pr1h: its head differs from its target tree`, `a.txt` listed, `NOT EQUAL` |
-| `forge rewrite` | A same-phase stack `parent:main`, `child:parent`. `parent` is squash-merged, the forge rebases `child` onto `main` with the same tree, `main` moves, then `child:main::parent` | guarantees kept over the rewritten head, diff `c.txt`, `EQUAL` |
+| `forge rewrite` | A same-phase stack `parent:main`, `child:parent`. `parent` is squash-merged, the forge rebases `child` onto `main` with the same tree, `main` moves, then `child:main::parent` | the rewrite `STOP` for `child` |
 | `round 1 squash step` | Child stacked on another phase's `parent`, which is squash-merged; then `main` fixes `parent`'s line 2; child's round as `child:main::parent` | line 2 is `main`'s fix, diff `c.txt`, `EQUAL` |
 | `round 1 version fix` | A fix round editing `description:`, next to the `version:` line the branch's regenerate commit changed | exit `0`, `version: "0.1.1"` and the new description, `EQUAL` |
 | `round 1 version build` | A first build editing `description:`, while the orchestrator branch holds another phase's `version:` raise | exit `0`, the new description, diff `a.txt`, `EQUAL` |
@@ -66,7 +66,7 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `round 2 orchestrator merged, delete` | The phase deletes `README`, the orchestrator merges the phase | `EQUAL`, no `README` on `pr1` |
 | `round 2 merge commit` | Parent `pr1` merged into `main` with a merge commit, then `pr2:main::pr1` | guarantees kept, diff `b.txt`, `EQUAL` |
 | `round 2 row 3 to row 2` | `pr3:main:depA,depB`, `depA` squash-merged; `depB` lacks the new `main`. First `pr3:depB::depA`, then `pr3:main:depB:depA` | first: exit `1`, `STOP depB does not hold origin/main, so pr3 must target it with depB merged in`, `origin/pr3` unchanged. Then guarantees kept, both child lines, `EQUAL`. |
-| `round 2 grandchild` | Stack `pr1`, `pr2`, `pr3`, where `pr2` rewrites `pr1`'s line. `pr1` squash-merged, the forge rewrites `pr2` only, then `pr2:main::pr1` and `pr3:pr2` | both exit `0`, `pr2` an ancestor of `pr3`, `pr3`'s diff against `pr2` is `three.txt`, line 2 `line 2 Y`, `EQUAL` |
+| `round 2 grandchild` | Stack `pr1`, `pr2`, `pr3`, where `pr2` rewrites `pr1`'s line. `pr1` squash-merged, the forge rewrites `pr2` only, then `pr2:main::pr1` and `pr3:pr2` | the rewrite `STOP` for `pr2`, from the proof of both, `pr3` and `origin/pr3` unchanged with line 2 `line 2 Y` |
 | `round 2 delete package` | `main` holds package `old/` with its lockfile; the phase deletes `old/` | nothing under `old/` on `pr1`, `EQUAL` |
 | `round 2 undeclared` | `pr2` cut from `pr1`'s unpushed head in the same round, given as `pr2:main` | `NOT EQUAL`, a `FAIL` line naming `a.txt`, neither branch pushed |
 | `adjacent-line STOP` | Stack `pr1` (line 5) and `pr2` (line 6) of `shared.txt`; a fix to `pr1`'s line 5 | `pr1`'s round exits `1` with `STOP shared.txt conflicts outside generated content`, `STOP <sha> fix: pr1 does not apply` and `STOP the branch is back at <old head>`, `origin/pr1` unchanged |
@@ -124,13 +124,13 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `developer commit, then true-merged` | The same with `pr1` and `pr2:main` independent, and `pr1` merged with a merge commit; rounds of `pr2:main` proved with `pr1:main pr2:main` | the same two-remedy `FAIL` and `NOT EQUAL`, no "needs a new pull request" line; then `EQUAL` with the suggestion on `pr2` |
 | `merged one listed after main edits its file` | Independent `pr1:main` (eight-line `a.txt`) and `pr2:main`; `pr1` squash-merged; the phase merges `origin/main` and a round of `pr2`; another pull request on `main` edits `a.txt` line 8, the phase merges `origin/main` again, and a round, each proved with `pr1:main pr2:main` | both rounds exit `0` with `EQUAL` and no `neither the phase's` or head `FAIL`, `pr2` has `main`'s line 8 and diff `b.txt` |
 | `merged one with a developer commit, local branch stale` | Independent `pr1:main` and `pr2:main`; a suggestion on `origin/pr1` that the local `pr1` lacks; `pr1` squash-merged. A round of `pr2`, then the same proof with the local `pr1` moved to `origin/pr1`; then the phase merges `origin/main` and a round | the round and the second proof print the same lines: the two-remedy `FAIL`, no `DEVELOPER-COMMITS`, `NOT EQUAL`, `pr2` unchanged. After the merge: exit `0`, `EQUAL`. |
-| `taken developer commit, child rebased` | Stack `parent:main`, `child:parent`. The developer commits a suggestion to `c.txt` on `origin/child`; the phase takes it with `git cherry-pick -x` and a round of both carries it, pushing nothing because `child` already holds it, and proves `EQUAL`. `parent` is squash-merged, and the forge rebases `child` onto `main` with the same tree; three rounds of `child:main::parent`. Then the developer commits a further suggestion to `c.txt` on `origin/child`, and a round | the carry round pushes nothing, and its `RECORD` line names `child` once, at the developer's commit. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `c.txt` is the suggestion, diff `c.txt`, `EQUAL`, and `RECORD` names `child` twice, the developer's commit first and the new head last. The second and third rounds leave `origin/child` and the `RECORD` line unchanged and prove `EQUAL`. The last round exits `1` with `DEVELOPER-COMMITS child <sha>` for the further suggestion, `NOT EQUAL`, `child` and `origin/child` still at it, the further suggestion kept |
+| `taken developer commit, child rebased`, the decision path | Stack `parent:main`, `child:parent`. The developer commits a suggestion to `c.txt` on `origin/child`; the phase takes it with `git cherry-pick -x` and a round of both carries it, pushing nothing because `child` already holds it, and proves `EQUAL`. `parent` is squash-merged, and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent`. Then `child=<origin/child>` is appended to `PUSHED`, as the developer's decision; three rounds. Then the developer commits a further suggestion to `c.txt` on `origin/child`, and a round | the carry round pushes nothing, and its `RECORD` line names `child` once, at the developer's commit. The round after the rebase: the rewrite `STOP` for `child`, `c.txt` the suggestion. The round after the decision: exit `0`, no `STOP` or `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `c.txt` is the suggestion, diff `c.txt`, `EQUAL`, and `RECORD` names `child` twice, the developer's commit first and the rewritten head last. The second and third rounds leave `origin/child` and the `RECORD` line unchanged and prove `EQUAL`. The last round exits `1` with `DEVELOPER-COMMITS child <sha>` for the further suggestion, `NOT EQUAL`, `child` and `origin/child` still at it, the further suggestion kept |
 | `twin developer commit` | `pr1` carries phase commits `a`, `a2` (`a.txt` from `a` to `a2`) and a revert to `a`. The developer commits `a.txt` from `a` to `a2` on `origin/pr1`, with the same patch-id as the phase's `a2`; a round | exit `1`, `DEVELOPER-COMMITS pr1 <sha>`, `NOT EQUAL`, `pr1` and `origin/pr1` still at the developer's commit, `a.txt` is `a2` |
-| `rebased child, main moved` | Stack `parent:main`, `child:parent`, pushed. `parent` is squash-merged, `main` changes `README`, and the forge rebases `child` onto that `main`, so the tree changes; a round of `child:main::parent` | exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `README` is `main`'s, diff `c.txt`, `EQUAL` |
-| `rebased child with a developer edit` | The same, but the developer commits a suggestion to `c.txt` on `origin/child` before the rebase; a round; then the phase takes the reported commit with `git cherry-pick -x` and a round carries that commit | first: exit `1`, `DEVELOPER-COMMITS child <sha>` naming the rebased developer commit, `NOT EQUAL`, `child` and `origin/child` unchanged, the suggestion kept. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept, the suggestion kept, `EQUAL`. |
-| `rebased child, developer edit to a shared path` | Stack `parent:main` (`p.txt`), `child:parent` (`shared.txt` line 3 and `c.txt`), `gc:child` (`shared.txt` line 9 and `g.txt`), pushed. The developer commits a suggestion to `shared.txt` line 6 on `origin/child`, once before and once after `parent` is squash-merged and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent` and `gc:child`; then the phase takes the reported commit with `git cherry-pick -x` and a round of both carries it | first: exit `1`, `DEVELOPER-COMMITS child <sha>` naming the developer commit as rebased, `NOT EQUAL`, `child`, `origin/child`, `gc` and `origin/gc` unchanged, line 6 the suggestion. Then: exit `0`, no `DEVELOPER-COMMITS`, `child` keeps the guarantees, `gc` holds `child`, line 6 the suggestion on both and line 9 the grandchild's, `EQUAL`. |
-| `taken developer commit and a fix, child rebased` | Stack `parent:main`, `child:parent`, pushed. `parent` is squash-merged and the forge rebases `child` onto `main` with the same tree; the developer commits a suggestion to `c.txt` on `origin/child`; the phase takes it with `git cherry-pick -x` and commits a fix that adds a line to `c.txt`; a round of `child:main::parent` carrying both, once directly and once after a round that reported the suggestion; then another round | the reporting round: exit `1`, `DEVELOPER-COMMITS child <suggestion>`. The carrying round: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the suggestion, `c.txt` holds the suggestion and the fix, diff `c.txt`, `EQUAL`. The next round leaves `origin/child` unchanged and proves `EQUAL`. |
-| `taken before the round, child rebased` | Stack `parent:main`, `child:parent`, pushed. The developer commits a suggestion to `c.txt` on `origin/child` and the phase takes it with `git cherry-pick -x`; before any round, `parent` is squash-merged and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent` carrying the taken commit | exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `c.txt` is the suggestion, diff `c.txt`, `EQUAL` |
+| `rebased child, main moved` | Stack `parent:main`, `child:parent`, pushed. `parent` is squash-merged, `main` changes `README`, and the forge rebases `child` onto that `main`, so the tree changes; a round of `child:main::parent` | the rewrite `STOP` for `child` |
+| `rebased child with a developer edit` | The same, but the developer commits a suggestion to `c.txt` on `origin/child` before the rebase; a round; then the phase takes the rebased developer commit with `git cherry-pick -x` and a round carries that commit; then `child=<origin/child>` is appended to `PUSHED` and the same round runs again | the first two rounds: the rewrite `STOP` for `child`, `c.txt` the suggestion. The last: exit `0`, no `STOP` or `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, the suggestion kept, `EQUAL`. |
+| `rebased child, developer edit to a shared path` | Stack `parent:main` (`p.txt`), `child:parent` (`shared.txt` line 3 and `c.txt`), `gc:child` (`shared.txt` line 9 and `g.txt`), pushed. The developer commits a suggestion to `shared.txt` line 6 on `origin/child`, once before and once after `parent` is squash-merged and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent` and `gc:child`; then the phase takes the developer commit with `git cherry-pick -x` and a round of both carries it | each round: the rewrite `STOP` for `child`, from the proof of all three, `gc` and `origin/gc` unchanged, line 6 the suggestion on `origin/child` |
+| `taken developer commit and a fix, child rebased` | Stack `parent:main`, `child:parent`, pushed. `parent` is squash-merged and the forge rebases `child` onto `main` with the same tree; the developer commits a suggestion to `c.txt` on `origin/child`; a round; the phase takes it with `git cherry-pick -x` and commits a fix that adds a line to `c.txt`; a round of `child:main::parent` carrying both | each round: the rewrite `STOP` for `child`, `c.txt` the suggestion alone |
+| `taken before the round, child rebased` | Stack `parent:main`, `child:parent`, pushed. The developer commits a suggestion to `c.txt` on `origin/child` and the phase takes it with `git cherry-pick -x`; before any round, `parent` is squash-merged and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent` carrying the taken commit | the rewrite `STOP` for `child`, `c.txt` the suggestion |
 | `never pushed, no entry` | A first build of `pr1:main` with `PUSHED` naming only `xpr1` | exit `0`, no `STOP`, diff `a.txt`, `EQUAL` |
 | `pushed, no entry` | `pr1` is pushed. A proof with an empty `PUSHED`; then the developer commits a suggestion to `a.txt` and a proof with the recorded entry; then a round and a proof with an empty `PUSHED`, and again with `PUSHED` naming only `xpr1` | each proof without the entry prints `STOP pr1 is on origin but has no PUSHED entry, so its developer commits cannot be told apart` and `NOT EQUAL`, and never `EQUAL`. The proof with the entry prints `DEVELOPER-COMMITS pr1 <sha>`. Each round exits `1` and prints exactly that `STOP`, and `pr1` and `origin/pr1` stay at the developer's commit with the suggestion. |
 | `pushed head missing` | `pr1` is pushed, then `PUSHED` names a head that the repository lacks, as its only entry and then as an older entry before the recorded head; a round, then a proof, for each | each refresh exits `1` and prints exactly `STOP pr1 was recorded at <sha>, which is not here, so its developer commits cannot be told apart`, `pr1` and `origin/pr1` unchanged; each proof prints the same line and `NOT EQUAL` |
@@ -328,8 +328,8 @@ c_rewrite() {
   if forge child origin/parent; then
     rw=$(git rev-parse origin/child); on_main 'docs: main moves' readme 2
     PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
-    [ "${o%% *}" = 0 ] && guarded "$rw" origin/child && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal child:main::parent \
-      && pass "forge rewrite: the rewritten head is the start, commits only on top, EQUAL" || fail "forge rewrite: $o; adds $(added "$rw" origin/child); proof $out"
+    rewritten child "$rw" parent:main child:main::parent \
+      && pass "forge rewrite: GitHub's rebase of the child gives the rewrite STOP in the refresh and the proof, nothing pushed" || fail "forge rewrite: round $o; proof $out"
   else fail "forge rewrite: the simulated rebase changed the tree"; fi
 }
 
@@ -507,9 +507,10 @@ c_r2_grandchild() {
   echo three > three.txt; commit 'feat: three'; c3=$(sha)
   step pr1 pr1:main "$c1"; step pr2 pr2:pr1 "$c2"; step pr3 pr3:pr2 "$c3"; finish pr1:main pr2:pr1 pr3:pr2 || fail "r2-grandchild build: $out"
   squash pr1; forge pr2 origin/pr1 || fail "r2-grandchild: the simulated rewrite changed the tree"
-  step pr2 pr2:main::pr1; o1="$code $out"; step pr3 pr3:pr2; o2="$code $out"; finish pr2:main::pr1 pr3:pr2; o3="$code $out"
-  [ "${o1%% *} ${o2%% *} ${o3%% *}" = '0 0 0' ] && anc origin/pr2 origin/pr3 && [ "$(hand origin/pr2 origin/pr3)" = 'three.txt ' ] && [ "$(at origin/pr3 shared.txt 2)" = 'line 2 Y' ] && equal pr2:main::pr1 pr3:pr2 \
-    && pass "round 2, a grandchild whose parent the forge rewrote, spec without the merged grandparent" || fail "r2-grandchild: pr2 $o1; pr3 $o2; diff $(hand origin/pr2 origin/pr3); proof $out"
+  rw=$(git rev-parse origin/pr2) g=$(git rev-parse origin/pr3)
+  step pr2 pr2:main::pr1; step pr3 pr3:pr2; finish pr2:main::pr1 pr3:pr2; o="$code $out"
+  unchanged pr3 "$g" && [ "$(at origin/pr3 shared.txt 2)" = 'line 2 Y' ] && rewritten pr2 "$rw" pr2:main::pr1 pr3:pr2 \
+    && pass "round 2, a grandchild whose parent the forge rewrote: the rewrite STOP for the parent, nothing pushed, the grandchild unchanged" || fail "r2-grandchild: round $o; proof $out"
 }
 
 c_r2_delete_package() {
@@ -611,6 +612,11 @@ c_missing() {
 }
 
 unchanged() { [ "$(git rev-parse "origin/$1")" = "$2" ] && [ "$(git rev-parse "$1")" = "$2" ]; }
+rewrite_stop() { echo "STOP $1 is at $(git rev-parse --short "$2"), which does not descend from its recorded head $(git rev-parse --short "$(echo "$PUSHED" | tr , '\n' | sed -n "s/^$1=//p" | tail -1)"), so the branch was rewritten and may hold a developer's edits"; }
+rewritten() {
+  local b=$1 h=$2 st; shift 2; st=$(rewrite_stop "$b" "$h")
+  [ "$code" = 1 ] && [ "$out" = "$st" ] && unchanged "$b" "$h" && not_equal "$@" && has "$st"
+}
 unpushed() { ! git rev-parse -q --verify "refs/remotes/origin/$1" >/dev/null; }
 SHARED_STOP='STOP shared.txt is a shared path, so the stop is permanent: no merge or commit on the phase clears it, and it needs a decision'
 other_on() { local at=$1; shift; git fetch -q origin; in_wt "$at" other_commit "$@"; }
@@ -1252,20 +1258,24 @@ c_taken_rebased() {
   forge child origin/parent || { fail "taken-rebased: the simulated rebase changed the tree"; return; }
   rw=$(git rev-parse origin/child)
   PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
-  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$rw" origin/child && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] \
+  [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] && rewritten child "$rw" parent:main child:main::parent \
+    && pass "a taken developer commit, then the parent squash-merged and GitHub's rebase of the child: the rewrite STOP, nothing pushed, the suggestion kept" || fail "taken-rebased, the rewrite STOP: round $o; proof $out"
+  PUSHED="$PUSHED,child=$rw"
+  PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
+  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && ! has 'STOP.*' && guarded "$rw" origin/child && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] \
     && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && [ "$(child_entries | tr '\n' ' ')" = "$s $(git rev-parse origin/child) " ] && equal parent:main child:main::parent \
-    && pass "a taken developer commit after GitHub rebases the child: EQUAL, RECORD keeps the developer's commit and adds the new head" || fail "taken-rebased: $o; PUSHED $PUSHED"
+    && pass "the developer's decision recorded as child=<its rewritten head> after its earlier entries: EQUAL, the suggestion kept, RECORD keeps the developer's commit and adds the head" || fail "taken-rebased, after the decision: $o; PUSHED $PUSHED"
   rec=$PUSHED
   for r in second third; do
     h=$(git rev-parse origin/child); PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
     [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/child)" = "$h" ] && [ "$PUSHED" = "$rec" ] && equal parent:main child:main::parent \
-      && pass "a taken developer commit after GitHub rebases the child: the $r round changes nothing, RECORD unchanged, EQUAL" || fail "taken-rebased, the $r round: $o; PUSHED $PUSHED, was $rec"
+      && pass "after the decision on the rebased child: the $r round changes nothing, RECORD unchanged, EQUAL" || fail "taken-rebased, the $r round: $o; PUSHED $PUSHED, was $rec"
   done
   suggest child c.txt 'c, as the reviewer suggested again'; s2=$(git rev-parse origin/child)
   PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
   [ "${o%% *}" = 1 ] && has "DEVELOPER-COMMITS child $(git rev-parse --short "$s2") ?" && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] && unchanged child "$s2" \
     && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested again' ] && [ "$PUSHED" = "$rec" ] \
-    && pass "a further developer commit after the rebased child's EQUAL rounds: DEVELOPER-COMMITS, nothing pushed or reverted" || fail "taken-rebased, a further developer commit: $o"
+    && pass "a further developer commit after the decision on the rebased child: DEVELOPER-COMMITS, nothing pushed or reverted" || fail "taken-rebased, a further developer commit: $o"
 }
 child_entries() { echo "$PUSHED" | tr , '\n' | sed -n 's/^child=//p'; }
 
@@ -1296,9 +1306,8 @@ c_rebased_equal() {
   forge_moved child origin/parent || { fail "rebased-equal: the simulated rebase failed"; return; }
   rw=$(git rev-parse origin/child)
   PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
-  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$rw" origin/child && [ "$(git show origin/child:README)" = 'readme 2' ] \
-    && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal parent:main child:main::parent \
-    && pass "a child rebased onto a moved main, owned paths as last pushed: no DEVELOPER-COMMITS, EQUAL" || fail "rebased-equal: $o"
+  rewritten child "$rw" parent:main child:main::parent \
+    && pass "a child rebased onto a moved main: the rewrite STOP, nothing pushed" || fail "rebased-equal: round $o; proof $out"
 }
 
 c_rebased_dev() {
@@ -1308,13 +1317,16 @@ c_rebased_dev() {
   forge_moved child origin/parent || { fail "rebased-dev: the simulated rebase failed"; return; }
   rw=$(git rev-parse origin/child); d=$(git log -1 --format=%H --first-parent --grep='^Apply suggestions from code review$' "$rw")
   PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
-  [ "${o%% *}" = 1 ] && has "DEVELOPER-COMMITS child $(git rev-parse --short "$d") ?" && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] && unchanged child "$rw" \
-    && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] \
-    && pass "a rebased child with a developer edit to an owned path: DEVELOPER-COMMITS names the rebased developer commit, nothing pushed or reverted" || fail "rebased-dev: $o"
+  [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] && rewritten child "$rw" parent:main child:main::parent \
+    && pass "a rebased child with a developer edit: the rewrite STOP, nothing pushed or reverted" || fail "rebased-dev: round $o; proof $out"
   git checkout -q phase; git cherry-pick -x "$d" >/dev/null; p=$(sha)
   PROOF="parent:main child:main::parent" round child child:main::parent "$p"; o="$code $out"
-  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$rw" origin/child && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] && equal parent:main child:main::parent \
-    && pass "the rebased child's developer commit taken with cherry-pick -x: EQUAL, the suggestion kept" || fail "rebased-dev remedy: $o"
+  [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] && rewritten child "$rw" parent:main child:main::parent \
+    && pass "the rebased child's developer commit taken with cherry-pick -x, no decision recorded: the rewrite STOP again, nothing pushed" || fail "rebased-dev, taken: round $o; proof $out"
+  PUSHED="$PUSHED,child=$rw"
+  PROOF="parent:main child:main::parent" round child child:main::parent "$p"; o="$code $out"
+  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && ! has 'STOP.*' && guarded "$rw" origin/child && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] && equal parent:main child:main::parent \
+    && pass "the taken commit and the decision recorded as child=<its rewritten head>: EQUAL, the suggestion kept" || fail "rebased-dev, after the decision: $o"
 }
 
 shared_stack() {
@@ -1332,41 +1344,29 @@ c_rebased_shared() {
   [ "$1" = after ] && suggest6
   rw=$(git rev-parse origin/child) g=$(git rev-parse origin/gc); d=$(git log -1 --format=%H --first-parent --grep='^Apply suggestions from code review$' "$rw")
   step child child:main::parent; step gc gc:child; finish parent:main child:main::parent gc:child; o="$code $out"
-  [ "${o%% *}" = 1 ] && has "DEVELOPER-COMMITS child $(git rev-parse --short "$d") ?" && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] && unchanged child "$rw" && unchanged gc "$g" \
-    && [ "$(at origin/child shared.txt 6)" = 'line 6 reviewer' ] \
-    && pass "a developer edit to a shared path made $1 GitHub rebases the child: DEVELOPER-COMMITS, nothing pushed, the suggestion kept" || fail "rebased-shared-$1: $o"
+  unchanged gc "$g" && [ "$(at origin/child shared.txt 6)" = 'line 6 reviewer' ] && rewritten child "$rw" parent:main child:main::parent gc:child \
+    && pass "a developer edit to a shared path made $1 GitHub rebases the child: the rewrite STOP, nothing pushed, the suggestion kept" || fail "rebased-shared-$1: round $o; proof $out"
   git checkout -q phase; git cherry-pick -x "$d" >/dev/null; p=$(sha)
   step child child:main::parent "$p"; step gc gc:child; finish parent:main child:main::parent gc:child; o="$code $out"
-  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$rw" origin/child && anc origin/child origin/gc \
-    && [ "$(at origin/child shared.txt 6)" = 'line 6 reviewer' ] && [ "$(at origin/gc shared.txt 6)" = 'line 6 reviewer' ] && [ "$(at origin/gc shared.txt 9)" = 'line 9 grandchild' ] \
-    && equal parent:main child:main::parent gc:child \
-    && pass "the shared-path suggestion on the rebased child taken with cherry-pick -x: EQUAL, kept on child and grandchild" || fail "rebased-shared-$1 remedy: $o"
+  unchanged gc "$g" && [ "$(at origin/child shared.txt 6)" = 'line 6 reviewer' ] && rewritten child "$rw" parent:main child:main::parent gc:child \
+    && pass "the shared-path suggestion on the rebased child taken with cherry-pick -x, no decision recorded: the rewrite STOP again" || fail "rebased-shared-$1, taken: round $o; proof $out"
 }
 c_rebased_shared_before() { c_rebased_shared before; }
 c_rebased_shared_after() { c_rebased_shared after; }
 
 c_rebased_taken_fix() {
-  rebased_setup "rebased-taken-fix-$1"
-  squash parent; forge child origin/parent || { fail "rebased-taken-fix-$1: the simulated rebase changed the tree"; return; }
+  rebased_setup rebased-taken-fix
+  squash parent; forge child origin/parent || { fail "rebased-taken-fix: the simulated rebase changed the tree"; return; }
   suggest child c.txt 'c, as the reviewer suggested'; s=$(git rev-parse origin/child)
-  if [ "$1" = reported ]; then
-    PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
-    [ "${o%% *}" = 1 ] && has "DEVELOPER-COMMITS child $(git rev-parse --short "$s") ?" && unchanged child "$s" \
-      || fail "rebased-taken-fix-$1, the reporting round: $o"
-  fi
+  PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
+  [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] && rewritten child "$s" parent:main child:main::parent \
+    && pass "a developer commit after GitHub rebased the child: the rewrite STOP, nothing pushed" || fail "rebased-taken-fix, the first round: round $o; proof $out"
   git checkout -q phase; git cherry-pick -x "$s" >/dev/null; p=$(sha)
   printf 'c, as the reviewer suggested\nand the fix the review asked for\n' > c.txt; commit 'fix: review comment on c'; f=$(sha)
   PROOF="parent:main child:main::parent" round child child:main::parent "$p" "$f"; o="$code $out"
-  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$s" origin/child \
-    && [ "$(git show origin/child:c.txt)" = "$(printf 'c, as the reviewer suggested\nand the fix the review asked for')" ] \
-    && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal parent:main child:main::parent \
-    && pass "a taken developer commit and a fix to the same file on a rebased child ($1): EQUAL, both changes kept" || fail "rebased-taken-fix-$1: $o"
-  h=$(git rev-parse origin/child); PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
-  [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/child)" = "$h" ] && equal parent:main child:main::parent \
-    && pass "a taken developer commit and a fix on a rebased child ($1): the next round changes nothing, EQUAL" || fail "rebased-taken-fix-$1, next round: $o"
+  [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] && rewritten child "$s" parent:main child:main::parent \
+    && pass "a taken developer commit and a fix on a rebased child, no decision recorded: the rewrite STOP, nothing pushed" || fail "rebased-taken-fix, carrying both: round $o; proof $out"
 }
-c_rebased_taken_fix_direct() { c_rebased_taken_fix direct; }
-c_rebased_taken_fix_reported() { c_rebased_taken_fix reported; }
 
 c_taken_before_round() {
   rebased_setup taken-before-round
@@ -1376,9 +1376,8 @@ c_taken_before_round() {
   forge child origin/parent || { fail "taken-before-round: the simulated rebase changed the tree"; return; }
   rw=$(git rev-parse origin/child)
   PROOF="parent:main child:main::parent" round child child:main::parent "$p"; o="$code $out"
-  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$rw" origin/child && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] \
-    && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal parent:main child:main::parent \
-    && pass "a developer commit taken before any round, then the parent squash-merged and the child rebased: the suggestion kept, EQUAL" || fail "taken-before-round: $o"
+  [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] && rewritten child "$rw" parent:main child:main::parent \
+    && pass "a developer commit taken before any round, then the parent squash-merged and the child rebased: the rewrite STOP, nothing pushed" || fail "taken-before-round: round $o; proof $out"
 }
 
 c_never_pushed() {
@@ -1445,7 +1444,7 @@ for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_versio
   c_extend c_foreign_above c_delegate_after_orch c_mixed_below c_mixed_above c_own_missing \
   c_order_stack_fix c_order_row3_edit c_order_span_chained c_span_unchained c_outside_own c_not_own c_glob c_local_only c_own_refusal \
   c_merged_skipped c_merge_edit_shared c_merge_edit_other c_developer c_update_branch c_update_edit c_landed c_developer_file c_update_child \
-  c_dev_merged_squash c_dev_merged_true c_merged_main_edits c_merged_stale_local c_taken_rebased c_twin c_rebased_equal c_rebased_dev c_rebased_shared_before c_rebased_shared_after c_rebased_taken_fix_direct c_rebased_taken_fix_reported c_taken_before_round c_never_pushed c_no_entry c_pushed_missing c_record; do
+  c_dev_merged_squash c_dev_merged_true c_merged_main_edits c_merged_stale_local c_taken_rebased c_twin c_rebased_equal c_rebased_dev c_rebased_shared_before c_rebased_shared_after c_rebased_taken_fix c_taken_before_round c_never_pushed c_no_entry c_pushed_missing c_record; do
   (cd "$S" && "$c") || fail "$c ended early"
 done
 n=$(wc -l < "$S/failed" | tr -d ' ')
@@ -1486,7 +1485,7 @@ Expected answer:
 9. GitHub rewrote `gadgets-pr`'s head when its parent merged, so `widgets-pr` holds the old head, whose commits now count as its own, and the stop recurs in every round, even after `gadgets-pr` merges. The PR creator does not work around it and opens no pull request for it. It reports the output to the phase session, which sends the orchestrator a decision request with the same two options as (3): a one-off rebuild that force-pushes with the developer's approval, or a replacement pull request on a new branch. The branch is left where it started, nothing is pushed.
 10. A delegate's branch merged into the phase leaves its commits off the phase's first-parent line, so they are not phase commits. The PR creator opens no pull request for it and reports the output to the phase session, which sends the orchestrator a decision request. Either the phase session rebuilds its phase branch locally without that merge, taking the delegate's commits with `git cherry-pick -x` so they become phase commits that the next round carries, a local rewrite that needs Verify and Review again, or the orchestrator decides otherwise. The branch is left where it started, nothing is pushed.
 11. The phase replaced a file with a directory of the same name, which the design does not handle. The PR creator reports it to the phase session, which sends the orchestrator a decision request: whether to split that change by hand, or to undo it in the phase. The branch is left where it started, nothing is pushed.
-12. A rewritten pull request branch is a history the design does not detect. The round may print `EQUAL`, or a stop whose remedy has nothing to commit, and it can put the phase's version back over the developer's change, because an amended commit keeps its `cherry-pick` line. It is out of scope: the handbook states as a precondition that nobody rewrites a pull request branch. The developer adds commits on top, uses "Update branch", or comments. The PR creator does not work around it. If it happens, the phase session reports it to the orchestrator before any round. Each description asks reviewers to add commits on top, use "Update branch" or comment, and never to rewrite the branch with an amend, a squash or "Update with rebase".
+12. The round detects it. The refresh and the proof print `STOP widgets-pr is at <sha>, which does not descend from its recorded head <sha>, so the branch was rewritten and may hold a developer's edits`, and nothing is pushed, so the round neither overwrites nor reverts the developer's change. Every round stops so until the developer has said whether the branch holds edits of theirs. The developer should add commits on top, use "Update branch", or comment instead. The PR creator does not work around it and never merges its old local head back in. It reports the line to the phase session, which sends a decision request asking the developer whether the branch holds edits of theirs and takes any with `git cherry-pick -x`; the next brief's `PUSHED` then adds `widgets-pr=<head>` after that branch's earlier entries. Each description asks reviewers to add commits on top, use "Update branch" or comment, and never to rewrite the branch with an amend, a squash or "Update with rebase".
 
 ### Cold read. What `PUSHED` holds and what to report after an `EQUAL` round
 
@@ -1500,17 +1499,19 @@ Expected answer:
 2. The PR creator reports the proof's `RECORD` line as printed, all three entries including both for `widgets-b`, even though the round pushed nothing. It does not build the value itself from `origin/<branch>`. The phase session records the line in its status file, and it becomes the next round's `PUSHED`.
 3. It reports the push failure and not the `RECORD` line.
 
-### Cold read. `DEVELOPER-COMMITS` after GitHub rebased a child
+### Cold read. The rewrite `STOP` after GitHub rebased a child
 
-After GitHub rebases a stack child, the proof reports either a developer commit after the point where the rebase ended or, when it finds no such point, the head itself, and the two take different remedies. The PR creator and the phase session learn which from the handbook's prose, so this check is a cold read. Start a fresh subagent, give it only `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md` and `packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md`, tell it to read nothing else, and ask the question. Its answer passes when it agrees in substance with every point of the expected answer. Wait for it to finish before reporting.
+When GitHub rebases a stack child, every round stops until the developer decides, and the PR creator and the phase session learn the remedy from the handbook's prose, so this check is a cold read. Start a fresh subagent, give it only `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`, tell it to read nothing else, and ask the question. Its answer passes when it agrees in substance with every point of the expected answer. Wait for it to finish before reporting.
 
-Prompt: "Read only the files `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md` and `packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md` and nothing else, not even files they link to or name. Answer from them alone. You are the PR creator for phase `widgets`. Its stack is `widgets-a` and `widgets-b`, stacked on `widgets-a`. `widgets-a` was squash-merged, and GitHub then rebased `widgets-b` onto `main`, so `widgets-b` no longer descends from the head that `PUSHED` names for it. A round's proof prints `DEVELOPER-COMMITS widgets-b <sha>` and `NOT EQUAL`. For each case below, say what the proof found, what you do, where `widgets-b` and `origin/widgets-b` are left, and what the phase session does so that a later round proves `EQUAL`, with the exact command where there is one. (1) `<sha>` is a commit on `widgets-b` that is not its head. (2) `<sha>` is `widgets-b`'s head. (3) `<sha>` is `widgets-b`'s head, and that head is the commit 'Apply suggestions from code review', which the developer made on `widgets-b` before GitHub rebased it, as rewritten by the rebase."
+Prompt: "Read only the file `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md` and nothing else, not even files it links to or names. Answer from it alone. You are the PR creator for phase `widgets`. Its stack is `parent`, then `child` stacked on `parent`, and your brief's `PUSHED` is `parent=1111111,child=2222222`. `parent` was squash-merged. In your next round, the refresh of `child` prints `STOP child is at 3333333, which does not descend from its recorded head 2222222, so the branch was rewritten and may hold a developer's edits` and exits 1. (1) What has happened, what do you do now, and where are `child` and `origin/child` left? (2) What must you not do? (3) What do you report, and to whom? What happens before a round of `child` can pass, and what does the phase session do when the developer says (a) the branch holds a suggestion commit of theirs, or (b) it holds no edit of theirs? (4) What does the next brief's `PUSHED` hold, and how does that round go? (5) After that round proves `EQUAL` and pushes, the developer commits another suggestion on `child`. What does the next round print, and what happens?"
 
 Expected answer:
 
-1. The proof found where the rebase ended and, among the commits after that point, a commit that matches no phase commit: a commit the developer made. Nothing is pushed and nothing is reverted, so `widgets-b` and `origin/widgets-b` stay where they were. The PR creator reports the line to the phase session. The phase session takes the commit into the phase branch with `git cherry-pick -x <sha>`, passes both gates and asks for a round, whose proof is then `EQUAL`.
-2. No commit on the head holds the merge of the pushed head with the new base, or that merge conflicts, so the proof cannot find where the rebase ended and reports the head. Nothing is pushed or reverted, and the PR creator reports the line. The remedy is the one for a developer merge: an ordinary phase commit that gives the paths the head's content, then both gates and a round.
-3. The reported commit is a developer commit found after the point where the rebase ended, even though it is also the head, so the remedy is the one in (1): `git cherry-pick -x <sha>`, both gates and a round, which proves `EQUAL`. An ordinary phase commit with the head's content is not this remedy.
+1. The branch was rewritten: GitHub rebased `child` onto the default branch with a force-push when `parent` merged, so its head no longer descends from the head last recorded for it. The PR creator pushes nothing, removes the worktree and resets `child` to `origin/child`, so both stay at `3333333`, the developer's possible edits untouched.
+2. It does not work around the stop: it never merges its old local head back in, never force-pushes, and changes no code.
+3. It reports the `STOP` line, as the refresh's output, to the phase session. The phase session sends a decision request asking the developer whether the branch holds edits of theirs, and no round of `child` passes until the developer has answered. (a) The phase session takes the developer's commit into the phase branch with `git cherry-pick -x <sha>`. (b) It takes nothing.
+4. The next brief's `PUSHED` adds `child=3333333` after `child`'s earlier entries, as in `parent=1111111,child=2222222,child=3333333`. The round starts from `3333333` as an ordinary round, proves `EQUAL`, keeping the developer's edit in case (a) because the phase now holds it, and pushes as a fast-forward. The PR creator reports the proof's `RECORD` line.
+5. The proof prints `DEVELOPER-COMMITS child <sha>` and `NOT EQUAL`, and nothing is pushed or reverted. The PR creator reports the line, and the phase session takes the commit with `git cherry-pick -x <sha>` and asks for another round, which proves `EQUAL`.
 
 ## Evidence
 
@@ -1521,9 +1522,3 @@ The phase's own verifier runs these at every code head it verifies. They are nev
 What it checks: the handbook's rule that `gh stack link <parent number> <own number>` adds a pull request on top of its parent's stack without pushing or rebasing any branch, and that linking a merged pull request is refused. The scratch cases cannot reach GitHub.
 
 How: in a throwaway public repository owned by the developer, never Foundry, push two branches with plain `git push`, open both as drafts with `gh pr create --draft`, and run `gh stack link <first> <second>`. Record both branches' head SHAs before and after, and the stack GitHub shows. Then merge the first, open a third draft on the second, and run `gh stack link <first> <third>`. The rule holds when the heads do not move on the first link and the second link is refused. This changes state on GitHub, so the developer runs it or approves it first.
-
-### A forge rewrite keeps the tree
-
-What it checks: the handbook's rule that when a stack parent merges, GitHub may rewrite the child's head with the same tree and new commits, which the `forge rewrite` and `round 2 grandchild` cases simulate.
-
-How: pick a pull request of this run whose stack parent has merged, from the run's decisions. Read its force-push events with `gh api graphql`, asking for `pullRequest(number: <n>) { timelineItems(itemTypes: [HEAD_REF_FORCE_PUSHED_EVENT]) { nodes { ... on HeadRefForcePushedEvent { createdAt beforeCommit { oid tree { oid } } afterCommit { oid tree { oid } } } } } }`. The rule holds when an event at the parent's merge time has equal tree ids and different commit ids. It only reads.

@@ -27,8 +27,18 @@ verdicts:
     code_head: "acaba0e6fcd36b38e2c6061c6fc7ede046844cae"
     at: "2026-11-22T19:14:58Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/default-stack-evidence.md"
-pull_requests: []
-pushed: null
+pull_requests:
+  - number: 97
+    branch: "s-stack-relativise-lockfiles"
+    base: "main"
+    depends_on: []
+    stacked: false
+  - number: 98
+    branch: "s-stack-default-stack"
+    base: "s-stack-relativise-lockfiles"
+    depends_on: [97]
+    stacked: true
+pushed: "s-stack-relativise-lockfiles=73224f799c04635ec26503db06f552c81458db15,s-stack-default-stack=b640fd02bf723e8caf498ab52fe98871ab0052dc"
 requests: []
 decisions:
   - id: "default-stack-d1"

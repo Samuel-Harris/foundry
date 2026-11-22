@@ -161,6 +161,8 @@ Each phase's verifier records that phase's behavioural checks in `tests/s-stack/
 
 List the files in name order, then run every check in each file's `## Rerun` section exactly as written and compare its result with the expected one. Report each check by file and name. A Rerun check may report PENDING when what it needs is absent on the checked-out branch, and that PENDING never fails the verdict. With no files, report "no check files" and PASS.
 
+A scoped run, which the verifier and the post-merge check make, runs only the checks its brief names as in the blast radius, and reports each other check file with the brief's reason. The full run, every Rerun check, is for the end of the feature and for when the developer asks.
+
 ```bash
 bash <<'EOF'
 shopt -s nullglob

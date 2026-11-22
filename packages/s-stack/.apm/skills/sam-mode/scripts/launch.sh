@@ -152,13 +152,15 @@ pane_is_idle() {
 
 # Prints "pane_id window_id tag kind in_worktree idle" for every pane, in tmux's
 # order. tag is the pane's @s-stack-session option, or - when unset. kind
-# describes the claude processes among the pane's descendants: strict when a
-# claude's first argument is --name <session>, as the launcher writes it, so a
-# --name inside a prompt never matches; continued when no argument is --name
-# and one is --continue or -c, which is how workmux resurrect restarts a session
-# and resumes its conversation; nameless for any other claude without --name;
-# other for any other claude; none without one. A pane running several claudes reports the closest
-# match. in_worktree is 1 when the pane's directory is <worktree> or under it.
+# describes the claude processes among the pane's descendants: strict when
+# --name <session> is among a claude's leading options, which run until the
+# first argument that is neither an option nor the value of an option known to
+# take one, so a --name inside the prompt never matches; continued when no
+# leading option is --name and an argument is --continue or -c, which is how
+# workmux resurrect restarts a session and resumes its conversation; nameless
+# for any other claude without a leading --name; other for any other claude;
+# none without one. A pane running several claudes reports the closest match.
+# in_worktree is 1 when the pane's directory is <worktree> or under it.
 # idle is 1 when the pane sits at an interactive shell, as pane_is_idle decides.
 pane_inventory() {
   local session=$1 worktree_path=$2 panes pane_id pane_pid window_id tag tty idle current_path in_worktree resolved_worktree='' status
@@ -184,14 +186,18 @@ pane_inventory() {
     # procps cuts each line to $COLUMNS even into a pipe, which would hide --name.
     ps -A -ww -o pid=,ppid=,args=
   } | awk -v name="$session" '
+    BEGIN { split("--name --model --resume -r --session-id --effort --permission-mode --settings --add-dir --agent", list, " "); for (i in list) takes_value[list[i]] = 1 }
     $1 == "pane" { order[++n] = $3; pane_pid[$3] = $2; info[$2] = $2 " " $4 " " $5; in_worktree[$2] = $6; idle[$2] = $7; next }
     {
       parent[$1] = $2
       program = $3; sub(/.*\//, "", program)
       if (program != "claude") next
-      strict = ($4 == "--name" && $5 == name) || $4 == "--name=" name
-      named = 0
-      for (i = 4; i <= NF; i++) if ($i == "--name" || index($i, "--name=") == 1) named = 1
+      strict = 0; named = 0
+      for (i = 4; i <= NF && $i ~ /^-/; i++) {
+        if ($i == "--name") { named = 1; if ($(i + 1) == name) strict = 1 }
+        if (index($i, "--name=") == 1) { named = 1; if ($i == "--name=" name) strict = 1 }
+        if ($i in takes_value) i++
+      }
       continued = 0
       for (i = 4; i <= NF; i++) if ($i == "--continue" || $i == "-c") continued = 1
       claude[$1] = strict ? "strict" : (named ? "other" : (continued ? "continued" : "nameless"))
@@ -212,16 +218,16 @@ pane_inventory() {
 }
 
 # Reads pane_inventory for <session> and prints the one pane that runs it, or
-# nothing. A claude named for the session counts, and so does a nameless claude
+# nothing. A claude named for the session counts, and so does a continued claude
 # in the inventory's worktree in the session's own tagged pane, as a developer
 # resuming it by hand leaves it. Only when neither exists does a continued one in
 # an untagged pane count, as workmux resurrect makes, and only when <marker>
 # shows the launcher started the session there. A plain claude the developer
-# opens is never taken for it.
+# opens, even in the session's own pane, is never taken for it.
 live_pane_of() {
   local session=$1 marker=$2 inventory matches
   inventory=$(cat)
-  matches=$(printf '%s\n' "$inventory" | awk -v session="$session" '$4 == "strict" || (($4 == "nameless" || $4 == "continued") && $5 == 1 && $3 == session) { print $1 }')
+  matches=$(printf '%s\n' "$inventory" | awk -v session="$session" '$4 == "strict" || ($4 == "continued" && $5 == 1 && $3 == session) { print $1 }')
   if [ -z "$matches" ] && [ -n "$marker" ] && [ -s "$marker" ]; then
     matches=$(printf '%s\n' "$inventory" | awk '$4 == "continued" && $5 == 1 && $3 == "-" { print $1 }')
   fi
@@ -238,10 +244,13 @@ marker_of() {
 
 find_live_pane() {
   local marker=''
-  # workmux resurrect restores only the orchestrator, and the spec writer has
-  # ended by then, so a nameless claude in an untagged pane of the feature
-  # worktree is the orchestrator.
-  if [ -z "$first_spec" ] && [ -n "$worktree" ]; then marker=$(marker_of "$worktree" "$name"); fi
+  # workmux resurrect restores one session per worktree. In the feature
+  # worktree that is the spec writer until an orchestrator has been started
+  # there, and the orchestrator after, since the spec writer has ended by then.
+  if [ -n "$worktree" ]; then
+    marker=$(marker_of "$worktree" "$name")
+    if [ -n "$first_spec" ] && [ -e "$(marker_of "$worktree" "$feature-orchestrator")" ]; then marker=''; fi
+  fi
   printf '%s\n' "$inventory" | live_pane_of "$name" "$marker"
 }
 
@@ -327,14 +336,18 @@ release_worktrees() {
 # checks liveness only after ps shows this one's claude. The holder may be
 # waiting for the worktree lock, so the wait is as long.
 lock_session() {
+  prepare_locks
+  take_lock "$locks/$name" "$name" 300
+  session_lock=$locks/$name
+}
+
+prepare_locks() {
   local common
   common=$(git rev-parse --git-common-dir 2>/dev/null) && common=$(resolve "$common") && [ -n "$common" ] || die 'cannot resolve the git common directory'
   locks=$common/s-stack-locks
   mkdir -p "$locks" || die "cannot create $locks"
   lock_record="$$ $(process_start "$$")"
-  take_lock "$locks/$name" "$name" 300
-  session_lock=$locks/$name
-  window_lock='' zoomed_pane='' worktrees_lock=''
+  session_lock='' window_lock='' zoomed_pane='' worktrees_lock=''
   trap 'release_worktrees; release_window; release_lock "$session_lock"' EXIT
 }
 
@@ -433,6 +446,18 @@ widths_after_full_span() {
     }' | sort -n | awk '{ print $2, $3 }'
 }
 
+# Prints "pane_id width" for every pane wholly left or right of the column of
+# <anchor> except <pane>, from left to right. Setting each width in that order
+# after <pane> is killed gives the width tmux handed to <pane>'s neighbour back
+# to the anchor's column.
+widths_beside_column() {
+  awk -v anchor="$1" -v skip="$2" '
+    { n++; id[n] = $1; left[n] = $2; right[n] = $3; width[n] = $5; if ($1 == anchor) a = n }
+    END {
+      for (i = 1; i <= n; i++) if (id[i] != skip && (right[i] < left[a] || left[i] > right[a])) print left[i], id[i], width[i]
+    }' | sort -n | awk '{ print $2, $3 }'
+}
+
 # Sets target_pane, direction, split_size, full_span and widths for a session
 # started by splitting a pane of $window. The orchestrator holds the first
 # column after the workmux sidebar, spec writers stack in its column and every
@@ -506,14 +531,36 @@ cmd_close() {
   panes="$panes $(printf '%s\n' "$inventory" | awk -v name="$name" '$3 == name && $4 == "none" && $6 == 1 { print $1 }')"
   [ -n "${panes// /}" ] || { printf 'absent %s\n' "$name"; return; }
   for pane in $panes; do
-    # Closing a pane unzooms its window.
-    zoomed=$(tmux list-panes -t "$pane" -F '#{window_zoomed_flag} #{pane_active} #{pane_id}' | awk -v pane="$pane" '$1 == 1 && $2 == 1 && $3 != pane { print $3 }') || die "tmux list-panes -t $pane failed"
-    tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
-    if [ -n "$zoomed" ] && [ "$(tmux display-message -p -t "$zoomed" '#{window_zoomed_flag}')" = 0 ]; then
-      tmux resize-pane -Z -t "$zoomed" || die "tmux resize-pane -Z -t $zoomed failed"
+    window=$(tmux display-message -p -t "$pane" '#{window_id}') || die "tmux display-message -t $pane failed"
+    # An orchestrator that cannot be told apart must not stop the close.
+    find_orchestrator_pane || orchestrator_pane=''
+    if [ -n "$orchestrator_pane" ] && [ "$orchestrator_pane" != "$pane" ]; then
+      close_beside_orchestrator "$pane"
+    else
+      # Closing a pane unzooms its window.
+      zoomed=$(tmux list-panes -t "$pane" -F '#{window_zoomed_flag} #{pane_active} #{pane_id}' | awk -v pane="$pane" '$1 == 1 && $2 == 1 && $3 != pane { print $3 }') || die "tmux list-panes -t $pane failed"
+      tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
+      if [ -n "$zoomed" ] && [ "$(tmux display-message -p -t "$zoomed" '#{window_zoomed_flag}')" = 0 ]; then
+        tmux resize-pane -Z -t "$zoomed" || die "tmux resize-pane -Z -t $zoomed failed"
+      fi
     fi
     printf 'closed %s pane=%s\n' "$name" "$pane"
   done
+}
+
+# tmux hands a killed pane's width to a neighbour, often a developer's column
+# beside the orchestrator's, so each closed session would narrow the
+# orchestrator's column for good.
+close_beside_orchestrator() {
+  local pane=$1 widths other width
+  prepare_locks
+  lock_window
+  widths=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_left} #{pane_right} #{pane_top} #{pane_width}' | widths_beside_column "$orchestrator_pane" "$pane") || die "tmux list-panes -t $window failed"
+  tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
+  printf '%s\n' "$widths" | while read -r other width; do
+    [ -z "$other" ] || tmux resize-pane -t "$other" -x "$width" || die "tmux resize-pane -t $other -x $width failed"
+  done
+  release_window
 }
 
 cmd_remove() {

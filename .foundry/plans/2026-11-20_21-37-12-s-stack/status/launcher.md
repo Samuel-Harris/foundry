@@ -1,7 +1,7 @@
 ---
 phase: "launcher"
-state: "Verify"
-changed_at: "2026-11-21T23:30:34Z"
+state: "Review"
+changed_at: "2026-11-22T00:03:58Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
 code_head: "0ad72927067f8875e5db62d10156c4c867b9291b"
@@ -56,6 +56,11 @@ verdicts:
     result: "NOT VERIFIED"
     code_head: "061f71e3849fa779879183f90ff825a3071525a2"
     at: "2026-11-21T23:30:29Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "0ad72927067f8875e5db62d10156c4c867b9291b"
+    at: "2026-11-22T00:03:58Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - id: "launcher-r2"

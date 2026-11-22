@@ -141,6 +141,26 @@ It failed one check. Deleting the argument rule in `pane_is_idle` left all 113 t
 
 The phase session fixed the tests. The shells now block in the `read` builtin, and both tests fail against that mutant. `checks/launcher.md` now lists the idle-rule and lock mutations, says to wait for the trust dialog to draw, and checks only that nothing of the check's is left on the developer's server.
 
+## Verify, code head `0ad72927067f8875e5db62d10156c4c867b9291b`, VERIFIED
+
+A fresh verifier ran with nothing committed. Its report, summarised:
+
+- The full skill passed: primitives, the root manifest, lint, budgets and isolation. 113 tests passed, and again under `LC_ALL=C`. Tier 1 passed across 20 packages. The board's rendered check passed, and all nine cold reads passed.
+- 31 mutants ran on scratch copies, with a control passing beside them. Every mutant fails named tests, except one equivalent mutant: dropping only the branch-merged guard in `--remove`, which the HEAD-merged guard covers.
+- The fix for 061f71e holds: deleting the argument rule in `pane_is_idle` fails both busy-shell tests.
+- Reproductions, with and without a sidebar:
+  - The shared-column layout kept the sidebar at 20 columns. The first phase column was full height, and later phases tiled in it.
+  - With a developer's unnamed `claude` present, the named orchestrator took precedence.
+  - A SIGKILLed lock was taken over in 0.67 s.
+  - Under the `launcher-d16` idle rule, `bash build.sh` and `sh -c` panes survived a restart and `--close`, while `bash`, `zsh -l` and `-zsh` panes were reused.
+  - All five defects from the third review stay fixed.
+- Live check with the real `claude` 2.1.330. The first launch took 0.44 s, `alive` came in 0.18 s, and a relaunch after `/exit` in 0.30 s reused the same pane with `--resume <stored id>`.
+- Minor gaps recorded and not fixed:
+  - The stale-lock and sidebar recipes in `checks/launcher.md`.
+  - The equivalent mutant.
+  - The `## Evidence` wording in the verification skill's check 8.
+  - The real `sam-mode` does not load in a scratch repository.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

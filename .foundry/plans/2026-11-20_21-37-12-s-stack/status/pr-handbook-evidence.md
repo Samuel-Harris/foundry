@@ -260,3 +260,19 @@ Defects:
 - **Significant: d16's history fails when the handbook is followed.** Listing the merged pull request, built without trailers, reports its old commit as `DEVELOPER-COMMITS` and fails its head against a target tree.
 - **Minor, could mislead.** A developer commit that adds a new file gets the delegate and forge `STOP` "would carry" instead of `DEVELOPER-COMMITS`.
 - **Not run.** The two `## Evidence` checks need GitHub.
+
+## Verify: NOT VERIFIED at `0305089fca6946a7631acacd073d7206a0d3656f`
+
+A sixteenth fresh verifier covered `3d475ad` plus its own check-file commit `0305089`.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING. Check 8 passed for every file. `pr-handbook.md`'s scratch block printed 107 PASS and `0 failed`, and the eleven-point cold read agreed.
+- **New cases.** A developer edit inside a merge with its remedy, the merged pull request listed in `c_landed`, and a developer's new file with its remedy all fail at `85bb0a5` and pass now. "Update branch" on a stacked child passes at both heads, because `85bb0a5` never inspected merges, and a mutation shows that case can fail.
+- **Done when and decisions d1 to d16 hold.**
+
+Defects, all present at `85bb0a5` too:
+
+- **Significant: the developer rewrites a pull request branch.** The developer amends a carried commit and force-pushes. The commit keeps its trailer, so it matches its phase commit, and the round reverts the change and pushes with `EQUAL`.
+- **Minor: GitHub's "Update with rebase" re-hashes a developer commit the phase already took.** The round stops safely, but its documented remedy, `cherry-pick -x`, has nothing to commit.
+- **Minor: a developer squash and force-push without trailers** gets "lacks phase commits" instead of `DEVELOPER-COMMITS`. Nothing is pushed.
+
+Request `pr-handbook-r4` asks whether developer rewrites of pull request branches are in scope.

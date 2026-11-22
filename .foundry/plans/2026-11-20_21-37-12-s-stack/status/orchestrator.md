@@ -10,7 +10,7 @@
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
 | Last tick | 2026-11-22 14:51 |
-| Default branch merged at | `25a6b61` (#95, into `829ab81`) |
+| Default branch merged at | `0fdbb53` (#94, into `0cb0607`) |
 
 ## Live sessions
 
@@ -59,7 +59,7 @@ None.
 | `orchestrator-handbook` | `7cd7034` (tip `2fbf619`) | `ff83115` | NOT VERIFIED on `6703d16` (scoped): cold reads AP (twice), AE, AN, I, Z; branch frozen, phase moved back |
 | `orchestrator-handbook` (post-merge fix) | `9eb7fac` (tip `455c545`) | `a3f4749` | VERIFIED on `9eb7fac` (scoped) |
 | `pr-handbook` | `ab06c83` (tip `c9e0f72`) | `27d6f55` | VERIFIED on `899ec3a` (scoped, no code change since `ab06c83`) |
-| `launcher` | `a51f246` (tip `117abdb`) | `890d46d` | running (scoped) |
+| `launcher` | `a51f246` (tip `117abdb`) | `890d46d` | VERIFIED on `3a21396` (scoped, no code change since `a51f246`) |
 
 ## Closed sessions
 
@@ -100,7 +100,6 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 ## Merge cautions
 
-- `main` moved to `0fdbb53` (#94). Merge it into `s-stack-package` once launcher's post-merge check on `a51f246` returns, because that check reads this checkout. Then send launcher the merged notice if the check passed.
 
 
 

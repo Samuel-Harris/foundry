@@ -1,7 +1,7 @@
 ---
 phase: "launcher"
-state: "Verify"
-changed_at: "2026-11-22T13:42:09Z"
+state: "Review"
+changed_at: "2026-11-22T14:07:52Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
 code_head: "890d46d63795ca74f298d66e582461dceab118d6"
@@ -117,14 +117,17 @@ verdicts:
     code_head: "36ea9023e2a6dc555a8e7d4b65e2d630440fec01"
     at: "2026-11-22T13:17:15Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "890d46d63795ca74f298d66e582461dceab118d6"
+    at: "2026-11-22T14:07:52Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
-  - id: "launcher-r2"
-    question: "Session and worktree names are joined with hyphens, so two features can collide: the planner of feature a-phase and phase planner of feature a are both a-phase-planner, and the planner of feature query takes the feature worktree of a feature named query-planner. Should the launcher refuse feature names that can collide?"
-    options: ["A. The launcher exits 2 for a feature name that contains -phase- or ends with -phase, -planner, -orchestrator, -spec or -spec-<n>, and its usage text says so.", "B. Change the naming scheme in the roadmap so names cannot collide, for example a separator that a kebab-case name cannot contain.", "C. Accept the collision and document it."]
-    recommendation: "A"
-    door: "two-way"
-    waiting_work: "The launcher's feature-name validation and its test. Every other review fix goes ahead."
-    since: "2026-11-21T16:43:47Z"
+  - number: 94
+    branch: "s-stack-launcher"
+    base: "main"
+    depends_on: []
+    stacked: false
 requests: []
 decisions:
   - id: "launcher-d1"

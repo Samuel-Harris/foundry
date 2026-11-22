@@ -324,6 +324,18 @@ The second adversary (Fable) then joined and returned CLEAR. Its container varia
 
 It also confirmed isolation with real executables of those names planted. Both noted that the first CI run after the push is the real confirmation.
 
+## Verify, code head `890d46d63795ca74f298d66e582461dceab118d6`, VERIFIED
+
+This round ran under the gate-cost rules. The scope was the diff since 36ea902: `sidebar_program` in `packages/s-stack/tests/launcher_case.py`. CI run 45026683655 failed on the new Ubuntu 26.04 runner image. There, `sleep` is the uutils multicall binary, and a copy named `workmux` exits with `unknown program`. Linux tmux reports argv[0], so a plain script reads as `sh`. On Linux the stub is now a script whose interpreter is a link to `sh` named `workmux`. macOS keeps the signed copy of `sleep`. Test logic is not waivable.
+
+- Blast radius: every test that calls `add_sidebar` or `sidebar_program`, and the two Rerun suite checks in `checks/launcher.md`.
+- Ubuntu 26.04 (tmux 3.6) and Ubuntu 24.04 (tmux 3.4), run as a non-root user: 130 tests passed. The one skip is the time-zone test, which needs tzdata.
+- macOS: 130 tests passed, also under `LC_ALL=C`.
+- The fixture at 36ea902 fails in the 26.04 container with the CI failure set: 20 failures and 1 error.
+- Mutants killed in 26.04, each with the same 21-test failure set: a plain `#!/bin/sh` stub, a copy of `sleep`, and an interpreter link with another name.
+- A probe confirmed that tmux reads argv[0] on Linux, with dash and bash interpreters alike.
+- Recorded limits, none new: a `TMPDIR` containing a space already broke the unquoted `exec` path. A busybox `/bin/sh` or a noexec `/tmp` breaks both the old stub and the new one.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

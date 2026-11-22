@@ -205,6 +205,22 @@ p-stack's `interrogate` skill ran at 79c8715 with adversaries on Opus and Fable,
 
 Both held up everywhere else: the full documented flow, parallel launches and relaunches after crashes and after a resurrect, developer splits around the orchestrator, and zsh panes.
 
+## Verify, code head `5ba7c2d20de90afed4b569e9b297f146c730a8af`, VERIFIED
+
+A fresh verifier ran with nothing committed. Its report, summarised:
+
+- The full skill passed: 122 tests on macOS in both locales and in the Ubuntu container, with four skips that need zsh or a locale-sensitive `ps`. Tier 1 passed across 20 packages, the board's rendered check passed, and all nine cold reads passed.
+- 23 mutants, including two new ones for this round's fixes, each failed named tests.
+- **Developer's `claude` fix.** After the orchestrator's `claude` was killed beside a developer's plain `claude`, a relaunch restarted the orchestrator in its own pane with `--resume`, and the developer's `claude` kept its PID. The update spec writer and planner were placed by the orchestrator, and the developer's pane was never split. After a simulated resurrect (`claude --continue`) beside the developer's `claude`, planner and phase launches succeeded and the orchestrator was reported `alive` at the resurrected pane.
+- **Spec-writer restart fix.** `--role spec` with no `--window` printed `alive` while the spec writer lived, restarted it in its own pane with `--resume` after its `claude` died, and exited 2 naming `--window` when its pane was gone or busy.
+- **Parallel relaunch after a crash.** With panes kept and stale locks planted, eight launches gave one `started` per name in its earlier pane with `--resume`, plus four `alive`. With every pane gone and a resurrected orchestrator, four launches shared one full-height column.
+- Live check with the real `claude` 2.1.330. The first launch took 0.88 s, `alive` came in 0.13 s, and a relaunch in 0.25 s used the same pane with `--resume`.
+- Minor gaps recorded:
+  - The check file lacks this round's mutations and the lock-holding recipe.
+  - A launch SIGKILLed between starting its pane and `claude` appearing in `ps` can lead to a duplicate. This was seen only with the stub's 3 s delay.
+  - The exit-2 message says no pane is left when the pane is busy.
+  - `-ww` regressions are caught on Linux only.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

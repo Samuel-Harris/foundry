@@ -5,7 +5,7 @@ changed_at: "2026-11-22T00:29:00Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
-waits_for: "The orchestrator's answer to spec-planner-handbooks-r2."
+waits_for: null
 verdicts:
   - gate: "verify"
     result: "VERIFIED"
@@ -83,14 +83,7 @@ pull_requests:
     base: "main"
     depends_on: []
     stacked: false
-requests:
-  - id: "spec-planner-handbooks-r2"
-    question: "pr-handbook's proof and refresh still cannot account for merged #84's untrailered history, so this round's pull request also prints NOT EQUAL on otherwise exact direct-comparison evidence; may it ship as spec-planner-handbooks-r1 did?"
-    options: ["A. Ship it: tree 2097cff equals main plus the three files from 775a30a plus generated lines, files byte-identical, hook and versioning check pass.", "B. Wait for pr-handbook to make pr.sh accept owned paths already equal to the default branch, then rebuild."]
-    recommendation: "A"
-    door: "two-way"
-    waiting_work: "Pushing s-stack-spec-planner-owner-pointers at 561e71c and opening its draft pull request against main."
-    since: "2026-11-22T00:33:46Z"
+requests: []
 decisions:
   - id: "spec-planner-handbooks-d1"
     decision: "planner.md does not point to this run's feature plan as a worked example, because that file lives under .foundry/ on Foundry's orchestrator branch and never reaches a consuming repository. The feature plan allows the pointer but does not require it."
@@ -116,8 +109,12 @@ decisions:
     decision: "Answer to spec-planner-handbooks-r1, option A, from the orchestrator. The follow-up pull request ships on direct-comparison evidence: its tree equals main with both files from 47f792f plus generated lines. pr-handbook's proof cannot account for #84, which predates its cherry-pick trailers."
     door: "two-way"
     at: "2026-11-21T23:43:47Z"
+  - id: "spec-planner-handbooks-d7"
+    decision: "Answer to spec-planner-handbooks-r2, option A, from the orchestrator. The second follow-up pull request ships on direct-comparison evidence, as r1 did: tree 2097cff equals main plus the three files from 775a30a plus generated lines."
+    door: "two-way"
+    at: "2026-11-22T00:35:48Z"
 ---
 
 # Phase `spec-planner-handbooks` status
 
-Second follow-up round. Both gates passed for `775a30a`. A PR creator is opening a new draft pull request against `main`.
+Second follow-up round. Both gates passed for `775a30a`. Under `spec-planner-handbooks-r2`, option A, a PR creator is pushing `s-stack-spec-planner-owner-pointers` (`561e71c`) and opening its draft pull request against `main`.

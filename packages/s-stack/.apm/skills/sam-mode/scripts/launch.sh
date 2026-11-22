@@ -228,7 +228,9 @@ live_pane_of() {
   local session=$1 marker=$2 inventory matches
   inventory=$(cat)
   matches=$(printf '%s\n' "$inventory" | awk -v session="$session" '$4 == "strict" || ($4 == "continued" && $5 == 1 && $3 == session) { print $1 }')
-  if [ -z "$matches" ] && [ -n "$marker" ] && [ -s "$marker" ]; then
+  # workmux resurrect makes new panes, so a pane still tagged for the session
+  # means it has not been resurrected since it started.
+  if [ -z "$matches" ] && [ -n "$marker" ] && [ -s "$marker" ] && ! printf '%s\n' "$inventory" | awk -v session="$session" '$3 == session { found = 1 } END { exit !found }'; then
     matches=$(printf '%s\n' "$inventory" | awk '$4 == "continued" && $5 == 1 && $3 == "-" { print $1 }')
   fi
   at_most_one "pane runs $session" "$matches"
@@ -446,15 +448,19 @@ widths_after_full_span() {
     }' | sort -n | awk '{ print $2, $3 }'
 }
 
-# Prints "pane_id width" for every pane wholly left or right of the column of
-# <anchor> except <pane>, from left to right. Setting each width in that order
-# after <pane> is killed gives the width tmux handed to <pane>'s neighbour back
-# to the anchor's column.
+# Prints "pane_id width" for <anchor>, at its width plus <gain>, and for every
+# pane wholly left or right of its column except <pane>, at its width, from left
+# to right. resize-pane -x moves a pane's right border and takes what it needs
+# from the panes to its right, so setting each width in that order after <pane>
+# is killed hands the freed <gain> to the anchor's column, wherever tmux put it.
 widths_beside_column() {
-  awk -v anchor="$1" -v skip="$2" '
+  awk -v anchor="$1" -v skip="$2" -v gain="$3" '
     { n++; id[n] = $1; left[n] = $2; right[n] = $3; width[n] = $5; if ($1 == anchor) a = n }
     END {
-      for (i = 1; i <= n; i++) if (id[i] != skip && (right[i] < left[a] || left[i] > right[a])) print left[i], id[i], width[i]
+      for (i = 1; i <= n; i++) {
+        if (i == a) print left[i], id[i], width[i] + gain
+        else if (id[i] != skip && (right[i] < left[a] || left[i] > right[a])) print left[i], id[i], width[i]
+      }
     }' | sort -n | awk '{ print $2, $3 }'
 }
 
@@ -552,10 +558,13 @@ cmd_close() {
 # beside the orchestrator's, so each closed session would narrow the
 # orchestrator's column for good.
 close_beside_orchestrator() {
-  local pane=$1 widths other width
+  local pane=$1 panes gain widths='' other width
   prepare_locks
   lock_window
-  widths=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_left} #{pane_right} #{pane_top} #{pane_width}' | widths_beside_column "$orchestrator_pane" "$pane") || die "tmux list-panes -t $window failed"
+  panes=$(tmux list-panes -t "$window" -F '#{pane_id} #{pane_left} #{pane_right} #{pane_top} #{pane_width} #{pane_height} #{window_height}') || die "tmux list-panes -t $window failed"
+  # Only a pane alone in its column frees a column; any other closes as tmux closes it.
+  gain=$(printf '%s\n' "$panes" | awk -v pane="$pane" '$1 == pane && $4 == 0 && $6 == $7 { print $5 + 1 }')
+  if [ -n "$gain" ]; then widths=$(printf '%s\n' "$panes" | widths_beside_column "$orchestrator_pane" "$pane" "$gain"); fi
   tmux kill-pane -t "$pane" || die "tmux kill-pane -t $pane failed"
   printf '%s\n' "$widths" | while read -r other width; do
     [ -z "$other" ] || tmux resize-pane -t "$other" -x "$width" || die "tmux resize-pane -t $other -x $width failed"

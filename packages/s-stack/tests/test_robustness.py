@@ -24,8 +24,8 @@ class RobustnessTests(LauncherTestCase):
         spec, _ = self.started(self.launch("--feature", "f", "--role", "spec", env=c_locale), name="f-spec")
         window = self.window_of(spec)
         orchestrator = ("--feature", "f", "--role", "orchestrator", "--window", window)
-        self.started(self.launch(*orchestrator, env=c_locale), name="f-orchestrator")
-        self.kill_claude("f-orchestrator")
+        orchestrator_pane, _ = self.started(self.launch(*orchestrator, env=c_locale), name="f-orchestrator")
+        self.tmux("kill-pane", "-t", orchestrator_pane)
         resurrected = self.make_pane(self.worktree("f"), command="claude --continue")
 
         result = self.launch(*orchestrator, env=c_locale)
@@ -420,6 +420,22 @@ class SpecWriterRestartTests(LauncherTestCase):
 
         self.assertEqual(result.returncode, 2, result.stdout)
         self.assertIn("--window", result.stderr)
+
+    def test_a_crashed_orchestrator_started_by_a_resurrected_spec_writer_restarts(self) -> None:
+        spec, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        self.wait_for_claude(spec)
+        self.tmux("kill-window", "-t", self.window_of(spec))
+        resurrected = self.make_pane(self.worktree("f"), command="claude --continue")
+        orchestrator_args = ("--feature", "f", "--role", "orchestrator", "--window", self.window)
+        orchestrator, _ = self.started(self.launch(*orchestrator_args), name="f-orchestrator")
+        self.wait_for_claude(orchestrator)
+        self.kill_claude("f-orchestrator")
+
+        restarted, _ = self.started(self.launch(*orchestrator_args), name="f-orchestrator")
+
+        self.assertEqual(restarted, orchestrator)
+        self.assertIn("--resume", self.wait_for_claude(orchestrator))
+        self.assertEqual((self.claude_in_pane(resurrected) or "").split(), ["claude", "--continue"])
 
     def test_a_resurrected_spec_writer_is_alive(self) -> None:
         spec, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")

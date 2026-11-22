@@ -174,6 +174,39 @@ class CloseWidthTests(LauncherTestCase):
         self.assertLessEqual(abs(after[developer].width - before[developer].width), 1, (before, after))
 
 
+    def test_closed_phases_give_their_width_back_past_two_developer_columns(self) -> None:
+        self.make_feature_worktree()
+        first = self.pane_ids()[0]
+        self.add_sidebar()
+        orchestrator, _ = self.started(self.launch("--feature", "f", "--role", "orchestrator", "--window", self.window), name="f-orchestrator")
+        self.tmux("kill-pane", "-t", first)
+        left = self.split(target=orchestrator, flags=["-h"])
+        right = self.split(target=left, flags=["-h"])
+        before = self.geometry()
+
+        for cycle in range(1, 4):
+            phase = ("--feature", "f", "--role", "phase", "--phase", f"p{cycle}")
+            pane, _ = self.started(self.launch(*phase, "--window", self.window), name=f"f-phase-p{cycle}")
+            self.assertEqual(self.launch(*phase, "--close").returncode, 0)
+
+        after = self.geometry()
+        for kept in (orchestrator, left, right):
+            self.assertLessEqual(abs(after[kept].width - before[kept].width), 1, (kept, before, after))
+
+    def test_closing_a_session_beside_a_developer_split_leaves_its_column_alone(self) -> None:
+        self.make_feature_worktree()
+        orchestrator = self.make_orchestrator()
+        phase_a, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "a", "--window", self.window), name="f-phase-a")
+        phase_b, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "b", "--window", self.window), name="f-phase-b")
+        self.split(target=phase_a, flags=["-h"])
+        before = self.geometry()
+
+        self.assertEqual(self.launch("--feature", "f", "--role", "phase", "--phase", "a", "--close").returncode, 0)
+
+        after = self.geometry()
+        self.assertEqual(after[phase_b].width, before[phase_b].width)
+        self.assertEqual(after[orchestrator].width, before[orchestrator].width)
+
 class RemoveTests(LauncherTestCase):
     args = ("--feature", "f", "--role", "phase", "--phase", "p")
 

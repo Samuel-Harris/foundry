@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "Review"
-changed_at: "2026-11-22T11:14:38Z"
+state: "PR"
+changed_at: "2026-11-22T11:30:35Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "ff831156b0c01d2fae94e01031147297ccfa242a"
@@ -232,6 +232,11 @@ verdicts:
     code_head: "ff831156b0c01d2fae94e01031147297ccfa242a"
     at: "2026-11-22T11:14:38Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "ff831156b0c01d2fae94e01031147297ccfa242a"
+    at: "2026-11-22T11:30:35Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -424,3 +429,5 @@ The fourteenth Review gate returned SIGNIFICANT at `73ba6d4`, under the common-p
 The developer chose to drop patch matching for developer commits. The held fix was reverted. The developer-commit check now compares each pull request's head with its head at the phase's last `prs-open`, at `6b29b1b`. The phase moved to Verify at code head `6b29b1b`.
 
 The thirty-fifth Verify gate returned VERIFIED at `ff83115`. `s-stack-package` (`cb513f9`, `.foundry/` only) was merged. The phase moved to Review, which covers the commits since `73ba6d4`.
+
+The fifteenth Review gate returned CLEAR at `ff83115`, under the common-path bar. Its two findings depend on `pr-handbook`'s contracts and are recorded. Both verdicts cover `ff83115`. The phase moved to PR, and the PR creator is starting.

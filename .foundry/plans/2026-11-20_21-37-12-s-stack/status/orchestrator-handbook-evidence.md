@@ -786,3 +786,25 @@ For other phases: `phase-session.md` has no row for a refresh `instruction`, and
 The check file is 1,058 lines, down from 1,138, which was already over the 1,000-line rule.
 
 `s-stack-package` (`cb513f9`, `.foundry/` only) was merged after the gate.
+
+## Review 15, code head `ff831156b0c01d2fae94e01031147297ccfa242a`, CLEAR
+
+`interrogate` over the commits since `73ba6d4`, under the common-path bar. Two adversaries ran, on Opus and Fable, each in its own worktree, and drove the real `pr.sh` from `pr-handbook`'s branch.
+
+The orchestrator's side held in every run:
+
+- each moved head drew one refresh instruction naming both heads;
+- an unchanged head drew nothing;
+- nothing was sent while a round was unanswered;
+- there was no loop after the answering `prs-open`;
+- the phase session handled the instruction correctly, both with no change and on `DEVELOPER-COMMITS`;
+- a restart after a developer commit made during downtime still sent the round.
+
+Both findings sit in contracts that are not on `s-stack-package`. Under the run decision they are recorded, not failed.
+
+| Finding | Adversary | Where it sits |
+| --- | --- | --- |
+| Nothing records the PR creator's last pushed head. `pr-creator.md` reads `PUSHED` "from its status file", but neither the status header nor `phase-session.md` has a slot for it. With `PUSHED` empty, `pr.sh` refreshes over a developer's suggestion and prints `EQUAL`. The phase session reran `runs/s2.sh B` and saw `EQUAL` with the suggestion reverted, and `s2.sh A` printed `DEVELOPER-COMMITS`. The refresh instruction on line 148 names the recorded head, which readers used as `PUSHED`. Line 117's "A pull request merged" round names none. | Opus, Fable | `pr-creator.md`, `pr-commands.md`, `phase-session.md`, C2 |
+| A suggestion the phase took on a stacked child cannot survive the parent's merge and the forge rebase. `pr.sh` prints `FAIL c.txt: child lacks phase commits …` on every later round, or permanent `STOP`s, so no `prs-open` follows. | Fable | `pr-commands.md` matching by the SHA from before the rebase, as Review 14 also recorded |
+
+Both are for `pr-handbook` and the cross-handbook read-through. One change addresses both of them and the timing gap from Verify 35: give `prs-open`, or the header's `pull_requests` entries, the heads the PR creator pushed.

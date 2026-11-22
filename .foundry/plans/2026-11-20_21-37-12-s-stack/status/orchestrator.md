@@ -10,7 +10,7 @@
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
 | Last tick | 2026-11-22 14:31 |
-| Default branch merged at | `ee49f7b` (#93, into `196e5c4`) |
+| Default branch merged at | `25a6b61` (#95, into `829ab81`) |
 
 ## Live sessions
 
@@ -58,7 +58,7 @@ None.
 | `board` (follow-up) | `3940c5b` (tip `de27bbb`) | `284ad88` | VERIFIED on `fe43e00` (no code change since `3940c5b`) |
 | `orchestrator-handbook` | `7cd7034` (tip `2fbf619`) | `ff83115` | NOT VERIFIED on `6703d16` (scoped): cold reads AP (twice), AE, AN, I, Z; branch frozen, phase moved back |
 | `orchestrator-handbook` (post-merge fix) | `9eb7fac` (tip `455c545`) | `a3f4749` | VERIFIED on `9eb7fac` (scoped) |
-| `pr-handbook` | `ab06c83` (tip `c9e0f72`) | `27d6f55` | running (scoped) |
+| `pr-handbook` | `ab06c83` (tip `c9e0f72`) | `27d6f55` | VERIFIED on `899ec3a` (scoped, no code change since `ab06c83`) |
 
 ## Closed sessions
 
@@ -98,7 +98,6 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 ## Merge cautions
 
-- `main` moved to `25a6b61` (#95). Merge it into `s-stack-package` once pr-handbook's post-merge check on `ab06c83` returns, because that check reads this checkout. Then send pr-handbook the merged notice if the check passed.
 
 
 - 2026-11-22 11:34: a `launcher` verifier set `TMUX_TMPDIR` to a directory it had not created, so tmux fell back to the developer's real server and created session `$4` (name `4`, one window, a shell in a scratch repository). The kill was refused by the permission check. The developer was asked to run `tmux kill-session -t '$4'`. Launcher briefs now create `TMUX_TMPDIR` first and confirm tmux cannot connect there before creating any server.

@@ -323,3 +323,22 @@ Of the one-off cold reads, the delegate and move-back case passed. Three cases f
 - The PR creator's `DEVELOPER-COMMITS` report was routed to a feedback round in PR step 2, but PR step 3 ("unless a `STOP`") and the "pull request merged" round sent `prs-open` straight away.
 - The feedback round's step 3 said `prs-open` answers the round, with no exception for a `STOP`.
 - "In Verify, Review, PR or Done, an instruction or a message that asks for a change to the code moves the phase back to Implement first" covered a conflict round, which says for itself when to move back.
+
+## Verify: VERIFIED at `148f7450311affebc0961feb6b509d45f3481bf0`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-22 between 00:35 and 00:39 UTC, at HEAD `507ddc1`. It made no commit.
+
+- Passed: primitives (`94 primitives valid`), root manifest (`12 listed, 19 reached`), markdownlint (13 files, 0 errors), line budgets (phase-session 139, verifier 78, reviewer 41 of 200), package isolation, Tier 1 00:35:18 to 00:37:56 (`all Tier 1 structural checks passed across 20 packages`), the board check (50 `ok`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 00:36:47: 0 matches.
+- Four one-off cold reads, all passing with no contradiction:
+  - a conflict round whose commit the branch already holds changes nothing and resends `prs-open`;
+  - a `STOP` in a "pull request merged" round, and one after the gates in a feedback round, means no `prs-open`, a decision request, and staying in state;
+  - `DEVELOPER-COMMITS` runs the feedback round with `git cherry-pick -x` and both gates before `prs-open`;
+  - a delegate's work lands by cherry-pick, and an instruction in Review moves the phase back to Implement first.
+- Gaps the readers noted, none contradicting a required point:
+  - what answers a fix round while a `STOP` decision request is open;
+  - an `answer` that needs a code change in PR;
+  - whether the feedback round merges the orchestrator branch before Verify;
+  - a no-op conflict round leaves any conflict on a pull request branch to `pr-creator.md`;
+  - the reference file's `fix-round` row lags, which belongs to `foundation`.

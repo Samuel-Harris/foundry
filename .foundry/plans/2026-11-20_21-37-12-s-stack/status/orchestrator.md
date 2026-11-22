@@ -8,9 +8,9 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `c9a7832` (version 7) |
+| Architecture page describes | `410ae2e` (version 8) |
 | Last tick | 2026-11-22 00:51 |
-| Default branch merged at | `bce824b` (#90, into `4d59e8a`) |
+| Default branch merged at | `d6187b5` (#91) |
 
 ## Live sessions
 
@@ -39,7 +39,7 @@ None.
 | 88 | `foundation` | merged into `main` as `054a9e7` | | |
 | 89 | `foundation` | merged into `main` as `5c4d320` | | |
 | 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
-| 91 | `phase-handbooks` | `s-stack-phase-handbooks-follow-up` | `main` | none |
+| 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
 
 ## Merged phases
 

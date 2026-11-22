@@ -9,10 +9,11 @@ This package ships no primitives of its own; it exists so a consumer can install
 - `coding-style`
 - `execution`
 - `git-diff`
-- `planning`
+- `p-stack`
 - `pr`
 - `repo-maintenance`
 - `review`
+- `s-stack`
 - `skill-creation`
 
 ## Install

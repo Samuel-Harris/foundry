@@ -35,11 +35,11 @@ APM_TIMEOUT="${APM_TIMEOUT:-180}"
 # this suite asserts that refusal rather than skipping these packages silently.
 PACK_BLOCKED=" default-stack execution planning repo-init s-stack skill-creation "
 
-# Direct dependencies of the meta-package, plus the one package they pull in
-# transitively (`deep-interview`). A default-stack install
-# therefore deploys nine of the twenty packages,
+# Direct dependencies of the meta-package, plus the two packages they pull in
+# transitively (`planning` and `deep-interview`). A default-stack install
+# therefore deploys eleven of the twenty packages,
 # which is what the scratch-consumer inventory check covers.
-DEFAULT_STACK_DEPLOYED="coding-style deep-interview execution git-diff planning pr repo-maintenance review skill-creation"
+DEFAULT_STACK_DEPLOYED="coding-style deep-interview execution git-diff p-stack planning pr repo-maintenance review s-stack skill-creation"
 
 # Primitives that no longer ship. `design-skill` is deliberately absent: it moved
 # to `skill-creation` and is still deployed.
@@ -223,7 +223,7 @@ for target in "${target_list[@]}"; do
   done
   failures=$((failures + inventory_missing))
   if (( inventory_missing == 0 )); then
-    echo "  [+] $target deployed every skill, agent and instruction file for the nine default-stack packages"
+    echo "  [+] $target deployed every skill, agent and instruction file for the $(wc -w <<<"$DEFAULT_STACK_DEPLOYED" | tr -d ' ') default-stack packages"
   fi
 
   retired_hits=0

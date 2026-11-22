@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "Review"
-changed_at: "2026-11-22T00:34:40Z"
+state: "Implement"
+changed_at: "2026-11-22T00:45:26Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "8fff7f3d20da708eba2817769edb4b5c7ca067af"
@@ -197,6 +197,11 @@ verdicts:
     code_head: "8fff7f3d20da708eba2817769edb4b5c7ca067af"
     at: "2026-11-22T00:34:40Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "8fff7f3d20da708eba2817769edb4b5c7ca067af"
+    at: "2026-11-22T00:45:26Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -367,3 +372,5 @@ The eleventh Review gate returned SIGNIFICANT at `0582ad8`, under the common-pat
 The Review 11 fixes are at `0008162`. `s-stack-package` (`c2ee849`, `foundation`'s follow-up) was merged at `db4f2bf`, and under `launcher-r3` the code head is unchanged. The phase moved to Verify at code head `0008162`.
 
 The thirty-first Verify gate returned VERIFIED at `8fff7f3`. The phase moved to Review, which covers the commits since `0582ad8`.
+
+The twelfth Review gate returned SIGNIFICANT at `8fff7f3`, under the common-path bar. The phase moved back to Implement.

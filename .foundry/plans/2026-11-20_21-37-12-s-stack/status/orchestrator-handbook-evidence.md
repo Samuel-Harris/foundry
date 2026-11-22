@@ -616,3 +616,15 @@ Minor items:
 - Step 5's "new review comment" does not exclude the phase's own replies.
 - A paused phase can be judged stalled.
 - `phase-session.md` line 107's "report" is ambiguous.
+
+## Review 12, code head `8fff7f3d20da708eba2817769edb4b5c7ca067af`, SIGNIFICANT
+
+`interrogate` over the commits since `0582ad8`, under the common-path bar, with two adversaries on Opus and Fable in their own worktrees, each walking a whole feature. The phase session reran the git probe.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| A developer's commit pushed while the phase is not settled is never sent to the phase. The `prs-open` that ends the phase's round resets the baseline to a head that already holds the commit, so the settled check finds nothing. No gate covers it, and the pull request counts as ready. In the Fable case the PR creator never touches that pull request, so this does not depend on `pr-creator.md`. | Opus, Fable | Two git probes, one rerun; four cold reads |
+
+Both walks otherwise reached Done for every phase, through review comments, applied suggestions, "Update branch" on stacked pull requests, a failed check that passes on rerun, a main merge, out-of-order merges, a failed post-merge check with a crash, a roadmap update, a hand-written conflict, and a restart while a PR creator was mid-push.
+
+For the cross-handbook integration: the review-question gap queued after Verify 31 is closed on the phase side by `phase-handbooks`' fix `148f745`, where PR step 3 sends `prs-open`. Check it against that branch when it merges.

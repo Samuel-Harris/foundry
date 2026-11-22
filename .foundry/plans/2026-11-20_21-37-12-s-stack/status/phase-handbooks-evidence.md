@@ -366,3 +366,7 @@ https://github.com/Samuel-Harris/foundry/pull/91 is a draft on branch `s-stack-p
 - The hook and `versioning.py check origin/main` passed. GitHub reports the pull request MERGEABLE.
 
 The phase session checked independently. Against `main`, #91 changes only `phase-session.md` (identical to the phase tip), the lockfile and the `version:` line. The branch holds no file under `.foundry/` and contains `origin/main`. It adds 26 hand-written lines.
+
+## Done, after the follow-up round
+
+#91 merged into main as `d6187b5` at 01:04:52 UTC on 2026-11-22. GitHub confirms the merge, and `148f745` is an ancestor of `s-stack-package`. The orchestrator reports the merge at `4585528`, with its post-merge check VERIFIED on `7e0b76d`. The phase is Done.

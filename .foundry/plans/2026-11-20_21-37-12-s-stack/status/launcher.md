@@ -1,7 +1,7 @@
 ---
 phase: "launcher"
-state: "PR"
-changed_at: "2026-11-22T14:28:54Z"
+state: "Done"
+changed_at: "2026-11-22T14:57:50Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
 code_head: "890d46d63795ca74f298d66e582461dceab118d6"

@@ -697,3 +697,24 @@ Each carried commit ends with `(cherry picked from commit <sha>)`, which names i
 - The stacked child after its parent's squash merge and the forge rebase. The carried commit and the generated-only commit are both dropped.
 
 The line count is still 185.
+
+## Verify 34, code head `73ba6d40af063c44b910e6c0ca61efae1e96d57b`, VERIFIED
+
+A fresh verifier updated the check file for `24b8981` in commit `73ba6d4` (+70/−24, only `checks/orchestrator-handbook.md`) and ran every check at `73ba6d4`.
+
+- **Carried-commit script.** Renamed "`git cherry` tells a carried commit from a developer's commit". Its phase commits regenerate a lockfile in the same commit. Carried copies leave the lockfile out, carry the cherry-pick line, and are followed by a regenerate commit. It asserts that `git cherry` marks the copy `+`, and that the rule leaves only the developer's suggestion and keeps a developer's own `cherry-pick -x` of a commit that is not on the phase branch. A new case covers a forge-rebased stack child, where nothing is left. Three mutants fail where expected: the old rule, the old rule without that case, and a rule that drops every cherry-picked commit. The base-merge script now applies line 148 in full.
+- **Cold reads.** AS, BA, BC and BD now show carried copies marked `+` and drop them by the cherry-pick rule.
+- **C6.** Checks 1, 2, 3, 5 and 7 PASS (`185/200 orchestrator.md`; Tier 1 across 20 packages, outside the sandbox). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: every script in all five check files.
+- **Real branch.** Line 148 applied to pull request 92's branch leaves nothing.
+- **Cold reads.** 65 of 65 pass, none rerun.
+- **Done when.** All items are met, and the private-name grep has 0 hits.
+
+The phase session reran the carried-commit script from the check file at `73ba6d4`, and it passed.
+
+Minor defects, none on the common path:
+
+- Line 148 relies on the PR creator's `(cherry picked from commit <sha>)` line. Only `references/pr-commands.md` on `s-stack-phase-pr-handbook` states it, so this depends on a contract not yet on `s-stack-package`. Check it at the cross-handbook read-through.
+- Line 148 is one dense paragraph, though readers applied it correctly every time.
+- The minor items from Verify 33 stand: lines 96, 97 and 109, lines 13 and 142, and lines 22 to 31.
+
+`s-stack-package` (`ff59e46`, `.foundry/` only) was merged after the gate, and the code head is unchanged.

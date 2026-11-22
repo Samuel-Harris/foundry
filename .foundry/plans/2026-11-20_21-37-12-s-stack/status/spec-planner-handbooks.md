@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "PR"
-changed_at: "2026-11-21T23:36:16Z"
+state: "Implement"
+changed_at: "2026-11-22T00:18:24Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
@@ -103,4 +103,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Both gates passed for `47f792f`. The evidence for the pull request branch `s-stack-spec-planner-port-rule` (`5da7f5d`) is recorded under option A of `spec-planner-handbooks-r1`, and a PR creator is pushing it and opening the draft pull request.
+This is the second follow-up round. #87 merged as `b440889`, and `s-stack-package` is merged in at `7402919`, touching no owned path. There are three items. `planner.md` should say generated paths and generated lines. `spec-writer.md` should point to `SKILL.md`'s "Starting a session" instead of copying the launch steps. Both handbooks should point to the reference for message payloads. #88 has merged, so the pull request targets `main`.

@@ -82,3 +82,15 @@ Recorded as minor, not fixed:
 - **Fable 3.** `verifier.md` cites "the reference file" without its path. The reader did not waive, which is correct.
 - The Opus reader noted `<pr>=<its current head>` in `phase-session.md`'s answer row could be read as a pull request number. It resolved this from the header's `<branch>=<sha>` form.
 - The Fable reader noted no file names the state a phase records between merging `origin/<default>` and re-running the gates after a PR creator `FAIL`. It acted correctly.
+
+## Verify 2: NOT VERIFIED at `ccedb5143a5831c32ad9b08bc26b46ee75f6b0de`, 2026-11-22T15:58:48Z
+
+Fresh Opus verifier. Scope: the phase's work since `faa5b86`, one commit, `d1cecf7`. No waiver: the scope changes handbook text and expected results. Answers and grades are under the session scratchpad's `verify2/` directory.
+
+- Commits: `853fe3a` adds integration cold reads 7 (a frozen phase re-merges at the failed code head) and 8 (which untested changes may be waived). `ccedb51` rewrites point 2 of orchestrator cold reads T and AT, which still expected the old "newer code head" re-merge test that `d1cecf7` replaced. Checked: both commits touch only check files, and the new points keep the same bar.
+- Skill checks 1 to 5 and 7 PASS. Tier 1 passed across 20 packages. All five scripted checks PASS.
+- 64 cold reads: foundation 1 and 3, integration 1 to 4, 7 and 8, and orchestrator A to BD. Every one passed on its counted run except orchestrator AP.
+- **AP FAIL**, point 2. `orchestrator.md` line 165, "Write `depends_on` again for each phase that a later `done-planning` changes", was read as "changes its dependencies". A diagnostic rerun passed. It is not counted.
+- Outside the radius: foundation 2, integration 5 and 6, phase-handbooks, pr-handbook, spec-planner-handbooks, board and launcher. None of their files changed since `faa5b86`.
+
+Next: reword line 165 to "each phase whose entry a later `done-planning` changes", then Verify again.

@@ -1,7 +1,7 @@
 ---
 phase: "integration"
-state: "Review"
-changed_at: "2026-11-22T20:33:13Z"
+state: "PR"
+changed_at: "2026-11-22T20:36:44Z"
 session: "s-stack-phase-integration"
 branch: "s-stack-phase-integration"
 code_head: "eb83e95d58cf0d36069cdb241cd9cc1993e75fe7"
@@ -61,6 +61,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "eb83e95d58cf0d36069cdb241cd9cc1993e75fe7"
     at: "2026-11-22T20:33:13Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/integration-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "eb83e95d58cf0d36069cdb241cd9cc1993e75fe7"
+    at: "2026-11-22T20:36:44Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/integration-evidence.md"
 pull_requests:
   - number: 96

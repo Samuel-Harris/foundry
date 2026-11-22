@@ -195,3 +195,16 @@ Fresh Opus verifier. Scope: `4e19585` and `eb83e95`. No waiver. No commits. Evid
 - Integration 7 and orchestrator A to BD, once each: 57 of 57 PASS, so no reruns were needed.
 - Orchestrator scripted checks, skill checks 1, 2, 3, 5 and 7, and the pre-commit hook over `90f855a...HEAD` all PASS. The default-stack lockfile checks PASS.
 - `versioning.py check origin/main` fails, because s-stack and default-stack are still at `main`'s 0.1.13. The PR creator's regenerate commit raises them.
+
+## Review 4: CLEAR at `eb83e95d58cf0d36069cdb241cd9cc1993e75fe7`, 2026-11-22T20:36:44Z
+
+Scope: `4e19585` and `eb83e95`. Merge `fb12e85` was clean, and its remerge diff is empty. First reviewer: Opus, not allowed to waive. The Fable adversary ran beside it. Repros are under the session scratchpad's `review4-opus/` and `review4-fable/` directories.
+
+- Opus: a script check showed the split keeps all eight scenarios and points, matched in pairs. Cold reads 4a to 4d passed. Three step-5 scenarios passed: the first `done-planning`, a later one, and a later one while frozen.
+- Fable: cold reads 4a to 4d passed, and so did three step-5 scenarios of its own. Both lockfiles match a fresh regenerate. Markdown lint found 0 errors.
+
+Recorded as minor, not fixed:
+
+- `versioning.py check origin/main` fails on the phase branch until the PR creator's regenerate commit raises s-stack and default-stack. That is by design.
+- Step 5's "start each phase whose dependencies are met" does not repeat the exclusive-resource and freeze conditions, which tick step 3 and Merging a phase step 5 hold. Every reader applied them.
+- A phase started by the same later `done-planning` could also be read as getting a `move-back` to Plan. Every reader resolved it correctly.

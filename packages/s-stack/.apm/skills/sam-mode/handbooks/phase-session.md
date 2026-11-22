@@ -60,7 +60,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 ## Verify
 
 1. Move to Verify.
-2. Start a fresh verifier subagent. Its brief gives the absolute path of `handbooks/verifier.md` in the skill directory you read this handbook from, the roadmap, the feature plan, your phase plan, the phase branch, the orchestrator branch, the verification skill, the code head of your newest `VERIFIED` verdict, or none, and, after a `move-back` for a failed check, the failed check. Give it no summary of how you built the phase.
+2. Start a fresh verifier subagent. Its brief gives the absolute path of `handbooks/verifier.md` in the skill directory you read this handbook from, the roadmap, the feature plan, your phase plan, the phase branch, the orchestrator branch, the verification skill, the code head of your newest `VERIFIED` verdict, or none, whether it may waive, as the reference file's waiver rule says, and, after a `move-back` for a failed check, the failed check. Give it no summary of how you built the phase.
 3. Wait for its report. When the verifier commits, its verdict names the code head that includes its commits.
 4. Record the verdict in `verdicts`, and the report's results, outputs and dates in `.foundry/plans/<id>/status/<phase>-evidence.md`. A `.foundry/`-only commit moves no code head.
 

@@ -5,7 +5,7 @@ changed_at: "2026-11-22T12:12:24Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
 code_head: "cf378d80b95d4e250c2a5473876db547b2f72d24"
-waits_for: null
+waits_for: "launcher-r4: the developer decides whether the 2,796-line pull request may exceed the 2,500-line limit"
 verdicts:
   - gate: "verify"
     result: "VERIFIED"
@@ -115,7 +115,14 @@ pull_requests:
     door: "two-way"
     waiting_work: "The launcher's feature-name validation and its test. Every other review fix goes ahead."
     since: "2026-11-21T16:43:47Z"
-requests: []
+requests:
+  - id: "launcher-r4"
+    question: "The launcher's pull request is 2,796 hand-written changed lines, over the 2,500-line hard limit, and about 1,980 of them are tests. May it open as one pull request by exception, or must it be split?"
+    options: ["A. One pull request by exception, with the count and the reason stated in its description. It is ready to push.", "B. A stack of two that moves no code: launch.sh with its start and placement tests, then the remaining test files. The first pull request would ship the --close, --remove, lock and some placement behaviour untested until the second merges.", "C. Split launch.sh itself, with the core start, resume and placement path first and the --close, --remove and --print-window modes second. That needs an implement round and both gates again."]
+    recommendation: "A"
+    door: "one-way"
+    waiting_work: "Pushing the PR branch, opening the draft pull request, and the CI run of s-stack-launcher-tests."
+    since: "2026-11-22T12:20:24Z"
 decisions:
   - id: "launcher-d1"
     decision: "Answer to launcher-r1, option A, from the orchestrator: launch.sh --print-window prints window=<window id> for $TMUX_PANE, exit 3 without tmux and exit 1 outside tmux."

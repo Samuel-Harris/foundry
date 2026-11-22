@@ -1,7 +1,7 @@
 ---
 phase: "integration"
-state: "PR"
-changed_at: "2026-11-22T17:28:10Z"
+state: "Done"
+changed_at: "2026-11-22T17:59:14Z"
 session: "s-stack-phase-integration"
 branch: "s-stack-phase-integration"
 code_head: "90f855ad42b9f67abe0a0150f1da1b05ae81932f"

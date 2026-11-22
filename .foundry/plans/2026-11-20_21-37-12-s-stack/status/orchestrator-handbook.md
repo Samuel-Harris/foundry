@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-22T12:00:14Z"
+state: "Review"
+changed_at: "2026-11-22T12:07:38Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "ff831156b0c01d2fae94e01031147297ccfa242a"
+code_head: "a3f4749585412f4be042c8f479a8971768df5756"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -237,6 +237,11 @@ verdicts:
     code_head: "ff831156b0c01d2fae94e01031147297ccfa242a"
     at: "2026-11-22T11:30:35Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "a3f4749585412f4be042c8f479a8971768df5756"
+    at: "2026-11-22T12:07:38Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests:
   - number: 93
     branch: "s-stack-orchestrator-handbook"
@@ -444,3 +449,5 @@ The PR creator opened draft pull request #93 (`s-stack-orchestrator-handbook` in
 The orchestrator merged the tip `2fbf619` into `s-stack-package` at `7cd7034`. Its scoped post-merge check returned NOT VERIFIED on the check file's cold reads: AP failed twice, AE failed once, and AN, I and Z each failed on the first reader. Every structural check and script passed. `s-stack-package` is frozen. The orchestrator sent `move-back` to Implement, and the phase moved back. `s-stack-package` (`3ac4bf0`) was merged.
 
 AE's scenario is at fault, not the handbook, as the evidence file explains. `orchestrator.md` does not change. The phase moved to Verify at code head `ff83115`, for a scoped Verify under gate-cost rule 1, in which the verifier makes the check-file changes.
+
+The scoped thirty-sixth Verify gate returned VERIFIED at `a3f4749`. `s-stack-package` (`0bcb8d9`) was merged. The phase moved to Review, which covers the commits since `ff83115`.

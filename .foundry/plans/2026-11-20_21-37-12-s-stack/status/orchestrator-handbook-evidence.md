@@ -832,3 +832,19 @@ The orchestrator's scoped post-merge check failed on the cold reads in this phas
 - AN, I and Z each failed on the first reader and passed on the second.
 
 AE: the scenario is wrong, not the handbook. In tick 2, `pe`'s PR creator pushes `h240b…`, but `pe` never sends `prs-open`, while `qof` does for 241. `phase-session.md` ends an "A pull request merged" round with `prs-open` (PR steps 2 and 3). Without it, `pe`'s tick-1 round stays unanswered under `orchestrator.md` line 13. After two ticks with no pull request change, a careful reader can judge `pe` stalled at tick 4, against the expected answer's "told nothing". The fix is to have `pe` send `prs-open` for 240 in tick 2. `orchestrator.md` does not change, so the code head stays `ff83115` until the verifier commits the check file.
+
+## Verify 36 (scoped, gate-cost rule 1), code head `a3f4749585412f4be042c8f479a8971768df5756`, VERIFIED
+
+A fresh verifier changed only the check file, in commit `a3f4749` (10 lines edited):
+
+- **AP.** The reference joins the Files line, and the prompt says "four files".
+- **AE.** Tick 2 says `pe` sent `prs-open` for 240. Point 2 says both `prs-open` messages answer their rounds without making the rewrite expected. Point 4 says `pe` has nothing unanswered and has not stalled. An unscored note covers line 148.
+- **I.** The prompt asks which pull requests are ready and whether `gamma` is told that every pull request has merged. Point 1 states both.
+- **AN.** The prompt asks whether the architecture page changes. Point 7 notes the update, unscored.
+- **Z.** Tick 3 says workmux showed `kaph` working at tick (2). The expected answers are unchanged.
+
+Each changed read ran three times, each with a fresh Opus reader and a fresh Opus grader, and all 15 runs passed. Z's first run was void, because the reader wrote no answer, so it was rerun fresh. markdownlint and the hook passed. Audit: every other read, every script, the other check files and C6 checks 1, 3 to 7 are outside the radius. Their inputs did not change, and the only other change since `ff83115` is the merged-in `version:` line, which is verified under rule 7. The phase session read the diff and found it matches the report.
+
+The verifier's minor note: AE relies on line 136 taking priority over line 148. All three readers applied that priority.
+
+`s-stack-package` (`0bcb8d9`, `.foundry/` only) was merged after the gate.

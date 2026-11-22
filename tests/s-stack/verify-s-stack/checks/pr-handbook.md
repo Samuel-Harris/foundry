@@ -30,7 +30,7 @@ The block builds throwaway repositories under `$TMPDIR` with git's global and sy
 
 `main` holds a package `pkg/` whose `apm.yml` has `version:` on its second line and `description:` on its third, an `apm.lock.yaml` beside each `apm.yml` that lists the package's other files, a twelve-line `shared.txt` and a `README`. The stand-in regenerate command sets `pkg`'s `version:` to the patch after `origin/main`'s and rewrites every lockfile from the tree, and commits with the regenerate subject when that changed anything. The script's parameter lines stay as the reference file ships them.
 
-Each case follows the handbook's round order. A round starts with `git fetch origin` and records every branch on `origin`. Then, for each branch it builds, bottom of the stack first, it removes any worktree a stopped round left at the branch's path and runs `git worktree add --no-track -B <branch> <path> origin/<branch>`. A new branch starts instead from its base as the refresh reads it: the local branch of a parent named in `OWN`, `origin/<parent>` for any other parent, or `origin/main` when the base is `main`. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` with `OWN` set and the regenerate command, and removes the worktree. When every branch has had that, the round proves the local branches with `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request, and with a merged one only where a case lists it. Only when the proof prints `EQUAL` does it run `git push -u origin <branch>`, bottom first, for each branch whose `origin/<branch>` is missing or differs. On any `STOP` or on `NOT EQUAL` it pushes nothing, resets each branch it built to `origin/<branch>` or deletes a new one, and fails the case if any branch on `origin` moved. A crashed round stops after the refresh and regenerate of a branch, with no proof and no reset. `OWN` names the case's own pull request branches: every branch the case builds is added to it before its first refresh, and every refresh and proof is given it. A case that tests the list itself sets it before a build. `MERGED` names the case's own pull request branches that have merged: a squash or true merge of a branch in `OWN` adds it, and every proof is given it. `PUSHED` records, after every round that proves `EQUAL`, the head `origin/<branch>` then holds for each branch the round built, pushed in that round or not, as `<branch>=<sha>`. It starts empty in each new repository, and every refresh and proof is given it; a branch that GitHub or the developer moved keeps the head recorded after its last `EQUAL` round. A case that tests the list itself sets it before a round. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
+Each case follows the handbook's round order. A round starts with `git fetch origin` and records every branch on `origin`. Then, for each branch it builds, bottom of the stack first, it removes any worktree a stopped round left at the branch's path and runs `git worktree add --no-track -B <branch> <path> origin/<branch>`. A new branch starts instead from its base as the refresh reads it: the local branch of a parent named in `OWN`, `origin/<parent>` for any other parent, or `origin/main` when the base is `main`. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` with `OWN` set and the regenerate command, and removes the worktree. When every branch has had that, the round proves the local branches with `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request, and with a merged one only where a case lists it. Only when the proof prints `EQUAL` does it run `git push -u origin <branch>`, bottom first, for each branch whose `origin/<branch>` is missing or differs. On any `STOP` or on `NOT EQUAL` it pushes nothing, resets each branch it built to `origin/<branch>` or deletes a new one, and fails the case if any branch on `origin` moved. A crashed round stops after the refresh and regenerate of a branch, with no proof and no reset. `OWN` names the case's own pull request branches: every branch the case builds is added to it before its first refresh, and every refresh and proof is given it. A case that tests the list itself sets it before a build. `MERGED` names the case's own pull request branches that have merged: a squash or true merge of a branch in `OWN` adds it, and every proof is given it. A proof that passes ends with `EQUAL` and then a `RECORD` line. Once every push of a round whose proof printed `EQUAL` has succeeded, pushed in that round or not, `PUSHED` becomes that `RECORD` line without the word `RECORD`, as the handbook says. When a case's round proves only some of its branches, the entries of the branches that proof does not list are kept. `PUSHED` starts empty in each new repository, and every refresh and proof is given it; a branch that GitHub or the developer moved keeps the entries of its last `EQUAL` round. A case that tests the list itself sets it before a round. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
 
 A round keeps the guarantees when the old `origin/<branch>` is an ancestor of the new one, `origin/main` is an ancestor of it, and it adds at most one merge commit and one regenerate commit. Each case prints `PASS <case>` or `FAIL <case>: <output>`, and the block ends with `<n> failed` and exits `0` only when no case failed.
 
@@ -124,14 +124,15 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `developer commit, then true-merged` | The same with `pr1` and `pr2:main` independent, and `pr1` merged with a merge commit; rounds of `pr2:main` proved with `pr1:main pr2:main` | the same two-remedy `FAIL` and `NOT EQUAL`, no "needs a new pull request" line; then `EQUAL` with the suggestion on `pr2` |
 | `merged one listed after main edits its file` | Independent `pr1:main` (eight-line `a.txt`) and `pr2:main`; `pr1` squash-merged; the phase merges `origin/main` and a round of `pr2`; another pull request on `main` edits `a.txt` line 8, the phase merges `origin/main` again, and a round, each proved with `pr1:main pr2:main` | both rounds exit `0` with `EQUAL` and no `neither the phase's` or head `FAIL`, `pr2` has `main`'s line 8 and diff `b.txt` |
 | `merged one with a developer commit, local branch stale` | Independent `pr1:main` and `pr2:main`; a suggestion on `origin/pr1` that the local `pr1` lacks; `pr1` squash-merged. A round of `pr2`, then the same proof with the local `pr1` moved to `origin/pr1`; then the phase merges `origin/main` and a round | the round and the second proof print the same lines: the two-remedy `FAIL`, no `DEVELOPER-COMMITS`, `NOT EQUAL`, `pr2` unchanged. After the merge: exit `0`, `EQUAL`. |
-| `taken developer commit, child rebased` | Stack `parent:main`, `child:parent`. The developer commits a suggestion to `c.txt` on `origin/child`; the phase takes it with `git cherry-pick -x` and a round of both carries it, pushing nothing because `child` already holds it, and proves `EQUAL`, so `PUSHED` records `child` at the developer's commit. `parent` is squash-merged, and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent`, then another | the carry round pushes nothing and records `child=<developer's commit>`. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `c.txt` is the suggestion, diff `c.txt`, `EQUAL`; the second round leaves `origin/child` unchanged and proves `EQUAL` |
+| `taken developer commit, child rebased` | Stack `parent:main`, `child:parent`. The developer commits a suggestion to `c.txt` on `origin/child`; the phase takes it with `git cherry-pick -x` and a round of both carries it, pushing nothing because `child` already holds it, and proves `EQUAL`. `parent` is squash-merged, and the forge rebases `child` onto `main` with the same tree; three rounds of `child:main::parent`. Then the developer commits a further suggestion to `c.txt` on `origin/child`, and a round | the carry round pushes nothing, and its `RECORD` line names `child` once, at the developer's commit. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `c.txt` is the suggestion, diff `c.txt`, `EQUAL`, and `RECORD` names `child` twice, the developer's commit first and the new head last. The second and third rounds leave `origin/child` and the `RECORD` line unchanged and prove `EQUAL`. The last round exits `1` with `DEVELOPER-COMMITS child <sha>` for the further suggestion, `NOT EQUAL`, `child` and `origin/child` still at it, the further suggestion kept |
 | `twin developer commit` | `pr1` carries phase commits `a`, `a2` (`a.txt` from `a` to `a2`) and a revert to `a`. The developer commits `a.txt` from `a` to `a2` on `origin/pr1`, with the same patch-id as the phase's `a2`; a round | exit `1`, `DEVELOPER-COMMITS pr1 <sha>`, `NOT EQUAL`, `pr1` and `origin/pr1` still at the developer's commit, `a.txt` is `a2` |
 | `rebased child, main moved` | Stack `parent:main`, `child:parent`, pushed. `parent` is squash-merged, `main` changes `README`, and the forge rebases `child` onto that `main`, so the tree changes; a round of `child:main::parent` | exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `README` is `main`'s, diff `c.txt`, `EQUAL` |
 | `rebased child with a developer edit` | The same, but the developer commits a suggestion to `c.txt` on `origin/child` before the rebase; a round; then the phase commits the head's `c.txt` and a round carries that commit | first: exit `1`, `DEVELOPER-COMMITS child <rewritten head>`, `NOT EQUAL`, `child` and `origin/child` unchanged, the suggestion kept. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept, the suggestion kept, `EQUAL`. |
 | `taken before the round, child rebased` | Stack `parent:main`, `child:parent`, pushed. The developer commits a suggestion to `c.txt` on `origin/child` and the phase takes it with `git cherry-pick -x`; before any round, `parent` is squash-merged and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent` carrying the taken commit | exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `c.txt` is the suggestion, diff `c.txt`, `EQUAL` |
 | `never pushed, no entry` | A first build of `pr1:main` with `PUSHED` naming only `xpr1` | exit `0`, no `STOP`, diff `a.txt`, `EQUAL` |
 | `pushed, no entry` | `pr1` is pushed. A proof with an empty `PUSHED`; then the developer commits a suggestion to `a.txt` and a proof with the recorded entry; then a round and a proof with an empty `PUSHED`, and again with `PUSHED` naming only `xpr1` | each proof without the entry prints `STOP pr1 is on origin but has no PUSHED entry, so its developer commits cannot be told apart` and `NOT EQUAL`, and never `EQUAL`. The proof with the entry prints `DEVELOPER-COMMITS pr1 <sha>`. Each round exits `1` and prints exactly that `STOP`, and `pr1` and `origin/pr1` stay at the developer's commit with the suggestion. |
-| `pushed head missing` | `pr1` is pushed, then `PUSHED` names a head that the repository lacks; a round, then a proof | the refresh exits `1` and prints exactly `STOP pr1 was last pushed at <sha>, which is not here, so its developer commits cannot be told apart`, `pr1` and `origin/pr1` unchanged; the proof prints the same line and `NOT EQUAL` |
+| `pushed head missing` | `pr1` is pushed, then `PUSHED` names a head that the repository lacks, as its only entry and then as an older entry before the recorded head; a round, then a proof, for each | each refresh exits `1` and prints exactly `STOP pr1 was recorded at <sha>, which is not here, so its developer commits cannot be told apart`, `pr1` and `origin/pr1` unchanged; each proof prints the same line and `NOT EQUAL` |
+| `RECORD keeps and drops` | `pr1` is pushed; `main` moves and a round; then a proof with `PUSHED` holding a commit that is not an ancestor of `pr1` before the recorded head | the round's `RECORD` line is exactly `pr1=<new head>`, dropping the old head that the new one descends from. The proof prints `EQUAL` and exactly `RECORD pr1=<that commit>,pr1=<head>`, keeping the head that `pr1` does not descend from |
 
 ```bash
 /bin/bash <<'CHECK'
@@ -151,7 +152,13 @@ pass() { echo "PASS $1"; }
 fail() { echo "FAIL $1"; echo x >> "$S/failed"; }
 export OWN= MERGED= PUSHED=
 own_add() { [[ ",$OWN," == *",$1,"* ]] || OWN=${OWN:+$OWN,}$1; }
-pushed_set() { local e r=; for e in ${PUSHED//,/ }; do [ "${e%%=*}" = "$1" ] || r=${r:+$r,}$e; done; PUSHED=${r:+$r,}$1=$2; }
+ends_equal() { [ "$(echo "$1" | tail -2 | head -1)" = EQUAL ] && [[ "$(echo "$1" | tail -1)" == 'RECORD '* ]]; }
+record_set() {
+  local rec=${1#RECORD } e s n listed=, r=; shift
+  for s; do n=${s%%:*}; listed="$listed${n#origin/},"; done
+  for e in ${PUSHED//,/ }; do [[ $listed == *",${e%%=*},"* ]] || r=${r:+$r,}$e; done
+  PUSHED=$r${r:+${rec:+,}}$rec
+}
 merged_add() { [[ ",$OWN," != *",$1,"* || ",$MERGED," == *",$1,"* ]] || MERGED=${MERGED:+$MERGED,}$1; }
 
 commit() { git add -A && git commit -q -m "$1"; }
@@ -222,10 +229,10 @@ abort() {
 finish() {
   local b; [ "$IN_ROUND" = 1 ] || { IN_ROUND=; code=1; return 1; }
   prove "$@"; R_OUT="$R_OUT${R_OUT:+$'\n'}$out"
-  if [ $code = 0 ] && [ "$(echo "$out" | tail -1)" = EQUAL ]; then
+  if [ $code = 0 ] && ends_equal "$out"; then
     for b in "${RB[@]}"; do [ "$(git rev-parse -q --verify "refs/remotes/origin/$b")" = "$(git rev-parse "$b")" ] && continue
       git push -q -u origin "$b" 2>&1 || { out="$R_OUT"$'\n'"push of $b refused"; code=1; IN_ROUND=; return 1; }; done
-    IN_ROUND=; git fetch -q origin; for b in "${RB[@]}"; do pushed_set "$b" "$(git rev-parse "origin/$b")"; done; out=$R_OUT; code=0; return 0
+    IN_ROUND=; git fetch -q origin; record_set "$(echo "$out" | tail -1)" "$@"; out=$R_OUT; code=0; return 0
   fi
   abort; IN_ROUND=; out=$R_OUT; code=1; return 1
 }
@@ -233,7 +240,7 @@ round() { step "$@" && finish ${PROOF:-$2}; local c=$?; IN_ROUND=; return $c; }
 crashed_round() { step "$@"; local c=$?; IN_ROUND=; return $c; }
 variant() { local b=$1 from=$2 wt="$S/wt.v" c; shift 2; git worktree add -q -b "$b" "$wt" "$from" && (cd "$wt" && "$@"); c=$?; git worktree remove --force "$wt"; return $c; }
 prove() { out=$("$BASH" "$S/pr.sh" prove orch phase origin/main "$@" 2>&1); code=$?; }
-equal() { prove "$@"; [ $code = 0 ] && [ "$(echo "$out" | tail -1)" = EQUAL ]; }
+equal() { prove "$@"; [ $code = 0 ] && ends_equal "$out"; }
 not_equal() { prove "$@"; [ $code = 1 ] && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ]; }
 has() { echo "$out" | grep -q -x -E -- "$1"; }
 added() { echo "$(git rev-list --first-parent --merges --count "$1..$2") $(git rev-list --first-parent --count --grep="$REGEN_RE" "$1..$2") $(git rev-list --first-parent --count "$1..$2")"; }
@@ -844,7 +851,7 @@ c_extend() {
   printf 'one\ntwo\n' > f.txt; commit 'feat: parent adds f'; c1=$(sha)
   printf 'one\ntwo\nthree\nfour\nfive\n' > f.txt; commit 'feat: child extends f'; c2=$(sha)
   step parent parent:main "$c1"; o1="$code $out"; step child child:parent "$c2"; o2="$code $out"; finish parent:main child:parent; o3="$code $out"
-  [ "${o1%% *} ${o2%% *} ${o3%% *}" = '0 0 0' ] && [ "$(echo "$o3" | tail -1)" = EQUAL ] && anc origin/parent origin/child && [ "$(hand origin/parent origin/child)" = 'f.txt ' ] \
+  [ "${o1%% *} ${o2%% *} ${o3%% *}" = '0 0 0' ] && ends_equal "$o3" && anc origin/parent origin/child && [ "$(hand origin/parent origin/child)" = 'f.txt ' ] \
     && [ "$(git show origin/parent:f.txt | wc -l | tr -d ' ') $(git show origin/child:f.txt | wc -l | tr -d ' ')" = '2 5' ] && equal parent:main child:parent \
     && pass "own-phase child extends its parent's file: built on the parent's unpushed head, EQUAL" || fail "own-phase child extends its parent's file: parent $o1; child $o2; proof $o3"
 }
@@ -1237,19 +1244,28 @@ c_taken_rebased() {
   suggest child c.txt 'c, as the reviewer suggested'; s=$(git rev-parse origin/child)
   git checkout -q phase; git cherry-pick -x "$s" >/dev/null; p=$(sha)
   step parent parent:main; step child child:parent "$p"; finish parent:main child:parent || fail "taken-rebased, the pick carried: $out"
-  [ "$(git rev-parse origin/child)" = "$s" ] && [[ ",$PUSHED," == *",child=$s,"* ]] \
-    && pass "a taken developer commit carried with nothing to push: the EQUAL round records origin/child at the developer's commit" || fail "taken-rebased, recorded head: origin/child $(git rev-parse origin/child), PUSHED $PUSHED"
+  [ "$(git rev-parse origin/child)" = "$s" ] && [ "$(child_entries)" = "$s" ] \
+    && pass "a taken developer commit carried with nothing to push: RECORD names child once, at the developer's commit" || fail "taken-rebased, recorded head: origin/child $(git rev-parse origin/child), PUSHED $PUSHED"
   squash parent
   forge child origin/parent || { fail "taken-rebased: the simulated rebase changed the tree"; return; }
   rw=$(git rev-parse origin/child)
   PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
   [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$rw" origin/child && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] \
-    && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal parent:main child:main::parent \
-    && pass "a taken developer commit after GitHub rebases the child: the pushed head accounts for it, EQUAL" || fail "taken-rebased: $o"
-  h=$(git rev-parse origin/child); PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
-  [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/child)" = "$h" ] && equal parent:main child:main::parent \
-    && pass "a taken developer commit after GitHub rebases the child: a further round changes nothing, EQUAL" || fail "taken-rebased, a further round: $o"
+    && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && [ "$(child_entries | tr '\n' ' ')" = "$s $(git rev-parse origin/child) " ] && equal parent:main child:main::parent \
+    && pass "a taken developer commit after GitHub rebases the child: EQUAL, RECORD keeps the developer's commit and adds the new head" || fail "taken-rebased: $o; PUSHED $PUSHED"
+  rec=$PUSHED
+  for r in second third; do
+    h=$(git rev-parse origin/child); PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
+    [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/child)" = "$h" ] && [ "$PUSHED" = "$rec" ] && equal parent:main child:main::parent \
+      && pass "a taken developer commit after GitHub rebases the child: the $r round changes nothing, RECORD unchanged, EQUAL" || fail "taken-rebased, the $r round: $o; PUSHED $PUSHED, was $rec"
+  done
+  suggest child c.txt 'c, as the reviewer suggested again'; s2=$(git rev-parse origin/child)
+  PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
+  [ "${o%% *}" = 1 ] && has "DEVELOPER-COMMITS child $(git rev-parse --short "$s2") ?" && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] && unchanged child "$s2" \
+    && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested again' ] && [ "$PUSHED" = "$rec" ] \
+    && pass "a further developer commit after the rebased child's EQUAL rounds: DEVELOPER-COMMITS, nothing pushed or reverted" || fail "taken-rebased, a further developer commit: $o"
 }
+child_entries() { echo "$PUSHED" | tr , '\n' | sed -n 's/^child=//p'; }
 
 c_twin() {
   init twin; orch; phase
@@ -1346,10 +1362,26 @@ c_pushed_missing() {
   echo a > a.txt; commit 'feat: a'; c1=$(sha)
   round pr1 pr1:main "$c1" || fail "pushed-missing build: $out"
   h=$(git rev-parse origin/pr1); z=0123456789abcdef0123456789abcdef01234567
-  stop="STOP pr1 was last pushed at $z, which is not here, so its developer commits cannot be told apart"
-  PUSHED="pr1=$z"; round pr1 pr1:main; o="$code $out"
-  [ "${o%% *}" = 1 ] && [ "$out" = "$stop" ] && unchanged pr1 "$h" && pass "a recorded pushed head missing here: the refresh STOPs, nothing pushed" || fail "pushed-missing refresh: $o"
-  not_equal pr1:main && has "$stop" && pass "a recorded pushed head missing here: the proof prints the STOP and NOT EQUAL" || fail "pushed-missing proof: $out"
+  stop="STOP pr1 was recorded at $z, which is not here, so its developer commits cannot be told apart"
+  for e in "pr1=$z" "pr1=$z,pr1=$h"; do
+    PUSHED=$e; round pr1 pr1:main; o="$code $out"
+    [ "${o%% *}" = 1 ] && [ "$out" = "$stop" ] && unchanged pr1 "$h" && pass "a recorded head missing here ('$e'): the refresh STOPs, nothing pushed" || fail "pushed-missing refresh ('$e'): $o"
+    PUSHED=$e; not_equal pr1:main && has "$stop" && pass "a recorded head missing here ('$e'): the proof prints the STOP and NOT EQUAL" || fail "pushed-missing proof ('$e'): $out"
+  done
+}
+
+c_record() {
+  init record; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  round pr1 pr1:main "$c1" || fail "record build: $out"
+  h1=$(git rev-parse origin/pr1); on_main 'docs: main moves' readme 2
+  round pr1 pr1:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && [ "$(git rev-parse origin/pr1)" != "$h1" ] && anc "$h1" origin/pr1 && [ "$(echo "$out" | tail -1)" = "RECORD pr1=$(git rev-parse origin/pr1)" ] && [ "$PUSHED" = "pr1=$(git rev-parse origin/pr1)" ] \
+    && pass "RECORD drops a recorded head that the new head descends from" || fail "record, drop: $o; PUSHED $PUSHED"
+  x=$(git commit-tree -p "$c1" -m 'a head pr1 no longer descends from' "$(git rev-parse "$c1^{tree}")"); h2=$(git rev-parse origin/pr1)
+  PUSHED="pr1=$x,pr1=$h2"; prove pr1:main
+  [ $code = 0 ] && ends_equal "$out" && [ "$(echo "$out" | tail -1)" = "RECORD pr1=$x,pr1=$h2" ] \
+    && pass "RECORD keeps a recorded head that the branch does not descend from, before the head" || fail "record, keep: $out"
 }
 
 for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_version_build c_r1_orch_merged c_r1_two_squashed c_r1_stack_moves c_r1_spaces \
@@ -1360,7 +1392,7 @@ for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_versio
   c_extend c_foreign_above c_delegate_after_orch c_mixed_below c_mixed_above c_own_missing \
   c_order_stack_fix c_order_row3_edit c_order_span_chained c_span_unchained c_outside_own c_not_own c_glob c_local_only c_own_refusal \
   c_merged_skipped c_merge_edit_shared c_merge_edit_other c_developer c_update_branch c_update_edit c_landed c_developer_file c_update_child \
-  c_dev_merged_squash c_dev_merged_true c_merged_main_edits c_merged_stale_local c_taken_rebased c_twin c_rebased_equal c_rebased_dev c_taken_before_round c_never_pushed c_no_entry c_pushed_missing; do
+  c_dev_merged_squash c_dev_merged_true c_merged_main_edits c_merged_stale_local c_taken_rebased c_twin c_rebased_equal c_rebased_dev c_taken_before_round c_never_pushed c_no_entry c_pushed_missing c_record; do
   (cd "$S" && "$c") || fail "$c ended early"
 done
 n=$(wc -l < "$S/failed" | tr -d ' ')
@@ -1402,6 +1434,18 @@ Expected answer:
 10. A delegate's branch merged into the phase leaves its commits off the phase's first-parent line, so they are not phase commits. The PR creator opens no pull request for it and reports the output to the phase session, which sends the orchestrator a decision request. Either the phase session rebuilds its phase branch locally without that merge, taking the delegate's commits with `git cherry-pick -x` so they become phase commits that the next round carries, a local rewrite that needs Verify and Review again, or the orchestrator decides otherwise. The branch is left where it started, nothing is pushed.
 11. The phase replaced a file with a directory of the same name, which the design does not handle. The PR creator reports it to the phase session, which sends the orchestrator a decision request: whether to split that change by hand, or to undo it in the phase. The branch is left where it started, nothing is pushed.
 12. A rewritten pull request branch is a history the design does not detect. The round may print `EQUAL`, or a stop whose remedy has nothing to commit, and it can put the phase's version back over the developer's change, because an amended commit keeps its `cherry-pick` line. It is out of scope: the handbook states as a precondition that nobody rewrites a pull request branch. The developer adds commits on top, uses "Update branch", or comments. The PR creator does not work around it. If it happens, the phase session reports it to the orchestrator before any round. Each description asks reviewers to add commits on top, use "Update branch" or comment, and never to rewrite the branch with an amend, a squash or "Update with rebase".
+
+### Cold read. What `PUSHED` holds and what to report after an `EQUAL` round
+
+The recorded heads decide which commits the proof counts as the developer's, and the PR creator learns from the handbook's prose what to pass and what to hand back, so this check is a cold read. Start a fresh subagent, give it only `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`, tell it to read nothing else, and ask the question. Its answer passes when it agrees in substance with every point of the expected answer. Wait for it to finish before reporting.
+
+Prompt: "Read only the file `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md` and nothing else, not even files it links to or names. Answer from it alone. You are the PR creator for phase `widgets`, whose pull request branches are `widgets-a` and `widgets-b`. (1) What value do you pass as `PUSHED` to `pr.sh refresh` and `pr.sh prove`, and where does it come from? What does it hold for a branch you have never pushed, and may a branch appear in it more than once? (2) A round's proof prints `EQUAL` and then `RECORD widgets-a=1111111,widgets-b=2222222,widgets-b=3333333`. Every `origin/<branch>` already equals its local head, so the round pushes nothing. What do you report about `PUSHED`, and what does the phase session do with it? (3) The same round, but a push of `widgets-b` fails. What do you report?"
+
+Expected answer:
+
+1. `PUSHED` is the `RECORD` line of the last proof that printed `EQUAL`, without the word `RECORD`. The phase session's brief gives it from its status file. It is passed to both the refresh and the proof. A branch never pushed has no entry, and a branch may have several entries.
+2. The PR creator reports the proof's `RECORD` line as printed, all three entries including both for `widgets-b`, even though the round pushed nothing. It does not build the value itself from `origin/<branch>`. The phase session records the line in its status file, and it becomes the next round's `PUSHED`.
+3. It reports the push failure and not the `RECORD` line.
 
 ## Evidence
 

@@ -115,6 +115,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
   - Include: `SKILL.md`'s "repository root" leaves a worktree session to work out which root it means (readers chose the worktree root, which is right). Raised by `spec-planner-handbooks` at `775a30a`. Its other item, `phase-session.md` line 26, is in `phase-handbooks`' current round.
   - Include: `board` took its `needs_update` wording from `orchestrator.md` on the `orchestrator-handbook` branch at `1e0a39e`, because that handbook is not yet on `s-stack-package`. Check the two still match once it merges.
   - Include: `pr.sh`'s proof run against `origin/s-stack-package` gives false merge FAILs, because only the developer pushes that branch and it lags the local one. The handbooks should name the local orchestrator branch. Raised by `board`'s PR creator.
+  - Include: the board template's `needs_update` rule says "draft or open pull request", while `orchestrator.md` lines 113 to 116 say "open pull request". Make them use the same words. Raised by `orchestrator-handbook` at `9c1e21f`.
   - Include: the run decision on parallel package versions. `pr-creator.md` and `orchestrator.md` may need to state it.
 
 ## Post-merge check briefs

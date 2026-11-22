@@ -147,3 +147,19 @@ Fresh Opus verifier, with the orchestrator's rerun rule in its brief. Scope: `82
 - Skill checks 1 to 5 and 7 PASS. The pre-commit hook over `982bdc4...HEAD` exited 0. Three orchestrator scripted checks PASS.
 - Cold reads: orchestrator A to BD and integration 4 and 7, 58 in all. 57 passed on their first run, including D, T, V, AT, I and J.
 - Orchestrator BB failed its first run on point 1: the reader called an "Update branch" merge a developer commit. That reading rests on `orchestrator.md` lines 141 and 149, which this scope did not change. Both reruns, each with a fresh reader and grader, passed. Recorded as reader variance under `integration-d3`.
+
+## Review 3: CLEAR at `90f855ad42b9f67abe0a0150f1da1b05ae81932f`, 2026-11-22T17:28:10Z
+
+Scope: `82a30d2`, `4393405` and `90f855a`. First reviewer: Opus, not allowed to waive. The Fable adversary ran beside it. Repros are under the session scratchpad's `review3-opus/` and `review3-fable/` directories.
+
+- Probes from Reviews 1 and 2, run again by both reviewers: the timeout default is not waived, the frozen phase re-merges with the failed check run, and a Done phase's status-only merge during a freeze runs no check and leaves the branch frozen. All PASS.
+- Opus: two new cold reads, a second failure on a frozen re-merge and the quiet test with a waiting prompt. Both PASS.
+- Fable: verbatim reruns of integration 7 and orchestrator V and J, its own quiet-test scenario, and a last-phase full-run failure owned by another phase. All matched.
+
+Recorded as minor, not fixed:
+
+- Integration cold read 4, line 66, still says "frozen until a later check passes", which is looser than the handbook but does not contradict it.
+- "The frozen phase" is inferred, not defined, when a full run fails in paths owned by a phase other than the one just merged. Both readers inferred correctly.
+- Step 7's "after a passing check only" does not say whether a failed full run holds back the just-merged phase's `stop`.
+- A `WAIVED` verdict given after the failed check satisfies step 5's timing rule, as integration cold read 7 expects.
+- No cap on repeated `move-back` cycles for a check that fails intermittently, and which failure time step 5 means after two failures.

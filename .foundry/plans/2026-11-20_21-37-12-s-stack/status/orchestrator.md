@@ -21,6 +21,7 @@
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 | `s-stack-phase-spec-planner-handbooks` | `%195` | `../s-stack-phase-spec-planner-handbooks` | 2026-11-22, resumed for its second follow-up round |
 | `s-stack-phase-phase-handbooks` | `%196` | `../s-stack-phase-phase-handbooks` | 2026-11-22, worktree recreated and session resumed for its follow-up round |
+| `s-stack-phase-board` | `%197` | `../s-stack-phase-board` | 2026-11-22, worktree recreated and session resumed for its follow-up round |
 
 ## Open decision requests
 
@@ -56,7 +57,6 @@ None.
 | Session | Worktree | Closed | Last commit |
 | --- | --- | --- | --- |
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
-| `s-stack-phase-board` | removed, branch kept | 2026-11-21 | Done at `c7dcf1a`, merged; #86 merged into `main` |
 | `s-stack-phase-foundation` | removed, branch kept | 2026-11-22 | Done at `5423ae5`, merged; #88 and #89 merged into `main` |
 
 ## Queued fix rounds
@@ -108,13 +108,6 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
   - Include: `references/status-and-messages.md`'s `fix-round` row carries only "the pull request and its comments, or the failed check". It must also carry the developer's commits, as the developer-commit rule and `phase-session.md`'s feedback round now do. Raised by `phase-handbooks` at `5d30a59`.
   - Include: `SKILL.md`'s "repository root" leaves a worktree session to work out which root it means (readers chose the worktree root, which is right). Raised by `spec-planner-handbooks` at `775a30a`. Its other item, `phase-session.md` line 26, is in `phase-handbooks`' current round.
   - Include: the run decision on parallel package versions. `pr-creator.md` and `orchestrator.md` may need to state it.
-- `board` (Done): the board template's schema comment (C5) describes `needs_update` as containing main's tip with passing checks. `orchestrator.md` at `20c031a` also requires the heads of open dependencies. Make the comment match. Raised by `orchestrator-handbook`.
-
-## Follow-ups after foundation's round merges
-
-Raised by `foundation`'s follow-up review. Foundation's round has merged. Start `board`'s round once `foundation`'s pane closes, to keep the right column readable.
-
-- `board` (Done): `assets/status-board.html` lines 77 and 283 still offer a "restack" need, but the restack kind is gone under automatic stacking.
 
 ## Post-merge check briefs
 

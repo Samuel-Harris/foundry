@@ -550,3 +550,29 @@ Minor items:
 - GitHub's "Update branch" merge counts as a developer commit.
 - The order of restart messages is not stated.
 - Check-file gaps: AT point 1 and Z's tick 2.
+
+## Verify 29, stopped without a verdict
+
+The verifier for `df8b532` was stopped before it committed anything, so that the orchestrator's "Update branch" instruction could fold into the round.
+
+## Verify 30, code head `0582ad8893691db277312e9ccc4ca3fff799b545d`, VERIFIED
+
+A fresh verifier updated the check file for `df8b532` and `90f463d` (commits `017dc5f` and `0582ad8`, with a new cold read AY, and Verify 28's two check-file gaps fixed) and ran everything twice. The verdict rests on the full rerun at `0582ad8`. C6 checks 1, 2, 3, 5 and 7 PASS (`185/200 orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: the board's 50 Chrome scenarios, the three other scripts, and 60 cold reads across five check files.
+
+Every **Done when** item was met:
+
+- The handbook has 185 lines, and no command line appears.
+- A private-name grep across the phase's files, diff and commit messages found 0 hits.
+
+No defect breaks the common path. For the cross-handbook integration:
+
+- Supervision's stall `--close` timing is not quiet-gated.
+- No tick step is named for the developer-commit round.
+- A developer commit pushed while a round is unanswered looks like a PR creator push. This depends on `pr-creator.md`.
+- Readiness is not tied to an unanswered feedback round.
+- A refresh round can be resent each quiet tick.
+- `phase-session.md` line 122's Plan case reads as missing a listed phase whose entry did not change.
+
+## Merge of `s-stack-package` at `de508d0`, under run decision `launcher-r3`
+
+`s-stack-package` (`a4bf95f`, the `spec-planner-handbooks` follow-up) was merged at `de508d0`. Outside `.foundry/` it touched `packages/s-stack/.apm/skills/sam-mode/handbooks/planner.md` and `tests/s-stack/verify-s-stack/checks/spec-planner-handbooks.md`, plus the generated lockfile. None is an owned path, so the code head and verdicts stay at `0582ad8`.

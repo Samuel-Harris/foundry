@@ -822,3 +822,13 @@ Both are for `pr-handbook` and the cross-handbook read-through. One change addre
   - the branch holds no `.foundry/` file and no merge commit;
   - a grep of the title, the description and the commit messages finds no private name.
 - Pushed head for the next `PUSHED`: `s-stack-orchestrator-handbook=07adeba657325567e45c983f295bb2c2a87c0936`. The C2 header has no slot for it, as Review 15 recorded.
+
+## Post-merge check at `7cd7034`, NOT VERIFIED, and the phase session's call on AE
+
+The orchestrator's scoped post-merge check failed on the cold reads in this phase's check file. Every structural check and script passed.
+
+- AP failed twice. Its point 1 needs the `done-planning` detail line, which only `references/status-and-messages.md` line 87 states, and AP's Files line does not give that file.
+- AE failed once. Its first reader judged `pe` stalled at tick 4.
+- AN, I and Z each failed on the first reader and passed on the second.
+
+AE: the scenario is wrong, not the handbook. In tick 2, `pe`'s PR creator pushes `h240b…`, but `pe` never sends `prs-open`, while `qof` does for 241. `phase-session.md` ends an "A pull request merged" round with `prs-open` (PR steps 2 and 3). Without it, `pe`'s tick-1 round stays unanswered under `orchestrator.md` line 13. After two ticks with no pull request change, a careful reader can judge `pe` stalled at tick 4, against the expected answer's "told nothing". The fix is to have `pe` send `prs-open` for 240 in tick 2. `orchestrator.md` does not change, so the code head stays `ff83115` until the verifier commits the check file.

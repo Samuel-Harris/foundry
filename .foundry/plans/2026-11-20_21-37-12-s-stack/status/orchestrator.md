@@ -20,6 +20,7 @@
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
 | `s-stack-phase-board` | `%197` | `../s-stack-phase-board` | 2026-11-22, worktree recreated and session resumed for its follow-up round |
+| `s-stack-spec` | `%198` (orchestrator column) | `../s-stack-spec` | 2026-11-22, spec writer for the developer's question on verify and review cost |
 
 ## Open decision requests
 

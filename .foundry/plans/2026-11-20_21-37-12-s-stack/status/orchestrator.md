@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
-| Last tick | 2026-11-22 14:31 |
+| Last tick | 2026-11-22 14:51 |
 | Default branch merged at | `25a6b61` (#95, into `829ab81`) |
 
 ## Live sessions
@@ -39,7 +39,7 @@ None.
 | 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
 | 92 | `board` | merged into `main` as `92a91f7` | | |
 | 93 | `orchestrator-handbook` | merged into `main` as `ee49f7b` | | |
-| 94 | `launcher` | `s-stack-launcher` | `main` | none |
+| 94 | `launcher` | merged into `main` as `0fdbb53` | | |
 | 95 | `pr-handbook` | merged into `main` as `25a6b61` | | |
 
 ## Merged phases
@@ -99,6 +99,8 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
 ## Merge cautions
+
+- `main` moved to `0fdbb53` (#94). Merge it into `s-stack-package` once launcher's post-merge check on `a51f246` returns, because that check reads this checkout. Then send launcher the merged notice if the check passed.
 
 
 

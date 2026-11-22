@@ -339,3 +339,14 @@ The verifier's check-file commits are `af0fc8b` and `d7f2260`, on top of code he
 - **Finding 1, significant on the common path.** A developer commits a suggestion on a stacked child. The phase takes it with `git cherry-pick -x`, and a round carries the pick. The carry skips it because the branch already holds the commit, so nothing is pushed, and `PUSHED` keeps the head from before the suggestion. After the parent's squash merge and GitHub's rebase, the recorded head lacks the developer's commit. The taken commit is then unaccounted. Every round prints `FAIL c.txt: child lacks phase commits ... Apply suggestions from code review;, so they need a pull request` and `NOT EQUAL`, with nothing pushed. The verifier's case is `taken developer commit, child rebased`.
 - **Finding 2, fixed.** An empty `PUSHED` on a pushed branch stops in refresh and in prove, and never prints `EQUAL`.
 - **Not a finding.** Recording pushed heads on the phase side is the known integration item owned elsewhere.
+
+## Verify 22, NOT VERIFIED at `bce4cc8`
+
+The verifier's check-file commit is `bce4cc8`, on top of code head `b0adfc6`. The gate was scoped to the phase's own diff since `d6067a3` under run decision `gate-cost`. Each check file's out-of-radius checks are listed with reasons in the verifier's report: routes, launcher tests, board, foundation cold reads, orchestrator-handbook, phase-handbooks and spec-planner-handbooks. In the radius:
+
+- Primitives, lint, line budgets, isolation and `apm audit --ci` passed.
+- Tier 1 passed across 20 packages.
+- The STOP cold read passed, and so did a new cold read on which head to record after an `EQUAL` round that pushed nothing.
+- The check block printed 129 PASS and `2 failed`, both from the finding below.
+
+- **Finding, significant on the common path.** The history: the phase takes a developer commit `s` on a stack child as `p`, a round carries it without a push, the parent is squash-merged, and GitHub rebases the child. The first round after that proves `EQUAL` and records the rewritten head. Every round after it prints `FAIL c.txt: child lacks phase commits ... Apply suggestions from code review;, so they need a pull request` and `NOT EQUAL`. The cause: `p`'s trailer names `s`, and once the recorded head moves past the rebase, nothing reachable holds `s`. With the old push-only recording, the same case fails one round earlier. Two fixes have now failed on the same premise, that one recorded head per branch is enough.

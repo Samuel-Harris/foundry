@@ -253,3 +253,45 @@ Minor findings, recorded and not fixed under `spec-planner-handbooks-d3`:
 
 - `SKILL.md`'s "Starting a session" says "with the repository root as the working directory". A session in a worktree has to work out which root that means. Readers chose the worktree root, which is correct. The old `spec-writer.md` said "worktree root".
 - `handbooks/phase-session.md` line 26 names only generated paths for the code head, while `planner.md` and the reference now also name generated lines.
+
+## Second follow-up round: pull request evidence before the push
+
+A fresh PR creator built `s-stack-spec-planner-owner-pointers` from `origin/main` (`5c4d320`, after #89 merged with s-stack at 0.1.5). `pr.sh refresh` stopped, because the earlier phase commits on `spec-writer.md` reached `main` only through #84, which has no cherry-pick trailers. So the PR creator carried `eabb628` and `775a30a` with `git cherry-pick -x -n`, without the lockfile hunk, as the script's own carry does. It then added regenerate commit `561e71c`, which `versioning.py bump` set to s-stack 0.1.6, with the hook on. Nothing was pushed. The phase session checked the stat, the version diff, the byte identity and the `.foundry` check itself.
+
+**Proof.** `pr.sh prove` printed NOT EQUAL. Its lines were `DEVELOPER-COMMITS s-stack-spec-planner-handbooks` with 27 SHAs, then:
+
+```text
+FAIL s-stack-spec-planner-handbooks: it changes AGENTS.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes apm.yml, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes docs/COMPATIBILITY.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes docs/DEPENDENCY-CONTRACTS.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.apm/skills/sam-mode/references/status-and-messages.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.apm/skills/sam-mode/SKILL.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.gitignore, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/apm.yml, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/README.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes README.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/acceptance.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/s-stack/verify-s-stack/checks/foundation.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/s-stack/verify-s-stack/SKILL.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/structural/run-tier1.sh, which the phase does not
+FAIL s-stack-spec-planner-handbooks: its head differs from its target tree
+NOT EQUAL
+```
+
+Every line comes from the history of #84, whose 27 untrailered pre-squash commits touch exactly those 14 files. No line concerns #87 or the new branch.
+
+**Head versus target, by direct comparison.** The expected tree is `origin/main`, plus the three blobs from `775a30a`, plus the regenerate diff. It is `2097cffe79c670f1be519b9c94359be24ac49d91`, the same as the branch tree.
+
+**`git diff origin/main 561e71c --stat`:**
+
+```text
+ .../s-stack/.apm/skills/sam-mode/handbooks/planner.md    |  6 +++---
+ .../.apm/skills/sam-mode/handbooks/spec-writer.md        | 15 ++++-----------
+ packages/s-stack/apm.lock.yaml                           | 16 ++++++++--------
+ packages/s-stack/apm.yml                                 |  2 +-
+ .../verify-s-stack/checks/spec-planner-handbooks.md      |  9 +++++----
+ 5 files changed, 21 insertions(+), 27 deletions(-)
+```
+
+The `apm.yml` change is only `version: "0.1.5"` to `"0.1.6"`. The three owned files are byte-identical to `775a30a`, and no `.foundry/` path is on the branch. The hook exited 0, and `versioning.py check origin/main` printed `1 changed package(s), none without a version bump`. The full log is the PR creator's `r2-evidence.md` in the phase session's scratchpad.

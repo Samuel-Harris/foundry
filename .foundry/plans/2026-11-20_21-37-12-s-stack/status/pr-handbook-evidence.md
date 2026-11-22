@@ -246,3 +246,17 @@ The fourth `interrogate` run used Opus and Fable, with the brief in `handbooks/r
 - The handbook does not say to skip merged pull requests in a round.
 
 **Fallback.** Under d9 condition 4 and d11 the design is not changed. The implementation bugs are fixed. The two premise defects are turned into proof `FAIL`s that push nothing and are documented as unhandled histories, because a wrong `EQUAL` is never acceptable.
+
+## Verify: NOT VERIFIED at `c3a5c5baf8915f8868535de60b90781e8be4c4d6`
+
+A fifteenth fresh verifier covered `85bb0a5` plus its own check-file commit `c3a5c5b`. That commit adds seventeen cases and corrects the merged-dependency restore command in the cold read.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING. Check 8 passed for `board`, `foundation`, `phase-handbooks` and `spec-planner-handbooks`. For `pr-handbook.md`, the parse, the budget (159/200) and the eleven-point cold read passed, but the scratch block printed 101 PASS and `2 failed`.
+- **New cases.** Fifteen of them fail at `697c739` and pass now: the refresh order, the split fault, `outside()` and `not()` through `OWN`, the glob path, the local-only branch, the `OWN` refusal, both merge-edit cases, the developer commit, and landed content without the merged pull request listed.
+
+Defects:
+
+- **Significant: a developer's edit inside a merge on a pull request branch is reverted with `EQUAL`, against d15.** `own()` skips merges, so the refresh rebuilds the tree and undoes the edit, and the proof checks only the new head.
+- **Significant: d16's history fails when the handbook is followed.** Listing the merged pull request, built without trailers, reports its old commit as `DEVELOPER-COMMITS` and fails its head against a target tree.
+- **Minor, could mislead.** A developer commit that adds a new file gets the delegate and forge `STOP` "would carry" instead of `DEVELOPER-COMMITS`.
+- **Not run.** The two `## Evidence` checks need GitHub.

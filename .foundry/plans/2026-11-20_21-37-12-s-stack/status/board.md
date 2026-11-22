@@ -1,10 +1,10 @@
 ---
 phase: "board"
-state: "Verify"
-changed_at: "2026-11-22T00:41:54Z"
+state: "Review"
+changed_at: "2026-11-22T01:01:30Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
-code_head: "5fc142fa893c0d4ce4492602b5cd2f99e1764e49"
+code_head: "284ad88a3929192851895e2650198266bcddca75"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -56,6 +56,11 @@ verdicts:
     result: "CLEAR"
     code_head: "afd3f270ba9c2ddc689b0afe12927591941ccc7f"
     at: "2026-11-21T21:41:33Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "284ad88a3929192851895e2650198266bcddca75"
+    at: "2026-11-22T01:01:30Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
 pull_requests:
   - number: 86
@@ -136,3 +141,5 @@ Pull request #86 merged into `main` as `51f334e`. The code head `afd3f27` is mer
 The orchestrator opened a two-item follow-up round (`board-d8`), so the phase moved from Done back to Implement. The worktree was recreated on the phase branch at `c7dcf1a`.
 
 Follow-up round: `s-stack-package` was merged under C7 at `a60b107`, cleanly, bringing s-stack 0.1.5. `73251d3` removes the restack need kind and aligns the `needs_update` rule with `orchestrator.md`, as it stands on `s-stack-phase-orchestrator-handbook`, because that file is not yet on `s-stack-package`. `quick-review` (bug and quality) found no significant defect in the code. Both reviewers flagged that "open" collides with the schema's `open` state, which would leave drafts out. `5fc142f` names draft and open pull requests, says the flag is set and cleared, and says required checks come from the repository. The Verify gate is starting for `5fc142f`.
+
+`s-stack-package` was merged again at `f674585`, touching no board path. The verifier updated `checks/board.md` for the removed kind at `284ad88`, the new code head, and returned VERIFIED. The Review gate is starting over `afd3f27..284ad88`.

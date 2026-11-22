@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Implement"
-changed_at: "2026-11-22T00:20:00Z"
+state: "Verify"
+changed_at: "2026-11-22T00:31:30Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "0ad72927067f8875e5db62d10156c4c867b9291b"
+code_head: "e8bc6e10bacd2b790df9b238975ae24750d61bb9"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -166,3 +166,5 @@ The idle rule now reads argument lists (launcher-d16). 113 tests pass on macOS a
 The verifier at 061f71e found the busy-shell tests too weak, and they are fixed. Verify runs at 0ad7292.
 
 Merge 481497e of `s-stack-package` at a4bf95f (spec-planner-handbooks follow-up) touched `packages/s-stack/.apm/skills/sam-mode/handbooks/planner.md`, `tests/s-stack/verify-s-stack/checks/spec-planner-handbooks.md` and the generated lockfile. None of these is a launcher-owned path, so under launcher-d14 the code head stays 0ad7292 and the Verify verdict stands.
+
+Merge 99599dc of `s-stack-package` at 99953ad (foundation's follow-up) touched only foundation's files: `SKILL.md`, `references/status-and-messages.md`, the verification skill, `checks/foundation.md`, the version line and the lockfile. The fourth review's two significant findings are fixed: the squashed right-hand column, and `ps -ww` against `COLUMNS` truncation. 118 tests pass on macOS and Ubuntu in both locales. Verify runs at e8bc6e1.

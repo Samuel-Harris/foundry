@@ -10,8 +10,8 @@ Your workers are main sessions that the launcher starts, not subagents, and each
 
 - Read the evidence, not the report. A status file, a commit and a pull request's live state outrank a message, including one that says a phase is done.
 - Check a pull request's live state before you report on it or act on it.
-- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR has work only while a `fix-round`, `instruction` or `move-back` you sent it is unanswered. A `move-back` is answered once the phase's status reaches that state. A `fix-round` for review comments, a failed check or a conflict is answered only by a `prs-open` that follows the phase's return to PR after you sent the round. Any other `fix-round` or `instruction` is answered by the reply it asks for, such as a `prs-open` after a refresh or a state change after the merged notice. Nothing a phase does in response to a `stop` you sent answers a message. Otherwise tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported since you last started it has no work.
-- Retry by cause. A session that ended or lost its connection resumes with the launcher. A session whose conversation is the problem, because it loops, its context is full or it has stalled, gets `stop`, then in the next tick `--close` and a launch with `--fresh`. Then send the fresh session every message the phase left unanswered.
+- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR has work only while a `fix-round`, `instruction` or `move-back` you sent it is unanswered. A `move-back` is answered once the phase's status reaches that state. A `fix-round` for review comments, a failed check or a conflict is answered only by a `prs-open` sent after the round while the phase is in PR. Any other `fix-round` or `instruction` is answered by the reply it asks for, such as a `prs-open` after a refresh or a state change after the merged notice. Nothing a phase does in response to a `stop` you sent answers a message. Otherwise tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported since you last started it has no work.
+- Retry by cause. A session that ended or lost its connection resumes with the launcher. A session whose conversation is the problem, because it loops, its context is full or it has stalled, gets `stop`, then, once it is quiet in a later tick, `--close` and a launch with `--fresh`. Then send the fresh session every message the phase left unanswered.
 - Ask the developer only for a real decision: a one-way door, a product or preference call, or a blocker that survived a restart. Merge mechanics, retries and fix rounds never reach the developer.
 - Never read a phase plan, a diff or long pane output yourself. Give it to a fresh subagent and keep its conclusion. Send your own messages, never through a subagent.
 
@@ -53,7 +53,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 - Live sessions: name, pane, worktree, started, the tick in which it began stopping, if it is stopping, and whether you have told it that every pull request merged. Drop a session's row when you close its pane.
 - Unanswered messages: phase, kind, what each `fix-round`, `instruction` or `move-back` said, and the code head when you sent it, kept until it is answered as Supervision says.
 - Open decision requests: id, phase, door, since.
-- Pull requests under watch: number, phase, branch, base, head, its head when the phase's last `prs-open` arrived, depends on, `needs_update`, and the code head at each phase's last `prs-open`.
+- Pull requests under watch: number, phase, branch, base, head, its head in the `pushed` line of the phase's last `prs-open`, depends on, `needs_update`, and the code head at each phase's last `prs-open`.
 - Merged phases: merge commit, phase code head, post-merge check result.
 
 ## The tick
@@ -72,7 +72,7 @@ Run these steps in order on every tick. While the orchestrator branch is frozen,
 4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, and none in a tick whose default-branch merge committed, so a failing post-merge check names one change. Finishing a phase's status-only merges are exempt from both limits. Before merging, ask each quiet phase in PR whose newest verdicts name its current code head, but which has sent no `prs-open` at that code head, to send `prs-open` once a pull request holds that code, with an `instruction`. Tell phases about flagged pull requests, as [Keeping pull requests up to date](#keeping-pull-requests-up-to-date) says. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
 5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
 6. **Record.** Update the tracker with the tick time, and commit it.
-7. **Publish.** Write the board's changed documents in one database batch. When a phase merged and passed its post-merge check, or a roadmap update merged, have a fresh subagent update the architecture page.
+7. **Publish.** Write the board's changed documents in one database batch. When a phase merged and passed its post-merge check, or needed none, or a roadmap update merged, have a fresh subagent update the architecture page.
 8. **Report.** End the turn without a reply unless something needs the developer. Then say what, in a few lines.
 
 The board documents a tick writes:
@@ -92,9 +92,9 @@ To abort a merge, run `git merge --abort`. If it refuses because a hook or check
 1. On the orchestrator branch, run `git merge --no-ff --no-commit <tip SHA>`.
 2. If it conflicts anywhere, run `git merge --abort` and send the phase `merge-orchestrator-branch`. Never resolve the conflict.
 3. Regenerate with the feature plan's command, stage the result, and commit with the hooks on. If a hook refuses, abort the merge and send the phase `merge-orchestrator-branch`.
-4. Have a fresh subagent run the feature's verification skill on the orchestrator branch. Record the result in the tracker.
+4. Have a fresh subagent work out the blast radius of the merge's first-parent diff, as `verifier.md` defines it, and run the checks in it on the orchestrator branch. A merge that changes only `.foundry/`, or only generated paths and lines, needs no check. No waiver applies. Record the result, or that none was needed, in the tracker.
 5. If the check fails, the orchestrator branch is frozen until a later check passes. Send `move-back` to Implement to the phase, naming the failed check. Before it verifies again it merges the orchestrator branch, which holds the combination that failed. While frozen, start no new phase, merge no other phase and not the default branch, and send `merge-orchestrator-branch` to no other phase. Merge the phase again only when both its newest verdicts name a code head newer than the one that failed.
-6. If it passes, send `merge-orchestrator-branch` to every other live phase that has not reached PR, and start the phases that now have their dependencies.
+6. If it passes, send `merge-orchestrator-branch` to every other live phase that has not reached PR, and start the phases that now have their dependencies. When this merge was the last phase of the feature plan to merge, have a fresh subagent run the whole verification skill on the orchestrator branch. Handle a failure as in step 5, sending `move-back` to Implement to the phase that owns the failing paths.
 7. After a passing check only, once none of its pull requests has `needs_update` set and nothing you sent it is unanswered, and unless every pull request of the phase has merged, which means Finishing a phase tells it instead, send the merged phase `stop`. [Finishing a phase](#finishing-a-phase) closes its pane once it is quiet. Its worktree stays until the phase is Done.
 
 ## Merging the default branch
@@ -104,15 +104,15 @@ Merge the default branch into the orchestrator branch on the orchestrator branch
 1. If the tracker shows a conflict round was sent for the current tip, and you have not yet merged the owning phase at a code head that contains that tip, skip this procedure for this tick. Otherwise run `git merge --no-ff --no-commit origin/<default branch>`, never a local copy, which can be behind. If nothing is merged, record the tip as merged and stop.
 2. For each conflicted file in a generated path the feature plan names, take the default branch's side. For a package manifest whose sides differ only in a generated version line, do the same. On any other conflict, abort the merge, send the owning phase a `fix-round` that names the conflicting paths and the default branch commit, and record that tip in the tracker. It merges the default branch into its phase branch and passes both gates again. If no phase owns the paths, tell the developer.
 3. Regenerate with the feature plan's command, whether or not anything conflicted, and stage the result.
-4. Run the repository checks the feature plan names. If they fail, abort the merge and tell the developer.
-5. Commit with the hooks on. If a hook refuses, abort the merge and tell the developer.
+4. Run the repository checks the feature plan names. If they fail, abort the merge and tell the developer. Record the tip in the tracker, and do not merge it again until the developer answers or the default branch moves.
+5. Commit with the hooks on. If a hook refuses, abort the merge and tell the developer. Record the tip in the tracker, and do not merge it again until the developer answers or the default branch moves.
 6. Record the default branch commit you merged in the tracker, and send `merge-orchestrator-branch` to every live phase that has not reached PR.
 
 ## Keeping pull requests up to date
 
 A pull request's checks do not run again when the default branch, or a pull request it depends on, moves. Two pull requests can each pass, merge, and together break the default branch. `needs_update` marks each open pull request that has to be refreshed.
 
-- An open pull request is up to date when, after `git fetch origin`, its head contains the default branch's tip and the current head of every open pull request it depends on, directly or through another, and every required check has passed on that head. A merged or closed pull request has no flag.
+- An open pull request, draft or not, is up to date when, after `git fetch origin`, its head contains the default branch's tip and the current head of every open pull request it depends on, directly or through another, and every required check has passed on that head. A merged or closed pull request has no flag.
 - In tick step 1, set `needs_update` on each open pull request that is not up to date, and clear it on each that is. Write each change to the tracker and the board.
 - In tick step 4, tell each phase in PR that has a pull request it must refresh, once a tick: start its session if its pane is closed, and otherwise wait until it is quiet. If the pull request lacks the default branch's tip, send a `fix-round` of the kind "A pull request merged", naming that tip. Otherwise, if it lacks the head of a pull request it depends on, send an `instruction` to refresh it onto that pull request, naming its current head. A pull request flagged only because its checks are pending or failed needs no message here. Step 5 handles a failed check. Send nothing here to a phase that step 2 sent a `fix-round` this tick. A phase in another state is told once it is back in PR, because those handlers expect PR.
 
@@ -137,6 +137,7 @@ Some histories are rare, and the handbook does not handle them:
 - a pull request closed without merging;
 - a pull request merged into a branch other than the default branch;
 - a forge rewrite other than the rebase of a stack child after its parent merges;
+- a default branch whose checks fail only on generated content after two of the feature's pull requests merged;
 - a tracker fact that git or the forge contradicts, other than an expected change: your own steps, a PR creator's pushes, the developer's commits on a pull request branch, the developer's merges into the default branch, or the forge's rebase of a stack child after its parent merges.
 
 When the reconcile step finds one, record what you saw in the tracker, and stop acting on every phase it touches, apart from reconciling it and keeping the board current. Send the developer a decision request with the options you see and your recommendation. Act on those phases again once the developer answers.
@@ -145,13 +146,15 @@ When the reconcile step finds one, record what you saw in the tracker, and stop 
 
 Feedback reaches a phase only through you. When the developer asks for a change, or a tick finds a new review comment or a failed check, send the phase a `fix-round` with the pull request and the comments or the check. Merge it again as [Merging a phase](#merging-a-phase) says.
 
-A developer's commit on a pull request branch, such as an applied suggestion, is review feedback. When a `prs-open` arrives, record each of its pull requests' head. Once the phase has settled, in PR with nothing you sent it unanswered, compare each of its open pull requests' head with the recorded one. If they differ, send the phase an `instruction` to refresh that pull request, naming it and both heads. Its PR creator decides what is new. When it reports the developer's commits, the phase takes them and passes both gates again. Otherwise the phase stays in PR. Either way its next `prs-open` answers the instruction. A forge rebase or an "Update branch" merge also moves a head and draws a round that changes nothing, so no developer change is missed.
+A developer's commit on a pull request branch, such as an applied suggestion, is review feedback. When a `prs-open` arrives, record for each of its pull requests the last head its `pushed` line names. Once the phase has settled, in PR with nothing you sent it unanswered, compare each of its open pull requests' head with the recorded one. If they differ, send the phase an `instruction` to refresh that pull request, naming it and both heads. Its PR creator decides what is new. When it reports the developer's commits, the phase takes them and passes both gates again. Otherwise the phase stays in PR. Either way its next `prs-open` answers the instruction. A forge rebase or an "Update branch" merge also moves a head and draws a round that changes nothing, so no developer change is missed.
 
 PR creators choose and change their pull requests' bases themselves, across phases. You never offer or send `restack`. When the developer asks for a restack, pass it to the phase as an `instruction`. When a stack parent merges, the forge rebases its child with a force-push from the developer's account. That is expected, not a second writer on the branch.
 
 ## Decisions
 
-Phase requests sit in status headers. The planner has no status file, so its requests, `planner-r<n>`, sit in the feature plan's "Open requests" section, and the reconcile subagent reads them there. Put each open decision request to the developer with all its fields, and list it in the tracker and under **Needs you**. The developer decides every one-way door. You may decide a two-way door that affects only the run's coordination. Before you send `answer`, record the decision in `run-decisions.md` with its date, door type and reason, and commit it.
+Phase requests sit in status headers. The planner has no status file, so its requests, `planner-r<n>`, sit in the feature plan's "Open requests" section, and the reconcile subagent reads them there. Put each open decision request to the developer with all its fields, and list it in the tracker and under **Needs you**. The developer decides every one-way door. You may decide a two-way door that affects only the run's coordination. Before you send `answer`, record the decision in `run-decisions.md` with its date, door type and reason, and commit it. When the answer changes the feature plan or a contract, restart the planner with an `instruction` that names the decision and the phases it affects. Handle its `done-planning` as Starting the feature step 5 says.
+
+A `blocked` that names a conflict in another phase's file goes to the developer as a decision request, with the owning phase and the paths. When a phase reports an `instruction`, record it in `run-decisions.md` if it changes a recorded decision, and restart the planner if it changes the plan.
 
 ## Permission prompts
 
@@ -182,4 +185,4 @@ When you start again, read the tracker, every status file, workmux's status and 
 
 ## Ending the feature
 
-When every phase is Done, have a fresh subagent update the architecture page once more, delete the tick, close every pane you started with `--close`, and remove every remaining worktree with `--remove`, after merging each branch's last status commits as for a phase at Done. Tell the developer the feature is complete.
+When every phase is Done and the full run after the last merge has passed, have a fresh subagent update the architecture page once more, delete the tick, close every pane you started with `--close`, and remove every remaining worktree with `--remove`, after merging each branch's last status commits as for a phase at Done. Tell the developer the feature is complete.

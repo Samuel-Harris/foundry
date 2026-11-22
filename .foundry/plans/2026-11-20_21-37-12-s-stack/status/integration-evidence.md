@@ -117,3 +117,14 @@ Recorded as minor, not fixed:
 - **Fable 2.** Orchestrator cold read AV, points 1 and 2 (lines 786 and 787), still give "names the failed code head" as the reason `beta` does not merge. The scored action (no merge) is right, and AV passed in Verify 3.
 - **Fable 3, Opus.** The waivable examples, a type annotation and a log level, can overlap the never-waivable list, a public interface or a default, and no sentence says which list wins. Every reader chose not to waive.
 - Untested reader remarks: after a `move-back` for a check, the phase's own gates may be waived on an empty scope, which leaves the post-merge rerun as the backstop. "Sent `prs-open` since" does not say since what. An intermittent check can fail again with no bound. "Moving back" does not say to redo the PR step.
+
+## Verify 4: NOT VERIFIED at `82a30d2a8133ed8413569cc861cd3fea1a35dafc`, 2026-11-22T16:46:10Z
+
+Fresh Opus verifier. Scope: `82a30d2`. No waiver: the scope changes handbook text and expected answers. No commits. Answers and grades are under the session scratchpad's `verify4/` directory.
+
+- Skill checks 1 to 5 and 7 PASS. The pre-commit hook over `982bdc4...HEAD` exited 0.
+- Orchestrator scripted checks PASS. Orchestrator cold reads: 55 of 56 PASS, including the changed D, T and AT. Integration cold reads 4 and 7 PASS.
+- **Orchestrator cold read J, point 4, FAIL**, reproduced by a fresh reader. In tick (4), `beta` was working at the previous tick. Both readers called it quiet from the current reading alone and sent the deferred round. The text at fault is tick step 4's "wait until it is quiet" in `orchestrator.md`, which predates this phase.
+- Cold reads AK and V failed a first grader that lacked the scenario, and passed on a regrade with it. V point 2's "two messages" also catches the restack `instruction` that point 4 requires.
+
+Next: restate the quiet test at tick step 4, and narrow V point 2 to refresh messages.

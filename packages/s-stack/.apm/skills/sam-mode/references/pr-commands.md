@@ -44,7 +44,7 @@ A branch may be written `main` or `origin/main`. The default branch always resol
 - **Phase commits** are the commits on the phase branch's first-parent line that the default branch lacks, leaving out merges. Work that reached the phase through a merge, such as another phase's commits from the orchestrator branch, is not a phase commit.
 - **A commit's paths** are the files it changes outside `.foundry/`. A wholly generated file counts only when the commit deletes it. A file with generated lines counts only when its hand-written lines change.
 - **A carried commit** ends its message with `(cherry picked from commit <sha>)`, naming its phase commit, as `git cherry-pick -x` writes it. The script matches a pull request's commit to a phase commit by that line or by its own hash, never by author, date, subject or content. A phase commit taken from a pull request's commit with `git cherry-pick -x` also matches that commit. A forge rebase keeps the message, so a head GitHub rewrote still matches.
-- **A phase commit is accounted for** a pull request when the pull request's branch, a merged dependency's branch or the default branch holds it, or holds a commit that matches it. In a refresh, the base's and open dependencies' tips count as the branch, because the merge brings them in.
+- **A phase commit is accounted for** a pull request when the pull request's branch, a merged dependency's branch or the default branch holds it, or holds a commit that matches it. In a refresh, the base's and open dependencies' tips count as the branch, because the merge brings them in. The head that `PUSHED` names counts too, so a commit the phase took with `git cherry-pick -x` still matches after GitHub rebases the pull request.
 - **A shared path** is one that commits other than phase commits changed on the phase branch, or one with a phase commit that is not accounted for, because another pull request of the phase carries it. Every other path of a pull request's own commits is **owned** by it.
 
 ## Refresh a branch
@@ -251,13 +251,13 @@ stale() {
 }
 matches() { ids --no-walk "$1" | grep -q -x -F -f "$W/fp" || cut -d ' ' -f 2 "$W/named" | grep -q -x -F "$1"; }
 pushed() { list "${PUSHED:-}" | awk -v b="${1#origin/}=" 'index($0, b) == 1 { print substr($0, length(b) + 1); exit }'; }
+pin() { local p; p=$(pushed "$1"); [ -n "$p" ] && git cat-file -e "$p^{commit}" 2>/dev/null && echo "$p"; }
 pushed_here() {
   local p; p=$(pushed "$1"); [ -z "$p" ] || git cat-file -e "$p^{commit}" 2>/dev/null ||
     { echo "STOP ${1#origin/} was last pushed at $p, which is not here, so its developer commits cannot be told apart"; return 1; }
 }
 devs() {
-  local p h=$2 c b x v; p=$(pushed "$1"); shift 2
-  [ -n "$p" ] && git cat-file -e "$p^{commit}" 2>/dev/null || return 0
+  local p h=$2 c b x v; p=$(pin "$1") || return 0; shift 2
   if ! git merge-base --is-ancestor "$p" "$h"; then
     for x in $(paths "${mine[@]}"); do shared "$x" && continue; v=$(ver "$h" "$x")
       [ "$v" = "$(ver "$p" "$x")" ] || [ "$v" = "$(ver "$PH" "$x")" ] || { git rev-parse --short "$h"; return; }
@@ -286,14 +286,14 @@ refresh() {
   wt=$(pwd) head=$(git rev-parse HEAD) tips=$(for b in "$base" $(list "$extra"); do ref "$b"; done)
   [ ${#new_c[@]} = 0 ] || new_c=($(git rev-list --no-merges --no-walk=unsorted "${new_c[@]}"))
   mine=($(own "$head" "$D" "$base" $(list "$extra") $(list "$merged")) "${new_c[@]}")
-  accounted HEAD $tips $(refs "$merged"); cp "$W/acc" "$W/held"; [ ${#new_c[@]} = 0 ] || printf '%s\n' "${new_c[@]}" >> "$W/acc"
+  accounted HEAD $tips $(refs "$merged") $(pin "$pr"); cp "$W/acc" "$W/held"; [ ${#new_c[@]} = 0 ] || printf '%s\n' "${new_c[@]}" >> "$W/acc"
   stale "$D" $(refs "$extra") $(outside "$base") || exit 1
   paths $(git rev-list --first-parent --no-merges "$PH" "^$D") > "$W/pp"
   for x in $(paths "${mine[@]}" | grep -v -x -F -f "$W/pp"); do
     dev=($(devs "$pr" "$head" "$D" "$base" $(list "$extra") $(list "$merged"))); [ ${#dev[@]} = 0 ] || { echo "DEVELOPER-COMMITS $pr $(printf '%s ' "${dev[@]}")"; exit 1; }
     echo "STOP $pr would carry $x, which the phase does not change"; exit 1; done
   [ ${#new_c[@]} = 0 ] || carry "${new_c[@]}" || { git reset -q --hard "$head"; echo "STOP the branch is back at $head"; exit 1; }
-  mine=($(own HEAD "$D" "$base" $(list "$extra") $(list "$merged"))); accounted HEAD $tips $(refs "$merged")
+  mine=($(own HEAD "$D" "$base" $(list "$extra") $(list "$merged"))); accounted HEAD $tips $(refs "$merged") $(pin "$pr")
   at "$(ref "$base")" && merge_in $(echo "$tips" | sed 1d) && overlay "${mine[@]}" || { done_at "$wt"; git reset -q --hard "$head"; exit 1; }
   t=$(git write-tree); done_at "$wt"
   new=$(for x in $tips; do git merge-base --is-ancestor "$x" HEAD || echo "$x"; done)
@@ -340,7 +340,7 @@ prove() {
     done
     for f in $(git diff --name-only "$D...$pr" -- .foundry); do echo "FAIL $pr: contains $f"; fail=1; done
     [ -n "$lp" ] && continue
-    accounted "$pr" $(refs "$merged")
+    accounted "$pr" $(refs "$merged") $(pin "$n")
     h=$pr; git rev-parse -q --verify "refs/remotes/origin/$n" >/dev/null && h=origin/$n
     pushed_here "$n" || fail=1
     dev=($(devs "$n" "$h" "$D" "$base" $(list "$extra") $(list "$merged"))); [ ${#dev[@]} = 0 ] || { echo "DEVELOPER-COMMITS $pr $(printf '%s ' "${dev[@]}")"; fail=1; }

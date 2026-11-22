@@ -10,7 +10,7 @@
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `c9a7832` (version 7) |
 | Last tick | 2026-11-22 00:11 |
-| Default branch merged at | `054a9e7` (#88, into `99953ad`) |
+| Default branch merged at | `5c4d320` (#89, into `57c4ad2`) |
 
 ## Live sessions
 
@@ -38,7 +38,7 @@ None.
 | 86 | `board` | merged into `main` as `51f334e` | | |
 | 87 | `spec-planner-handbooks` | merged into `main` as `b440889` | | |
 | 88 | `foundation` | merged into `main` as `054a9e7` | | |
-| 89 | `foundation` | `s-stack-version-0.1.5` | `main` | none |
+| 89 | `foundation` | merged into `main` as `5c4d320` | | |
 
 ## Merged phases
 

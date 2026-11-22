@@ -70,11 +70,11 @@ written as a string, such as prs/42:
                 Each may be a number or a string of its decimal digits, which
                 the page reads as that number.
   review_rank   number, the lowest reviewed first, or null
-  needs_update  boolean, explained below
+  needs_update  boolean, or null, explained below
 
 needs/<id>, one document per item waiting on the developer, its document id
 chosen by the orchestrator:
-  kind     "decision", "prompt" or "restack"
+  kind     "decision" or "prompt"
   phase    string, the phase id
   summary  string, one line
   door     "one-way", "two-way" or null
@@ -88,8 +88,13 @@ only the documents that changed. Keep recent as one document: replace its
 items with the new list, trimmed to 20. When a needs item is resolved, delete
 its document rather than flag it.
 
-needs_update is true until the pull request contains the default branch's tip
-and its checks have passed on that head.
+needs_update is true when a draft or open pull request is not up to date, and
+false when it is. It is up to date when its head contains the default branch's
+tip and the current head of every draft or open pull request it depends on,
+directly or through another, and every check the repository requires has
+passed on that head. The checks field does not tell required checks apart, so
+take them from the repository. A merged or closed pull request has no flag:
+leave needs_update null.
 -->
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -280,7 +285,7 @@ and its checks have passed on that head.
 <script>
 (() => {
   const STATE_TONE = {Spec: "plain", Plan: "plain", Implement: "accent", Verify: "warn", Review: "warn", PR: "good", Done: "good"};
-  const NEED_KINDS = ["decision", "prompt", "restack"];
+  const NEED_KINDS = ["decision", "prompt"];
   const DEFAULT_STALE_MIN = 40;
   const MINUTE = 60000;
 

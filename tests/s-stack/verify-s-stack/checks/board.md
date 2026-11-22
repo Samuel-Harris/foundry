@@ -19,7 +19,7 @@ Each line of the `LIST` block is one scenario: a virtual-time budget in millisec
 
 | Fixture | Holds |
 | --- | --- |
-| `full` | A 66-character orchestrator branch with no hyphen or other break point. This run's phase shape: `foundation` with `[]`, six middle phases on `foundation` until `merged`, `default-stack` on the other seven until `done`, unsorted, every state tone and all four scheduling values. Drafts #11 (rank 1, on `12`), `"12"` (rank 2, a digit string) and #13 (rank 3, on `[11, "12", 100, 9]`, markup in its title, a `javascript:` URL), open `"100"` with an `http:` URL, merged #9. `board` live with `pane: null`. Four needs out of order, one with a `javascript:` link in its summary, one prompt with a 61-character pane, a decision with a pane and a restack with a door. 22 recent items, two out of time order. |
+| `full` | A 66-character orchestrator branch with no hyphen or other break point. This run's phase shape: `foundation` with `[]`, six middle phases on `foundation` until `merged`, `default-stack` on the other seven until `done`, unsorted, every state tone and all four scheduling values. Drafts #11 (rank 1, on `12`), `"12"` (rank 2, a digit string) and #13 (rank 3, on `[11, "12", 100, 9]`, markup in its title, a `javascript:` URL), open `"100"` with an `http:` URL, merged #9 with `needs_update: null`. `board` live with `pane: null`. Five needs out of order, one with a `javascript:` link in its summary, one prompt with a 61-character pane, a decision with a pane, and two of unknown kinds, each with a door: the retired `restack` and an older `handover`. 22 recent items, two out of time order. |
 | `review` | Seven pull requests, unsorted: null rank, a rank tie between two drafts that can go, a two-draft dependency cycle, a dependency on a closed pull request and a missing `needs_update`. |
 | `lanes-a`, `lanes-b` | Five phases in three columns and two skipping edges. They differ only in which first-column phase each skipping edge leaves from. |
 | `share` | Four columns and three skipping edges: two share a source, two share a target, and two overlap without sharing an end. Solid and dashed edges share each end. |
@@ -31,9 +31,9 @@ Each line of the `LIST` block is one scenario: a virtual-time budget in millisec
 | Six sections, in order, under exact headings | every scenario |
 | No `<title>` element, and the tab title from `board/meta.feature` | every scenario; `full` |
 | Header: feature, both branches, an `https` architecture link; markup in `feature` shown as text and a non-`https` architecture link shown as plain text | `full`, `hostile` |
-| Needs you: every item, sorted by kind then oldest first, door chip only on decisions, pane only on prompts, waiting time, count, empty state | `full`, `empty`, `swap` |
+| Needs you: every item, sorted by kind then oldest first, with unknown kinds, the retired `restack` among them, last, door chip only on decisions, pane only on prompts, waiting time, count, empty state | `full`, `empty`, `swap` |
 | Ready for your review: drafts only, rank order with null last and ties by number, dependencies first, cycle fallback, "after" notes for draft and open dependencies, chips, empty state | `full`, `review`, `empty` |
-| Pull requests: every row and cell, ordered by number, digit strings read as numbers, empty state | `full`, `review`, `empty` |
+| Pull requests: every row and cell, ordered by number, digit strings read as numbers, no update chip for a null `needs_update`, empty state | `full`, `review`, `empty` |
 | Phases: every row and cell, scheduling phrases, unknown values, Depends on, a live session with and without a pane, relative time with its `datetime`, empty state | `full`, `missing`, `unreadable`, `cycle`, `flat`, `empty` |
 | Recent changes: first 20 in stored order, each time's visible text and `datetime`, null `from`, empty state | `full`, `empty` |
 | Heartbeat: last tick's visible time and `datetime`, age, Fresh or Stale chip, banner minutes, no tick, unreadable tick | every scenario with `board/meta` |
@@ -143,9 +143,10 @@ cat > "$dir/stub.js" <<'JS'
         {number: 11, url: "https://example.com/pull/11", title: "Pull request A", phase: "launcher", state: "draft", checks: "passing", base: "placeholder-feature-orchestrator", depends_on: [12], review_rank: 1, needs_update: true},
         {number: "100", url: "http://example.com/pull/100", title: "Ready for a human", phase: "foundation", state: "open", checks: "none", base: "main", depends_on: [9], review_rank: null, needs_update: true},
         {number: "12", url: "https://example.com/pull/12", title: "Pull request B", phase: "launcher", state: "draft", checks: "pending", base: "main", depends_on: [], review_rank: 2, needs_update: false},
-        {number: 9, url: "https://example.com/pull/9", title: "Merged groundwork", phase: "foundation", state: "merged", checks: "passing", base: "main", depends_on: [], review_rank: null, needs_update: false}],
+        {number: 9, url: "https://example.com/pull/9", title: "Merged groundwork", phase: "foundation", state: "merged", checks: "passing", base: "main", depends_on: [], review_rank: null, needs_update: null}],
       needs: [
         {kind: "restack", phase: "launcher", summary: "Restack launcher onto the merged foundation.", door: "two-way", pane: null, since: ago(50)},
+        {kind: "handover", phase: "board", summary: "Hand the board session over.", door: "one-way", pane: "%3", since: ago(60)},
         {kind: "prompt", phase: "board", summary: "A permission prompt waits in the session.", door: null, pane: "%" + "1234567890".repeat(6), since: ago(4)},
         {kind: "decision", phase: "phase-handbooks", summary: "Choose the handbook layout.", door: "two-way", pane: "%7", since: ago(10)},
         {kind: "decision", phase: "default-stack", summary: "Approve the tag <a href=\"javascript:alert(2)\">now</a>", door: "one-way", pane: null, since: ago(23)}],
@@ -509,13 +510,14 @@ NEEDS = [
     'decision | one-way | default-stack | waiting 23 min | Approve the tag <a href="javascript:alert(2)">now</a>',
     "decision | two-way | phase-handbooks | waiting 10 min | Choose the handbook layout.",
     "prompt | board | waiting 4 min | A permission prompt waits in the session. | pane %" + "1234567890" * 6,
+    "handover | board | waiting 1 h 0 min | Hand the board session over.",
     "restack | launcher | waiting 50 min | Restack launcher onto the merged foundation."]
 REVIEW = [
     "#12 | Pull request B | launcher | pending | Up to date",
     "#11 | Pull request A | launcher | passing | Needs update | after #12",
     "#13 | Pull request C <b>not bold</b><img src=x> | board | failing | Up to date | after #11, #12, #100"]
 PRS = [
-    ["#9", "Merged groundwork", "foundation", "merged", "passing", "main", "none", "Up to date"],
+    ["#9", "Merged groundwork", "foundation", "merged", "passing", "main", "none", ""],
     ["#11", "Pull request A", "launcher", "draft", "passing", "placeholder-feature-orchestrator", "#12", "Needs update"],
     ["#12", "Pull request B", "launcher", "draft", "pending", "main", "none", "Up to date"],
     ["#13", "Pull request C <b>not bold</b><img src=x>", "board", "draft", "failing", "main", "#11, #12, #100, #9", "Up to date"],
@@ -559,7 +561,7 @@ LONG = "orchestrator-handbook-and-phase-handboo"
 def STALE(n): return f"The orchestrator has not ticked for {n} minutes."
 
 TONES = {
-    "plain": ["decision", "prompt", "restack", "two-way", "draft", "open", "closed", "none", "Spec", "Plan",
+    "plain": ["decision", "prompt", "restack", "handover", "two-way", "draft", "open", "closed", "none", "Spec", "Plan",
               "session live", "session closed", "queued to start"],
     "accent": ["Implement"], "warn": ["Verify", "Review", "pending", "Needs update", "blocked"],
     "good": ["PR", "Done", "merged", "passing", "Up to date", "Fresh"], "crit": ["one-way", "failing", "Stale"]}
@@ -733,11 +735,13 @@ def full_content(c, s):
     c("header names the feature, both branches and the architecture page", s["h1"] == "placeholder-feature"
       and s["title"] == "placeholder-feature status board" and s["headerLinks"] == ["https://example.com/architecture"]
       and s["metaLine"] == "orchestrator placeholder_feature_orchestrator_with_a_long_unbroken_branch_name | default main | Architecture")
-    c("Needs you: decisions first, then prompts, then restacks, oldest first", sec(s, "Needs you")["items"] == NEEDS)
-    c("Needs you count", sec(s, "Needs you")["count"] == "4")
+    c("Needs you: decisions first, then prompts, then unknown kinds, oldest first", sec(s, "Needs you")["items"] == NEEDS)
+    c("Needs you count", sec(s, "Needs you")["count"] == "5")
     c("Ready for your review: drafts in dependency order with after notes", sec(s, "Ready for your review")["items"] == REVIEW
       and sec(s, "Ready for your review")["count"] == "3")
     c("Pull requests: every row, ordered by number", sec(s, "Pull requests")["rows"] == PRS and sec(s, "Pull requests")["count"] == "5")
+    c("Pull requests: a null needs_update shows no update chip", sec(s, "Pull requests")["rows"][0][:1] == ["#9"]
+      and sec(s, "Pull requests")["rows"][0][7] == "")
     phases = sec(s, "Phases")
     c("Phases: every row with scheduling labels and Depends on", phases["rows"] == PHASES and phases["count"] == "8")
     c("Phases: each last change dated", phases["times"] == [iso(t0, a * 60000) for a in PHASE_AGES])

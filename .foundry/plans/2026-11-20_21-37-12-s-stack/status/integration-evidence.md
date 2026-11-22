@@ -139,3 +139,11 @@ Fresh Opus verifier. Scope: `82a30d2` and `4393405`. No waiver. No commits. Answ
 - Under `integration-d3`, the phase session reran I twice, each with a fresh Opus reader and grader (`verify5/rerun/`). Rerun 2 PASS. Rerun 1 FAIL: it wrote `prs/40` only "if it was under watch". The verifier's own diagnostic rerun passed, but it does not count under the rule. One rerun failed, so the text gets fixed at its source.
 
 Next: line 83 says a pull request that merged or closed this tick has changed state.
+
+## Verify 6: VERIFIED at `90f855ad42b9f67abe0a0150f1da1b05ae81932f`, 2026-11-22T17:21:57Z
+
+Fresh Opus verifier, with the orchestrator's rerun rule in its brief. Scope: `82a30d2`, `4393405` and `90f855a`. No waiver. No commits. The report named branch HEAD `debda08`, a status-only commit. The phase session computed the code head as `90f855a`, and the verdict names that. Answers and grades are under the session scratchpad's `verify6/` directory.
+
+- Skill checks 1 to 5 and 7 PASS. The pre-commit hook over `982bdc4...HEAD` exited 0. Three orchestrator scripted checks PASS.
+- Cold reads: orchestrator A to BD and integration 4 and 7, 58 in all. 57 passed on their first run, including D, T, V, AT, I and J.
+- Orchestrator BB failed its first run on point 1: the reader called an "Update branch" merge a developer commit. That reading rests on `orchestrator.md` lines 141 and 149, which this scope did not change. Both reruns, each with a fresh reader and grader, passed. Recorded as reader variance under `integration-d3`.

@@ -281,6 +281,23 @@ A fresh verifier ran with nothing committed. Its report, summarised:
   - The check file lacks this round's mutations and the relaunch recipes.
   - Its safety advice checks the socket only after a server is created.
 
+## Review, code head `cf378d80b95d4e250c2a5473876db547b2f72d24`, CLEAR
+
+The review ran under the gate-cost rules. Its scope was the diff since the last reviewed head, e7405c5 to cf378d8: the width hand-back in `--close` and the untagged `--continue` fallback. Being logic, it could not be waived. The first reviewer (Opus) reviewed and returned CLEAR. The second adversary (Fable) then joined, as rule 5 requires, and also returned CLEAR.
+
+- **Opus.** Seven repro scenarios all ended with the orchestrator and developer columns within one column of their starting widths: a full-width developer pane at the bottom; overlapping phases in a 400-column window; phases side by side; a planner plus two phases; an update spec writer; the real start order with parallel phases; and a simulated resurrect with parallel phase relaunch.
+- **Fable.** It covered what Opus did not, and every case behaved as intended:
+  - a zoomed orchestrator or developer pane during closes;
+  - a developer column between the orchestrator and three stacked phases;
+  - an update spec writer beside a split developer column;
+  - parallel starts and closes;
+  - a 420-column window with developer splits under and beside phases;
+  - the real start order with idle tagged panes;
+  - a zoomed phase closed;
+  - a resurrect with a developer column;
+  - a dead orchestrator beside a developer's `claude --continue`.
+- **One cosmetic observation.** Closing the zoomed pane itself prints `can't find pane` on standard error from the re-zoom, with exit 0 and correct output. That code predates this diff.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

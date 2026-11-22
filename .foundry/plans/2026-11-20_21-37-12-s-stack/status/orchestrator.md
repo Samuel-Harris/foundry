@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `410ae2e` (version 8) |
-| Last tick | 2026-11-22 01:11 |
+| Last tick | 2026-11-22 01:54 |
 | Default branch merged at | `d6187b5` (#91) |
 
 ## Live sessions
@@ -39,6 +39,7 @@ None.
 | 89 | `foundation` | merged into `main` as `5c4d320` | | |
 | 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
 | 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
+| 92 | `board` | `s-stack-board-follow-up` | `main` | none (no `prs-open` yet; asked at 01:55) |
 
 ## Merged phases
 

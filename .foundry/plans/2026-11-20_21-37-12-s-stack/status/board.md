@@ -1,7 +1,7 @@
 ---
 phase: "board"
-state: "PR"
-changed_at: "2026-11-22T01:06:43Z"
+state: "Done"
+changed_at: "2026-11-22T11:15:18Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
 code_head: "284ad88a3929192851895e2650198266bcddca75"
@@ -157,3 +157,5 @@ Follow-up round: `s-stack-package` was merged under C7 at `a60b107`, cleanly, br
 The follow-up Review gate returned CLEAR at `284ad88`: neither adversary found a defect. Both verdicts cover `284ad88`. The PR creator is starting a new draft pull request against `main`.
 
 Draft pull request #92 (`s-stack-board-follow-up` into `main`, head `f9aa70c`) is open, with no open dependency. It carries `73251d3`, `5fc142f` and `284ad88` without lockfile hunks, then a regenerate commit that raises s-stack from 0.1.7 to 0.1.8. At that moment no open pull request changed `packages/s-stack/apm.yml`. The PR creator's proof printed EQUAL against the local `s-stack-package`. The phase session confirmed that both hand-written files are byte-identical to `284ad88`, and that the branch holds no `.foundry/`. The pull request carries 37 hand-written lines. Tier 1 and the hook passed locally, and CI run https://github.com/Samuel-Harris/foundry/actions/runs/44972350601 passed.
+
+Pull request #92 merged into `main` as `92a91f7`, and #86 had merged as `51f334e`. The code head `284ad88` is merged into `s-stack-package` (`3940c5b`), and the orchestrator's post-merge check returned VERIFIED on `fe43e00`. Every pull request of the phase is merged, so the phase is Done.

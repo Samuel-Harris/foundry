@@ -66,3 +66,19 @@ Reader remarks, not scored, recorded as minor:
 - `phase-session.md` line 14 does not say whether to build to the roadmap while its request is open.
 - `reviewer.md`'s opening says Review follows VERIFIED, not VERIFIED or WAIVED.
 - No `phases` board document is written for a phase a later `done-planning` adds.
+
+## Review 1: SIGNIFICANT at `faa5b867b5747f43174ad66e5260f3347039c72d`, 2026-11-22T15:38:56Z
+
+`interrogate` over `git diff s-stack-package...s-stack-phase-integration`, excluding `.foundry/` and lockfiles. The intent came from the commit messages. First reviewer: Opus, briefed as first and not allowed to waive. The Fable adversary started at the same time, because the first reviewer could not waive. Repros are under the session scratchpad's `review-opus/` and `review-fable/` directories.
+
+Significant:
+
+- **Opus 1. The waiver list admits what its condition excludes.** Cold read of the reference and `verifier.md`: a one-line change to a timeout default that no check reads. The reader said the "small, isolated change ... that no check or probe exercises" item covers it, while the condition and the verifier's INCONCLUSIVE rule exclude it. It resolved the conflict by verifying. Classified significant: waiver calls are on every re-gate of the common path, and the reference had compressed away gate-cost rule 3's examples, which settle it.
+- **Fable 1. A failed post-merge check can freeze the orchestrator branch for good.** Cold read of the reference, `phase-session.md` and `orchestrator.md`, and `review-fable/probe2.sh`, re-run by the phase session. The run printed `code head, base rule  57cd077…` and `code head, new rule   a598151…`. After a failed check, the moved-back phase merges the orchestrator branch cleanly. If it needs no code change, its code head stays the failed one. Merging a phase step 5 then never allows a re-merge, and nothing else can end the freeze. A failed post-merge check is on the orchestrator's common path (run-decisions row 49), and the new code-head rule makes this the normal outcome.
+
+Recorded as minor, not fixed:
+
+- **Fable 2.** `verify-s-stack/SKILL.md`'s scoped run says the brief names the radius, while `verifier.md` has the verifier work it out. The skill also does not say whether checks 1 to 7 are scoped. The reader acted correctly.
+- **Fable 3.** `verifier.md` cites "the reference file" without its path. The reader did not waive, which is correct.
+- The Opus reader noted `<pr>=<its current head>` in `phase-session.md`'s answer row could be read as a pull request number. It resolved this from the header's `<branch>=<sha>` form.
+- The Fable reader noted no file names the state a phase records between merging `origin/<default>` and re-running the gates after a PR creator `FAIL`. It acted correctly.

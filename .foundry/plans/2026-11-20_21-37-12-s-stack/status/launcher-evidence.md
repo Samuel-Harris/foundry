@@ -336,6 +336,23 @@ This round ran under the gate-cost rules. The scope was the diff since 36ea902: 
 - A probe confirmed that tmux reads argv[0] on Linux, with dash and bash interpreters alike.
 - Recorded limits, none new: a `TMPDIR` containing a space already broke the unquoted `exec` path. A busybox `/bin/sh` or a noexec `/tmp` breaks both the old stub and the new one.
 
+## Review, code head `890d46d63795ca74f298d66e582461dceab118d6`, CLEAR
+
+The review was scoped to `sidebar_program` since 36ea902, under the gate-cost rules. The first reviewer (Opus) did not waive, because the change is test logic. It returned CLEAR:
+
+- 130 tests passed on Ubuntu 26.04, Ubuntu 24.04 and macOS.
+- A probe showed `/proc/<pid>/cmdline` beginning with the `workmux` interpreter link, and the pane reading `workmux`.
+- With both `workmux` comparisons in `launch.sh` broken, 5 sidebar tests fail on 26.04, so the fixture tests the launcher rather than passing by accident.
+
+The second adversary (Fable) then joined and returned CLEAR:
+
+- As a normal user on 26.04: 130 tests passed, and the 19 sidebar tests passed in 8 of 8 repeated runs.
+- The stub kept reading `workmux` through `resize-pane`, `resize-window`, `select-pane`, and keys sent without Enter.
+- A key plus Enter ends it on Linux, which only makes the fixture stricter. `launch.sh` has no `send-keys`.
+- It reproduced the 5-failure launcher mutant.
+
+Limits, none new: busybox `sh`; a `TMPDIR` with spaces or long enough to break the shebang line. On Linux a stray Enter closes the stub, while on macOS the copied `sleep` ignores it.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

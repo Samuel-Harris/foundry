@@ -331,3 +331,11 @@ The phase session's fix: a patch-id match counts only when the trailer-named com
 ## Known integration item for pr-handbook-d18
 
 The phase session recording each pull request branch's pushed head, and passing it as `PUSHED` in the PR creator's brief, is not yet described in `handbooks/phase-session.md` or `references/status-and-messages.md`. Those files belong to phases that are Done, and the orchestrator has put the gap on its cross-handbook read-through list. It is a known integration item owned elsewhere, not a finding against pr-handbook.
+
+## Verify 21, NOT VERIFIED at `d7f2260`
+
+The verifier's check-file commits are `af0fc8b` and `d7f2260`, on top of code head `534c5ce`. The check block printed 128 PASS and `2 failed`, both from finding 1. Tier 1 passed across 20 packages. Every other verify-s-stack check passed, apart from the routes and launcher tests, which are pending and set no verdict.
+
+- **Finding 1, significant on the common path.** A developer commits a suggestion on a stacked child. The phase takes it with `git cherry-pick -x`, and a round carries the pick. The carry skips it because the branch already holds the commit, so nothing is pushed, and `PUSHED` keeps the head from before the suggestion. After the parent's squash merge and GitHub's rebase, the recorded head lacks the developer's commit. The taken commit is then unaccounted. Every round prints `FAIL c.txt: child lacks phase commits ... Apply suggestions from code review;, so they need a pull request` and `NOT EQUAL`, with nothing pushed. The verifier's case is `taken developer commit, child rebased`.
+- **Finding 2, fixed.** An empty `PUSHED` on a pushed branch stops in refresh and in prove, and never prints `EQUAL`.
+- **Not a finding.** Recording pushed heads on the phase side is the known integration item owned elsewhere.

@@ -647,3 +647,27 @@ Defects that mislead a reader:
 ## Merge of `s-stack-package` at `7032b0d`, under run decision `launcher-r3`
 
 `s-stack-package` (`410ae2e`, the `phase-handbooks` follow-up) was merged at `7032b0d`. Outside `.foundry/` it touched `handbooks/phase-session.md`, s-stack's `version:` line and the generated lockfile, whose lockfile-only conflict was resolved under C7. None is an owned path, so the code head stays at the phase's own commit `8ad18a1`.
+
+## Verify 33, code head `9c1e21fa51e5829bc7402596bea8e863bcd7ab2d`, VERIFIED
+
+A fresh verifier updated the check file for `8ad18a1` in commit `9c1e21f` (+61/−35, only `checks/orchestrator-handbook.md`) and ran every check at `9c1e21f`. The code head was computed by walking the first-parent line with `.foundry/` and `**/apm.lock.yaml` excluded, and agrees with the single-command form.
+
+- **Base-merge script.** It now applies the reachability filter over four cases: "Update branch" alone, "Update branch" plus a suggestion, a refresh plus a regenerate commit, and a stacked child that merges its parent's head. Three mutants fail where expected: the old rule, the rule without the dependency head, and a rule that drops every commit.
+- **Cold reads.** AL, AS, AY and BB now drop merged-in commits by reachability and record the checked head. AA and Y gained the new pull request starting point. R, X and Y say "every pull request of the phase". AB, AN, AR, AU, AW, AJ and AO follow the updated `phase-session.md`, whose feedback and conflict rounds end with PR steps 1 to 3 and `prs-open`.
+- **C6.** Checks 1, 2, 3, 5 and 7 PASS: 94 primitives valid, markdownlint 0 errors, `185/200 orchestrator.md`, links stay inside `packages/s-stack`, and Tier 1 passed across 20 packages outside the sandbox. Checks 4 and 6 are PENDING, which is allowed (`handbooks/pr-creator.md` and `packages/s-stack/tests`). Check 8 PASS: board 50 scenarios in Chrome, the foundation reference, the launcher and command-line script, abort recovery, and both `git cherry` scripts.
+- **Cold reads.** 65 of 65 pass: orchestrator-handbook A to BD, foundation 1 to 3, phase-handbooks 1 to 4 and spec-planner-handbooks 1 and 2. J was rerun because the first answer was not grounded in line 13, and the rerun passed. Z's two readers matched every action but both called `kaph` quiet in tick 3. The verifier scored it a pass, because the operative rule holds and Z's fail rule is not triggered.
+- **Done when.** All items are met. The handbook has 185 lines and names no command line. The launcher flags are exactly C4 plus `launcher-r1` and `orchestrator-handbook-r2`. A and B pass, and both scenarios are in `## Rerun`. The private-name grep has 0 hits in the handbook, the check file, the phase diff and the branch's commit messages.
+
+Minor defects, none on the common path:
+
+- Lines 96, 97 and 109. "Every live phase that has not reached PR" is unclear for a phase that has moved back from PR. It is harmless, because the phase merges anyway before Verify.
+- Lines 13 and 142. After "Histories handled by asking" is answered, a paused phase with an unanswered refresh round can be judged stalled when a resend would do. This is a rare history.
+- Lines 22 to 31. The flags cannot be run against `launch.sh`, which is not yet on `s-stack-package`.
+
+## Merge of `s-stack-package` at `156592d`, under run decision `launcher-r3`
+
+`s-stack-package` (`7338e85`, with the `board` follow-up) was merged at `156592d`. Outside `.foundry/` it touched `assets/status-board.html`, `checks/board.md`, s-stack's `version:` line and the generated lockfile, whose lockfile-only conflict was resolved under C7. None is an owned path, so the code head stays at `9c1e21f`.
+
+## For the cross-handbook integration: draft pull requests in the up-to-date rule
+
+The board template now says "a draft or open pull request" in its `needs_update` rule. `orchestrator.md` lines 113 to 116 say "open pull request". Every phase pull request is a draft, and GitHub reports a draft's state as open. Readers took it that way in 65 cold reads. Align the wording at integration, as the orchestrator's integration list already plans.

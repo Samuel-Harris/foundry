@@ -52,7 +52,13 @@ verdicts:
     code_head: "90f855ad42b9f67abe0a0150f1da1b05ae81932f"
     at: "2026-11-22T17:28:10Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/integration-evidence.md"
-pull_requests: []
+pull_requests:
+  - number: 96
+    branch: "s-stack-integration"
+    base: "main"
+    depends_on: []
+    stacked: false
+pushed: "s-stack-integration=3d668db6cab4a6289361d86951e16e763d6dd506"
 requests: []
 decisions:
   - id: "integration-d1"

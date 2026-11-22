@@ -163,3 +163,13 @@ Recorded as minor, not fixed:
 - Step 7's "after a passing check only" does not say whether a failed full run holds back the just-merged phase's `stop`.
 - A `WAIVED` verdict given after the failed check satisfies step 5's timing rule, as integration cold read 7 expects.
 - No cap on repeated `move-back` cycles for a check that fails intermittently, and which failure time step 5 means after two failures.
+
+## PR
+
+PR creator, fresh Opus. One draft pull request, https://github.com/Samuel-Harris/foundry/pull/96, branch `s-stack-integration`, base `main`, no dependencies.
+
+- The refresh carried the 16 phase commits `bb07229` to `90f855a`. Regenerate commit `3d668db` raised s-stack from 0.1.12 to 0.1.13, after `gh pr list` showed no open pull request changing `packages/s-stack/`.
+- Proof: `EQUAL`, `RECORD s-stack-integration=3d668db6cab4a6289361d86951e16e763d6dd506`.
+- On the branch, the pre-commit hook over `origin/main...HEAD`, `versioning.py check origin/main` and Tier 1 all exited 0.
+- 436 hand-written lines (320 added, 116 deleted) against `origin/main`, including the `version:` line.
+- Phase session check: `gh pr view` shows a draft against `main` at `3d668db`. `git diff 90f855a origin/s-stack-integration` outside `.foundry/` changes only the `version:` line. The branch holds no `.foundry/` path.

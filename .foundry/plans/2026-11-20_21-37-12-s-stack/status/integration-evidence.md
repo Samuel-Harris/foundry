@@ -173,3 +173,48 @@ PR creator, fresh Opus. One draft pull request, https://github.com/Samuel-Harris
 - On the branch, the pre-commit hook over `origin/main...HEAD`, `versioning.py check origin/main` and Tier 1 all exited 0.
 - 436 hand-written lines (320 added, 116 deleted) against `origin/main`, including the `version:` line.
 - Phase session check: `gh pr view` shows a draft against `main` at `3d668db`. `git diff 90f855a origin/s-stack-integration` outside `.foundry/` changes only the `version:` line. The branch holds no `.foundry/` path.
+
+## Move-back after the final full run, and Verify 7: NOT VERIFIED at `4e19585e4dbcb850624a6cb57258435265146dc1`, 2026-11-22T20:05:16Z
+
+The orchestrator's final full run at `1983ab2` failed integration cold read 4 on two of three runs. Run 1 dropped point 2's starts after `done-planning`. Run 2 dropped point 5's `merge-orchestrator-branch`. The phase moved from Done back to Implement (`b070f31`), merged `s-stack-package` cleanly (`fb12e85`), and split the read into 4a to 4d (`4e19585`).
+
+Verify 7, fresh Opus verifier, scope `4e19585`, no waiver:
+
+- Markdown lint: 21 files, 0 errors.
+- Substance check by script: all eight scenarios and points are present. Seven points are byte-identical. Point 4's freeze clause now matches `orchestrator.md` line 96.
+- Twelve runs, each with its own reader and grader: 11 PASS. **4a run 2 FAIL**: the reader again left out "start each phase whose dependencies are met" after a later `done-planning`.
+- Cause: in `orchestrator.md` line 43, Starting the feature step 5, only the `move-back` clause is marked as applying to a later `done-planning`, so the starts read as first-time only.
+
+Next: line 43 applies the starts to every `done-planning`.
+
+## Verify 8: VERIFIED at `eb83e95d58cf0d36069cdb241cd9cc1993e75fe7`, 2026-11-22T20:33:13Z
+
+Fresh Opus verifier. Scope: `4e19585` and `eb83e95`. No waiver. No commits. Evidence is under the session scratchpad's `verify8/` directory.
+
+- Integration cold reads 4a to 4d, three runs each, each with its own reader and grader: 12 of 12 PASS. All three 4a answers start unblocked phases on the later `done-planning`.
+- Integration 7 and orchestrator A to BD, once each: 57 of 57 PASS, so no reruns were needed.
+- Orchestrator scripted checks, skill checks 1, 2, 3, 5 and 7, and the pre-commit hook over `90f855a...HEAD` all PASS. The default-stack lockfile checks PASS.
+- `versioning.py check origin/main` fails, because s-stack and default-stack are still at `main`'s 0.1.13. The PR creator's regenerate commit raises them.
+
+## Review 4: CLEAR at `eb83e95d58cf0d36069cdb241cd9cc1993e75fe7`, 2026-11-22T20:36:44Z
+
+Scope: `4e19585` and `eb83e95`. Merge `fb12e85` was clean, and its remerge diff is empty. First reviewer: Opus, not allowed to waive. The Fable adversary ran beside it. Repros are under the session scratchpad's `review4-opus/` and `review4-fable/` directories.
+
+- Opus: a script check showed the split keeps all eight scenarios and points, matched in pairs. Cold reads 4a to 4d passed. Three step-5 scenarios passed: the first `done-planning`, a later one, and a later one while frozen.
+- Fable: cold reads 4a to 4d passed, and so did three step-5 scenarios of its own. Both lockfiles match a fresh regenerate. Markdown lint found 0 errors.
+
+Recorded as minor, not fixed:
+
+- `versioning.py check origin/main` fails on the phase branch until the PR creator's regenerate commit raises s-stack and default-stack. That is by design.
+- Step 5's "start each phase whose dependencies are met" does not repeat the exclusive-resource and freeze conditions, which tick step 3 and Merging a phase step 5 hold. Every reader applied them.
+- A phase started by the same later `done-planning` could also be read as getting a `move-back` to Plan. Every reader resolved it correctly.
+
+## PR, after the move-back
+
+PR creator, fresh Opus. New draft pull request https://github.com/Samuel-Harris/foundry/pull/103, branch `s-stack-integration-cold-read-4`, base `main`, no open dependencies, spec `s-stack-integration-cold-read-4:main::s-stack-integration`.
+
+- It carries `4e19585` and `eb83e95` as `a2e6809` and `79c2a55`. Regenerate commit `0b74099` raises s-stack and default-stack from 0.1.13 to 0.1.14.
+- Proof: `EQUAL`, `RECORD s-stack-integration=3d668db6cab4a6289361d86951e16e763d6dd506,s-stack-integration-cold-read-4=0b740994c8ff987a422c75073e6ab188d66df400`.
+- On the branch, the pre-commit hook, `versioning.py check origin/main` and Tier 1 (21 packages) all exited 0.
+- 49 hand-written lines, including the two `version:` lines.
+- Phase session check: the branch contains `origin/main`. `git diff origin/main...` lists only the two phase files, identical to the phase's versions, plus the two lockfiles and `version:` lines. It is a draft, and the branch holds no `.foundry/` path.

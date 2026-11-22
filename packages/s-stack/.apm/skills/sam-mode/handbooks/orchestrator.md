@@ -40,7 +40,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 2. Arm the tick, as [The tick](#the-tick) says.
 3. Publish the status board, as [The status board](#the-status-board) says.
 4. Have a fresh subagent publish the first architecture page from the approved roadmap.
-5. Start the planner. When it sends `done-planning`, check that its branch changes nothing outside `.foundry/plans/`, merge it with `--no-ff`, close the planner's pane with `--close`, write `phases` board documents as [The status board](#the-status-board) says, and start each phase whose dependencies are met. On a later `done-planning`, also send `move-back` to Plan to each started phase whose plan entry the message names as changed.
+5. Start the planner. Each time it sends `done-planning`, the first time and every later time, check that its branch changes nothing outside `.foundry/plans/`, merge it with `--no-ff`, close the planner's pane with `--close`, write `phases` board documents as [The status board](#the-status-board) says, and start each phase whose dependencies are met. On a later `done-planning`, also send `move-back` to Plan to each started phase whose plan entry the message names as changed.
 
 ## The tracker
 

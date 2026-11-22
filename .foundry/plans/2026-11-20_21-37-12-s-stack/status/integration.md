@@ -1,10 +1,10 @@
 ---
 phase: "integration"
-state: "Done"
-changed_at: "2026-11-22T17:59:14Z"
+state: "PR"
+changed_at: "2026-11-22T20:36:44Z"
 session: "s-stack-phase-integration"
 branch: "s-stack-phase-integration"
-code_head: "90f855ad42b9f67abe0a0150f1da1b05ae81932f"
+code_head: "eb83e95d58cf0d36069cdb241cd9cc1993e75fe7"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -52,13 +52,33 @@ verdicts:
     code_head: "90f855ad42b9f67abe0a0150f1da1b05ae81932f"
     at: "2026-11-22T17:28:10Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/integration-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "4e19585e4dbcb850624a6cb57258435265146dc1"
+    at: "2026-11-22T20:05:16Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/integration-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "eb83e95d58cf0d36069cdb241cd9cc1993e75fe7"
+    at: "2026-11-22T20:33:13Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/integration-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "eb83e95d58cf0d36069cdb241cd9cc1993e75fe7"
+    at: "2026-11-22T20:36:44Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/integration-evidence.md"
 pull_requests:
   - number: 96
     branch: "s-stack-integration"
     base: "main"
     depends_on: []
     stacked: false
-pushed: "s-stack-integration=3d668db6cab4a6289361d86951e16e763d6dd506"
+  - number: 103
+    branch: "s-stack-integration-cold-read-4"
+    base: "main"
+    depends_on: []
+    stacked: false
+pushed: "s-stack-integration=3d668db6cab4a6289361d86951e16e763d6dd506,s-stack-integration-cold-read-4=0b740994c8ff987a422c75073e6ab188d66df400"
 requests: []
 decisions:
   - id: "integration-d1"

@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Verify"
-changed_at: "2026-11-22T00:47:05Z"
+state: "Implement"
+changed_at: "2026-11-22T01:07:56Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "ea4fb99bd3a7fa4321782e2064efeb6e20e55734"
+code_head: "f75dd6ab87f52ce67ee95c4330bbc2fb61ec0ddf"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -202,6 +202,11 @@ verdicts:
     code_head: "8fff7f3d20da708eba2817769edb4b5c7ca067af"
     at: "2026-11-22T00:45:26Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "f75dd6ab87f52ce67ee95c4330bbc2fb61ec0ddf"
+    at: "2026-11-22T01:07:56Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -376,3 +381,5 @@ The thirty-first Verify gate returned VERIFIED at `8fff7f3`. The phase moved to 
 The twelfth Review gate returned SIGNIFICANT at `8fff7f3`, under the common-path bar. The phase moved back to Implement.
 
 The Review 12 fix is at `ea4fb99`. `s-stack-package` was merged at `8dc793d`, and under `launcher-r3` the code head is unchanged. The phase moved to Verify at code head `ea4fb99`.
+
+The thirty-second Verify gate returned NOT VERIFIED at `f75dd6a`. The phase moved back to Implement.

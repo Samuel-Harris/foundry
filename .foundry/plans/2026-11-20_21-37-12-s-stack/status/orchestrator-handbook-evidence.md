@@ -632,3 +632,14 @@ For the cross-handbook integration: the review-question gap queued after Verify 
 ## Merge of `s-stack-package` at `8dc793d`, under run decision `launcher-r3`
 
 `s-stack-package` (`e924352`, the second `spec-planner-handbooks` follow-up) was merged at `8dc793d`. Outside `.foundry/` it touched `handbooks/planner.md`, `handbooks/spec-writer.md`, `checks/spec-planner-handbooks.md`, s-stack's `version:` line and the generated lockfile. None is an owned path, so the code head stays at the phase's own commit `ea4fb99`.
+
+## Verify 32, code head `f75dd6ab87f52ce67ee95c4330bbc2fb61ec0ddf`, NOT VERIFIED
+
+A fresh verifier updated the check file for `ea4fb99` (commit `f75dd6a`, with new cold reads BC and BD and two scratch-repository scripts for `git cherry`) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`185/200 orchestrator.md`; Tier 1 across 20 packages). Checks 4 and 6 are PENDING, which is allowed. Check 8 FAILS on the new script "`git cherry` after a merge of the default branch". The other scripts pass, including the board's 50 Chrome scenarios, and 65 cold reads pass. B passed on a fresh rerun.
+
+The defect breaks the common path. `git cherry` lists no merge commits, but it marks `+` every commit a merge of the default branch brings in that the phase branch lacks. A phase in PR never merges the orchestrator branch, so it lacks every newer default-branch commit. After GitHub's "Update branch", or a PR creator's refresh merge, the rule named other people's commits as developer commits.
+
+Defects that mislead a reader:
+
+- The checked head had no starting value for a new pull request.
+- "every pull request has merged" did not say "of the phase".

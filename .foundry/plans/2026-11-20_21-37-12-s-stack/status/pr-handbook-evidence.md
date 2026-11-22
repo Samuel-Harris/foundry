@@ -364,3 +364,20 @@ Minor findings, not on the common path:
 
 - After a failed push, the Report's "the proof's full output" includes the `RECORD` line, which step 5 says to leave out. The handbook does not say what else to do after a failed push.
 - The STOP cold read inferred that a round pushes over a developer's amend. A rewritten branch is already documented as out of scope.
+
+## Review 6, SIGNIFICANT at `019ecea`
+
+Under run decision `gate-cost`, the first reviewer, on Opus, reviewed rather than waived, because the scope changes logic and agent instructions. The second reviewer, on Fable, then joined. The scope was the phase's own commits from `cef8140` to `019ecea` and the lockfile-only resolution of merge `3292aee`.
+
+**Earlier probes.** Both reviewers ran the check file's scratch block: 137 PASS and `0 failed`. None of the fifth review's four significant findings still fails.
+
+**Significant findings.** The phase session reran each command.
+
+- **A developer's edit to a shared path on a rebased child is pushed over with `EQUAL`** (Opus 1, Fable 1). Both reviewers found it, in a parent, child and grandchild stack where the child and grandchild change one file. The developer commits a suggestion to that file on the child, before or after GitHub rebases the child onto `main`. The round prints `EQUAL` and pushes, and the suggestion is gone. Without a rebase the same commit gives `DEVELOPER-COMMITS`. The check for a rebased head skips shared paths. Commands: `/bin/bash /private/tmp/claude-501/-Users-samharris-projects-foundry--worktrees-s-stack-phase-pr-handbook/3c5c66d2-a34f-42e2-9aaa-69b896b4cb09/scratchpad/repro/r.sh`, and `bash /private/tmp/claude-501/-Users-samharris-projects-foundry--worktrees-s-stack-phase-pr-handbook/3c5c66d2-a34f-42e2-9aaa-69b896b4cb09/scratchpad/rev-aab0/mine/mk.sh p2.sh`.
+- **A rebased child stays `NOT EQUAL` after the phase takes a developer commit and fixes the same file** (Fable 2). The check for a rebased head accepts a path only at the recorded head's or the phase tip's version, and the head holds neither. The documented remedy does not clear it. Command: `bash /private/tmp/claude-501/-Users-samharris-projects-foundry--worktrees-s-stack-phase-pr-handbook/3c5c66d2-a34f-42e2-9aaa-69b896b4cb09/scratchpad/rev-aab0/mine/mk.sh p3.sh`.
+
+**Root cause.** For a rebased head, the developer check compares whole files instead of finding where the rebase ended and classifying the commits after it.
+
+**Not counted.**
+
+- `versioning.py check origin/main` reports `s-stack` at the base's version. The bump runs before the pull request, as `AGENTS.md` says.

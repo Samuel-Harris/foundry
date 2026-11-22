@@ -9,8 +9,8 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `410ae2e` (version 8) |
-| Last tick | 2026-11-22 10:53 |
-| Default branch merged at | `d6187b5` (#91) |
+| Last tick | 2026-11-22 11:11 |
+| Default branch merged at | `92a91f7` (#92) |
 
 ## Live sessions
 
@@ -40,7 +40,7 @@ None.
 | 89 | `foundation` | merged into `main` as `5c4d320` | | |
 | 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
 | 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
-| 92 | `board` | `s-stack-board-follow-up` | `main` | none |
+| 92 | `board` | merged into `main` as `92a91f7` | | |
 
 ## Merged phases
 
@@ -118,6 +118,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
   - Include: `pr.sh`'s proof run against `origin/s-stack-package` gives false merge FAILs, because only the developer pushes that branch and it lags the local one. The handbooks should name the local orchestrator branch. Raised by `board`'s PR creator.
   - Include: the board template's `needs_update` rule says "draft or open pull request", while `orchestrator.md` lines 113 to 116 say "open pull request". Make them use the same words. Raised by `orchestrator-handbook` at `9c1e21f`.
   - Include: `orchestrator.md`'s developer-commit check (line 148) relies on the PR creator ending each carried commit with `(cherry picked from commit <sha>)`. Only `pr-handbook`'s `references/pr-commands.md` states it. Raised by `orchestrator-handbook` at `73ba6d4`.
+  - Include: `phase-session.md` and `references/status-and-messages.md` must say the phase records each pull request branch's pushed head and passes it to the PR creator (`PUSHED=`), which `pr-creator.md` assumes after pr-handbook-r5. Raised by `pr-handbook` at `49b3fab`.
   - Include: the run decision on parallel package versions. `pr-creator.md` and `orchestrator.md` may need to state it.
 
 ## Post-merge check briefs

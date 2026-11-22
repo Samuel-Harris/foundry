@@ -127,3 +127,75 @@ On each branch, `FOUNDRY_DIFF_RANGE=origin/main...HEAD bash .githooks/pre-commit
 The equality proof in the form of Experiment 7 printed nothing on every "must print nothing" line, and its tree diff against `s-stack-phase-foundation` exited 0. The phase session checked independently: `git diff --stat origin/s-stack-verify-skill s-stack-phase-foundation -- . ':(exclude).foundry'` printed nothing, neither remote branch holds a file under `.foundry/`, and both pull requests are drafts.
 
 The PR creator pushed only these two branches, with plain pushes. The automatic permission check refused `gh stack submit --auto`, so it opened the drafts with `gh pr create --draft` and linked them with `gh stack link 81 82`.
+
+## One-off check results moved from `checks/foundation.md`
+
+These results stood in the check file's `## Evidence` section until the run decision that check files hold no results.
+
+### C2 conformance of the reference at `512edd797f497f955ca5a0175faead7c18a8c2d8`
+
+Compared the reference's header section with feature plan C2 by `diff` of the text from "The header is" to the tracker sentence. Differences: the `<id>`, `<feature>` and `<phase>` placeholders and the general code-head rule, both as the orchestrator decided (`foundation-r1`, option A), plus two additions that C2 does not contain: "Run it from the worktree root." in the code-head rule, and three sentences in the **Evidence** rule making the evidence file append-only with one section per verdict. Option A says every other part of C2 is copied unchanged, so the append-only rule is a contract change made without a decision request. Result: FAIL, reported to the phase session.
+
+### Private names at `512edd797f497f955ca5a0175faead7c18a8c2d8`
+
+A case-insensitive `grep` over every file in `git diff --name-only s-stack-package...HEAD -- . ':(exclude).foundry'` and over the phase's commit messages, for the private repository's name, its feature's name and both prototype page ids (taken from the developer's private notes and not reproduced here), found no hit.
+
+## Follow-up round, Verify: VERIFIED at `829f3b1982124399b5ea54f8b597d62b7c8779a9`
+
+A fresh verifier ran the whole skill with the main checkout's pinned venv in place of `.venv-apm`, which this worktree lacks. Checks 0, 1, 2, 3, 5, 7 and 8 PASS. Check 4 is PENDING for `orchestrator.md` and `pr-creator.md`, and check 6 is PENDING because `packages/s-stack/tests` is missing. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0. Check 8 ran every phase's Rerun section: the board's headless Chrome check (`board renders as specified`), the C2 check, and nine cold reads, all passing. Mutated references made the C2 check exit 1.
+
+Every **Done when** item passed. `apm audit --ci` in `packages/s-stack` passed 10 of 10 checks without a reinstall. All 17 queued items are addressed at the code head, items 10 and the merged-notice part of 16 through the phase session's decision to keep that notice an `instruction`. In a scratch repository the code-head loop gave the expected result for status-only, version-only, `.foundry/`-only merge, version-only merge and code-bringing merge cases, and the controls showed both the glob and `-I` clauses are needed.
+
+Minor findings, recorded and not fixed (run decision on minor findings):
+
+- `packages/s-stack/README.md` lists the requirements without `gh stack`, and the body of `SKILL.md` names it only in the frontmatter.
+- `checks/foundation.md` has no rerunnable check for "Starting a session", the feature-name rule or the code-head loop's behaviour.
+- `tests/s-stack/verify-s-stack/SKILL.md` names `handbooks/verifier.md` without saying it is relative to `sam-mode`.
+
+The full report is in the phase session's scratchpad as `verify-round2.md`.
+
+## Follow-up round, Review: SIGNIFICANT at `829f3b1982124399b5ea54f8b597d62b7c8779a9`
+
+Two reviewers, Opus and Fable, reviewed `28fb827`, `4e35b4a`, `b02556c` and `829f3b1` under `handbooks/reviewer.md`. The merges in the range resolved no conflicts.
+
+| Finding | Found by | Classification | Proof |
+| --- | --- | --- | --- |
+| `SKILL.md` and the reference say `handbooks/orchestrator.md` owns the merge rule, while `handbooks/phase-session.md` lines 5 and 84 say the reference owns it and move to PR "once the reference file's merge rule holds". A phase session with VERIFIED and CLEAR verdicts for its code head could not decide to move to PR. | Both | Significant | Cold reads given only those files; each reader quoted the contradiction and would not move on the verdicts alone |
+| `/sam-mode start` with a feature name the limits forbid has no stated action, and a reader cannot tell who enforces the limits | Fable | Not significant | Cold read of `SKILL.md`; the launcher is not on this branch, so no wrong outcome was shown |
+
+Both reviewers also ran, with clean results: the three cold reads in `checks/foundation.md`, the C2 check (pass, PENDING without the plan, and exit 1 on each mutation tried), the code-head loop on scratch histories including renames, symlinks, binaries and mode-only changes, `apm install` and `apm audit --ci` in `packages/s-stack`, `versioning.py check`, and the pre-commit hook over `50e26ee...HEAD`.
+
+## Follow-up round, Verify: VERIFIED at `98999eef74b7d80f3c83160ef8fa4b439790c2aa`
+
+A fresh verifier reran the whole skill with the main checkout's venv. Checks 1, 2, 3, 5, 7 and 8 PASS, and 4 and 6 are PENDING as before. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`, exit 0. Every phase's Rerun checks passed, including the board's Chrome render and every cold read. The C2 check passes, and it exits 1 on the reference from `829f3b1`.
+
+The cold read that proves the fix was given only `SKILL.md`, the reference and `handbooks/phase-session.md`. It said a phase in Review with VERIFIED and CLEAR verdicts for its code head moves to PR, that the reference owns the merge rule a phase checks, that `handbooks/orchestrator.md` owns only the orchestrator's further checks, and that the files do not contradict each other.
+
+Every **Done when** item that still applies passed, including `apm audit --ci` with no install (`All 10 check(s) passed`). The only defect found is the minor one already recorded: the package README's requirements omit `gh stack`. The full report is in the phase session's scratchpad as `verify-round2b.md`.
+
+## Follow-up round, Review: SIGNIFICANT at `98999eef74b7d80f3c83160ef8fa4b439790c2aa`
+
+Two reviewers, Opus and Fable, reviewed `e92c913` and `98999ee` and reran the earlier significant probe.
+
+- The probe now passes for both. Given only `SKILL.md`, the reference and `handbooks/phase-session.md`, each reader named one owner of the merge rule and moved to PR on the two verdicts.
+- Both found the same significant finding. `checks/foundation.md` line 51 still says the run decision on `prs-open` re-merges makes the Verdicts rule "a condition of the merge rule rather than the whole of it", while lines 45, 89 and 91 say it is the merge rule. A cold read of the check file could not settle how to grade an answer between them. Both judged the impact small.
+- Clean under both: the C2 check, which exits 1 on every rewording tried; cold read 3; `apm install` and `apm audit --ci` in `packages/s-stack`; the validator and markdown lint. No other handbook states who owns the merge rule.
+- Noted by Fable, not caused by this round: `versioning.py check origin/main` fails because `main` already carries s-stack 0.1.3. The PR creator's regenerate commit raises the version on the pull request branch.
+
+## Follow-up round, Verify: VERIFIED at `74bba4e19e398b0284414bae2e49a9f257c42157`
+
+A fresh verifier reran the whole skill with the main checkout's venv. Checks 1, 2, 3, 5, 7 and 8 PASS, and 4 and 6 are PENDING as before. Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. All nine check-file cold reads and the board render passed, and the C2 check passed and exited 1 on four rewordings. A cold read of `checks/foundation.md` alone found that all its statements agree on what the merge rule is. Every **Done when** item passed, including `apm audit --ci` with no install.
+
+Minor finding, recorded and not fixed: cold read 3's question 3 asks "When may the orchestrator merge a phase?", while its expected answer frames the merge rule as the gate for moving to PR. The reader answered correctly.
+
+The full report is in the phase session's scratchpad as `verify-round2c.md`.
+
+## Follow-up round, Review: CLEAR at `74bba4e19e398b0284414bae2e49a9f257c42157`
+
+Two reviewers, Opus and Fable, reviewed `74bba4e`, and the merge after it resolved no conflicts. Both reran the stale-sentence probe. Given only `checks/foundation.md`, each reader found that every statement agrees that the reference's Verdicts rule is the merge rule a phase checks before PR. Each could decide how to grade cold read 3. The C2 check passed, and exited 1 on three rewordings of the Verdicts sentence. A cold read of the check file, the reference and `SKILL.md` found them in agreement and gave the right action for a phase holding both verdicts. No finding was reported, significant or otherwise. Fable noted three small paraphrase differences in line 51, none of which led a reader to a wrong action.
+
+## Follow-up round, PR: draft pull request 88 for code head `74bba4e19e398b0284414bae2e49a9f257c42157`
+
+A fresh PR creator cut `s-stack-foundation-follow-up` from `origin/main` at `51f334e`. It replayed the round's seven commits without lockfile hunks or `.foundry/`, then added `chore(s-stack): regenerate generated files`, which raised s-stack from 0.1.3 to 0.1.4 and refreshed its lockfile hashes. [Pull request 88](https://github.com/Samuel-Harris/foundry/pull/88) targets `main`, depends on nothing, and is a draft. It has 87 hand-written lines.
+
+On the branch, the pre-commit hook over `origin/main...HEAD`, `versioning.py check origin/main` (`1 changed package(s), none without a version bump`) and Tier 1 (`all Tier 1 structural checks passed across 20 packages`) all exited 0. The phase session checked independently. `git diff --exit-code 74bba4e origin/s-stack-foundation-follow-up` over the four hand-written files exits 0. The branch changes only those files, the s-stack lockfile and its `version:` line, and nothing under `.foundry/`.

@@ -19,7 +19,6 @@
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-phase-board` | `%197` | `../s-stack-phase-board` | 2026-11-22, worktree recreated and session resumed for its follow-up round |
 | `s-stack-spec` | `%198` (orchestrator column) | `../s-stack-spec` | 2026-11-22, spec writer for the developer's question on verify and review cost |
 
 ## Open decision requests
@@ -65,6 +64,7 @@ None.
 | `s-stack-phase-foundation` | removed, branch kept | 2026-11-22 | Done at `5423ae5`, merged; #88 and #89 merged into `main` |
 | `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-22 | Done at `079c16d`, merged; #84, #87 and #90 merged into `main` |
 | `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-22 | Done again at `8a63c84`, merged; #85 and #91 merged into `main` |
+| `s-stack-phase-board` | removed, branch kept | 2026-11-22 | Done again at `53276c3`, merged; #86 and #92 merged into `main` |
 
 ## Queued fix rounds
 

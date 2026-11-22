@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "Review"
-changed_at: "2026-11-22T00:25:00Z"
+state: "PR"
+changed_at: "2026-11-22T00:29:00Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
@@ -67,6 +67,11 @@ verdicts:
     code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
     at: "2026-11-22T00:25:00Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
+    at: "2026-11-22T00:29:00Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
@@ -108,4 +113,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Second follow-up round. Verify passed at `775a30a`. The review covers this phase's owned paths from `47f792f` to `775a30a`.
+Second follow-up round. Both gates passed for `775a30a`. A PR creator is opening a new draft pull request against `main`.

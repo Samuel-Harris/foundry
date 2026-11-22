@@ -234,3 +234,22 @@ Minor note, recorded and not fixed under `spec-planner-handbooks-d3`: `spec-writ
 ### For the cross-handbook integration
 
 `references/status-and-messages.md`, owned by `foundation`, says each detail line is "a fact already committed to the sender's own file". That sits awkwardly with two messages. `started` is sent before any commit. A spec writer's folded `run-decisions.md` rows live in the orchestrator's file. Not fixed here.
+
+## Second follow-up round: Review, code head `775a30ac0ed9bf848197cd5b4e9499dc9266266a`
+
+Two adversaries ran `interrogate`, on Opus and on Fable, scoped to `47f792f..775a30a` on this phase's owned paths. They ran ten cold reads and one scratch-repository probe between them.
+
+- **Spec writers.** Every reader started the orchestrator through `SKILL.md`, handled exit 3 and exit 4 failures correctly, and took payloads from the reference.
+- **Planners.** Planners named generated paths and generated lines.
+- **Probe.** The scratch-repository probe showed the reference's code-head command skipping a version-only bump.
+
+Verdict: CLEAR.
+
+Minor findings, recorded and not fixed under `spec-planner-handbooks-d3`:
+
+- Cold read 2's point 1 expects "sends the orchestrator no decision request", which the prompt does not ask about, so a strict grader could fail a correct answer. That line is unchanged in this round.
+
+### For the cross-handbook integration
+
+- `SKILL.md`'s "Starting a session" says "with the repository root as the working directory". A session in a worktree has to work out which root that means. Readers chose the worktree root, which is correct. The old `spec-writer.md` said "worktree root".
+- `handbooks/phase-session.md` line 26 names only generated paths for the code head, while `planner.md` and the reference now also name generated lines.

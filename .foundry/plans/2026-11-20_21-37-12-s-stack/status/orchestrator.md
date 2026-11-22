@@ -43,6 +43,7 @@ None.
 | 96 | `integration` | merged into `main` as `7747021` | | |
 | 97 | `default-stack` | merged into `main` as `26f1458` | | |
 | 98 | `default-stack` | merged into `main` as `59bee65` | | |
+| 103 | `integration` | `s-stack-integration-cold-read-4` | `main` | none |
 
 ## Merged phases
 
@@ -64,6 +65,7 @@ None.
 | `launcher` | `a51f246` (tip `117abdb`) | `890d46d` | VERIFIED on `3a21396` (scoped, no code change since `a51f246`) |
 | `integration` | `9f6c1c0` (tip `d8e5fe7`) | `90f855a` | VERIFIED on `e407673` (74 cold reads, 8 scripts; no code change since `9f6c1c0`) |
 | `default-stack` | `1983ab2` (tip `fef611d`) | `acaba0e` | final full run NOT VERIFIED on `5e529e3`: integration cold read 4 failed 2 of 3 runs; everything else passed |
+| `integration` (full-run fix) | `7aa4a70` (tip `c257bc4`) | `eb83e95` | second final full run running |
 
 ## Closed sessions
 

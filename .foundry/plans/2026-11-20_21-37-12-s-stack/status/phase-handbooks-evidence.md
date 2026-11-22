@@ -288,3 +288,26 @@ The phase session checked independently. The four files #85 adds over `origin/ma
 ## Done
 
 #85 merged into main as `6f42b1c` at 18:47:47 UTC on 2026-11-21. GitHub confirms the merge. The orchestrator reports code head `a1c95f1` merged into `s-stack-package` at `986be95`, with its post-merge check VERIFIED on `ce086bb`. The phase is Done.
+
+## Verify: NOT VERIFIED at `5d30a593661581bad342e74e6d9ced3f1289ee3c`
+
+Follow-up round of 2026-11-22. A fresh verifier ran the whole verification skill between 00:21 and 00:26 UTC, at HEAD `1816fc3`, and made no commit.
+
+Passed:
+
+- primitives (`94 primitives valid`) and the root manifest (`12 listed, 19 reached`);
+- markdownlint (13 files, 0 errors);
+- line budgets (phase-session 136, verifier 78, reviewer 41 of 200);
+- package isolation;
+- Tier 1 (`all Tier 1 structural checks passed across 20 packages`);
+- the rendered-board check (50 `ok`);
+- `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads;
+- the private-name search (0 matches).
+
+Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+
+The one-off cold reads of changes a, d, e and f passed. Three failed on consistency:
+
+- b: the `fix-round` row says every fix round re-derives bases with a PR creator, while a conflict round whose commit the branch already holds changes nothing.
+- c: the "pull request merged" round sends `prs-open` unconditionally, then says what to do after a `STOP`. Because `prs-open` triggers the orchestrator's re-merge, sending it after a `STOP` could admit code that no pull request holds.
+- g: the reference file's `fix-round` row omits commits the developer made, which `phase-session.md`'s feedback round now carries. The file belongs to `foundation`.

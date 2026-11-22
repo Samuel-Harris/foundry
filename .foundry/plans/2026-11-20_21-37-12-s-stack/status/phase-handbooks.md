@@ -1,7 +1,7 @@
 ---
 phase: "phase-handbooks"
-state: "Verify"
-changed_at: "2026-11-22T00:21:02Z"
+state: "Implement"
+changed_at: "2026-11-22T00:27:34Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
 code_head: "5d30a593661581bad342e74e6d9ced3f1289ee3c"
@@ -122,6 +122,11 @@ verdicts:
     code_head: "a1c95f1df8eab39ede778ec82f49b025034881da"
     at: "2026-11-21T18:38:59Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
+  - gate: "verify"
+    result: "NOT VERIFIED"
+    code_head: "5d30a593661581bad342e74e6d9ced3f1289ee3c"
+    at: "2026-11-22T00:27:34Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/phase-handbooks-evidence.md"
 pull_requests:
   - number: 85
     branch: "s-stack-phase-handbooks"
@@ -170,4 +175,4 @@ Fix 771ac5d: the merged notice is resent only once every pull request, new ones 
 Fixes 52bc3da and 8e258ca: PR step 4 now says the orchestrator merges a phase it has merged before only while that phase lists an open pull request, in the orchestrator's words, so the notice cannot come before the new pull request is recorded. Verify returned NOT VERIFIED at 8e258ca: the orchestrator's re-merge guard and its resend condition, restated in phase-session.md, leave a dead end. Decision request phase-handbooks-r1 sent. phase-handbooks-r1 answered with option A (phase-handbooks-d4). Fix a1c95f1 replaces the restated resend conditions and the guard sentence with a pointer to orchestrator.md. Verify returned VERIFIED at a1c95f1. Review returned CLEAR at a1c95f1. Both verdicts cover a1c95f1. A PR creator now rebuilds #85 against main under run decision pr-handbook-r1. #85 was rebuilt onto main at f54b7b8, with no dependency, and the proof shows it holds exactly the verified phase diff.
 Every pull request of the phase has merged into main: #85 as 6f42b1c on 2026-11-21 at 18:47:47 UTC. Code head a1c95f1 is merged into s-stack-package at 986be95, and its post-merge check passed (VERIFIED on ce086bb), per the orchestrator. The phase moved from PR to Done.
 Follow-up round from the orchestrator on 2026-11-22: a Done phase asked to change code moves back to Implement. Seven changes to phase-session.md (prs-open after fix rounds, an idempotent conflict round, STOP handling, cherry-pick for delegates, a wider move back, generated lines in the code head, and developer commits on pull request branches).
-s-stack-package merged at 195daeb. Fix 5d30a59 makes changes a to g. The code head is now computed with the reference's first-parent command, with this run's lockfile path and version-line exclusions. No new quick-review: the layer had its pass, and this round's change is small and gets both gates.
+s-stack-package merged at 195daeb. Fix 5d30a59 makes changes a to g. The code head is now computed with the reference's first-parent command, with this run's lockfile path and version-line exclusions. No new quick-review: the layer had its pass, and this round's change is small and gets both gates. Verify returned NOT VERIFIED at 5d30a59: the no-op conflict round contradicted the fix-round row, and prs-open could follow a STOP. Back to Implement.

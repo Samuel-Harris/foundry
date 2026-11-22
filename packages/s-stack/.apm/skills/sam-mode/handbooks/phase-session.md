@@ -82,8 +82,11 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 ## PR
 
 1. Move to PR once the reference file's merge rule holds for the current code head.
-2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request for commits that the phase plan assigns to a new one, and for commits that no open pull request carries, such as a fix made after every pull request has merged. When it reports a `STOP`, send no `prs-open`. Send the orchestrator a decision request that names the `STOP` line, and stay in your current state. When it reports `DEVELOPER-COMMITS`, run the feedback round below for those commits.
-3. Unless the PR creator reported a `STOP`, record each pull request in `pull_requests`, then send `prs-open` with each number and its `depends_on` list.
+2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan and your phase plan. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request for commits that the phase plan assigns to a new one, and for commits that no open pull request carries, such as a fix made after every pull request has merged. Act on its report:
+   - A `STOP`: send no `prs-open`. Send the orchestrator a decision request that names the `STOP` line, and stay in your current state.
+   - `DEVELOPER-COMMITS`: send no `prs-open`. Run the feedback round below for those commits.
+   - Neither: go on to step 3.
+3. Record each pull request in `pull_requests`, then send `prs-open` with each number and its `depends_on` list.
 4. Stay in PR while the developer reviews. When the orchestrator tells you that every pull request has merged into the default branch, move to Done only if the phase is in PR. In any other state, ignore it and send `state`. When the notice comes again is for `handbooks/orchestrator.md` to decide.
 
 ## Messages from the orchestrator
@@ -103,9 +106,9 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 
 1. Move back to Implement. Take each commit the developer made into the phase branch with `git cherry-pick -x <commit>`, then make any other fix on the phase branch.
 2. Pass Verify and Review again for the new code head.
-3. Follow [PR](#pr) steps 1 to 3. The PR creator carries the fix commits to the pull request that owns each one, and your `prs-open` answers the round, so the orchestrator can merge the phase branch again.
+3. Follow [PR](#pr) steps 1 to 3. The PR creator carries the fix commits to the pull request that owns each one. The `prs-open` that step 3 sends answers the round, so the orchestrator can merge the phase branch again.
 
-**A pull request merged.** One that your pull requests depend on has merged, or another phase's pull request has landed on the default branch and left your generated files stale. Start a PR creator to refresh each of your pull request branches, as `pr-creator.md` says. If it reports a `STOP`, act as [PR](#pr) step 2 says. Otherwise record each pull request's base and `depends_on` in `pull_requests`, then send `prs-open`. The phase branch does not change, so the phase stays in PR and no gate runs again.
+**A pull request merged.** One that your pull requests depend on has merged, or another phase's pull request has landed on the default branch and left your generated files stale. Start a PR creator to refresh each of your pull request branches, as `pr-creator.md` says. Act on its report as [PR](#pr) steps 2 and 3 say. When it reports neither a `STOP` nor `DEVELOPER-COMMITS`, the phase branch does not change, so the phase stays in PR and no gate runs again.
 
 **A conflict with the default branch.** The message names the conflicting paths, which you own, and the default branch commit. If the phase branch already contains that commit, change nothing and send `prs-open` again with your pull requests as they stand. Otherwise move back to Implement, merge that commit into the phase branch with `git merge --no-ff`, resolve the conflict in your own paths, pass both gates again, and follow [PR](#pr) steps 1 to 3.
 
@@ -123,7 +126,7 @@ A `move-back` names the state and what changed.
 
 ## Instructions from the developer
 
-The developer can type into your pane. Follow a direct instruction. When it changes the phase's scope or a recorded decision, also record it in `decisions`, commit, and send the orchestrator an `instruction` message that carries it, before you start the work. When it conflicts with the feature plan, send a decision request as well, because only the planner changes the plan. Build the instructed work that the answer cannot change while the request is open. In Verify, Review, PR or Done, an instruction or a message that asks for a change to the code moves the phase back to Implement first.
+The developer can type into your pane. Follow a direct instruction. When it changes the phase's scope or a recorded decision, also record it in `decisions`, commit, and send the orchestrator an `instruction` message that carries it, before you start the work. When it conflicts with the feature plan, send a decision request as well, because only the planner changes the plan. Build the instructed work that the answer cannot change while the request is open. In Verify, Review, PR or Done, an instruction, from the developer or the orchestrator, that asks for a change to the code moves the phase back to Implement first. A fix round says for itself when to move back.
 
 ## After a restart
 

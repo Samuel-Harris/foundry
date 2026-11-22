@@ -1,0 +1,802 @@
+<!--
+Status board template for one s-stack feature. This comment is the one home
+of the board's data schema and of the publish call that goes with it; other
+documents point here instead of copying it.
+
+PUBLISHING
+
+Publish this file once per feature with the Artifact tool, and never publish
+it again. Every later change goes into the page's database. Pass:
+
+  capabilities: {db: {rules: [{path: "", read: "view", write: "admin"}]}}
+  icon: "status"
+  title: "<feature> status board"
+
+The file has no <title> element on purpose, so the gallery takes the publish
+title. The page sets the browser tab's title from board/meta.feature. The page
+never writes. Only an editor writes, through ArtifactData, and every viewer
+reads.
+
+DOCUMENTS
+
+A time is a UTC ISO 8601 string, such as "2026-01-31T09:05:00Z". A state name
+is one of the seven names Spec, Plan, Implement, Verify, Review, PR and Done.
+
+board/meta, one document:
+  feature              string, the feature's name
+  orchestrator_branch  string
+  default_branch       string
+  architecture_url     https URL of the architecture page, or null
+  tick_at              time of the orchestrator's last tick
+  stale_after_min      number, normally 40. The page marks itself stale when
+                       tick_at is more than this many minutes old, and uses
+                       40 when the field is absent.
+
+board/recent, one document:
+  items  list of at most 20 {at, phase, from, to} objects, newest first. at is
+         a time, phase is a phase id, from and to are state names, and from is
+         null for a phase's first state.
+
+phases/<phase id>, one document per phase:
+  phase         string, the phase id, equal to the document id
+  state         a state name
+  scheduling    "queued", "blocked", "live" or "closed"
+                (it describes the session, not the phase's state)
+  waits_for     string, a one-line description of anything the phase waits
+                for, such as a decision, a person or a resource, or null.
+                Other phases go in depends_on, not here.
+  session_live  boolean, true while the phase's session runs
+  pane          string naming the session's pane, or null
+  changed_at    time of the phase's last state change
+  depends_on    list of {phase, until} objects, one per other phase this
+                phase waits for, or an empty list. It lists only phases.
+                phase is the other phase's id.
+                until is "merged" when the other phase's work only has to
+                be merged into the orchestrator branch, or "done" when every
+                pull request of the other phase has to be merged into the
+                default branch. The page draws these as a dependency map.
+
+prs/<number>, one document per pull request, its document id the number
+written as a string, such as prs/42:
+  number        number, or a string of its decimal digits, such as "42",
+                which the page reads as that number
+  url           https URL of the pull request
+  title         string
+  phase         string, the phase id
+  state         "draft", "open", "merged" or "closed"
+  checks        "passing", "failing", "pending" or "none"
+  base          string, the base branch
+  depends_on    list of pull request numbers, empty when there are none.
+                Each may be a number or a string of its decimal digits, which
+                the page reads as that number.
+  review_rank   number, the lowest reviewed first, or null
+  needs_update  boolean, explained below
+
+needs/<id>, one document per item waiting on the developer, its document id
+chosen by the orchestrator:
+  kind     "decision", "prompt" or "restack"
+  phase    string, the phase id
+  summary  string, one line
+  door     "one-way", "two-way" or null
+  pane     string naming the pane that shows a waiting prompt, or null
+  since    time the item started waiting
+
+WRITING
+
+Write once per tick, as one ArtifactData batch of at most 50 writes that holds
+only the documents that changed. Keep recent as one document: replace its
+items with the new list, trimmed to 20. When a needs item is resolved, delete
+its document rather than flag it.
+
+needs_update is true until the pull request contains the default branch's tip
+and its checks have passed on that head.
+-->
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* One column up to 960 px wide: header, notices, then six sections split by hairlines. */
+  :root {
+    --bg: #f5f7fa;
+    --fg: #1a2130;
+    --muted: #5a6476;
+    --line: #dbe0e8;
+    --accent: #3b5788;
+    --accent-bg: #e2e9f5;
+    --chip-bg: #e9edf3;
+    --chip-fg: #374255;
+    --good: #1c6e46;
+    --good-bg: #ddf1e5;
+    --warn: #7d5300;
+    --warn-bg: #f9ecd0;
+    --crit: #a82418;
+    --crit-bg: #fbe4e1;
+    --font-text: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10141b;
+      --fg: #e2e6ed;
+      --muted: #98a2b3;
+      --line: #29303c;
+      --accent: #92acd8;
+      --accent-bg: #1d2a40;
+      --chip-bg: #1e242f;
+      --chip-fg: #c2c9d5;
+      --good: #74d3a0;
+      --good-bg: #16352a;
+      --warn: #e9b95e;
+      --warn-bg: #3a2c12;
+      --crit: #ff8f85;
+      --crit-bg: #45201c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10141b;
+    --fg: #e2e6ed;
+    --muted: #98a2b3;
+    --line: #29303c;
+    --accent: #92acd8;
+    --accent-bg: #1d2a40;
+    --chip-bg: #1e242f;
+    --chip-fg: #c2c9d5;
+    --good: #74d3a0;
+    --good-bg: #16352a;
+    --warn: #e9b95e;
+    --warn-bg: #3a2c12;
+    --crit: #ff8f85;
+    --crit-bg: #45201c;
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.5 var(--font-text);
+  }
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding-block: 24px 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 28px;
+  }
+  .sections { display: grid; gap: 28px; min-width: 0; }
+  .mono, time, .num { font-family: var(--font-mono); font-size: 0.92em; }
+  time, .num, .count { font-variant-numeric: tabular-nums; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  header { display: grid; gap: 6px; }
+  h1 { margin: 0; font-size: 1.5rem; font-weight: 600; line-height: 1.25; text-wrap: balance; overflow-wrap: anywhere; }
+  .meta-line { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); font-size: 0.9rem; }
+  .meta-line > * { min-width: 0; overflow-wrap: anywhere; }
+
+  .banner, .notice {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.92rem;
+  }
+  .banner { background: var(--crit-bg); color: var(--crit); font-weight: 500; }
+  .notice { background: var(--warn-bg); color: var(--warn); }
+
+  section { display: grid; gap: 10px; padding-top: 20px; border-top: 1px solid var(--line); min-width: 0; }
+  .section-head { display: flex; align-items: baseline; gap: 10px; }
+  h2 { margin: 0; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .empty { margin: 0; color: var(--muted); }
+  .section-error { margin: 0; color: var(--crit); font-size: 0.9rem; }
+
+  .chip {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--chip-bg);
+    color: var(--chip-fg);
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.6;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .chip.accent { background: var(--accent-bg); color: var(--accent); }
+  .chip.good { background: var(--good-bg); color: var(--good); }
+  .chip.warn { background: var(--warn-bg); color: var(--warn); }
+  .chip.crit { background: var(--crit-bg); color: var(--crit); }
+
+  ul.items { list-style: none; margin: 0; padding: 0; display: grid; }
+  ul.items > li { display: grid; gap: 4px; padding-block: 10px; border-bottom: 1px solid var(--line); min-width: 0; }
+  ul.items > li:last-child { border-bottom: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; min-width: 0; }
+  .row > * { min-width: 0; overflow-wrap: anywhere; }
+  .summary, .pane { overflow-wrap: anywhere; }
+  .pane { min-width: 0; }
+  .sub { color: var(--muted); font-size: 0.88rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  th { text-align: left; font-weight: 500; color: var(--muted); font-size: 0.8rem; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); }
+  td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: break-word; }
+  tr:last-child td { border-bottom: 0; }
+  @media (min-width: 601px) {
+    .table-wrap { overflow-x: auto; }
+  }
+  @media (max-width: 600px) {
+    table, tbody, tr, td { display: block; }
+    thead { display: none; }
+    tr { padding-block: 8px; border-bottom: 1px solid var(--line); }
+    tr:last-child { border-bottom: 0; }
+    td { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); justify-items: start; gap: 8px; padding: 3px 0; border: 0; overflow-wrap: anywhere; }
+    td::before { content: attr(data-label); color: var(--muted); font-size: 0.8rem; }
+  }
+
+  ol.recent { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  ol.recent > li { display: grid; grid-template-columns: minmax(0, max-content) minmax(8em, 1fr); gap: 12px; }
+  ol.recent > li > :first-child { overflow-wrap: anywhere; }
+  .deps { max-width: 100%; }
+  .deps .chip { white-space: normal; overflow-wrap: anywhere; border-radius: 6px; }
+  .map-heading { margin: 6px 0 0; font-size: 0.85rem; font-weight: 600; }
+  .map { overflow-x: auto; max-width: 100%; min-width: 0; }
+  .map svg { display: block; }
+  .map text { font-family: var(--font-mono); font-size: 12px; fill: var(--fg); }
+  .map .node-state { font-family: var(--font-text); font-size: 11px; fill: var(--muted); }
+  .map .node { stroke-width: 1.5; }
+  .map .node.plain { fill: var(--chip-bg); stroke: var(--line); }
+  .map .node.accent { fill: var(--accent-bg); stroke: var(--accent); }
+  .map .node.warn { fill: var(--warn-bg); stroke: var(--warn); }
+  .map .node.good { fill: var(--good-bg); stroke: var(--good); }
+  .map .node.crit { fill: var(--crit-bg); stroke: var(--crit); }
+  .map .edge { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+  .map .edge.done { stroke-dasharray: 5 4; }
+  .map .arrow { fill: var(--muted); }
+  .map-legend { margin: 0; }
+  .heartbeat { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+  .heartbeat > * { min-width: 0; overflow-wrap: anywhere; }
+</style>
+
+<div class="page">
+  <header>
+    <h1 id="feature">Status board</h1>
+    <div class="meta-line" id="meta-line"></div>
+    <div class="banner" id="stale-banner" hidden></div>
+  </header>
+  <div class="notice" id="notice" hidden></div>
+  <main id="sections" class="sections">
+    <section id="s-needs"></section>
+    <section id="s-review"></section>
+    <section id="s-prs"></section>
+    <section id="s-phases"></section>
+    <section id="s-recent"></section>
+    <section id="s-heartbeat"></section>
+  </main>
+</div>
+
+<script>
+(() => {
+  const STATE_TONE = {Spec: "plain", Plan: "plain", Implement: "accent", Verify: "warn", Review: "warn", PR: "good", Done: "good"};
+  const NEED_KINDS = ["decision", "prompt", "restack"];
+  const DEFAULT_STALE_MIN = 40;
+  const MINUTE = 60000;
+
+  const digitsToNumber = (v) => (typeof v === "string" && /^[0-9]+$/.test(v) ? Number(v) : v);
+  const prDoc = (p) => ({...p, number: digitsToNumber(p.number),
+    depends_on: Array.isArray(p.depends_on) ? p.depends_on.map(digitsToNumber) : p.depends_on});
+
+  const SOURCES = {
+    meta: {ref: (db) => db.doc("board/meta")},
+    recent: {ref: (db) => db.doc("board/recent")},
+    phases: {ref: (db) => db.collection("phases")},
+    prs: {ref: (db) => db.collection("prs"), normalise: prDoc},
+    needs: {ref: (db) => db.collection("needs")},
+  };
+
+  const state = {
+    meta: null,
+    liveMeta: undefined,
+    recent: null,
+    phases: [],
+    prs: [],
+    needs: [],
+    status: Object.fromEntries(Object.keys(SOURCES).map((source) => [source, "loading"])),
+    noDatabase: false,
+    waitedLong: false,
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  function el(tag, attrs, ...children) {
+    const node = document.createElement(tag);
+    for (const [key, value] of Object.entries(attrs || {})) {
+      if (value == null) continue;
+      if (key === "class") node.className = value;
+      else node.setAttribute(key, value);
+    }
+    for (const child of children) {
+      if (child == null || child === false) continue;
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    }
+    return node;
+  }
+
+  const str = (v) => (typeof v === "string" ? v : typeof v === "number" ? String(v) : "");
+  const isObj = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
+  const chip = (text, tone) => el("span", {class: tone ? "chip " + tone : "chip", title: text}, text);
+
+  // key survives re-rendering, so render() can give focus back to the new copy of a focused link.
+  function link(text, url, key) {
+    if (typeof url === "string" && url.startsWith("https://")) {
+      return el("a", {href: url, target: "_blank", rel: "noopener noreferrer", "data-key": key}, text);
+    }
+    return el("span", {}, text);
+  }
+
+  function parseTime(v) {
+    if (typeof v !== "string") return null;
+    const ms = Date.parse(v);
+    return Number.isNaN(ms) ? null : ms;
+  }
+
+  function formatAge(ms) {
+    const min = Math.max(0, Math.floor(ms / MINUTE));
+    if (min < 60) return min + " min";
+    const h = Math.floor(min / 60);
+    if (h < 48) return h + " h " + (min % 60) + " min";
+    return Math.floor(h / 24) + " d " + (h % 24) + " h";
+  }
+
+  function timeEl(v, mode) {
+    const ms = parseTime(v);
+    if (ms === null) return el("span", {class: "mono"}, str(v) || "unknown");
+    const local = new Date(ms).toLocaleString(undefined, {dateStyle: "medium", timeStyle: "short"});
+    const text = mode === "relative" ? formatAge(Date.now() - ms) + " ago" : local;
+    return el("time", {datetime: new Date(ms).toISOString(), title: local}, text);
+  }
+
+  const numbers = (v) => (Array.isArray(v) ? v.filter((n) => typeof n === "number") : []);
+  const prLabel = (n) => "#" + n;
+
+  function checksChip(checks) {
+    const tone = {passing: "good", pending: "warn", failing: "crit"}[checks];
+    return chip(str(checks) || "none", tone);
+  }
+  function updateChip(pr) {
+    if (pr.needs_update === true) return chip("Needs update", "warn");
+    if (pr.needs_update === false) return chip("Up to date", "good");
+    return null;
+  }
+
+  function stateLook(s) {
+    if (typeof s === "string" && Object.hasOwn(STATE_TONE, s)) return {label: s, tone: STATE_TONE[s]};
+    if (s == null) return {label: "unknown", tone: "crit"};
+    return {label: "unknown: " + str(s), tone: "crit"};
+  }
+  function phaseStateChip(s) {
+    const {label, tone} = stateLook(s);
+    return chip(label, tone === "plain" ? "" : tone);
+  }
+
+  const SCHEDULING = {live: "session live", closed: "session closed", queued: "queued to start", blocked: "blocked"};
+  function schedulingChip(s) {
+    if (!Object.hasOwn(SCHEDULING, s)) return chip("unknown: " + str(s), "crit");
+    return chip(SCHEDULING[s], s === "blocked" ? "warn" : "");
+  }
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const UNTIL = ["merged", "done"];
+  // charW is the advance of a 12 px mono character with a margin for the fallback faces.
+  const MAP = {nodeW: 168, nodeH: 44, colGap: 56, rowGap: 12, pad: 12, lane: 24, charW: 7.4, maxLabel: 40};
+
+  function dependsOn(p) {
+    if (Array.isArray(p.depends_on)) return p.depends_on;
+    if (p.depends_on == null) return [];
+    return [p.depends_on];
+  }
+  const readableDep = (d) => isObj(d) && typeof d.phase === "string" && UNTIL.includes(d.until);
+  const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+  function svg(tag, attrs, ...children) {
+    const node = document.createElementNS(SVG_NS, tag);
+    for (const [key, value] of Object.entries(attrs || {})) node.setAttribute(key, value);
+    for (const child of children) if (child != null) node.append(child);
+    return node;
+  }
+
+  // A cycle is a broken plan, so the walk reports the first one it meets instead of laying it out.
+  function phaseGraph(phases, deps) {
+    const nodes = new Map();
+    for (const p of phases) if (str(p.phase)) nodes.set(str(p.phase), {id: str(p.phase), state: p.state});
+    const edges = [];
+    for (const p of phases) {
+      if (!str(p.phase)) continue;
+      for (const d of deps.get(p).filter(readableDep)) {
+        if (!nodes.has(d.phase)) nodes.set(d.phase, {id: d.phase, state: null});
+        edges.push({from: d.phase, to: str(p.phase), until: d.until});
+      }
+    }
+    const layers = new Map();
+    const path = [];
+    let cycle = null;
+    const layer = (id) => {
+      if (layers.has(id)) return layers.get(id);
+      if (path.includes(id)) {
+        cycle ||= path.slice(path.indexOf(id));
+        return 0;
+      }
+      path.push(id);
+      let depth = 0;
+      for (const e of edges) if (e.to === id) depth = Math.max(depth, 1 + layer(e.from));
+      path.pop();
+      layers.set(id, depth);
+      return depth;
+    };
+    for (const node of nodes.values()) node.layer = layer(node.id);
+    return {nodes: [...nodes.values()], edges, cycle};
+  }
+
+  function drawMap({nodes, edges}) {
+    const {nodeH, colGap, rowGap, pad, lane, charW, maxLabel} = MAP;
+    const longest = Math.min(maxLabel, Math.max(...nodes.map((n) => n.id.length)));
+    const nodeW = Math.max(MAP.nodeW, 20 + Math.ceil(longest * charW));
+    const columns = [];
+    for (const n of nodes) (columns[n.layer] ||= []).push(n);
+    const colHeight = (col) => col.length * nodeH + (col.length - 1) * rowGap;
+    const tallest = Math.max(...columns.map(colHeight));
+    const byId = new Map(nodes.map((n) => [n.id, n]));
+    const col = (id) => byId.get(id).layer;
+    // A lane of its own per edge, so two graphs that differ only in a skipping edge's ends never draw alike.
+    const lanes = edges.filter((e) => col(e.to) - col(e.from) !== 1).sort((a, b) =>
+      col(a.from) - col(b.from) || col(a.to) - col(b.to) || a.from.localeCompare(b.from) || a.to.localeCompare(b.to));
+    const laneY = new Map(lanes.map((e, i) => [e, pad + lane * (i + 0.5)]));
+    const top = pad + lanes.length * lane;
+    const width = 2 * pad + columns.length * nodeW + (columns.length - 1) * colGap;
+    const height = top + tallest + pad;
+
+    const box = new Map();
+    columns.forEach((col, ci) => {
+      col.sort((a, b) => a.id.localeCompare(b.id));
+      const offset = top + (tallest - colHeight(col)) / 2;
+      col.forEach((n, i) => box.set(n.id, {x: pad + ci * (nodeW + colGap), y: offset + i * (nodeH + rowGap)}));
+    });
+
+    // Edges into one node would otherwise stack their arrowheads on one point.
+    const arrival = new Map();
+    for (const node of nodes) {
+      const incoming = edges.filter((e) => e.to === node.id);
+      const fromY = (e) => (laneY.has(e) ? laneY.get(e) : box.get(e.from).y);
+      incoming.sort((a, b) => fromY(a) - fromY(b));
+      incoming.forEach((e, k) => arrival.set(e, box.get(node.id).y + nodeH * (k + 1) / (incoming.length + 1)));
+    }
+
+    const edgePath = (e) => {
+      const a = box.get(e.from), b = box.get(e.to);
+      const x0 = a.x + nodeW, y0 = a.y + nodeH / 2, x3 = b.x, y3 = arrival.get(e);
+      if (!laneY.has(e)) {
+        const mid = (x0 + x3) / 2;
+        return `M${x0},${y0} C${mid},${y0} ${mid},${y3} ${x3},${y3}`;
+      }
+      // One curve with both control points on the lane dips back into the middle column, so rise and fall inside the gaps.
+      const y = laneY.get(e);
+      return `M${x0},${y0} C${x0 + colGap / 2},${y0} ${x0 + colGap / 2},${y} ${x0 + colGap},${y} ` +
+        `H${x3 - colGap} C${x3 - colGap / 2},${y} ${x3 - colGap / 2},${y3} ${x3},${y3}`;
+    };
+
+    return svg("svg", {width, height, viewBox: `0 0 ${width} ${height}`, "aria-hidden": "true"},
+      svg("defs", {}, svg("marker", {id: "map-arrow", viewBox: "0 0 8 8", refX: 8, refY: 4, markerWidth: 8, markerHeight: 8, markerUnits: "userSpaceOnUse", orient: "auto"},
+        svg("path", {class: "arrow", d: "M0,0 L8,4 L0,8 z"}))),
+      ...edges.map((e) => svg("path", {class: e.until === "done" ? "edge done" : "edge", d: edgePath(e), "marker-end": "url(#map-arrow)"})),
+      ...nodes.map((n) => svg("g", {transform: `translate(${box.get(n.id).x},${box.get(n.id).y})`},
+        svg("title", {}, n.id),
+        svg("rect", {class: "node " + stateLook(n.state).tone, width: nodeW, height: nodeH, rx: 6}),
+        svg("text", {x: 10, y: 19}, truncate(n.id, maxLabel)),
+        svg("text", {class: "node-state", x: 10, y: 35}, truncate(stateLook(n.state).label, 24)))));
+  }
+
+  function byRankThenNumber(a, b) {
+    const ra = typeof a.review_rank === "number" ? a.review_rank : Infinity;
+    const rb = typeof b.review_rank === "number" ? b.review_rank : Infinity;
+    if (ra !== rb) return ra < rb ? -1 : 1;
+    return (Number(a.number) || 0) - (Number(b.number) || 0);
+  }
+
+  const unmergedNumbers = (prs) =>
+    new Set(prs.filter((p) => p.state === "draft" || p.state === "open").map((p) => p.number));
+
+  // A dependency cycle falls back to rank order, so no draft drops off the list.
+  function reviewOrder(prs) {
+    const remaining = prs.filter((p) => p.state === "draft").sort(byRankThenNumber);
+    const inList = new Set(remaining.map((p) => p.number));
+    const emitted = new Set();
+    const ordered = [];
+    while (remaining.length) {
+      const next = remaining.findIndex((p) =>
+        numbers(p.depends_on).every((n) => !inList.has(n) || emitted.has(n)));
+      if (next === -1) {
+        ordered.push(...remaining);
+        break;
+      }
+      const [pr] = remaining.splice(next, 1);
+      emitted.add(pr.number);
+      ordered.push(pr);
+    }
+    return ordered;
+  }
+
+  function staleness(body) {
+    const meta = body || {};
+    const limit = typeof meta.stale_after_min === "number" ? meta.stale_after_min : DEFAULT_STALE_MIN;
+    const tick = parseTime(meta.tick_at);
+    if (tick === null) return {stale: true, age: null};
+    const age = Date.now() - tick;
+    return {stale: age > limit * MINUTE, age};
+  }
+
+  function sectionShell(id, title, count) {
+    const section = $(id);
+    section.replaceChildren(el("div", {class: "section-head"},
+      el("h2", {}, title),
+      count == null ? null : el("span", {class: "count"}, String(count))));
+    return section;
+  }
+
+  const isLoaded = (source) => state.status[source] === "cached" || state.status[source] === "live";
+  // A cached tick may be old, so only the last live meta body can call the board stale or fresh.
+  const verdict = () => (state.liveMeta === undefined ? null : staleness(state.liveMeta));
+
+  function renderLoadState(section, source) {
+    const status = state.status[source];
+    if (isObj(status)) {
+      section.append(el("p", {class: "section-error"},
+        "This section stopped updating (" + status.error + "). Reload the page to try again."));
+      return status.last !== "loading";
+    }
+    if (status === "loading") {
+      section.append(el("p", {class: "empty"}, "Loading."));
+      return false;
+    }
+    return true;
+  }
+
+  function table(key, columns, rows) {
+    return el("div", {class: "table-wrap", "data-key": key}, el("table", {},
+      el("thead", {}, el("tr", {}, ...columns.map((c) => el("th", {scope: "col"}, c)))),
+      el("tbody", {}, ...rows.map((cells) =>
+        el("tr", {}, ...cells.map((cell, i) => el("td", {"data-label": columns[i]}, cell)))))));
+  }
+
+  function renderHeader(judged) {
+    const meta = state.meta || {};
+    const feature = str(meta.feature);
+    $("feature").textContent = feature || "Status board";
+    document.title = feature ? feature + " status board" : "Status board";
+    const line = $("meta-line");
+    line.replaceChildren();
+    if (str(meta.orchestrator_branch)) line.append(el("span", {}, "orchestrator ", el("span", {class: "mono"}, str(meta.orchestrator_branch))));
+    if (str(meta.default_branch)) line.append(el("span", {}, "default ", el("span", {class: "mono"}, str(meta.default_branch))));
+    if (str(meta.architecture_url)) line.append(link("Architecture", meta.architecture_url, "architecture"));
+
+    const banner = $("stale-banner");
+    banner.hidden = !(judged && judged.stale);
+    if (!judged || judged.age === null) banner.textContent = "The orchestrator has not recorded a readable tick yet.";
+    else banner.textContent = "The orchestrator has not ticked for " + Math.floor(judged.age / MINUTE) + " minutes.";
+  }
+
+  function renderNeeds() {
+    const kindRank = (k) => (NEED_KINDS.includes(k) ? NEED_KINDS.indexOf(k) : NEED_KINDS.length);
+    const sinceKey = (n) => parseTime(n.since) ?? Infinity;
+    const needs = state.needs.slice().sort((a, b) => kindRank(a.kind) - kindRank(b.kind) || sinceKey(a) - sinceKey(b));
+    const section = sectionShell("s-needs", "Needs you", isLoaded("needs") ? needs.length : null);
+    if (!renderLoadState(section, "needs")) return;
+    if (!needs.length) {
+      section.append(el("p", {class: "empty"}, "Nothing needs you."));
+      return;
+    }
+    section.append(el("ul", {class: "items"}, ...needs.map((n) => {
+      const since = parseTime(n.since);
+      const waiting = since === null ? "since " + (str(n.since) || "unknown") : "waiting " + formatAge(Date.now() - since);
+      return el("li", {},
+        el("div", {class: "row"},
+          chip(str(n.kind) || "unknown"),
+          n.kind === "decision" && str(n.door) ? chip(str(n.door), n.door === "one-way" ? "crit" : "") : null,
+          el("span", {class: "mono"}, str(n.phase)),
+          el("span", {class: "sub num"}, waiting)),
+        el("div", {class: "summary"}, str(n.summary)),
+        n.kind === "prompt" && str(n.pane) ? el("div", {class: "sub pane"}, "pane ", el("span", {class: "mono"}, str(n.pane))) : null);
+    })));
+  }
+
+  function renderReview() {
+    const ordered = reviewOrder(state.prs);
+    const unmerged = unmergedNumbers(state.prs);
+    const section = sectionShell("s-review", "Ready for your review", isLoaded("prs") ? ordered.length : null);
+    if (!renderLoadState(section, "prs")) return;
+    if (!ordered.length) {
+      section.append(el("p", {class: "empty"}, "No draft pull requests yet."));
+      return;
+    }
+    section.append(el("ul", {class: "items", id: "review-list"}, ...ordered.map((p) => {
+      const after = numbers(p.depends_on).filter((n) => unmerged.has(n));
+      return el("li", {"data-number": str(p.number)},
+        el("div", {class: "row"},
+          el("span", {class: "num"}, link(prLabel(str(p.number)), p.url, "review-" + str(p.number))),
+          el("span", {class: "summary"}, str(p.title))),
+        el("div", {class: "row"},
+          el("span", {class: "mono sub"}, str(p.phase)),
+          checksChip(p.checks),
+          updateChip(p),
+          after.length ? el("span", {class: "sub num"}, "after " + after.map(prLabel).join(", ")) : null));
+    })));
+  }
+
+  function renderPrs() {
+    const prs = state.prs.slice().sort((a, b) => (Number(a.number) || 0) - (Number(b.number) || 0));
+    const section = sectionShell("s-prs", "Pull requests", isLoaded("prs") ? prs.length : null);
+    if (!renderLoadState(section, "prs")) return;
+    if (!prs.length) {
+      section.append(el("p", {class: "empty"}, "No pull requests yet."));
+      return;
+    }
+    const deps = (p) => numbers(p.depends_on);
+    section.append(table("table-prs",
+      ["Number", "Title", "Phase", "State", "Checks", "Base", "Depends on", "Update"],
+      prs.map((p) => [
+        el("span", {class: "num"}, link(prLabel(str(p.number)), p.url, "prs-" + str(p.number))),
+        str(p.title),
+        el("span", {class: "mono"}, str(p.phase)),
+        chip(str(p.state) || "unknown", p.state === "merged" ? "good" : ""),
+        checksChip(p.checks),
+        el("span", {class: "mono"}, str(p.base)),
+        el("span", {class: "num"}, deps(p).length ? deps(p).map(prLabel).join(", ") : "none"),
+        updateChip(p),
+      ])));
+  }
+
+  function dependsCell(entries) {
+    if (!entries.length) return el("span", {class: "mono"}, "none");
+    return el("div", {class: "mono deps"}, ...entries.map((d) => el("div", {},
+      readableDep(d) ? d.phase + " (" + d.until + ")" : chip("unknown: " + JSON.stringify(d), "crit"))));
+  }
+
+  function renderPhases() {
+    const phases = state.phases.slice().sort((a, b) => str(a.phase).localeCompare(str(b.phase)));
+    const section = sectionShell("s-phases", "Phases", isLoaded("phases") ? phases.length : null);
+    if (!renderLoadState(section, "phases")) return;
+    if (!phases.length) {
+      section.append(el("p", {class: "empty"}, "No phases yet. The orchestrator adds them once the feature plan exists."));
+      return;
+    }
+    const deps = new Map(phases.map((p) => [p, dependsOn(p)]));
+    section.append(table("table-phases",
+      ["Phase", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"],
+      phases.map((p) => [
+        el("span", {class: "mono"}, str(p.phase)),
+        phaseStateChip(p.state),
+        schedulingChip(p.scheduling),
+        str(p.waits_for) || "nothing",
+        dependsCell(deps.get(p)),
+        p.session_live === true
+          ? (str(p.pane) ? el("span", {}, "live in pane ", el("span", {class: "mono"}, str(p.pane))) : "live")
+          : "not live",
+        timeEl(p.changed_at, "relative"),
+      ])));
+    const graph = phaseGraph(phases, deps);
+    if (graph.cycle) {
+      section.append(el("p", {class: "section-error"},
+        "The phases depend on each other in a cycle: " + graph.cycle.join(", ") + ". Fix depends_on in the feature plan."));
+      return;
+    }
+    if (!graph.edges.length) return;
+    section.append(
+      el("h3", {class: "map-heading"}, "Dependency map"),
+      el("div", {class: "map", "data-key": "map"}, drawMap(graph)),
+      el("p", {class: "map-legend sub"},
+        "Solid line: needed merged into the orchestrator branch. Dashed line: needed with every pull request merged into the default branch."));
+  }
+
+  function renderRecent() {
+    const items = isObj(state.recent) && Array.isArray(state.recent.items) ? state.recent.items.filter(isObj).slice(0, 20) : [];
+    const section = sectionShell("s-recent", "Recent changes", isLoaded("recent") ? items.length : null);
+    if (!renderLoadState(section, "recent")) return;
+    if (!items.length) {
+      section.append(el("p", {class: "empty"}, "No state changes yet."));
+      return;
+    }
+    section.append(el("ol", {class: "recent"}, ...items.map((item) =>
+      el("li", {},
+        timeEl(item.at, "absolute"),
+        el("div", {class: "row"},
+          el("span", {class: "mono"}, str(item.phase)),
+          el("span", {}, (str(item.from) ? str(item.from) + " → " : "→ ") + str(item.to)))))));
+  }
+
+  function renderHeartbeat({age}, judged) {
+    const section = sectionShell("s-heartbeat", "Heartbeat", null);
+    if (!renderLoadState(section, "meta")) return;
+    const tickAt = state.meta && state.meta.tick_at;
+    let status = null;
+    if (judged) status = judged.stale ? chip("Stale", "crit") : chip("Fresh", "good");
+    if (age === null) {
+      section.append(el("div", {class: "heartbeat"},
+        status,
+        el("span", {class: "empty"}, "No tick recorded yet."),
+        tickAt == null ? null : el("span", {class: "mono"}, str(tickAt) || "unknown")));
+      return;
+    }
+    section.append(el("div", {class: "heartbeat"},
+      status,
+      el("span", {}, "last tick ", timeEl(tickAt, "absolute")),
+      el("span", {class: "sub num"}, formatAge(age) + " ago")));
+  }
+
+  function renderNotice() {
+    const waiting = Object.values(state.status).some((s) => s === "loading" || s === "cached");
+    let message = null;
+    if (state.noDatabase) {
+      message = "This board reads its data from the page's database, which this view cannot open. Open the board in Claude.";
+    } else if (state.waitedLong && waiting) {
+      message = "The board's data can't be reached yet. What is shown may be out of date.";
+    }
+    $("sections").hidden = state.noDatabase;
+    $("notice").hidden = message === null;
+    $("notice").textContent = message || "";
+  }
+
+  // Each render rebuilds the sections, so the focused element and each scroller's position move to the new copies by data-key.
+  function keepViewState(draw) {
+    const focusKey = document.activeElement && document.activeElement.dataset.key;
+    const scrolled = [...document.querySelectorAll(".map, .table-wrap")].map((n) => [n.dataset.key, n.scrollLeft]);
+    draw();
+    const find = (key) => document.querySelector(`[data-key="${CSS.escape(key)}"]`);
+    for (const [key, left] of scrolled) if (left) find(key)?.scrollTo({left});
+    if (focusKey) find(focusKey)?.focus({preventScroll: true});
+  }
+
+  function render() {
+    keepViewState(() => {
+      const judged = verdict();
+      renderHeader(judged);
+      renderNeeds();
+      renderReview();
+      renderPrs();
+      renderPhases();
+      renderRecent();
+      renderHeartbeat(staleness(state.meta), judged);
+      renderNotice();
+    });
+  }
+
+  async function start() {
+    render();
+    const db = window.claude ? await window.claude.use("db") : null;
+    if (!db) {
+      state.noDatabase = true;
+      render();
+      return;
+    }
+    setTimeout(() => {
+      state.waitedLong = true;
+      render();
+    }, 10000);
+    for (const [source, {ref, normalise = (d) => d}] of Object.entries(SOURCES)) {
+      ref(db).onSnapshot((snap) => {
+        if ("docs" in snap) state[source] = snap.docs.map((d) => d.data()).filter(isObj).map(normalise);
+        else state[source] = snap.exists ? snap.data() : null;
+        state.status[source] = snap.metadata.fromCache ? "cached" : "live";
+        if (source === "meta" && !snap.metadata.fromCache) state.liveMeta = state.meta;
+        render();
+      }, (error) => {
+        state.status[source] = {error: str(error && error.code) || "unavailable", last: state.status[source]};
+        render();
+      });
+    }
+    setInterval(render, 30000);
+  }
+
+  start();
+})();
+</script>

@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
-| Last tick | 2026-11-22 14:11 |
+| Last tick | 2026-11-22 14:31 |
 | Default branch merged at | `ee49f7b` (#93, into `196e5c4`) |
 
 ## Live sessions
@@ -40,7 +40,7 @@ None.
 | 92 | `board` | merged into `main` as `92a91f7` | | |
 | 93 | `orchestrator-handbook` | merged into `main` as `ee49f7b` | | |
 | 94 | `launcher` | `s-stack-launcher` | `main` | none |
-| 95 | `pr-handbook` | `s-stack-pr-handbook` | `main` | none |
+| 95 | `pr-handbook` | merged into `main` as `25a6b61` | | |
 
 ## Merged phases
 
@@ -97,6 +97,8 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
 ## Merge cautions
+
+- `main` moved to `25a6b61` (#95). Merge it into `s-stack-package` once pr-handbook's post-merge check on `ab06c83` returns, because that check reads this checkout. Then send pr-handbook the merged notice if the check passed.
 
 
 - 2026-11-22 11:34: a `launcher` verifier set `TMUX_TMPDIR` to a directory it had not created, so tmux fell back to the developer's real server and created session `$4` (name `4`, one window, a shell in a scratch repository). The kill was refused by the permission check. The developer was asked to run `tmux kill-session -t '$4'`. Launcher briefs now create `TMUX_TMPDIR` first and confirm tmux cannot connect there before creating any server.

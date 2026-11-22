@@ -109,6 +109,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
   - Include: in `references/status-and-messages.md`, "a fact already committed to the sender's own file" fits `started` and the folded run-decisions rows awkwardly. Raised by `spec-planner-handbooks` at `775a30a`.
   - Include: `references/status-and-messages.md`'s `fix-round` row carries only "the pull request and its comments, or the failed check". It must also carry the developer's commits, as the developer-commit rule and `phase-session.md`'s feedback round now do. Raised by `phase-handbooks` at `5d30a59`.
   - Include: `SKILL.md`'s "repository root" leaves a worktree session to work out which root it means (readers chose the worktree root, which is right). Raised by `spec-planner-handbooks` at `775a30a`. Its other item, `phase-session.md` line 26, is in `phase-handbooks`' current round.
+  - Include: `board` took its `needs_update` wording from `orchestrator.md` on the `orchestrator-handbook` branch at `1e0a39e`, because that handbook is not yet on `s-stack-package`. Check the two still match once it merges.
   - Include: the run decision on parallel package versions. `pr-creator.md` and `orchestrator.md` may need to state it.
 
 ## Post-merge check briefs

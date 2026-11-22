@@ -94,3 +94,12 @@ Fresh Opus verifier. Scope: the phase's work since `faa5b86`, one commit, `d1cec
 - Outside the radius: foundation 2, integration 5 and 6, phase-handbooks, pr-handbook, spec-planner-handbooks, board and launcher. None of their files changed since `faa5b86`.
 
 Next: reword line 165 to "each phase whose entry a later `done-planning` changes", then Verify again.
+
+## Verify 3: VERIFIED at `982bdc43a0d05a7638e6a65008062f037c9196e9`, 2026-11-22T16:19:45Z
+
+Fresh Opus verifier. Scope: the phase's work since `faa5b86`, which is `d1cecf7`, `853fe3a`, `ccedb51` and `982bdc4`. No waiver: the gate's newest real verdict was NOT VERIFIED. No commits. Answers and grades are under the session scratchpad's `verify3/` directory.
+
+- Skill checks 1 to 5 and 7 PASS. Tier 1 passed across 20 packages. `.githooks/pre-commit` over `faa5b86...HEAD` exited 0.
+- Five scripted checks PASS.
+- 64 cold reads PASS, including AP, integration 7 and 8, and T and AT.
+- Outside the radius: foundation 2, integration 5 and 6, phase-handbooks, pr-handbook, spec-planner-handbooks, board and launcher. None of their files changed since `faa5b86`.

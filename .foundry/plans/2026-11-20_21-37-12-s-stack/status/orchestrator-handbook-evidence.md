@@ -718,3 +718,25 @@ Minor defects, none on the common path:
 - The minor items from Verify 33 stand: lines 96, 97 and 109, lines 13 and 142, and lines 22 to 31.
 
 `s-stack-package` (`ff59e46`, `.foundry/` only) was merged after the gate, and the code head is unchanged.
+
+## Review 14, code head `73ba6d40af063c44b910e6c0ca61efae1e96d57b`, SIGNIFICANT
+
+`interrogate` over the commits since `9c1e21f`, under the common-path bar. Two adversaries ran, on Opus and Fable, each in its own worktree, and drove the real `pr.sh` from `pr-handbook`'s branch.
+
+The Opus adversary found nothing. Its walks covered:
+
+- carried fix rounds;
+- suggestions before and after "Update branch";
+- a phase taking a suggestion;
+- squash and merge-commit merges of a stack parent with the forge's rebase;
+- a cross-phase dependency.
+
+| Finding | Adversary | Proof |
+| --- | --- | --- |
+| A developer's commit that the phase took with `cherry-pick -x`, regenerating the lockfile in the same commit as `phase-session.md` line 47 says, comes out `+` and survives every drop rule. A suggestion applied while a fix round is in flight, which the phase takes itself after a `DEVELOPER-COMMITS` report, draws a false round. After a stack parent merges, the forge's rebase gives every taken suggestion on the child a new SHA, and each draws a false round. The phase cannot follow such a round: each cherry-pick is empty. | Fable | The phase session reran `driver.sh amend` and `driver.sh separate`. With the regeneration in the same commit, the in-flight case leaves one commit and the rebase case leaves two. The separate-commit control leaves none. Orchestrator-side cold reads sent both false rounds. |
+
+The check file's carried-commit script takes the suggestion without regenerating, so it cannot catch either case.
+
+Root cause: every fix to this paragraph has relied on `git cherry`'s full-patch match, and a copy that differs only in generated files never matches. This is the third finding from that same premise.
+
+Outside the scope, for `pr-handbook`: after the forge rebase, the real `pr.sh` prints `FAIL src/b.txt: pr2 lacks phase commits …` in both variants. The phase's copy names the SHA from before the rebase.

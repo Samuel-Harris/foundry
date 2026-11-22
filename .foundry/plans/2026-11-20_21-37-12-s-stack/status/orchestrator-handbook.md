@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "Review"
-changed_at: "2026-11-22T02:45:18Z"
+state: "Implement"
+changed_at: "2026-11-22T04:18:09Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "73ba6d40af063c44b910e6c0ca61efae1e96d57b"
@@ -222,6 +222,11 @@ verdicts:
     code_head: "73ba6d40af063c44b910e6c0ca61efae1e96d57b"
     at: "2026-11-22T02:45:18Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "73ba6d40af063c44b910e6c0ca61efae1e96d57b"
+    at: "2026-11-22T04:18:09Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
 pull_requests: []
 requests: []
 decisions:
@@ -408,3 +413,5 @@ The thirteenth Review gate returned SIGNIFICANT at `9c1e21f`, under the common-p
 The Review 13 fix is at `24b8981`, with the regenerated lockfile at `8c42572`. `s-stack-package` (`8952f36`, `.foundry/` only) was merged, and the phase moved to Verify at code head `24b8981`.
 
 The thirty-fourth Verify gate returned VERIFIED at `73ba6d4`. `s-stack-package` (`ff59e46`, `.foundry/` only) was merged. The phase moved to Review, which covers the commits since `9c1e21f`.
+
+The fourteenth Review gate returned SIGNIFICANT at `73ba6d4`, under the common-path bar. The phase moved back to Implement.

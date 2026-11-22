@@ -334,10 +334,10 @@ change merged without a bump never reaches them.
   every commit. Pass `minor` or `major` for a larger bump. Under `0.x`, `^0.1.0`
   accepts only `0.1.x`, so a minor bump is a breaking release for consumers.
 - `python3 scripts/versioning.py check origin/main` is the CI gate. It fails
-  when a changed package's version is not greater than the base's. On a push to
-  `main` it checks against the previous tip, which catches two PRs that merged
-  the same bump.
-- After every check passes on `main`, the `tag` job creates a lightweight
+  when a changed package's version is not greater than the base's. Because the
+  `main` ruleset requires an up-to-date branch, a PR whose base moved must
+  rebase and rerun it, which catches two PRs that bump to the same version.
+- On every push to `main`, the `tag` job creates a lightweight
   `<name>--v<version>` tag for each version that has none, and pushes it. Never
   create, move or delete these tags by hand. The tags are lightweight because
   APM 0.32.0's resolver ignores peeled `^{}` refs and records the SHA of the
@@ -370,16 +370,25 @@ install packages itself, or it would rewrite lockfiles before the hook could
 see them. The action's `apm-version` input defaults to `0.14.0`, so always pass
 `apm-version: "0.32.0"`.
 
-On a pull request the hook's range is `origin/<base>...HEAD`. On a push it is
-the push's previous tip to `HEAD`. A manual run, or a push that creates a
-branch, sets `FOUNDRY_CHECK_ALL=1` and checks every package. The Tier 1 suite
-is local: `bash tests/structural/run-tier1.sh`.
+CI runs on pull requests and manual dispatch, not on pushes to `main`. On a
+pull request the hook's range is `origin/<base>...HEAD`. A manual run sets
+`FOUNDRY_CHECK_ALL=1` and checks every package. The Tier 1 suite is local:
+`bash tests/structural/run-tier1.sh`.
 
 `versions` runs the `tests/versioning` and `tests/pstack_upstream` unit tests
-and `scripts/versioning.py check` over the same range. On a push to `main`, `tag`
-runs after every other job passes and pushes the new `<name>--v<version>` tags
-with the job's `contents: write` token. Tags pushed with `GITHUB_TOKEN` start no
-further workflow runs.
+and `scripts/versioning.py check` over the same range.
+
+`ci-passed` (check name `CI passed`) is the only required status check in the
+`main` ruleset, which also requires the branch to be up to date before merging.
+Because main only squash-merges, the commit that lands is the merge result CI
+tested, so main needs no second run. Add every new job to `ci-passed`'s
+`needs`, or a failure in it will not block merging. `ci-passed` runs with
+`if: always()` because a job whose dependency failed is skipped, and GitHub
+counts a skipped required check as passing.
+
+`.github/workflows/tag.yml` runs `tag` on each push to `main`. It pushes the new
+`<name>--v<version>` tags with the job's `contents: write` token. Tags pushed
+with `GITHUB_TOKEN` start no further workflow runs.
 
 ## Generated-file policy
 

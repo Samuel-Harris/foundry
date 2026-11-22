@@ -2,8 +2,6 @@ name: CI
 
 on:
   pull_request:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -13,8 +11,7 @@ env:
   APM_VERSION: "0.32.0"
 
 jobs:
-  # Pushes and manual runs skip the filter, so every job runs and tag keeps
-  # its full gate.
+  # Manual runs skip the filter, so every job runs.
   changes:
     name: Detect changed paths
     runs-on: ubuntu-latest
@@ -75,14 +72,11 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           BASE_REF: ${{ github.base_ref }}
-          BEFORE: ${{ github.event.before }}
         run: |
           set -euo pipefail
           if [[ "$EVENT_NAME" == "pull_request" ]]; then
             git fetch --no-tags origin "$BASE_REF"
             export FOUNDRY_DIFF_RANGE="origin/${BASE_REF}...HEAD"
-          elif [[ "$EVENT_NAME" == "push" && -n "${BEFORE:-}" && "$BEFORE" != 0000000000000000000000000000000000000000 ]]; then
-            export FOUNDRY_DIFF_RANGE="${BEFORE}...HEAD"
           else
             export FOUNDRY_CHECK_ALL=1
           fi
@@ -108,51 +102,31 @@ jobs:
       - name: Run pstack upstream tests
         run: uv run --script tests/pstack_upstream/test_pstack_upstream.py
 
-      # On a push, checking against the previous tip catches two PRs that
-      # merged the same bump.
       - name: Check changed packages are bumped
         env:
           EVENT_NAME: ${{ github.event_name }}
           BASE_REF: ${{ github.base_ref }}
-          BEFORE: ${{ github.event.before }}
         run: |
           set -euo pipefail
           if [[ "$EVENT_NAME" == "pull_request" ]]; then
             git fetch --no-tags origin "$BASE_REF"
             python3 scripts/versioning.py check "origin/${BASE_REF}"
-          elif [[ "$EVENT_NAME" == "push" && -n "${BEFORE:-}" && "$BEFORE" != 0000000000000000000000000000000000000000 ]]; then
-            python3 scripts/versioning.py check "$BEFORE"
           else
             echo "No base to compare against; skipping the version check."
           fi
 
-  tag:
-    name: Tag package versions
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests, foundry-maintenance-tests, s-stack-launcher-tests, claude-code-usage-tests]
+  # The one required check on main. A job whose dependency failed is skipped,
+  # and a skipped job counts as passing, so this must run always() and read
+  # every result itself.
+  ci-passed:
+    name: CI passed
+    if: always()
+    needs: [changes, pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests, foundry-maintenance-tests, s-stack-launcher-tests, claude-code-usage-tests]
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Tag and push new package versions
-        run: |
-          set -euo pipefail
-          git fetch --tags origin
-          tags="$(python3 scripts/versioning.py tag)"
-          if [[ -z "$tags" ]]; then
-            echo "No new package versions to tag."
-            exit 0
-          fi
-          refs=()
-          for tag in $tags; do
-            refs+=("refs/tags/${tag}")
-          done
-          printf 'Pushing %s\n' "${refs[@]}"
-          git push --atomic origin "${refs[@]}"
+      - name: Fail unless every job succeeded or was filtered out
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
 
   statechart-tests:
     name: p-stack statechart tests

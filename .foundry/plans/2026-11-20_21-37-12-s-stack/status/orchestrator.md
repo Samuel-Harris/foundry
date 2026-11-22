@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `d3dd837` (version 6) |
-| Last tick | 2026-11-21 23:52 |
+| Last tick | 2026-11-22 00:11 |
 | Default branch merged at | `51f334e` (#86, into `853a26d`) |
 
 ## Live sessions
@@ -34,7 +34,8 @@ None.
 | 84 | `spec-planner-handbooks` | merged into `main` as `0531411` | | |
 | 85 | `phase-handbooks` | merged into `main` as `6f42b1c` | | |
 | 86 | `board` | merged into `main` as `51f334e` | | |
-| 87 | `spec-planner-handbooks` | `s-stack-spec-planner-port-rule` | `main` | none |
+| 87 | `spec-planner-handbooks` | merged into `main` as `b440889` | | |
+| 88 | `foundation` | `s-stack-foundation-follow-up` | `main` | none |
 
 ## Merged phases
 
@@ -46,6 +47,7 @@ None.
 | `phase-handbooks` (re-merge) | `986be95` (tip `32811f9`) | `a1c95f1` | VERIFIED on `ce086bb` |
 | `board` | `a606589` (tip `22e6ab0`) | `afd3f27` | VERIFIED on `3ce7d34` |
 | `spec-planner-handbooks` (follow-up) | `b89a458` (tip `40c3e56`) | `47f792f` | VERIFIED on `8f735d6` |
+| `foundation` (follow-up) | `3364856` (tip `8616cb8`) | `74bba4e` | running |
 
 ## Closed sessions
 
@@ -80,6 +82,8 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
 ## Merge cautions
+
+- `main` moved to `b440889` (#87). Merge it into `s-stack-package` once the foundation follow-up post-merge check on `3364856` returns, because that check reads this checkout. Then start `spec-planner-handbooks`' next round with the items under "Follow-ups after foundation's round merges" instead of taking it to Done, since more work is queued for it.
 
 - After the pre-commit hook has rewritten a staged lockfile, `git merge --abort` exits 128 and leaves `MERGE_HEAD`. Recover with `git reset --merge`, then check `git status`. Found by `orchestrator-handbook` (review of `e0a51a2`).
 - Read a phase's tip and its code head in one step, and merge that tip SHA, not the branch name, so no commit added after the verdicts check can slip in.

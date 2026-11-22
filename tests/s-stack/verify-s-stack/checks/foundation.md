@@ -28,26 +28,27 @@ Prompt: "Read only this file and nothing else. Answer from it alone. (1) The dev
 
 Expected answer:
 
-1. It runs `scripts/launch.sh --feature billing-export --role spec`, the script in the `sam-mode` skill's own directory, with the repository root as the working directory, reports the script's output, and does nothing else. It does not interview the developer, write a roadmap or read a handbook itself.
-2. The default branch (resolved, never assumed to be `main`), the orchestrator branch `<feature>`, phase branches `<feature>-phase-<phase>`, and pull request branches. Only pull request branches, which never contain `.foundry/`, are pushed. The orchestrator branch and phase branches carry `.foundry/` and are not pushed to a public remote unless the developer says so.
+1. It runs `scripts/launch.sh --feature billing-export --role spec`, the script in the `sam-mode` skill's own directory, with the repository root as the working directory, reports the script's output, and does nothing else. It does not read `poteto-mode` first, interview the developer, write a roadmap or read a handbook itself.
+2. The default branch (resolved, never assumed to be `main`), the orchestrator branch `<feature>`, the planner branch `<feature>-planner`, update spec writer branches `<feature>-spec-<n>`, phase branches `<feature>-phase-<phase>`, and pull request branches. Only pull request branches, which never contain `.foundry/`, are pushed. The orchestrator branch and every branch cut from it carry `.foundry/` and are not pushed to a public remote unless the developer says so.
 3. The developer decides it. The session sends a decision request to the orchestrator and continues with the work the decision does not affect.
 
 ### Cold read 3. Code head, messages and merging
 
 Files: `references/status-and-messages.md` only.
 
-Prompt: "Read only this file and nothing else. Answer from it alone. (1) How does a phase session compute its code head, and which commits leave it unchanged? (2) Phase `launcher` of feature `billing-export` has just moved to Verify. Write the message its session sends to the orchestrator, and say what it does before sending it. (3) When may the orchestrator merge a phase? (4) What is the commit subject of that phase's status commit?"
+Prompt: "Read only this file and nothing else. Answer from it alone. (1) How does a phase session compute its code head, and which commits leave it unchanged? (2) Phase `launcher` of feature `billing-export` has just moved to Verify. Write the message its session sends to the orchestrator, and say what it does before sending it. (3) When may the orchestrator merge a phase? (4) What is the commit subject of that phase's status commit? (5) Which message does the orchestrator send when (a) every pull request of a phase in PR has merged into the default branch, (b) only generated files on one of its pull requests are stale, and (c) a check on the orchestrator branch fails after the phase merged?"
 
 Expected answer:
 
-1. `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, run from the worktree root: the latest commit on the phase branch that changes a file outside `.foundry/`. A commit that only records status leaves it unchanged. When the feature plan names generated paths such as lockfiles, the session adds an exclude clause for each, and commits touching only those also leave it unchanged.
+1. Walk the phase branch's first-parent line, newest first, diff each commit against its own first parent, and take the newest that changes something outside `.foundry/`, leaving out the generated paths and lines the feature plan names. So a merge that brings in code moves the code head and one that brings only `.foundry/` changes does not. A commit that only records status, or changes only those generated paths and lines, leaves it unchanged.
 2. It first commits its status file (state `Verify`, the code head) on its own branch. Then it sends a message whose first line is `billing-export-phase-launcher: state: <one sentence>`, carrying the new state `Verify` and the code head, with any detail lines below being facts already committed.
-3. Only when the newest `verify` verdict is `VERIFIED` and the newest `review` verdict is `CLEAR`, and both name the current code head.
+3. The newest `verify` verdict must be `VERIFIED` and the newest `review` verdict `CLEAR`, and both must name the current code head. That is the merge rule, and the phase moves to PR once it holds. `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges.
 4. `chore(billing-export): launcher Verify`.
+5. (a) An `instruction` carrying the merged pull request numbers. (b) `fix-round`. (c) `move-back`, naming the state to move back to and the failed check.
 
 ### Status header matches C2
 
-The reference ships the feature plan's C2 with three kinds of change, all decided by the orchestrator. Request `foundation-r1`, option A, set the first two. Request `foundation-r2`, option A, added one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. This run's example values become placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. The code-head rule states the general command with only `.foundry/` excluded, a sentence to run it from the worktree root, and a sentence that a feature plan may name generated paths to exclude too. The check compares that code-head rule, whole, with the wording the orchestrator approved. Any other difference, such as a new or reworded rule, is a contract change and fails. The check runs from the repository root wherever it is started, and always compares the code-head rule, which needs only the reference. The rest of the comparison reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. Without the plan, as on a pull request branch or the default branch, it prints `PENDING: .foundry/plans/2026-11-20_21-37-12-s-stack/README.md not found, so the reference cannot be compared with C2 here` and skips that part. It exits `1` whenever the code-head rule differs, and otherwise `0`, with the PENDING line when only the plan is missing.
+The reference ships the feature plan's C2 with these changes, each set by a run decision in `run-decisions.md` or by an item the orchestrator queued in its tracker. Request `foundation-r1`, option A, turns this run's example values into placeholders: `<id>`, `<feature>` and `<phase>`, plus `<pull request branch>` and `<default branch>` for this run's pull request branch and `main`. Request `foundation-r2`, option A, adds one sentence to the quoting rule that keeps characters outside the Basic Multilingual Plane out of header strings. The code-head rule follows `foundation-r1`, which keeps it general with only `.foundry/` excluded, and the run decision that the code head is the newest first-parent commit whose diff against its first parent changes a line outside the excluded paths and lines. It gives that rule as one bash loop over `git rev-list --first-parent`, run from the worktree root, and says how a feature plan's generated paths and lines are excluded. The check compares that code-head rule, whole, with the approved wording. Queued item 1, raised by `spec-planner-handbooks`, adds the planner's `planner-r<n>` exception to the **Ids** rule. The run decision on `prs-open` re-merges and the follow-up round's review make the **Verdicts** rule state the merge rule, which a phase checks before it moves to PR, and point to `handbooks/orchestrator.md` for the orchestrator's further checks before it merges. Any other difference, such as a new or reworded rule, is a contract change and fails. The check runs from the repository root wherever it is started, and always compares the code-head rule, which needs only the reference. The rest of the comparison reads the feature plan under `.foundry/`, which exists only on the orchestrator branch and the phase branches. Without the plan, as on a pull request branch or the default branch, it prints `PENDING: .foundry/plans/2026-11-20_21-37-12-s-stack/README.md not found, so the reference cannot be compared with C2 here` and skips that part. It exits `1` whenever the code-head rule differs, and otherwise `0`, with the PENDING line when only the plan is missing.
 
 ```bash
 python3 - <<'EOF'
@@ -61,7 +62,7 @@ def header_section(text):
     end = text.index("\n", text.index("keeps its own form", start))
     return [re.sub(r"\s+", " ", l).strip() for l in text[start:end].splitlines() if l.strip()]
 
-code_head = "- **Code head.** It is `git log -1 --format=%H <phase branch> -- . ':(exclude).foundry'`, the latest commit on the phase branch that changes a file outside `.foundry/`. Run it from the worktree root. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, whose commits also move no code head. Its sessions then add an exclude clause for each such path to the command."
+code_head = """- **Code head.** It is the newest commit on the phase branch's first-parent line whose diff against its own first parent changes a file outside `.foundry/`, so a merge that brings in code moves it. Run `for c in $(git rev-list --first-parent <phase branch>); do git diff --quiet "$c^" "$c" -- . ':(exclude).foundry' || { echo "$c"; break; }; done` from the worktree root. A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, and generated lines, such as a `version:` line, whose changes also move no code head. Its sessions then add `':(exclude,glob)**/<name>'` to the `git diff` pathspecs for each such path, and `-I '<regex>'` before its `--` for each such line. Without `glob`, `**/<name>` misses a file at the repository root. A generated-line regex must match only generated lines, because `-I` applies to every file. A correct run prints one 40-character SHA and nothing on standard error, so any error output means the result cannot be trusted."""
 
 def without_code_head(lines):
     hits = [k for k, l in enumerate(lines) if l.startswith("- **Code head.**")]
@@ -85,6 +86,9 @@ if plan_path.is_file():
         ("chore(s-stack)", "chore(<feature>)"),
         ("tracker at `status/orchestrator.md`", "tracker at `.foundry/plans/<id>/status/orchestrator.md`"),
         ("cannot break the YAML.", "cannot break the YAML. Keep characters outside the Basic Multilingual Plane, such as emoji, out of header strings, because `json.dumps` writes them as surrogate pairs that a YAML reader does not join."),
+        ("The orchestrator merges only when", "The merge rule is that"),
+        ("numbered by the phase itself.", "numbered by the phase itself. The planner numbers its requests `planner-r<n>`, and `handbooks/planner.md` says where it keeps them."),
+        ("and both name the current code head.", "and both name the current code head. A phase moves to PR once it holds, and `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges."),
     ]
     expected = []
     for line in header_section(plan.split("### C2.", 1)[1].split("### C3.", 1)[0]):
@@ -103,14 +107,10 @@ if plan_path.is_file():
 EOF
 ```
 
-Expected: exit `0` and `reference matches C2 apart from the allowed differences`. On the reference at `13f835b` it exits `1` and prints the append-only sentences of the **Evidence** rule.
+Expected: exit `0` and `reference matches C2 apart from the allowed differences`. On the reference at `13f835b` it exits `1`, and among the differences it prints the append-only sentences of the **Evidence** rule.
 
 ## Evidence
 
-### C2 conformance of the reference at `512edd797f497f955ca5a0175faead7c18a8c2d8`
+### Private names
 
-Compared the reference's header section with feature plan C2 by `diff` of the text from "The header is" to the tracker sentence. Differences: the `<id>`, `<feature>` and `<phase>` placeholders and the general code-head rule, both as the orchestrator decided (`foundation-r1`, option A), plus two additions that C2 does not contain: "Run it from the worktree root." in the code-head rule, and three sentences in the **Evidence** rule making the evidence file append-only with one section per verdict. Option A says every other part of C2 is copied unchanged, so the append-only rule is a contract change made without a decision request. Result: FAIL, reported to the phase session.
-
-### Private names at `512edd797f497f955ca5a0175faead7c18a8c2d8`
-
-A case-insensitive `grep` over every file in `git diff --name-only s-stack-package...HEAD -- . ':(exclude).foundry'` and over the phase's commit messages, for the private repository's name, its feature's name and both prototype page ids (taken from the developer's private notes and not reproduced here), found no hit.
+A case-insensitive `grep` over every file in `git diff --name-only s-stack-package...HEAD -- . ':(exclude).foundry'`, and over the phase's commit messages, for the private repository's name, its feature's name and both prototype page ids. The verifier takes the names from the developer's private notes and never writes them into a file. Passes when nothing matches.

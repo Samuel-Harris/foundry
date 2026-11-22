@@ -298,6 +298,15 @@ The review ran under the gate-cost rules. Its scope was the diff since the last 
   - a dead orchestrator beside a developer's `claude --continue`.
 - **One cosmetic observation.** Closing the zoomed pane itself prints `can't find pane` on standard error from the re-zoom, with exit 0 and correct output. That code predates this diff.
 
+## Verify, code head `36ea9023e2a6dc555a8e7d4b65e2d630440fec01`, VERIFIED
+
+This round ran under the gate-cost rules. The scope was the diff since cf378d8. Its only phase change is one line in `build_system_bin` in `packages/s-stack/tests/launcher_case.py`: `not link.exists()` became `not os.path.lexists(link)`. The other files in the diff came in by merges, and they count as verified. The verifier did not waive, because a condition is control flow.
+
+- Blast radius: every check that runs the unit suite, which is the two Rerun suite checks and the mutations in `checks/launcher.md`. The other check files never name or run the tests, and are out of scope.
+- macOS: 130 tests passed, also under `LC_ALL=C`.
+- Ubuntu container with dangling links planted in `/usr/bin` and `/bin`, as on the GitHub runner: 130 tests passed. The fixture at cf378d8 ran 0 tests in the same run and failed with 18 `setUpClass` errors, each a `FileExistsError`, reproducing CI run 45021884353.
+- All listed mutants are killed in the container. One narrower breaker mutant survives: it keeps the re-read but skips taking `$lock.break`, and no test forces that race. The race needs a stale breaker, a rare setup already recorded as an accepted limit.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

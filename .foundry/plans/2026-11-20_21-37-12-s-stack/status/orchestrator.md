@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `410ae2e` (version 8) |
-| Last tick | 2026-11-22 11:11 |
+| Last tick | 2026-11-22 11:51 |
 | Default branch merged at | `92a91f7` (#92) |
 
 ## Live sessions
@@ -19,7 +19,6 @@
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-spec` | `%198` (orchestrator column) | `../s-stack-spec` | 2026-11-22, spec writer for the developer's question on verify and review cost |
 
 ## Open decision requests
 
@@ -40,6 +39,7 @@ None.
 | 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
 | 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
 | 92 | `board` | merged into `main` as `92a91f7` | | |
+| 93 | `orchestrator-handbook` | `s-stack-orchestrator-handbook` | `main` | none |
 
 ## Merged phases
 
@@ -55,6 +55,7 @@ None.
 | `spec-planner-handbooks` (second follow-up) | `5c411ce` (tip `d5c4ff2`) | `775a30a` | VERIFIED on `a89e044` (no code change since `5c411ce`) |
 | `phase-handbooks` (follow-up) | `4585528` (tip `7e09ef7`) | `148f745` | VERIFIED on `7e0b76d` (no code change since `4585528`) |
 | `board` (follow-up) | `3940c5b` (tip `de27bbb`) | `284ad88` | VERIFIED on `fe43e00` (no code change since `3940c5b`) |
+| `orchestrator-handbook` | `7cd7034` (tip `2fbf619`) | `ff83115` | NOT VERIFIED on `6703d16` (scoped): cold reads AP (twice), AE, AN, I, Z; branch frozen, phase moved back |
 
 ## Closed sessions
 
@@ -65,6 +66,7 @@ None.
 | `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-22 | Done at `079c16d`, merged; #84, #87 and #90 merged into `main` |
 | `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-22 | Done again at `8a63c84`, merged; #85 and #91 merged into `main` |
 | `s-stack-phase-board` | removed, branch kept | 2026-11-22 | Done again at `53276c3`, merged; #86 and #92 merged into `main` |
+| `s-stack-spec` | removed, branch kept | 2026-11-22 | gate-cost proposal at `d41db5b`, merged at `883083b` |
 
 ## Queued fix rounds
 
@@ -92,6 +94,10 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 ## Merge cautions
 
+- `s-stack-package` is frozen for other phase merges from 2026-11-22 12:05 until `orchestrator-handbook`'s post-merge fix round merges and its check passes.
+
+- 2026-11-22 11:34: a `launcher` verifier set `TMUX_TMPDIR` to a directory it had not created, so tmux fell back to the developer's real server and created session `$4` (name `4`, one window, a shell in a scratch repository). The kill was refused by the permission check. The developer was asked to run `tmux kill-session -t '$4'`. Launcher briefs now create `TMUX_TMPDIR` first and confirm tmux cannot connect there before creating any server.
+
 
 - After the pre-commit hook has rewritten a staged lockfile, `git merge --abort` exits 128 and leaves `MERGE_HEAD`. Recover with `git reset --merge`, then check `git status`. Found by `orchestrator-handbook` (review of `e0a51a2`).
 - Read a phase's tip and its code head in one step, and merge that tip SHA, not the branch name, so no commit added after the verdicts check can slip in.
@@ -108,6 +114,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 
 ## Deferred follow-ups for live phases
 
+- After the live phases merge, route the gate-cost text edits (`proposals/gate-cost.md`, section "Files this touches") to the owners in one integration round, together with the read-through fixes below. Roadmap files go to the spec writer's end-of-run update.
 - After every handbook phase is merged, have a fresh subagent do one cross-handbook read-through on `s-stack-package`: orchestrator, phase-session, verifier, reviewer, pr-creator, spec-writer and planner, plus the reference file. Collect the recorded handshake edge cases from each phase's evidence file. Route the fixes to the owning phases, or to the foundation round for the reference file.
   - Include: can `orchestrator.md` send the merged notice to a phase that has just entered PR (PR step 1) before `prs-open` lists its new pull request? Check against the re-merge guard and the notice's conditions. Raised by `phase-handbooks`' reviewers at `a1c95f1`.
   - Include: `references/status-and-messages.md` has no developer-commit row and splits the generated and dependency `fix-round` uses into two rows, unlike `orchestrator.md` at `0008162`. A suggestion applied while a round is unanswered is left to the PR creator's `DEVELOPER-COMMITS` report. Raised by `orchestrator-handbook`.

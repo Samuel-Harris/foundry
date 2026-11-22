@@ -223,6 +223,21 @@ Results:
 - **Live page.** https://claude.ai/artifact/2DKwc7LqGBu5pfjoGrZmhH serves the current template byte for byte. It rendered Fresh after batch 1, and the stale banner after batch 2, with no publish in between. A write at `interact` level was refused.
 - **Static checks.** `grep innerHTML` finds nothing, and `apm audit --ci` passes.
 
+
+## Follow-up round, Review gate, code head `284ad88a3929192851895e2650198266bcddca75`, CLEAR
+
+`interrogate` ran Opus and Fable at medium effort over `73251d3`, `5fc142f`, `284ad88` and the resolutions of `a60b107` and `f674585`, under the minor-findings rule and `board-d7`.
+
+- **The probe held on both runs.** The real template exits 0. The copy that keeps "restack" in the rank exits 1, with 24 failed checks.
+- **The handbook agrees.** Both adversaries compared the schema comment with "Keeping pull requests up to date" in `orchestrator.md` and found it matches. The handbook says the orchestrator never sends `restack`.
+- **The comment is clear to a cold reader.** Given only the schema comment, the reader wrote:
+  - null for a merged pull request, and for one closed in the same tick;
+  - true for drafts that lack the new tip;
+  - false despite a failing optional check;
+  - no restack need.
+- **The merges are clean.** Both are git's automatic resolution. The lockfile's hashes match the files, and `apm audit --ci` passes.
+- **No significant finding.** One minor check gap goes to the backlog.
+
 ## Check hardening backlog
 
 `board-d7` sends every check gap found from the fifth Review gate on to this list, for a future hardening pass. These are not fixed in this phase.
@@ -256,3 +271,4 @@ Results:
 - From the follow-up round's Verify gate:
   - The review fixture's closed #35 still has `needs_update: false`, where the new schema says a closed pull request is null.
   - The live render used the verifier's own collector, not the Rerun collector.
+- From the follow-up round's Review gate: the fixture's unknown kinds `handover` (60 min) and `restack` (50 min) sort the same oldest first and by name. A template that sorts unknown kinds by name therefore passes. The fix is to make the alphabetically earlier kind the newer one.

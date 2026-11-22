@@ -9,8 +9,8 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `c9a7832` (version 7) |
-| Last tick | 2026-11-22 00:31 |
-| Default branch merged at | `5c4d320` (#89, into `57c4ad2`) |
+| Last tick | 2026-11-22 00:51 |
+| Default branch merged at | `bce824b` (#90, into `4d59e8a`) |
 
 ## Live sessions
 
@@ -39,7 +39,8 @@ None.
 | 87 | `spec-planner-handbooks` | merged into `main` as `b440889` | | |
 | 88 | `foundation` | merged into `main` as `054a9e7` | | |
 | 89 | `foundation` | merged into `main` as `5c4d320` | | |
-| 90 | `spec-planner-handbooks` | `s-stack-spec-planner-owner-pointers` | `main` | none |
+| 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
+| 91 | `phase-handbooks` | `s-stack-phase-handbooks-follow-up` | `main` | none |
 
 ## Merged phases
 
@@ -53,6 +54,7 @@ None.
 | `spec-planner-handbooks` (follow-up) | `b89a458` (tip `40c3e56`) | `47f792f` | VERIFIED on `8f735d6` |
 | `foundation` (follow-up) | `3364856` (tip `8616cb8`) | `74bba4e` | VERIFIED on `3364856` |
 | `spec-planner-handbooks` (second follow-up) | `5c411ce` (tip `d5c4ff2`) | `775a30a` | VERIFIED on `a89e044` (no code change since `5c411ce`) |
+| `phase-handbooks` (follow-up) | `4585528` (tip `7e09ef7`) | `148f745` | running |
 
 ## Closed sessions
 

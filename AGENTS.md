@@ -286,9 +286,9 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
   parents another local package, the drift replay fails with `ambiguous
   resolved_by parent ...: 2 local dependencies share that repo_url`. Re-running
   `apm install` rewrites the same duplicate. No package here triggers it:
-  `default-stack` reaches `pr` and `repo-maintenance` twice, and `s-stack`
-  reaches `deep-interview` and `review` twice, but none of the four has a
-  dependency of its own. Giving any of them a sibling dependency would break
+  `default-stack` reaches `coding-style`, `p-stack`, `pr`, `repo-maintenance`
+  and `review` twice, and `s-stack` reaches `deep-interview` and `review`
+  twice, but none of the six has a dependency of its own. Giving any of them a sibling dependency would break
   the audit of the package that reaches it twice. The repro is in
   `docs/DEPENDENCY-CONTRACTS.md`.
 - `apm pack --archive -o ./dist` emits a **Claude plugin bundle** (default

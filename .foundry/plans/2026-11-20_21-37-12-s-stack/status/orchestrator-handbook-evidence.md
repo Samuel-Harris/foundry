@@ -598,3 +598,21 @@ For the cross-handbook integration: the reference splits the generated-only roun
 ## For the cross-handbook integration: package versions across open pull requests
 
 Under the orchestrator's run decision, a PR creator that opens or refreshes a pull request changing s-stack sets s-stack's version above every s-stack version in an open s-stack pull request at that moment, checked with `gh pr list` and each pull request's `apm.yml`, not only above `main`'s. Pull requests #87 and #88 both shipped 0.1.4 and turned `main` red. `pr-creator.md`, and possibly `orchestrator.md`, may need to state this. This phase's PR creator brief will carry it.
+
+## Verify 31, code head `8fff7f3d20da708eba2817769edb4b5c7ca067af`, VERIFIED
+
+A fresh verifier updated the check file for `0008162` (commit `8fff7f3`, with new cold reads AZ, BA and BB) and ran every check. C6 checks 1, 2, 3, 5 and 7 PASS (`185/200 orchestrator.md`; `all Tier 1 structural checks passed across 20 packages`). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS: the board's 50 Chrome scenarios, the updated `foundation` C2 script, the two other scripts, and 63 cold reads across five check files. AN passed on a fresh rerun.
+
+Every **Done when** item was met:
+
+- The handbook has 185 lines, and no command line appears.
+- A private-name grep across the phase's files, diff and commit messages found 0 hits.
+
+One item misleads a reader, and is queued for the next fix round. After a review question answered by reply with no code change, tick step 4 does not ask for `prs-open`, because the last one is at the current code head. If the phase reads `phase-session.md`'s "Move to PR and report" as a `state` message only, the round is never answered. Readers split on this rather than failing.
+
+Minor items:
+
+- "return to PR" assumes the phase left PR.
+- Step 5's "new review comment" does not exclude the phase's own replies.
+- A paused phase can be judged stalled.
+- `phase-session.md` line 107's "report" is ambiguous.

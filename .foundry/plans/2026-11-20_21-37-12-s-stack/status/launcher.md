@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Implement"
-changed_at: "2026-11-22T06:23:50Z"
+state: "Verify"
+changed_at: "2026-11-22T06:58:19Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "5ba7c2d20de90afed4b569e9b297f146c730a8af"
+code_head: "e7405c5c33a60d71a726f857443b44b7587c9fe6"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -198,3 +198,5 @@ Merge 481497e of `s-stack-package` at a4bf95f (spec-planner-handbooks follow-up)
 Merge 99599dc of `s-stack-package` at 99953ad (foundation's follow-up) touched only foundation's files: `SKILL.md`, `references/status-and-messages.md`, the verification skill, `checks/foundation.md`, the version line and the lockfile. The fourth review's two significant findings are fixed: the squashed right-hand column, and `ps -ww` against `COLUMNS` truncation. 118 tests pass on macOS and Ubuntu in both locales. Verify runs at e8bc6e1.
 
 The fifth review was SIGNIFICANT for e8bc6e1, and both of its findings are fixed (launcher-d17). 122 tests pass on Ubuntu in both locales, and on macOS apart from one test that asserted the old behaviour, which is now deleted. Verify runs at 5ba7c2d.
+
+The sixth review's four findings are fixed (launcher-d18), with 127 tests passing on macOS and Ubuntu in both locales. Merge 54d6139 of `s-stack-package` touched only other phases' files: `status-board.html`, `phase-session.md`, `planner.md`, `spec-writer.md`, `checks/board.md`, `checks/spec-planner-handbooks.md`, the version line and the lockfile. Verify runs at e7405c5.

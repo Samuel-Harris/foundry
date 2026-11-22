@@ -863,3 +863,13 @@ elsewhere hook exit=0
 ```
 
 Before the fix, at `b94559e`'s parent tree, the same Tier 1 at the second path failed only `install and pack leave no tracked-file change`, as both reviewers showed. `9285fa1` after `bba668d` changes only docs.
+
+## Verify 2, VERIFIED at `acaba0e6fcd36b38e2c6061c6fc7ede046844cae`, 2026-11-22T19:02:05Z
+
+Scoped to `9095235..s-stack-phase-default-stack`, own commits `57b0790`, `bba668d`, `5f58a7c`, `b94559e`, `9285fa1`; no waiver. The verifier committed `acaba0e`, which changes only the check file. It adds a Rerun check for path independence, matches the drift check to the documented outputs, and normalises the slot directory in the "loses no file" Evidence check, as Review 1's finding 3 asked. The phase session confirmed that the diff touches only that file and that the tree is clean.
+
+- Review 1's probes at the new head, from a second checkout path: P1, install, relativise and `git diff --exit-code`, gave `install=0 relativise=0 diff=0`. P2, the hook, exited 0. P3, Tier 1, passed with `install and pack leave no tracked-file change`. All pass.
+- Tier 1 and the hook in this worktree: pass. `tests/versioning`: 13 tests OK.
+- On a real lockfile, the relativiser exits 1 and leaves the lockfile unchanged when a deployed file is edited or deleted, and exits 0 once the file is restored.
+- Drift section, run as written: `[x] 2 of 9 check(s) failed`, failed `content-integrity,drift`, 32 files; after reinstall, `[*] All 10 check(s) passed`; the lockfile was restored.
+- The skill's checks 1 to 8 pass: launcher 130 tests OK, and Tier 1 at both paths. Every Done-when item passes. Loses no file: 374 files before, 398 after, none lost. 32 files differ only by the slot. After normalising, only `apm.yml` and `apm.lock.yaml` differ.

@@ -1,10 +1,10 @@
 ---
 phase: "default-stack"
-state: "Verify"
-changed_at: "2026-11-22T18:48:12Z"
+state: "Review"
+changed_at: "2026-11-22T19:02:05Z"
 session: "s-stack-phase-default-stack"
 branch: "s-stack-phase-default-stack"
-code_head: "9285fa108d30402b19c438b177fbb3b2e72fa13d"
+code_head: "acaba0e6fcd36b38e2c6061c6fc7ede046844cae"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -16,6 +16,11 @@ verdicts:
     result: "SIGNIFICANT"
     code_head: "9095235fd831608032a251232927ca6f85496768"
     at: "2026-11-22T18:30:39Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/default-stack-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "acaba0e6fcd36b38e2c6061c6fc7ede046844cae"
+    at: "2026-11-22T19:02:05Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/default-stack-evidence.md"
 pull_requests: []
 pushed: null

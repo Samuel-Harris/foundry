@@ -70,6 +70,7 @@ The merge commit and the carried commits run no hook. A stop prints `STOP` lines
 | `<path> conflicts outside generated content` alone | An open dependency conflicts with the base or with another dependency |
 | `<pr> would carry <path>, which the phase does not change` | The pull request's own commits touch a path off the phase's first-parent line: a delegate's branch merged into the phase, or a third-row dependency whose old head GitHub rewrote. The check runs before anything is recorded. When the branch holds a developer commit or merge, by the rule in [Prove the split](#prove-the-split), the refresh prints `DEVELOPER-COMMITS <pr> <sha>...` instead and exits 1, so a file the developer added is not taken for a delegate's |
 | `<pr> was last pushed at <sha>, which is not here, so its developer commits cannot be told apart` | `PUSHED` names a head that this repository lacks. Fetch it, or report |
+| `<pr> is on origin but has no PUSHED entry, so its developer commits cannot be told apart` | The branch was pushed before, but the brief gave no recorded head for it. Report, and do not guess one |
 | `<path> cannot be written into the tree, as when a file and a directory share its name` | The phase replaced a file with a directory of the same name, or the reverse |
 | `the branch is back at <commit>` | Follows a stopped carry |
 
@@ -81,7 +82,7 @@ A shared path's stop is permanent because the refresh replays only the phase's o
 
 - **Each pull request's head** equals its target tree outside generated files and generated lines. The target tree is the overlay of its own commits, built at the merge base of its base and its head, with each open dependency's merge base merged in. This catches a hand edit inside a merge commit and a path taken from the wrong version.
 - **No own commit is already on the orchestrator branch.** Such a commit belongs to another pull request, so the spec is missing a dependency.
-- **No developer commit or merge.** Each is reported as `DEVELOPER-COMMITS <pr> <sha>...`, which makes the proof `NOT EQUAL`, because the refresh would revert it. The boundary is the head that `PUSHED` names for the pull request. A branch with no entry has not been pushed, so nothing on it is the developer's. The check reads `origin/<pr>` when that ref exists, because a round starts from it. When `PUSHED` names a head that is not here, the proof prints the refresh's `STOP` line for it.
+- **No developer commit or merge.** Each is reported as `DEVELOPER-COMMITS <pr> <sha>...`, which makes the proof `NOT EQUAL`, because the refresh would revert it. The boundary is the head that `PUSHED` names for the pull request. A branch with no entry and no `origin/<pr>` has not been pushed, so nothing on it is the developer's. A branch on `origin` with no entry stops, because a missing record cannot be told from a first push. The check reads `origin/<pr>` when that ref exists, because a round starts from it. When `PUSHED` names a head that is not here, the proof prints the refresh's `STOP` line for it.
   - A developer commit is an own commit on the pull request's first-parent line after the pushed head that matches no phase commit, such as GitHub's "Apply suggestions from code review".
   - When the pull request's head does not descend from the pushed head, as after GitHub rebases a stack child, the check compares the owned paths of the pull request's own commits instead. A path whose version differs from both the pushed head's and the phase tip's reports the head as `DEVELOPER-COMMITS`. A rebase that brings in the default branch's changes to other files reports nothing. The remedy is the one for a developer merge, with the head's content.
   - A developer merge is a merge after the pushed head, reachable from the pull request and from none of the default branch, its base and its dependencies, whose message does not end with the refresh's `(s-stack refresh)` line. It is reported when its second parent is in none of the default branch, the base and the dependencies, or when it has a hand edit whose version differs from the phase tip's. Its hand edits are the paths where its tree differs from `git merge-tree --write-tree` of its two parents, outside `.foundry/` and wholly generated files, ignoring generated lines. A merge that only brings in the default branch, as GitHub's "Update branch" button makes, is not reported; the refresh starts from it.
@@ -253,7 +254,10 @@ matches() { ids --no-walk "$1" | grep -q -x -F -f "$W/fp" || cut -d ' ' -f 2 "$W
 pushed() { list "${PUSHED:-}" | awk -v b="${1#origin/}=" 'index($0, b) == 1 { print substr($0, length(b) + 1); exit }'; }
 pin() { local p; p=$(pushed "$1"); [ -n "$p" ] && git cat-file -e "$p^{commit}" 2>/dev/null && echo "$p"; }
 pushed_here() {
-  local p; p=$(pushed "$1"); [ -z "$p" ] || git cat-file -e "$p^{commit}" 2>/dev/null ||
+  local p; p=$(pushed "$1")
+  [ -n "$p" ] || ! git rev-parse -q --verify "refs/remotes/origin/${1#origin/}" >/dev/null ||
+    { echo "STOP ${1#origin/} is on origin but has no PUSHED entry, so its developer commits cannot be told apart"; return 1; }
+  [ -z "$p" ] || git cat-file -e "$p^{commit}" 2>/dev/null ||
     { echo "STOP ${1#origin/} was last pushed at $p, which is not here, so its developer commits cannot be told apart"; return 1; }
 }
 devs() {

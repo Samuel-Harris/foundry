@@ -80,7 +80,7 @@ dependencies:
   declared_license: MIT
 - repo_url: _local/s-stack
   name: s-stack
-  version: 0.1.13
+  version: 0.1.14
   package_type: apm_package
   deployed_files:
   - .agents/skills/sam-mode
@@ -112,7 +112,7 @@ dependencies:
   deployed_file_hashes:
     .agents/skills/sam-mode/SKILL.md: sha256:907cd5531f3daf925acae16c7bc8a656019137adddba3885efee38db355679df
     .agents/skills/sam-mode/assets/status-board.html: sha256:7ceeb3138256e608c7cf7d74bc87f1481d12d9367531ebc8e17a8965a5cfe59a
-    .agents/skills/sam-mode/handbooks/orchestrator.md: sha256:64faa8003435dafddedd1bf264cc2ab0efa43c536a19de70c1e79dc622484e2d
+    .agents/skills/sam-mode/handbooks/orchestrator.md: sha256:2722c8f15739e0249437da4e4c5d98363041f133e3a6ae3a36b911e840d7bd10
     .agents/skills/sam-mode/handbooks/phase-session.md: sha256:bb0f735030e32e2607448ea5e7d154cb40cd3e228e254d7a242ff89a93b52053
     .agents/skills/sam-mode/handbooks/planner.md: sha256:a8f79fa54649de5f734e3eb22b501c30152735b0ad9fb18e70e9485c154ad023
     .agents/skills/sam-mode/handbooks/pr-creator.md: sha256:fe63a90c0a971e0369abfb5a6d60d2ab49204b59bfcc14133cd9040c64e00d66
@@ -124,7 +124,7 @@ dependencies:
     .agents/skills/sam-mode/scripts/launch.sh: sha256:f1511e2e0c0d1e3860a94c6ec95be1b3bb6c3b04467132f5174208f883f80ce4
     .claude/skills/sam-mode/SKILL.md: sha256:907cd5531f3daf925acae16c7bc8a656019137adddba3885efee38db355679df
     .claude/skills/sam-mode/assets/status-board.html: sha256:7ceeb3138256e608c7cf7d74bc87f1481d12d9367531ebc8e17a8965a5cfe59a
-    .claude/skills/sam-mode/handbooks/orchestrator.md: sha256:64faa8003435dafddedd1bf264cc2ab0efa43c536a19de70c1e79dc622484e2d
+    .claude/skills/sam-mode/handbooks/orchestrator.md: sha256:2722c8f15739e0249437da4e4c5d98363041f133e3a6ae3a36b911e840d7bd10
     .claude/skills/sam-mode/handbooks/phase-session.md: sha256:bb0f735030e32e2607448ea5e7d154cb40cd3e228e254d7a242ff89a93b52053
     .claude/skills/sam-mode/handbooks/planner.md: sha256:a8f79fa54649de5f734e3eb22b501c30152735b0ad9fb18e70e9485c154ad023
     .claude/skills/sam-mode/handbooks/pr-creator.md: sha256:fe63a90c0a971e0369abfb5a6d60d2ab49204b59bfcc14133cd9040c64e00d66
@@ -2878,7 +2878,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:64faa8003435dafddedd1bf264cc2ab0efa43c536a19de70c1e79dc622484e2d
+  content_hash: sha256:2722c8f15739e0249437da4e4c5d98363041f133e3a6ae3a36b911e840d7bd10
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/handbooks/phase-session.md
@@ -5218,7 +5218,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:64faa8003435dafddedd1bf264cc2ab0efa43c536a19de70c1e79dc622484e2d
+  content_hash: sha256:2722c8f15739e0249437da4e4c5d98363041f133e3a6ae3a36b911e840d7bd10
 - kind: project-relative
   target: copilot
   value: .agents/skills/sam-mode/handbooks/phase-session.md

@@ -53,9 +53,9 @@ A branch may be written `main` or `origin/main`. The default branch always resol
 
 1. **Check the spec.** `<pr>` must be in `OWN`. Every branch the spec names must exist. A base other than the default branch must hold `origin/<default>`.
 2. **Check for stale paths.** For each owned path of the pull request, it reads the version on the default branch, on each open dependency, and on the base when the base is another phase's pull request. That version must equal the phase tip's, the one at the phase's merge base with that branch, or one the phase branch has held since. So a default branch that holds an earlier version of the phase's file, such as one a merged pull request landed, is not stale.
-3. **Carry.** It carries each `<commit>` given, oldest first. An owned path takes the commit's version of the file, or the phase tip's when no later phase commit changes the path, with the current generated lines. A shared path takes only the commit's own change, through `git apply --3way`. When the pull request and its base hold none of the earlier phase commits on a shared path that no other commit changed, the commit spans two pull requests, and the refresh stops. Each carried commit keeps the original author, date and message, and adds the `(cherry picked from commit <sha>)` line. A commit with nothing left to carry is skipped.
+3. **Carry.** It carries each `<commit>` given, oldest first. An owned path takes the commit's version of the file, or the phase tip's when no later phase commit changes the path, with the current generated lines. A shared path takes only the commit's own change, through `git apply --3way`. When the pull request and its base hold none of the earlier phase commits on a shared path that no other commit changed, the commit spans two pull requests, and the refresh stops. Each carried commit keeps the original author, date and message, and adds the `(cherry picked from commit <sha>)` line. A commit with nothing left to carry is skipped when it has no paths or the branch, its base or a dependency already holds it or a commit that matches it. Otherwise it is carried as an empty commit, so the pull request accounts for it, as for a phase commit that copies a developer merge's hand edit.
 4. **Overlay.** In a temporary worktree at the base's tip, it merges each open dependency's tip. Then, for each path of the pull request's own commits, an owned path takes the phase tip's version with the base's generated lines, or is deleted when the phase deleted it. A shared path replays, with `git apply --3way`, each phase commit on that path that the pull request carries, oldest first. A conflict in a wholly generated file keeps the base's side. A file with generated lines is merged after both sides take the base's generated lines. Any other conflict stops the refresh.
-5. **Record.** When a base tip is not yet an ancestor of `HEAD`, or the overlaid tree differs from `HEAD` outside generated files and generated lines, it records the tree as one merge commit, `git commit-tree <tree> -p HEAD -p <each new tip>`, with the base's tip as the second parent when no tip is new, and prints `merged <commit>`. Otherwise it prints `up to date with <tips>`. The merge takes the base's generated content, so a regenerate commit usually follows.
+5. **Record.** When a base tip is not yet an ancestor of `HEAD`, or the overlaid tree differs from `HEAD` outside generated files and generated lines, it records the tree as one merge commit, `git commit-tree <tree> -p HEAD -p <each new tip>`, with the base's tip as the second parent when no tip is new and `(s-stack refresh)` as the message's last line, and prints `merged <commit>`. Otherwise it prints `up to date with <tips>`. The merge takes the base's generated content, so a regenerate commit usually follows.
 
 The merge commit and the carried commits run no hook. A stop prints `STOP` lines, leaves the branch where it started and exits 1.
 
@@ -68,7 +68,7 @@ The merge commit and the carried commits run no hook. A stop prints `STOP` lines
 | `<path> conflicts outside generated content`, `<commit> does not apply`, then `<path> is a shared path, so the stop is permanent: no merge or commit on the phase clears it, and it needs a decision` | A shared path's replay or carry conflicts |
 | `<commit> also changes <path>, which <pr> and its base do not hold, so it spans two pull requests and the split must change` | A carried commit changes another pull request's path, and that pull request is not below this one |
 | `<path> conflicts outside generated content` alone | An open dependency conflicts with the base or with another dependency |
-| `<pr> would carry <path>, which the phase does not change` | The pull request's own commits touch a path off the phase's first-parent line: a delegate's branch merged into the phase, or a third-row dependency whose old head GitHub rewrote. The check runs before anything is recorded |
+| `<pr> would carry <path>, which the phase does not change` | The pull request's own commits touch a path off the phase's first-parent line: a delegate's branch merged into the phase, or a third-row dependency whose old head GitHub rewrote. The check runs before anything is recorded. When the branch holds a developer commit or merge, by the rule in [Prove the split](#prove-the-split) without its check for hand edits, the refresh prints `DEVELOPER-COMMITS <pr> <sha>...` instead and exits 1, so a file the developer added is not taken for a delegate's |
 | `<path> cannot be written into the tree, as when a file and a directory share its name` | The phase replaced a file with a directory of the same name, or the reverse |
 | `the branch is back at <commit>` | Follows a stopped carry |
 
@@ -80,7 +80,11 @@ A shared path's stop is permanent because the refresh replays only the phase's o
 
 - **Each pull request's head** equals its target tree outside generated files and generated lines. The target tree is the overlay of its own commits, built at the merge base of its base and its head, with each open dependency's merge base merged in. This catches a hand edit inside a merge commit and a path taken from the wrong version.
 - **No own commit is already on the orchestrator branch.** Such a commit belongs to another pull request, so the spec is missing a dependency.
-- **Every own commit matches a phase commit.** A commit made on the pull request branch, such as GitHub's "Apply suggestions from code review", is reported as `DEVELOPER-COMMITS <pr> <sha>...`, which makes the proof `NOT EQUAL`, because the refresh would revert it. A merge commit that only brings in the default branch, as GitHub's "Update branch" button makes, is not reported; the refresh starts from it.
+- **No developer commit or merge.** Each is reported as `DEVELOPER-COMMITS <pr> <sha>...`, which makes the proof `NOT EQUAL`, because the refresh would revert it.
+  - A developer commit is an own commit on the pull request's first-parent line, after its oldest commit that matches a phase commit, that matches none itself, such as GitHub's "Apply suggestions from code review". The commits before that one are a parent's history, as when GitHub rewrote a stack parent's head.
+  - A developer merge is a merge reachable from the pull request and from none of the default branch, its base and its dependencies, whose message does not end with the refresh's `(s-stack refresh)` line. It is reported when its second parent is in none of the default branch, the base and the dependencies, or when it has a hand edit whose version differs from the phase tip's. Its hand edits are the paths where its tree differs from `git merge-tree --write-tree` of its two parents, outside `.foundry/` and wholly generated files, ignoring generated lines. A merge that only brings in the default branch, as GitHub's "Update branch" button makes, is not reported; the refresh starts from it.
+  - The remedy for a developer merge is an ordinary phase commit that gives those paths the merge's content. The phase tip then holds the edit, and the next round proves `EQUAL`.
+- **A landed pull request is history.** One that a listed spec names as a merged dependency, or whose head the default branch holds, takes neither the developer check nor the head check. Its paths still count in the ownership check.
 - **No pull request changes a path that the phase commits do not.**
 - **Regenerate commits** change only generated files and generated lines.
 - **No pull request contains `.foundry/`.**
@@ -107,7 +111,7 @@ The proof relies on three rules from the other handbooks. When one is broken, it
 
 Two other histories stop the refresh in every round, so nothing is pushed, and the handbook sends both for a decision. When GitHub rewrites a third-row dependency's head after its parent merges, or a stack parent's head while leaving its child's alone, the refresh prints `<pr> would carry <file>, which the phase does not change` for the parent's or dependency's files. When the phase replaces a file with a directory of the same name, or the reverse, the refresh prints git's own error and then `<path> cannot be written into the tree, as when a file and a directory share its name`.
 
-A commit made on a pull request branch, and an edit inside one of the phase's merges, fail the proof as the checks above say. One history goes undetected: a merged pull request that the developer reverts on the default branch. The proof counts the merged pull request as holding its paths, so it still prints `EQUAL`.
+A commit or a merge with a hand edit made on a pull request branch, and an edit inside one of the phase's merges, fail the proof as the checks above say. One history goes undetected: a merged pull request that the developer reverts on the default branch. The proof counts the merged pull request as holding its paths, so it still prints `EQUAL`.
 
 ## The script
 
@@ -120,6 +124,7 @@ REGEN='^chore(s-stack): regenerate generated files$'
 GEN=(':(exclude)*apm.lock.yaml')
 LINES=(':(exclude)*apm.yml') LINES_IN='*apm.yml'
 GEN_LINE='^version: '
+MARK='^(s-stack refresh)$'
 mine_b() { [[ ",${OWN:-}," == *",${1#origin/},"* ]]; }
 ref() {
   local b=${1#origin/}; git rev-parse -q --verify "refs/remotes/origin/$b" >/dev/null || { mine_b "$b" && echo "$b" || echo "origin/$b"; return; }
@@ -227,7 +232,7 @@ carry() {
         put "$x" "$s" || { echo "STOP $x cannot be written into the tree, as when a file and a directory share its name"; return 1; }
       fi
     done
-    git diff --cached --quiet || { trailer "$c" && git commit -q --no-verify -F "$W/msg" --author="$(git log -1 --format='%an <%ae>' "$c")" --date="$(git log -1 --format=%ad --date=raw "$c")"; } || return 1
+    { git diff --cached --quiet && { grep -q -x -F "$c" "$W/held" || [ -z "$(paths "$c")" ]; }; } || { trailer "$c" && git commit -q --allow-empty --no-verify -F "$W/msg" --author="$(git log -1 --format='%an <%ae>' "$c")" --date="$(git log -1 --format=%ad --date=raw "$c")"; } || return 1
   done
 }
 stale() {
@@ -239,6 +244,24 @@ stale() {
     done
   done
 }
+matches() { ids --no-walk "$1" | grep -q -x -F -f "$W/fp" || cut -d ' ' -f 2 "$W/named" | grep -q -x -F "$1"; }
+devs() {
+  local h=$1 c b seen=; shift
+  for c in $(git rev-list --reverse --first-parent --no-merges "$h" $(not "$@") --invert-grep --grep="$REGEN"); do
+    if matches "$c"; then seen=1; elif [ -n "$seen" ]; then git rev-parse --short "$c"; fi
+  done
+  for c in $(git rev-list --merges "$h" $(not "$@") --invert-grep --grep="$MARK"); do
+    for b in $(not "$@"); do git merge-base --is-ancestor "$c^2" "${b#^}" && continue 2; done; git rev-parse --short "$c"
+  done
+}
+edits() {
+  local x; git diff --name-only "$1" "$2" -- . "${GEN[@]}" "${LINES[@]}" ':(exclude).foundry'
+  for x in $(git diff --name-only "$1" "$2" -- "$LINES_IN"); do [ -z "$(only_lines "$1" "$2" ":(literal)$x" | grep -v -E '^-(<{7}|={7}|>{7})')" ] || echo "$x"; done
+}
+hand_edited() {
+  local t x; t=$(git merge-tree --write-tree "$1^1" "$1^2" 2>/dev/null | head -1); [ -n "$t" ] || return 0
+  for x in $(edits "$t" "$1"); do [ "$(ver "$1" "$x")" = "$(ver "$PH" "$x")" ] || return 0; done; return 1
+}
 outside() { [ "$(ref "$1")" = "$D" ] || mine_b "$1" || ref "$1"; }
 refresh() {
   local pr base extra merged wt head tips t new m new_c; IFS=: read -r pr base extra merged <<< "$3"; setup "$1" "$2"; shift 3; new_c=("$@")
@@ -248,26 +271,29 @@ refresh() {
   wt=$(pwd) head=$(git rev-parse HEAD) tips=$(for b in "$base" $(list "$extra"); do ref "$b"; done)
   [ ${#new_c[@]} = 0 ] || new_c=($(git rev-list --no-merges --no-walk=unsorted "${new_c[@]}"))
   mine=($(own "$head" "$D" "$base" $(list "$extra") $(list "$merged")) "${new_c[@]}")
-  accounted HEAD $tips $(refs "$merged"); [ ${#new_c[@]} = 0 ] || printf '%s\n' "${new_c[@]}" >> "$W/acc"
+  accounted HEAD $tips $(refs "$merged"); cp "$W/acc" "$W/held"; [ ${#new_c[@]} = 0 ] || printf '%s\n' "${new_c[@]}" >> "$W/acc"
   stale "$D" $(refs "$extra") $(outside "$base") || exit 1
   paths $(git rev-list --first-parent --no-merges "$PH" "^$D") > "$W/pp"
-  for x in $(paths "${mine[@]}" | grep -v -x -F -f "$W/pp"); do echo "STOP $pr would carry $x, which the phase does not change"; exit 1; done
+  for x in $(paths "${mine[@]}" | grep -v -x -F -f "$W/pp"); do
+    dev=($(devs "$head" "$D" "$base" $(list "$extra") $(list "$merged"))); [ ${#dev[@]} = 0 ] || { echo "DEVELOPER-COMMITS $pr $(printf '%s ' "${dev[@]}")"; exit 1; }
+    echo "STOP $pr would carry $x, which the phase does not change"; exit 1; done
   [ ${#new_c[@]} = 0 ] || carry "${new_c[@]}" || { git reset -q --hard "$head"; echo "STOP the branch is back at $head"; exit 1; }
   mine=($(own HEAD "$D" "$base" $(list "$extra") $(list "$merged"))); accounted HEAD $tips $(refs "$merged")
   at "$(ref "$base")" && merge_in $(echo "$tips" | sed 1d) && overlay "${mine[@]}" || { done_at "$wt"; git reset -q --hard "$head"; exit 1; }
   t=$(git write-tree); done_at "$wt"
   new=$(for x in $tips; do git merge-base --is-ancestor "$x" HEAD || echo "$x"; done)
   if [ -n "$new" ] || ! same "$t" HEAD; then
-    m=$(git commit-tree "$t" -p HEAD $(for x in ${new:-$(echo "$tips" | head -1)}; do printf -- '-p\n%s\n' "$x"; done) -m "Merge $(echo $tips) into $pr") && git merge -q --ff-only "$m" || exit 1
+    m=$(git commit-tree "$t" -p HEAD $(for x in ${new:-$(echo "$tips" | head -1)}; do printf -- '-p\n%s\n' "$x"; done) -m "Merge $(echo $tips) into $pr" -m "(s-stack refresh)") && git merge -q --ff-only "$m" || exit 1
     echo "merged $m"
   else echo "up to date with $(echo $tips)"; fi
 }
 deps_of() { local s b e x m; for s in "${specs[@]}"; do IFS=: read -r b e x m <<< "$s"; [ "${b#origin/}" = "${1#origin/}" ] && { echo "${e#origin/}"; list "$x,$m" | sed 's,^origin/,,'; }; done; }
 above() { local d; for d in $(deps_of "$1"); do { [ "$d" = "${2#origin/}" ] || above "$d" "$2"; } && return 0; done; return 1; }
 prove() {
-  local orch=$1 fail=0 top s c f l t x o i b v m p deps; setup "$2" "$3"; shift 3; specs=("$@") top=$(pwd)
+  local orch=$1 fail=0 top s c f l t x o i b v m p deps landed lp dev; setup "$2" "$3"; shift 3; specs=("$@") top=$(pwd)
   spec() { IFS=: read -r pr base extra merged <<< "$1"; mine=($(own "$pr" "$D" "$base" $(list "$extra") $(list "$merged"))); }
   deps=$(for s; do IFS=: read -r _ b x m <<< "$s"; ref "$b"; refs "$x"; refs "$m"; done)
+  landed=$(for s; do IFS=: read -r _ _ _ m <<< "$s"; list "$m"; done | sed 's,^origin/,,')
   git rev-list --first-parent "$orch" > "$W/ofp"
   paths $(git rev-list --first-parent --no-merges "$PH" "^$D") > "$W/pp"
   for m in $(git rev-list --first-parent --merges "$PH" "^$D" | grep -v -x -F -f "$W/ofp"); do
@@ -278,8 +304,7 @@ prove() {
     done
     t=$(git merge-tree --write-tree "$m^1" "$m^2" 2>/dev/null | head -1)
     [ -n "$t" ] || { echo "FAIL $(git log -1 --format='%h %s' "$m") cannot be merged again to check it for edits"; fail=1; continue; }
-    for x in $(git diff --name-only "$t" "$m" -- . "${GEN[@]}" "${LINES[@]}" ':(exclude).foundry'; for x in $(git diff --name-only "$t" "$m" -- "$LINES_IN"); do
-      [ -z "$(only_lines "$t" "$m" ":(literal)$x" | grep -v -E '^-(<{7}|={7}|>{7})')" ] || echo "$x"; done); do
+    for x in $(edits "$t" "$m"); do
       grep -q -x -F -- "$x" "$W/pp" && ! foreign "$x" && continue
       echo "FAIL $(git log -1 --format='%h %s' "$m") edits $x inside the merge, so no pull request carries the edit"; fail=1
     done
@@ -288,14 +313,18 @@ prove() {
     spec "$s"; paths "${mine[@]}" > "$W/own.${pr//\//_}"
     echo "$pr:$(git diff --shortstat "$(ref "$base")...$pr" -- . "${GEN[@]}")"
     for c in ${mine[@]}; do ! git merge-base --is-ancestor "$c" "$orch" || { echo "FAIL $pr: $c is already on $orch, so its pull request is an undeclared dependency"; fail=1; }; done
-    dev=(); for c in ${mine[@]}; do ids --no-walk "$c" | grep -q -x -F -f "$W/fp" || cut -d ' ' -f 2 "$W/named" | grep -q -x -F "$c" || dev+=("$(git rev-parse --short "$c")"); done
-    [ ${#dev[@]} = 0 ] || { echo "DEVELOPER-COMMITS $pr $(printf '%s ' "${dev[@]}")"; fail=1; }
+    lp=; { echo "$landed" | grep -q -x -F -- "${pr#origin/}" || git merge-base --is-ancestor "$pr" "$D"; } && lp=1
+    [ -n "$lp" ] || dev=($( { devs "$pr" "$D" "$base" $(list "$extra") $(list "$merged")
+      for m in $(git rev-list --merges "$pr" $(not "$D" "$base" $(list "$extra") $(list "$merged")) --invert-grep --grep="$MARK"); do hand_edited "$m" && git rev-parse --short "$m"; done
+      } | awk '!s[$0]++'))
+    [ -n "$lp" ] || [ ${#dev[@]} = 0 ] || { echo "DEVELOPER-COMMITS $pr $(printf '%s ' "${dev[@]}")"; fail=1; }
     for x in $(grep -v -x -F -f "$W/pp" "$W/own.${pr//\//_}"); do echo "FAIL $pr: it changes $x, which the phase does not"; fail=1; done
     for c in $(git rev-list --no-merges "$pr" $(not "$D" "$base" $(list "$extra") $(list "$merged")) --grep="$REGEN"); do
       for f in $(git diff-tree --no-commit-id --name-only -r "$c" -- . "${GEN[@]}" "${LINES[@]}"); do echo "FAIL $pr: regenerate commit $c changes $f"; fail=1; done
       l=$(only_lines "$c^" "$c"); [ -z "$l" ] || { echo "FAIL $pr: regenerate commit $c changes $l"; fail=1; }
     done
     for f in $(git diff --name-only "$D...$pr" -- .foundry); do echo "FAIL $pr: contains $f"; fail=1; done
+    [ -n "$lp" ] && continue
     accounted "$pr" $(refs "$merged")
     at "$(git merge-base "$(ref "$base")" "$pr")"
     merge_in $(for e in $(list "$extra"); do git merge-base "$(ref "$e")" "$pr"; done) && overlay "${mine[@]}" && t=$(git write-tree) || t=

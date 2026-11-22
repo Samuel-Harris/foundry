@@ -8,7 +8,7 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `d3dd837` (version 6) |
+| Architecture page describes | `c9a7832` (version 7) |
 | Last tick | 2026-11-22 00:11 |
 | Default branch merged at | `054a9e7` (#88, into `99953ad`) |
 
@@ -38,6 +38,7 @@ None.
 | 86 | `board` | merged into `main` as `51f334e` | | |
 | 87 | `spec-planner-handbooks` | merged into `main` as `b440889` | | |
 | 88 | `foundation` | merged into `main` as `054a9e7` | | |
+| 89 | `foundation` | `s-stack-version-0.1.5` | `main` | none |
 
 ## Merged phases
 
@@ -84,7 +85,7 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 ## Merge cautions
 
-- `main` at `054a9e7` fails CI's "Package versions": #87 and #88 both set s-stack to 0.1.4. `foundation` opens a generated-only draft pull request raising it to 0.1.5, then goes to Done once it merges.
+- `main` at `054a9e7` fails CI's "Package versions": #87 and #88 both set s-stack to 0.1.4. `foundation` opened #89 (version line only) raising it to 0.1.5, and goes to Done once it merges.
 
 - After the pre-commit hook has rewritten a staged lockfile, `git merge --abort` exits 128 and leaves `MERGE_HEAD`. Recover with `git reset --merge`, then check `git status`. Found by `orchestrator-handbook` (review of `e0a51a2`).
 - Read a phase's tip and its code head in one step, and merge that tip SHA, not the branch name, so no commit added after the verdicts check can slip in.
@@ -104,6 +105,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 - After every handbook phase is merged, have a fresh subagent do one cross-handbook read-through on `s-stack-package`: orchestrator, phase-session, verifier, reviewer, pr-creator, spec-writer and planner, plus the reference file. Collect the recorded handshake edge cases from each phase's evidence file. Route the fixes to the owning phases, or to the foundation round for the reference file.
   - Include: can `orchestrator.md` send the merged notice to a phase that has just entered PR (PR step 1) before `prs-open` lists its new pull request? Check against the re-merge guard and the notice's conditions. Raised by `phase-handbooks`' reviewers at `a1c95f1`.
   - Include: `references/status-and-messages.md` has no developer-commit row and splits the generated and dependency `fix-round` uses into two rows, unlike `orchestrator.md` at `0008162`. A suggestion applied while a round is unanswered is left to the PR creator's `DEVELOPER-COMMITS` report. Raised by `orchestrator-handbook`.
+  - Include: in `references/status-and-messages.md`, "a fact already committed to the sender's own file" fits `started` and the folded run-decisions rows awkwardly. Raised by `spec-planner-handbooks` at `775a30a`.
 - `board` (Done): the board template's schema comment (C5) describes `needs_update` as containing main's tip with passing checks. `orchestrator.md` at `20c031a` also requires the heads of open dependencies. Make the comment match. Raised by `orchestrator-handbook`.
 
 ## Follow-ups after foundation's round merges

@@ -9,8 +9,8 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
-| Last tick | 2026-11-22 13:11 |
-| Default branch merged at | `92a91f7` (#92) |
+| Last tick | 2026-11-22 13:31 |
+| Default branch merged at | `ee49f7b` (#93, into `196e5c4`) |
 
 ## Live sessions
 
@@ -39,7 +39,8 @@ None.
 | 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
 | 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
 | 92 | `board` | merged into `main` as `92a91f7` | | |
-| 93 | `orchestrator-handbook` | `s-stack-orchestrator-handbook` | `main` | none |
+| 93 | `orchestrator-handbook` | merged into `main` as `ee49f7b` | | |
+| 94 | `launcher` | `s-stack-launcher` | `main` | none |
 
 ## Merged phases
 

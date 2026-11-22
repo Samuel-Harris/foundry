@@ -9,14 +9,15 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
-| Last tick | 2026-11-22 14:51 |
-| Default branch merged at | `0fdbb53` (#94, into `0cb0607`) |
+| Last tick | 2026-11-22 19:51 |
+| Default branch merged at | `59bee65` (#97, #98, into `3aa3de7`) |
 
 ## Live sessions
 
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
-| `s-stack-phase-integration` | `%201` | `../s-stack-phase-integration` | 2026-11-22, the 45-item cross-handbook round (`integration-fixes.md`) |
+| `s-stack-phase-integration` | `%206` | `../s-stack-phase-integration` | 2026-11-22, reopened to split cold read 4 after the failed full run |
+| `s-stack-phase-default-stack` | `%202` | `../s-stack-phase-default-stack` | 2026-11-22, last phase |
 
 ## Open decision requests
 
@@ -40,6 +41,9 @@ None.
 | 93 | `orchestrator-handbook` | merged into `main` as `ee49f7b` | | |
 | 94 | `launcher` | merged into `main` as `0fdbb53` | | |
 | 95 | `pr-handbook` | merged into `main` as `25a6b61` | | |
+| 96 | `integration` | merged into `main` as `7747021` | | |
+| 97 | `default-stack` | merged into `main` as `26f1458` | | |
+| 98 | `default-stack` | merged into `main` as `59bee65` | | |
 
 ## Merged phases
 
@@ -59,6 +63,8 @@ None.
 | `orchestrator-handbook` (post-merge fix) | `9eb7fac` (tip `455c545`) | `a3f4749` | VERIFIED on `9eb7fac` (scoped) |
 | `pr-handbook` | `ab06c83` (tip `c9e0f72`) | `27d6f55` | VERIFIED on `899ec3a` (scoped, no code change since `ab06c83`) |
 | `launcher` | `a51f246` (tip `117abdb`) | `890d46d` | VERIFIED on `3a21396` (scoped, no code change since `a51f246`) |
+| `integration` | `9f6c1c0` (tip `d8e5fe7`) | `90f855a` | VERIFIED on `e407673` (74 cold reads, 8 scripts; no code change since `9f6c1c0`) |
+| `default-stack` | `1983ab2` (tip `fef611d`) | `acaba0e` | final full run NOT VERIFIED on `5e529e3`: integration cold read 4 failed 2 of 3 runs; everything else passed |
 
 ## Closed sessions
 
@@ -100,6 +106,10 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 ## Merge cautions
 
+- `s-stack-package` is frozen from 2026-11-22 20:00 until integration's fix for cold read 4 merges and a full run passes again.
+
+
+
 
 
 
@@ -135,6 +145,8 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
   - Include: `phase-session.md` and `references/status-and-messages.md` must say the phase records each pull request branch's pushed head and passes it to the PR creator (`PUSHED=`), which `pr-creator.md` assumes after pr-handbook-r5. Raised by `pr-handbook` at `49b3fab`. Since `1223f1e` (pr-handbook-d21), `prove` prints a `RECORD <branch>=<sha>,...` line after EQUAL, and the phase must store and pass that line verbatim, not one SHA per branch.
   - Include: `prs-open` (C3), or the status header's `pull_requests` entries (C2), should carry each pushed head. `orchestrator.md` line 148 records the head on arrival, so a developer commit landing between the push and `prs-open` is never compared. This pairs with the `PUSHED=` item above. Raised by `orchestrator-handbook` at `ff83115`.
   - Include: `phase-session.md` needs a row for the orchestrator's refresh instruction (start a PR creator; on `DEVELOPER-COMMITS` start a feedback round, otherwise send `prs-open`). Raised by `orchestrator-handbook` at `ff83115`.
+  - Follow-up, not in this run: no `s-stack--v0.1.12` tag exists. CI on `main` at `0fdbb53` (#94) failed in the p-stack statechart job (ENOENT scanning a temporary `draft` directory), so the tag job was skipped. `s-stack--v0.1.13` is tagged at `7747021`, so consumers on `^0.1.0` are unaffected. `v0.1.10` never reached `main`. The statechart failure's cause is not investigated, and `main` passed at `59bee65`.
+  - Follow-up, not in this run: a checkout path containing a space still gives a different `default-stack` lockfile, as before `default-stack-r2`. Raised by `default-stack`'s second review.
   - Include: the run decision on parallel package versions. `pr-creator.md` and `orchestrator.md` may need to state it.
 
 ## Post-merge check briefs

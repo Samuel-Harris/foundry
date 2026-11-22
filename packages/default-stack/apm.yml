@@ -1,5 +1,5 @@
 name: default-stack
-version: "0.1.12"
+version: "0.1.13"
 description: "Meta-package that installs the default Foundry stack."
 author: sam
 license: MIT
@@ -15,10 +15,10 @@ dependencies:
     - path: ../execution
     - path: ../git-diff
     - path: ../p-stack
-    - path: ../planning
     - path: ../pr
     - path: ../repo-maintenance
     - path: ../review
+    - path: ../s-stack
     - path: ../skill-creation
 scripts:
   check: apm audit --ci

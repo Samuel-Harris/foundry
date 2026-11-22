@@ -148,14 +148,18 @@ dependencies:
   `Samuel-Harris/foundry/packages/<name>#<branch>` in an empty directory.
 - **A transitive sibling dependency is written with an absolute path.** Direct
   dependencies get a portable `local_path: ../<name>`, but a local dependency
-  reached through another local package (for example `deep-interview` via `planning` in `default-stack`) also
+  reached through another local package (for example `deep-interview` via `s-stack` in `default-stack`) also
   gets `anchored_local_path`, and its deployment owners are recorded as
   `local:<path>`. APM only relativises paths inside the project root
   (`packages/<name>`), and siblings are outside it, so every install writes
   `/absolute/path/to/packages/<name>`. The committed form is relative
   (`../<name>`): run `python3 scripts/relativise_lockfiles.py
-  packages/<name>/apm.lock.yaml` after any `apm install`. The pre-commit hook
-  and Tier 1 run it before diffing. Both fields must stay relative together;
+  packages/<name>/apm.lock.yaml` straight after any `apm install`. It also
+  rewrites the content hashes of files whose links name the sibling's hashed
+  `apm_modules/_local/<hash>/` directory, so it reads the deployed files and
+  exits `1` when one is missing or edited; reinstall, then rerun it. The
+  pre-commit hook and Tier 1 run it before diffing. `anchored_local_path` and
+  the `local:` owners must stay relative together;
   `apm audit --ci` rejects a relative owner whose `anchored_local_path` is
   absolute.
 - **Only the direct-dependency form dedupes.** When a package is reachable both
@@ -280,16 +284,20 @@ Generated, committed, and never hand-edited. Regenerate with `apm install`.
 - `apm audit --ci` is the real gate for a lockfile and its deployed tree. It runs
   nine or ten baseline checks plus drift detection and replays the install into a
   scratch tree; it also skips gitignored deploy paths automatically, which is what
-  makes it usable here.
+  makes it usable here. In `packages/default-stack`, run `apm install --frozen`
+  first: its committed, relativised lockfile reports drift in p-stack's files,
+  which `docs/DEPENDENCY-CONTRACTS.md` explains. Do not edit the lockfile to fix
+  it.
 - **`apm audit --ci` cannot replay a lockfile that records a local package
   twice.** If a local package is reachable directly *and* transitively *and* it
   parents another local package, the drift replay fails with `ambiguous
   resolved_by parent ...: 2 local dependencies share that repo_url`. Re-running
   `apm install` rewrites the same duplicate. No package here triggers it:
-  `default-stack` reaches `pr` and `repo-maintenance` twice, and `s-stack`
-  reaches `deep-interview` and `review` twice, but none of the four has a
-  dependency of its own. Giving any of them a sibling dependency would break
-  the audit of the package that reaches it twice. The repro is in
+  `default-stack` reaches `coding-style`, `p-stack`, `pr`, `repo-maintenance`
+  and `review` twice, and `s-stack` reaches `deep-interview` and `review`
+  twice, but none of the six has a dependency of its own. Giving any of them a
+  sibling dependency would break the audit of the package that reaches it
+  twice. The repro is in
   `docs/DEPENDENCY-CONTRACTS.md`.
 - `apm pack --archive -o ./dist` emits a **Claude plugin bundle** (default
   format) as a `.zip`; installing it round-trips the file inventory but not

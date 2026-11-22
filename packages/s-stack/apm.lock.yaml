@@ -2510,7 +2510,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:eb3bbf0f674111454a5a69c3184c7fec9019ff2471909eb83458c1f34ca287d8
+  content_hash: sha256:0b0968556fed92021d3e3572abd66248e0c95f0f04b74b98d492b3dc9ef3943c
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/handbooks/reviewer.md
@@ -2546,7 +2546,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:22637e217b0bc950368d5427a5c9c6dfe5d6bad9a9e609f816b045af3c27b1d9
+  content_hash: sha256:dcd5d309a60821b09c0adac2f55417ea8148875a51bff9cfeb136bcaa17ea219
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/references/status-and-messages.md
@@ -5372,7 +5372,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:eb3bbf0f674111454a5a69c3184c7fec9019ff2471909eb83458c1f34ca287d8
+  content_hash: sha256:0b0968556fed92021d3e3572abd66248e0c95f0f04b74b98d492b3dc9ef3943c
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/handbooks/reviewer.md
@@ -5408,7 +5408,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:22637e217b0bc950368d5427a5c9c6dfe5d6bad9a9e609f816b045af3c27b1d9
+  content_hash: sha256:dcd5d309a60821b09c0adac2f55417ea8148875a51bff9cfeb136bcaa17ea219
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/references/status-and-messages.md
@@ -5449,20 +5449,20 @@ local_deployed_file_hashes:
   .agents/skills/sam-mode/handbooks/orchestrator.md: sha256:e614dbbdb464c6e10c3d1942fec5c99b14814d4ded1697285a3b5418077046d6
   .agents/skills/sam-mode/handbooks/phase-session.md: sha256:734e7d7cc2dab5d4c89b1f80e25e1288ccf31083e8fe338dfa14e282a532def2
   .agents/skills/sam-mode/handbooks/planner.md: sha256:02d2fbc0e9fe240822113870c1c109f34ca40eac54c6b526ba70d9daa3765ede
-  .agents/skills/sam-mode/handbooks/pr-creator.md: sha256:eb3bbf0f674111454a5a69c3184c7fec9019ff2471909eb83458c1f34ca287d8
+  .agents/skills/sam-mode/handbooks/pr-creator.md: sha256:0b0968556fed92021d3e3572abd66248e0c95f0f04b74b98d492b3dc9ef3943c
   .agents/skills/sam-mode/handbooks/reviewer.md: sha256:d19c4492585e8fdf731a28f78b1b2826133fe8c58dbe7fbe85ad08c0f4a303ea
   .agents/skills/sam-mode/handbooks/spec-writer.md: sha256:2f5a9fc83f9f6f3d236726765488fb4eb39361e83b4f1136542645c9507efaf5
   .agents/skills/sam-mode/handbooks/verifier.md: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
-  .agents/skills/sam-mode/references/pr-commands.md: sha256:22637e217b0bc950368d5427a5c9c6dfe5d6bad9a9e609f816b045af3c27b1d9
+  .agents/skills/sam-mode/references/pr-commands.md: sha256:dcd5d309a60821b09c0adac2f55417ea8148875a51bff9cfeb136bcaa17ea219
   .agents/skills/sam-mode/references/status-and-messages.md: sha256:72059d6e8977bf978a24b04aa9354dbb7283963bcc25f6ae19f41bfd41c1c2d6
   .claude/skills/sam-mode/SKILL.md: sha256:907cd5531f3daf925acae16c7bc8a656019137adddba3885efee38db355679df
   .claude/skills/sam-mode/assets/status-board.html: sha256:7ceeb3138256e608c7cf7d74bc87f1481d12d9367531ebc8e17a8965a5cfe59a
   .claude/skills/sam-mode/handbooks/orchestrator.md: sha256:e614dbbdb464c6e10c3d1942fec5c99b14814d4ded1697285a3b5418077046d6
   .claude/skills/sam-mode/handbooks/phase-session.md: sha256:734e7d7cc2dab5d4c89b1f80e25e1288ccf31083e8fe338dfa14e282a532def2
   .claude/skills/sam-mode/handbooks/planner.md: sha256:02d2fbc0e9fe240822113870c1c109f34ca40eac54c6b526ba70d9daa3765ede
-  .claude/skills/sam-mode/handbooks/pr-creator.md: sha256:eb3bbf0f674111454a5a69c3184c7fec9019ff2471909eb83458c1f34ca287d8
+  .claude/skills/sam-mode/handbooks/pr-creator.md: sha256:0b0968556fed92021d3e3572abd66248e0c95f0f04b74b98d492b3dc9ef3943c
   .claude/skills/sam-mode/handbooks/reviewer.md: sha256:d19c4492585e8fdf731a28f78b1b2826133fe8c58dbe7fbe85ad08c0f4a303ea
   .claude/skills/sam-mode/handbooks/spec-writer.md: sha256:2f5a9fc83f9f6f3d236726765488fb4eb39361e83b4f1136542645c9507efaf5
   .claude/skills/sam-mode/handbooks/verifier.md: sha256:5d451df339c440ec427302861cd0c4972303dbe097a7e0be37c13491175cf5ae
-  .claude/skills/sam-mode/references/pr-commands.md: sha256:22637e217b0bc950368d5427a5c9c6dfe5d6bad9a9e609f816b045af3c27b1d9
+  .claude/skills/sam-mode/references/pr-commands.md: sha256:dcd5d309a60821b09c0adac2f55417ea8148875a51bff9cfeb136bcaa17ea219
   .claude/skills/sam-mode/references/status-and-messages.md: sha256:72059d6e8977bf978a24b04aa9354dbb7283963bcc25f6ae19f41bfd41c1c2d6

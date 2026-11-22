@@ -38,6 +38,7 @@ None.
 | 86 | `board` | merged into `main` as `51f334e` | | |
 | 87 | `spec-planner-handbooks` | merged into `main` as `b440889` | | |
 | 88 | `foundation` | merged into `main` as `054a9e7` | | |
+| 89 | `foundation` | `s-stack-version-0.1.5` | `main` | none |
 
 ## Merged phases
 
@@ -84,7 +85,7 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 ## Merge cautions
 
-- `main` at `054a9e7` fails CI's "Package versions": #87 and #88 both set s-stack to 0.1.4. `foundation` opens a generated-only draft pull request raising it to 0.1.5, then goes to Done once it merges.
+- `main` at `054a9e7` fails CI's "Package versions": #87 and #88 both set s-stack to 0.1.4. `foundation` opened #89 (version line only) raising it to 0.1.5, and goes to Done once it merges.
 
 - After the pre-commit hook has rewritten a staged lockfile, `git merge --abort` exits 128 and leaves `MERGE_HEAD`. Recover with `git reset --merge`, then check `git status`. Found by `orchestrator-handbook` (review of `e0a51a2`).
 - Read a phase's tip and its code head in one step, and merge that tip SHA, not the branch name, so no commit added after the verdicts check can slip in.

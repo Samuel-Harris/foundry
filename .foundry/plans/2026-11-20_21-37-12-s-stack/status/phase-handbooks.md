@@ -1,10 +1,10 @@
 ---
 phase: "phase-handbooks"
-state: "Implement"
-changed_at: "2026-11-22T00:27:34Z"
+state: "Verify"
+changed_at: "2026-11-22T00:28:00Z"
 session: "s-stack-phase-phase-handbooks"
 branch: "s-stack-phase-phase-handbooks"
-code_head: "5d30a593661581bad342e74e6d9ced3f1289ee3c"
+code_head: "2de88c241dff05eee336f0494c7e7a57bc1c54fd"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -176,3 +176,4 @@ Fixes 52bc3da and 8e258ca: PR step 4 now says the orchestrator merges a phase it
 Every pull request of the phase has merged into main: #85 as 6f42b1c on 2026-11-21 at 18:47:47 UTC. Code head a1c95f1 is merged into s-stack-package at 986be95, and its post-merge check passed (VERIFIED on ce086bb), per the orchestrator. The phase moved from PR to Done.
 Follow-up round from the orchestrator on 2026-11-22: a Done phase asked to change code moves back to Implement. Seven changes to phase-session.md (prs-open after fix rounds, an idempotent conflict round, STOP handling, cherry-pick for delegates, a wider move back, generated lines in the code head, and developer commits on pull request branches).
 s-stack-package merged at 195daeb. Fix 5d30a59 makes changes a to g. The code head is now computed with the reference's first-parent command, with this run's lockfile path and version-line exclusions. No new quick-review: the layer had its pass, and this round's change is small and gets both gates. Verify returned NOT VERIFIED at 5d30a59: the no-op conflict round contradicted the fix-round row, and prs-open could follow a STOP. Back to Implement.
+Fix 2de88c2: prs-open is sent only when the PR creator reports no STOP, and the base re-derivation applies only to fix rounds that start a PR creator. The reference file's fix-round row (finding g) belongs to foundation and was sent to the orchestrator.

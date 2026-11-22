@@ -179,6 +179,23 @@ Recorded, not fixed (rare or adversarial setups):
 - A command started in the left-over pane during a slow `workmux add`, after a `--remove`, is killed, because the idle check ran before the add. Found by Fable.
 - Under a Latin-1 locale on macOS, Bash 3.2's `[a-z]` follows collation, so names that are not kebab-case pass validation. Found by Fable.
 
+## Verify, code head `e8bc6e10bacd2b790df9b238975ae24750d61bb9`, VERIFIED
+
+A fresh verifier ran with nothing committed. Its report, summarised:
+
+- The full skill passed, with 118 tests on macOS (also under `LC_ALL=C`) and on Ubuntu 24.04. Ubuntu skipped 4: three need zsh, and one needs a locale-sensitive `ps`. Tier 1 passed across 20 packages, the board's rendered check passed, and every cold read passed.
+- All 21 listed mutations and 3 extra ones fail named tests. The `-ww` mutant is killed on Ubuntu only, because macOS `ps` never truncates.
+- Both fixes held:
+  - With a pane spanning the orchestrator's column, the first phase column was full height, 40 to 94 columns wide and no wider than the orchestrator's column, with and without a sidebar. Developer columns kept their widths.
+  - `test_an_exported_columns_does_not_hide_a_live_session` passes on Ubuntu.
+- Parallel relaunch after a simulated crash: four phases had their `claude` SIGKILLed, with stale locks planted, including a reused PID and a stale window lock. Twelve concurrent launches gave exactly one `started` per name, each in its own earlier pane with `--resume`, plus eight `alive`, twelve exits of 0, an unchanged pane count and one `claude` per name.
+- The idle rule, the named-orchestrator precedence and stale-lock takeover all held.
+- Live check with the real `claude` 2.1.330. The first launch took 0.63 s, `alive` came in 0.18 s, and a relaunch after `/exit` in 0.34 s used the same pane with `--resume <stored id>`.
+- Minor gaps recorded:
+  - `checks/launcher.md` has no mutation or reproduction for this round's two fixes, though the suite catches both.
+  - The `-ww` regression is caught only on Linux.
+  - Cold readers flagged ambiguities in files the launcher does not own.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

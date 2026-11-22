@@ -186,3 +186,12 @@ Verify 7, fresh Opus verifier, scope `4e19585`, no waiver:
 - Cause: in `orchestrator.md` line 43, Starting the feature step 5, only the `move-back` clause is marked as applying to a later `done-planning`, so the starts read as first-time only.
 
 Next: line 43 applies the starts to every `done-planning`.
+
+## Verify 8: VERIFIED at `eb83e95d58cf0d36069cdb241cd9cc1993e75fe7`, 2026-11-22T20:33:13Z
+
+Fresh Opus verifier. Scope: `4e19585` and `eb83e95`. No waiver. No commits. Evidence is under the session scratchpad's `verify8/` directory.
+
+- Integration cold reads 4a to 4d, three runs each, each with its own reader and grader: 12 of 12 PASS. All three 4a answers start unblocked phases on the later `done-planning`.
+- Integration 7 and orchestrator A to BD, once each: 57 of 57 PASS, so no reruns were needed.
+- Orchestrator scripted checks, skill checks 1, 2, 3, 5 and 7, and the pre-commit hook over `90f855a...HEAD` all PASS. The default-stack lockfile checks PASS.
+- `versioning.py check origin/main` fails, because s-stack and default-stack are still at `main`'s 0.1.13. The PR creator's regenerate commit raises them.

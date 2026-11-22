@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `c9a7832` (version 7) |
-| Last tick | 2026-11-22 00:11 |
+| Last tick | 2026-11-22 00:31 |
 | Default branch merged at | `5c4d320` (#89, into `57c4ad2`) |
 
 ## Live sessions
@@ -85,7 +85,6 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 ## Merge cautions
 
-- `main` at `054a9e7` fails CI's "Package versions": #87 and #88 both set s-stack to 0.1.4. `foundation` opened #89 (version line only) raising it to 0.1.5, and goes to Done once it merges.
 
 - After the pre-commit hook has rewritten a staged lockfile, `git merge --abort` exits 128 and leaves `MERGE_HEAD`. Recover with `git reset --merge`, then check `git status`. Found by `orchestrator-handbook` (review of `e0a51a2`).
 - Read a phase's tip and its code head in one step, and merge that tip SHA, not the branch name, so no commit added after the verdicts check can slip in.
@@ -113,7 +112,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 
 ## Follow-ups after foundation's round merges
 
-Raised by `foundation`'s follow-up review. They point at text that round adds, so they wait for it to merge.
+Raised by `foundation`'s follow-up review. Foundation's round has merged. Start `board`'s round once `foundation`'s pane closes, to keep the right column readable.
 
 - `board` (Done): `assets/status-board.html` lines 77 and 283 still offer a "restack" need, but the restack kind is gone under automatic stacking.
 

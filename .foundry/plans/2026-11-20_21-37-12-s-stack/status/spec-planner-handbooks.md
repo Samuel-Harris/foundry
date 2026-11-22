@@ -1,7 +1,7 @@
 ---
 phase: "spec-planner-handbooks"
-state: "PR"
-changed_at: "2026-11-22T00:29:00Z"
+state: "Done"
+changed_at: "2026-11-22T01:02:40Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
 code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
@@ -122,4 +122,4 @@ decisions:
 
 # Phase `spec-planner-handbooks` status
 
-Second follow-up round. Both gates passed for `775a30a`. Draft pull request 90 (`s-stack-spec-planner-owner-pointers`, head `561e71c`) is open against `main`, with no dependencies, and its CI passed. It was proved by direct comparison under `spec-planner-handbooks-r2`, option A. The phase waits for the developer's review.
+Done. Every pull request of the phase has merged into `main`: #84 as `0531411`, #87 as `b440889` and #90 as `bce824b`. Code head `775a30a` is merged into `s-stack-package` at `5c411ce`, and its post-merge check passed.

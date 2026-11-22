@@ -262,6 +262,25 @@ p-stack's `interrogate` skill ran at 986b6e5 with adversaries on Opus and Fable,
 2. **`--close` misplaces freed width with two developer columns.** With two developer columns right of the orchestrator's column, the width a closed phase freed stopped in the developer column nearest the orchestrator. Three open and close cycles left the orchestrator 11 columns wide. Found by Fable.
 3. **`--close` narrows a sibling in a shared column.** Closing a session whose pane the developer had split side by side resized the whole stacked column, so a live phase in the same column lost half its width. Found by Fable.
 
+## Verify, code head `cf378d80b95d4e250c2a5473876db547b2f72d24`, VERIFIED
+
+A fresh verifier ran with nothing committed. Its report, summarised:
+
+- The full skill passed: 130 tests on macOS in both locales and on Ubuntu in both locales (four environmental skips). Tier 1 passed across 20 packages, the board's rendered check passed, and all nine cold reads passed.
+- All 21 listed mutants and the three undone fixes are killed. One extra mutant survives: dropping only the `[ -z "$matches" ]` guard lets an untagged `--continue` claude replace a hand-started named orchestrator in an untagged pane. A launcher-started orchestrator is tagged, so this is off the common path.
+- All three fixes held:
+  - The orchestrator started by a resurrected spec writer restarts in its own pane with `--resume`, and the spec writer is untouched.
+  - Three cycles past two developer columns leave every width exactly unchanged.
+  - Closing a phase beside a developer split leaves phase b and the orchestrator unchanged.
+- Relaunches held:
+  - Parallel relaunch after a crash with stale locks: ten launches gave one copy per name in its own pane in 0.58 s.
+  - Resurrect relaunch: every session was placed in one full-height column.
+- Live check with the real `claude` 2.1.330. The first launch took 0.49 s, `alive` came in 0.22 s, and a relaunch after `/exit` in 0.33 s used the same pane with `--resume`.
+- **Safety incident.** One of the verifier's setup scripts set `TMUX_TMPDIR` to a directory not yet created. tmux then fell back to the default socket, and a `new-session -d` created session `$4` on the developer's server: one window holding a shell and the workmux sidebar, both in the verifier's scratch repository. The verifier's kill was refused by the permission check. The phase session confirmed the contents read-only and asked the developer to remove it. Later briefs require creating `TMUX_TMPDIR` before any tmux call, and confirming that `tmux list-sessions` cannot connect there before creating a server.
+- Minor gaps recorded:
+  - The check file lacks this round's mutations and the relaunch recipes.
+  - Its safety advice checks the socket only after a server is created.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

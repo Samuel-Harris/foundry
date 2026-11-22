@@ -17,7 +17,6 @@
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
 | `s-stack-phase-integration` | `%206` | `../s-stack-phase-integration` | 2026-11-22, reopened to split cold read 4 after the failed full run |
-| `s-stack-phase-default-stack` | `%202` | `../s-stack-phase-default-stack` | 2026-11-22, last phase |
 
 ## Open decision requests
 
@@ -78,6 +77,7 @@ None.
 | `s-stack-phase-orchestrator-handbook` | removed, branch kept | 2026-11-22 | Done at `d110165`, merged; #93 merged into `main` |
 | `s-stack-phase-pr-handbook` | removed, branch kept | 2026-11-22 | Done at `9b141bd`, merged; #95 merged into `main` |
 | `s-stack-phase-launcher` | removed, branch kept | 2026-11-22 | Done at `72d5dda`, merged; #94 merged into `main` |
+| `s-stack-phase-default-stack` | removed, branch kept | 2026-11-22 | Done at `4969d88`, merged; #97 and #98 merged into `main` |
 | `s-stack-spec` | removed, branch kept | 2026-11-22 | gate-cost proposal at `d41db5b`, merged at `883083b` |
 
 ## Queued fix rounds

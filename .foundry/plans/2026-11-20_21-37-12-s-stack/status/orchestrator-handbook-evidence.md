@@ -628,3 +628,7 @@ Minor items:
 Both walks otherwise reached Done for every phase, through review comments, applied suggestions, "Update branch" on stacked pull requests, a failed check that passes on rerun, a main merge, out-of-order merges, a failed post-merge check with a crash, a roadmap update, a hand-written conflict, and a restart while a PR creator was mid-push.
 
 For the cross-handbook integration: the review-question gap queued after Verify 31 is closed on the phase side by `phase-handbooks`' fix `148f745`, where PR step 3 sends `prs-open`. Check it against that branch when it merges.
+
+## Merge of `s-stack-package` at `8dc793d`, under run decision `launcher-r3`
+
+`s-stack-package` (`e924352`, the second `spec-planner-handbooks` follow-up) was merged at `8dc793d`. Outside `.foundry/` it touched `handbooks/planner.md`, `handbooks/spec-writer.md`, `checks/spec-planner-handbooks.md`, s-stack's `version:` line and the generated lockfile. None is an owned path, so the code head stays at the phase's own commit `ea4fb99`.

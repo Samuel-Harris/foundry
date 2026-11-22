@@ -458,3 +458,5 @@ AE's scenario is at fault, not the handbook, as the evidence file explains. `orc
 The scoped thirty-sixth Verify gate returned VERIFIED at `a3f4749`. `s-stack-package` (`0bcb8d9`) was merged. The phase moved to Review, which covers the commits since `ff83115`.
 
 The sixteenth Review gate returned CLEAR at `a3f4749`. Both verdicts cover `a3f4749`. The phase moved to PR, and a PR creator is refreshing #93 from the pushed head `07adeba`.
+
+The PR creator carried `a3f4749` to #93, whose head is now `044aeca`. Its proof printed `EQUAL`. The pushed head for the next `PUSHED` is `s-stack-orchestrator-handbook=044aecaee05aef535d97ec415d50a03711f771e6`.

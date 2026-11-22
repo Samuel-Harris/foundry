@@ -857,3 +857,15 @@ The verifier's minor note: AE relies on line 136 taking priority over line 148. 
 - The Fable adversary ran each twice, once on Opus and once on Fable, and all ten passed.
 
 Neither found an expected answer that contradicts the handbook, a loosened requirement, or a read still fragile on a first run. AE was probed for a reader taking `pe`'s `prs-open` as accepting the rebase, and neither reader did. What the readers raised about the handbook itself, the close timing for a stalled session and a phase in Spec without `waits_for`, is already known and outside the bar.
+
+## PR creator refresh of #93 after the post-merge round
+
+- `a3f4749` was carried as `044aeca`, a fast-forward from `07adeba` with no regenerate commit (`versioning: nothing to bump`). s-stack stays `0.1.9`, and no open pull request changes it.
+- Proof against the local `s-stack-package`, with `PUSHED=s-stack-orchestrator-handbook=07adeba…`, printed `3 files changed, 1244 insertions(+), 1 deletion(-)` and `EQUAL`. The pre-commit hook, `versioning.py check` and Tier 1 across 20 packages passed on the branch.
+- The description's Verification paragraph was updated for the reworded reads.
+- Phase-session check:
+  - #93 is a draft, base `main`, head `044aeca`;
+  - `07adeba` is an ancestor of the new head;
+  - the handbook, the check file and the lockfile equal the phase branch;
+  - the branch holds no `.foundry/` file and no merge commit.
+- Pushed head for the next `PUSHED`: `s-stack-orchestrator-handbook=044aecaee05aef535d97ec415d50a03711f771e6`.

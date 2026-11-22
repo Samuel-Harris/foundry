@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
-| Last tick | 2026-11-22 17:31 |
+| Last tick | 2026-11-22 17:51 |
 | Default branch merged at | `0fdbb53` (#94, into `0cb0607`) |
 
 ## Live sessions
@@ -40,7 +40,7 @@ None.
 | 93 | `orchestrator-handbook` | merged into `main` as `ee49f7b` | | |
 | 94 | `launcher` | merged into `main` as `0fdbb53` | | |
 | 95 | `pr-handbook` | merged into `main` as `25a6b61` | | |
-| 96 | `integration` | `s-stack-integration` | `main` | none |
+| 96 | `integration` | merged into `main` as `7747021` | | |
 
 ## Merged phases
 
@@ -101,6 +101,8 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
 ## Merge cautions
+
+- `main` moved to `7747021` (#96). Merge it into `s-stack-package` once integration's post-merge check on `9f6c1c0` returns, because that check reads this checkout. Then send integration the merged notice if the check passed, and start default-stack once integration is Done.
 
 
 

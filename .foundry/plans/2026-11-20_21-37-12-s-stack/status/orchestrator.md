@@ -55,7 +55,7 @@ None.
 | `spec-planner-handbooks` (second follow-up) | `5c411ce` (tip `d5c4ff2`) | `775a30a` | VERIFIED on `a89e044` (no code change since `5c411ce`) |
 | `phase-handbooks` (follow-up) | `4585528` (tip `7e09ef7`) | `148f745` | VERIFIED on `7e0b76d` (no code change since `4585528`) |
 | `board` (follow-up) | `3940c5b` (tip `de27bbb`) | `284ad88` | VERIFIED on `fe43e00` (no code change since `3940c5b`) |
-| `orchestrator-handbook` | `7cd7034` (tip `2fbf619`) | `ff83115` | running (scoped) |
+| `orchestrator-handbook` | `7cd7034` (tip `2fbf619`) | `ff83115` | NOT VERIFIED on `6703d16` (scoped): cold reads AP (twice), AE, AN, I, Z; branch frozen, phase moved back |
 
 ## Closed sessions
 
@@ -93,6 +93,8 @@ One `foundation` fix round, sent once the middle phases reach Verify, so pull re
 For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine dependency-bearing packages use the sibling path: form".
 
 ## Merge cautions
+
+- `s-stack-package` is frozen for other phase merges from 2026-11-22 12:05 until `orchestrator-handbook`'s post-merge fix round merges and its check passes.
 
 - 2026-11-22 11:34: a `launcher` verifier set `TMUX_TMPDIR` to a directory it had not created, so tmux fell back to the developer's real server and created session `$4` (name `4`, one window, a shell in a scratch repository). The kill was refused by the permission check. The developer was asked to run `tmux kill-session -t '$4'`. Launcher briefs now create `TMUX_TMPDIR` first and confirm tmux cannot connect there before creating any server.
 

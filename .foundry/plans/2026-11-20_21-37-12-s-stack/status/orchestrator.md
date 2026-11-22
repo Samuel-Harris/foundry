@@ -39,7 +39,7 @@ None.
 | 89 | `foundation` | merged into `main` as `5c4d320` | | |
 | 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
 | 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
-| 92 | `board` | `s-stack-board-follow-up` | `main` | none (no `prs-open` yet; asked at 01:55) |
+| 92 | `board` | `s-stack-board-follow-up` | `main` | none |
 
 ## Merged phases
 
@@ -54,6 +54,7 @@ None.
 | `foundation` (follow-up) | `3364856` (tip `8616cb8`) | `74bba4e` | VERIFIED on `3364856` |
 | `spec-planner-handbooks` (second follow-up) | `5c411ce` (tip `d5c4ff2`) | `775a30a` | VERIFIED on `a89e044` (no code change since `5c411ce`) |
 | `phase-handbooks` (follow-up) | `4585528` (tip `7e09ef7`) | `148f745` | VERIFIED on `7e0b76d` (no code change since `4585528`) |
+| `board` (follow-up) | `3940c5b` (tip `de27bbb`) | `284ad88` | running |
 
 ## Closed sessions
 
@@ -113,6 +114,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
   - Include: `references/status-and-messages.md`'s `fix-round` row carries only "the pull request and its comments, or the failed check". It must also carry the developer's commits, as the developer-commit rule and `phase-session.md`'s feedback round now do. Raised by `phase-handbooks` at `5d30a59`.
   - Include: `SKILL.md`'s "repository root" leaves a worktree session to work out which root it means (readers chose the worktree root, which is right). Raised by `spec-planner-handbooks` at `775a30a`. Its other item, `phase-session.md` line 26, is in `phase-handbooks`' current round.
   - Include: `board` took its `needs_update` wording from `orchestrator.md` on the `orchestrator-handbook` branch at `1e0a39e`, because that handbook is not yet on `s-stack-package`. Check the two still match once it merges.
+  - Include: `pr.sh`'s proof run against `origin/s-stack-package` gives false merge FAILs, because only the developer pushes that branch and it lags the local one. The handbooks should name the local orchestrator branch. Raised by `board`'s PR creator.
   - Include: the run decision on parallel package versions. `pr-creator.md` and `orchestrator.md` may need to state it.
 
 ## Post-merge check briefs

@@ -105,7 +105,7 @@ bounded 300 "$APM" install --frozen --target cursor,claude,copilot >/dev/null 2>
 python3 ../../scripts/relativise_lockfiles.py apm.lock.yaml
 git diff --exit-code --stat apm.lock.yaml; d1=$?
 bounded 300 "$APM" audit --ci > "$t/audit1.log" 2>&1; a1=$?
-drift=$(grep -oE 'Drift detected: [0-9]+ file' "$t/audit1.log" | grep -oE '[0-9]+')
+drift=$(grep -oE 'Drift detected: [0-9]+ file' "$t/audit1.log" | head -n 1 | grep -oE '[0-9]+')
 bounded 300 "$APM" install --frozen --target cursor,claude,copilot >/dev/null 2>&1; i2=$?
 bounded 300 "$APM" audit --ci > "$t/audit2.log" 2>&1; a2=$?
 last=$(grep -E 'check\(s\) passed' "$t/audit2.log" | tail -n 1)

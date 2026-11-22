@@ -41,7 +41,8 @@ The packages that `DEFAULT_STACK_DEPLOYED` in `tests/structural/run-tier1.sh` li
 ```bash
 bash <<'EOF'
 set -euo pipefail
-list=$(bash -c 'source <(grep "^DEFAULT_STACK_DEPLOYED=" tests/structural/run-tier1.sh); tr " " "\n" <<<"$DEFAULT_STACK_DEPLOYED"' | sort -u)
+eval "$(grep '^DEFAULT_STACK_DEPLOYED=' tests/structural/run-tier1.sh)"
+list=$(tr ' ' '\n' <<<"$DEFAULT_STACK_DEPLOYED" | sort -u)
 lock=$(grep -E '^- repo_url: _local/' packages/default-stack/apm.lock.yaml | sed 's#.*_local/##' | sort -u)
 echo "lockfile resolves $(wc -l <<<"$lock" | tr -d ' ') packages"
 diff <(echo "$lock") <(echo "$list") && echo "inventory list matches the lockfile"

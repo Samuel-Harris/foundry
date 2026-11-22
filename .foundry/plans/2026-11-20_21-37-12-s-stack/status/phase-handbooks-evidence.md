@@ -311,3 +311,15 @@ The one-off cold reads of changes a, d, e and f passed. Three failed on consiste
 - b: the `fix-round` row says every fix round re-derives bases with a PR creator, while a conflict round whose commit the branch already holds changes nothing.
 - c: the "pull request merged" round sends `prs-open` unconditionally, then says what to do after a `STOP`. Because `prs-open` triggers the orchestrator's re-merge, sending it after a `STOP` could admit code that no pull request holds.
 - g: the reference file's `fix-round` row omits commits the developer made, which `phase-session.md`'s feedback round now carries. The file belongs to `foundation`.
+
+## Verify: NOT VERIFIED at `2de88c241dff05eee336f0494c7e7a57bc1c54fd`
+
+A fresh verifier ran the whole verification skill between 00:28 and 00:32 UTC on 2026-11-22, at HEAD `58939af`, and made no commit.
+
+Passed: primitives, root manifest, markdownlint (13 files, 0 errors), line budgets, package isolation, Tier 1 (`all Tier 1 structural checks passed across 20 packages`), the board check (50 `ok`), every Rerun cold read of the four check files, the C2 check, and the private-name search (0 matches).
+
+Of the one-off cold reads, the delegate and move-back case passed. Three cases failed on consistency, although every reader took the right actions:
+
+- The PR creator's `DEVELOPER-COMMITS` report was routed to a feedback round in PR step 2, but PR step 3 ("unless a `STOP`") and the "pull request merged" round sent `prs-open` straight away.
+- The feedback round's step 3 said `prs-open` answers the round, with no exception for a `STOP`.
+- "In Verify, Review, PR or Done, an instruction or a message that asks for a change to the code moves the phase back to Implement first" covered a conflict round, which says for itself when to move back.

@@ -350,3 +350,17 @@ The verifier's check-file commit is `bce4cc8`, on top of code head `b0adfc6`. Th
 - The check block printed 129 PASS and `2 failed`, both from the finding below.
 
 - **Finding, significant on the common path.** The history: the phase takes a developer commit `s` on a stack child as `p`, a round carries it without a push, the parent is squash-merged, and GitHub rebases the child. The first round after that proves `EQUAL` and records the rewritten head. Every round after it prints `FAIL c.txt: child lacks phase commits ... Apply suggestions from code review;, so they need a pull request` and `NOT EQUAL`. The cause: `p`'s trailer names `s`, and once the recorded head moves past the rebase, nothing reachable holds `s`. With the old push-only recording, the same case fails one round earlier. Two fixes have now failed on the same premise, that one recorded head per branch is enough.
+
+## Verify 23, VERIFIED at `019ecea`
+
+The verifier's check-file commit is `019ecea`, on top of code head `1223f1e`. The gate was scoped to the phase's own diff since `d6067a3` under run decision `gate-cost`, with orchestrator-handbook's check file left out, as the orchestrator ruled.
+
+- verify-s-stack checks 1 to 5 passed. Tier 1 passed across 20 packages.
+- The check block printed 137 PASS and `0 failed`. Its new cases fail on `b0adfc6`'s script.
+- The STOP cold read and the new `PUSHED` cold read passed.
+- Out of the radius: the launcher tests, foundation's and phase-handbooks' cold reads, spec-planner-handbooks, board's Rerun, and pr-handbook's two GitHub Evidence checks, each with its reason in the verifier's report.
+
+Minor findings, not on the common path:
+
+- After a failed push, the Report's "the proof's full output" includes the `RECORD` line, which step 5 says to leave out. The handbook does not say what else to do after a failed push.
+- The STOP cold read inferred that a round pushes over a developer's amend. A rewritten branch is already documented as out of scope.

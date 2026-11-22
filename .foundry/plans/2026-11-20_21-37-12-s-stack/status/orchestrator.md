@@ -17,6 +17,7 @@
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
+| `s-stack-phase-integration` | `%201` | `../s-stack-phase-integration` | 2026-11-22, the 45-item cross-handbook round (`integration-fixes.md`) |
 
 ## Open decision requests
 
@@ -119,7 +120,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 
 ## Deferred follow-ups for live phases
 
-- After the live phases merge, route the gate-cost text edits (`proposals/gate-cost.md`, section "Files this touches") to the owners in one integration round, together with the read-through fixes below. Roadmap files go to the spec writer's end-of-run update.
+- Gate-cost text and the read-through fixes went to `s-stack-phase-integration` on 2026-11-22. The roadmap section of `integration-fixes.md` goes to a fresh spec writer at the end of the run.
 - After every handbook phase is merged, have a fresh subagent do one cross-handbook read-through on `s-stack-package`: orchestrator, phase-session, verifier, reviewer, pr-creator, spec-writer and planner, plus the reference file. Collect the recorded handshake edge cases from each phase's evidence file. Route the fixes to the owning phases, or to the foundation round for the reference file.
   - Include: can `orchestrator.md` send the merged notice to a phase that has just entered PR (PR step 1) before `prs-open` lists its new pull request? Check against the re-merge guard and the notice's conditions. Raised by `phase-handbooks`' reviewers at `a1c95f1`.
   - Include: `references/status-and-messages.md` has no developer-commit row and splits the generated and dependency `fix-round` uses into two rows, unlike `orchestrator.md` at `0008162`. A suggestion applied while a round is unanswered is left to the PR creator's `DEVELOPER-COMMITS` report. Raised by `orchestrator-handbook`.

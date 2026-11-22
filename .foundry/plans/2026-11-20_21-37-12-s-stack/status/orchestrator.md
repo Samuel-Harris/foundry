@@ -40,6 +40,7 @@ None.
 | 92 | `board` | merged into `main` as `92a91f7` | | |
 | 93 | `orchestrator-handbook` | merged into `main` as `ee49f7b` | | |
 | 94 | `launcher` | `s-stack-launcher` | `main` | none |
+| 95 | `pr-handbook` | `s-stack-pr-handbook` | `main` | none |
 
 ## Merged phases
 
@@ -57,6 +58,7 @@ None.
 | `board` (follow-up) | `3940c5b` (tip `de27bbb`) | `284ad88` | VERIFIED on `fe43e00` (no code change since `3940c5b`) |
 | `orchestrator-handbook` | `7cd7034` (tip `2fbf619`) | `ff83115` | NOT VERIFIED on `6703d16` (scoped): cold reads AP (twice), AE, AN, I, Z; branch frozen, phase moved back |
 | `orchestrator-handbook` (post-merge fix) | `9eb7fac` (tip `455c545`) | `a3f4749` | VERIFIED on `9eb7fac` (scoped) |
+| `pr-handbook` | `ab06c83` (tip `c9e0f72`) | `27d6f55` | running (scoped) |
 
 ## Closed sessions
 

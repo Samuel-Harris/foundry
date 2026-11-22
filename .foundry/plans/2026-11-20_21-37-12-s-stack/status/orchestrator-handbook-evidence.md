@@ -808,3 +808,17 @@ Both findings sit in contracts that are not on `s-stack-package`. Under the run 
 | A suggestion the phase took on a stacked child cannot survive the parent's merge and the forge rebase. `pr.sh` prints `FAIL c.txt: child lacks phase commits …` on every later round, or permanent `STOP`s, so no `prs-open` follows. | Fable | `pr-commands.md` matching by the SHA from before the rebase, as Review 14 also recorded |
 
 Both are for `pr-handbook` and the cross-handbook read-through. One change addresses both of them and the timing gap from Verify 35: give `prs-open`, or the header's `pull_requests` entries, the heads the PR creator pushed.
+
+## PR creator, pull request #93
+
+- Draft #93, `s-stack-orchestrator-handbook` into `main`, head `07adeba657325567e45c983f295bb2c2a87c0936`, `depends_on: []`, not stacked. It was built from `origin/main` at `92a91f7`, with 77 carried commits and one regenerate commit.
+- Proof, run as `OWN=s-stack-orchestrator-handbook MERGED= PUSHED= bash pr.sh prove s-stack-package s-stack-phase-orchestrator-handbook origin/main s-stack-orchestrator-handbook:main::s-stack-foundation-package,s-stack-verify-skill`, printed `3 files changed, 1244 insertions(+), 1 deletion(-)` and `EQUAL`.
+- Version: s-stack goes from `0.1.8` to `0.1.9`. Open pull requests #76, #64 and #47 change no s-stack version.
+- Checks on the branch passed: the pre-commit hook over `origin/main...HEAD`, `versioning.py check origin/main`, and Tier 1 across 20 packages.
+- Hand-written lines: 1,245, plus 22 in the lockfile.
+- Phase-session check:
+  - `gh pr view 93` shows a draft with base `main`;
+  - the three phase files on the branch equal the phase branch;
+  - the branch holds no `.foundry/` file and no merge commit;
+  - a grep of the title, the description and the commit messages finds no private name.
+- Pushed head for the next `PUSHED`: `s-stack-orchestrator-handbook=07adeba657325567e45c983f295bb2c2a87c0936`. The C2 header has no slot for it, as Review 15 recorded.

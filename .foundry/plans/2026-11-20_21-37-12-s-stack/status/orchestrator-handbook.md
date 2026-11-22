@@ -237,7 +237,12 @@ verdicts:
     code_head: "ff831156b0c01d2fae94e01031147297ccfa242a"
     at: "2026-11-22T11:30:35Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/orchestrator-handbook-evidence.md"
-pull_requests: []
+pull_requests:
+  - number: 93
+    branch: "s-stack-orchestrator-handbook"
+    base: "main"
+    depends_on: []
+    stacked: false
 requests: []
 decisions:
   - id: "orchestrator-handbook-d1"
@@ -433,3 +438,5 @@ The thirty-fifth Verify gate returned VERIFIED at `ff83115`. `s-stack-package` (
 The fifteenth Review gate returned CLEAR at `ff83115`, under the common-path bar. Its two findings depend on `pr-handbook`'s contracts and are recorded. Both verdicts cover `ff83115`. The phase moved to PR, and the PR creator is starting.
 
 `s-stack-package` (`a209d0e`, with #92 merged into `main` and `board` Done) was merged at `5b0ad24`. Outside `.foundry/` it touched only s-stack's `version:` line, which became `0.1.8`, and the regenerated lockfile, so under `launcher-r3` the code head stays `ff83115`. The PR creator started.
+
+The PR creator opened draft pull request #93 (`s-stack-orchestrator-handbook` into `main`, head `07adeba`), with no open dependency. Its proof printed `EQUAL` against the local `s-stack-package`. s-stack goes to `0.1.9`, and no open pull request changed its version. The pull request holds 1,245 hand-written lines. The phase session checked that the handbook, the check file and the lockfile on the branch equal the phase branch, and that the branch holds no `.foundry/` file and no merge commit. The pushed head for the next round's `PUSHED` is `s-stack-orchestrator-handbook=07adeba657325567e45c983f295bb2c2a87c0936`.

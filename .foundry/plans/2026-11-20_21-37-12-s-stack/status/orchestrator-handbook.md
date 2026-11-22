@@ -1,7 +1,7 @@
 ---
 phase: "orchestrator-handbook"
-state: "PR"
-changed_at: "2026-11-22T12:12:09Z"
+state: "Done"
+changed_at: "2026-11-22T13:35:19Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
 code_head: "a3f4749585412f4be042c8f479a8971768df5756"
@@ -460,3 +460,5 @@ The scoped thirty-sixth Verify gate returned VERIFIED at `a3f4749`. `s-stack-pac
 The sixteenth Review gate returned CLEAR at `a3f4749`. Both verdicts cover `a3f4749`. The phase moved to PR, and a PR creator is refreshing #93 from the pushed head `07adeba`.
 
 The PR creator carried `a3f4749` to #93, whose head is now `044aeca`. Its proof printed `EQUAL`. The pushed head for the next `PUSHED` is `s-stack-orchestrator-handbook=044aecaee05aef535d97ec415d50a03711f771e6`.
+
+Pull request #93 merged into `main` as `ee49f7b`. The code head `a3f4749` is merged into `s-stack-package` at `9eb7fac`, and its scoped post-merge check passed. The orchestrator said every pull request of the phase has merged, and the phase moved to Done at code head `a3f4749`.

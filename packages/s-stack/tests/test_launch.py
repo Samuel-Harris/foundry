@@ -527,14 +527,6 @@ class ArgumentTests(LauncherTestCase):
                 phase = ("--phase", taken_phase) if taken_phase else ()
                 self.started(self.launch("--feature", taken_feature, "--role", taken_role, *phase, "--window", self.window), name=f"{taken_feature}-{taken_role}" + (f"-{taken_phase}" if taken_phase else ""))
 
-    def test_restarting_the_spec_writer_needs_a_window(self) -> None:
-        self.make_feature_worktree()
-
-        result = self.launch("--feature", "f", "--role", "spec")
-
-        self.assertEqual(result.returncode, 2, result.stderr)
-        self.assertIn("Usage:", result.stderr)
-
 
 if __name__ == "__main__":
     unittest.main()

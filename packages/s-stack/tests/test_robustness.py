@@ -314,3 +314,69 @@ class NarrowColumnsTests(LauncherTestCase):
 
         self.assertEqual((second.returncode, second.stdout), (0, f"alive f-phase-migrate-the-invoice-tables-to-the-new-schema pane={first}\n"), second.stderr)
         self.assertEqual(len(self.named_claudes("f-phase-migrate-the-invoice-tables-to-the-new-schema")), 1)
+
+
+class DevelopersClaudeTests(LauncherTestCase):
+    """A plain claude the developer opens in the feature worktree is never the orchestrator."""
+
+    def crashed_orchestrator_beside_a_developers_claude(self) -> tuple[tuple[str, ...], str, str]:
+        spec, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        window = self.window_of(spec)
+        orchestrator_args = ("--feature", "f", "--role", "orchestrator", "--window", window)
+        orchestrator, _ = self.started(self.launch(*orchestrator_args), name="f-orchestrator")
+        self.wait_for_claude(orchestrator)
+        developer = self.tmux("split-window", "-d", "-h", "-P", "-F", "#{pane_id}", "-t", spec, "-c", str(self.worktree("f")), "claude").strip()
+        self.wait_for_claude(developer)
+        self.kill_claude("f-orchestrator")
+        return orchestrator_args, orchestrator, developer
+
+    def test_a_crashed_orchestrator_restarts_in_its_own_pane_beside_a_developers_claude(self) -> None:
+        orchestrator_args, orchestrator, developer = self.crashed_orchestrator_beside_a_developers_claude()
+
+        restarted, _ = self.started(self.launch(*orchestrator_args), name="f-orchestrator")
+
+        self.assertEqual(restarted, orchestrator)
+        self.assertIn("--resume", self.wait_for_claude(orchestrator))
+        self.assertEqual((self.claude_in_pane(developer) or "").split(), ["claude"])
+
+    def test_a_resurrected_orchestrator_beside_a_developers_claude_still_places_sessions(self) -> None:
+        orchestrator_args, orchestrator, developer = self.crashed_orchestrator_beside_a_developers_claude()
+        window = orchestrator_args[-1]
+        self.tmux("kill-pane", "-t", orchestrator)
+        resurrected = self.tmux("split-window", "-d", "-v", "-P", "-F", "#{pane_id}", "-t", developer, "-c", str(self.worktree("f")), "claude --continue").strip()
+        self.wait_for_claude(resurrected)
+
+        result = self.launch("--feature", "f", "--role", "planner", "--window", window)
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.launch(*orchestrator_args).stdout, f"alive f-orchestrator pane={resurrected}\n")
+
+
+class SpecWriterRestartTests(LauncherTestCase):
+    def test_the_documented_call_restarts_a_crashed_spec_writer_in_its_own_pane(self) -> None:
+        spec, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        self.wait_for_claude(spec)
+        self.kill_claude("f-spec")
+
+        restarted, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+
+        self.assertEqual(restarted, spec)
+        self.assertIn("--resume", self.wait_for_claude(spec))
+
+    def test_the_documented_call_reports_a_live_spec_writer(self) -> None:
+        spec, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        self.wait_for_claude(spec)
+
+        result = self.launch("--feature", "f", "--role", "spec")
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"alive f-spec pane={spec}\n"), result.stderr)
+
+    def test_a_spec_writer_whose_pane_is_gone_needs_a_window(self) -> None:
+        spec, _ = self.started(self.launch("--feature", "f", "--role", "spec"), name="f-spec")
+        self.wait_for_claude(spec)
+        self.tmux("kill-pane", "-t", spec)
+
+        result = self.launch("--feature", "f", "--role", "spec")
+
+        self.assertEqual(result.returncode, 2, result.stdout)
+        self.assertIn("--window", result.stderr)

@@ -12,7 +12,8 @@ Usage:
 
 Roles: spec, orchestrator, planner, phase. --phase is required with --role phase
 and refused otherwise. --update is allowed only with --role spec. --window is
-required for every session except the first spec writer of a feature.
+required for every session except the first spec writer of a feature, or a
+restart of it in its own pane.
 
 Features and phases are kebab-case. A feature name may not contain -phase- or
 end with -phase, -planner, -orchestrator, -spec or -spec-<n>, because another
@@ -153,9 +154,10 @@ pane_is_idle() {
 # order. tag is the pane's @s-stack-session option, or - when unset. kind
 # describes the claude processes among the pane's descendants: strict when a
 # claude's first argument is --name <session>, as the launcher writes it, so a
-# --name inside a prompt never matches; nameless when no argument is --name,
-# which is how workmux resurrect restarts a session; other for any other
-# claude; none without one. A pane running several claudes reports the closest
+# --name inside a prompt never matches; continued when no argument is --name
+# and one is --continue or -c, which is how workmux resurrect restarts a session
+# and resumes its conversation; nameless for any other claude without --name;
+# other for any other claude; none without one. A pane running several claudes reports the closest
 # match. in_worktree is 1 when the pane's directory is <worktree> or under it.
 # idle is 1 when the pane sits at an interactive shell, as pane_is_idle decides.
 pane_inventory() {
@@ -190,10 +192,12 @@ pane_inventory() {
       strict = ($4 == "--name" && $5 == name) || $4 == "--name=" name
       named = 0
       for (i = 4; i <= NF; i++) if ($i == "--name" || index($i, "--name=") == 1) named = 1
-      claude[$1] = strict ? "strict" : (named ? "other" : "nameless")
+      continued = 0
+      for (i = 4; i <= NF; i++) if ($i == "--continue" || $i == "-c") continued = 1
+      claude[$1] = strict ? "strict" : (named ? "other" : (continued ? "continued" : "nameless"))
     }
     END {
-      rank["none"] = 0; rank["other"] = 1; rank["nameless"] = 2; rank["strict"] = 3
+      rank["none"] = 0; rank["other"] = 1; rank["nameless"] = 2; rank["continued"] = 3; rank["strict"] = 4
       for (i = 1; i <= n; i++) kind[pane_pid[order[i]]] = "none"
       for (pid in claude) {
         for (p = pid; p != "" && p > 1; p = parent[p]) {
@@ -210,16 +214,16 @@ pane_inventory() {
 # Reads pane_inventory for <session> and prints the one pane that runs it, or
 # nothing. A claude named for the session counts, and so does a nameless claude
 # in the inventory's worktree in the session's own tagged pane, as a developer
-# resuming it by hand leaves it. Only when neither exists does a nameless one in
+# resuming it by hand leaves it. Only when neither exists does a continued one in
 # an untagged pane count, as workmux resurrect makes, and only when <marker>
-# shows the launcher started the session there, so a developer's own claude is
-# not taken for it.
+# shows the launcher started the session there. A plain claude the developer
+# opens is never taken for it.
 live_pane_of() {
   local session=$1 marker=$2 inventory matches
   inventory=$(cat)
-  matches=$(printf '%s\n' "$inventory" | awk -v session="$session" '$4 == "strict" || ($4 == "nameless" && $5 == 1 && $3 == session) { print $1 }')
+  matches=$(printf '%s\n' "$inventory" | awk -v session="$session" '$4 == "strict" || (($4 == "nameless" || $4 == "continued") && $5 == 1 && $3 == session) { print $1 }')
   if [ -z "$matches" ] && [ -n "$marker" ] && [ -s "$marker" ]; then
-    matches=$(printf '%s\n' "$inventory" | awk '$4 == "nameless" && $5 == 1 && $3 == "-" { print $1 }')
+    matches=$(printf '%s\n' "$inventory" | awk '$4 == "continued" && $5 == 1 && $3 == "-" { print $1 }')
   fi
   at_most_one "pane runs $session" "$matches"
   [ -z "$matches" ] || printf '%s\n' "$matches"
@@ -530,7 +534,7 @@ cmd_start() {
   require tmux workmux claude
   worktree=$(workmux path "$worktree_name" 2>/dev/null) || worktree=''
   if [ -z "$window" ]; then
-    [ -n "$first_spec" ] && [ -z "$worktree" ] || usage
+    [ -n "$first_spec" ] || usage
   fi
 
   lock_session
@@ -542,7 +546,16 @@ cmd_start() {
   fi
 
   target_pane=''
-  [ -z "$window" ] || target_pane=$(printf '%s\n' "$inventory" | find_own_pane)
+  if [ -n "$first_spec" ] && [ -z "$window" ] && [ -n "$worktree" ]; then
+    # /sam-mode start runs again after a crash with no window to name, so the
+    # spec writer is restarted in its own pane, wherever that pane is.
+    read -r target_pane window <<EOF
+$(printf '%s\n' "$inventory" | awk -v name="$name" '$3 == name && $4 == "none" && $6 == 1 { print $1, $2; exit }')
+EOF
+    [ -n "$target_pane" ] || { printf 'launch.sh: the feature worktree %s exists and no pane of %s is left; pass --window <the feature window>\n' "$feature" "$name" >&2; exit 2; }
+  elif [ -n "$window" ]; then
+    target_pane=$(printf '%s\n' "$inventory" | find_own_pane)
+  fi
   orchestrator_pane=''
   if [ -z "$target_pane" ] && [ -n "$window" ] && [ "$role" != orchestrator ]; then
     find_orchestrator_pane

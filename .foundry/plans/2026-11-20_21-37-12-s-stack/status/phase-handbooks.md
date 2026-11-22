@@ -148,6 +148,11 @@ pull_requests:
     base: "main"
     depends_on: []
     stacked: false
+  - number: 91
+    branch: "s-stack-phase-handbooks-follow-up"
+    base: "main"
+    depends_on: []
+    stacked: false
 requests: []
 decisions:
   - id: "phase-handbooks-d4"
@@ -192,4 +197,4 @@ Every pull request of the phase has merged into main: #85 as 6f42b1c on 2026-11-
 Follow-up round from the orchestrator on 2026-11-22: a Done phase asked to change code moves back to Implement. Seven changes to phase-session.md (prs-open after fix rounds, an idempotent conflict round, STOP handling, cherry-pick for delegates, a wider move back, generated lines in the code head, and developer commits on pull request branches).
 s-stack-package merged at 195daeb. Fix 5d30a59 makes changes a to g. The code head is now computed with the reference's first-parent command, with this run's lockfile path and version-line exclusions. No new quick-review: the layer had its pass, and this round's change is small and gets both gates. Verify returned NOT VERIFIED at 5d30a59: the no-op conflict round contradicted the fix-round row, and prs-open could follow a STOP. Back to Implement.
 Fix 2de88c2: prs-open is sent only when the PR creator reports no STOP, and the base re-derivation applies only to fix rounds that start a PR creator. The reference file's fix-round row (finding g) belongs to foundation and was sent to the orchestrator. Verify returned NOT VERIFIED at 2de88c2: the PR creator's outcomes were restated inconsistently. Back to Implement to give them one home.
-Fix 148f745: PR step 2 owns what the PR creator's STOP and DEVELOPER-COMMITS reports mean, step 3 sends prs-open only when it reports neither, and the fix rounds point there. The move back before a code change now covers instructions only. Verify returned VERIFIED at 148f745. Review returned CLEAR at 148f745. Both verdicts cover 148f745. A PR creator opens a new draft pull request against main.
+Fix 148f745: PR step 2 owns what the PR creator's STOP and DEVELOPER-COMMITS reports mean, step 3 sends prs-open only when it reports neither, and the fix rounds point there. The move back before a code change now covers instructions only. Verify returned VERIFIED at 148f745. Review returned CLEAR at 148f745. Both verdicts cover 148f745. A PR creator opens a new draft pull request against main. Draft #91 opened on main at f7ae100, with no dependency. The proof prints EQUAL.

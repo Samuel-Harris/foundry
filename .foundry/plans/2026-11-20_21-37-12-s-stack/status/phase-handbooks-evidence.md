@@ -354,3 +354,15 @@ Not significant, recorded only:
 - A developer commit that also edits another phase's file has no rule. Not a common path.
 - A no-op conflict round that arrives while the phase is in Implement would send `prs-open` without verdicts for the code head. Two rounds must overlap, and the orchestrator's merge rule would refuse.
 - An `answer` asking for a code change has no stated move back (readers used the Verdicts rule); after a `STOP` is answered, nothing says how the PR creator learns the decision; and fix rounds do not restate the orchestrator-branch merge or `quick-review`.
+
+## PR: draft pull request 91 for code head `148f7450311affebc0961feb6b509d45f3481bf0`
+
+https://github.com/Samuel-Harris/foundry/pull/91 is a draft on branch `s-stack-phase-handbooks-follow-up` at `f7ae100`, with base `main`, `depends_on: []` and no stack.
+
+- #90 merged into `main` while the PR creator worked, so it rebuilt the branch from the new `origin/main`.
+- It carried `5d30a59`, `2de88c2` and `148f745` with `cherry-pick -x` trailers and no lockfile hunks.
+- The regenerate commit raises s-stack from 0.1.6 to 0.1.7. No other open pull request carries an s-stack version.
+- `pr.sh prove`, from the bash block in `pr-commands.md` on `s-stack-phase-pr-handbook`, printed `EQUAL` once #85's spec named its merged dependencies.
+- The hook and `versioning.py check origin/main` passed. GitHub reports the pull request MERGEABLE.
+
+The phase session checked independently. Against `main`, #91 changes only `phase-session.md` (identical to the phase tip), the lockfile and the `version:` line. The branch holds no file under `.foundry/` and contains `origin/main`. It adds 26 hand-written lines.

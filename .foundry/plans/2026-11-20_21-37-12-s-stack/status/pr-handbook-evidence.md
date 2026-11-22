@@ -276,3 +276,19 @@ Defects, all present at `85bb0a5` too:
 - **Minor: a developer squash and force-push without trailers** gets "lacks phase commits" instead of `DEVELOPER-COMMITS`. Nothing is pushed.
 
 Request `pr-handbook-r4` asks whether developer rewrites of pull request branches are in scope.
+
+## Verify: VERIFIED at `d6067a3f3535f5366eb22b1115b2ce4459a77426`
+
+A seventeenth fresh verifier, under the common-path bar of `pr-handbook-d17`, covered `9a3f721` plus its own check-file commit `d6067a3`. That commit adds cold-read item 12 on a rewritten pull request branch.
+
+- **verify-s-stack.** Checks 1, 2, 3, 5 and 7 passed, and Tier 1 printed `all Tier 1 structural checks passed across 20 packages`. Checks 4 and 6 are PENDING. Check 8 passed for every file. `pr-handbook.md`'s scratch block printed 107 PASS and `0 failed`, and the twelve-item cold read agreed.
+- **Common-path probes.** Five new probes found no false `EQUAL`, `FAIL` or `STOP`, no unproven push and no lost developer change. They covered:
+  - a developer commit on a stacked parent, with its remedy;
+  - "Update branch" followed by a developer commit;
+  - a later review fix on a suggested line;
+  - a parent merged with a merge commit;
+  - a parent merged by rebase with the child rewritten.
+- **Rewrite probes.** They behave as at `0305089`. Under d17 that history is a precondition and an undetected history.
+- **Done when and decisions d1 to d17 hold.**
+- **Independent rerun.** The phase session reran the scratch block: 107 PASS and `0 failed`. It took about 85 minutes, against about 10 earlier, because the machine's load average was about 10 while other sessions ran their own scratch suites. It was not a hang, and every assertion passed in order.
+- **Minor, off the common path.** The rewrite row does not name the "lacks phase commits" `FAIL` that a squash without trailers gives. Nothing is pushed. Carried to the round after Review.

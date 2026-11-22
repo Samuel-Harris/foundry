@@ -73,6 +73,11 @@ pull_requests:
     base: "main"
     depends_on: []
     stacked: false
+  - number: 92
+    branch: "s-stack-board-follow-up"
+    base: "main"
+    depends_on: []
+    stacked: false
 requests: []
 decisions:
   - id: "board-d1"
@@ -150,3 +155,5 @@ Follow-up round: `s-stack-package` was merged under C7 at `a60b107`, cleanly, br
 `s-stack-package` was merged again at `f674585`, touching no board path. The verifier updated `checks/board.md` for the removed kind at `284ad88`, the new code head, and returned VERIFIED. The Review gate is starting over `afd3f27..284ad88`.
 
 The follow-up Review gate returned CLEAR at `284ad88`: neither adversary found a defect. Both verdicts cover `284ad88`. The PR creator is starting a new draft pull request against `main`.
+
+Draft pull request #92 (`s-stack-board-follow-up` into `main`, head `f9aa70c`) is open, with no open dependency. It carries `73251d3`, `5fc142f` and `284ad88` without lockfile hunks, then a regenerate commit that raises s-stack from 0.1.7 to 0.1.8. At that moment no open pull request changed `packages/s-stack/apm.yml`. The PR creator's proof printed EQUAL against the local `s-stack-package`. The phase session confirmed that both hand-written files are byte-identical to `284ad88`, and that the branch holds no `.foundry/`. The pull request carries 37 hand-written lines. Tier 1 and the hook passed locally, and CI run https://github.com/Samuel-Harris/foundry/actions/runs/44972350601 passed.

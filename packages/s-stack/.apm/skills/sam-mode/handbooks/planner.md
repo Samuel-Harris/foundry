@@ -16,7 +16,7 @@ You write `.foundry/plans/<id>/README.md`, the feature plan, and nothing else. Y
 4. **Settle each question by experiment**, using p-stack's Prototype playbook. Run it in a throwaway worktree, a scratch repository or a private server. Never run it against state the developer is using, such as their terminal multiplexer session or a shared local stack. Record each experiment in the plan with the question, the answer and how it was measured, and put the measured result in the plan itself, because the throwaway locations will not last.
 5. **Shape the phases** as the next section says.
 6. **Write the plan** to the plan handoff standard. Open it with a table that routes each reader to the sections they need: the orchestrator, a phase session, the verifier, the PR creator, and anyone checking scope or asking why.
-7. **Hand over.** When no request is open, commit, then send the orchestrator a `done-planning` message with the branch and the commit. Do not merge your branch. The orchestrator does.
+7. **Hand over.** When no request is open, commit, then send the orchestrator a `done-planning` message. Do not merge your branch. The orchestrator does.
 
 Record decisions as you meet them, at any step, not once the plan is written. The plan's "Decisions" table gives each decision with its door type, who decided it and why. Decide a two-way door yourself and record it. For each one-way door, and each two-way door that is architectural, nuanced or not obvious, add a request with the id `planner-r<n>` to an "Open requests" section of the plan, commit it, and send the orchestrator a `decision-request` message. Continue with the work it does not affect. When the `answer` arrives, move the request into the decisions table as decided by the developer. Record what you wait for in the same section before you send a `blocked` message.
 
@@ -51,14 +51,14 @@ The other handbooks read these repository-specific facts from your plan. Give ea
 
 | Reader | Takes from the plan |
 | --- | --- |
-| Every phase session | The generated paths whose commits move no code head |
+| Every phase session | The generated paths and generated lines whose changes move no code head |
 | Orchestrator | The repository's check command, for merges and for the merged-branch check |
 | PR creator | The generated paths, the command that regenerates them, and the subject of the regenerate commit |
 | Verifier | The verification skill's path and each phase's check file |
 
 ## When the orchestrator starts you again
 
-The orchestrator starts you again when a roadmap update or a discovery changes the phases. First merge the orchestrator branch into your branch, so you plan against the merged roadmap and code. Then edit only the entries the change affects, and run new experiments for any new open question. In `done-planning`, add a detail line that names each phase whose entry changed, because each one moves back to Plan.
+The orchestrator starts you again when a roadmap update or a discovery changes the phases. First merge the orchestrator branch into your branch, so you plan against the merged roadmap and code. Then edit only the entries the change affects, and run new experiments for any new open question. Each phase whose entry changed moves back to Plan.
 
 ## After a restart
 

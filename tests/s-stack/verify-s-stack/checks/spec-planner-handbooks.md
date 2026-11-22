@@ -2,10 +2,11 @@
 
 Phase `spec-planner-handbooks` ships the spec writer and planner handbooks of the `sam-mode` skill. Both are prose, so the behavioural checks are cold reads. A cold read starts a fresh subagent, gives it only the file the check names, tells it to read nothing else, and asks the questions. Its answer passes when it agrees in substance with every point of the expected answer. Wording may differ, but a missing or contradicting point fails the check. Wait for every cold-read subagent to finish before reporting.
 
-The two files, relative to the repository root:
+The files, relative to the repository root:
 
 - `packages/s-stack/.apm/skills/sam-mode/handbooks/planner.md`
 - `packages/s-stack/.apm/skills/sam-mode/handbooks/spec-writer.md`
+- `packages/s-stack/.apm/skills/sam-mode/SKILL.md`, which cold read 2 also reads
 
 ## Rerun
 
@@ -29,12 +30,12 @@ Expected answer:
 
 ### Cold read 2. The spec writer's questions, records and handover
 
-Files: `handbooks/spec-writer.md` only.
+Files: `handbooks/spec-writer.md` and the skill's `SKILL.md`, which the handbook points to for starting a session.
 
-Prompt: "Read only this file and nothing else, not even files it names or links to. Answer from it alone. You are a new spec writer, started with `update=-` for feature `notes-export`. The developer's idea is: 'Users of the placeholder application `acme-notes` can get a CSV export of all their notes, and the export should stay fresh. While we are at it, drop the old `legacy_tags` column from the `notes` table in the same migration, because nothing reads it any more.' (1) Which questions would you put to the developer about this idea, and why each? (2) Where do you record the answers, and what do you record with each? (3) When and how does the orchestrator get started, and what do you do after that?"
+Prompt: "Read only these two files and nothing else, not even files they name or link to. Answer from them alone. You are a new spec writer, started with `update=-` for feature `notes-export`. The developer's idea is: 'Users of the placeholder application `acme-notes` can get a CSV export of all their notes, and the export should stay fresh. While we are at it, drop the old `legacy_tags` column from the `notes` table in the same migration, because nothing reads it any more.' (1) Which questions would you put to the developer about this idea, and why each? (2) Where do you record the answers, and what do you record with each? (3) When and how does the orchestrator get started, and what do you do after that?"
 
 Expected answer:
 
 1. It asks the developer about the column drop, because deleting a column and its data cannot be undone, so it is a one-way door. It asks when an export happens, for example daily or on demand, because "stay fresh" is ambiguous. It settles neither itself and sends the orchestrator no decision request.
 2. It records each answer in `decisions.md` in the roadmap directory `.foundry/feature-roadmaps/<id>/`, with its door type (one-way or two-way), who decided and why. It does not write `run-decisions.md`.
-3. Only after the developer explicitly approves the roadmap. It commits, then from its own main session, not a subagent, it runs the launcher in the `sam-mode` skill's `scripts/` directory: `launch.sh --print-window` to learn its window, then `launch.sh --feature notes-export --role orchestrator --window <window id>`. It reports the launcher's output to the developer and stops working.
+3. Only after the developer explicitly approves the roadmap. It commits, then, with the repository root as the working directory, from its own main session and not a subagent, it runs the launcher in the `sam-mode` skill's `scripts/` directory: `launch.sh --print-window` to learn its window, then `launch.sh --feature notes-export --role orchestrator --window <window id>`. If either command fails, it reports the exit code and standard error and does not start the orchestrator another way. Otherwise it reports the launcher's output to the developer and stops working.

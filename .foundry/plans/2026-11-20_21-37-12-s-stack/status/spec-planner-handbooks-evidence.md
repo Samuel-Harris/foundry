@@ -211,3 +211,91 @@ The `apm.yml` change is only `version: "0.1.3"` to `version: "0.1.4"`.
 ## Pull request 87
 
 https://github.com/Samuel-Harris/foundry/pull/87 is a draft with base `main`, head `5da7f5d`, no dependencies, and not stacked. Its description carries the direct-comparison sentence. CI run 44963276937 passed: Pre-commit checks, Package versions, Detect changed paths and both tools test jobs. The p-stack suites and the tag job were skipped by their conditions.
+
+## Second follow-up round: Verify, code head `775a30ac0ed9bf848197cd5b4e9499dc9266266a`
+
+The round makes three changes:
+
+- `planner.md` says "generated paths and generated lines".
+- `spec-writer.md` starts the orchestrator through `SKILL.md`'s "Starting a session".
+- Both handbooks leave message payloads to the reference.
+
+Cold read 2 now also reads `SKILL.md`. A fresh verifier ran the full skill. Checks 4 and 6 are pending by design. Tier 1 passed across 20 packages, which the phase session confirmed in the log. Every check file's Rerun passed, including `board.md`'s Chrome script. Cold read 2 passed three times out of three.
+
+Two extra reads took payloads from the reference correctly:
+
+- An update spec writer gave `started` and `roadmap-update`, including the folded `run-decisions.md` rows.
+- A restarted planner gave `done-planning` with the changed phases. It named generated paths and generated lines as the facts the plan gives every phase session.
+
+Verdict: VERIFIED.
+
+Minor note, recorded and not fixed under `spec-planner-handbooks-d3`: `spec-writer.md` step 8 says "Report the launcher's output line" without saying which line. Every run still reported it and stopped.
+
+### For the cross-handbook integration
+
+`references/status-and-messages.md`, owned by `foundation`, says each detail line is "a fact already committed to the sender's own file". That sits awkwardly with two messages. `started` is sent before any commit. A spec writer's folded `run-decisions.md` rows live in the orchestrator's file. Not fixed here.
+
+## Second follow-up round: Review, code head `775a30ac0ed9bf848197cd5b4e9499dc9266266a`
+
+Two adversaries ran `interrogate`, on Opus and on Fable, scoped to `47f792f..775a30a` on this phase's owned paths. They ran ten cold reads and one scratch-repository probe between them.
+
+- **Spec writers.** Every reader started the orchestrator through `SKILL.md`, handled exit 3 and exit 4 failures correctly, and took payloads from the reference.
+- **Planners.** Planners named generated paths and generated lines.
+- **Probe.** The scratch-repository probe showed the reference's code-head command skipping a version-only bump.
+
+Verdict: CLEAR.
+
+Minor findings, recorded and not fixed under `spec-planner-handbooks-d3`:
+
+- Cold read 2's point 1 expects "sends the orchestrator no decision request", which the prompt does not ask about, so a strict grader could fail a correct answer. That line is unchanged in this round.
+
+### For the cross-handbook integration
+
+- `SKILL.md`'s "Starting a session" says "with the repository root as the working directory". A session in a worktree has to work out which root that means. Readers chose the worktree root, which is correct. The old `spec-writer.md` said "worktree root".
+- `handbooks/phase-session.md` line 26 names only generated paths for the code head, while `planner.md` and the reference now also name generated lines.
+
+## Second follow-up round: pull request evidence before the push
+
+A fresh PR creator built `s-stack-spec-planner-owner-pointers` from `origin/main` (`5c4d320`, after #89 merged with s-stack at 0.1.5). `pr.sh refresh` stopped, because the earlier phase commits on `spec-writer.md` reached `main` only through #84, which has no cherry-pick trailers. So the PR creator carried `eabb628` and `775a30a` with `git cherry-pick -x -n`, without the lockfile hunk, as the script's own carry does. It then added regenerate commit `561e71c`, which `versioning.py bump` set to s-stack 0.1.6, with the hook on. Nothing was pushed. The phase session checked the stat, the version diff, the byte identity and the `.foundry` check itself.
+
+**Proof.** `pr.sh prove` printed NOT EQUAL. Its lines were `DEVELOPER-COMMITS s-stack-spec-planner-handbooks` with 27 SHAs, then:
+
+```text
+FAIL s-stack-spec-planner-handbooks: it changes AGENTS.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes apm.yml, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes docs/COMPATIBILITY.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes docs/DEPENDENCY-CONTRACTS.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.apm/skills/sam-mode/references/status-and-messages.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.apm/skills/sam-mode/SKILL.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/.gitignore, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/apm.yml, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes packages/s-stack/README.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes README.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/acceptance.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/s-stack/verify-s-stack/checks/foundation.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/s-stack/verify-s-stack/SKILL.md, which the phase does not
+FAIL s-stack-spec-planner-handbooks: it changes tests/structural/run-tier1.sh, which the phase does not
+FAIL s-stack-spec-planner-handbooks: its head differs from its target tree
+NOT EQUAL
+```
+
+Every line comes from the history of #84, whose 27 untrailered pre-squash commits touch exactly those 14 files. No line concerns #87 or the new branch.
+
+**Head versus target, by direct comparison.** The expected tree is `origin/main`, plus the three blobs from `775a30a`, plus the regenerate diff. It is `2097cffe79c670f1be519b9c94359be24ac49d91`, the same as the branch tree.
+
+**`git diff origin/main 561e71c --stat`:**
+
+```text
+ .../s-stack/.apm/skills/sam-mode/handbooks/planner.md    |  6 +++---
+ .../.apm/skills/sam-mode/handbooks/spec-writer.md        | 15 ++++-----------
+ packages/s-stack/apm.lock.yaml                           | 16 ++++++++--------
+ packages/s-stack/apm.yml                                 |  2 +-
+ .../verify-s-stack/checks/spec-planner-handbooks.md      |  9 +++++----
+ 5 files changed, 21 insertions(+), 27 deletions(-)
+```
+
+The `apm.yml` change is only `version: "0.1.5"` to `"0.1.6"`. The three owned files are byte-identical to `775a30a`, and no `.foundry/` path is on the branch. The hook exited 0, and `versioning.py check origin/main` printed `1 changed package(s), none without a version bump`. The full log is the PR creator's `r2-evidence.md` in the phase session's scratchpad.
+
+## Pull request 90
+
+https://github.com/Samuel-Harris/foundry/pull/90 is a draft with base `main`, head `561e71c`, no dependencies, and not stacked. Its description carries the direct-comparison sentence. CI run 44967444516 passed: Pre-commit checks, Package versions, Detect changed paths and both tools test jobs. The p-stack suites and the tag job were skipped by their conditions.

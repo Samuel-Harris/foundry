@@ -159,3 +159,5 @@ The third review's fixes are committed: atomic symlink locks, fixed start times,
 The idle rule now reads argument lists (launcher-d16). 113 tests pass on macOS and Ubuntu in both locales. Merge d4d7224 of `s-stack-package` touched only `.foundry/`. Verify runs at 061f71e.
 
 The verifier at 061f71e found the busy-shell tests too weak, and they are fixed. Verify runs at 0ad7292.
+
+Merge 481497e of `s-stack-package` at a4bf95f (spec-planner-handbooks follow-up) touched `packages/s-stack/.apm/skills/sam-mode/handbooks/planner.md`, `tests/s-stack/verify-s-stack/checks/spec-planner-handbooks.md` and the generated lockfile. None of these is a launcher-owned path, so under launcher-d14 the code head stays 0ad7292 and the Verify verdict stands.

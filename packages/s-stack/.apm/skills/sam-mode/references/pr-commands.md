@@ -7,6 +7,8 @@ OWN=<own branches> PUSHED=<pushed heads> bash pr.sh refresh <phase branch> <defa
 OWN=<own branches> MERGED=<merged branches> PUSHED=<pushed heads> bash pr.sh prove <orchestrator branch> <phase branch> <default branch> <spec> ...
 ```
 
+`<orchestrator branch>` is the local branch, never `origin/<orchestrator branch>`, which may lag or not exist.
+
 ## The parameters
 
 The feature plan names the generated files, the command that regenerates them and the regenerate commit's subject. The script's first lines hold them. The values shown are Foundry's.

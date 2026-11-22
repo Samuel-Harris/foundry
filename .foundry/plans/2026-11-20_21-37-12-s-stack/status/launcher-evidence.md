@@ -221,6 +221,19 @@ A fresh verifier ran with nothing committed. Its report, summarised:
   - The exit-2 message says no pane is left when the pane is busy.
   - `-ww` regressions are caught on Linux only.
 
+## Review, code head `5ba7c2d20de90afed4b569e9b297f146c730a8af`, SIGNIFICANT
+
+p-stack's `interrogate` skill ran at 5ebe77d with adversaries on Opus and Fable, under the orchestrator's common-path bar. The phase session reran or checked each finding below.
+
+1. **A named session restarted with other options first goes unrecognised.** A session restarted as `claude --continue --name <session>` was classed `other`, because the strict rule wanted `--name` as the first argument. A relaunch therefore started a second copy, and `--close` left the first running. A read-only `ps` on the developer's machine shows a live s-stack session in exactly this shape. Found by Fable.
+2. **A plain `claude` in a session's own pane counts as the session.** A plain `claude` the developer types into a session's own tagged pane after its `claude` exits was counted as the live session. The session was never restarted, and after a restart in a new pane every launch exited 1 with `more than one pane runs`. Found by Opus.
+3. **Open/close cycles squeeze the orchestrator's column.** With a developer column right of the orchestrator's column, as the developer's workmux layout gives (a shell pane beside the agent pane), `--close` of a phase handed its width to the developer column, never back. Four open/close cycles left the orchestrator and the new phase 5 columns wide, with exit 0. Found by Fable.
+4. **A resurrected spec writer goes unrecognised.** After `workmux resurrect` during the spec interview, the resurrected spec writer is an untagged `claude --continue` in the feature worktree. `launch.sh --feature <f> --role spec` exited 2, and with `--window` started a second copy on the same conversation. Found by Fable.
+
+Recorded, not fixed:
+
+- A resurrect leaving both a spec writer and an orchestrator as `claude --continue` in the feature worktree blocks every launch with `more than one pane runs`. `workmux resurrect` compacts recovery to one candidate per working directory, so the real tool does not produce two. Found by Fable.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

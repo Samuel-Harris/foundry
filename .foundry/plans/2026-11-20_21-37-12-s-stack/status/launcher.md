@@ -1,7 +1,7 @@
 ---
 phase: "launcher"
-state: "Review"
-changed_at: "2026-11-22T04:36:57Z"
+state: "Implement"
+changed_at: "2026-11-22T06:23:50Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
 code_head: "5ba7c2d20de90afed4b569e9b297f146c730a8af"
@@ -82,6 +82,11 @@ verdicts:
     code_head: "5ba7c2d20de90afed4b569e9b297f146c730a8af"
     at: "2026-11-22T04:36:57Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "5ba7c2d20de90afed4b569e9b297f146c730a8af"
+    at: "2026-11-22T06:23:50Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - id: "launcher-r2"
     question: "Session and worktree names are joined with hyphens, so two features can collide: the planner of feature a-phase and phase planner of feature a are both a-phase-planner, and the planner of feature query takes the feature worktree of a feature named query-planner. Should the launcher refuse feature names that can collide?"
@@ -160,6 +165,10 @@ decisions:
     decision: "An unnamed claude in an untagged pane counts as a resurrected session only when started with --continue or -c, as workmux resurrect does, so a developer's plain claude is never the orchestrator. Running launch.sh --feature <f> --role spec again restarts the spec writer in its own idle pane in any window, or reports it alive; with no such pane and no --window it exits 2 naming --window. This refines launcher-d12 and launcher-d9."
     door: "two-way"
     at: "2026-11-22T02:21:26Z"
+  - id: "launcher-d18"
+    decision: "A claude is the session when --name <session> appears among its leading options, which are scanned until the first argument that is neither an option nor the value of a known option. In the session's own tagged pane, only a --continue claude counts, never a plain one. In the feature worktree, an untagged --continue claude is the first spec writer while no orchestrator has been started there. --close gives the closed pane's width back to the orchestrator's column by restoring the widths of the untagged panes outside it."
+    door: "two-way"
+    at: "2026-11-22T06:23:50Z"
 ---
 
 # Phase launcher status

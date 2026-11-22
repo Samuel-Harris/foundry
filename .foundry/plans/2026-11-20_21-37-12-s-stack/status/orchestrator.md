@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `410ae2e` (version 8) |
-| Last tick | 2026-11-22 00:51 |
+| Last tick | 2026-11-22 01:11 |
 | Default branch merged at | `d6187b5` (#91) |
 
 ## Live sessions
@@ -19,7 +19,6 @@
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-phase-phase-handbooks` | `%196` | `../s-stack-phase-phase-handbooks` | 2026-11-22, worktree recreated and session resumed for its follow-up round |
 | `s-stack-phase-board` | `%197` | `../s-stack-phase-board` | 2026-11-22, worktree recreated and session resumed for its follow-up round |
 
 ## Open decision requests
@@ -62,6 +61,7 @@ None.
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
 | `s-stack-phase-foundation` | removed, branch kept | 2026-11-22 | Done at `5423ae5`, merged; #88 and #89 merged into `main` |
 | `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-22 | Done at `079c16d`, merged; #84, #87 and #90 merged into `main` |
+| `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-22 | Done again at `8a63c84`, merged; #85 and #91 merged into `main` |
 
 ## Queued fix rounds
 

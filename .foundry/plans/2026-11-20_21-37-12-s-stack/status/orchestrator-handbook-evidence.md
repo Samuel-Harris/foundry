@@ -576,3 +576,15 @@ No defect breaks the common path. For the cross-handbook integration:
 ## Merge of `s-stack-package` at `de508d0`, under run decision `launcher-r3`
 
 `s-stack-package` (`a4bf95f`, the `spec-planner-handbooks` follow-up) was merged at `de508d0`. Outside `.foundry/` it touched `packages/s-stack/.apm/skills/sam-mode/handbooks/planner.md` and `tests/s-stack/verify-s-stack/checks/spec-planner-handbooks.md`, plus the generated lockfile. None is an owned path, so the code head and verdicts stay at `0582ad8`.
+
+## Review 11, code head `0582ad8893691db277312e9ccc4ca3fff799b545d`, SIGNIFICANT
+
+`interrogate` over the commits since `ac3d7c0`, under the common-path bar, with two adversaries on Opus and Fable in their own worktrees. The phase session checked each finding against both handbooks.
+
+| Finding | Adversaries | Proof |
+| --- | --- | --- |
+| "Update branch" on a stacked child merges the parent pull request's branch, not the default branch. It was classed as a developer commit, and the round it drew could never be answered, so the phase was replaced endlessly. | Opus, Fable | Git probe; two cold reads |
+| A feedback round that needs no new code head can never be answered under "only a `prs-open` at a newer code head". Examples are a question answered by reply, a check that failed for an outside reason, and a fix only in a generated path. The phase is replaced endlessly, and a later applied suggestion is never caught. | Opus, Fable | Two cold reads |
+| The phase's own PR creator push is taken for a developer commit when nothing is unanswered but the phase has not yet sent `prs-open`. That happens after an answered `move-back`, after a `merge-orchestrator-branch`, and after a crash loses the `prs-open`. | Fable | Three cold reads |
+
+Recorded for the cross-handbook integration, because it depends on `pr-creator.md`: a suggestion applied while a round is unanswered is not caught by the orchestrator. Under the run decision, the PR creator reports such commits as `DEVELOPER-COMMITS` and pushes nothing over them.

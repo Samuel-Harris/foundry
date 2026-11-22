@@ -10,6 +10,13 @@ on:
 permissions:
   contents: read
 
+# Overlapping runs would both push a tag neither had seen, and the atomic push
+# of the loser would drop its other new tags. Queue instead; never cancel a run
+# that may already be pushing.
+concurrency:
+  group: tag
+  cancel-in-progress: false
+
 jobs:
   tag:
     name: Tag package versions

@@ -381,3 +381,21 @@ Under run decision `gate-cost`, the first reviewer, on Opus, reviewed rather tha
 **Not counted.**
 
 - `versioning.py check origin/main` reports `s-stack` at the base's version. The bump runs before the pull request, as `AGENTS.md` says.
+
+## Verify 24 and 25
+
+The twenty-fourth verifier was stopped before any verdict, when the developer decided against classifying a rewritten head (`pr-handbook-d23`). It left check-file commit `74c2411`.
+
+### Verify 25, VERIFIED at `27d6f55`
+
+The verifier's check-file commit is `27d6f55`, on top of code head `b366e26`. The gate was scoped under run decision `gate-cost` to the diff since `019ecea`: `29bf683`, `74c2411` and `b366e26`.
+
+- The check block printed 145 PASS and `0 failed`. Every rebased child now asserts the rewrite STOP with nothing pushed and the developer's edits kept. The decision path proves `EQUAL` after the append and reports a later developer commit. The rebase-classification cases and the forge-keeps-the-tree Evidence check are dropped.
+- Three cold reads passed: the STOP meanings, `PUSHED` and `RECORD`, and the new rewrite STOP.
+- Tier 1 passed across 20 packages. verify-s-stack checks 1, 2, 3 and 5 also passed.
+- Each check that did not run is outside the radius, and the verifier's report gives the reason for each.
+
+Minor findings, off the common path:
+
+- After a one-off rebuild the developer approved, which is the remedy for the shared-path and rewritten-dependency stops, the rebuilt head no longer descends from its recorded head. The next round therefore gives the rewrite STOP. Neither file says to record the rebuilt head. This is inferred and was not run.
+- If the developer wrongly answers that a rewritten branch holds no edits, the next round can revert those edits. This is by design, because the answer is the developer's.

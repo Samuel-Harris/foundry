@@ -307,6 +307,23 @@ This round ran under the gate-cost rules. The scope was the diff since cf378d8. 
 - Ubuntu container with dangling links planted in `/usr/bin` and `/bin`, as on the GitHub runner: 130 tests passed. The fixture at cf378d8 ran 0 tests in the same run and failed with 18 `setUpClass` errors, each a `FileExistsError`, reproducing CI run 45021884353.
 - All listed mutants are killed in the container. One narrower breaker mutant survives: it keeps the re-read but skips taking `$lock.break`, and no test forces that race. The race needs a stale breaker, a rare setup already recorded as an accepted limit.
 
+## Review, code head `36ea9023e2a6dc555a8e7d4b65e2d630440fec01`, CLEAR
+
+The review was scoped to the one-line fixture change since cf378d8, under the gate-cost rules. The first reviewer (Opus) did not waive, because a condition is control flow. It reviewed and returned CLEAR:
+
+- It reproduced the CI failure with the old line in the Ubuntu container with a planted dangling link: 0 tests run, 18 errors.
+- The new line passed 130 tests there and 130 on macOS.
+- `tmux`, `workmux`, `claude` and `gh` stay withheld from the linked directory.
+
+The second adversary (Fable) then joined and returned CLEAR. Its container variants all passed 130 tests:
+
+- a self-referential link loop;
+- a dangling link with a space in its name;
+- `/usr/bin/git` as a dangling link with the real `git` moved elsewhere;
+- dangling links named `workmux`, `claude` and `gh`.
+
+It also confirmed isolation with real executables of those names planted. Both noted that the first CI run after the push is the real confirmation.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

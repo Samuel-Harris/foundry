@@ -848,3 +848,12 @@ Each changed read ran three times, each with a fresh Opus reader and a fresh Opu
 The verifier's minor note: AE relies on line 136 taking priority over line 148. All three readers applied that priority.
 
 `s-stack-package` (`0bcb8d9`, `.foundry/` only) was merged after the gate.
+
+## Review 16, code head `a3f4749585412f4be042c8f479a8971768df5756`, CLEAR
+
+`interrogate` over the check-file edit since `ff83115`, under the common-path bar. The edit alters expected results, so gate-cost rule 3 does not allow a waiver, and both adversaries ran: Opus and Fable, each in its own worktree.
+
+- The Opus adversary ran each of the five changed reads once, and all passed.
+- The Fable adversary ran each twice, once on Opus and once on Fable, and all ten passed.
+
+Neither found an expected answer that contradicts the handbook, a loosened requirement, or a read still fragile on a first run. AE was probed for a reader taking `pe`'s `prs-open` as accepting the rebase, and neither reader did. What the readers raised about the handbook itself, the close timing for a stalled session and a phase in Spec without `waits_for`, is already known and outside the bar.

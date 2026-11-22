@@ -85,6 +85,37 @@ class PlacementTests(LauncherTestCase):
         self.assertGreater(new.top, before[self.first].top)
         self.assertLess(new.top, before[lower].top)
 
+    def assert_usable_full_height_column(self, *, orchestrator: str, new: str) -> dict[str, Pane]:
+        after = self.geometry()
+        height = int(self.tmux("display-message", "-p", "-t", self.window, "#{window_height}"))
+        self.assertEqual((after[new].top, after[new].height), (0, height))
+        self.assertGreaterEqual(after[new].width, 40, "the new column was squashed")
+        self.assertGreaterEqual(after[orchestrator].width, after[new].width)
+        return after
+
+    def test_a_pane_spanning_the_orchestrators_column_does_not_squash_the_new_column(self) -> None:
+        self.tmux("respawn-pane", "-k", "-t", self.first, "-c", str(self.worktree("f")), "claude --name f-spec")
+        self.wait_for_claude(self.first)
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        developer = self.split(target=orchestrator, flags=["-h"])
+        before = self.geometry()
+
+        planner = self.start("--role", "planner", name="f-planner")
+
+        after = self.assert_usable_full_height_column(orchestrator=orchestrator, new=planner)
+        self.assertEqual(after[developer].width, before[developer].width)
+
+    def test_a_full_width_developer_pane_does_not_squash_the_new_column(self) -> None:
+        right = self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
+        orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")
+        bottom = self.split(target=self.window, flags=["-v", "-f", "-l", "8"])
+        before = self.geometry()
+
+        planner = self.start("--role", "planner", name="f-planner")
+
+        after = self.assert_usable_full_height_column(orchestrator=orchestrator, new=planner)
+        self.assertEqual(after[right].width, before[right].width)
+
     def test_a_planners_column_lands_right_of_a_developer_column_which_keeps_its_width(self) -> None:
         developer = self.split(target=self.window, flags=["-h", "-f", "-l", "30"])
         orchestrator = self.start("--role", "orchestrator", name="f-orchestrator")

@@ -138,7 +138,7 @@ resolve() {
 # helper the shell keeps in the background, as zsh prompt plugins do, is not in
 # that group; a build started as bash build.sh, or a command run with exec, is.
 pane_is_idle() {
-  LC_ALL=C ps -t "${1#/dev/}" -o stat=,args= 2>/dev/null | awk '
+  LC_ALL=C ps -ww -t "${1#/dev/}" -o stat=,args= 2>/dev/null | awk '
     $1 !~ /[+]/ { next }
     {
       seen = 1
@@ -179,7 +179,8 @@ pane_inventory() {
       if [ -n "$resolved_worktree" ] && [[ "$(resolve "$current_path")/" == "$resolved_worktree"/* ]]; then in_worktree=1; fi
       printf 'pane %s %s %s %s %s %s\n' "$pane_id" "$pane_pid" "$window_id" "$tag" "$in_worktree" "$idle"
     done
-    ps -A -o pid=,ppid=,args=
+    # procps cuts each line to $COLUMNS even into a pipe, which would hide --name.
+    ps -A -ww -o pid=,ppid=,args=
   } | awk -v name="$session" '
     $1 == "pane" { order[++n] = $3; pane_pid[$3] = $2; info[$2] = $2 " " $4 " " $5; in_worktree[$2] = $6; idle[$2] = $7; next }
     {
@@ -410,9 +411,10 @@ right_of_column() {
     }'
 }
 
-# Prints "pane_id width" for every pane outside the column of <anchor>, and for
-# <anchor> the width it keeps after giving up a <size> column and its divider,
-# from left to right. resize-pane -x moves a pane's right border, so setting
+# Prints "pane_id width" for every pane wholly left or right of the column of
+# <anchor>, and for <anchor> the width it keeps after giving up a <size> column
+# and its divider, from left to right. A pane spanning across that column, such
+# as a full-width pane above or below it, narrows with it. resize-pane -x moves a pane's right border, so setting
 # each width in that order returns every other column to its width, takes the
 # new column's width from the anchor's column alone, and leaves the new column,
 # the rightmost, at <size>.
@@ -422,7 +424,7 @@ widths_after_full_span() {
     END {
       for (i = 1; i <= n; i++) {
         if (i == a) print left[i], id[i], width[i] - size - 1
-        else if (left[i] < left[a] || right[i] > right[a]) print left[i], id[i], width[i]
+        else if (right[i] < left[a] || left[i] > right[a]) print left[i], id[i], width[i]
       }
     }' | sort -n | awk '{ print $2, $3 }'
 }

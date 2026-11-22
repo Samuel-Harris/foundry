@@ -299,3 +299,18 @@ class IdlePaneTests(LauncherTestCase):
     def test_a_zsh_started_as_a_login_shell_by_name_is_idle(self) -> None:
         zsh = self.zsh()
         self.assert_idle(command=["bash", "-c", f"exec -a -zsh {zsh}"], ready="-zsh")
+
+
+class NarrowColumnsTests(LauncherTestCase):
+    def test_an_exported_columns_does_not_hide_a_live_session(self) -> None:
+        # procps cuts ps output to $COLUMNS even into a pipe; macOS's ps does not.
+        self.make_feature_worktree()
+        narrow = dict(self.env, COLUMNS="40")
+        args = ("--feature", "f", "--role", "phase", "--phase", "migrate-the-invoice-tables-to-the-new-schema", "--window", self.window)
+        self.launch("--feature", "f", "--role", "orchestrator", "--window", self.window, env=narrow)
+        first, _ = self.started(self.launch(*args, env=narrow), name="f-phase-migrate-the-invoice-tables-to-the-new-schema")
+
+        second = self.launch(*args, env=narrow)
+
+        self.assertEqual((second.returncode, second.stdout), (0, f"alive f-phase-migrate-the-invoice-tables-to-the-new-schema pane={first}\n"), second.stderr)
+        self.assertEqual(len(self.named_claudes("f-phase-migrate-the-invoice-tables-to-the-new-schema")), 1)

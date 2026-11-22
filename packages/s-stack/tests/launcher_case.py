@@ -293,14 +293,22 @@ class LauncherTestCase(unittest.TestCase):
         return pane
 
     def sidebar_program(self) -> Path:
-        """A copy of sleep named workmux, which tmux reports as the sidebar's command."""
+        """A blocking program named workmux, which tmux reports as the sidebar's command."""
         program = self.tmp / "sidebar" / "workmux"
         if not program.exists():
             program.parent.mkdir()
-            shutil.copy(os.path.realpath(shutil.which("sleep", path=str(self.system_bin))), program)
             if sys.platform == "darwin":
-                # macOS kills a copied system binary until it is signed again.
+                # macOS reports a script's interpreter, so copy sleep, and sign the copy or macOS kills it.
+                shutil.copy(os.path.realpath(shutil.which("sleep", path=str(self.system_bin))), program)
                 subprocess.run(["codesign", "-f", "-s", "-", str(program)], check=True, capture_output=True)
+            else:
+                # Linux tmux reports argv[0], which for a script is its interpreter, so name the interpreter workmux.
+                # A copied sleep will not do: a multicall coreutils rejects the name.
+                interpreter = self.tmp / "sidebar" / "bin" / "workmux"
+                interpreter.parent.mkdir()
+                interpreter.symlink_to(os.path.realpath(shutil.which("sh", path=str(self.system_bin))))
+                program.write_text(f"#!{interpreter}\nread _\n")
+                program.chmod(0o755)
         return program
 
     def add_sidebar(self) -> str:

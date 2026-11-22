@@ -327,3 +327,7 @@ Findings:
 - **Minor.** The handbook says an empty `MERGED` gives a false `FAIL`. It can also give a false `EQUAL` that hides a developer commit merged before the phase took it.
 
 The phase session's fix: a patch-id match counts only when the trailer-named commit is not an ancestor of the candidate, which is true after GitHub's rebase and false for a twin on the same branch. It also adds the `MERGED` wording. The twin probe now reports `DEVELOPER-COMMITS` with nothing pushed, and the distinct-context control is unchanged.
+
+## Known integration item for pr-handbook-d18
+
+The phase session recording each pull request branch's pushed head, and passing it as `PUSHED` in the PR creator's brief, is not yet described in `handbooks/phase-session.md` or `references/status-and-messages.md`. Those files belong to phases that are Done, and the orchestrator has put the gap on its cross-handbook read-through list. It is a known integration item owned elsewhere, not a finding against pr-handbook.

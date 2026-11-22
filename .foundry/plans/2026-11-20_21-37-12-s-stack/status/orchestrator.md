@@ -8,9 +8,9 @@
 | tmux window | `@47` |
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
-| Architecture page describes | `c9a7832` (version 7) |
-| Last tick | 2026-11-22 00:51 |
-| Default branch merged at | `bce824b` (#90, into `4d59e8a`) |
+| Architecture page describes | `410ae2e` (version 8) |
+| Last tick | 2026-11-22 02:11 |
+| Default branch merged at | `d6187b5` (#91) |
 
 ## Live sessions
 
@@ -19,7 +19,6 @@
 | `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
 | `s-stack-phase-orchestrator-handbook` | `%174` | `../s-stack-phase-orchestrator-handbook` | 2026-11-21 |
 | `s-stack-phase-pr-handbook` | `%176` | `../s-stack-phase-pr-handbook` | 2026-11-21 |
-| `s-stack-phase-phase-handbooks` | `%196` | `../s-stack-phase-phase-handbooks` | 2026-11-22, worktree recreated and session resumed for its follow-up round |
 | `s-stack-phase-board` | `%197` | `../s-stack-phase-board` | 2026-11-22, worktree recreated and session resumed for its follow-up round |
 
 ## Open decision requests
@@ -39,7 +38,8 @@ None.
 | 88 | `foundation` | merged into `main` as `054a9e7` | | |
 | 89 | `foundation` | merged into `main` as `5c4d320` | | |
 | 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
-| 91 | `phase-handbooks` | `s-stack-phase-handbooks-follow-up` | `main` | none |
+| 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
+| 92 | `board` | `s-stack-board-follow-up` | `main` | none |
 
 ## Merged phases
 
@@ -54,6 +54,7 @@ None.
 | `foundation` (follow-up) | `3364856` (tip `8616cb8`) | `74bba4e` | VERIFIED on `3364856` |
 | `spec-planner-handbooks` (second follow-up) | `5c411ce` (tip `d5c4ff2`) | `775a30a` | VERIFIED on `a89e044` (no code change since `5c411ce`) |
 | `phase-handbooks` (follow-up) | `4585528` (tip `7e09ef7`) | `148f745` | VERIFIED on `7e0b76d` (no code change since `4585528`) |
+| `board` (follow-up) | `3940c5b` (tip `de27bbb`) | `284ad88` | VERIFIED on `fe43e00` (no code change since `3940c5b`) |
 
 ## Closed sessions
 
@@ -62,6 +63,7 @@ None.
 | `s-stack-planner` | `../s-stack-planner` | 2026-11-21 | `e99d77d`, merged |
 | `s-stack-phase-foundation` | removed, branch kept | 2026-11-22 | Done at `5423ae5`, merged; #88 and #89 merged into `main` |
 | `s-stack-phase-spec-planner-handbooks` | removed, branch kept | 2026-11-22 | Done at `079c16d`, merged; #84, #87 and #90 merged into `main` |
+| `s-stack-phase-phase-handbooks` | removed, branch kept | 2026-11-22 | Done again at `8a63c84`, merged; #85 and #91 merged into `main` |
 
 ## Queued fix rounds
 
@@ -112,6 +114,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
   - Include: `references/status-and-messages.md`'s `fix-round` row carries only "the pull request and its comments, or the failed check". It must also carry the developer's commits, as the developer-commit rule and `phase-session.md`'s feedback round now do. Raised by `phase-handbooks` at `5d30a59`.
   - Include: `SKILL.md`'s "repository root" leaves a worktree session to work out which root it means (readers chose the worktree root, which is right). Raised by `spec-planner-handbooks` at `775a30a`. Its other item, `phase-session.md` line 26, is in `phase-handbooks`' current round.
   - Include: `board` took its `needs_update` wording from `orchestrator.md` on the `orchestrator-handbook` branch at `1e0a39e`, because that handbook is not yet on `s-stack-package`. Check the two still match once it merges.
+  - Include: `pr.sh`'s proof run against `origin/s-stack-package` gives false merge FAILs, because only the developer pushes that branch and it lags the local one. The handbooks should name the local orchestrator branch. Raised by `board`'s PR creator.
   - Include: the run decision on parallel package versions. `pr-creator.md` and `orchestrator.md` may need to state it.
 
 ## Post-merge check briefs

@@ -588,3 +588,9 @@ No defect breaks the common path. For the cross-handbook integration:
 | The phase's own PR creator push is taken for a developer commit when nothing is unanswered but the phase has not yet sent `prs-open`. That happens after an answered `move-back`, after a `merge-orchestrator-branch`, and after a crash loses the `prs-open`. | Fable | Three cold reads |
 
 Recorded for the cross-handbook integration, because it depends on `pr-creator.md`: a suggestion applied while a round is unanswered is not caught by the orchestrator. Under the run decision, the PR creator reports such commits as `DEVELOPER-COMMITS` and pushes nothing over them.
+
+## Merge of `s-stack-package` at `db4f2bf`, under run decision `launcher-r3`
+
+`s-stack-package` (`c2ee849`, which brings `foundation`'s follow-up round) was merged at `db4f2bf`. Outside `.foundry/` it touched `SKILL.md`, `references/status-and-messages.md`, `tests/s-stack/verify-s-stack/SKILL.md` and `checks/foundation.md`, plus the generated lockfile. None is an owned path, so the code head stays at the phase's own commit `0008162`. The reference's message table now matches this handbook's uses: the `state` reply to the merged notice, `move-back` after a failed post-merge check, the merged notice as an `instruction`, `stop` for a stalled session, and no `restack`.
+
+For the cross-handbook integration: the reference splits the generated-only round and the dependency round into two `fix-round` rows, where this handbook and `phase-session.md` use one kind ("A pull request merged"). It also has no row for the developer-commit round.

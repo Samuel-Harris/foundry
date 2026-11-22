@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-22T00:15:39Z"
+state: "Verify"
+changed_at: "2026-11-22T00:17:15Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "0582ad8893691db277312e9ccc4ca3fff799b545d"
+code_head: "0008162745cfb91e8743b080ef7f49ea7a47b474"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -358,3 +358,5 @@ The "Update branch" exemption is at `90f463d`, on top of the Verify 28 fix at `d
 The thirtieth Verify gate returned VERIFIED at `0582ad8`. `s-stack-package` was merged at `de508d0`, and under `launcher-r3` the code head is unchanged. The phase moved to Review, which covers the commits since `ac3d7c0`.
 
 The eleventh Review gate returned SIGNIFICANT at `0582ad8`, under the common-path bar. The phase moved back to Implement.
+
+The Review 11 fixes are at `0008162`. `s-stack-package` (`c2ee849`, `foundation`'s follow-up) was merged at `db4f2bf`, and under `launcher-r3` the code head is unchanged. The phase moved to Verify at code head `0008162`.

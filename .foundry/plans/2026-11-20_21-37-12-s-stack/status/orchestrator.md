@@ -16,6 +16,7 @@
 
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
+| `s-stack-phase-default-stack` | `%202` | `../s-stack-phase-default-stack` | 2026-11-22, last phase |
 
 ## Open decision requests
 

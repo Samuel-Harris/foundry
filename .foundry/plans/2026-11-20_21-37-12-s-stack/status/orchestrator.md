@@ -9,7 +9,7 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
-| Last tick | 2026-11-22 20:51 (tick paused until 02:03 on 2026-11-23) |
+| Last tick | 2026-11-22 20:51 (tick paused until 00:23 on 2026-11-23, after the session limit resets) |
 | Default branch merged at | `59bee65` (#97, #98, into `3aa3de7`) |
 
 ## Live sessions
@@ -66,7 +66,7 @@ None.
 | `launcher` | `a51f246` (tip `117abdb`) | `890d46d` | VERIFIED on `3a21396` (scoped, no code change since `a51f246`) |
 | `integration` | `9f6c1c0` (tip `d8e5fe7`) | `90f855a` | VERIFIED on `e407673` (74 cold reads, 8 scripts; no code change since `9f6c1c0`) |
 | `default-stack` | `1983ab2` (tip `fef611d`) | `acaba0e` | final full run NOT VERIFIED on `5e529e3`: integration cold read 4 failed 2 of 3 runs; everything else passed |
-| `integration` (full-run fix) | `7aa4a70` (tip `c257bc4`) | `eb83e95` | second full run NOT VERIFIED on `405978a`: cold reads AO (3 of 3 failed) and Q (2 of 3); fix round at 02:00 GMT |
+| `integration` (full-run fix) | `7aa4a70` (tip `c257bc4`) | `eb83e95` | second full run NOT VERIFIED on `405978a`: cold reads AO (3 of 3 failed) and Q (2 of 3); fix round at 00:23 GMT |
 
 ## Closed sessions
 

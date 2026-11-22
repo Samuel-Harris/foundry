@@ -1,10 +1,10 @@
 ---
 phase: "launcher"
-state: "Review"
-changed_at: "2026-11-22T00:59:52Z"
+state: "Verify"
+changed_at: "2026-11-22T02:21:26Z"
 session: "s-stack-phase-launcher"
 branch: "s-stack-phase-launcher"
-code_head: "e8bc6e10bacd2b790df9b238975ae24750d61bb9"
+code_head: "5ba7c2d20de90afed4b569e9b297f146c730a8af"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -71,6 +71,11 @@ verdicts:
     result: "VERIFIED"
     code_head: "e8bc6e10bacd2b790df9b238975ae24750d61bb9"
     at: "2026-11-22T00:59:52Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
+  - gate: "review"
+    result: "SIGNIFICANT"
+    code_head: "e8bc6e10bacd2b790df9b238975ae24750d61bb9"
+    at: "2026-11-22T02:21:26Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/launcher-evidence.md"
 pull_requests:
   - id: "launcher-r2"
@@ -146,6 +151,10 @@ decisions:
     decision: "From the orchestrator: idleness reads the full argument list of every process in the pane's foreground group with LC_ALL=C. Only an interactive shell with no script and no -c command is idle, so bash build.sh and sh -c are busy and -zsh, zsh -l and bash are idle. Unusual login shells never count as idle, which is safe."
     door: "two-way"
     at: "2026-11-21T23:11:10Z"
+  - id: "launcher-d17"
+    decision: "An unnamed claude in an untagged pane counts as a resurrected session only when started with --continue or -c, as workmux resurrect does, so a developer's plain claude is never the orchestrator. Running launch.sh --feature <f> --role spec again restarts the spec writer in its own idle pane in any window, or reports it alive; with no such pane and no --window it exits 2 naming --window. This refines launcher-d12 and launcher-d9."
+    door: "two-way"
+    at: "2026-11-22T02:21:26Z"
 ---
 
 # Phase launcher status
@@ -173,3 +182,5 @@ The verifier at 061f71e found the busy-shell tests too weak, and they are fixed.
 Merge 481497e of `s-stack-package` at a4bf95f (spec-planner-handbooks follow-up) touched `packages/s-stack/.apm/skills/sam-mode/handbooks/planner.md`, `tests/s-stack/verify-s-stack/checks/spec-planner-handbooks.md` and the generated lockfile. None of these is a launcher-owned path, so under launcher-d14 the code head stays 0ad7292 and the Verify verdict stands.
 
 Merge 99599dc of `s-stack-package` at 99953ad (foundation's follow-up) touched only foundation's files: `SKILL.md`, `references/status-and-messages.md`, the verification skill, `checks/foundation.md`, the version line and the lockfile. The fourth review's two significant findings are fixed: the squashed right-hand column, and `ps -ww` against `COLUMNS` truncation. 118 tests pass on macOS and Ubuntu in both locales. Verify runs at e8bc6e1.
+
+The fifth review was SIGNIFICANT for e8bc6e1, and both of its findings are fixed (launcher-d17). 122 tests pass on Ubuntu in both locales, and on macOS apart from one test that asserted the old behaviour, which is now deleted. Verify runs at 5ba7c2d.

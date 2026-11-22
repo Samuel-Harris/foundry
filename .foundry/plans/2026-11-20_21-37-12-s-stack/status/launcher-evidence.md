@@ -196,6 +196,15 @@ A fresh verifier ran with nothing committed. Its report, summarised:
   - The `-ww` regression is caught only on Linux.
   - Cold readers flagged ambiguities in files the launcher does not own.
 
+## Review, code head `e8bc6e10bacd2b790df9b238975ae24750d61bb9`, SIGNIFICANT
+
+p-stack's `interrogate` skill ran at 79c8715 with adversaries on Opus and Fable, under the orchestrator's common-path bar. Both adversaries found the same two defects independently, and the phase session reran both.
+
+1. **A developer's own `claude` was taken for the orchestrator.** After the orchestrator's `claude` exited, a plain `claude` the developer opened in an untagged pane of the feature worktree counted as the resurrected orchestrator. A relaunch printed `alive` at the developer's pane instead of restarting the orchestrator in its own idle pane. The next update spec writer then split the developer's pane, and the next planner was placed against it. After a real resurrect, the same developer `claude` made every planner and phase launch exit 1 with `more than one pane runs`.
+2. **The documented spec-writer call could not restart it.** `launch.sh --feature <f> --role spec`, the only spec call `SKILL.md` documents, exited 2 with the usage text on every run after the first, alive or not. With the caller's own window passed, it split the developer's pane instead of reusing the spec writer's own idle pane.
+
+Both held up everywhere else: the full documented flow, parallel launches and relaunches after crashes and after a resurrect, developer splits around the orchestrator, and zsh panes.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

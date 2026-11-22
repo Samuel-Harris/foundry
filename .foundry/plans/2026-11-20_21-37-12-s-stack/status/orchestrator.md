@@ -39,6 +39,7 @@ None.
 | 90 | `spec-planner-handbooks` | merged into `main` as `bce824b` | | |
 | 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
 | 92 | `board` | merged into `main` as `92a91f7` | | |
+| 93 | `orchestrator-handbook` | `s-stack-orchestrator-handbook` | `main` | none |
 
 ## Merged phases
 
@@ -54,6 +55,7 @@ None.
 | `spec-planner-handbooks` (second follow-up) | `5c411ce` (tip `d5c4ff2`) | `775a30a` | VERIFIED on `a89e044` (no code change since `5c411ce`) |
 | `phase-handbooks` (follow-up) | `4585528` (tip `7e09ef7`) | `148f745` | VERIFIED on `7e0b76d` (no code change since `4585528`) |
 | `board` (follow-up) | `3940c5b` (tip `de27bbb`) | `284ad88` | VERIFIED on `fe43e00` (no code change since `3940c5b`) |
+| `orchestrator-handbook` | `7cd7034` (tip `2fbf619`) | `ff83115` | running (scoped) |
 
 ## Closed sessions
 

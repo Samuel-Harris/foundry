@@ -13,7 +13,14 @@ Every other phase is Done, so `main` holds a complete s-stack package. Nothing i
 - Tier 1's default-stack inventory check covers every package the meta-package deploys.
 - The docs state the new graph, the corrected counts, and the latent audit drift that Experiment 1 found, with commands a reader can rerun.
 
-## Commits and the pull request
+## Commits and the pull requests
+
+Decision  (the orchestrator's answer to ) splits the work into two stacked draft pull requests.
+
+- **Bottom, **, against . Only  and . APM 0.32.0 materialises a local dependency that has a declaring parent under , with an absolute anchor, and rewrites cross-skill links into that slot, so the deployed text and its  hashes in the lockfile depend on the checkout path. The relativiser maps each absolute slot to the slot of the relative anchor it already writes, in the deployed files' text, and replaces each affected hash with the hash of the mapped text. Rerunning it must change no committed lockfile on .
+- **Top, **, targeting the bottom branch. Every other commit below, the verifier's check file, and the regenerated  lockfile.
+
+The original single pull request's commits:
 
 One pull request, `feat(default-stack): install s-stack`, targeting `main` with no dependencies. Its commits, in order:
 

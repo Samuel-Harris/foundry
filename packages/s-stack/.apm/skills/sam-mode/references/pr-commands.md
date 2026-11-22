@@ -43,7 +43,7 @@ A branch may be written `main` or `origin/main`. The default branch always resol
 
 - **Phase commits** are the commits on the phase branch's first-parent line that the default branch lacks, leaving out merges. Work that reached the phase through a merge, such as another phase's commits from the orchestrator branch, is not a phase commit.
 - **A commit's paths** are the files it changes outside `.foundry/`. A wholly generated file counts only when the commit deletes it. A file with generated lines counts only when its hand-written lines change.
-- **A carried commit** ends its message with `(cherry picked from commit <sha>)`, naming its phase commit, as `git cherry-pick -x` writes it. The script matches a pull request's commit to a phase commit by that line or by its own hash, never by author, date or subject. A phase commit taken from a pull request's commit with `git cherry-pick -x` also matches that commit, and any commit whose `git patch-id --stable` equals that commit's, so a developer commit that GitHub rebased still matches once the phase has taken it. When the named commit is missing locally, only its hash matches. A forge rebase keeps the message, so a head GitHub rewrote still matches.
+- **A carried commit** ends its message with `(cherry picked from commit <sha>)`, naming its phase commit, as `git cherry-pick -x` writes it. The script matches a pull request's commit to a phase commit by that line or by its own hash, never by author, date or subject. A phase commit taken from a pull request's commit with `git cherry-pick -x` also matches that commit, and any commit whose `git patch-id --stable` equals that commit's and does not descend from it, so a developer commit that GitHub rebased still matches once the phase has taken it, while a later commit with the same hunk elsewhere in the file does not. When the named commit is missing locally, only its hash matches. A forge rebase keeps the message, so a head GitHub rewrote still matches.
 - **A phase commit is accounted for** a pull request when the pull request's branch, a merged dependency's branch or the default branch holds it, or holds a commit that matches it. In a refresh, the base's and open dependencies' tips count as the branch, because the merge brings them in.
 - **A shared path** is one that commits other than phase commits changed on the phase branch, or one with a phase commit that is not accounted for, because another pull request of the phase carries it. Every other path of a pull request's own commits is **owned** by it.
 
@@ -192,7 +192,7 @@ setup() {
   S0=$(git rev-parse "${first:-$D}^" 2>/dev/null || git rev-parse "$D")
   git rev-list --first-parent --no-merges "$PH" "^$D" > "$W/fp"; : > "$W/named"
   [ ! -s "$W/fp" ] || pairs --no-walk=unsorted --stdin < "$W/fp" | awk 'NF == 2' > "$W/named"
-  : > "$W/pids"; while IFS=" " read -r c n; do git cat-file -e "$n^{commit}" 2>/dev/null && echo "$(pids "$n") $c"; done < "$W/named" | grep -v '^- ' > "$W/npid"
+  : > "$W/pids"; while IFS=" " read -r c n; do git cat-file -e "$n^{commit}" 2>/dev/null && echo "$(pids "$n") $c $n"; done < "$W/named" | grep -v '^- ' > "$W/npid"
 }
 refs() { local b; for b in $(list "$1"); do ref "$b"; done; }
 accounted() {
@@ -253,7 +253,10 @@ stale() {
     done
   done
 }
-matches() { ids --no-walk "$1" | grep -q -x -F -f "$W/fp" || cut -d ' ' -f 2 "$W/named" | grep -q -x -F "$1" || awk -v p="$(pids "$1")" '$1 == p { f = 1 } END { exit !f }' "$W/npid"; }
+matches() {
+  local n; { ids --no-walk "$1" | grep -q -x -F -f "$W/fp" || cut -d ' ' -f 2 "$W/named" | grep -q -x -F "$1"; } && return 0
+  for n in $(awk -v p="$(pids "$1")" '$1 == p { print $3 }' "$W/npid"); do git merge-base --is-ancestor "$n" "$1" || return 0; done; return 1
+}
 devs() {
   local h=$1 c b seen=; shift
   for c in $(git rev-list --reverse --first-parent --no-merges "$h" $(not "$@") --invert-grep --grep="$REGEN"); do

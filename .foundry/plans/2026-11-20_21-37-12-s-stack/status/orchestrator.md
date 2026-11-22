@@ -106,6 +106,8 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
   - Include: can `orchestrator.md` send the merged notice to a phase that has just entered PR (PR step 1) before `prs-open` lists its new pull request? Check against the re-merge guard and the notice's conditions. Raised by `phase-handbooks`' reviewers at `a1c95f1`.
   - Include: `references/status-and-messages.md` has no developer-commit row and splits the generated and dependency `fix-round` uses into two rows, unlike `orchestrator.md` at `0008162`. A suggestion applied while a round is unanswered is left to the PR creator's `DEVELOPER-COMMITS` report. Raised by `orchestrator-handbook`.
   - Include: in `references/status-and-messages.md`, "a fact already committed to the sender's own file" fits `started` and the folded run-decisions rows awkwardly. Raised by `spec-planner-handbooks` at `775a30a`.
+  - Include: `references/status-and-messages.md`'s `fix-round` row carries only "the pull request and its comments, or the failed check". It must also carry the developer's commits, as the developer-commit rule and `phase-session.md`'s feedback round now do. Raised by `phase-handbooks` at `5d30a59`.
+  - Include: the run decision on parallel package versions. `pr-creator.md` and `orchestrator.md` may need to state it.
 - `board` (Done): the board template's schema comment (C5) describes `needs_update` as containing main's tip with passing checks. `orchestrator.md` at `20c031a` also requires the heads of open dependencies. Make the comment match. Raised by `orchestrator-handbook`.
 
 ## Follow-ups after foundation's round merges

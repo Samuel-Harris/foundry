@@ -758,3 +758,31 @@ The handbook is still 185 lines.
 The orchestrator's message asked for a feedback round. The handbook sends an `instruction` to refresh instead, as line 117 already does when a dependency's head moves. Under `phase-session.md`, a "Feedback on a pull request" round always moves the phase back to Implement and runs both gates again, so a no-op round would not be cheap. A refresh instruction runs only a PR creator. Its `DEVELOPER-COMMITS` report starts the feedback round, under PR step 2.
 
 The regenerated lockfile is at `964fa1c`. `s-stack-package` (`1d9406c`, `.foundry/` only) was merged after it.
+
+## Verify 35, code head `ff831156b0c01d2fae94e01031147297ccfa242a`, VERIFIED
+
+A fresh verifier rewrote the check file for `6b29b1b` in commit `ff83115` (+115/−195, only `checks/orchestrator-handbook.md`) and ran every check at `ff83115`.
+
+- **Script.** The two `git cherry` scripts are replaced by "A pull request's head against its head at the last `prs-open`". The script asserts:
+  - an unchanged head sends no round;
+  - a suggestion, an "Update branch" merge and a forge rebase after a squash-merged parent each send one refresh instruction naming both heads;
+  - no second instruction is sent while one is unanswered;
+  - no further round follows the answering `prs-open`.
+
+  The mutants `skips-moved-head` and `sends-for-unchanged-head` each fail at their own assertion. The phase session reran the script from the check file, and it passed.
+- **Cold reads.** The preamble and the reads B (point 7), Y, AA, AL, AN, AS, AU, AW, AX, AY, AZ, BA, BB, BC and BD follow the new rule. 65 of 65 pass. Z was rerun after a quietness claim that the scenario did not support.
+- **C6.** Checks 1, 2, 3, 5 and 7 PASS (`185/200 orchestrator.md`; Tier 1 across 20 packages, outside the sandbox). Checks 4 and 6 are PENDING, which is allowed. Check 8 PASS, every script.
+- **Done when.** All items are met, and the private-name grep has 0 hits.
+
+Defects, none on the common path:
+
+- Line 148 misleads a reader, and partly depends on a contract not on `s-stack-package`. The head is recorded when `prs-open` arrives, so a developer commit that lands between the PR creator's push and that arrival is never compared, and "no developer change is missed" is false in that window. A clean fix needs `prs-open` to carry the pushed heads, which changes C3. Raise it at the cross-handbook read-through.
+- Line 148, minor. After a `move-back` is answered, a phase whose PR creator is still pushing counts as settled, so it draws a no-op instruction. Requiring quiet, as line 117 does, would avoid it.
+- Line 148, minor. The check is not tied to a tick step. Readers placed it in step 4.
+- Lines 14 and 125, and line 117, minor and already known.
+
+For other phases: `phase-session.md` has no row for a refresh `instruction`, and readers inferred "start a PR creator" from PR step 2.
+
+The check file is 1,058 lines, down from 1,138, which was already over the 1,000-line rule.
+
+`s-stack-package` (`cb513f9`, `.foundry/` only) was merged after the gate.

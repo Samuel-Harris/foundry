@@ -9,14 +9,14 @@
 | Status board | https://claude.ai/artifact/Y3dKHCV8KrRCDf3zSfo3Jn (source in the orchestrator scratchpad, `board/status-board.html`) |
 | Architecture page | https://claude.ai/artifact/LCPjGJNor9jKgXB4rzFev4 (source in the orchestrator scratchpad, `architecture/s-stack-architecture.html`) |
 | Architecture page describes | `9adc56f` (version 9) |
-| Last tick | 2026-11-22 14:31 |
-| Default branch merged at | `25a6b61` (#95, into `829ab81`) |
+| Last tick | 2026-11-22 14:51 |
+| Default branch merged at | `0fdbb53` (#94, into `0cb0607`) |
 
 ## Live sessions
 
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
-| `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
+| `s-stack-phase-integration` | `%201` | `../s-stack-phase-integration` | 2026-11-22, the 45-item cross-handbook round (`integration-fixes.md`) |
 
 ## Open decision requests
 
@@ -38,7 +38,7 @@ None.
 | 91 | `phase-handbooks` | merged into `main` as `d6187b5` | | |
 | 92 | `board` | merged into `main` as `92a91f7` | | |
 | 93 | `orchestrator-handbook` | merged into `main` as `ee49f7b` | | |
-| 94 | `launcher` | `s-stack-launcher` | `main` | none |
+| 94 | `launcher` | merged into `main` as `0fdbb53` | | |
 | 95 | `pr-handbook` | merged into `main` as `25a6b61` | | |
 
 ## Merged phases
@@ -58,7 +58,7 @@ None.
 | `orchestrator-handbook` | `7cd7034` (tip `2fbf619`) | `ff83115` | NOT VERIFIED on `6703d16` (scoped): cold reads AP (twice), AE, AN, I, Z; branch frozen, phase moved back |
 | `orchestrator-handbook` (post-merge fix) | `9eb7fac` (tip `455c545`) | `a3f4749` | VERIFIED on `9eb7fac` (scoped) |
 | `pr-handbook` | `ab06c83` (tip `c9e0f72`) | `27d6f55` | VERIFIED on `899ec3a` (scoped, no code change since `ab06c83`) |
-| `launcher` | `a51f246` (tip `117abdb`) | `890d46d` | running (scoped) |
+| `launcher` | `a51f246` (tip `117abdb`) | `890d46d` | VERIFIED on `3a21396` (scoped, no code change since `a51f246`) |
 
 ## Closed sessions
 
@@ -71,6 +71,7 @@ None.
 | `s-stack-phase-board` | removed, branch kept | 2026-11-22 | Done again at `53276c3`, merged; #86 and #92 merged into `main` |
 | `s-stack-phase-orchestrator-handbook` | removed, branch kept | 2026-11-22 | Done at `d110165`, merged; #93 merged into `main` |
 | `s-stack-phase-pr-handbook` | removed, branch kept | 2026-11-22 | Done at `9b141bd`, merged; #95 merged into `main` |
+| `s-stack-phase-launcher` | removed, branch kept | 2026-11-22 | Done at `72d5dda`, merged; #94 merged into `main` |
 | `s-stack-spec` | removed, branch kept | 2026-11-22 | gate-cost proposal at `d41db5b`, merged at `883083b` |
 
 ## Queued fix rounds
@@ -101,6 +102,7 @@ For `default-stack`: `docs/COMPATIBILITY.md` line 126 still says "The nine depen
 
 
 
+
 - 2026-11-22 11:34: a `launcher` verifier set `TMUX_TMPDIR` to a directory it had not created, so tmux fell back to the developer's real server and created session `$4` (name `4`, one window, a shell in a scratch repository). The kill was refused by the permission check. The developer was asked to run `tmux kill-session -t '$4'`. Launcher briefs now create `TMUX_TMPDIR` first and confirm tmux cannot connect there before creating any server.
 
 
@@ -119,7 +121,7 @@ The orchestrator's pane `%165` holds the whole column after the sidebar `%147`. 
 
 ## Deferred follow-ups for live phases
 
-- After the live phases merge, route the gate-cost text edits (`proposals/gate-cost.md`, section "Files this touches") to the owners in one integration round, together with the read-through fixes below. Roadmap files go to the spec writer's end-of-run update.
+- Gate-cost text and the read-through fixes went to `s-stack-phase-integration` on 2026-11-22. The roadmap section of `integration-fixes.md` goes to a fresh spec writer at the end of the run.
 - After every handbook phase is merged, have a fresh subagent do one cross-handbook read-through on `s-stack-package`: orchestrator, phase-session, verifier, reviewer, pr-creator, spec-writer and planner, plus the reference file. Collect the recorded handshake edge cases from each phase's evidence file. Route the fixes to the owning phases, or to the foundation round for the reference file.
   - Include: can `orchestrator.md` send the merged notice to a phase that has just entered PR (PR step 1) before `prs-open` lists its new pull request? Check against the re-merge guard and the notice's conditions. Raised by `phase-handbooks`' reviewers at `a1c95f1`.
   - Include: `references/status-and-messages.md` has no developer-commit row and splits the generated and dependency `fix-round` uses into two rows, unlike `orchestrator.md` at `0008162`. A suggestion applied while a round is unanswered is left to the PR creator's `DEVELOPER-COMMITS` report. Raised by `orchestrator-handbook`.

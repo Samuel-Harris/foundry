@@ -1,0 +1,38 @@
+name: Tag
+
+# Every commit on main passed CI on its pull request: the main ruleset requires
+# the "CI passed" check and an up-to-date branch, so the tested merge result is
+# the commit that lands.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tag:
+    name: Tag package versions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Tag and push new package versions
+        run: |
+          set -euo pipefail
+          git fetch --tags origin
+          tags="$(python3 scripts/versioning.py tag)"
+          if [[ -z "$tags" ]]; then
+            echo "No new package versions to tag."
+            exit 0
+          fi
+          refs=()
+          for tag in $tags; do
+            refs+=("refs/tags/${tag}")
+          done
+          printf 'Pushing %s\n' "${refs[@]}"
+          git push --atomic origin "${refs[@]}"

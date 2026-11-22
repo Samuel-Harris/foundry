@@ -216,7 +216,7 @@ apm install --target cursor,claude,copilot        # from the repository root
 
 `bash tests/structural/run-tier1.sh` runs the whole suite, including the scratch-consumer installs, the archive consumer and the tamper rejection, with every CLI call bounded by a hard timeout. `apm pack` refuses to bundle a package that declares a local `path:` dependency, so every package with sibling dependencies is pack-blocked from its committed manifest; the suite asserts that guardrail explicitly rather than skipping those packages.
 
-CI runs `.githooks/pre-commit` on the pull-request diff, or on the commits just pushed, and runs the p-stack script tests described in `packages/p-stack/README.md`. The Tier 1 suite above is what to run locally before relying on a package change. See `[tests/acceptance.md](tests/acceptance.md)` for its assertions and `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the manifest and CLI contracts.
+CI runs `.githooks/pre-commit` on the pull-request diff and runs the p-stack script tests described in `packages/p-stack/README.md`. The Tier 1 suite above is what to run locally before relying on a package change. See `[tests/acceptance.md](tests/acceptance.md)` for its assertions and `[docs/DEPENDENCY-CONTRACTS.md](docs/DEPENDENCY-CONTRACTS.md)` for the manifest and CLI contracts.
 
 ## Attributions
 

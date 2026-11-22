@@ -431,3 +431,5 @@ The developer chose to drop patch matching for developer commits. The held fix w
 The thirty-fifth Verify gate returned VERIFIED at `ff83115`. `s-stack-package` (`cb513f9`, `.foundry/` only) was merged. The phase moved to Review, which covers the commits since `73ba6d4`.
 
 The fifteenth Review gate returned CLEAR at `ff83115`, under the common-path bar. Its two findings depend on `pr-handbook`'s contracts and are recorded. Both verdicts cover `ff83115`. The phase moved to PR, and the PR creator is starting.
+
+`s-stack-package` (`a209d0e`, with #92 merged into `main` and `board` Done) was merged at `5b0ad24`. Outside `.foundry/` it touched only s-stack's `version:` line, which became `0.1.8`, and the regenerated lockfile, so under `launcher-r3` the code head stays `ff83115`. The PR creator started.

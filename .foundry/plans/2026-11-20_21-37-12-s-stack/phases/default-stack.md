@@ -15,10 +15,10 @@ Every other phase is Done, so `main` holds a complete s-stack package. Nothing i
 
 ## Commits and the pull requests
 
-Decision  (the orchestrator's answer to ) splits the work into two stacked draft pull requests.
+Decision `default-stack-d4` (the orchestrator's answer to `default-stack-r2`) splits the work into two stacked draft pull requests.
 
-- **Bottom, **, against . Only  and . APM 0.32.0 materialises a local dependency that has a declaring parent under , with an absolute anchor, and rewrites cross-skill links into that slot, so the deployed text and its  hashes in the lockfile depend on the checkout path. The relativiser maps each absolute slot to the slot of the relative anchor it already writes, in the deployed files' text, and replaces each affected hash with the hash of the mapped text. Rerunning it must change no committed lockfile on .
-- **Top, **, targeting the bottom branch. Every other commit below, the verifier's check file, and the regenerated  lockfile.
+- **Bottom, `fix(scripts): make relativised lockfiles independent of the checkout path`**, against `main`. Only `scripts/relativise_lockfiles.py` and `tests/versioning/test_relativise_lockfiles.py`. APM 0.32.0 materialises a local dependency that has a declaring parent under `apm_modules/_local/<sha256(anchored_local_path)[:12]>/`, with an absolute anchor, and rewrites cross-skill links into that slot, so the deployed text and its `sha256:` hashes in the lockfile depend on the checkout path. The relativiser maps each absolute slot to the slot of the relative anchor it already writes, in the deployed files' text, and replaces each affected hash with the hash of the mapped text. Rerunning it must change no committed lockfile on `main`.
+- **Top, `feat(default-stack): install s-stack`**, targeting the bottom branch. Every other commit below, the verifier's check file, and the regenerated `default-stack` lockfile.
 
 The original single pull request's commits:
 

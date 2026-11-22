@@ -353,6 +353,10 @@ The second adversary (Fable) then joined and returned CLEAR:
 
 Limits, none new: busybox `sh`; a `TMPDIR` with spaces or long enough to break the shebang line. On Linux a stray Enter closes the stub, while on macOS the copied `sleep` ignores it.
 
+## CI on pull request 94, head `29ce864`, passed
+
+Run https://github.com/Samuel-Harris/foundry/actions/runs/45033456425 passed every job, including `s-stack launcher tests` on the Ubuntu 26.04 runner image. The tag job is skipped on pull requests. Before this run, `main` gained #93 and #95 and moved s-stack to 0.1.11, so the pull request conflicted and no checks ran. I merged `origin/main` into `s-stack-launcher` with no force-push, and set version 0.1.12. The lockfile was unchanged under apm 0.32.0. The pre-commit hook and `versioning.py check origin/main` passed, and 130 tests passed on the merge.
+
 ## Verifier results moved from the check file
 
 The run decision that verifiers do not commit results into `checks/<phase>.md` moved these records here unchanged, apart from their heading level.

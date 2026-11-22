@@ -681,8 +681,19 @@ The board template now says "a draft or open pull request" in its `needs_update`
 | The developer-commit check marks the PR creator's own carried commits `+`. A phase commit regenerates the lockfile in the commit that makes it stale (`phase-session.md` line 47). The carried copy holds only the hand-written paths, and a separate regenerate commit follows it, so the patch ids differ. The carried commit is not reachable from the default branch and touches hand-written files, so neither drop rule removes it. This sends a false "Feedback on a pull request" round after every carried fix, and after a stack parent merges and the forge rebases the child. | Opus, Fable | On real branches, `git cherry -v s-stack-phase-board origin/s-stack-board-follow-up origin/main` marks the carried copies of `73251d3` and `5fc142f` `+`. The patch ids match once `apm.lock.yaml` is excluded. Scratch walks and three cold reads give the same result. Two readers avoided the round only by departing from line 148. |
 
 Each carried commit ends with `(cherry picked from commit <sha>)`, which names its phase commit. A developer's commit has no such line. The `pr-handbook` branch's `references/pr-commands.md` line 46 matches carried commits by that line. Both walks otherwise held:
+
 - suggestions before and after "Update branch", including on stacked pull requests;
 - refresh merges and regenerate commits;
 - a suggestion the phase has taken;
 - the checked-head start;
 - "every pull request of the phase".
+
+## Review 13 fix at `24b8981`
+
+`orchestrator.md` line 148 now drops each commit whose message ends with `(cherry picked from commit <sha>)` naming a commit on the phase branch. It also removes the false claim that the phase branch holds no equivalent change. The phase session applied the whole rule to three cases:
+
+- Pull request 92's real branch. Both carried copies are dropped. A regenerate commit is left, which touches only `apm.lock.yaml` and `apm.yml`'s version line, so the generated-path rule drops it.
+- The Opus adversary's ordinary fix round. The carried commit and the generated-only commit are both dropped.
+- The stacked child after its parent's squash merge and the forge rebase. The carried commit and the generated-only commit are both dropped.
+
+The line count is still 185.

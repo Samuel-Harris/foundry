@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-22T02:26:37Z"
+state: "Verify"
+changed_at: "2026-11-22T02:28:24Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "9c1e21fa51e5829bc7402596bea8e863bcd7ab2d"
+code_head: "24b8981f9215b5baec95d55cd1cc286fda359510"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -399,3 +399,5 @@ The Verify 32 fix is at `8ad18a1`. `s-stack-package` (`410ae2e`, the `phase-hand
 The thirty-third Verify gate returned VERIFIED at `9c1e21f`. `s-stack-package` (`7338e85`, the `board` follow-up) was merged at `156592d`, and under `launcher-r3` the code head is unchanged. The phase moved to Review, which covers the commits since `8fff7f3`.
 
 The thirteenth Review gate returned SIGNIFICANT at `9c1e21f`, under the common-path bar. The phase moved back to Implement.
+
+The Review 13 fix is at `24b8981`, with the regenerated lockfile at `8c42572`. `s-stack-package` (`8952f36`, `.foundry/` only) was merged, and the phase moved to Verify at code head `24b8981`.

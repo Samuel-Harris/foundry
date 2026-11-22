@@ -92,3 +92,31 @@ Expected answer:
 1. Only `Cold read 3` of `checks/foundation.md`, exactly as written, compared with its expected result. No other check of `foundation.md` runs, and every other check file, `board.md` and `launcher.md`, is reported with the brief's reason, not run. An answer that runs every Rerun check fails this point.
 2. The full run, every Rerun check in name order, is for the end of the feature and for when the developer asks.
 3. No. A Rerun check may report PENDING when what it needs is absent on the checked-out branch, and PENDING never fails the verdict. It is named beneath the verdict.
+
+### Cold read 7. A frozen phase re-merges at the code head that failed
+
+Files: the reference and `orchestrator.md`.
+
+Prompt: "Read only these two files and nothing else, not even files they link to. Answer from them and the scenario alone. You are the orchestrator of feature `acme-widgets`, default branch `trunk`. At 10:00 you merged `acme-widgets-phase-beta` at code head `b2b2…`, its post-merge check `Cold read 3` failed, and you recorded that result and its time, 10:00, in the tracker's 'Merged phases' table and sent `beta` a `move-back` to Implement naming the check. The orchestrator branch is frozen. `beta`'s status header lists pull request 51. (1) In a later tick, `beta`'s newest verdicts are verify `VERIFIED` at `b2b2…` given at 09:30 and review `CLEAR` at `b2b2…` given at 09:40, and its last `prs-open` arrived at 09:50. Do you merge `beta`? Do you merge any other phase? (2) In a later tick, `beta` has merged the orchestrator branch cleanly and made no code change, so its code head is still `b2b2…`. Its newest verdicts are now verify `VERIFIED` at `b2b2…` given at 11:00 and review `WAIVED` at `b2b2…` given at 11:10, and the newest earlier review verdict that is not `WAIVED` is the `CLEAR` given at 09:40. It sent `prs-open` at 11:15. Do you merge `beta`, given that you have already merged `b2b2…` once? (3) If you merge it, which post-merge check runs, given that the merge's first-parent diff changes only files under `.foundry/`? (4) Suppose instead that in (2) `beta` had sent no `prs-open` since the failed check. What then?"
+
+Expected answer:
+
+1. No. Both newest verdicts were given before the failed check at 10:00, by their `at` times and the tracker's time, and the last `prs-open` also came before it, so `beta` does not merge, although the plain verdict rule holds. No other phase merges while the branch is frozen. An answer that merges `beta` here fails this point.
+2. Yes. Both newest verdicts were given after the failed check, the review waiver counts because the newest earlier review verdict that is not `WAIVED` is `CLEAR`, both name the current code head, and `beta` has sent `prs-open` since. Re-merging the frozen phase is the exception to the rule against merging a code head already merged, and it holds even though the verdicts name the code head that failed, because a clean merge of the orchestrator branch does not move it. An answer that refuses because `b2b2…` was already merged, or because the code head did not change, fails this point.
+3. The check that failed, `Cold read 3`, runs, because while the branch is frozen it runs on every merge, whatever the merge changes. The `.foundry/`-only rule does not excuse it, and no waiver applies. If it passes the branch is no longer frozen; if it fails, the branch stays frozen and `beta` gets another `move-back`. An answer under which no check runs fails this point.
+4. `beta` does not merge yet, because it has sent no `prs-open` since the failed check.
+
+### Cold read 8. Which small changes a verifier may waive
+
+Files: the reference and `verifier.md`.
+
+Prompt: "Read only these two files and nothing else, not even files they link to. Answer from them and the scenario alone. You are the verifier for phase `widgets`. Your brief says you may waive. Each case below is the whole of your scope, and in each no existing check or probe exercises the changed line. For each, may you return `WAIVED`, and why? (1) The default request timeout in `src/widgets/client.py` changes from 30 to 60 seconds. (2) A function's return annotation is tightened from `Any` to `str`, with no other change. (3) A log call's level is raised from `debug` to `info`, with the same message. (4) A condition `if retries > 3:` becomes `if retries >= 3:`. (5) Only `packages/widgets/lock.json` changed, regenerated from an unchanged manifest. (6) In case (1), if you then find that nothing in your environment can run the client to observe the timeout, what is your verdict?"
+
+Expected answer:
+
+1. No. A change to a default is a change to logic, which is never waivable however small, even when no check exercises it. The verifier verifies it. An answer that waives it fails this point.
+2. Yes. Tightening a type annotation is a small, isolated change whose whole effect the verifier can state from the diff, that no check exercises and that nothing acts on differently.
+3. Yes, for the same reason: raising a log level is one of the listed examples.
+4. No. A changed condition is a change to logic or control flow, never waivable. An answer that waives it fails this point.
+5. Yes. A diff of generated files only is waivable.
+6. INCONCLUSIVE, not `WAIVED`, because something could observe the change but no check can run here. INCONCLUSIVE is not a pass.

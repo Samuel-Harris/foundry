@@ -223,7 +223,7 @@ for target in "${target_list[@]}"; do
   done
   failures=$((failures + inventory_missing))
   if (( inventory_missing == 0 )); then
-    echo "  [+] $target deployed every skill, agent and instruction file for the eleven default-stack packages"
+    echo "  [+] $target deployed every skill, agent and instruction file for the $(wc -w <<<"$DEFAULT_STACK_DEPLOYED" | tr -d ' ') default-stack packages"
   fi
 
   retired_hits=0

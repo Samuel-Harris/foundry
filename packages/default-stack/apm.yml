@@ -15,10 +15,10 @@ dependencies:
     - path: ../execution
     - path: ../git-diff
     - path: ../p-stack
-    - path: ../s-stack
     - path: ../pr
     - path: ../repo-maintenance
     - path: ../review
+    - path: ../s-stack
     - path: ../skill-creation
 scripts:
   check: apm audit --ci

@@ -15,7 +15,7 @@ dependencies:
     - path: ../execution
     - path: ../git-diff
     - path: ../p-stack
-    - path: ../planning
+    - path: ../s-stack
     - path: ../pr
     - path: ../repo-maintenance
     - path: ../review

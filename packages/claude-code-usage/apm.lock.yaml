@@ -1,0 +1,91 @@
+lockfile_version: '1'
+dependencies: []
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/claude-code-cost-review
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/claude-code-cost-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4c0fa369739f19ad6c89d5f15ee05db63c933c4d066fad0304c00b7bb6296a41
+- kind: project-relative
+  target: claude
+  value: .claude/skills/claude-code-cost-review/references/cost-levers.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c22da0845aeea234667bbaa6dcb636829e6ceb5476ffeb00e171ce173c8576ad
+- kind: project-relative
+  target: claude
+  value: .claude/skills/claude-code-cost-review/scripts/summarise_sessions.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ca6f925c8a9b6f4516decba0fd5e19d0e880ed9b34f7ce5a640a2b2f4df6d5c5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/claude-code-cost-review
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/claude-code-cost-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:4c0fa369739f19ad6c89d5f15ee05db63c933c4d066fad0304c00b7bb6296a41
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/claude-code-cost-review/references/cost-levers.md
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:c22da0845aeea234667bbaa6dcb636829e6ceb5476ffeb00e171ce173c8576ad
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/claude-code-cost-review/scripts/summarise_sessions.py
+  runtime: null
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: sha256:ca6f925c8a9b6f4516decba0fd5e19d0e880ed9b34f7ce5a640a2b2f4df6d5c5
+local_deployed_files:
+- .agents/skills/claude-code-cost-review
+- .agents/skills/claude-code-cost-review/SKILL.md
+- .agents/skills/claude-code-cost-review/references/cost-levers.md
+- .agents/skills/claude-code-cost-review/scripts/summarise_sessions.py
+- .claude/skills/claude-code-cost-review
+- .claude/skills/claude-code-cost-review/SKILL.md
+- .claude/skills/claude-code-cost-review/references/cost-levers.md
+- .claude/skills/claude-code-cost-review/scripts/summarise_sessions.py
+local_deployed_file_hashes:
+  .agents/skills/claude-code-cost-review/SKILL.md: sha256:4c0fa369739f19ad6c89d5f15ee05db63c933c4d066fad0304c00b7bb6296a41
+  .agents/skills/claude-code-cost-review/references/cost-levers.md: sha256:c22da0845aeea234667bbaa6dcb636829e6ceb5476ffeb00e171ce173c8576ad
+  .agents/skills/claude-code-cost-review/scripts/summarise_sessions.py: sha256:ca6f925c8a9b6f4516decba0fd5e19d0e880ed9b34f7ce5a640a2b2f4df6d5c5
+  .claude/skills/claude-code-cost-review/SKILL.md: sha256:4c0fa369739f19ad6c89d5f15ee05db63c933c4d066fad0304c00b7bb6296a41
+  .claude/skills/claude-code-cost-review/references/cost-levers.md: sha256:c22da0845aeea234667bbaa6dcb636829e6ceb5476ffeb00e171ce173c8576ad
+  .claude/skills/claude-code-cost-review/scripts/summarise_sessions.py: sha256:ca6f925c8a9b6f4516decba0fd5e19d0e880ed9b34f7ce5a640a2b2f4df6d5c5

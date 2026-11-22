@@ -8,7 +8,7 @@ Foundry is a collection of 84 agent skills, 5 subagents and 4 instructions distr
 
 ## What this is
 
-This repository was previously a Cursor plugin marketplace. It is now an APM monorepo of 20 independently installable packages. Every primitive has a single target-neutral source, and APM handles the per-target directory and frontmatter translation at install time — there are no per-target variants to keep in sync.
+This repository was previously a Cursor plugin marketplace. It is now an APM monorepo of 21 independently installable packages. Every primitive has a single target-neutral source, and APM handles the per-target directory and frontmatter translation at install time — there are no per-target variants to keep in sync.
 
 ## Prerequisites
 
@@ -56,6 +56,7 @@ Each package has its own version and its own tags, named `<package>--v<version>`
 
 | Package            | Contents                                                                                                                                                                  | Purpose                                                                                     |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `claude-code-usage` | skills: `claude-code-cost-review` | Analyse Claude Code spend from local session files, and rank ways to reduce it. |
 | `coding-style`     | instructions: `compatibility-surface-gate`, `python-rules`, `software-engineering-rules`                                                                                  | Core engineering rules, compatibility guardrails and Python style for agent-written code.   |
 | `cursor-usage`     | skills: `cursor-cost-review`                                                                                                                                              | Analyse Cursor spend from a usage export and local transcripts, and rank ways to reduce it. |
 | `data-visualisation` | skills: `data-visualisation` | Munzner's *Visualization Analysis and Design* as a page-cited reference for choosing, coding, critiquing and designing visualisations. |
@@ -83,6 +84,7 @@ Each package declares its sibling dependencies in `apm.yml`, so installing one p
 
 | Skill                                | Package            | Trigger                                                                                                                                                           |
 | ------------------------------------ | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `claude-code-cost-review` | `claude-code-usage` | Analyse local Claude Code session files to find where Claude Code spend goes and which changes would cut it without lowering engineering quality. Use when the u… |
 | `cursor-cost-review`                 | `cursor-usage`     | Analyse an exported Cursor usage-events CSV together with local agent transcripts to find where Cursor spend goes and which changes would cut it without lo…      |
 | `data-visualisation` | `data-visualisation` | Munzner's Visualization Analysis and Design as a navigable, page-cited reference. Load it when choosing a chart or visualisation idiom for a dataset and qu… |
 | `implement-linear-ticket`            | `execution`        | Take a Linear ticket to a merge-ready draft GitHub pull request. Resolve the issue, branch from origin/$BASE, plan, implement, run quick-review, open a draft PR,…     |

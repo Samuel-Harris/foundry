@@ -1,10 +1,10 @@
 ---
 phase: "board"
 state: "Done"
-changed_at: "2026-11-21T23:15:33Z"
+changed_at: "2026-11-22T11:15:18Z"
 session: "s-stack-phase-board"
 branch: "s-stack-phase-board"
-code_head: "afd3f270ba9c2ddc689b0afe12927591941ccc7f"
+code_head: "284ad88a3929192851895e2650198266bcddca75"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -57,9 +57,24 @@ verdicts:
     code_head: "afd3f270ba9c2ddc689b0afe12927591941ccc7f"
     at: "2026-11-21T21:41:33Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "284ad88a3929192851895e2650198266bcddca75"
+    at: "2026-11-22T01:01:30Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "284ad88a3929192851895e2650198266bcddca75"
+    at: "2026-11-22T01:06:43Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/board-evidence.md"
 pull_requests:
   - number: 86
     branch: "s-stack-board"
+    base: "main"
+    depends_on: []
+    stacked: false
+  - number: 92
+    branch: "s-stack-board-follow-up"
     base: "main"
     depends_on: []
     stacked: false
@@ -93,6 +108,10 @@ decisions:
     decision: "Instruction from the orchestrator, replacing board-d6 from the fifth Review gate on: only a real defect in the template is significant. Every check gap, however misleading its mutant, goes under Check hardening backlog in the evidence file, and the phase goes to PR. The twelve gaps of the fourth review are still closed in the current round."
     door: "two-way"
     at: "2026-11-21T20:59:46Z"
+  - id: "board-d8"
+    decision: "Follow-up round from the orchestrator after foundation's follow-ups (#88, #89) merged: remove the retired restack need kind from the board template and its schema comment, and make the schema comment's needs_update rule match orchestrator.md, which also requires the heads of a pull request's open dependencies. Then Verify and Review once under the minor-findings rule, and open a new draft pull request."
+    door: "two-way"
+    at: "2026-11-22T00:37:11Z"
 ---
 
 # Phase `board` status
@@ -128,3 +147,15 @@ The fifth Review gate returned CLEAR at `afd3f27` under `board-d7`: neither adve
 Draft pull request #86 (`s-stack-board` into `main`, head `7f233e4`) is open, with no open dependency. It replays the 14 own commits without lockfile hunks or `.foundry/`, and ends with `chore(s-stack): regenerate generated files`, which raises s-stack from 0.1.2 to 0.1.3 and regenerates its lockfile. The equality proof, in the form of Experiment 7, printed EQUAL against the phase branch, with an empty regenerate check and no `.foundry/` on the branch. The phase session confirmed that both hand-written files on the branch are byte-identical to `afd3f27`. The pull request carries 1,792 hand-written lines plus 22 generated lockfile lines. Its CI run https://github.com/Samuel-Harris/foundry/actions/runs/44953157241 passed: Pre-commit checks and Package versions pass, and the path-filtered jobs skipped.
 
 Pull request #86 merged into `main` as `51f334e`. The code head `afd3f27` is merged into `s-stack-package` (`a606589`), and the orchestrator's post-merge check returned VERIFIED on `3ce7d34`. Every pull request of the phase is merged, so the phase is Done.
+
+The orchestrator opened a two-item follow-up round (`board-d8`), so the phase moved from Done back to Implement. The worktree was recreated on the phase branch at `c7dcf1a`.
+
+Follow-up round: `s-stack-package` was merged under C7 at `a60b107`, cleanly, bringing s-stack 0.1.5. `73251d3` removes the restack need kind and aligns the `needs_update` rule with `orchestrator.md`, as it stands on `s-stack-phase-orchestrator-handbook`, because that file is not yet on `s-stack-package`. `quick-review` (bug and quality) found no significant defect in the code. Both reviewers flagged that "open" collides with the schema's `open` state, which would leave drafts out. `5fc142f` names draft and open pull requests, says the flag is set and cleared, and says required checks come from the repository. The Verify gate is starting for `5fc142f`.
+
+`s-stack-package` was merged again at `f674585`, touching no board path. The verifier updated `checks/board.md` for the removed kind at `284ad88`, the new code head, and returned VERIFIED. The Review gate is starting over `afd3f27..284ad88`.
+
+The follow-up Review gate returned CLEAR at `284ad88`: neither adversary found a defect. Both verdicts cover `284ad88`. The PR creator is starting a new draft pull request against `main`.
+
+Draft pull request #92 (`s-stack-board-follow-up` into `main`, head `f9aa70c`) is open, with no open dependency. It carries `73251d3`, `5fc142f` and `284ad88` without lockfile hunks, then a regenerate commit that raises s-stack from 0.1.7 to 0.1.8. At that moment no open pull request changed `packages/s-stack/apm.yml`. The PR creator's proof printed EQUAL against the local `s-stack-package`. The phase session confirmed that both hand-written files are byte-identical to `284ad88`, and that the branch holds no `.foundry/`. The pull request carries 37 hand-written lines. Tier 1 and the hook passed locally, and CI run https://github.com/Samuel-Harris/foundry/actions/runs/44972350601 passed.
+
+Pull request #92 merged into `main` as `92a91f7`, and #86 had merged as `51f334e`. The code head `284ad88` is merged into `s-stack-package` (`3940c5b`), and the orchestrator's post-merge check returned VERIFIED on `fe43e00`. Every pull request of the phase is merged, so the phase is Done.

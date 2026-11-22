@@ -288,3 +288,85 @@ The phase session checked independently. The four files #85 adds over `origin/ma
 ## Done
 
 #85 merged into main as `6f42b1c` at 18:47:47 UTC on 2026-11-21. GitHub confirms the merge. The orchestrator reports code head `a1c95f1` merged into `s-stack-package` at `986be95`, with its post-merge check VERIFIED on `ce086bb`. The phase is Done.
+
+## Verify: NOT VERIFIED at `5d30a593661581bad342e74e6d9ced3f1289ee3c`
+
+Follow-up round of 2026-11-22. A fresh verifier ran the whole verification skill between 00:21 and 00:26 UTC, at HEAD `1816fc3`, and made no commit.
+
+Passed:
+
+- primitives (`94 primitives valid`) and the root manifest (`12 listed, 19 reached`);
+- markdownlint (13 files, 0 errors);
+- line budgets (phase-session 136, verifier 78, reviewer 41 of 200);
+- package isolation;
+- Tier 1 (`all Tier 1 structural checks passed across 20 packages`);
+- the rendered-board check (50 `ok`);
+- `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads;
+- the private-name search (0 matches).
+
+Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+
+The one-off cold reads of changes a, d, e and f passed. Three failed on consistency:
+
+- b: the `fix-round` row says every fix round re-derives bases with a PR creator, while a conflict round whose commit the branch already holds changes nothing.
+- c: the "pull request merged" round sends `prs-open` unconditionally, then says what to do after a `STOP`. Because `prs-open` triggers the orchestrator's re-merge, sending it after a `STOP` could admit code that no pull request holds.
+- g: the reference file's `fix-round` row omits commits the developer made, which `phase-session.md`'s feedback round now carries. The file belongs to `foundation`.
+
+## Verify: NOT VERIFIED at `2de88c241dff05eee336f0494c7e7a57bc1c54fd`
+
+A fresh verifier ran the whole verification skill between 00:28 and 00:32 UTC on 2026-11-22, at HEAD `58939af`, and made no commit.
+
+Passed: primitives, root manifest, markdownlint (13 files, 0 errors), line budgets, package isolation, Tier 1 (`all Tier 1 structural checks passed across 20 packages`), the board check (50 `ok`), every Rerun cold read of the four check files, the C2 check, and the private-name search (0 matches).
+
+Of the one-off cold reads, the delegate and move-back case passed. Three cases failed on consistency, although every reader took the right actions:
+
+- The PR creator's `DEVELOPER-COMMITS` report was routed to a feedback round in PR step 2, but PR step 3 ("unless a `STOP`") and the "pull request merged" round sent `prs-open` straight away.
+- The feedback round's step 3 said `prs-open` answers the round, with no exception for a `STOP`.
+- "In Verify, Review, PR or Done, an instruction or a message that asks for a change to the code moves the phase back to Implement first" covered a conflict round, which says for itself when to move back.
+
+## Verify: VERIFIED at `148f7450311affebc0961feb6b509d45f3481bf0`
+
+A fresh verifier ran the whole verification skill and this phase's `## Evidence` check on 2026-11-22 between 00:35 and 00:39 UTC, at HEAD `507ddc1`. It made no commit.
+
+- Passed: primitives (`94 primitives valid`), root manifest (`12 listed, 19 reached`), markdownlint (13 files, 0 errors), line budgets (phase-session 139, verifier 78, reviewer 41 of 200), package isolation, Tier 1 00:35:18 to 00:37:56 (`all Tier 1 structural checks passed across 20 packages`), the board check (50 `ok`), `foundation.md`'s three cold reads and C2 check, all four phase-handbooks cold reads, and both spec-planner-handbooks cold reads.
+- Pending, not failing: the `orchestrator.md` and `pr-creator.md` routes, and the launcher tests.
+- Private-name search at 00:36:47: 0 matches.
+- Four one-off cold reads, all passing with no contradiction:
+  - a conflict round whose commit the branch already holds changes nothing and resends `prs-open`;
+  - a `STOP` in a "pull request merged" round, and one after the gates in a feedback round, means no `prs-open`, a decision request, and staying in state;
+  - `DEVELOPER-COMMITS` runs the feedback round with `git cherry-pick -x` and both gates before `prs-open`;
+  - a delegate's work lands by cherry-pick, and an instruction in Review moves the phase back to Implement first.
+- Gaps the readers noted, none contradicting a required point:
+  - what answers a fix round while a `STOP` decision request is open;
+  - an `answer` that needs a code change in PR;
+  - whether the feedback round merges the orchestrator branch before Verify;
+  - a no-op conflict round leaves any conflict on a pull request branch to `pr-creator.md`;
+  - the reference file's `fix-round` row lags, which belongs to `foundation`.
+
+## Review: CLEAR at `148f7450311affebc0961feb6b509d45f3481bf0`
+
+The review covered the phase diff, `git diff s-stack-package...HEAD`, which changes only `phase-session.md` through `5d30a59`, `2de88c2` and `148f745`. Two reviewers, Opus and Fable, each in a detached worktree at `4875436`, ran ten cold reads and two git probe repositories between them. The last review was CLEAR, so no probes were given. Neither found anything significant under the minor-findings rule. Every git probe of the code head, the cherry-pick rule and the merge rule behaved as the handbook says.
+
+Not significant, recorded only:
+
+- The feedback round does not say that a developer commit, once taken with `git cherry-pick -x`, is already on its pull request branch. A cold reader expected an empty cherry-pick, or a repeated `DEVELOPER-COMMITS`. This is not fixed, because the run decision on `pr-handbook`'s overlay refinements has the PR creator identify commits by their `cherry-pick -x` trailer, and `pr-creator.md` says the phase holding the change makes its proof EQUAL.
+- "Each commit the developer made" includes no rule for a GitHub "Update branch" merge, which `git cherry-pick` rejects without `-m`. `pr-creator.md` and the orchestrator's rule both exclude such merges, and readers skipped or asked.
+- A developer commit that also edits another phase's file has no rule. Not a common path.
+- A no-op conflict round that arrives while the phase is in Implement would send `prs-open` without verdicts for the code head. Two rounds must overlap, and the orchestrator's merge rule would refuse.
+- An `answer` asking for a code change has no stated move back (readers used the Verdicts rule); after a `STOP` is answered, nothing says how the PR creator learns the decision; and fix rounds do not restate the orchestrator-branch merge or `quick-review`.
+
+## PR: draft pull request 91 for code head `148f7450311affebc0961feb6b509d45f3481bf0`
+
+https://github.com/Samuel-Harris/foundry/pull/91 is a draft on branch `s-stack-phase-handbooks-follow-up` at `f7ae100`, with base `main`, `depends_on: []` and no stack.
+
+- #90 merged into `main` while the PR creator worked, so it rebuilt the branch from the new `origin/main`.
+- It carried `5d30a59`, `2de88c2` and `148f745` with `cherry-pick -x` trailers and no lockfile hunks.
+- The regenerate commit raises s-stack from 0.1.6 to 0.1.7. No other open pull request carries an s-stack version.
+- `pr.sh prove`, from the bash block in `pr-commands.md` on `s-stack-phase-pr-handbook`, printed `EQUAL` once #85's spec named its merged dependencies.
+- The hook and `versioning.py check origin/main` passed. GitHub reports the pull request MERGEABLE.
+
+The phase session checked independently. Against `main`, #91 changes only `phase-session.md` (identical to the phase tip), the lockfile and the `version:` line. The branch holds no file under `.foundry/` and contains `origin/main`. It adds 26 hand-written lines.
+
+## Done, after the follow-up round
+
+#91 merged into main as `d6187b5` at 01:04:52 UTC on 2026-11-22. GitHub confirms the merge, and `148f745` is an ancestor of `s-stack-package`. The orchestrator reports the merge at `4585528`, with its post-merge check VERIFIED on `7e0b76d`. The phase is Done.

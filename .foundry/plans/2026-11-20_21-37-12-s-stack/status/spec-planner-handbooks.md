@@ -1,10 +1,10 @@
 ---
 phase: "spec-planner-handbooks"
-state: "PR"
-changed_at: "2026-11-21T23:36:16Z"
+state: "Done"
+changed_at: "2026-11-22T01:02:40Z"
 session: "s-stack-phase-spec-planner-handbooks"
 branch: "s-stack-phase-spec-planner-handbooks"
-code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
+code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -62,6 +62,16 @@ verdicts:
     code_head: "47f792f2110fc8b49158a7305c703ec5de9f6c91"
     at: "2026-11-21T23:36:16Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "verify"
+    result: "VERIFIED"
+    code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
+    at: "2026-11-22T00:25:00Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
+  - gate: "review"
+    result: "CLEAR"
+    code_head: "775a30ac0ed9bf848197cd5b4e9499dc9266266a"
+    at: "2026-11-22T00:29:00Z"
+    evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/spec-planner-handbooks-evidence.md"
 pull_requests:
   - number: 84
     branch: "s-stack-spec-planner-handbooks"
@@ -70,6 +80,11 @@ pull_requests:
     stacked: false
   - number: 87
     branch: "s-stack-spec-planner-port-rule"
+    base: "main"
+    depends_on: []
+    stacked: false
+  - number: 90
+    branch: "s-stack-spec-planner-owner-pointers"
     base: "main"
     depends_on: []
     stacked: false
@@ -99,8 +114,12 @@ decisions:
     decision: "Answer to spec-planner-handbooks-r1, option A, from the orchestrator. The follow-up pull request ships on direct-comparison evidence: its tree equals main with both files from 47f792f plus generated lines. pr-handbook's proof cannot account for #84, which predates its cherry-pick trailers."
     door: "two-way"
     at: "2026-11-21T23:43:47Z"
+  - id: "spec-planner-handbooks-d7"
+    decision: "Answer to spec-planner-handbooks-r2, option A, from the orchestrator. The second follow-up pull request ships on direct-comparison evidence, as r1 did: tree 2097cff equals main plus the three files from 775a30a plus generated lines."
+    door: "two-way"
+    at: "2026-11-22T00:35:48Z"
 ---
 
 # Phase `spec-planner-handbooks` status
 
-Follow-up round. Both gates passed for `47f792f`. The evidence for the pull request branch `s-stack-spec-planner-port-rule` (`5da7f5d`) is recorded under option A of `spec-planner-handbooks-r1`, and a PR creator is pushing it and opening the draft pull request.
+Done. Every pull request of the phase has merged into `main`: #84 as `0531411`, #87 as `b440889` and #90 as `bce824b`. Code head `775a30a` is merged into `s-stack-package` at `5c411ce`, and its post-merge check passed.

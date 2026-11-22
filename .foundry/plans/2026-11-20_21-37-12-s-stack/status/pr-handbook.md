@@ -5,7 +5,7 @@ changed_at: "2026-11-22T01:12:07Z"
 session: "s-stack-phase-pr-handbook"
 branch: "s-stack-phase-pr-handbook"
 code_head: "0305089fca6946a7631acacd073d7206a0d3656f"
-waits_for: "pr-handbook-r4, whether developer rewrites of pull request branches are in scope"
+waits_for: null
 verdicts:
   - gate: "verify"
     result: "NOT VERIFIED"
@@ -98,14 +98,7 @@ verdicts:
     at: "2026-11-22T01:12:07Z"
     evidence: ".foundry/plans/2026-11-20_21-37-12-s-stack/status/pr-handbook-evidence.md"
 pull_requests: []
-requests:
-  - id: "pr-handbook-r4"
-    question: "Should the PR creator handle a developer rewriting a pull request branch (amending or squashing its commits and force-pushing, or GitHub's Update with rebase), which today can revert the developer's change with a false EQUAL?"
-    options: ["A. Out of scope, documented. pr-creator.md states the precondition that nobody rewrites a pull request branch's existing commits: the developer commits on top, merges with Update branch, or comments. A rewrite is listed as an unhandled history with no detection, the way a revert on the default branch is. The phase session tells the developer in the pull request description.", "B. Detect it. The phase session records each pull request's pushed head in the status file, and the round gives it to the script. A head on origin that does not descend from the recorded head and whose tree differs from it is a developer rewrite, reported in DEVELOPER-COMMITS with nothing pushed. GitHub's own rebase of a child after its parent merges keeps the tree, so it passes. This changes the status header (C2) and the round's inputs.", "C. Detect it through GitHub's pull request timeline, whose head_ref_force_pushed events give the before and after heads, with read-only gh api calls. It needs no new state, but it ties the script to GitHub's API."]
-    recommendation: "A"
-    door: "two-way"
-    waiting_work: "The fix for the sixteenth Verify's finding, then Verify and Review."
-    since: "2026-11-22T01:12:07Z"
+requests: []
 decisions:
   - id: "pr-handbook-d1"
     decision: "The PR creator reads ../summarise-pr/SKILL.md relative to the sam-mode skill directory and follows it, because summarise-pr sets disable-model-invocation: true."
@@ -171,6 +164,10 @@ decisions:
     decision: "From the orchestrator, from a real run: the proof accepts a phase path whose version in the top open pull request already equals the phase tip's, without needing older phase commits' trailers, as after a pull request built before trailers was squash-merged."
     door: "two-way"
     at: "2026-11-21T23:57:04Z"
+  - id: "pr-handbook-d17"
+    decision: "Answer to pr-handbook-r4 from the orchestrator, option A: pr-creator.md states the precondition that nobody rewrites a pull request branch's existing commits, lists a rewrite as an undetected history, and has each pull request description say so. B and C are not built. Also from the orchestrator, from this round on: a verifier or reviewer finding is significant only if it breaks the common path. That path is creating, refreshing and restacking pull requests, carrying fixes, developer commits added on top or merged through Update branch, review comments and failed checks, and merged dependencies and pull requests. A defect that could push a wrong tree or lose a developer's change on that path stays significant. Any other history is documented as a precondition or a STOP and recorded in the evidence file."
+    door: "two-way"
+    at: "2026-11-22T02:33:06Z"
 ---
 
 # Phase `pr-handbook` status

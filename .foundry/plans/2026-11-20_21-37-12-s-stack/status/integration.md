@@ -1,10 +1,10 @@
 ---
 phase: "integration"
-state: "Verify"
-changed_at: "2026-11-22T15:05:43Z"
+state: "Review"
+changed_at: "2026-11-22T15:29:36Z"
 session: "s-stack-phase-integration"
 branch: "s-stack-phase-integration"
-code_head: "d8a1a63cda56bbf3e51d46bcc3477c69b9f70a06"
+code_head: "faa5b867b5747f43174ad66e5260f3347039c72d"
 waits_for: null
 verdicts:
   - gate: "verify"

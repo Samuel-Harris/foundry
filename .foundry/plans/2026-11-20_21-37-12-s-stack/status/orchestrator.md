@@ -41,6 +41,8 @@ None.
 | 94 | `launcher` | merged into `main` as `0fdbb53` | | |
 | 95 | `pr-handbook` | merged into `main` as `25a6b61` | | |
 | 96 | `integration` | merged into `main` as `7747021` | | |
+| 97 | `default-stack` | `s-stack-relativise-lockfiles` | `main` | none |
+| 98 | `default-stack` | `s-stack-default-stack` | `s-stack-relativise-lockfiles` | 97 |
 
 ## Merged phases
 
@@ -61,6 +63,7 @@ None.
 | `pr-handbook` | `ab06c83` (tip `c9e0f72`) | `27d6f55` | VERIFIED on `899ec3a` (scoped, no code change since `ab06c83`) |
 | `launcher` | `a51f246` (tip `117abdb`) | `890d46d` | VERIFIED on `3a21396` (scoped, no code change since `a51f246`) |
 | `integration` | `9f6c1c0` (tip `d8e5fe7`) | `90f855a` | VERIFIED on `e407673` (74 cold reads, 8 scripts; no code change since `9f6c1c0`) |
+| `default-stack` | `1983ab2` (tip `fef611d`) | `acaba0e` | final full run (gate-cost rule 9) running |
 
 ## Closed sessions
 

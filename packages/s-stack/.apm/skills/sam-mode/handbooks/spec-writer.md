@@ -33,25 +33,18 @@ The directory is `.foundry/feature-roadmaps/<id>/`, where `<id>` is `<date-time>
 4. **Check the repository's visibility** before your first commit, for example with `gh repo view --json visibility`. In a public repository, keep the names of private repositories, their features and their pages out of every file. Write placeholders instead.
 5. **Write the roadmap.** Commit it on the orchestrator branch as each part is written, so a restart loses at most the conversation since your last commit.
 6. **Review.** Tell the developer the roadmap is ready, with the path to its `README.md`, and make the changes they ask for.
-7. **Start the orchestrator** only when the developer explicitly approves the roadmap. Commit first. Then run these two commands from the worktree root, in this main session and never in a subagent, because a subagent can lack the pane:
-
-   ```bash
-   <this skill's directory>/scripts/launch.sh --print-window
-   <this skill's directory>/scripts/launch.sh --feature <feature> --role orchestrator --window <window id>
-   ```
-
-   The first prints `window=<window id>` for your own pane. Pass that value to the second. The launcher writes the orchestrator's first prompt, so hand the orchestrator nothing else. If either command fails, report its exit code and standard error to the developer and stop.
-8. **Stop.** Report the second command's output line to the developer and do no further work. The feature worktree then has one live session, and the developer can close your pane.
+7. **Start the orchestrator** only when the developer explicitly approves the roadmap. Commit first. Then start it with role `orchestrator` as `SKILL.md`'s "Starting a session" says, and report any failure to the developer. The launcher writes the orchestrator's first prompt, so hand the orchestrator nothing else.
+8. **Stop.** Report the launcher's output line to the developer and do no further work. The feature worktree then has one live session, and the developer can close your pane.
 
 ## Updating a roadmap
 
 The orchestrator starts you when the developer asks for a change to the approved roadmap.
 
-1. Send the orchestrator a `started` message with your session name and branch.
+1. Send the orchestrator a `started` message.
 2. Read the approved roadmap with `run-decisions.md`, which records the decisions the developer made during the run.
 3. Interview the developer about the change in the same way, and ask about every one-way door and every ambiguity it brings. Check the repository's visibility before your first commit, as for a new roadmap.
 4. Edit the roadmap on your branch and commit as each part is written. Fold each decision in `run-decisions.md` that the update covers into the main text and into `decisions.md`.
-5. When the developer approves, commit and send the orchestrator a `roadmap-update` message. Add a detail line that names each `run-decisions.md` row you folded in, so the orchestrator can retire it.
+5. When the developer approves, commit and send the orchestrator a `roadmap-update` message.
 6. Stop. Do not merge your branch. The orchestrator does.
 
 The reference file `references/status-and-messages.md` defines each message kind and its form.

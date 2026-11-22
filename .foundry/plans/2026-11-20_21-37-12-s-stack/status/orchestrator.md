@@ -16,7 +16,6 @@
 
 | Session | Pane | Worktree | Started |
 | --- | --- | --- | --- |
-| `s-stack-phase-launcher` | `%172` | `../s-stack-phase-launcher` | 2026-11-21 |
 | `s-stack-phase-integration` | `%201` | `../s-stack-phase-integration` | 2026-11-22, the 45-item cross-handbook round (`integration-fixes.md`) |
 
 ## Open decision requests
@@ -72,6 +71,7 @@ None.
 | `s-stack-phase-board` | removed, branch kept | 2026-11-22 | Done again at `53276c3`, merged; #86 and #92 merged into `main` |
 | `s-stack-phase-orchestrator-handbook` | removed, branch kept | 2026-11-22 | Done at `d110165`, merged; #93 merged into `main` |
 | `s-stack-phase-pr-handbook` | removed, branch kept | 2026-11-22 | Done at `9b141bd`, merged; #95 merged into `main` |
+| `s-stack-phase-launcher` | removed, branch kept | 2026-11-22 | Done at `72d5dda`, merged; #94 merged into `main` |
 | `s-stack-spec` | removed, branch kept | 2026-11-22 | gate-cost proposal at `d41db5b`, merged at `883083b` |
 
 ## Queued fix rounds

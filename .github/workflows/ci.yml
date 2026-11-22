@@ -129,7 +129,7 @@ jobs:
   tag:
     name: Tag package versions
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests, foundry-maintenance-tests]
+    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests, foundry-maintenance-tests, s-stack-launcher-tests]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -241,3 +241,16 @@ jobs:
 
       - name: Run tests
         run: python3 -m unittest discover -s packages/foundry-maintenance/tests
+
+  s-stack-launcher-tests:
+    name: s-stack launcher tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The Ubuntu runner images do not list tmux.
+      - name: Install tmux
+        run: command -v tmux || { sudo apt-get update && sudo apt-get install -y tmux; }
+
+      - name: Run tests
+        run: python3 -m unittest discover -s packages/s-stack/tests

@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-22T04:18:09Z"
+state: "Verify"
+changed_at: "2026-11-22T10:54:17Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "73ba6d40af063c44b910e6c0ca61efae1e96d57b"
+code_head: "6b29b1bd68c289f8a76e526a8e43eb7e3efd2ac8"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -415,3 +415,5 @@ The Review 13 fix is at `24b8981`, with the regenerated lockfile at `8c42572`. `
 The thirty-fourth Verify gate returned VERIFIED at `73ba6d4`. `s-stack-package` (`ff59e46`, `.foundry/` only) was merged. The phase moved to Review, which covers the commits since `9c1e21f`.
 
 The fourteenth Review gate returned SIGNIFICANT at `73ba6d4`, under the common-path bar. The phase moved back to Implement.
+
+The developer chose to drop patch matching for developer commits. The held fix was reverted. The developer-commit check now compares each pull request's head with its head at the phase's last `prs-open`, at `6b29b1b`. The phase moved to Verify at code head `6b29b1b`.

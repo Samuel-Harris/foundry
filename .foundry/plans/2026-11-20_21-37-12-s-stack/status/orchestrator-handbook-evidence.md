@@ -740,3 +740,21 @@ The check file's carried-commit script takes the suggestion without regenerating
 Root cause: every fix to this paragraph has relied on `git cherry`'s full-patch match, and a copy that differs only in generated files never matches. This is the third finding from that same premise.
 
 Outside the scope, for `pr-handbook`: after the forge rebase, the real `pr.sh` prints `FAIL src/b.txt: pr2 lacks phase commits …` in both variants. The phase's copy names the SHA from before the rebase.
+
+## The developer's decision on developer commits, and the rewrite at `6b29b1b`
+
+The phase session committed a patch-id fix for Review 14 at `ed28c6b`, with its lockfile at `21d06cb`. The orchestrator then told it to hold the fix and asked the developer to decide. The developer chose to drop patch matching. That decision is recorded in `run-decisions.md`.
+
+Both commits are reverted, at `1feb50c` and `4352854`. `s-stack-package` was merged at `8b9d467`.
+
+The rewrite at `6b29b1b` changes these places:
+
+- **Line 148.** When a `prs-open` arrives, the orchestrator records each of its pull requests' head. Once the phase has settled, it compares each open pull request's head with the recorded one. If they differ, it sends an `instruction` to refresh that pull request, naming both heads. The PR creator decides what is new. A `DEVELOPER-COMMITS` report starts the phase's own feedback round. Otherwise the phase stays in PR. Either way, its next `prs-open` answers the instruction. `git cherry`, the patch-id rule, the cherry-pick-line rule and the reachability drop are gone.
+- **Line 56.** The tracker's pull request row now records "its head when the phase's last `prs-open` arrived".
+- **Line 13.** It no longer lists a developer-commit `fix-round`, because the orchestrator no longer sends one.
+
+The handbook is still 185 lines.
+
+The orchestrator's message asked for a feedback round. The handbook sends an `instruction` to refresh instead, as line 117 already does when a dependency's head moves. Under `phase-session.md`, a "Feedback on a pull request" round always moves the phase back to Implement and runs both gates again, so a no-op round would not be cheap. A refresh instruction runs only a PR creator. Its `DEVELOPER-COMMITS` report starts the feedback round, under PR step 2.
+
+The regenerated lockfile is at `964fa1c`. `s-stack-package` (`1d9406c`, `.foundry/` only) was merged after it.

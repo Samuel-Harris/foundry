@@ -129,7 +129,7 @@ jobs:
   tag:
     name: Tag package versions
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests, foundry-maintenance-tests, s-stack-launcher-tests]
+    needs: [pre-commit, versions, statechart-tests, poteto-mode-tests, data-visualisation-tools-tests, foundry-maintenance-tests, s-stack-launcher-tests, claude-code-usage-tests]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -254,3 +254,12 @@ jobs:
 
       - name: Run tests
         run: python3 -m unittest discover -s packages/s-stack/tests
+
+  claude-code-usage-tests:
+    name: claude-code-usage script tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run tests
+        run: python3 -m unittest discover -s packages/claude-code-usage/tests

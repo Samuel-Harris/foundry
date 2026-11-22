@@ -52,6 +52,7 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 
 | Package            | Primitives deployed                                        | structural | runtime recognition | workflow behaviour |
 | ------------------ | ---------------------------------------------------------- | ---------- | ------------------- | ------------------ |
+| `claude-code-usage` | 1 skill | verified | untested | untested |
 | `coding-style`     | 2 instructions                                             | verified   | untested            | untested           |
 | `cursor-usage`     | 1 skill                                                    | verified   | untested            | untested           |
 | `data-visualisation` | 1 skill | verified | untested | untested |
@@ -75,12 +76,13 @@ Every package installs, and `apm audit --ci` passes, for `cursor`, `claude` and 
 
 Structural verification covers all three targets: every package installs, deploys the inventory above, and passes `apm audit --ci` in place once `apm install --frozen` has run, which `default-stack`'s committed lockfile needs. A clean consumer install of `default-stack` resolves the same eleven packages and passes `apm audit --ci` on all three targets. `docs/DEPENDENCY-CONTRACTS.md` records why `default-stack` needs that install, and the APM 0.32.0 lockfile defect that would break `default-stack`'s own audit if `coding-style`, `p-stack`, `pr`, `repo-maintenance` or `review` gained a sibling dependency, and `s-stack`'s if `deep-interview` or `review` did.
 
-`apm install --frozen` succeeds for all twenty packages in place.
+`apm install --frozen` succeeds for all twenty-one packages in place.
 
 ## Archive coverage
 
-`apm pack --archive` succeeds for the fourteen packages with an empty `dependencies:` mapping:
+`apm pack --archive` succeeds for the fifteen packages with an empty `dependencies:` mapping:
 
+- `claude-code-usage`
 - `coding-style`
 - `cursor-usage`
 - `data-visualisation`

@@ -11,6 +11,7 @@ targets:
 includes: auto
 dependencies:
   apm:
+    - path: ./packages/claude-code-usage
     - path: ./packages/cursor-usage
     - path: ./packages/data-visualisation
     - path: ./packages/execution

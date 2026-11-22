@@ -1,0 +1,14 @@
+name: claude-code-usage
+version: "0.1.0"
+description: "Analyse Claude Code spend from local session files, and rank ways to reduce it."
+author: sam
+license: MIT
+repository: https://github.com/Samuel-Harris/foundry
+targets:
+  - cursor
+  - claude
+  - copilot
+includes: auto
+dependencies: {}
+scripts:
+  check: apm audit --ci

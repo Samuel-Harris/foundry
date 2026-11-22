@@ -123,7 +123,7 @@ transitively added: planning, deep-interview
 planning             -> deep-interview, review
 ```
 
-`cursor-usage`, `data-visualisation`, `foundry-maintenance`, `handoff`, `infrastructure`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
+`claude-code-usage`, `cursor-usage`, `data-visualisation`, `foundry-maintenance`, `handoff`, `infrastructure`, `repo-init`, `search` and `ui` are intentionally not part of the default stack; install them individually.
 
 There is deliberately **no `apm.yml` at the repository root**. Root-level compile and pack discovery walks the whole tree, so a root manifest would absorb the nested packages' `.apm/` trees into one package and destroy the per-package boundaries.
 

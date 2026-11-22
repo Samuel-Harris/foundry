@@ -643,3 +643,7 @@ Defects that mislead a reader:
 
 - The checked head had no starting value for a new pull request.
 - "every pull request has merged" did not say "of the phase".
+
+## Merge of `s-stack-package` at `7032b0d`, under run decision `launcher-r3`
+
+`s-stack-package` (`410ae2e`, the `phase-handbooks` follow-up) was merged at `7032b0d`. Outside `.foundry/` it touched `handbooks/phase-session.md`, s-stack's `version:` line and the generated lockfile, whose lockfile-only conflict was resolved under C7. None is an owned path, so the code head stays at the phase's own commit `8ad18a1`.

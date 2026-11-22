@@ -1,10 +1,10 @@
 ---
 phase: "orchestrator-handbook"
-state: "Implement"
-changed_at: "2026-11-22T01:07:56Z"
+state: "Verify"
+changed_at: "2026-11-22T01:09:07Z"
 session: "s-stack-phase-orchestrator-handbook"
 branch: "s-stack-phase-orchestrator-handbook"
-code_head: "f75dd6ab87f52ce67ee95c4330bbc2fb61ec0ddf"
+code_head: "8ad18a12615f5e8984068f794d00c332f8b83b3b"
 waits_for: null
 verdicts:
   - gate: "verify"
@@ -383,3 +383,5 @@ The twelfth Review gate returned SIGNIFICANT at `8fff7f3`, under the common-path
 The Review 12 fix is at `ea4fb99`. `s-stack-package` was merged at `8dc793d`, and under `launcher-r3` the code head is unchanged. The phase moved to Verify at code head `ea4fb99`.
 
 The thirty-second Verify gate returned NOT VERIFIED at `f75dd6a`. The phase moved back to Implement.
+
+The Verify 32 fix is at `8ad18a1`. `s-stack-package` (`410ae2e`, the `phase-handbooks` follow-up) was merged at `7032b0d`, and under `launcher-r3` the code head is unchanged. The phase moved to Verify at code head `8ad18a1`.

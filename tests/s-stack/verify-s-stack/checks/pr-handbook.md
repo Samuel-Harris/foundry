@@ -1,6 +1,6 @@
 # Phase `pr-handbook` checks
 
-Phase `pr-handbook` ships `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`, the PR creator's handbook, and `packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md`, which holds the one script the PR creator runs. The script is the behaviour, so the checks extract it at run time and run it the way the handbook does: copied into `pr.sh` outside the repository and called as `OWN=<own branches> bash pr.sh refresh <phase branch> <default branch> <spec> [<commit> ...]` and `OWN=<own branches> bash pr.sh prove ...`. Run each block from anywhere inside the repository with `/bin/bash`, as written, because the agent shell is zsh. The script then runs under the same bash.
+Phase `pr-handbook` ships `packages/s-stack/.apm/skills/sam-mode/handbooks/pr-creator.md`, the PR creator's handbook, and `packages/s-stack/.apm/skills/sam-mode/references/pr-commands.md`, which holds the one script the PR creator runs. The script is the behaviour, so the checks extract it at run time and run it the way the handbook does: copied into `pr.sh` outside the repository and called as `OWN=<own branches> bash pr.sh refresh <phase branch> <default branch> <spec> [<commit> ...]` and `OWN=<own branches> MERGED=<merged branches> bash pr.sh prove ...`. Run each block from anywhere inside the repository with `/bin/bash`, as written, because the agent shell is zsh. The script then runs under the same bash.
 
 ## Rerun
 
@@ -30,7 +30,7 @@ The block builds throwaway repositories under `$TMPDIR` with git's global and sy
 
 `main` holds a package `pkg/` whose `apm.yml` has `version:` on its second line and `description:` on its third, an `apm.lock.yaml` beside each `apm.yml` that lists the package's other files, a twelve-line `shared.txt` and a `README`. The stand-in regenerate command sets `pkg`'s `version:` to the patch after `origin/main`'s and rewrites every lockfile from the tree, and commits with the regenerate subject when that changed anything. The script's parameter lines stay as the reference file ships them.
 
-Each case follows the handbook's round order. A round starts with `git fetch origin` and records every branch on `origin`. Then, for each branch it builds, bottom of the stack first, it removes any worktree a stopped round left at the branch's path and runs `git worktree add --no-track -B <branch> <path> origin/<branch>`. A new branch starts instead from its base as the refresh reads it: the local branch of a parent named in `OWN`, `origin/<parent>` for any other parent, or `origin/main` when the base is `main`. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` with `OWN` set and the regenerate command, and removes the worktree. When every branch has had that, the round proves the local branches with `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request, and with a merged one only where a case lists it. Only when the proof prints `EQUAL` does it run `git push -u origin <branch>`, bottom first, for each branch whose `origin/<branch>` is missing or differs. On any `STOP` or on `NOT EQUAL` it pushes nothing, resets each branch it built to `origin/<branch>` or deletes a new one, and fails the case if any branch on `origin` moved. A crashed round stops after the refresh and regenerate of a branch, with no proof and no reset. `OWN` names the case's own pull request branches: every branch the case builds is added to it before its first refresh, and every refresh and proof is given it. A case that tests the list itself sets it before a build. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
+Each case follows the handbook's round order. A round starts with `git fetch origin` and records every branch on `origin`. Then, for each branch it builds, bottom of the stack first, it removes any worktree a stopped round left at the branch's path and runs `git worktree add --no-track -B <branch> <path> origin/<branch>`. A new branch starts instead from its base as the refresh reads it: the local branch of a parent named in `OWN`, `origin/<parent>` for any other parent, or `origin/main` when the base is `main`. In that worktree it runs `bash pr.sh refresh phase origin/main <spec> <commits>` with `OWN` set and the regenerate command, and removes the worktree. When every branch has had that, the round proves the local branches with `bash pr.sh prove orch phase origin/main <spec> ...`, with every open pull request, and with a merged one only where a case lists it. Only when the proof prints `EQUAL` does it run `git push -u origin <branch>`, bottom first, for each branch whose `origin/<branch>` is missing or differs. On any `STOP` or on `NOT EQUAL` it pushes nothing, resets each branch it built to `origin/<branch>` or deletes a new one, and fails the case if any branch on `origin` moved. A crashed round stops after the refresh and regenerate of a branch, with no proof and no reset. `OWN` names the case's own pull request branches: every branch the case builds is added to it before its first refresh, and every refresh and proof is given it. A case that tests the list itself sets it before a build. `MERGED` names the case's own pull request branches that have merged: a squash or true merge of a branch in `OWN` adds it, and every proof is given it. `orch` and `phase` are local, never pushed. The orchestrator branch carries `.foundry/`, and the phase merges it with `git merge --no-ff`. Another phase's pull request is cut from `main`, ends with a regenerate commit and exists only on `origin`. A squash merge commits the merged tree onto `main` with one parent and keeps the merged branch. A round's added commits are counted along the first parent from the old `origin/<branch>`.
 
 A round keeps the guarantees when the old `origin/<branch>` is an ancestor of the new one, `origin/main` is an ancestor of it, and it adds at most one merge commit and one regenerate commit. Each case prints `PASS <case>` or `FAIL <case>: <output>`, and the block ends with `<n> failed` and exits `0` only when no case failed.
 
@@ -120,6 +120,11 @@ A round keeps the guarantees when the old `origin/<branch>` is an ancestor of th
 | `landed content` | `pr1`, built with no trailer, is squash-merged; a fix to `a.txt` in a new `pr1b:main::pr1` | exit `0`, `a fixed`, diff `a.txt`. The proof `pr1:main pr1b:main::pr1`, which lists the merged one as the handbook says, prints `EQUAL`. |
 | `developer's new file` | The developer commits a new `a_test.txt` on `origin/pr1`; a round; then the phase takes it with `git cherry-pick -x` and a round carries that commit | first: the refresh exits `1` and prints exactly `DEVELOPER-COMMITS pr1 <sha>`, `pr1` and `origin/pr1` still at the developer's commit. Then: exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over it, diff `a.txt a_test.txt`, `EQUAL`. |
 | `Update branch on a stacked child` | A same-phase stack `parent:main`, `child:parent`; a fix round of `parent`; `origin/child` merges `origin/parent`, as GitHub's "Update branch" does; a round of both | all three exit `0`, no `DEVELOPER-COMMITS`, `child` holds the merge and `origin/parent`, line 2 is the fix, diff against `parent` `c.txt`, `EQUAL` |
+| `developer commit, then squash-merged` | Stack `pr1:main` (`a.txt`), `pr2:pr1` (`b.txt`). The developer commits a suggestion to `a.txt` on `origin/pr1`, the phase has not taken it, and `pr1` is squash-merged. A round of `pr2:main::pr1`, proved with `pr1:main pr2:main::pr1`; then the phase merges `origin/main`, keeping its `a.txt`, and a round | first: exit `1`, exactly `FAIL a.txt differs between the phase and origin/main and no open pull request holds it: if the phase changed it, open a pull request for its commits; if origin/main changed it, for example a developer commit on a merged pull request, merge origin/main into the phase`, no `DEVELOPER-COMMITS`, `NOT EQUAL`, `pr2` and `origin/pr2` unchanged. Then: exit `0`, guarantees kept, `pr2` has the suggestion and diff `b.txt`, `EQUAL`. |
+| `developer commit, then true-merged` | The same with `pr1` and `pr2:main` independent, and `pr1` merged with a merge commit; rounds of `pr2:main` proved with `pr1:main pr2:main` | the same two-remedy `FAIL` and `NOT EQUAL`, no "needs a new pull request" line; then `EQUAL` with the suggestion on `pr2` |
+| `merged one listed after main edits its file` | Independent `pr1:main` (eight-line `a.txt`) and `pr2:main`; `pr1` squash-merged; the phase merges `origin/main` and a round of `pr2`; another pull request on `main` edits `a.txt` line 8, the phase merges `origin/main` again, and a round, each proved with `pr1:main pr2:main` | both rounds exit `0` with `EQUAL` and no `neither the phase's` or head `FAIL`, `pr2` has `main`'s line 8 and diff `b.txt` |
+| `merged one with a developer commit, local branch stale` | Independent `pr1:main` and `pr2:main`; a suggestion on `origin/pr1` that the local `pr1` lacks; `pr1` squash-merged. A round of `pr2`, then the same proof with the local `pr1` moved to `origin/pr1`; then the phase merges `origin/main` and a round | the round and the second proof print the same lines: the two-remedy `FAIL`, no `DEVELOPER-COMMITS`, `NOT EQUAL`, `pr2` unchanged. After the merge: exit `0`, `EQUAL`. |
+| `taken developer commit, child rebased` | Stack `parent:main`, `child:parent`. The developer commits a suggestion to `c.txt` on `origin/child`; the phase takes it with `git cherry-pick -x` and a round carries it. `parent` is squash-merged, and the forge rebases `child` onto `main` with the same tree; a round of `child:main::parent` | exit `0`, no `DEVELOPER-COMMITS`, guarantees kept over the rewritten head, `c.txt` is the suggestion, diff `c.txt`, `EQUAL` |
 
 ```bash
 /bin/bash <<'CHECK'
@@ -137,8 +142,9 @@ script=$(grep -l -E '^ *refresh \| prove\)' "$S"/block*.sh | head -1)
 : > "$S/failed"
 pass() { echo "PASS $1"; }
 fail() { echo "FAIL $1"; echo x >> "$S/failed"; }
-export OWN=
+export OWN= MERGED=
 own_add() { [[ ",$OWN," == *",$1,"* ]] || OWN=${OWN:+$OWN,}$1; }
+merged_add() { [[ ",$OWN," != *",$1,"* || ",$MERGED," == *",$1,"* ]] || MERGED=${MERGED:+$MERGED,}$1; }
 
 commit() { git add -A && git commit -q -m "$1"; }
 line() { sed "$1s/.*/$2/" "$3" > "$S/l" && cat "$S/l" > "$3"; }
@@ -163,9 +169,9 @@ on_main() { git fetch -q origin; in_wt origin/main main_commit "$@"; }
 other_commit() { local b=$1 m=$2; shift 2; "$@" && relock && commit "$m" && regen && git push -q origin "HEAD:refs/heads/$b"; }
 other() { git fetch -q origin; in_wt origin/main other_commit "$@"; }
 squash_in() { git merge -q --squash "origin/$1" >/dev/null 2>&1; relock; commit "feat: $1 (#1)" && git push -q origin HEAD:main; }
-squash() { git fetch -q origin; in_wt origin/main squash_in "$1"; }
+squash() { git fetch -q origin; in_wt origin/main squash_in "$1"; local c=$?; merged_add "$1"; return $c; }
 true_merge_in() { git merge -q --no-ff --no-edit "origin/$1" >/dev/null 2>&1 || { git checkout -q origin/main -- pkg; relock; git commit -q --no-edit; }; git push -q origin HEAD:main; }
-true_merge() { git fetch -q origin; in_wt origin/main true_merge_in "$1"; }
+true_merge() { git fetch -q origin; in_wt origin/main true_merge_in "$1"; local c=$?; merged_add "$1"; return $c; }
 forge_in() { git rebase -q --onto origin/main "$1" >/dev/null 2>&1 && git rev-parse HEAD > "$S/forged"; }
 forge() {
   local old=$(git rev-parse "origin/$1") new
@@ -1107,7 +1113,7 @@ c_landed() {
   in_wt origin/main sh -c "git cherry-pick $c1 >/dev/null 2>&1 && git commit -q --amend -m 'feat: a, no trailer' && git push -q origin HEAD:refs/heads/pr1"
   squash pr1; git branch -q --no-track pr1 origin/pr1
   echo 'a fixed' > a.txt; commit 'fix: a'; c2=$(sha)
-  OWN=pr1; PROOF="pr1b:main::pr1" round pr1b pr1b:main::pr1 "$c2"; o="$code $out"
+  OWN=pr1 MERGED=pr1; PROOF="pr1b:main::pr1" round pr1b pr1b:main::pr1 "$c2"; o="$code $out"
   [ "${o%% *}" = 0 ] && [ "$(git show origin/pr1b:a.txt)" = 'a fixed' ] && [ "$(hand origin/main origin/pr1b)" = 'a.txt ' ] \
     && pass "landed content: a pull request merged without trailers, then a fix in a new one, EQUAL" || fail "landed: $o"
   equal pr1:main pr1b:main::pr1 && pass "landed content: the proof also lists the merged pull request, as the handbook says, EQUAL" || fail "landed, merged one listed: $out"
@@ -1160,6 +1166,76 @@ c_update_child() {
     && pass "GitHub's Update branch on a stacked child, merging its parent: not reported, EQUAL" || fail "update-child: $o1 / $o2 / $o"
 }
 
+SUGGESTED='a, as the reviewer suggested'
+suggest() { in_wt "origin/$1" sh -c "echo '$3' > $2 && git commit -q -am 'Apply suggestions from code review' && git push -q origin HEAD:$1"; }
+take_main() { git checkout -q phase; git merge -q --no-ff --no-edit origin/main >/dev/null 2>&1 || { git checkout -q origin/main -- pkg "$@"; relock; git commit -q --no-edit; }; }
+two_remedy() { echo "FAIL $1 differs between the phase and origin/main and no open pull request holds it: if the phase changed it, open a pull request for its commits; if origin/main changed it, for example a developer commit on a merged pull request, merge origin/main into the phase"; }
+
+c_dev_merged() {
+  init "dev-merged-$1"; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  echo b > b.txt; commit 'feat: b'; c2=$(sha)
+  step pr1 pr1:main "$c1"; step pr2 "$2" "$c2"; finish pr1:main "$2" || fail "dev-merged-$1 build: $out"
+  suggest pr1 a.txt "$SUGGESTED"
+  "$1" pr1; h=$(git rev-parse origin/pr2)
+  PROOF="pr1:main $3" round pr2 "$3"; o="$code $out"
+  [ "${o%% *}" = 1 ] && has "$(two_remedy a.txt)" && ! has 'FAIL .*needs a new pull request' && ! has 'DEVELOPER-COMMITS.*' && [ "$(echo "$out" | tail -1)" = 'NOT EQUAL' ] && unchanged pr2 "$h" \
+    && pass "developer commit, then merged by $1: the two-remedy FAIL, nothing pushed" || fail "dev-merged-$1, before the phase takes main: $o"
+  take_main a.txt
+  PROOF="pr1:main $3" round pr2 "$3"; o="$code $out"
+  [ "${o%% *}" = 0 ] && guarded "$h" origin/pr2 && [ "$(git show origin/pr2:a.txt)" = "$SUGGESTED" ] && [ "$(hand origin/main origin/pr2)" = 'b.txt ' ] && equal pr1:main "$3" \
+    && pass "developer commit, then merged by $1: EQUAL once the phase merges main" || fail "dev-merged-$1, after the phase took main: $o; proof $out"
+}
+c_dev_merged_squash() { c_dev_merged squash pr2:pr1 pr2:main::pr1; }
+c_dev_merged_true() { c_dev_merged true_merge pr2:main pr2:main; }
+
+c_merged_main_edits() {
+  init merged-main-edits; orch; phase
+  for i in 1 2 3 4 5 6 7 8; do echo "a $i"; done > a.txt; commit 'feat: a'; c1=$(sha)
+  echo b > b.txt; commit 'feat: b'; c2=$(sha)
+  step pr1 pr1:main "$c1"; step pr2 pr2:main "$c2"; finish pr1:main pr2:main || fail "merged-main-edits build: $out"
+  squash pr1; take_main
+  PROOF="pr1:main pr2:main" round pr2 pr2:main; o1="$code $out"
+  on_main 'fix: another pull request edits a.txt line 8' put_line 8 'a 8 by another pull request' a.txt; take_main
+  h=$(git rev-parse origin/pr2); PROOF="pr1:main pr2:main" round pr2 pr2:main; o2="$code $out"
+  [ "${o1%% *} ${o2%% *}" = '0 0' ] && ! echo "$o1$o2" | grep -q '^FAIL' && guarded "$h" origin/pr2 && [ "$(at origin/pr2 a.txt 8)" = 'a 8 by another pull request' ] \
+    && [ "$(hand origin/main origin/pr2)" = 'b.txt ' ] && equal pr1:main pr2:main \
+    && pass "a squash-merged pull request listed after main edits its file and the phase takes main: EQUAL" || fail "merged-main-edits: $o1 / $o2"
+}
+
+c_merged_stale_local() {
+  init merged-stale-local; orch; phase
+  echo a > a.txt; commit 'feat: a'; c1=$(sha)
+  echo b > b.txt; commit 'feat: b'; c2=$(sha)
+  step pr1 pr1:main "$c1"; step pr2 pr2:main "$c2"; finish pr1:main pr2:main || fail "merged-stale-local build: $out"
+  suggest pr1 a.txt "$SUGGESTED"; squash pr1; h=$(git rev-parse origin/pr2)
+  PROOF="pr1:main pr2:main" round pr2 pr2:main; o1="$code $out"
+  p1=$(echo "$out" | sed -n '/^pr1:/,$p'); git branch -q -f pr1 origin/pr1; prove pr1:main pr2:main; o2="$code $out"
+  out=${o1#* }; has "$(two_remedy a.txt)"; t=$?
+  [ "${o1%% *}" = 1 ] && [ $t = 0 ] && ! echo "$o1$o2" | grep -q 'DEVELOPER-COMMITS' && [ "$p1" = "${o2#* }" ] && [ "${o2%% *}" = 1 ] && unchanged pr2 "$h" \
+    && pass "a merged pull request with a developer commit: no DEVELOPER-COMMITS, the same proof whether or not the local branch is stale" || fail "merged-stale-local: round $o1; proof with local pr1 synced $o2"
+  take_main a.txt
+  PROOF="pr1:main pr2:main" round pr2 pr2:main; o="$code $out"
+  [ "${o%% *}" = 0 ] && equal pr1:main pr2:main && pass "a merged pull request with a developer commit: EQUAL once the phase merges main" || fail "merged-stale-local, after the phase took main: $o"
+}
+
+c_taken_rebased() {
+  init taken-rebased; orch; phase
+  echo p > p.txt; commit 'feat: parent'; c1=$(sha)
+  echo c > c.txt; commit 'feat: child'; c2=$(sha)
+  step parent parent:main "$c1"; step child child:parent "$c2"; finish parent:main child:parent || fail "taken-rebased build: $out"
+  suggest child c.txt 'c, as the reviewer suggested'; s=$(git rev-parse origin/child)
+  git checkout -q phase; git cherry-pick -x "$s" >/dev/null; p=$(sha)
+  step parent parent:main; step child child:parent "$p"; finish parent:main child:parent || fail "taken-rebased, the pick carried: $out"
+  squash parent
+  forge child origin/parent || { fail "taken-rebased: the simulated rebase changed the tree"; return; }
+  rw=$(git rev-parse origin/child)
+  PROOF="parent:main child:main::parent" round child child:main::parent; o="$code $out"
+  [ "${o%% *}" = 0 ] && ! has 'DEVELOPER-COMMITS.*' && guarded "$rw" origin/child && [ "$(git show origin/child:c.txt)" = 'c, as the reviewer suggested' ] \
+    && [ "$(hand origin/main origin/child)" = 'c.txt ' ] && equal parent:main child:main::parent \
+    && pass "a taken developer commit after GitHub rebases the child: matched by patch-id, EQUAL" || fail "taken-rebased: $o"
+}
+
 for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_version_build c_r1_orch_merged c_r1_two_squashed c_r1_stack_moves c_r1_spaces \
   c_r2_conflict_commit c_r2_conflict_merge c_r2_clean_merge c_r2_orch_line c_r2_orch_delete c_r2_merge_commit c_r2_row3_to_row2 c_r2_grandchild \
   c_r2_delete_package c_r2_undeclared c_r2_adjacent c_uncarried c_leak c_identity c_assumptions c_missing \
@@ -1167,7 +1243,8 @@ for c in c_split c_rounds c_rewrite c_r1_squash_fix c_r1_version_fix c_r1_versio
   c_delegate_first_parent c_delegate_after_push c_stack_local c_foreign_local c_retry c_stale_other_stacked c_stale_other_row3 \
   c_extend c_foreign_above c_delegate_after_orch c_mixed_below c_mixed_above c_own_missing \
   c_order_stack_fix c_order_row3_edit c_order_span_chained c_span_unchained c_outside_own c_not_own c_glob c_local_only c_own_refusal \
-  c_merged_skipped c_merge_edit_shared c_merge_edit_other c_developer c_update_branch c_update_edit c_landed c_developer_file c_update_child; do
+  c_merged_skipped c_merge_edit_shared c_merge_edit_other c_developer c_update_branch c_update_edit c_landed c_developer_file c_update_child \
+  c_dev_merged_squash c_dev_merged_true c_merged_main_edits c_merged_stale_local c_taken_rebased; do
   (cd "$S" && "$c") || fail "$c ended early"
 done
 n=$(wc -l < "$S/failed" | tr -d ' ')

@@ -208,3 +208,13 @@ Recorded as minor, not fixed:
 - `versioning.py check origin/main` fails on the phase branch until the PR creator's regenerate commit raises s-stack and default-stack. That is by design.
 - Step 5's "start each phase whose dependencies are met" does not repeat the exclusive-resource and freeze conditions, which tick step 3 and Merging a phase step 5 hold. Every reader applied them.
 - A phase started by the same later `done-planning` could also be read as getting a `move-back` to Plan. Every reader resolved it correctly.
+
+## PR, after the move-back
+
+PR creator, fresh Opus. New draft pull request https://github.com/Samuel-Harris/foundry/pull/103, branch `s-stack-integration-cold-read-4`, base `main`, no open dependencies, spec `s-stack-integration-cold-read-4:main::s-stack-integration`.
+
+- It carries `4e19585` and `eb83e95` as `a2e6809` and `79c2a55`. Regenerate commit `0b74099` raises s-stack and default-stack from 0.1.13 to 0.1.14.
+- Proof: `EQUAL`, `RECORD s-stack-integration=3d668db6cab4a6289361d86951e16e763d6dd506,s-stack-integration-cold-read-4=0b740994c8ff987a422c75073e6ab188d66df400`.
+- On the branch, the pre-commit hook, `versioning.py check origin/main` and Tier 1 (21 packages) all exited 0.
+- 49 hand-written lines, including the two `version:` lines.
+- Phase session check: the branch contains `origin/main`. `git diff origin/main...` lists only the two phase files, identical to the phase's versions, plus the two lockfiles and `version:` lines. It is a draft, and the branch holds no `.foundry/` path.

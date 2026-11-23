@@ -24,7 +24,7 @@ The suite runs `afk-watchdog.sh` against private tmux servers, a stub `launchctl
 env -u TMUX -u TMUX_PANE python3 -m unittest discover -s packages/s-stack/tests -p 'test_afk_watchdog.py' -v
 ```
 
-Expected on macOS: exit `0`, `Ran 13 tests` and `OK`, with no test skipped. Off macOS the launchd and keep-awake classes skip with their stated reason, which is PENDING, not PASS.
+Expected on macOS: exit `0`, `Ran 14 tests` and `OK`, with no test skipped. Off macOS the launchd and keep-awake classes skip with their stated reason, which is PENDING, not PASS.
 
 ### The watchdog off macOS
 
@@ -165,7 +165,7 @@ Prompt: "Read only these three files and nothing else, not even files they link 
 
 Expected answer:
 
-1. Send no push notification, because `notify` is off. Write a `prompt` board item, which the board shows under Permission prompts, and list it in the return report. Count `zeta` as parked, so it takes no slot. Never approve anything for the developer, and never type into the pane.
+1. Send no push notification, because `notify` is off. Write a `prompt` board item, which the board shows under Permission prompts, and list it in the return report. `zeta` takes no slot under `sessions`, but it is not parked: no park is recorded for it, and it gets no `unpark`. Never approve anything for the developer, and never type into the pane.
 2. Send `eta` an `instruction` to continue from its recorded state, at this tick. Replace it, as Supervision says, only if it is still quiet at the next tick.
 3. The watchdog's launchd job, which runs every 20 minutes and runs the launcher for the orchestrator of each AFK marker, resumed the conversation. The launcher's prompt is not the developer's message, so AFK mode stays on. Restart as the handbook's Restarts says, and, because the tracker shows AFK mode on, run `scripts/afk-watchdog.sh keep-awake` again, because the keep-awake process ended with the `claude` process it waited on.
 4. Yes. A fresh relaunch is a start too, so the new session also runs `keep-awake` again and stays in AFK mode.
@@ -174,20 +174,20 @@ Expected answer:
 
 Files: the orchestrator set.
 
-Prompt: "Read only these three files and nothing else, not even files they link to. Answer from them and the scenario alone. You are the orchestrator of feature `acme-widgets`. AFK mode began at 22:00. Overnight you decided `AFK-8` (`alpha-r2`, every 15 minutes) and `AFK-9` (`beta-r2`, keep the old API). `gamma` is parked for the one-way door `gamma-r1`, `delta` for the round cap, and `epsilon` for the five-hour usage limit until 08:10. Draft pull requests 30 and 31 are ready for review, and 31 depends on 30. At 06:00 the developer typed 'stop' into `beta`'s pane. At 07:20 the tick fired, and at 07:30 `alpha` sent you a `state` message. At 07:40 the developer types in your pane: 'morning, I'm back'. (1) When did AFK mode end? (2) What is your first reply, in order? (3) What do you do after it? (4) The developer answers: 'AFK-8 is fine. For AFK-9, use the new API.' What do you do for each?"
+Prompt: "Read only these three files and nothing else, not even files they link to. Answer from them and the scenario alone. You are the orchestrator of feature `acme-widgets`. AFK mode began at 22:00. Overnight you decided `AFK-8` (`alpha-r2`, every 15 minutes) and `AFK-9` (`beta-r2`, keep the old API). `gamma` is parked for the one-way door `gamma-r1`, `delta` for the round cap, and `epsilon` for the five-hour usage limit until 08:10. Draft pull requests 30 and 31 are ready for review, and 31 depends on 30. `alpha` is in PR with draft 30, whose description carries the line "Contains AFK decision `AFK-8`, pending the developer's review." `zeta` has waited on a permission prompt since 05:00. At 06:00 the developer typed 'stop' into `beta`'s pane. At 07:20 the tick fired, at 07:25 Claude Code notified you that a background subagent you started at that tick had finished, and at 07:30 `alpha` sent you a `state` message. At 07:40 the developer types in your pane: 'morning, I'm back'. (1) When did AFK mode end? (2) What is your first reply, in order? (3) What do you do after it? (4) The developer answers: 'AFK-8 is fine. For AFK-9, use the new API.' What do you do for each, what answers each message you send, and what happens to pull request 30's line?"
 
 Expected answer:
 
-1. At 07:40, the developer's message in the orchestrator's pane. The tick's fixed sentence, `alpha`'s cross-session message and the message typed into `beta`'s pane do not end it.
+1. At 07:40, the developer's message in the orchestrator's pane. The tick's fixed sentence, the subagent's completion notification, `alpha`'s cross-session message and the message typed into `beta`'s pane do not end it.
 2. The return report, in this order: AFK decisions `AFK-8` and `AFK-9`, each with its ID, the question, the choice and the reason; the paused one-way door `gamma-r1`, with its options and recommendation; the pull requests ready for review, dependencies first, 30 then 31; `delta` parked by the round cap with its last findings, and other failures, stalls and permission prompts; usage, the five-hour and seven-day figures at the start and now, waits for resets, and any limit reached.
-3. Remove the marker, run `scripts/afk-watchdog.sh stop-keep-awake`, send `unpark` to every phase parked for a reason other than an open one-way door, so to `delta` and `epsilon` but not `gamma`, set `board/meta.afk` to `null`, clear the tracker's "AFK mode" row, record a `run-decisions.md` row for the end, commit, and go back to normal mode.
-4. `AFK-9`: send `beta` an `instruction` with the change, which runs as a fix round. For both: send the phase (`alpha`, `beta`) an `instruction` to set that decision's `afk` to `false`, remove "pending review" from the decision's `run-decisions.md` row yourself, commit, and delete its board item. Both items go, the changed one included.
+3. Remove the marker, run `scripts/afk-watchdog.sh stop-keep-awake`, send `unpark` to every phase the tracker lists as parked, except one parked for an open one-way door, so to `delta` and `epsilon`, but not `gamma`, and not `zeta`, which waits on a prompt and was never parked, set `board/meta.afk` to `null`, clear the tracker's "AFK mode" row, record a `run-decisions.md` row for the end, commit, and go back to normal mode.
+4. Send `alpha` and `beta` one `instruction` each. `alpha`'s names `AFK-8`; `beta`'s names `AFK-9` with the change, use the new API, made as a fix round. Each asks the phase to set its decision's `afk` to `false` and send `prs-open` once its pull requests carry the result, without the "pending the developer's review" lines, so pull request 30 loses its line. Each is answered by that `prs-open`, or by a `state` reply from a phase not in PR. Remove "pending review" from both decisions' `run-decisions.md` rows yourself, commit, and delete both board items, the changed one included.
 
 ### Cold read 7. A parked phase session
 
 Files: `handbooks/phase-session.md` and `references/status-and-messages.md`.
 
-Prompt: "Read only these two files and nothing else, not even files they link to. Answer from them and the scenario alone. You are the phase session for phase `alpha` of feature `acme-widgets`, in Implement. A delegate is halfway through a code step, with uncommitted edits in the phase worktree. (1) The orchestrator sends `park`, with the reason 'five-hour usage limit' and the time 04:10. What do you do, and what do you not do? (2) At 03:30 your session is relaunched with a new conversation. What do you do? (3) At 04:15 the orchestrator sends `unpark`. What do you do? (4) Earlier, an `answer` arrived for your request `alpha-r2`, saying it is AFK decision `AFK-8`, option B. What do you record, with which ID and keys? What would differ for an ordinary answer from the developer?"
+Prompt: "Read only these two files and nothing else, not even files they link to. Answer from them and the scenario alone. You are the phase session for phase `alpha` of feature `acme-widgets`, in Implement. A delegate is halfway through a code step, with uncommitted edits in the phase worktree. (1) The orchestrator sends `park`, with the reason 'five-hour usage limit' and the time 04:10. What do you do, and what do you not do? (2) At 03:30 your session is relaunched with a new conversation. What do you do? (3) At 04:15 the orchestrator sends `unpark`. What do you do? (4) Earlier, an `answer` arrived for your request `alpha-r2`, saying it is AFK decision `AFK-8`, option B. What do you record, with which ID and keys? What would differ for an ordinary answer from the developer? (5) Later, in PR with draft 30 open, the orchestrator sends an `instruction`: the developer reviewed `AFK-8` and accepts it, so set its `afk` to `false` and send `prs-open` once the pull request carries that. What do you do, does a gate run, and what do you send?"
 
 Expected answer:
 
@@ -195,6 +195,7 @@ Expected answer:
 2. `waits_for` is set, so keep waiting for what it names, the `park`, and start nothing it holds back.
 3. Clear `waits_for`, commit, and continue from the recorded state.
 4. Remove `alpha-r2` from `requests`, record the outcome in `decisions` with the ID `AFK-8`, `afk: true` and the door, clear `waits_for` if the answer ends the wait, commit, and continue the work that waited. An ordinary answer is recorded with an `alpha-d<n>` ID and `afk: false`.
+5. Set `AFK-8`'s `afk` to `false` and commit. It asks for a PR creator round, not new work: run PR steps 2 and 3, then send `prs-open`. No gate runs again, and the phase stays in PR.
 
 ### Cold read 8. The AFK decision line in a pull request description
 

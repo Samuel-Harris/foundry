@@ -223,21 +223,21 @@ These are the patterns I see most often. If you catch yourself doing any of thes
 
 **One PR, one atomic change.** Scope every pull request to a single feature, fix, or component. If the description needs "and also" to explain it, or a reviewer could approve one part of the diff while rejecting another, those parts are separate PRs. Refactors, renames, dependency bumps, and cleanup that the main change does not need go in their own PRs. A refactor the change depends on goes in its own PR below it in a stack. A small PR that does two things is still two PRs.
 
-A pull request must not exceed **2,500 changed lines**, measured as additions plus deletions against the PR's base branch. This is a hard limit, not a target, and includes application code, tests, migrations, generated files, lockfiles, and formatting changes. Staying under it does not make a multi-purpose PR acceptable.
+A pull request must not exceed **2,500 changed lines**, measured as additions plus deletions against the PR's base branch. This is a hard limit, not a target, and includes application code, tests, migrations, and formatting changes. Auto-generated files, such as lockfiles and other generated config, do not count towards it. The additions plus deletions that remain are the PR's hand-written line count. A file counts as generated only when a tool writes it from inputs in the repository and nobody edits it by hand, so that rerunning the tool reproduces it exactly. When generated files take the raw total over 2,500, state the hand-written line count in the PR description. Staying under the limit does not make a multi-purpose PR acceptable.
 
-Before creating or updating a PR, run `git fetch`, then `git log --oneline origin/<base>..HEAD` and `git diff --stat origin/<base>...HEAD` against its intended base branch. Read every file the diff lists and revert any file or hunk the change does not need, including formatter rewraps, lockfile churn and renames. Every commit and file must serve one change you can describe without "and also"; a file you did not touch, or a commit from another branch, means the base is wrong. Then check the total against 2,500 lines. If it does more than one thing or would exceed 2,500 changed lines, split the work before handoff; never create a mixed or oversized PR with a promise to split it later.
+Before creating or updating a PR, run `git fetch`, then `git log --oneline origin/<base>..HEAD` and `git diff --stat origin/<base>...HEAD` against its intended base branch. Read every file the diff lists and revert any file or hunk the change does not need, including formatter rewraps, lockfile churn and renames. Every commit and file must serve one change you can describe without "and also"; a file you did not touch, or a commit from another branch, means the base is wrong. Then check the hand-written line count against 2,500 lines. If it does more than one thing or its hand-written lines would exceed 2,500, split the work before handoff; never create a mixed or oversized PR with a promise to split it later.
 
-Split along vertical slices one reviewer can own. Keep supporting edits (comments, renames the change needs) in the PR they support. Check the line count against the real 2,500 limit before handing off.
+Split along vertical slices one reviewer can own. Keep supporting edits (comments, renames the change needs) in the PR they support. Check the hand-written line count against the 2,500 limit before handing off.
 
 Split independent changes into separate PRs against the base branch. Split dependent changes, and any single change over the limit, into a real GitHub PR stack:
 
 - Each branch is based on the preceding branch.
 - The first PR targets the original base branch; each later PR targets the previous branch in the stack.
-- Every PR in the stack does one thing and stays at or below 2,500 changed lines against its own target branch.
+- Every PR in the stack does one thing and stays at or below 2,500 hand-written changed lines against its own target branch.
 - Split by coherent deploy or implementation concern and order dependencies from bottom to top.
 - Every PR must be independently mergeable in stack order. Once its predecessors have merged, it must leave the base branch working, tested, and safe to deploy without requiring any later PR in the stack.
 - Design schema, API, configuration, and rollout changes so a partially merged stack remains correct. Earlier PRs must remain safe indefinitely if later PRs are delayed or never merged.
-- Do not hide an oversized change by moving files between layers, excluding generated output from the count, or using a cumulative diff different from the PR's actual base.
+- Do not hide an oversized change by moving files between layers, counting a hand-written or hand-edited file as generated, or using a cumulative diff different from the PR's actual base.
 - Never put code in one layer that a later layer in the same stack deletes or rewrites. Restack so the final shape lands once.
 - Do not move or add groundwork "for a later PR" unless you can name the PR and the call site that uses it.
 

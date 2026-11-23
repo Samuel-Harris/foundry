@@ -3,7 +3,7 @@ apm_version: 0.32.0
 dependencies:
 - repo_url: _local/coding-style
   name: coding-style
-  version: 0.1.4
+  version: 0.1.5
   package_type: apm_package
   deployed_files:
   - .claude/rules/compatibility-surface-gate.md
@@ -18,13 +18,13 @@ dependencies:
   deployed_file_hashes:
     .claude/rules/compatibility-surface-gate.md: sha256:f2bba27edc772115ef400549d6298ca5e9c8f7641896dae34a44f392f369dca0
     .claude/rules/python-rules.md: sha256:8d1542d9e9959740f6a5de12cfc81c5c3ccba4a53196d0e282376cdbbae11747
-    .claude/rules/software-engineering-rules.md: sha256:98508001c0100d5111c4129f5e562d54f746083a7526206409dcd6136ad721e4
+    .claude/rules/software-engineering-rules.md: sha256:37c6865a3fc1684fdb4c3908264008cb3fd528083c90461b12c8095592f93d26
     .cursor/rules/compatibility-surface-gate.mdc: sha256:365564aeb0a4d4f0c73b82306b17ef03eeac100840dc34a8cdd84b8955f5a6e3
     .cursor/rules/python-rules.mdc: sha256:01e2558ffbc8451acfedc3012979822f0e96ba688a0697b86244805f0a825196
-    .cursor/rules/software-engineering-rules.mdc: sha256:ea833cb7c1d060a03afd8b33fb7659832fe6b24bbdfe8cca5f2e6512752b70f2
+    .cursor/rules/software-engineering-rules.mdc: sha256:b8337107b6080faf3eef7a72a7679699e70161ee8d6537932e240f53ff11e282
     .github/instructions/compatibility-surface-gate.instructions.md: sha256:f530f6db676490358d5a200d450678c805afdcdede540cf9ad4937def6d45e16
     .github/instructions/python-rules.instructions.md: sha256:038304df0337669b692a2a9620050a98af4ae245d80d5490631cfab7e89fa732
-    .github/instructions/software-engineering-rules.instructions.md: sha256:2adf982dd661a380a46d2c422138edd1a2ad0839cebb291f66b4e7c928ede6b5
+    .github/instructions/software-engineering-rules.instructions.md: sha256:b8c552704129fe8637e638562efa72974a837eba7a86bdae54f7e9767d68a7de
   source: local
   local_path: ../coding-style
   declared_license: MIT
@@ -971,7 +971,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:98508001c0100d5111c4129f5e562d54f746083a7526206409dcd6136ad721e4
+  content_hash: sha256:37c6865a3fc1684fdb4c3908264008cb3fd528083c90461b12c8095592f93d26
 - kind: project-relative
   target: claude
   value: .claude/skills/architect
@@ -5246,7 +5246,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:2adf982dd661a380a46d2c422138edd1a2ad0839cebb291f66b4e7c928ede6b5
+  content_hash: sha256:b8c552704129fe8637e638562efa72974a837eba7a86bdae54f7e9767d68a7de
 - kind: project-relative
   target: cursor
   value: .cursor/agents/comment-sicko.md
@@ -5318,7 +5318,7 @@ deployments:
   owners:
   - ../coding-style
   active_owner: ../coding-style
-  content_hash: sha256:ea833cb7c1d060a03afd8b33fb7659832fe6b24bbdfe8cca5f2e6512752b70f2
+  content_hash: sha256:b8337107b6080faf3eef7a72a7679699e70161ee8d6537932e240f53ff11e282
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode

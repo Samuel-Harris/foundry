@@ -157,6 +157,20 @@ class LaunchdTests(WatchdogCase):
 
         self.assertEqual(self.watchdog("status").stdout, f"absent {self.label}\n")
 
+    def test_status_names_a_job_that_another_copy_installed(self) -> None:
+        """Each worktree deploys its own copy of the skill, and the job breaks when the installing worktree is removed."""
+        copy = self.tmp / "other-worktree/scripts"
+        shutil.copytree(LAUNCH.parent, copy)
+        installed = subprocess.run([str(copy / "afk-watchdog.sh"), "install"], env=self.env, cwd=self.root, capture_output=True, text=True, timeout=60)
+        self.assertEqual(installed.returncode, 0, installed.stderr)
+        shutil.rmtree(copy)
+
+        status = self.watchdog("status")
+
+        self.assertEqual((status.returncode, status.stdout), (0, f"other {self.label} script={copy / 'afk-watchdog.sh'}\n"), status.stderr)
+        self.install()
+        self.assertEqual(self.watchdog("status").stdout, f"installed {self.label}\n")
+
     def test_install_outside_a_repository_fails(self) -> None:
         result = self.watchdog("install", cwd=self.tmp)
 

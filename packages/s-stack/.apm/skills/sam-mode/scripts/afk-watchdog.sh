@@ -27,7 +27,10 @@ Standard output:
   installed <label> plist=<path>        install loaded the job
   removed <label>                       remove unloaded the job and deleted its plist
   absent <label>                        remove found no plist; status found no loaded job
-  installed <label>                     status found the plist and the loaded job
+  installed <label>                     status found the plist and the loaded job, and
+                                        the job runs this copy of the script
+  other <label> script=<path>           status found a loaded job that runs another copy,
+                                        which a removed worktree may have taken with it
   unsupported                           status on anything but macOS
   <UTC time> <feature> <outcome>        run, one line per marker: the launcher's
                                         output line, or failed <exit code>
@@ -152,10 +155,16 @@ cmd_remove() {
 cmd_status() {
   on_macos || { echo unsupported; return; }
   resolve_job
-  if [ -e "$plist" ] && launchctl print "$domain/$label" >/dev/null 2>&1; then
+  if ! { [ -e "$plist" ] && launchctl print "$domain/$label" >/dev/null 2>&1; }; then
+    printf 'absent %s\n' "$label"
+    return
+  fi
+  local runs
+  runs=$(plutil -extract ProgramArguments.1 raw -o - "$plist") || die "cannot read $plist"
+  if [ "$runs" = "$script" ]; then
     printf 'installed %s\n' "$label"
   else
-    printf 'absent %s\n' "$label"
+    printf 'other %s script=%s\n' "$label" "$runs"
   fi
 }
 

@@ -19,7 +19,7 @@ The developer starts it in your pane, for example "AFK until 08:00". Optional se
 Do these in order:
 
 1. Remind the developer to set or lower the monthly spend limit at claude.ai/settings/usage, because nothing else caps usage credits.
-2. Run `scripts/afk-watchdog.sh status` from the feature worktree's root. On `absent`, ask the developer to install the watchdog by typing `! <this skill's directory>/scripts/afk-watchdog.sh install` in your pane, or to say to go without it, and end your turn. Never install it yourself, because it adds a launchd job to their machine. Go on from step 3 at their next message, which belongs to the start and ends nothing. On `unsupported`, tell the developer that keep-awake and the watchdog are macOS only and are skipped.
+2. Run `scripts/afk-watchdog.sh status` from the feature worktree's root. On `absent`, or on `other`, which means the job runs another worktree's copy and stops working when that worktree is removed, ask the developer to install the watchdog by typing `! <this skill's directory>/scripts/afk-watchdog.sh install` in your pane, or to say to go without it, and end your turn. Never install it yourself, because it adds a launchd job to their machine. Go on from step 3 at their next message, which belongs to the start and ends nothing. On `unsupported`, tell the developer that keep-awake and the watchdog are macOS only and are skipped.
 3. Call the usage tool, as [Usage](#usage) says, and record the figures.
 4. Record the tracker's "AFK mode" row, as `handbooks/orchestrator.md` says. Write the marker from the feature worktree's root: `printf '%s %s\n' <feature> <window> > "$(git rev-parse --absolute-git-dir)/s-stack-afk"`. It is never committed. Write `board/meta.afk` as the board template's schema says.
 5. Except on `unsupported`, run `scripts/afk-watchdog.sh keep-awake`. It keeps the Mac from idle sleep while your `claude` process lives, on mains power. Tell the developer that a closed lid without an external display still sleeps.
@@ -27,7 +27,7 @@ Do these in order:
 
 ## Ending
 
-AFK mode ends at the developer's next message in your pane. A turn is the developer's unless it is the tick's fixed sentence, a cross-session message, or the launcher's `/sam-mode orchestrator` prompt that starts a relaunched or resumed session. A message the developer types into another session does not end it.
+AFK mode ends at the first message the developer types in your pane. Every other turn leaves it on: the tick's fixed sentence, a cross-session message, a notification that a subagent, a background task or a command finished, and the launcher's `/sam-mode orchestrator` prompt that starts a relaunched or resumed session. A message the developer types into another session does not end it.
 
 Your first reply is the return report, in this order:
 
@@ -37,12 +37,12 @@ Your first reply is the return report, in this order:
 4. Phases parked by the round cap, with their last findings, and other failures, stalls and permission prompts.
 5. Usage: the five-hour and seven-day figures at the start and now, waits for resets, and any limit reached.
 
-Then remove the marker, run `scripts/afk-watchdog.sh stop-keep-awake`, send `unpark` to every phase parked for any reason other than an open one-way door, set `board/meta.afk` to `null`, clear the tracker's "AFK mode" row, record a `run-decisions.md` row for the end, commit, and go back to normal mode.
+Then remove the marker, run `scripts/afk-watchdog.sh stop-keep-awake`, send `unpark` to every phase the tracker's "AFK mode" row lists as parked, except one parked for an open one-way door, set `board/meta.afk` to `null`, clear the tracker's "AFK mode" row, record a `run-decisions.md` row for the end, commit, and go back to normal mode.
 
-The developer answers "accept all", or names the changes. For each AFK decision:
+The developer answers "accept all", or names the changes. Then:
 
-- If they change it, send the phase an `instruction` with the change. It runs as a fix round.
-- Either way, send the phase an `instruction` to set that decision's `afk` to `false`. Remove "pending review" from the decision's `run-decisions.md` row yourself, commit, and delete its board item. Every item goes once the developer has said whether they agree, whichever way they answer.
+- Send each phase that holds AFK decisions one `instruction`. It names each of them, gives the developer's change for each one they changed, and asks the phase to set their `afk` to `false`, make the changes as a fix round, and send `prs-open` once its pull requests carry the result, without the "pending the developer's review" lines. That `prs-open` answers it, or, from a phase not in PR, a `state` reply.
+- Remove "pending review" from each decision's `run-decisions.md` row yourself, commit, and delete its board item. Every item goes once the developer has said whether they agree, whichever way they answer.
 
 ## Decisions
 
@@ -72,7 +72,7 @@ Record each park in the tracker with its reason and the time it waits until.
 ## Interrupted sessions and permission prompts
 
 - The reconcile subagent also reports each pane that stopped on an API error, such as "Your computer went to sleep mid-response". Send each one an `instruction` to continue from its recorded state, at that tick. Replace it, as Supervision says, only if it is still quiet at the next tick.
-- A session that waits on a permission prompt gets no push notification, unless `notify` is on. Write a `prompt` board item and list it in the return report. Count the phase as parked, so it takes no slot. Never approve anything for the developer.
+- A session that waits on a permission prompt gets no push notification, unless `notify` is on. Write a `prompt` board item and list it in the return report. The phase takes no slot under `sessions`, but it is not parked: record no park for it, and send it no `unpark`. Never approve anything for the developer.
 
 ## Restarts
 

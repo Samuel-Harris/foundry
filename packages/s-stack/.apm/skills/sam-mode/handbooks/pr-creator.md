@@ -134,7 +134,7 @@ Read the pr package's `summarise-pr` skill at `../summarise-pr/SKILL.md`, relati
 
 - a `Depends on #<n>` line for each open dependency;
 - for the third row of the base table, a sentence saying the diff includes the listed pull requests' changes until they merge;
-- for each entry in the phase's `decisions` with `afk: true`, the line "Contains AFK decision `<id>`, pending the developer's review.", which a later refresh removes once the entry's `afk` is `false`;
+- for each entry in the phase's `decisions` with `afk: true`, the line "Contains AFK decision `<id>`, pending the developer's review." Every round, an update included, sets these lines from the status file, so it removes the line of an entry whose `afk` is now `false`;
 - measured detail the phase produced, such as timings or cost savings;
 - the hand-written line count, when the size rules need it;
 - a sentence asking reviewers to add commits on top, use "Update branch" or comment, and never to rewrite the branch with an amend, a squash or "Update with rebase";

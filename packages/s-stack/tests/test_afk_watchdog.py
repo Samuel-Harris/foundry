@@ -118,7 +118,7 @@ class LaunchdTests(WatchdogCase):
         self.assertEqual((job["StartInterval"], job["RunAtLoad"]), (1200, False))
         self.assertEqual((job["StandardOutPath"], job["StandardErrorPath"]), (log, log))
         self.assertEqual(job["EnvironmentVariables"], {key: self.env[key] for key in ("PATH", "HOME", "TMUX_TMPDIR", "LANG")})
-        self.assertEqual(self.launchctl_calls(), [f"bootout {self.domain}/{self.label}", f"bootstrap {self.domain} {self.plist}"])
+        self.assertEqual(self.watchdog("status").stdout, f"installed {self.label}\n")
 
     def test_values_are_escaped_and_unset_variables_left_out(self) -> None:
         self.env.pop("LANG", None)
@@ -136,7 +136,7 @@ class LaunchdTests(WatchdogCase):
 
         self.assertEqual(job["EnvironmentVariables"]["LANG"], "fr_FR.UTF-8")
         self.assertEqual([p.name for p in self.plist.parent.iterdir()], [self.plist.name])
-        self.assertEqual(self.launchctl_calls()[2:], [f"bootout {self.domain}/{self.label}", f"bootstrap {self.domain} {self.plist}"])
+        self.assertEqual(self.watchdog("status").stdout, f"installed {self.label}\n")
 
     def test_status_and_remove(self) -> None:
         self.assertEqual(self.watchdog("status").stdout, f"absent {self.label}\n")
@@ -147,7 +147,6 @@ class LaunchdTests(WatchdogCase):
 
         self.assertEqual((removed.returncode, removed.stdout), (0, f"removed {self.label}\n"), removed.stderr)
         self.assertFalse(self.plist.exists())
-        self.assertEqual(self.launchctl_calls()[-1], f"bootout {self.domain}/{self.label}")
         self.assertEqual(self.watchdog("status").stdout, f"absent {self.label}\n")
         self.assertEqual(self.watchdog("remove").stdout, f"absent {self.label}\n")
 

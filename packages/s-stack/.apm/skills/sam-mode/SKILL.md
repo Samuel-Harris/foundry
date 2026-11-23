@@ -110,6 +110,14 @@ The orchestrator branch and every branch cut from it carry `.foundry/`. Push non
 - Decide a two-way door yourself and record it in your own file. Raise it when the choice is architectural, nuanced or not obvious.
 - In AFK mode the orchestrator answers a raised two-way door itself, and records the answer for the developer's review. A one-way door still waits for the developer.
 
+### tmux
+
+The developer's own tmux server runs every pane of the run, theirs included. Inside a pane, `$TMUX` names that server, and tmux then ignores `TMUX_TMPDIR`, so `TMUX_TMPDIR=<dir> tmux kill-server` kills the developer's server.
+
+- Never run `kill-server`, and never end a session, window or pane that the run did not start. The launcher's `--close` is how a pane the run started is closed.
+- To reach any other server, pass `-S <full socket path>`, or unset `TMUX`, and first confirm the target with `tmux -S <path> list-sessions -F '#{socket_path}'`.
+- A test that starts tmux runs it with `env -u TMUX` and `-S` into its own temporary directory, and on teardown kills only that server, also when the test fails.
+
 ## Where to read next
 
 | To learn | Read |

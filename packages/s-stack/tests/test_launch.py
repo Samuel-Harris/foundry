@@ -96,6 +96,15 @@ class StartTests(LauncherTestCase):
         spec, _ = self.started(self.launch("--feature", "f", "--role", "spec", "--window", self.window), name="f-spec")
         self.assertIn("--name f-spec ", self.wait_for_claude(spec))
 
+    def test_only_the_orchestrator_loads_the_usage_mod(self) -> None:
+        self.make_feature_worktree()
+        orchestrator, _ = self.started(self.launch("--feature", "f", "--role", "orchestrator", "--window", self.window), name="f-orchestrator")
+        phase, _ = self.started(self.launch("--feature", "f", "--role", "phase", "--phase", "p", "--window", self.window), name="f-phase-p")
+
+        usage_mod = LAUNCH.parents[1] / "assets/usage-mod"
+        self.assertIn(f" --plugin-dir {usage_mod} /sam-mode orchestrator ", self.wait_for_claude(orchestrator))
+        self.assertNotIn("--plugin-dir", self.wait_for_claude(phase))
+
     def test_a_plain_claude_in_the_feature_worktree_is_not_an_orchestrator_never_launched(self) -> None:
         feature = self.make_feature_worktree()
         plain = self.make_pane(feature, command="claude")

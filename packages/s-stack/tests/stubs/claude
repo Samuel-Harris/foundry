@@ -3,4 +3,6 @@ printf '%s\n' "$*" >> "$STUB_CLAUDE_LOG"
 sleep "${STUB_CLAUDE_DELAY:-0}"
 # ps must show "claude <arguments>", as for the real claude. On macOS perl's
 # $0 rewrite spills over the environment, so the environment is cleared first.
-exec -c -a claude perl -e '$0 = join " ", "claude", @ARGV; sleep 86400' -- "$@"
+# argv[0] already carries the arguments, so ps shows them before perl rewrites
+# $0, and nothing can see a claude whose --name is hidden behind the program.
+exec -c -a "claude $*" perl -e '$0 = join " ", "claude", @ARGV; sleep 86400' -- "$@"

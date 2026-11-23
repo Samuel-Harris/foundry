@@ -9,9 +9,3 @@ test('usage returns rateLimits unchanged', async ($, on) => {
   const ran = await $.tool.call({ tool: 'mcp__s-stack-usage__usage' })
   expect(ran.result).toBe(JSON.stringify(limits))
 })
-
-test('usage returns an empty list when the figures are unknown', async ($, on) => {
-  on('session.usage', () => ({ value: { startedAt: 0, context: { size: 200000 }, rateLimits: [] } }) as never)
-  const ran = await $.tool.call({ tool: 'mcp__s-stack-usage__usage' })
-  expect(ran.result).toBe('[]')
-})

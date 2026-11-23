@@ -19,7 +19,7 @@ The developer starts it in your pane, for example "AFK until 08:00". Optional se
 Do these in order:
 
 1. Remind the developer to set or lower the monthly spend limit at claude.ai/settings/usage, because nothing else caps usage credits.
-2. Run `scripts/afk-watchdog.sh status` from the feature worktree's root. On `absent`, ask the developer to install the watchdog by typing `! <this skill's directory>/scripts/afk-watchdog.sh install` in your pane. Never install it yourself, because it adds a launchd job to their machine. On `unsupported`, tell the developer that keep-awake and the watchdog are macOS only and are skipped.
+2. Run `scripts/afk-watchdog.sh status` from the feature worktree's root. On `absent`, ask the developer to install the watchdog by typing `! <this skill's directory>/scripts/afk-watchdog.sh install` in your pane, or to say to go without it, and end your turn. Never install it yourself, because it adds a launchd job to their machine. Go on from step 3 at their next message, which belongs to the start and ends nothing. On `unsupported`, tell the developer that keep-awake and the watchdog are macOS only and are skipped.
 3. Call the usage tool, as [Usage](#usage) says, and record the figures.
 4. Record the tracker's "AFK mode" row, as `handbooks/orchestrator.md` says. Write the marker from the feature worktree's root: `printf '%s %s\n' <feature> <window> > "$(git rev-parse --absolute-git-dir)/s-stack-afk"`. It is never committed. Write `board/meta.afk` as the board template's schema says.
 5. Except on `unsupported`, run `scripts/afk-watchdog.sh keep-awake`. It keeps the Mac from idle sleep while your `claude` process lives, on mains power. Tell the developer that a closed lid without an external display still sleeps.
@@ -27,7 +27,7 @@ Do these in order:
 
 ## Ending
 
-AFK mode ends at the developer's next message in your pane. A turn is the developer's unless it is the tick's fixed sentence or a cross-session message. A message the developer types into another session does not end it.
+AFK mode ends at the developer's next message in your pane. A turn is the developer's unless it is the tick's fixed sentence, a cross-session message, or the launcher's `/sam-mode orchestrator` prompt that starts a relaunched or resumed session. A message the developer types into another session does not end it.
 
 Your first reply is the return report, in this order:
 
@@ -42,7 +42,7 @@ Then remove the marker, run `scripts/afk-watchdog.sh stop-keep-awake`, send `unp
 The developer answers "accept all", or names the changes. For each AFK decision:
 
 - If they change it, send the phase an `instruction` with the change. It runs as a fix round.
-- Either way, send the phase an `instruction` to set that decision's `afk` to `false`, remove "pending review" from the decision's `run-decisions.md` row and commit, and delete its board item. Every item goes once the developer has said whether they agree, whichever way they answer.
+- Either way, send the phase an `instruction` to set that decision's `afk` to `false`. Remove "pending review" from the decision's `run-decisions.md` row yourself, commit, and delete its board item. Every item goes once the developer has said whether they agree, whichever way they answer.
 
 ## Decisions
 

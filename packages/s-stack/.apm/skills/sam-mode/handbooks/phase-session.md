@@ -146,4 +146,4 @@ Your conversation may resume or start fresh. Either way the files are the record
 3. The evidence file, for the last gate's results and the failed checks and merges a brief must name.
 4. The phase branch. Run `git status` for uncommitted work, and the code head command for the current code head.
 
-Continue from the recorded state. A gate whose verdict is not in the status file did not finish, so run it again. A verdict whose `code_head` differs from the current code head no longer covers the phase.
+Continue from the recorded state. If `waits_for` is set, keep waiting for what it names, a `park` included, and start nothing it holds back. A gate whose verdict is not in the status file did not finish, so run it again. A verdict whose `code_head` differs from the current code head no longer covers the phase.

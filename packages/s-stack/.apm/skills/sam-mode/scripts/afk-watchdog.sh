@@ -127,6 +127,12 @@ cmd_install() {
   write_plist > "$plist.tmp" || die "cannot write $plist.tmp"
   mv -f "$plist.tmp" "$plist" || die "cannot write $plist"
   launchctl bootout "$domain/$label" >/dev/null 2>&1 || true
+  # bootout returns before the old job is gone, and bootstrap fails while it is still loaded.
+  local tries=0
+  while launchctl print "$domain/$label" >/dev/null 2>&1 && [ "$tries" -lt 50 ]; do
+    sleep 0.1
+    tries=$((tries + 1))
+  done
   launchctl bootstrap "$domain" "$plist" || die "launchctl bootstrap $domain $plist failed"
   printf 'installed %s plist=%s\n' "$label" "$plist"
 }
@@ -154,7 +160,7 @@ cmd_status() {
 }
 
 cmd_run() {
-  local common=$1 failed='' listing worktree git_dir marker content feature window extra out code
+  local common=$1 failed='' listing worktree git_dir marker content feature window extra out
   [ -d "$common" ] || usage
   listing=$(git --git-dir "$common" worktree list --porcelain) || die "git --git-dir $common worktree list failed"
   while IFS= read -r line; do
@@ -171,13 +177,10 @@ cmd_run() {
       failed=1
       continue
     fi
-    if out=$(cd "$worktree" && "$script_dir/launch.sh" --feature "$feature" --role orchestrator --window "$window" </dev/null); then
-      code=0
-    else
-      code=$?
-      out="failed $code"
+    out=$(cd "$worktree" && "$script_dir/launch.sh" --feature "$feature" --role orchestrator --window "$window" </dev/null) || {
+      out="failed $?"
       failed=1
-    fi
+    }
     printf '%s %s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$feature" "$out"
   done <<EOF
 $listing

@@ -121,7 +121,7 @@ The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-se
 | `move-back` | A roadmap or plan change touches a phase, or a check on the orchestrator branch failed after the phase merged | The state to move back to, and what changed or the failed check |
 | `instruction` | Every pull request of the phase merged into the default branch | The merged pull request numbers |
 | `stop` | A phase's pane is about to close, or a stalled session is being replaced | A request to commit and stop |
-| `park` | In AFK mode, a phase must stop starting work: a round cap, a session cap, a usage threshold, a start time not yet reached, or an open one-way door with nothing else to do | The reason, and the time to wait until or "the developer's return" |
+| `park` | In AFK mode, a phase must stop starting work, for a reason [afk-mode.md](afk-mode.md) names | The reason, and the time to wait until or "the developer's return" |
 | `unpark` | The reason for a `park` has passed | Nothing more |
 
 The rules:
@@ -144,4 +144,4 @@ A decision request states five things. They match the fields of a `requests` ent
 | `door` | `one-way` or `two-way` |
 | `waiting_work` | The work that waits on the answer |
 
-The session commits the request to its status file, then sends a `decision-request` message. It removes the request from `requests` once the answer arrives. In AFK mode the orchestrator answers a two-way request itself, as [afk-mode.md](afk-mode.md) says, and a one-way request waits for the developer.
+The session commits the request to its status file, then sends a `decision-request` message. It removes the request from `requests` once the answer arrives. In AFK mode, [afk-mode.md](afk-mode.md) says who answers it.

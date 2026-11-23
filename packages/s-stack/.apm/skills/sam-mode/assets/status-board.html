@@ -39,8 +39,8 @@ board/recent, one document:
 
 phases/<phase id>, one document per phase:
   phase         string, the phase id, equal to the document id
-  state         a state name. The page draws each phase's whole sequence of
-                states from it, so the stepper needs no field of its own.
+  state         a state name. The page draws the seven states in order and
+                marks this one and those before it, so no other field is needed.
   scheduling    "queued", "blocked", "live" or "closed"
                 (it describes the session, not the phase's state)
   waits_for     string, a one-line description of anything the phase waits
@@ -248,12 +248,12 @@ leave needs_update null.
   ol.recent > li > :first-child { overflow-wrap: anywhere; }
   .deps { max-width: 100%; }
   .deps .chip { white-space: normal; overflow-wrap: anywhere; border-radius: 6px; }
-  .steps { display: grid; grid-template-columns: repeat(7, max-content); gap: 2px 6px; margin-top: 4px; font-size: 0.68rem; color: var(--muted); }
-  .step-bar { height: 5px; border-radius: 2px; background: var(--line); }
-  .step-bar.done { background: var(--accent); opacity: 0.55; }
-  .step-bar.now { background: var(--accent); }
-  .step-label { white-space: nowrap; }
-  .step-label.now { color: var(--fg); font-weight: 600; }
+  .steps { display: flex; gap: 6px; margin-top: 4px; font-size: 0.68rem; color: var(--muted); }
+  .step { display: grid; gap: 2px; white-space: nowrap; }
+  .step::before { content: ""; height: 5px; border-radius: 2px; background: var(--line); }
+  .step.done::before { background: var(--accent); opacity: 0.55; }
+  .step.now::before { background: var(--accent); }
+  .step.now { color: var(--fg); font-weight: 600; }
   .map-heading { margin: 6px 0 0; font-size: 0.85rem; font-weight: 600; }
   .map { overflow-x: auto; max-width: 100%; min-width: 0; }
   .map svg { display: block; }
@@ -292,8 +292,8 @@ leave needs_update null.
 
 <script>
 (() => {
-  const STATES = ["Spec", "Plan", "Implement", "Verify", "Review", "PR", "Done"];
   const STATE_TONE = {Spec: "plain", Plan: "plain", Implement: "accent", Verify: "warn", Review: "warn", PR: "good", Done: "good"};
+  const STATES = Object.keys(STATE_TONE);
   const NEED_KINDS = ["decision", "prompt"];
   const DEFAULT_STALE_MIN = 40;
   const MINUTE = 60000;
@@ -395,15 +395,14 @@ leave needs_update null.
     return chip(label, tone === "plain" ? "" : tone);
   }
 
-  // The chip and the steps are both children of the cell, so a phone row can give the steps the full width.
-  // An unknown state marks no step, and the chip alone reports it.
+  // A fragment, so on a phone td > .steps can span the row. The chip states the phase's state for every reader,
+  // and an unknown state marks no step.
   function stateCell(s) {
     const at = STATES.indexOf(s);
-    const look = (i) => (i === at ? " now" : i < at ? " done" : "");
+    const stepClass = (i) => (i === at ? "step now" : i < at ? "step done" : "step");
     const cell = document.createDocumentFragment();
-    cell.append(phaseStateChip(s), el("div", {class: "steps"},
-      ...STATES.map((_, i) => el("span", {class: "step-bar" + look(i), "aria-hidden": "true"})),
-      ...STATES.map((name, i) => el("span", {class: "step-label" + look(i), "aria-current": i === at ? "step" : null}, name))));
+    cell.append(phaseStateChip(s),
+      el("div", {class: "steps", "aria-hidden": "true"}, ...STATES.map((name, i) => el("span", {class: stepClass(i)}, name))));
     return cell;
   }
 

@@ -187,7 +187,8 @@ At the end of the sixth tick this session has run, once every subagent you start
 
 ```bash
 pane_pid=$(tmux display-message -p -t "$TMUX_PANE" '#{pane_pid}')
-if [ "$(tmux display-message -p -t "$TMUX_PANE" '#{@s-stack-session}')" = '<feature>-orchestrator' ] && claude_pid=$(pgrep -P "$pane_pid" -f ' <feature>-orchestrator '); then
+claude_pid=$(ps -A -ww -o pid=,ppid=,args= | awk -v p="$pane_pid" '$2 == p && / <feature>-orchestrator / { print $1 }')
+if [ "$(tmux display-message -p -t "$TMUX_PANE" '#{@s-stack-session}')" = '<feature>-orchestrator' ] && [ -n "$claude_pid" ]; then
   tmux run-shell -b -t "$TMUX_PANE" "sleep 60; cd '<feature worktree root>' && [ \"\$(git rev-parse HEAD)\" = $(git rev-parse HEAD) ] || exit 0; kill -TERM $claude_pid; while kill -0 $claude_pid 2>/dev/null; do sleep 1; done; sleep 5; PATH='$PATH' '<this skill's directory>/scripts/launch.sh' --feature <feature> --role orchestrator --window <window> --fresh"
 else echo 'not started by the launcher'; fi
 ```

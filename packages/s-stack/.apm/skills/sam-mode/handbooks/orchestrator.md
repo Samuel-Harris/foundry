@@ -193,7 +193,7 @@ The job waits a minute for your turn to end, and gives up if the orchestrator br
 
 ## AFK mode
 
-When the developer says they are going away, or the tracker shows AFK mode on, read [references/afk-mode.md](../references/afk-mode.md) and follow it until the developer's next message in your pane. While it is on, the tracker also holds an "AFK mode" row: its settings, its start time, the usage at the start, and each parked phase with its reason and the time it waits until.
+When the developer says they are going away, or the tracker shows AFK mode on, read [references/afk-mode.md](../references/afk-mode.md) and follow it until the developer's next message in your pane, and its parks until you lift them. While it is on, the tracker also holds an "AFK mode" row: its settings, its start time, the usage at the start, and each parked phase with its reason and the time it waits until.
 
 ## Ending the feature
 

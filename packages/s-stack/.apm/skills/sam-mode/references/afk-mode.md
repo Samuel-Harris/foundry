@@ -37,7 +37,9 @@ Your first reply is the return report, in this order:
 4. Phases parked by the round cap, with their last findings, and other failures, stalls and permission prompts.
 5. Usage: the five-hour and seven-day figures at the start and now, waits for resets, and any limit reached.
 
-Then remove the marker, run `scripts/afk-watchdog.sh stop-keep-awake`, send `unpark` to every phase the tracker's "AFK mode" row lists as parked, except one parked for an open one-way door, set `board/meta.afk` to `null`, clear the tracker's "AFK mode" row, record a `run-decisions.md` row for the end, commit, and go back to normal mode.
+Then remove the marker, run `scripts/afk-watchdog.sh stop-keep-awake`, set `board/meta.afk` to `null`, record a `run-decisions.md` row for the end, and commit. Then, unless a usage pause holds, as the next paragraph says, lift the parks: send `unpark` to every phase the tracker's "AFK mode" row lists as parked, except one parked for an open one-way door, clear the row, and go back to normal mode.
+
+A usage pause outlives the mode. When one is in force, or the developer's message reports a limit, which starts one, park as [Usage](#usage) says, and send no `unpark` in that turn. Mark the row ended and keep its parks. Lift them as above at the first tick after the pause's reset time, or, for a pause that waits for the developer's return, when the developer says to go on.
 
 The developer answers "accept all", or names the changes. Then:
 
@@ -59,13 +61,13 @@ In tick step 1, call the usage tool, `mcp__s-stack-usage__usage`, which the laun
 
 | Signal | Do |
 | --- | --- |
-| `five_hour` at 95% or more, or a per-model limit message in any pane | Pause until the window's `resetsAt`, and `unpark` at the first tick after it |
+| `five_hour` at 95% or more, or a per-model limit message in any pane | Pause until the window's `resetsAt`, and `unpark` the phases the pause parked at the first tick after it |
 | `seven_day` at 95% or more, or a weekly limit or monthly spend limit message in any pane | Pause until the developer returns |
 | No figures, and an 85% usage warning in any pane | Treat it as the 95% signal of the window it names |
 | A phase's `NOT VERIFIED` and `INCONCLUSIVE` verdicts since AFK mode began, by their `at` times, reach `rounds`, or its `SIGNIFICANT` verdicts do | Send it `park` with the reason "round cap", until the developer returns |
 | More phases working than `sessions` | Park the most recently started, with the reason "session cap", and unpark them, oldest first, as slots free |
 
-Each pause in this table is a usage pause. It parks every phase session, working or idle, with the reason and the time it waits until. The same holds when the developer tells you a limit was reached, and before your own pause until a reset. While it lasts, start no phase session, and relaunch none that is idle at a gate boundary.
+Each pause in this table is a usage pause, and so is a limit the developer tells you was reached. A limit message in your own pane is one too: park first, then stop until it resets. A usage pause parks every phase session, working or idle, with the reason and the time it waits until, with two exceptions. A phase already parked keeps its park and its reason. A phase waiting on a permission prompt is not parked, as [the prompts rule](#interrupted-sessions-and-permission-prompts) says, until its prompt is answered while the pause lasts, when you park it too. While the pause lasts, start no phase session, unpark none, and relaunch none that is idle at a gate boundary.
 
 The 5% headroom pays for the park messages and the next ticks. A session that a plan limit stopped waits for its own reset. Never replace a session for being rate-limited.
 
@@ -74,7 +76,7 @@ Record each park in the tracker with its reason and the time it waits until.
 ## Interrupted sessions and permission prompts
 
 - The reconcile subagent also reports each pane that stopped on an API error, such as "Your computer went to sleep mid-response". Send each one an `instruction` to continue from its recorded state, at that tick. Replace it, as Supervision says, only if it is still quiet at the next tick.
-- A session that waits on a permission prompt gets no push notification, unless `notify` is on. Write a `prompt` board item and list it in the return report. The phase takes no slot under `sessions`, but it is not parked: record no park for it, and send it no `unpark`. Never approve anything for the developer.
+- A session that waits on a permission prompt gets no push notification, unless `notify` is on. Write a `prompt` board item and list it in the return report. The phase takes no slot under `sessions`, but it is not parked, even during a usage pause: record no park for it, and send it no `unpark`. Never approve anything for the developer.
 
 ## Restarts
 

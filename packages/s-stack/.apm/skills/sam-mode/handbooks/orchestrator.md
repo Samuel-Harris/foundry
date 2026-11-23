@@ -138,7 +138,7 @@ Some histories are rare, and the handbook does not handle them:
 - a pull request merged into a branch other than the default branch;
 - a forge rewrite other than the rebase of a stack child after its parent merges;
 - a default branch whose checks fail only on generated content after two of the feature's pull requests merged;
-- a tracker fact that git or the forge contradicts, other than an expected change: your own steps, a PR creator's pushes, the developer's commits on a pull request branch, the developer's merges into the default branch, or the forge's rebase of a stack child after its parent merges.
+- a tracker fact that git or the forge contradicts, other than an expected change: your own steps, a PR creator's pushes, the developer's commits on a pull request branch, an "Update branch" merge, the developer's merges into the default branch, or the forge's rebase of a stack child after its parent merges.
 
 When the reconcile step finds one, record what you saw in the tracker, and stop acting on every phase it touches, apart from reconciling it and keeping the board current. Send the developer a decision request with the options you see and your recommendation. Act on those phases again once the developer answers.
 

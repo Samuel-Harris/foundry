@@ -12,6 +12,7 @@ Your workers are main sessions that the launcher starts, not subagents, and each
 - Check a pull request's live state before you report on it or act on it.
 - Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR has work only while a `fix-round`, `instruction` or `move-back` you sent it is unanswered. A `move-back` is answered once the phase's status reaches that state. A `fix-round` for review comments, a failed check or a conflict is answered only by a `prs-open` sent after the round while the phase is in PR. Any other `fix-round` or `instruction` is answered by the reply it asks for, such as a `prs-open` after a refresh or a state change after the merged notice. Nothing a phase does in response to a `stop` you sent answers a message. Otherwise tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported since you last started it has no work.
 - Retry by cause. A session that ended or lost its connection resumes with the launcher. A session whose conversation is the problem, because it loops, its context is full or it has stalled, gets `stop`, then, once it is quiet in a later tick, `--close` and a launch with `--fresh`. Then send the fresh session every message the phase left unanswered.
+- Relaunch a phase session at each gate boundary. A phase session ends its turn after the commit that moves it to Verify or records a verdict, because a fresh session costs less than a long context. When its status shows such a commit after the session started, by `changed_at` with state Verify or by a verdict's `at`, against the start time in the tracker, and the phase is in Implement, Verify or Review, or in PR with no `prs-open` at its current code head, mark it stopping as if you had sent `stop`, and send it nothing. Once it is quiet, `--close` it, launch it with `--fresh` and send it every message it left unanswered.
 - Ask the developer only for a real decision: a one-way door, a product or preference call, or a blocker that survived a restart. Merge mechanics, retries and fix rounds never reach the developer.
 - Never read a phase plan, a diff or long pane output yourself. Give it to a fresh subagent and keep its conclusion. Send your own messages, never through a subagent.
 
@@ -48,7 +49,7 @@ The spec writer starts you once the developer approves the roadmap. Do these in 
 
 - The window, the default branch, the default branch commit last merged, and the default branch tip a hand-written conflict was last sent to a phase for.
 - The board's and the architecture page's addresses, and the orchestrator branch commit the page describes.
-- The time of the last tick, and when the recurring tick was created.
+- The time of the last tick, the ticks this session has run, when the recurring tick was created, and `relaunching` with its time while you relaunch yourself, as [Restarts](#restarts) says.
 - Done phases whose status-only merge was refused, and whether the developer has been told.
 - Live sessions: name, pane, worktree, started, the tick in which it began stopping, if it is stopping, and whether you have told it that every pull request merged. Drop a session's row when you close its pane.
 - Unanswered messages: phase, kind, what each `fix-round`, `instruction` or `move-back` said, and the code head when you sent it, kept until it is answered as Supervision says.
@@ -64,16 +65,16 @@ Arm it with Claude Code's recurring scheduled task, every 20 minutes, off the ho
 Run the tick checklist in sam-mode's orchestrator handbook.
 ```
 
-Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip step 2 and the starts in step 3, and in step 4 merge only the frozen phase and the status-only merges of Finishing a phase. Still replace stalled sessions.
+Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip step 2 and the starts in step 3, and in step 4 merge only the frozen phase and the status-only merges of Finishing a phase. Still replace stalled sessions and relaunch phase sessions at a gate boundary.
 
 1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick. Then set and clear `needs_update` as [Keeping pull requests up to date](#keeping-pull-requests-up-to-date) says.
 2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says.
-3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, as Supervision says.
+3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session, and relaunch each phase session at a gate boundary, as Supervision says.
 4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, and none in a tick whose default-branch merge committed, so a failing post-merge check names one change. Finishing a phase's status-only merges are exempt from both limits. Before merging, ask each quiet phase in PR whose newest verdicts name its current code head, but which has sent no `prs-open` at that code head, to send `prs-open` once a pull request holds that code, with an `instruction`. Tell phases about flagged pull requests, as [Keeping pull requests up to date](#keeping-pull-requests-up-to-date) says. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
 5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
-6. **Record.** Update the tracker with the tick time, and commit it.
+6. **Record.** Update the tracker with the tick time and the count of ticks this session has run, and commit it.
 7. **Publish.** Write the board's changed documents in one database batch. When a phase merged and passed its post-merge check, or needed none, or a roadmap update merged, have a fresh subagent update the architecture page.
-8. **Report.** End the turn without a reply unless something needs the developer. Then say what, in a few lines.
+8. **Report.** End the turn without a reply unless something needs the developer. Then say what, in a few lines. At the end of every sixth tick this session runs, relaunch yourself, as [Restarts](#restarts) says.
 
 The board documents a tick writes:
 
@@ -182,6 +183,17 @@ When the developer asks for a roadmap change, start an update spec writer with `
 ## Restarts
 
 When you start again, read the tracker, every status file, workmux's status and every open pull request before you act. Arm the tick, then run a tick. Start each phase session that still has work with the launcher, which resumes its conversation, and ask each phase in PR, with an `instruction`, to send `prs-open` again once a pull request holds its current code head. Clear every told mark, so that a notice lost in the crash goes out again, and send each phase its unanswered messages again. Facts sent while a session was down are still in the sender's files, and the reconcile step finds them.
+
+Every six ticks you relaunch yourself fresh, so your context stays short. At the end of the sixth tick this session has run, set `relaunching` with the time in the tracker, commit, and, as the last call of your turn, run this in one call. When the launcher started your pane, it hands the relaunch to the tmux server, which outlives your process:
+
+```bash
+pane_pid=$(tmux display-message -p -t "$TMUX_PANE" '#{pane_pid}')
+if [ "$(tmux display-message -p -t "$TMUX_PANE" '#{@s-stack-session}')" = '<feature>-orchestrator' ] && claude_pid=$(pgrep -P "$pane_pid"); then
+  tmux run-shell -b "sleep 60; kill -TERM $claude_pid; while kill -0 $claude_pid 2>/dev/null; do sleep 1; done; sleep 5; cd '<feature worktree root>' && PATH='$PATH' '<this skill's directory>/scripts/launch.sh' --feature <feature> --role orchestrator --window <window> --fresh"
+else echo 'not started by the launcher'; fi
+```
+
+The job ends your claude process, which leaves your pane at its shell, and the launcher starts a new conversation there under the same session name. If it prints `not started by the launcher`, clear `relaunching`, commit, and tell the developer once. When a fresh session finds `relaunching` in the tracker, nothing was lost: read the files above, clear the mark and the tick count, commit, arm the tick, run a tick and send nothing again. A crash still resumes the old conversation.
 
 ## Ending the feature
 

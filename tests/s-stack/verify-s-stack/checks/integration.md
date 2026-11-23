@@ -1,6 +1,6 @@
 # Phase `integration` checks
 
-Phase `integration` makes the `sam-mode` handbooks agree with each other and with `references/status-and-messages.md`, and puts the adopted gate-cost rules into the handbook text. Cold reads 9 and 10 check phase `run-cost`'s cheaper cold reads and fresh sessions at each gate. A session follows several of these files at once, so each behavioural check is a cold read across the files that must agree. A cold read starts a fresh subagent, gives it only the files the check names and the scenario the check quotes, tells it to read nothing else, and asks the questions. Its answer passes when it agrees in substance with every point of the expected answer. Wording may differ, but a missing or contradicting point fails the check. Wait for every cold-read subagent to finish before reporting.
+Phase `integration` makes the `sam-mode` handbooks agree with each other and with `references/status-and-messages.md`, and puts the adopted gate-cost rules into the handbook text. Cold reads 9 and 10, and scripted check 11, check phase `run-cost`'s cheaper cold reads and fresh sessions at each gate. A session follows several of these files at once, so each behavioural check is a cold read across the files that must agree. A cold read starts a fresh subagent, gives it only the files the check names and the scenario the check quotes, tells it to read nothing else, and asks the questions. Its answer passes when it agrees in substance with every point of the expected answer. Wording may differ, but a missing or contradicting point fails the check. Wait for every cold-read subagent to finish before reporting.
 
 The checks of the other phases' files cover the rest of this phase's fixes: `foundation.md` cold read 3 and its two scripts the code head, the merge rule and the orchestrator's messages, `phase-handbooks.md` the scoped Verify after a conflicted merge, and `orchestrator-handbook.md` the recorded `pushed` heads and the scoped post-merge check. Every scenario below uses placeholder data. The files, relative to the repository root, under `packages/s-stack/.apm/skills/sam-mode/`:
 
@@ -173,3 +173,70 @@ Expected answer:
 4. No to both. A fix round keeps its conversation until its `prs-open`, so the session records the verdict and goes on to Review in the same conversation. The orchestrator does not relaunch it while the `fix-round` is unanswered. An answer under which the session is relaunched mid-round fails this point.
 5. It sets `relaunching` with the time in the tracker, commits, and as its last call runs the relaunch command, which checks that the launcher started its pane and hands a job to the tmux server. After a minute the job ends its claude process, waits for the pane's shell and runs the launcher with `--fresh` in the same pane, keeping the session name. If the orchestrator branch moved in that minute, the job gives up, and the orchestrator runs the command again at the end of a later tick while `relaunching` is still set. The fresh session finds `relaunching`, clears it and sets the tick count to zero, reads the files, arms the tick and runs a tick. Unlike after a crash, it resends no message and clears no told mark.
 6. The tracker exists, so it is restarting, but it first finishes each step of Starting the feature that the tracker does not show done: it arms the tick, publishes the status board, has a fresh subagent publish the architecture page and starts the planner. Then it goes on as for a restart. An answer that skips the planner fails this point.
+
+### Scripted check 11. The orchestrator's self-relaunch block, run from beneath its claude
+
+`orchestrator.md`'s Restarts block runs from the orchestrator's own Bash tool, so from a shell beneath its claude. It must pick out that claude among the pane shell's children by its session name, leave a prompt helper beside it alone, refuse a claude started without that name, and give up when the orchestrator branch moves during the wait. This script extracts the block from the handbook, fills its placeholders, and runs it against a stub `tmux` that runs the hand-off job in the background, as `tmux run-shell -b` does, with every `sleep` in the job cut to one second. A stand-in launcher records each call. It starts no tmux server, and touches nothing outside its temporary directory.
+
+```bash
+bash <<'SCRIPT'
+set -u
+export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+H="$PWD/packages/s-stack/.apm/skills/sam-mode/handbooks/orchestrator.md"
+tmp="$(mktemp -d)"
+trap 'pkill -f "$tmp/" 2>/dev/null; rm -rf "$tmp"' EXIT
+fail() { echo "FAIL: $*"; exit 1; }
+mkdir -p "$tmp/bin" "$tmp/fast" "$tmp/skill/scripts" "$tmp/root"
+git -C "$tmp/root" init -q && git -C "$tmp/root" -c user.name=p -c user.email=p@example.invalid commit -q --allow-empty -m init
+printf '#!/bin/sh\necho "launch $*" >> "%s/launched"\n' "$tmp" > "$tmp/skill/scripts/launch.sh"
+printf '#!/bin/sh\nexec /bin/sleep 1\n' > "$tmp/fast/sleep"
+cat > "$tmp/bin/tmux" <<STUB
+#!/bin/bash
+case "\$*" in
+  *pane_pid*) cat "$tmp/pane_pid" ;;
+  *@s-stack-session*) echo demo-orchestrator ;;
+  "run-shell -b -t "*) ( PATH="$tmp/fast:\$PATH" /bin/sh -c "\$5" ) </dev/null >/dev/null 2>&1 & ;;
+  *) exit 1 ;;
+esac
+STUB
+printf '#!/bin/bash\ntrap "exit 0" TERM\nwhile :; do /bin/sleep 0.2; done\n' > "$tmp/helper"
+cat > "$tmp/claude" <<STUB
+#!/bin/bash
+trap 'exit 0' TERM
+( cd "$tmp/root" && PATH="$tmp/bin:\$PATH" TMUX_PANE=%7 bash "$tmp/call.sh" > "$tmp/block.out" 2>&1
+  if [ -e "$tmp/move" ]; then git -c user.name=p -c user.email=p@example.invalid commit -q --allow-empty -m moved; fi
+  touch "$tmp/ran" ) &
+while :; do /bin/sleep 0.2; done
+STUB
+chmod +x "$tmp"/bin/* "$tmp/fast/sleep" "$tmp/skill/scripts/launch.sh" "$tmp/helper" "$tmp/claude"
+awk '/^pane_pid=\$\(tmux/{f=1} f{print} /^else echo/{f=0}' "$H" | sed -e "s|<feature>|demo|g" -e "s|<feature worktree root>|$tmp/root|" -e "s|<this skill's directory>|$tmp/skill|" -e "s|<window>|@1|" > "$tmp/call.sh"
+[ -s "$tmp/call.sh" ] || fail "no relaunch block in the handbook"
+run() {
+  rm -f "$tmp/ran" "$tmp/launched" "$tmp/block.out"
+  bash -c "echo \$\$ > '$tmp/pane_pid'; '$tmp/helper' & echo \$! > '$tmp/helper_pid'; exec -a '$1' /bin/bash '$tmp/claude' & echo \$! > '$tmp/claude_pid'; wait" &
+  for _ in $(seq 50); do [ -e "$tmp/ran" ] && break; /bin/sleep 0.2; done
+  [ -e "$tmp/ran" ] || fail "the block did not finish"
+  claude=$(cat "$tmp/claude_pid") helper=$(cat "$tmp/helper_pid")
+  for _ in $(seq 50); do [ -e "$tmp/launched" ] && break; /bin/sleep 0.2; done
+  /bin/sleep 1
+}
+alive() { kill -0 "$1" 2>/dev/null; }
+run 'claude --name demo-orchestrator --session-id x'
+grep -qx 'launch --feature demo --role orchestrator --window @1 --fresh' "$tmp/launched" 2>/dev/null || fail "named claude: no launcher call; block printed: $(cat "$tmp/block.out")"
+alive "$claude" && fail "named claude: still running"
+alive "$helper" || fail "named claude: the prompt helper was ended"
+kill "$helper"
+run 'claude --continue'
+grep -qx 'not started by the launcher' "$tmp/block.out" || fail "unnamed claude: block printed: $(cat "$tmp/block.out")"
+[ -e "$tmp/launched" ] && fail "unnamed claude: the launcher ran"
+alive "$claude" || fail "unnamed claude: it was ended"
+kill "$claude" "$helper"
+touch "$tmp/move"
+run 'claude --name demo-orchestrator --session-id x'
+[ -e "$tmp/launched" ] && fail "moved branch: the launcher ran"
+alive "$claude" || fail "moved branch: claude was ended"
+echo "self-relaunch: named claude relaunched, helper kept, unnamed refused, moved branch gave up"
+SCRIPT
+```
+
+Expected: exit `0` and the line `self-relaunch: named claude relaunched, helper kept, unnamed refused, moved branch gave up`.

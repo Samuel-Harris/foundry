@@ -1,5 +1,5 @@
 name: default-stack
-version: "0.1.17"
+version: "0.1.18"
 description: "Meta-package that installs the default Foundry stack."
 author: sam
 license: MIT

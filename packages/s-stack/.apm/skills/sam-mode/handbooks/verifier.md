@@ -24,6 +24,9 @@ Decide from the diff what proves the phase works.
 
 Prose is behaviour too, when an agent acts on it. Check a handbook, a prompt or a skill with a cold read. A cold read starts a fresh subagent, gives it only the files the check names, tells it to read nothing else, and asks a scenario question. Write the expected answer down before you run it. The answer passes when it agrees in substance with every point of the expected answer.
 
+- **Grade every answer yourself**, against the expected answer you wrote before the run. Start no subagent to grade.
+- **Batch questions that name the same files.** One reader takes up to three checks that name the same files, in one prompt, and gives a separately labelled answer to each check. A check that asks whether two statements contradict each other gets a reader of its own, and so does a check whose answer would give away the answer to another in the batch. Check files keep one check per behaviour. Batching is how you run them, not how they are written.
+
 ## The verification skill
 
 The skill's own files, its `SKILL.md` and its feature map, are shared by every phase. Change them only when the feature plan gives that path to your phase. A feature plan makes the verification skill its first phase when no skill covers the feature, so other phases find it in place.

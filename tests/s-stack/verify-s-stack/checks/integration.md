@@ -1,6 +1,6 @@
 # Phase `integration` checks
 
-Phase `integration` makes the `sam-mode` handbooks agree with each other and with `references/status-and-messages.md`, and puts the adopted gate-cost rules into the handbook text. A session follows several of these files at once, so each behavioural check is a cold read across the files that must agree. A cold read starts a fresh subagent, gives it only the files the check names and the scenario the check quotes, tells it to read nothing else, and asks the questions. Its answer passes when it agrees in substance with every point of the expected answer. Wording may differ, but a missing or contradicting point fails the check. Wait for every cold-read subagent to finish before reporting.
+Phase `integration` makes the `sam-mode` handbooks agree with each other and with `references/status-and-messages.md`, and puts the adopted gate-cost rules into the handbook text. Cold reads 9 and 10, and scripted check 11, check phase `run-cost`'s cheaper cold reads and fresh sessions at each gate. A session follows several of these files at once, so each behavioural check is a cold read across the files that must agree. A cold read starts a fresh subagent, gives it only the files the check names and the scenario the check quotes, tells it to read nothing else, and asks the questions. Its answer passes when it agrees in substance with every point of the expected answer. Wording may differ, but a missing or contradicting point fails the check. Wait for every cold-read subagent to finish before reporting.
 
 The checks of the other phases' files cover the rest of this phase's fixes: `foundation.md` cold read 3 and its two scripts the code head, the merge rule and the orchestrator's messages, `phase-handbooks.md` the scoped Verify after a conflicted merge, and `orchestrator-handbook.md` the recorded `pushed` heads and the scoped post-merge check. Every scenario below uses placeholder data. The files, relative to the repository root, under `packages/s-stack/.apm/skills/sam-mode/`:
 
@@ -147,3 +147,96 @@ Expected answer:
 4. No. A changed condition is a change to logic or control flow, never waivable. An answer that waives it fails this point.
 5. Yes. A diff of generated files only is waivable.
 6. INCONCLUSIVE, not `WAIVED`, because something could observe the change but no check can run here. INCONCLUSIVE is not a pass.
+
+### Cold read 9. Batched cold reads, graded by the verifier
+
+Files: `verifier.md`.
+
+Prompt: "Read only this file and nothing else, not even files it links to. Answer from it and the scenario alone. You are the verifier for phase `widgets`. Six cold-read checks in your blast radius each name only `handbooks/widgets.md`. Check A asks what the session does when a merge conflicts. Check B asks what it does after that conflict is resolved, and its expected answer states how the conflict was resolved, which is check A's expected answer. Check C asks whether two of the handbook's rules contradict each other. Checks D, E and F ask ordinary scenario questions whose answers do not give each other away, or give away A's or B's. (1) How many cold-read subagents do you start, and which checks does each one get? (2) Grading six long answers against their expected answers will take much of your context. Do you start a subagent to grade them, and against what is each answer graded?"
+
+Expected answer:
+
+1. Four readers, because one reader takes at most three checks that name the same files. C, the contradiction probe, gets a reader of its own. A and B must not share a reader, because B's answer would give away A's. One valid grouping is A with D and E, F alone, B alone, and C alone. Any grouping passes that keeps C alone, keeps A and B apart, gives no reader more than three checks, and has each reader answer each of its checks under its own label. An answer that puts C or both A and B in one batch, gives a reader four or more checks, or starts six readers fails this point.
+2. No. The verifier grades every answer itself, against the expected answer it wrote down before the run, and starts no grading subagent. An answer that starts a grader fails this point.
+
+### Cold read 10. A fresh phase session after a verdict, and the orchestrator's own relaunch
+
+Files: the reference, `phase-session.md` and `orchestrator.md`.
+
+Prompt: "Read only these three files and nothing else, not even files they link to. Answer from them and the scenario alone. Phase `widgets` of feature `demo` is in Verify, and nothing the orchestrator sent it is unanswered. Its verifier returns VERIFIED for the current code head. (1) What does the phase session do, up to the end of its turn? (2) What does the orchestrator do? What if, before that, it must send the session `merge-orchestrator-branch`, and the merge is clean? (3) What does the session that starts next read, and what does it do first? (4) Later, in PR, the orchestrator sends `widgets` a `fix-round` for a review comment. The session fixes it, moves to Verify, and the verifier returns VERIFIED. Does the session end its turn, and does the orchestrator relaunch it? (5) The orchestrator, which the launcher started, has just finished the sixth tick this session has run, and every subagent it started has reported. What does it do, what happens if it commits something within the next minute, and what does the session that starts next do differently from a restart after a crash? (6) Another time, an orchestrator crashed just after Starting the feature step 1, so its tracker holds only the window and the default branch, and no board, architecture page or planner exists. You are started again. What do you do?"
+
+Expected answer:
+
+1. In one commit it records the verdict in `verdicts`, the results in the evidence file and state Review. It sends the orchestrator a `state` message with Review and the code head, and ends its turn without starting the review.
+2. From the status file it sees a verdict given after the session's start time in the tracker, with nothing it sent unanswered and no `prs-open` at the current code head, so the session is at a gate boundary. It sends no `stop`. Once the session is quiet, it closes the pane with `--close` and launches the session with `--fresh`. If it sends `merge-orchestrator-branch` first, the session merges, keeps state Review because the clean merge moves no code head, and ends its turn again. The orchestrator checks the boundary again every tick, so it still relaunches the session once it is quiet, not only through the stalled-session rule. An answer under which the orchestrator resumes the old conversation, or waits for a later boundary, fails this point.
+3. The fresh session reads the phase plan, the status file, the evidence file and the phase branch, finds state Review with no review verdict for the current code head, and starts the Review gate.
+4. No to both. A fix round keeps its conversation until its `prs-open`, so the session records the verdict and goes on to Review in the same conversation. The orchestrator does not relaunch it while the `fix-round` is unanswered. An answer under which the session is relaunched mid-round fails this point.
+5. It sets `relaunching` with the time in the tracker, commits, and as its last call runs the relaunch command, which checks that the launcher started its pane and hands a job to the tmux server. After a minute the job ends its claude process, waits for the pane's shell and runs the launcher with `--fresh` in the same pane, keeping the session name. If the orchestrator branch moved in that minute, the job gives up, and the orchestrator runs the command again at the end of a later tick while `relaunching` is still set. The fresh session finds `relaunching`, clears it and sets the tick count to zero, reads the files, arms the tick and runs a tick. Unlike after a crash, it resends no message and clears no told mark.
+6. The tracker exists, so it is restarting, but it first finishes each step of Starting the feature that the tracker does not show done: it arms the tick, publishes the status board, has a fresh subagent publish the architecture page and starts the planner. Then it goes on as for a restart. An answer that skips the planner fails this point.
+
+### Scripted check 11. The orchestrator's self-relaunch block, run from beneath its claude
+
+`orchestrator.md`'s Restarts block runs from the orchestrator's own Bash tool, so from a shell beneath its claude. It must pick out that claude among the pane shell's children by its session name, leave a prompt helper beside it alone, refuse a claude started without that name, and give up when the orchestrator branch moves during the wait. This script extracts the block from the handbook, fills its placeholders, and runs it against a stub `tmux` that runs the hand-off job in the background, as `tmux run-shell -b` does, with every `sleep` in the job cut to one second. A stand-in launcher records each call. It starts no tmux server, and touches nothing outside its temporary directory.
+
+```bash
+bash <<'SCRIPT'
+set -u
+export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+H="$PWD/packages/s-stack/.apm/skills/sam-mode/handbooks/orchestrator.md"
+tmp="$(mktemp -d)"
+trap 'pkill -f "$tmp/" 2>/dev/null; rm -rf "$tmp"' EXIT
+fail() { echo "FAIL: $*"; exit 1; }
+mkdir -p "$tmp/bin" "$tmp/fast" "$tmp/skill/scripts" "$tmp/root"
+git -C "$tmp/root" init -q && git -C "$tmp/root" -c user.name=p -c user.email=p@example.invalid commit -q --allow-empty -m init
+printf '#!/bin/sh\necho "launch $*" >> "%s/launched"\n' "$tmp" > "$tmp/skill/scripts/launch.sh"
+printf '#!/bin/sh\nexec /bin/sleep 1\n' > "$tmp/fast/sleep"
+cat > "$tmp/bin/tmux" <<STUB
+#!/bin/bash
+case "\$*" in
+  *pane_pid*) cat "$tmp/pane_pid" ;;
+  *@s-stack-session*) echo demo-orchestrator ;;
+  "run-shell -b -t "*) ( PATH="$tmp/fast:\$PATH" /bin/sh -c "\$5" ) </dev/null >/dev/null 2>&1 & ;;
+  *) exit 1 ;;
+esac
+STUB
+printf '#!/bin/bash\ntrap "exit 0" TERM\nwhile :; do /bin/sleep 0.2; done\n' > "$tmp/helper"
+cat > "$tmp/claude" <<STUB
+#!/bin/bash
+trap 'exit 0' TERM
+( cd "$tmp/root" && PATH="$tmp/bin:\$PATH" TMUX_PANE=%7 bash "$tmp/call.sh" > "$tmp/block.out" 2>&1
+  if [ -e "$tmp/move" ]; then git -c user.name=p -c user.email=p@example.invalid commit -q --allow-empty -m moved; fi
+  touch "$tmp/ran" ) &
+while :; do /bin/sleep 0.2; done
+STUB
+chmod +x "$tmp"/bin/* "$tmp/fast/sleep" "$tmp/skill/scripts/launch.sh" "$tmp/helper" "$tmp/claude"
+awk '/^pane_pid=\$\(tmux/{f=1} f{print} /^else echo/{f=0}' "$H" | sed -e "s|<feature>|demo|g" -e "s|<feature worktree root>|$tmp/root|" -e "s|<this skill's directory>|$tmp/skill|" -e "s|<window>|@1|" > "$tmp/call.sh"
+[ -s "$tmp/call.sh" ] || fail "no relaunch block in the handbook"
+run() {
+  rm -f "$tmp/ran" "$tmp/launched" "$tmp/block.out"
+  bash -c "echo \$\$ > '$tmp/pane_pid'; '$tmp/helper' & echo \$! > '$tmp/helper_pid'; exec -a '$1' /bin/bash '$tmp/claude' & echo \$! > '$tmp/claude_pid'; wait" &
+  for _ in $(seq 50); do [ -e "$tmp/ran" ] && break; /bin/sleep 0.2; done
+  [ -e "$tmp/ran" ] || fail "the block did not finish"
+  claude=$(cat "$tmp/claude_pid") helper=$(cat "$tmp/helper_pid")
+  for _ in $(seq 50); do [ -e "$tmp/launched" ] && break; /bin/sleep 0.2; done
+  /bin/sleep 1
+}
+alive() { kill -0 "$1" 2>/dev/null; }
+run 'claude --name demo-orchestrator --session-id x'
+grep -qx 'launch --feature demo --role orchestrator --window @1 --fresh' "$tmp/launched" 2>/dev/null || fail "named claude: no launcher call; block printed: $(cat "$tmp/block.out")"
+alive "$claude" && fail "named claude: still running"
+alive "$helper" || fail "named claude: the prompt helper was ended"
+kill "$helper"
+run 'claude --continue'
+grep -qx 'not started by the launcher' "$tmp/block.out" || fail "unnamed claude: block printed: $(cat "$tmp/block.out")"
+[ -e "$tmp/launched" ] && fail "unnamed claude: the launcher ran"
+alive "$claude" || fail "unnamed claude: it was ended"
+kill "$claude" "$helper"
+touch "$tmp/move"
+run 'claude --name demo-orchestrator --session-id x'
+[ -e "$tmp/launched" ] && fail "moved branch: the launcher ran"
+alive "$claude" || fail "moved branch: claude was ended"
+echo "self-relaunch: named claude relaunched, helper kept, unnamed refused, moved branch gave up"
+SCRIPT
+```
+
+Expected: exit `0` and the line `self-relaunch: named claude relaunched, helper kept, unnamed refused, moved branch gave up`.

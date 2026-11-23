@@ -35,6 +35,7 @@ Each line of the `LIST` block is one scenario: a virtual-time budget in millisec
 | Ready for your review: drafts only, rank order with null last and ties by number, dependencies first, cycle fallback, "after" notes for draft and open dependencies, chips, empty state | `full`, `review`, `empty` |
 | Pull requests: every row and cell, ordered by number, digit strings read as numbers, no update chip for a null `needs_update`, empty state | `full`, `review`, `empty` |
 | Phases: every row and cell, scheduling phrases, unknown values, Depends on, a live session with and without a pane, relative time with its `datetime`, empty state | `full`, `missing`, `unreadable`, `cycle`, `flat`, `empty` |
+| Phases: under each state chip a stepper of the seven states, Spec to Done, in order, on one line inside its cell and hidden from screen readers. Passed steps have an accent bar at 0.55 opacity, the current step a full accent bar and a label at weight 600 in `--fg`, later steps a `--line` bar, read by computed style. For `board`, in Verify, Spec, Plan and Implement are passed, Verify is current, and Review, PR and Done are later. An unknown state marks no step. The rows' cell text leaves the stepper out | every scenario, in light, dark and OS dark, at 320 to 1000 px; `full`; `missing` |
 | Recent changes: first 20 in stored order, each time's visible text and `datetime`, null `from`, empty state | `full`, `empty` |
 | Heartbeat: last tick's visible time and `datetime`, age, Fresh or Stale chip, banner minutes, no tick, unreadable tick | every scenario with `board/meta` |
 | Staleness: more than 40 minutes by default and more than `stale_after_min` when sent, above or below 40, exact to the millisecond | `freeze` scenarios |
@@ -233,7 +234,7 @@ cat > "$dir/collect.js" <<'JS'
     const probe = document.createElement("div");
     document.body.append(probe);
     const out = {};
-    for (const t of ["chip-bg", "chip-fg", "line", "accent", "accent-bg", "good", "good-bg", "warn", "warn-bg", "crit", "crit-bg"]) {
+    for (const t of ["fg", "muted", "chip-bg", "chip-fg", "line", "accent", "accent-bg", "good", "good-bg", "warn", "warn-bg", "crit", "crit-bg"]) {
       probe.style.color = `var(--${t})`;
       out[t] = cs(probe).color;
     }
@@ -292,6 +293,23 @@ cat > "$dir/collect.js" <<'JS'
       overflowX: cs(box).overflowX, clientWidth: box.clientWidth, scrollWidth: box.scrollWidth,
       mainWidth: document.querySelector("main").clientWidth};
   }
+  const cellText = (td) => (td.querySelector(":scope > .steps")
+    ? [...td.children].filter((n) => !n.matches(".steps")).map(text).join(" | ") : text(td));
+  function steppers(section) {
+    const main = document.querySelector("main").getBoundingClientRect();
+    return [...section.querySelectorAll("tbody tr")].filter((tr) => tr.querySelector(".steps")).map((tr) => {
+      const box = tr.querySelector(".steps");
+      const r = box.getBoundingClientRect(), cell = box.parentElement.getBoundingClientRect();
+      const steps = [...box.children].map((n) => {
+        const bar = cs(n, "::before");
+        return {name: n.textContent, bar: bar.backgroundColor, opacity: bar.opacity, height: parseFloat(bar.height),
+          weight: cs(n).fontWeight, color: cs(n).color, top: Math.round(n.getBoundingClientRect().top), right: n.getBoundingClientRect().right};
+      });
+      return {phase: text(tr.cells[0]), state: cellText(box.parentElement), hidden: box.getAttribute("aria-hidden"), shown: shown(box), steps,
+        fits: r.left >= cell.left - 0.5 && r.right <= cell.right + 0.5 && r.right <= main.right + 0.5
+          && steps.every((x) => x.right <= r.right + 0.5)};
+    });
+  }
   const chips = (root) => [...root.querySelectorAll(".chip")].filter(shown).map((c) =>
     ({text: c.textContent, bg: cs(c).backgroundColor, fg: cs(c).color, clipped: c.scrollWidth > c.clientWidth}));
   function depChips() {
@@ -335,7 +353,8 @@ cat > "$dir/collect.js" <<'JS'
       shown: shown(s),
       text: text(s),
       items: [...s.querySelectorAll("ul > li, ol > li")].map(text),
-      rows: [...s.querySelectorAll("tbody tr")].map((tr) => [...tr.cells].map(text)),
+      rows: [...s.querySelectorAll("tbody tr")].map((tr) => [...tr.cells].map(cellText)),
+      steppers: steppers(s),
       times: [...s.querySelectorAll("time")].map((t) => t.getAttribute("datetime")),
       chips: chips(s),
       tables: [...s.querySelectorAll("table")].map((t) => ({head: [...t.querySelectorAll("th")].map((th) => th.textContent),
@@ -571,6 +590,26 @@ CHIP_TOKENS = {"plain": ("chip-bg", "chip-fg"), "accent": ("accent-bg", "accent"
 NODE_TOKENS = {"plain": ("chip-bg", "line"), "accent": ("accent-bg", "accent"), "warn": ("warn-bg", "warn"),
                "good": ("good-bg", "good"), "crit": ("crit-bg", "crit")}
 
+STATES = ["Spec", "Plan", "Implement", "Verify", "Review", "PR", "Done"]
+
+
+def stepper_ok(c, s):
+    t = s["tokens"]
+    rows = sec(s, "Phases")["rows"]
+    c("Phases: every row has a stepper", len(sec(s, "Phases")["steppers"]) == len(rows))
+    for st in sec(s, "Phases")["steppers"]:
+        at = STATES.index(st["state"]) if st["state"] in STATES else -1
+        p = st["phase"][:20]
+        c(f"stepper {p}: the seven states in order, shown, hidden from screen readers, one line inside its cell",
+          [x["name"] for x in st["steps"]] == STATES and st["shown"] and st["hidden"] == "true" and st["fits"]
+          and len({x["top"] for x in st["steps"]}) == 1 and all(x["height"] > 0 for x in st["steps"]))
+        for i, x in enumerate(st["steps"]):
+            kind = "current" if i == at else "passed" if i < at else "later"
+            bar = (t["accent"], "0.55") if kind == "passed" else (t["accent"], "1") if kind == "current" else (t["line"], "1")
+            label = x["weight"] == "600" and x["color"] == t["fg"] if kind == "current" else x["weight"] != "600" and x["color"] != t["fg"]
+            c(f"stepper {p}: {x['name']} is {kind}", (x["bar"], x["opacity"]) == bar and label)
+
+
 def tone(label):
     return "crit" if label.startswith("unknown") else TONE_OF.get(label)
 
@@ -623,7 +662,7 @@ def contrast(a, b):
 
 def sec(snap, title):
     missing = {"title": title, "count": None, "shown": False, "text": "", "items": [], "rows": [], "times": [], "chips": [],
-               "tables": [], "mapHeading": [], "map": None}
+               "tables": [], "mapHeading": [], "map": None, "steppers": []}
     return next((s for s in snap["sections"] if s["title"] == title), missing)
 
 
@@ -710,6 +749,7 @@ def common(c, snap, q):
     c("unknown dependency chips wrap inside the page", all(not d["clipped"] and d["inside"] for d in snap["depChips"]))
     c("no data becomes markup or an unsafe link", snap["injected"] == 0 and all(h.startswith("https://") for h in snap["links"]))
     chips_ok(c, snap, [ch for x in snap["sections"] for ch in x["chips"]] + snap["headerChips"])
+    stepper_ok(c, snap)
     for x in snap["sections"]:
         for t in x["tables"]:
             cols = PR_COLS if x["title"] == "Pull requests" else PHASE_COLS
@@ -745,6 +785,10 @@ def full_content(c, s):
     phases = sec(s, "Phases")
     c("Phases: every row with scheduling labels and Depends on", phases["rows"] == PHASES and phases["count"] == "8")
     c("Phases: each last change dated", phases["times"] == [iso(t0, a * 60000) for a in PHASE_AGES])
+    board = next((x for x in phases["steppers"] if x["phase"] == "board"), None)
+    c("Phases: board's stepper has Spec, Plan and Implement passed, Verify current, Review, PR and Done later",
+      board is not None and board["state"] == "Verify" and [x["opacity"] for x in board["steps"]] == ["0.55"] * 3 + ["1"] * 4
+      and [x["weight"] == "600" for x in board["steps"]] == [False, False, False, True, False, False, False])
     recent = sec(s, "Recent changes")
     c("Recent changes: first 20 in stored order, each at its UTC time", recent["items"] == [local(t0, a * 60000) + " | " + r
       for a, r in zip(RECENT_AGES, RECENT)] and recent["count"] == "20")
@@ -849,6 +893,8 @@ def check(name, r):
             "unreadable-" + "0123456789" * 6 + " | " + LONG + "cd | Review → Implement"])
     if fixture == "missing":
         c("an unknown state and scheduling read as unknown", phases["rows"][0][1:3] == ["unknown: Shipping", "unknown: weird"])
+        c("an unknown state marks no step", [(x["bar"], x["opacity"], x["weight"] == "600") for x in phases["steppers"][0]["steps"]]
+          == [(s["tokens"]["line"], "1", False)] * 7)
     if fixture == "cycle":
         c("a cycle shows the error line and no map", phases["map"] is None and phases["mapHeading"] == [] and CYCLE in phases["text"])
         c("a cycle still lists every dependency", deps == {"alpha": "beta (merged)", "beta": "alpha (done)", "gamma": "alpha (merged)"})

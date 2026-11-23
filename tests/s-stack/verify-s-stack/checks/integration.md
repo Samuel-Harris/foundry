@@ -147,3 +147,26 @@ Expected answer:
 4. No. A changed condition is a change to logic or control flow, never waivable. An answer that waives it fails this point.
 5. Yes. A diff of generated files only is waivable.
 6. INCONCLUSIVE, not `WAIVED`, because something could observe the change but no check can run here. INCONCLUSIVE is not a pass.
+
+### Cold read 9. Batched cold reads, graded by the verifier
+
+Files: `verifier.md`.
+
+Prompt: "Read only this file and nothing else, not even files it links to. Answer from it and the scenario alone. You are the verifier for phase `widgets`. A check file in your blast radius has four cold-read checks, each naming only `handbooks/widgets.md`. One asks whether two of that handbook's rules contradict each other. The other three ask ordinary scenario questions whose answers do not give each other away. (1) How many cold-read subagents do you start, and which questions does each one get? (2) Who grades the answers, and against what?"
+
+Expected answer:
+
+1. Two readers. One takes the three ordinary questions in one prompt and gives a separately labelled answer to each. The contradiction probe gets a reader of its own. An answer that starts four readers, or puts the contradiction probe in the batch, fails this point.
+2. The verifier grades every answer itself, against the expected answer it wrote down before the run. It starts no grading subagent. An answer that starts a grader fails this point.
+
+### Cold read 10. A fresh phase session after a verdict
+
+Files: the reference, `phase-session.md` and `orchestrator.md`.
+
+Prompt: "Read only these three files and nothing else, not even files they link to. Answer from them and the scenario alone. Phase `widgets` of feature `demo` is in Verify. Its verifier returns VERIFIED for the current code head. (1) What does the phase session do, up to the end of its turn? (2) What does the orchestrator do, and what does it send the session meanwhile? (3) What does the session that starts next read, and what does it do first?"
+
+Expected answer:
+
+1. It records the verdict in `verdicts` and the results in the evidence file, commits the status file with state Review, sends the orchestrator a `state` message with Review and the code head, and ends its turn without starting the review.
+2. From the status file it sees a verdict given after the session started. It marks the session stopping, as for a `stop`, and sends it nothing. Once the session is quiet, it closes the pane with `--close`, launches the session with `--fresh`, and sends it every message it left unanswered. An answer under which the orchestrator resumes the old conversation fails this point.
+3. The fresh session reads the phase plan, the status file, the evidence file and the phase branch, finds state Review with no review verdict for the current code head, and starts the Review gate.

@@ -104,7 +104,7 @@ Prompt: "Read only the handbook file at the path below and nothing else, not eve
 
 Expected answer:
 
-1. It reads again the phase plan, the status file and the phase branch, including uncommitted work (`git status`) and the current code head. It continues from the state recorded in the status file. A gate with no verdict in the status file runs again, and a verdict for a different code head no longer covers the phase.
+1. It reads again the phase plan, the status file, the evidence file and the phase branch, including uncommitted work (`git status`) and the current code head. It continues from the state recorded in the status file. A gate with no verdict in the status file runs again, and a verdict for a different code head no longer covers the phase.
 2. It follows the instruction. Because it changes the phase's scope, it records it in the status file's `decisions`, commits, and sends the orchestrator an `instruction` message that carries it. If the change conflicts with the feature plan, it also sends a decision request, because only the planner changes the plan.
 
 ## Evidence

@@ -59,11 +59,13 @@ In tick step 1, call the usage tool, `mcp__s-stack-usage__usage`, which the laun
 
 | Signal | Do |
 | --- | --- |
-| `five_hour` at 95% or more, or a per-model limit message in any pane | Send `park` to every working phase until the window's `resetsAt`, and `unpark` at the first tick after it |
-| `seven_day` at 95% or more, or a weekly limit or monthly spend limit message in any pane | Park every phase until the developer returns |
+| `five_hour` at 95% or more, or a per-model limit message in any pane | Pause until the window's `resetsAt`, and `unpark` at the first tick after it |
+| `seven_day` at 95% or more, or a weekly limit or monthly spend limit message in any pane | Pause until the developer returns |
 | No figures, and an 85% usage warning in any pane | Treat it as the 95% signal of the window it names |
 | A phase's `NOT VERIFIED` and `INCONCLUSIVE` verdicts since AFK mode began, by their `at` times, reach `rounds`, or its `SIGNIFICANT` verdicts do | Send it `park` with the reason "round cap", until the developer returns |
 | More phases working than `sessions` | Park the most recently started, with the reason "session cap", and unpark them, oldest first, as slots free |
+
+Each pause in this table is a usage pause. It parks every phase session, working or idle, with the reason and the time it waits until. The same holds when the developer tells you a limit was reached, and before your own pause until a reset. While it lasts, start no phase session, and relaunch none that is idle at a gate boundary.
 
 The 5% headroom pays for the park messages and the next ticks. A session that a plan limit stopped waits for its own reset. Never replace a session for being rate-limited.
 

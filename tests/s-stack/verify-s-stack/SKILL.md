@@ -159,7 +159,7 @@ Each phase's verifier records that phase's behavioural checks in `tests/s-stack/
 - `## Rerun` holds cheap, repeatable checks that touch nothing outside the machine, such as cold reads, scratch repositories and unit tests. Each states its command or scenario and its expected result.
 - `## Evidence` describes one-off checks, such as a published test page or a real `claude` session, and never their results. `handbooks/verifier.md` defines the section. This skill does not run it.
 
-List the files in name order, then run every check in each file's `## Rerun` section exactly as written and compare its result with the expected one. Report each check by file and name. A Rerun check may report PENDING when what it needs is absent on the checked-out branch, and that PENDING never fails the verdict. With no files, report "no check files" and PASS.
+List the files in name order, then run every check in each file's `## Rerun` section exactly as written and compare its result with the expected one. Batch cold reads and grade their answers yourself, as `packages/s-stack/.apm/skills/sam-mode/handbooks/verifier.md` says for cold reads. Report each check by file and name. A Rerun check may report PENDING when what it needs is absent on the checked-out branch, and that PENDING never fails the verdict. With no files, report "no check files" and PASS.
 
 A scoped run, which the verifier and the post-merge check make, runs only the checks its brief names as in the blast radius, and reports each other check file with the brief's reason. The full run, every Rerun check, is for the end of the feature and for when the developer asks.
 

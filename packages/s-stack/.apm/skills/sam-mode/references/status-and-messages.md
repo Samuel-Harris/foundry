@@ -121,7 +121,7 @@ The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-se
 | `move-back` | A roadmap or plan change touches a phase, or a check on the orchestrator branch failed after the phase merged | The state to move back to, and what changed or the failed check |
 | `instruction` | Every pull request of the phase merged into the default branch | The merged pull request numbers |
 | `stop` | A phase's pane is about to close, or a stalled session is being replaced | A request to commit and stop |
-| `park` | In AFK mode, or in a usage pause that outlives it, a phase must stop starting work, for a reason [afk-mode.md](afk-mode.md) names | The reason, and the time to wait until or "the developer's return" |
+| `park` | A phase must stop starting work, for a reason [afk-mode.md](afk-mode.md) names | The reason, and what ends it: a time, or an event such as the developer's word |
 | `unpark` | The reason for a `park` has passed | Nothing more |
 
 The rules:

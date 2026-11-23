@@ -32,7 +32,7 @@ Every change of state is two steps, in this order:
 1. Commit the status file with the new `state`, `changed_at` and `code_head`.
 2. Send the orchestrator a `state` message with the new state and the code head.
 
-When the commit moves the phase from Implement to Verify, or records a Verify or Review verdict together with the state it leads to, send the `state` message and then end your turn, starting nothing more. The orchestrator then relaunches your session with `--fresh`, and the fresh session continues as [After a restart](#after-a-restart) says, so commit everything it needs first. A fix round, or work an `instruction` asked for, keeps its conversation until its `prs-open`, and so does every other change of state.
+When the commit moves the phase from Implement to Verify, or records a Verify or Review verdict together with the state it leads to, send the `state` message and then end your turn, starting nothing more. The orchestrator then relaunches your session with `--fresh`, and the fresh session continues as [After a restart](#after-a-restart) says, so commit everything it needs first. A message that wakes you before then is handled as usual, and when it leaves the phase where it was, end your turn again. A `fix-round`, or an `instruction` from the orchestrator, keeps its conversation until its `prs-open`, and so does every other change of state.
 
 Whenever you wait, for an answer, a blocked merge or a `move-back`, set `waits_for` to one line saying what for, in the commit that records the request or the state, before you send the message. Set it back to `null` in the commit that ends the wait.
 

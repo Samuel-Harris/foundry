@@ -39,7 +39,8 @@ board/recent, one document:
 
 phases/<phase id>, one document per phase:
   phase         string, the phase id, equal to the document id
-  state         a state name
+  state         a state name. The page draws each phase's whole sequence of
+                states from it, so the stepper needs no field of its own.
   scheduling    "queued", "blocked", "live" or "closed"
                 (it describes the session, not the phase's state)
   waits_for     string, a one-line description of anything the phase waits
@@ -239,6 +240,7 @@ leave needs_update null.
     tr:last-child { border-bottom: 0; }
     td { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); justify-items: start; gap: 8px; padding: 3px 0; border: 0; overflow-wrap: anywhere; }
     td::before { content: attr(data-label); color: var(--muted); font-size: 0.8rem; }
+    td > .steps { grid-column: 1 / -1; }
   }
 
   ol.recent { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
@@ -246,6 +248,12 @@ leave needs_update null.
   ol.recent > li > :first-child { overflow-wrap: anywhere; }
   .deps { max-width: 100%; }
   .deps .chip { white-space: normal; overflow-wrap: anywhere; border-radius: 6px; }
+  .steps { display: grid; grid-template-columns: repeat(7, max-content); gap: 2px 6px; margin-top: 4px; font-size: 0.68rem; color: var(--muted); }
+  .step-bar { height: 5px; border-radius: 2px; background: var(--line); }
+  .step-bar.done { background: var(--accent); opacity: 0.55; }
+  .step-bar.now { background: var(--accent); }
+  .step-label { white-space: nowrap; }
+  .step-label.now { color: var(--fg); font-weight: 600; }
   .map-heading { margin: 6px 0 0; font-size: 0.85rem; font-weight: 600; }
   .map { overflow-x: auto; max-width: 100%; min-width: 0; }
   .map svg { display: block; }
@@ -284,6 +292,7 @@ leave needs_update null.
 
 <script>
 (() => {
+  const STATES = ["Spec", "Plan", "Implement", "Verify", "Review", "PR", "Done"];
   const STATE_TONE = {Spec: "plain", Plan: "plain", Implement: "accent", Verify: "warn", Review: "warn", PR: "good", Done: "good"};
   const NEED_KINDS = ["decision", "prompt"];
   const DEFAULT_STALE_MIN = 40;
@@ -384,6 +393,18 @@ leave needs_update null.
   function phaseStateChip(s) {
     const {label, tone} = stateLook(s);
     return chip(label, tone === "plain" ? "" : tone);
+  }
+
+  // The chip and the steps are both children of the cell, so a phone row can give the steps the full width.
+  // An unknown state marks no step, and the chip alone reports it.
+  function stateCell(s) {
+    const at = STATES.indexOf(s);
+    const look = (i) => (i === at ? " now" : i < at ? " done" : "");
+    const cell = document.createDocumentFragment();
+    cell.append(phaseStateChip(s), el("div", {class: "steps"},
+      ...STATES.map((_, i) => el("span", {class: "step-bar" + look(i), "aria-hidden": "true"})),
+      ...STATES.map((name, i) => el("span", {class: "step-label" + look(i), "aria-current": i === at ? "step" : null}, name))));
+    return cell;
   }
 
   const SCHEDULING = {live: "session live", closed: "session closed", queued: "queued to start", blocked: "blocked"};
@@ -680,7 +701,7 @@ leave needs_update null.
       ["Phase", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"],
       phases.map((p) => [
         el("span", {class: "mono"}, str(p.phase)),
-        phaseStateChip(p.state),
+        stateCell(p.state),
         schedulingChip(p.scheduling),
         str(p.waits_for) || "nothing",
         dependsCell(deps.get(p)),

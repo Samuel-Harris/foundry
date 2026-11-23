@@ -34,7 +34,7 @@ Every change of state is two steps, in this order:
 
 When the commit moves the phase from Implement to Verify, or records a Verify or Review verdict together with the state it leads to, send the `state` message and then end your turn, starting nothing more. The orchestrator then relaunches your session with `--fresh`, and the fresh session continues as [After a restart](#after-a-restart) says, so commit everything it needs first. A message that wakes you before then is handled as usual, and when it leaves the phase where it was, end your turn again. A `fix-round`, or an `instruction` from the orchestrator, keeps its conversation until its `prs-open`, and so does every other change of state.
 
-Whenever you wait, for an answer, a blocked merge or a `move-back`, set `waits_for` to one line saying what for, in the commit that records the request or the state, before you send the message. Set it back to `null` in the commit that ends the wait.
+Whenever you wait, for an answer, a blocked merge, a `move-back` or the end of a `park`, set `waits_for` to one line saying what for, in the commit that records the request or the state, before you send the message. Set it back to `null` in the commit that ends the wait.
 
 ## Plan
 
@@ -100,12 +100,14 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 
 | Kind | What you do |
 | --- | --- |
-| `answer` | Remove the request from `requests`, record the outcome in `decisions`, clear `waits_for` if the answer ends the wait, commit, and continue the work that waited. When the answer says a rewritten pull request branch holds no edits of the developer's, or once you have taken them, append `<pr>=<its current head>` to `pushed` and commit, as `pr-creator.md` says. |
+| `answer` | Remove the request from `requests`, record the outcome in `decisions`, with `afk: true` and the answer's `AFK-<n>` id when it says it is an AFK answer and `afk: false` otherwise, clear `waits_for` if the answer ends the wait, commit, and continue the work that waited. When the answer says a rewritten pull request branch holds no edits of the developer's, or once you have taken them, append `<pr>=<its current head>` to `pushed` and commit, as `pr-creator.md` says. |
 | `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. A notice that every pull request has merged is handled as [PR](#pr) step 4 says. An instruction to refresh a pull request, or to send `prs-open` at your code head, asks for a PR creator round, not new work. In PR, run [PR](#pr) steps 2 and 3. On `DEVELOPER-COMMITS`, run the feedback round. Otherwise the phase stays in PR and no gate runs again. In any other state, reply with `state`. |
 | `merge-orchestrator-branch` | Merge as in [Merge the orchestrator branch](#merge-the-orchestrator-branch), once nothing is half done. If the merge moved the code head and the phase was in Verify or later, move back to Implement. If the code head did not move, the phase keeps its state and its verdicts. |
 | `fix-round` | Run the fix round below that matches it. In every fix round that starts a PR creator, it works out each pull request's base again, as `pr-creator.md` says. |
 | `move-back` | Move back as in [Moving back](#moving-back). |
 | `stop` | Commit unfinished code to the planned pull request it belongs to, then commit your status file, then end your turn. A fresh session may continue later, as [After a restart](#after-a-restart) says. |
+| `park` | Finish or abandon the subagent step in progress, commit unfinished code as on `stop`, set `waits_for` to the reason, commit your status file and wait. Start no gate, delegate or PR creator. Unlike `stop`, keep your session. |
+| `unpark` | Clear `waits_for`, commit, and continue from your recorded state. |
 
 ## Fix rounds
 

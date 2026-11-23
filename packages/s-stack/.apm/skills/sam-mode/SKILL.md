@@ -108,6 +108,7 @@ The orchestrator branch and every branch cut from it carry `.foundry/`. Push non
 
 - The developer decides every one-way door. A phase session or the planner sends a decision request to the orchestrator and continues with the work the decision does not affect. A subagent reports a one-way door to its phase session, which sends the request. The spec writer asks the developer directly.
 - Decide a two-way door yourself and record it in your own file. Raise it when the choice is architectural, nuanced or not obvious.
+- In AFK mode the orchestrator answers a raised two-way door itself, and records the answer for the developer's review. A one-way door still waits for the developer.
 
 ## Where to read next
 
@@ -115,3 +116,4 @@ The orchestrator branch and every branch cut from it carry `.foundry/`. Push non
 | --- | --- |
 | The status file header, the messages and decision requests | [references/status-and-messages.md](references/status-and-messages.md) |
 | Everything specific to one role | That role's handbook, from the table above |
+| AFK mode, for the orchestrator | [references/afk-mode.md](references/afk-mode.md) |

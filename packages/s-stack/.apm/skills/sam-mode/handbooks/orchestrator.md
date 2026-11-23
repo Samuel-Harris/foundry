@@ -10,9 +10,9 @@ Your workers are main sessions that the launcher starts, not subagents, and each
 
 - Read the evidence, not the report. A status file, a commit and a pull request's live state outrank a message, including one that says a phase is done.
 - Check a pull request's live state before you report on it or act on it.
-- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR has work only while a `fix-round`, `instruction` or `move-back` you sent it is unanswered. A `move-back` is answered once the phase's status reaches that state. A `fix-round` for review comments, a failed check or a conflict is answered only by a `prs-open` sent after the round while the phase is in PR. Any other `fix-round` or `instruction` is answered by the reply it asks for, such as a `prs-open` after a refresh or a state change after the merged notice. Nothing a phase does in response to a `stop` you sent answers a message. Otherwise tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported since you last started it has no work.
+- Judge a session by its commits and pull request activity, not by what it says. A session is quiet when workmux showed it idle, not waiting on a prompt, at the previous tick and still does, and its branch has had no commit since. A session has stalled when it still has work, is quiet, its status has no `waits_for`, and it has made no pull request change for two ticks. A phase in PR has work only while a `fix-round`, `instruction` or `move-back` you sent it is unanswered. A `move-back` is answered once the phase's status reaches that state. A `fix-round` for review comments, a failed check or a conflict is answered only by a `prs-open` sent after the round while the phase is in PR. Any other `fix-round` or `instruction` is answered by the reply it asks for, such as a `prs-open` after a refresh or a state change after the merged notice. Nothing a phase does in response to a `stop` you sent answers a message. Otherwise tick step 4 and Finishing a phase handle it. A planner or spec writer that has reported since you last started it has no work. A phase parked in AFK mode has no work until you unpark it.
 - Retry by cause. A session that ended or lost its connection resumes with the launcher. A session whose conversation is the problem, because it loops, its context is full or it has stalled, gets `stop`, then, once it is quiet in a later tick, `--close` and a launch with `--fresh`. Then send the fresh session every message the phase left unanswered. A phase session at a gate boundary is replaced the same way once it is quiet, without `stop`, because it ended its own turn: after its start time in the tracker, its status moved to Verify, by `changed_at`, or gained a verdict, by `at`, nothing you sent it is unanswered, and it has sent no `prs-open` at its current code head. Check this every tick, whatever you have sent it since.
-- Ask the developer only for a real decision: a one-way door, a product or preference call, or a blocker that survived a restart. Merge mechanics, retries and fix rounds never reach the developer.
+- Ask the developer only for a real decision: a one-way door, a product or preference call, or a blocker that survived a restart. Merge mechanics, retries and fix rounds never reach the developer. In AFK mode, `references/afk-mode.md` says who decides.
 - Never read a phase plan, a diff or long pane output yourself. Give it to a fresh subagent and keep its conclusion. Send your own messages, never through a subagent.
 
 Your files are the tracker and `run-decisions.md`, committed on the orchestrator branch, plus the merge commits you make there and the two pages.
@@ -28,9 +28,7 @@ Run `<this skill's directory>/scripts/launch.sh` from the feature worktree's roo
 | `--close` | Close the session's pane. It changes nothing unless the pane runs that session. |
 | `--remove` | Remove the session's worktree. It refuses unless the worktree is clean and its branch is merged into the orchestrator branch. |
 
-The launcher places every pane. Never place, move or resize panes yourself, and leave alone any pane the developer adds to your column. Record each `started` or `alive` pane in the tracker. Exit 4 means the window has no room: start the session when a pane closes. Any other failure prints its cause. Fix it, or tell the developer when a tool is missing.
-
-Before you message a phase whose pane is closed, start its session with the launcher.
+The launcher places every pane. Never place, move or resize panes yourself, and leave alone any pane the developer adds to your column. Record each `started` or `alive` pane in the tracker. Exit 4 means the window has no room: start the session when a pane closes. Any other failure prints its cause. Fix it, or tell the developer when a tool is missing. Before you message a phase whose pane is closed, start its session with the launcher.
 
 ## Starting the feature
 
@@ -66,14 +64,14 @@ Run the tick checklist in sam-mode's orchestrator handbook.
 
 Run these steps in order on every tick. While the orchestrator branch is frozen, as [Merging a phase](#merging-a-phase) step 5 says, skip step 2 and the starts in step 3, and in step 4 merge only the frozen phase and the status-only merges of Finishing a phase. Still replace stalled sessions and phase sessions at a gate boundary.
 
-1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick. Then set and clear `needs_update` as [Keeping pull requests up to date](#keeping-pull-requests-up-to-date) says.
+1. **Reconcile.** Run `git fetch origin`. Have a fresh subagent read every status file through git (`git show <phase branch>:<path>`, or the orchestrator branch's copy for a phase whose worktree you removed at Done), the feature plan's open planner requests, workmux's status of every session, and the live state, checks and new review comments of every open pull request. Take its summary as the truth for this tick. Then set and clear `needs_update` as [Keeping pull requests up to date](#keeping-pull-requests-up-to-date) says. In AFK mode, also check usage and find panes stopped on an API error, as `references/afk-mode.md` says.
 2. **Default branch.** If `origin/<default branch>` has moved past the last merged commit in the tracker, merge it as [Merging the default branch](#merging-the-default-branch) says.
-3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back. Replace each stalled session and each phase session at a gate boundary, as Supervision says.
+3. **Start.** Start each phase whose dependencies in the feature plan are met, and whose exclusive resources there are free. A dependency is met when it is merged into the orchestrator branch and passed its post-merge check, or, where the plan says it must be Done, when it is Done. There is no fixed limit unless the developer told you to hold phases back, or AFK mode sets one and the order, as `references/afk-mode.md` says. Replace each stalled session and each phase session at a gate boundary, as Supervision says.
 4. **Merge.** Merge each phase that may merge, as [Merging a phase](#merging-a-phase) says. Merge at most one phase per tick, and none in a tick whose default-branch merge committed, so a failing post-merge check names one change. Finishing a phase's status-only merges are exempt from both limits. Before merging, ask each quiet phase in PR whose newest verdicts name its current code head, but which has sent no `prs-open` at that code head, to send `prs-open` once a pull request holds that code, with an `instruction`. Tell phases about flagged pull requests, as [Keeping pull requests up to date](#keeping-pull-requests-up-to-date) says. Then finish merged phases, as [Finishing a phase](#finishing-a-phase) says.
-5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. Send a `fix-round` for each new review comment or failed check.
+5. **Unblock.** Put each new decision request to the developer, and record and send each answer, as [Decisions](#decisions) says. Notify the developer of each session waiting on a permission prompt. In AFK mode, answer two-way requests and keep prompts silent, as `references/afk-mode.md` says. Send a `fix-round` for each new review comment or failed check.
 6. **Record.** Update the tracker with the tick time and the count of ticks this session has run, and commit it.
 7. **Publish.** Write the board's changed documents in one database batch. When a phase merged and passed its post-merge check, or needed none, or a roadmap update merged, have a fresh subagent update the architecture page.
-8. **Report.** End the turn without a reply unless something needs the developer. Then say what, in a few lines. At the end of the sixth tick this session has run, relaunch yourself, as [Restarts](#restarts) says.
+8. **Report.** End the turn without a reply unless something needs the developer. Then say what, in a few lines. In AFK mode, never reply to a tick. At the end of the sixth tick this session has run, relaunch yourself, as [Restarts](#restarts) says.
 
 The board documents a tick writes:
 
@@ -81,7 +79,7 @@ The board documents a tick writes:
 - `board/recent`, when any phase changed state.
 - One `phases/<phase>` for each phase whose state, scheduling, `waits_for`, session or pane changed.
 - One `prs/<number>` for each pull request whose state, checks, base, dependencies or `needs_update` changed. A pull request that merged or closed this tick has changed state.
-- A `needs` document added for each new decision request or waiting prompt, and removed once it is resolved.
+- A `needs` document added for each new decision request, recorded decision or waiting prompt, and removed once it is resolved.
 
 ## Merging a phase
 
@@ -152,13 +150,13 @@ PR creators choose and change their pull requests' bases themselves, across phas
 
 ## Decisions
 
-Phase requests sit in status headers. The planner has no status file, so its requests, `planner-r<n>`, sit in the feature plan's "Open requests" section, and the reconcile subagent reads them there. Put each open decision request to the developer with all its fields, and list it in the tracker and under **Needs you**. The developer decides every one-way door. You may decide a two-way door that affects only the run's coordination. Before you send `answer`, record the decision in `run-decisions.md` with its date, door type and reason, and commit it. When the answer changes the feature plan or a contract, restart the planner with an `instruction` that names the decision and the phases it affects. Handle its `done-planning` as Starting the feature step 5 says.
+Phase requests sit in status headers. The planner has no status file, so its requests, `planner-r<n>`, sit in the feature plan's "Open requests" section, and the reconcile subagent reads them there. Put each open decision request to the developer with all its fields, and list it in the tracker and under **Decisions** on the board, its id as `ref` and its fields in full as `detail`. The developer decides every one-way door. You may decide a two-way door that affects only the run's coordination. Before you send `answer`, record the decision in `run-decisions.md` with its date, door type and reason, and commit it. Give a decision you take alone the next free `run-<n>` ID and a `decision` board item with that `ref` and the decision in full, deleted once the developer has said whether they agree. In AFK mode, decide as `references/afk-mode.md` says. When the answer changes the feature plan or a contract, restart the planner with an `instruction` that names the decision and the phases it affects. Handle its `done-planning` as Starting the feature step 5 says.
 
 A `blocked` that names a conflict in another phase's file goes to the developer as a decision request, with the owning phase and the paths. When a phase reports an `instruction`, record it in `run-decisions.md` if it changes a recorded decision, and restart the planner if it changes the plan.
 
 ## Permission prompts
 
-From the reconcile summary, and whenever a session reports `blocked`, find each session that waits on a permission prompt. Send the developer a push notification with Claude Code's push notification tool that names the pane and the action, and add a prompt to **Needs you**. Only the developer approves, in that pane. Never relay an approval, and never type into a session's pane.
+From the reconcile summary, and whenever a session reports `blocked`, find each session that waits on a permission prompt. Send the developer a push notification with Claude Code's push notification tool that names the pane and the action, and add a prompt to **Permission prompts** on the board. In AFK mode, send no push notification unless `references/afk-mode.md` says to. Only the developer approves, in that pane. Never relay an approval, and never type into a session's pane.
 
 ## The status board
 
@@ -171,9 +169,7 @@ The page says what is being built, and the board says how the work is going. A f
 - It takes the intended design from the roadmap and `run-decisions.md`, and the built design from the code on the orchestrator branch.
 - It shows a map of the system, the feature's components and boundaries, the data model and main flows, the rules from the roadmap's decisions, each part as planned or built, and the commit and time it describes. A part is built once its phase has merged into the orchestrator branch and that merge passed its post-merge check.
 - s-stack ships no template. The subagent designs the page for the feature, and the page stays private until the developer shares it.
-- To update it, the subagent edits the page's file and then publishes the same path. Never publish with inline edits, which the automatic permission check cannot see.
-
-Record the commit it describes in the tracker.
+- To update it, the subagent edits the page's file and then publishes the same path. Never publish with inline edits, which the automatic permission check cannot see. Record the commit it describes in the tracker.
 
 ## Roadmap updates
 
@@ -181,7 +177,7 @@ When the developer asks for a roadmap change, start an update spec writer with `
 
 ## Restarts
 
-When you start and the tracker already exists, you are restarting. Finish each step of Starting the feature that the tracker does not show done, such as a board address, or a planner that runs or whose feature plan is merged, and skip the rest. Set the tracker's tick count to zero, and read the tracker, every status file, workmux's status and every open pull request before you act. Arm the tick, then run a tick. Start each phase session that still has work with the launcher, which resumes its conversation, and ask each phase in PR, with an `instruction`, to send `prs-open` again once a pull request holds its current code head. Clear every told mark, so that a notice lost in the crash goes out again, and send each phase its unanswered messages again. Facts sent while a session was down are still in the sender's files, and the reconcile step finds them.
+When you start and the tracker already exists, you are restarting. Finish each step of Starting the feature that the tracker does not show done, such as a board address, or a planner that runs or whose feature plan is merged, and skip the rest. Set the tracker's tick count to zero, and read the tracker, every status file, workmux's status and every open pull request before you act. Arm the tick, then run a tick. Start each phase session that still has work with the launcher, which resumes its conversation, and ask each phase in PR, with an `instruction`, to send `prs-open` again once a pull request holds its current code head. Clear every told mark, so that a notice lost in the crash goes out again, and send each phase its unanswered messages again. Facts sent while a session was down are still in the sender's files, and the reconcile step finds them. When the tracker shows AFK mode on, also follow `references/afk-mode.md` for restarts.
 
 At the end of the sixth tick this session has run, once every subagent you started has reported, relaunch yourself fresh, so your context stays short. Set `relaunching` with the time in the tracker, commit, and, as the last call of your turn, run this in one call. It checks that the launcher started your pane, then hands the relaunch to the tmux server, which outlives your process:
 
@@ -194,6 +190,10 @@ else echo 'not started by the launcher'; fi
 ```
 
 The job waits a minute for your turn to end, and gives up if the orchestrator branch has moved since, because you are at work again. Otherwise it ends your claude process, waits for your pane's shell, and runs the launcher, which starts a new conversation there under the same session name. If the command prints `not started by the launcher`, clear `relaunching`, commit, and tell the developer. A fresh session that finds `relaunching` in the tracker lost nothing: clear it, read and arm as above, run a tick, and resend no message and clear no told mark. If `relaunching` is still set at the end of a later tick, the job gave up, so run the command again.
+
+## AFK mode
+
+When the developer says they are going away, or the tracker shows AFK mode on, read [references/afk-mode.md](../references/afk-mode.md) and follow it until the developer's next message in your pane. While it is on, the tracker also holds an "AFK mode" row: its settings, its start time, the usage at the start, and each parked phase with its reason and the time it waits until.
 
 ## Ending the feature
 

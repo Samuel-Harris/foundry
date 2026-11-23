@@ -32,7 +32,7 @@ Every change of state is two steps, in this order:
 1. Commit the status file with the new `state`, `changed_at` and `code_head`.
 2. Send the orchestrator a `state` message with the new state and the code head.
 
-When the commit moves the phase from Implement to Verify, or records a Verify or Review verdict with the state it leads to, send the `state` message and then end your turn. Start nothing more. The orchestrator closes your session once it is quiet and launches it again with `--fresh`, and the fresh session continues as [After a restart](#after-a-restart) says, so commit everything it needs first. Every other change of state, in Plan, in PR or from a `move-back`, keeps the conversation.
+When the commit moves the phase from Implement to Verify, or records a Verify or Review verdict together with the state it leads to, send the `state` message and then end your turn, starting nothing more. The orchestrator then relaunches your session with `--fresh`, and the fresh session continues as [After a restart](#after-a-restart) says, so commit everything it needs first. A fix round, or work an `instruction` asked for, keeps its conversation until its `prs-open`, and so does every other change of state.
 
 Whenever you wait, for an answer, a blocked merge or a `move-back`, set `waits_for` to one line saying what for, in the commit that records the request or the state, before you send the message. Set it back to `null` in the commit that ends the wait.
 
@@ -62,9 +62,9 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 ## Verify
 
 1. Move to Verify.
-2. Start a fresh verifier subagent. Its brief gives the absolute path of `handbooks/verifier.md` in the skill directory you read this handbook from, the roadmap, the feature plan, your phase plan, the phase branch, the orchestrator branch, the verification skill, the code head of your newest `VERIFIED` verdict, or none, whether it may waive, as the reference file's waiver rule says, and each failed check that the evidence file records from a `move-back` since that `VERIFIED` verdict. Give it no summary of how you built the phase.
+2. Start a fresh verifier subagent. Its brief gives the absolute path of `handbooks/verifier.md` in the skill directory you read this handbook from, the roadmap, the feature plan, your phase plan, the phase branch, the orchestrator branch, the verification skill, the code head of your newest `VERIFIED` verdict, or none, whether it may waive, as the reference file's waiver rule says, and each failed check and merge that the evidence file records since that `VERIFIED` verdict, or since the phase began when there is none. Give it no summary of how you built the phase.
 3. Wait for its report. When the verifier commits, its verdict names the code head that includes its commits.
-4. Record the verdict in `verdicts`, and the report's results, outputs and dates in `.foundry/plans/<id>/status/<phase>-evidence.md`. A `.foundry/`-only commit moves no code head.
+4. In one commit, record the verdict in `verdicts` with the next state from the table below, and the report's results, outputs and dates in `.foundry/plans/<id>/status/<phase>-evidence.md`. A `.foundry/`-only commit moves no code head.
 
 | Verdict | Next state |
 | --- | --- |
@@ -77,7 +77,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 
 1. Move to Review.
 2. Run the gate as [reviewer.md](reviewer.md) says. It starts one reviewer first, who may waive.
-3. Record the verdict and the evidence.
+3. Record the verdict, the evidence and the next state from the table below in one commit.
 
 | Verdict | Next state |
 | --- | --- |
@@ -105,7 +105,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 | `merge-orchestrator-branch` | Merge as in [Merge the orchestrator branch](#merge-the-orchestrator-branch), once nothing is half done. If the merge moved the code head and the phase was in Verify or later, move back to Implement. If the code head did not move, the phase keeps its state and its verdicts. |
 | `fix-round` | Run the fix round below that matches it. In every fix round that starts a PR creator, it works out each pull request's base again, as `pr-creator.md` says. |
 | `move-back` | Move back as in [Moving back](#moving-back). |
-| `stop` | Commit unfinished code to the planned pull request it belongs to, then commit your status file, then end your turn. A fresh session may continue later from the phase plan and the status file. |
+| `stop` | Commit unfinished code to the planned pull request it belongs to, then commit your status file, then end your turn. A fresh session may continue later, as [After a restart](#after-a-restart) says. |
 
 ## Fix rounds
 
@@ -125,7 +125,7 @@ A `move-back` names the state and what changed.
 
 1. Commit what you have.
 2. Stop the work that the change could invalidate. Continue only work it cannot touch.
-3. Record the new state, and any failed check the `move-back` names in the evidence file, and send `state`.
+3. Record the new state in the status file, and any failed check the `move-back` names in the evidence file, then send `state`.
 4. Then act on the state:
    - **Implement**, whenever the orchestrator sends it, for example after a failed check on the orchestrator branch once your phase merged, when the message names the check. Fix what is needed, then pass both gates again.
    - **Plan**, after the planner revised the feature plan. Merge the orchestrator branch, update the phase plan against your entry, which may be unchanged, commit it, and move to Implement.

@@ -122,7 +122,7 @@ The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-se
 | `instruction` | Every pull request of the phase merged into the default branch | The merged pull request numbers |
 | `stop` | A phase's pane is about to close, or a stalled session is being replaced | A request to commit and stop |
 | `park` | A phase must stop starting work, for a reason [afk-mode.md](afk-mode.md) names | The reason, and what ends it: a time, or an event such as the developer's word |
-| `unpark` | The reason for a `park` has passed | Nothing more |
+| `unpark` | [afk-mode.md](afk-mode.md) says the park ends | Nothing more |
 
 The rules:
 

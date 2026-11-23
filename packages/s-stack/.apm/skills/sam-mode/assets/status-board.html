@@ -39,7 +39,8 @@ board/recent, one document:
 
 phases/<phase id>, one document per phase:
   phase         string, the phase id, equal to the document id
-  state         a state name
+  state         a state name. The page draws the seven states in order and
+                marks this one and those before it, so no other field is needed.
   scheduling    "queued", "blocked", "live" or "closed"
                 (it describes the session, not the phase's state)
   waits_for     string, a one-line description of anything the phase waits
@@ -239,6 +240,7 @@ leave needs_update null.
     tr:last-child { border-bottom: 0; }
     td { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); justify-items: start; gap: 8px; padding: 3px 0; border: 0; overflow-wrap: anywhere; }
     td::before { content: attr(data-label); color: var(--muted); font-size: 0.8rem; }
+    td > .steps { grid-column: 1 / -1; }
   }
 
   ol.recent { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
@@ -246,6 +248,12 @@ leave needs_update null.
   ol.recent > li > :first-child { overflow-wrap: anywhere; }
   .deps { max-width: 100%; }
   .deps .chip { white-space: normal; overflow-wrap: anywhere; border-radius: 6px; }
+  .steps { display: flex; gap: 6px; margin-top: 4px; font-size: 0.68rem; color: var(--muted); }
+  .step { display: grid; gap: 2px; white-space: nowrap; }
+  .step::before { content: ""; height: 5px; border-radius: 2px; background: var(--line); }
+  .step.done::before { background: var(--accent); opacity: 0.55; }
+  .step.now::before { background: var(--accent); }
+  .step.now { color: var(--fg); font-weight: 600; }
   .map-heading { margin: 6px 0 0; font-size: 0.85rem; font-weight: 600; }
   .map { overflow-x: auto; max-width: 100%; min-width: 0; }
   .map svg { display: block; }
@@ -285,6 +293,7 @@ leave needs_update null.
 <script>
 (() => {
   const STATE_TONE = {Spec: "plain", Plan: "plain", Implement: "accent", Verify: "warn", Review: "warn", PR: "good", Done: "good"};
+  const STATES = Object.keys(STATE_TONE);
   const NEED_KINDS = ["decision", "prompt"];
   const DEFAULT_STALE_MIN = 40;
   const MINUTE = 60000;
@@ -384,6 +393,17 @@ leave needs_update null.
   function phaseStateChip(s) {
     const {label, tone} = stateLook(s);
     return chip(label, tone === "plain" ? "" : tone);
+  }
+
+  // A fragment, so on a phone td > .steps can span the row. The chip states the phase's state for every reader,
+  // and an unknown state marks no step.
+  function stateCell(s) {
+    const at = STATES.indexOf(s);
+    const stepClass = (i) => (i === at ? "step now" : i < at ? "step done" : "step");
+    const cell = document.createDocumentFragment();
+    cell.append(phaseStateChip(s),
+      el("div", {class: "steps", "aria-hidden": "true"}, ...STATES.map((name, i) => el("span", {class: stepClass(i)}, name))));
+    return cell;
   }
 
   const SCHEDULING = {live: "session live", closed: "session closed", queued: "queued to start", blocked: "blocked"};
@@ -680,7 +700,7 @@ leave needs_update null.
       ["Phase", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"],
       phases.map((p) => [
         el("span", {class: "mono"}, str(p.phase)),
-        phaseStateChip(p.state),
+        stateCell(p.state),
         schedulingChip(p.scheduling),
         str(p.waits_for) || "nothing",
         dependsCell(deps.get(p)),

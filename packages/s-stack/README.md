@@ -28,6 +28,7 @@ apm install Samuel-Harris/foundry/packages/s-stack#^0.1.0 --target cursor,claude
 - Claude Code 2.1.224 or later, with cross-session messaging.
 - tmux.
 - workmux.
+- For AFK mode, macOS for keeping the machine awake and for the watchdog that restarts the orchestrator, which the developer installs once with `scripts/afk-watchdog.sh install`. On other systems AFK mode runs without both. The launcher loads the skill's usage mod into the orchestrator's session, so it can read the plan's usage limits. That needs a Claude Code build with mod support, proven on 2.1.330.
 
 ## Targets
 

@@ -52,6 +52,7 @@ decisions:                          # decisions taken for this phase only
   - id: "<phase>-d1"
     decision: "One sentence."
     door: "two-way"
+    afk: false                      # true for an answer the orchestrator gave in AFK mode, until the developer reviews it
     at: "2026-11-21T14:30:00Z"
 ---
 ```
@@ -74,7 +75,7 @@ The rules:
   A commit that only records status leaves it unchanged and cancels no verdict. A feature plan may name generated paths, such as lockfiles, and generated lines, such as a `version:` line, whose changes also move no code head. Its sessions then add `':(exclude,glob)**/<name>'` to both `git diff` pathspecs for each such path, and `-I '<regex>'` before each `--` for each such line. Without `glob`, `**/<name>` misses a file at the repository root. A generated-line regex must match only generated lines, because `-I` applies to every file. A correct run prints one 40-character SHA and nothing on standard error, so any error output means the result cannot be trusted.
 - **Verdicts.** The list keeps every verdict, newest last. The merge rule is that the newest `verify` verdict is `VERIFIED` or `WAIVED`, the newest `review` verdict is `CLEAR` or `WAIVED`, and both name the current code head. A `WAIVED` verdict counts only when the newest earlier verdict of the same gate that is not `WAIVED` is `VERIFIED` or `CLEAR`. A phase moves to PR once the rule holds, and `handbooks/orchestrator.md` owns the further checks the orchestrator makes before it merges.
 - **Waivers.** A fresh gate agent, the verifier or the first reviewer, may return `WAIVED` instead of running its gate, with its reason. It may do so only when its brief says it may, which the phase session says only when the gate's newest verdict that is not `WAIVED` is `VERIFIED` or `CLEAR`, so that every waiver counts under the merge rule, and only when the diff in its scope changes nothing that a user, a program or an agent reading the file would act on differently. Waivable: generated files only; formatting, import order or a linter's auto-fix; a complete rename of a local variable or private function; comments, docstrings, log wording, or a typo in a user-facing string that no test asserts; a small, isolated change whose whole effect the agent can state from the diff, that no check or probe exercises and that nothing acts on differently, such as tightening a type annotation, deleting code the diff shows unreachable, or raising a log level. Never waivable: any change to logic or control flow, however small, such as a condition, a default, an error path or a retry; a change to a public interface or contract; a dependency added or bumped by hand; anything touching authentication, permissions, secrets, input handling or the commands the code runs; a test or check change that alters an expected result; a change to instructions an agent follows, such as a prompt, skill or handbook. An empty scope is waivable. A waiver never moves a gate's baseline: the next scoped Verify covers everything since the last `VERIFIED` code head, and the next Review everything since the last `CLEAR` or `SIGNIFICANT` one.
-- **Ids.** A request or decision id is `<phase>-r<n>` or `<phase>-d<n>`, numbered by the phase itself. The planner numbers its requests `planner-r<n>`, and `handbooks/planner.md` says where it keeps them. No list is shared between writers.
+- **Ids.** A request or decision id is `<phase>-r<n>` or `<phase>-d<n>`, numbered by the phase itself. A decision that records an AFK answer takes the answer's `AFK-<n>` id instead. The planner numbers its requests `planner-r<n>`, and `handbooks/planner.md` says where it keeps them. No list is shared between writers.
 - **Evidence.** Evidence that is not a URL lives in a file the phase owns under `.foundry/plans/<id>/status/`, named `<phase>-evidence.md`.
 - **Pushed heads.** `pushed` holds the `RECORD` line of the PR creator's last proof that printed `EQUAL` and whose pushes all succeeded, without the word `RECORD`, exactly as printed. It is `null` before the first push. The phase passes it unchanged as the PR creator's `PUSHED`. `pull_requests` keeps every pull request once opened, merged ones included, because the PR creator's `OWN` lists them all.
 - **Commits.** A status commit holds files under `.foundry/` and nothing else. Its subject is `chore(<feature>): <phase> <state>`.
@@ -107,7 +108,7 @@ The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-se
 
 | Kind | When | The message carries |
 | --- | --- | --- |
-| `answer` | The developer has decided | The answer and the id of the request that it answers |
+| `answer` | The developer has decided, or in AFK mode the orchestrator answered a two-way request | The answer and the id of the request that it answers, and for an AFK answer its `AFK-<n>` id |
 | `instruction` | The developer gave an instruction | The instruction, in the developer's words |
 | `instruction` | A pull request's head differs from the head in the phase's last `prs-open` | The pull request, the recorded head and its current head |
 | `instruction` | A pull request lacks the current head of a pull request it depends on | The pull request and the dependency's head |
@@ -120,6 +121,8 @@ The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-se
 | `move-back` | A roadmap or plan change touches a phase, or a check on the orchestrator branch failed after the phase merged | The state to move back to, and what changed or the failed check |
 | `instruction` | Every pull request of the phase merged into the default branch | The merged pull request numbers |
 | `stop` | A phase's pane is about to close, or a stalled session is being replaced | A request to commit and stop |
+| `park` | A phase must stop starting work, for a reason [afk-mode.md](afk-mode.md) names | The reason, and what ends it: a time, or an event such as the developer's word |
+| `unpark` | [afk-mode.md](afk-mode.md) says the park ends | Nothing more |
 
 The rules:
 
@@ -141,4 +144,4 @@ A decision request states five things. They match the fields of a `requests` ent
 | `door` | `one-way` or `two-way` |
 | `waiting_work` | The work that waits on the answer |
 
-The session commits the request to its status file, then sends a `decision-request` message. It removes the request from `requests` once the answer arrives.
+The session commits the request to its status file, then sends a `decision-request` message. It removes the request from `requests` once the answer arrives. In AFK mode, [afk-mode.md](afk-mode.md) says who answers it.

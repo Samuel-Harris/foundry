@@ -675,9 +675,15 @@ EOF
     conversation_id=$(new_conversation_id) || die 'cannot make a conversation id: neither uuidgen nor /proc/sys/kernel/random/uuid works'
   fi
 
+  plugin_flag=''
+  if [ "$role" = orchestrator ]; then
+    usage_mod=$(resolve "$(dirname "${BASH_SOURCE[0]}")/../assets/usage-mod")
+    [ -z "$usage_mod" ] || plugin_flag="--plugin-dir $(printf %q "$usage_mod") "
+  fi
+
   prompt="/sam-mode $role feature=$feature phase=${phase:--} update=${update:--} roadmap=$roadmap plan=$plan orchestrator=$feature-orchestrator"
   # The trailing shell keeps the pane open after claude exits, so its last output stays visible.
-  pane_command="claude --name $(printf %q "$name") $conversation_flag $(printf %q "$conversation_id") $(printf %q "$prompt"); exec \"\${SHELL:-/bin/sh}\" -l"
+  pane_command="claude --name $(printf %q "$name") $conversation_flag $(printf %q "$conversation_id") $plugin_flag$(printf %q "$prompt"); exec \"\${SHELL:-/bin/sh}\" -l"
 
   if [ -n "$split" ]; then
     target_pane=$(tmux split-window -d -P -F '#{pane_id}' -t "$target_pane" -c "$worktree" "$direction" ${full_span:+-f} ${split_size:+-l "$split_size"} /bin/sh -c "$pane_command") || cannot_split

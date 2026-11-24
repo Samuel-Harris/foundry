@@ -108,6 +108,15 @@ The orchestrator branch and every branch cut from it carry `.foundry/`. Push non
 
 - The developer decides every one-way door. A phase session or the planner sends a decision request to the orchestrator and continues with the work the decision does not affect. A subagent reports a one-way door to its phase session, which sends the request. The spec writer asks the developer directly.
 - Decide a two-way door yourself and record it in your own file. Raise it when the choice is architectural, nuanced or not obvious.
+- In AFK mode, [references/afk-mode.md](references/afk-mode.md) says who answers a raised door.
+
+### tmux
+
+The developer's own tmux server runs every pane of the run, theirs included. Inside a pane, `$TMUX` names that server, and tmux then ignores `TMUX_TMPDIR`, so `TMUX_TMPDIR=<dir> tmux kill-server` kills the developer's server.
+
+- Never run `kill-server`, and never end a session, window or pane that the run did not start. The launcher's `--close` is how a pane the run started is closed.
+- To reach any other server, pass `-S <full socket path>`, or unset `TMUX`, and first confirm the target with `tmux -S <path> list-sessions -F '#{socket_path}'`.
+- A test that starts tmux runs it with `env -u TMUX` and `-S` into its own temporary directory, and on teardown kills only that server, also when the test fails.
 
 ## Where to read next
 
@@ -115,3 +124,4 @@ The orchestrator branch and every branch cut from it carry `.foundry/`. Push non
 | --- | --- |
 | The status file header, the messages and decision requests | [references/status-and-messages.md](references/status-and-messages.md) |
 | Everything specific to one role | That role's handbook, from the table above |
+| AFK mode, for the orchestrator | [references/afk-mode.md](references/afk-mode.md) |

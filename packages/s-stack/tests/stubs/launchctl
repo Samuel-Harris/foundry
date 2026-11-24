@@ -1,0 +1,24 @@
+#!/bin/bash
+# Records each call, and keeps the loaded labels in "$STUB_LAUNCHCTL_LOG.loaded"
+# so that print and bootout fail for a job not loaded, and bootstrap fails for
+# one already loaded, as launchctl does.
+printf '%s\n' "$*" >> "$STUB_LAUNCHCTL_LOG"
+loaded=$STUB_LAUNCHCTL_LOG.loaded
+touch "$loaded"
+case "$1" in
+  bootstrap)
+    label=$(basename "$3" .plist)
+    grep -qxF "$label" "$loaded" && exit 5
+    printf '%s\n' "$label" >> "$loaded"
+    ;;
+  bootout)
+    label=${2##*/}
+    grep -qxF "$label" "$loaded" || exit 3
+    grep -vxF "$label" "$loaded" > "$loaded.new"
+    mv "$loaded.new" "$loaded"
+    ;;
+  print)
+    grep -qxF "${2##*/}" "$loaded" || exit 113
+    ;;
+  *) exit 64 ;;
+esac

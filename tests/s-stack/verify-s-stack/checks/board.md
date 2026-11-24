@@ -13,13 +13,13 @@ Every Chrome call runs under a 30-second wall-clock bound, through `timeout`, `g
 Each line of the `LIST` block is one scenario: a virtual-time budget in milliseconds, extra Chrome flags (`-` for none) and the query string the stub and collector read.
 
 - `theme` is `light` or `dark`, set as `data-theme`, or `os`, which sets no `data-theme` and runs Chrome with `--blink-settings=preferredColorScheme=0` so the page's own `prefers-color-scheme: dark` block must apply.
-- `tick` is the age of `tick_at` in minutes (5 by default), `tickms` the age in milliseconds, or `bad` for an unreadable 71-character string. `stale` sends `stale_after_min`; without it the field is absent. `hostile` sends a `feature` carrying markup and a `javascript:` architecture URL.
+- `tick` is the age of `tick_at` in minutes (5 by default), `tickms` the age in milliseconds, or `bad` for an unreadable 71-character string. `stale` sends `stale_after_min`; without it the field is absent. `hostile` sends a `feature` carrying markup and a `javascript:` architecture URL. `afk` sends `board/meta.afk`: `full` with every part, `notify` with no return time, one session, one round and notifications on, `bad` with every field unreadable, or `null`; without it the field is absent.
 - `fixture` names the first data set (`full` by default). `deliver` is `live` (data after 20 ms), `silent` (never), `late` (after 11 s), `cached` (cached only), `live-cached` (live, then the same data cached at 300 ms, or with a tick `ctick` minutes old when `ctick` is set), `live-cached-error` (that, then the failing listeners fail at 600 ms), `nodb` (`use("db")` resolves `null`), `error-before` or `error-after` (at 300 ms). `error` lists the sources whose listeners fail with `permission-denied`. `swap` sends every source the data of another fixture, live, at 300 ms, and `tick2` sends the same fixture again at 300 ms with a new tick age.
 - `at` lists the virtual times at which the page is read. `interact=focus` focuses the `#11` link in Ready for your review, scrolls the map to 80 px and the page to its end, then sends every listener a second, identical snapshot, and reads the page again after it and after the 30-second re-render. `interact=scroll` widens both tables to 1200 px with a test style, scrolls the Pull requests table to its end, the Phases table to 37 px and the map to its end, then does the same. `words` checks word breaks.
 
 | Fixture | Holds |
 | --- | --- |
-| `full` | A 66-character orchestrator branch with no hyphen or other break point. This run's phase shape: `foundation` with `[]`, six middle phases on `foundation` until `merged`, `default-stack` on the other seven until `done`, unsorted, every state tone and all four scheduling values. Drafts #11 (rank 1, on `12`), `"12"` (rank 2, a digit string) and #13 (rank 3, on `[11, "12", 100, 9]`, markup in its title, a `javascript:` URL), open `"100"` with an `http:` URL, merged #9 with `needs_update: null`. `board` live with `pane: null`. Five needs out of order, one with a `javascript:` link in its summary, one prompt with a 61-character pane, a decision with a pane, and two of unknown kinds, each with a door: the retired `restack` and an older `handover`. 22 recent items, two out of time order. |
+| `full` | A 66-character orchestrator branch with no hyphen or other break point. This run's phase shape: `foundation` with `[]`, six middle phases on `foundation` until `merged`, `default-stack` on the other seven until `done`, unsorted, every state tone and all four scheduling values. Drafts #11 (rank 1, on `12`), `"12"` (rank 2, a digit string) and #13 (rank 3, on `[11, "12", 100, 9]`, markup in its title, a `javascript:` URL), open `"100"` with an `http:` URL, merged #9 with `needs_update: null`. `board` live with `pane: null`. Eight needs out of order: two AFK decisions, one with a door, markup in its `detail` and `prs` of `[11, "100", 77]` (an `https` pull request, an `http` one and one with no document), the other with a 200-character unbroken string in its `detail` and `prs` of `["12"]`; two decisions, one with a `javascript:` link in its summary, the other with a `ref`, a two-line `detail` and a pane; two prompts, one with a 61-character pane; and two of unknown kinds, each with a door: the retired `restack` and an older `handover`. 22 recent items, two out of time order. |
 | `review` | Seven pull requests, unsorted: null rank, a rank tie between two drafts that can go, a two-draft dependency cycle, a dependency on a closed pull request and a missing `needs_update`. |
 | `lanes-a`, `lanes-b` | Five phases in three columns and two skipping edges. They differ only in which first-column phase each skipping edge leaves from. |
 | `share` | Four columns and three skipping edges: two share a source, two share a target, and two overlap without sharing an end. Solid and dashed edges share each end. |
@@ -28,10 +28,12 @@ Each line of the `LIST` block is one scenario: a virtual-time budget in millisec
 
 | Promise | Scenarios that assert it |
 | --- | --- |
-| Six sections, in order, under exact headings | every scenario |
+| Seven sections, in order, under exact headings | every scenario |
 | No `<title>` element, and the tab title from `board/meta.feature` | every scenario; `full` |
 | Header: feature, both branches, an `https` architecture link; markup in `feature` shown as text and a non-`https` architecture link shown as plain text | `full`, `hostile` |
-| Needs you: every item, sorted by kind then oldest first, with unknown kinds, the retired `restack` among them, last, door chip only on decisions, pane only on prompts, waiting time, count, empty state | `full`, `empty`, `swap` |
+| Decisions: every item but prompts, AFK decisions then decisions then unknown kinds, the retired `restack` among them, oldest first within a kind; an "AFK decision" chip, door chip only on AFK decisions and decisions, `ref` before the summary, `detail` in full as text with its line break, a long unbroken `detail` wrapping inside the page at every width, `prs` linked to an `https` pull request and plain otherwise, no pane, waiting time, count, empty state | `full`, `empty`, `swap`, every width scenario |
+| Permission prompts: only prompts, oldest first, with summary, phase, pane and waiting time, count, empty state | `full`, `empty`, `swap` |
+| AFK notice in the header, in the notice style and not the stale banner's: every part in order, "back about" only with a readable `until`, singular and plural counts, notifications on or off, unreadable fields skipped; no notice when `afk` is null or absent | `afk=full`, `afk=notify`, `afk=bad`, `afk=null`, every other scenario |
 | Ready for your review: drafts only, rank order with null last and ties by number, dependencies first, cycle fallback, "after" notes for draft and open dependencies, chips, empty state | `full`, `review`, `empty` |
 | Pull requests: every row and cell, ordered by number, digit strings read as numbers, no update chip for a null `needs_update`, empty state | `full`, `review`, `empty` |
 | Phases: every row and cell, scheduling phrases, unknown values, Depends on, a live session with and without a pane, relative time with its `datetime`, empty state | `full`, `missing`, `unreadable`, `cycle`, `flat`, `empty` |
@@ -111,6 +113,11 @@ cat > "$dir/stub.js" <<'JS'
       tick_at: tickms != null ? iso(Number(tickms)) : tick === "bad" ? "unreadable-" + "0123456789".repeat(6) : ago(Number(tick || 5))};
     if (q.has("stale")) meta.stale_after_min = Number(q.get("stale"));
     if (q.has("hostile")) Object.assign(meta, {feature: "placeholder-feature <b>bold</b><img src=x>", architecture_url: "javascript:alert(3)"});
+    if (q.has("afk")) meta.afk = {
+      full: {since: ago(180), until: ago(-180), sessions: 2, rounds: 3, notify: false},
+      notify: {since: ago(180), until: null, sessions: 1, rounds: 1, notify: true},
+      bad: {since: "soon", until: 5, sessions: "2", rounds: null, notify: "yes"},
+      null: null}[q.get("afk")];
     return meta;
   };
   const dep = (phase, until) => ({phase, until});
@@ -146,10 +153,16 @@ cat > "$dir/stub.js" <<'JS'
         {number: "12", url: "https://example.com/pull/12", title: "Pull request B", phase: "launcher", state: "draft", checks: "pending", base: "main", depends_on: [], review_rank: 2, needs_update: false},
         {number: 9, url: "https://example.com/pull/9", title: "Merged groundwork", phase: "foundation", state: "merged", checks: "passing", base: "main", depends_on: [], review_rank: null, needs_update: null}],
       needs: [
+        {kind: "afk-decision", phase: "launcher", summary: "Keep the launcher's retry at three attempts.", ref: "AFK-2",
+          detail: "Chose three attempts <b>not bold</b><img src=x> because the reviews passed with three.", prs: [11, "100", 77], door: "two-way", pane: null, since: ago(30)},
+        {kind: "prompt", phase: "launcher", summary: "Allow the launcher to run tmux.", door: null, pane: "%12", since: ago(15)},
+        {kind: "afk-decision", phase: "board", summary: "Name the board's section Decisions.", ref: "AFK-1",
+          detail: "Chose Decisions. Reason: " + "0123456789".repeat(20), prs: ["12"], door: null, pane: null, since: ago(40)},
         {kind: "restack", phase: "launcher", summary: "Restack launcher onto the merged foundation.", door: "two-way", pane: null, since: ago(50)},
         {kind: "handover", phase: "board", summary: "Hand the board session over.", door: "one-way", pane: "%3", since: ago(60)},
         {kind: "prompt", phase: "board", summary: "A permission prompt waits in the session.", door: null, pane: "%" + "1234567890".repeat(6), since: ago(4)},
-        {kind: "decision", phase: "phase-handbooks", summary: "Choose the handbook layout.", door: "two-way", pane: "%7", since: ago(10)},
+        {kind: "decision", phase: "phase-handbooks", summary: "Choose the handbook layout.", ref: "alpha-r1",
+          detail: "Options: one page per phase, or one page for all.\nRecommendation: one page per phase.", prs: [], door: "two-way", pane: "%7", since: ago(10)},
         {kind: "decision", phase: "default-stack", summary: "Approve the tag <a href=\"javascript:alert(2)\">now</a>", door: "one-way", pane: null, since: ago(23)}],
     },
     review: {"board/meta": meta, prs: [pr(36, "draft", 2, [], "passing", false), pr(30, "draft", null, [], "none", false),
@@ -342,6 +355,26 @@ cat > "$dir/collect.js" <<'JS'
     }
     return broken;
   }
+  const LONG_WORD = "0123456789".repeat(20);
+  function longWordLines() {
+    const walker = document.createTreeWalker(document.querySelector("main"), NodeFilter.SHOW_TEXT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const at = node.data.indexOf(LONG_WORD);
+      if (at === -1 || !shown(node.parentElement)) continue;
+      const range = document.createRange();
+      range.setStart(node, at);
+      range.setEnd(node, at + LONG_WORD.length);
+      return new Set([...range.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top))).size;
+    }
+    return 0;
+  }
+  const outside = (s) => {
+    const box = document.querySelector("main").getBoundingClientRect();
+    return [...s.querySelectorAll("*")].filter((n) => shown(n) && !n.closest(".table-wrap, .map")).filter((n) => {
+      const r = n.getBoundingClientRect();
+      return r.left < box.left - 0.5 || r.right > box.right + 0.5;
+    }).length;
+  };
   const scroller = (n, keep) => n && {left: n.scrollLeft, overflow: n.scrollWidth - n.clientWidth, replaced: n !== keep};
   function snapshot() {
     const root = document.documentElement;
@@ -353,6 +386,8 @@ cat > "$dir/collect.js" <<'JS'
       shown: shown(s),
       text: text(s),
       items: [...s.querySelectorAll("ul > li, ol > li")].map(text),
+      links: [...s.querySelectorAll("a")].map((a) => [a.textContent, a.getAttribute("href")]),
+      outside: outside(s),
       rows: [...s.querySelectorAll("tbody tr")].map((tr) => [...tr.cells].map(cellText)),
       steppers: steppers(s),
       times: [...s.querySelectorAll("time")].map((t) => t.getAttribute("datetime")),
@@ -376,6 +411,9 @@ cat > "$dir/collect.js" <<'JS'
       notices: [...document.querySelectorAll("body *")].filter((n) => shown(n) && !n.closest("main") && !n.closest("header") && n.children.length === 0 && n.textContent.trim()).map(text),
       sections,
       headerChips: chips(document.querySelector("header")),
+      afk: [...document.querySelectorAll("header *")].filter((n) => shown(n) && /^AFK mode/.test(n.textContent))
+        .map((n) => ({text: text(n), bg: cs(n).backgroundColor, fg: cs(n).color})),
+      longWordLines: longWordLines(),
       injected: document.querySelectorAll("b, img, main script, header script, a:not([href^='https://'])").length,
       links: [...document.querySelectorAll("a")].map((a) => a.getAttribute("href")),
       tokens: tokens(),
@@ -482,6 +520,10 @@ done > "$dir/out.txt" <<'LIST'
 65000 - theme=light&stale=10&tickms=555000&at=1500,59900,60100
 5000 - theme=light&freeze=1&stale=10&tick=11
 5000 - theme=dark&hostile=1
+5000 - theme=light&afk=full
+5000 - theme=dark&afk=notify&w=320
+5000 - theme=light&afk=bad
+5000 - theme=light&afk=null
 5000 - theme=dark&tick=bad
 5000 - theme=light&tick=41&tick2=5&at=100,1500
 5000 - theme=light&tick=5&tick2=41&at=100,1500
@@ -523,14 +565,27 @@ cat > "$dir/check.py" <<'PY'
 import html, json, re, sys
 from datetime import datetime, timezone
 
-HEADINGS = ["Needs you", "Ready for your review", "Pull requests", "Phases", "Recent changes", "Heartbeat"]
+HEADINGS = ["Decisions", "Permission prompts", "Ready for your review", "Pull requests", "Phases", "Recent changes", "Heartbeat"]
 SOURCES = ["board/meta", "board/recent", "needs", "phases", "prs"]
-NEEDS = [
+DECISIONS = [
+    "AFK decision | board | waiting 40 min | AFK-1 | Name the board's section Decisions. | Chose Decisions. Reason: "
+    + "0123456789" * 20 + " | In #12",
+    "AFK decision | two-way | launcher | waiting 30 min | AFK-2 | Keep the launcher's retry at three attempts. | "
+    "Chose three attempts <b>not bold</b><img src=x> because the reviews passed with three. | In #11, #100, #77",
     'decision | one-way | default-stack | waiting 23 min | Approve the tag <a href="javascript:alert(2)">now</a>',
-    "decision | two-way | phase-handbooks | waiting 10 min | Choose the handbook layout.",
-    "prompt | board | waiting 4 min | A permission prompt waits in the session. | pane %" + "1234567890" * 6,
+    "decision | two-way | phase-handbooks | waiting 10 min | alpha-r1 | Choose the handbook layout. | "
+    "Options: one page per phase, or one page for all. | Recommendation: one page per phase.",
     "handover | board | waiting 1 h 0 min | Hand the board session over.",
     "restack | launcher | waiting 50 min | Restack launcher onto the merged foundation."]
+DECISION_LINKS = [["#12", "https://example.com/pull/12"], ["#11", "https://example.com/pull/11"]]
+PROMPTS = [
+    "prompt | launcher | waiting 15 min | Allow the launcher to run tmux. | pane %12",
+    "prompt | board | waiting 4 min | A permission prompt waits in the session. | pane %" + "1234567890" * 6]
+AFK = {
+    "full": "AFK mode since 31 Jan 2026, 06:05 · back about 31 Jan 2026, 12:05"
+            " · up to 2 sessions · 3 failed rounds per gate · no push notifications",
+    "notify": "AFK mode since 31 Jan 2026, 06:05 · up to 1 session · 1 failed round per gate · push notifications on",
+    "bad": "AFK mode"}
 REVIEW = [
     "#12 | Pull request B | launcher | pending | Up to date",
     "#11 | Pull request A | launcher | passing | Needs update | after #12",
@@ -567,7 +622,7 @@ RECENT = ["p01 | → Implement"] + [f"p{i:02d} | Plan → Implement" for i in ra
 RECENT_AGES = [0, 10, 5] + [i * 5 for i in range(3, 20)]
 PR_COLS = ["Number", "Title", "Phase", "State", "Checks", "Base", "Depends on", "Update"]
 PHASE_COLS = ["Phase", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"]
-EMPTIES = ["Nothing needs you.", "No draft pull requests yet.", "No pull requests yet.",
+EMPTIES = ["No decisions wait for you.", "No session waits on a permission prompt.", "No draft pull requests yet.", "No pull requests yet.",
            "No phases yet. The orchestrator adds them once the feature plan exists.", "No state changes yet.", "No tick recorded yet."]
 STOPPED = "This section stopped updating (permission-denied). Reload the page to try again."
 NODB = "This board reads its data from the page's database, which this view cannot open. Open the board in Claude."
@@ -582,7 +637,7 @@ def STALE(n): return f"The orchestrator has not ticked for {n} minutes."
 TONES = {
     "plain": ["decision", "prompt", "restack", "handover", "two-way", "draft", "open", "closed", "none", "Spec", "Plan",
               "session live", "session closed", "queued to start"],
-    "accent": ["Implement"], "warn": ["Verify", "Review", "pending", "Needs update", "blocked"],
+    "accent": ["Implement", "AFK decision"], "warn": ["Verify", "Review", "pending", "Needs update", "blocked"],
     "good": ["PR", "Done", "merged", "passing", "Up to date", "Fresh"], "crit": ["one-way", "failing", "Stale"]}
 TONE_OF = {text: tone for tone, texts in TONES.items() for text in texts}
 CHIP_TOKENS = {"plain": ("chip-bg", "chip-fg"), "accent": ("accent-bg", "accent"), "warn": ("warn-bg", "warn"),
@@ -661,7 +716,7 @@ def contrast(a, b):
 
 
 def sec(snap, title):
-    missing = {"title": title, "count": None, "shown": False, "text": "", "items": [], "rows": [], "times": [], "chips": [],
+    missing = {"title": title, "count": None, "shown": False, "text": "", "items": [], "links": [], "outside": 0, "rows": [], "times": [], "chips": [],
                "tables": [], "mapHeading": [], "map": None, "steppers": []}
     return next((s for s in snap["sections"] if s["title"] == title), missing)
 
@@ -743,7 +798,7 @@ def chips_ok(c, s, chips):
 def common(c, snap, q):
     c("the page never writes", snap["writes"] == [])
     c("one subscription per source, never renewed", sorted(snap["subs"]) == ([] if q.get("deliver") == "nodb" else SOURCES))
-    c("six headings in order", [x["title"] for x in snap["sections"]] == HEADINGS)
+    c("seven headings in order", [x["title"] for x in snap["sections"]] == HEADINGS)
     c("no <title> element", snap["htmlTitles"] == 0)
     c("frame at the asked width with no horizontal page scroll", snap["width"] == int(q.get("w", 400)) and snap["noHorizontalScroll"])
     c("unknown dependency chips wrap inside the page", all(not d["clipped"] and d["inside"] for d in snap["depChips"]))
@@ -775,8 +830,13 @@ def full_content(c, s):
     c("header names the feature, both branches and the architecture page", s["h1"] == "placeholder-feature"
       and s["title"] == "placeholder-feature status board" and s["headerLinks"] == ["https://example.com/architecture"]
       and s["metaLine"] == "orchestrator placeholder_feature_orchestrator_with_a_long_unbroken_branch_name | default main | Architecture")
-    c("Needs you: decisions first, then prompts, then unknown kinds, oldest first", sec(s, "Needs you")["items"] == NEEDS)
-    c("Needs you count", sec(s, "Needs you")["count"] == "5")
+    c("Decisions: AFK decisions, then decisions, then unknown kinds, oldest first", sec(s, "Decisions")["items"] == DECISIONS)
+    c("Decisions: count, and pull requests linked only to an https document", sec(s, "Decisions")["count"] == "6"
+      and sec(s, "Decisions")["links"] == DECISION_LINKS)
+    c("Permission prompts: only prompts, oldest first, with count", sec(s, "Permission prompts")["items"] == PROMPTS
+      and sec(s, "Permission prompts")["count"] == "2")
+    c("Decisions: the long detail wraps inside the page", s["longWordLines"] >= 2
+      and sec(s, "Decisions")["outside"] == 0 and sec(s, "Permission prompts")["outside"] == 0)
     c("Ready for your review: drafts in dependency order with after notes", sec(s, "Ready for your review")["items"] == REVIEW
       and sec(s, "Ready for your review")["count"] == "3")
     c("Pull requests: every row, ordered by number", sec(s, "Pull requests")["rows"] == PRS and sec(s, "Pull requests")["count"] == "5")
@@ -821,6 +881,10 @@ def check(name, r):
     s = snaps[-1]
     for snap in snaps + [r[k] for k in ("before", "after", "later") if k in r]:
         common(c, snap, q)
+        want = AFK.get(q.get("afk"))
+        c("AFK notice exactly when afk is an object", [x["text"] for x in snap["afk"]] == ([want] if want else []))
+        c("AFK notice in the notice style, not the banner's", all(x["bg"] == snap["tokens"]["warn-bg"] and x["fg"] == snap["tokens"]["warn"]
+          for x in snap["afk"]))
     deliver = q.get("deliver", "live")
     fixture = q.get("fixture", "full")
     tick_ms = int(q["tickms"]) if "tickms" in q else round(float(q.get("tick", 5)) * 60000) if q.get("tick") != "bad" else None
@@ -920,7 +984,7 @@ def check(name, r):
         c("unreachable notice after 10 s", snaps[1]["notices"] == [SLOW])
         c("the first live data clears the notice", s["notices"] == [] and sec(s, "Ready for your review")["items"] == REVIEW)
     failed = [x for x in q.get("error", "").split(",") if x]
-    titles = {"needs": ["Needs you"], "prs": ["Ready for your review", "Pull requests"], "phases": ["Phases"],
+    titles = {"needs": ["Decisions", "Permission prompts"], "prs": ["Ready for your review", "Pull requests"], "phases": ["Phases"],
               "recent": ["Recent changes"], "meta": ["Heartbeat"]}
     if deliver == "error-before":
         for source in failed:
@@ -930,7 +994,8 @@ def check(name, r):
             c("Ready for your review and Pull requests keep working", sec(s, "Ready for your review")["items"] == REVIEW
               and sec(s, "Pull requests")["rows"] == PRS)
         if "needs" not in failed:
-            c("Needs you and Phases keep working", sec(s, "Needs you")["items"] == NEEDS and sec(s, "Phases")["rows"] == PHASES)
+            c("Decisions, Permission prompts and Phases keep working", sec(s, "Decisions")["items"] == DECISIONS
+              and sec(s, "Permission prompts")["items"] == PROMPTS and sec(s, "Phases")["rows"] == PHASES)
         if "meta" in failed:
             c("no verdict without a live tick", s["banner"] == [] and sec(s, "Heartbeat")["chips"] == [])
     if deliver == "error-after":
@@ -938,7 +1003,8 @@ def check(name, r):
             for title in titles[source]:
                 c(f"{title}: error after data keeps what it showed", STOPPED in sec(s, title)["text"])
         if "needs" in failed:
-            c("rows kept under the error lines", sec(s, "Needs you")["items"] == NEEDS and sec(s, "Phases")["rows"] == PHASES
+            c("rows kept under the error lines", sec(s, "Decisions")["items"] == DECISIONS
+              and sec(s, "Permission prompts")["items"] == PROMPTS and sec(s, "Phases")["rows"] == PHASES
               and sec(s, "Pull requests")["rows"] == PRS and sec(s, "Ready for your review")["items"] == REVIEW
               and [i.split(" | ", 1)[1] for i in sec(s, "Recent changes")["items"]] == RECENT and sec(s, "Phases")["map"] is not None)
         if "meta" in failed:
@@ -993,7 +1059,7 @@ python3 "$dir/check.py" "$dir/out.txt"
 EOF
 ```
 
-Expected: exit `0`, one `ok` line for each of the 49 scenarios and one for `lanes-a against lanes-b`, then `board renders as specified`. A failing assertion prints `FAIL`, the scenario and the name of each failed check, then `<n> failed checks`, and exits `1`. A page that crashes, produces no result or times out twice fails its scenario the same way.
+Expected: exit `0`, one `ok` line for each of the 53 scenarios and one for `lanes-a against lanes-b`, then `board renders as specified`. A failing assertion prints `FAIL`, the scenario and the name of each failed check, then `<n> failed checks`, and exits `1`. A page that crashes, produces no result or times out twice fails its scenario the same way.
 
 ## Evidence
 

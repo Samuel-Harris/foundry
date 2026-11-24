@@ -1,0 +1,5 @@
+#!/bin/bash
+printf '%s\n' "$*" >> "$STUB_CAFFEINATE_LOG"
+# ps must show "caffeinate <arguments>", as for the real caffeinate, which also
+# exits once the pid it was given with -w has exited.
+exec -c -a "caffeinate $*" perl -e '$0 = join " ", "caffeinate", @ARGV; my $pid = $ARGV[-1]; sleep 1 while kill 0, $pid' -- "$@"

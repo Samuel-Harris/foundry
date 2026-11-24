@@ -60,7 +60,7 @@ Prompt: "Read only these two files and nothing else, not even files they link to
 
 Expected answer:
 
-1. A `blocked` that names a conflict in another phase's file goes to the developer as a decision request, naming the owning phase `gamma` and the path, listed in the tracker and under **Needs you**. `beta` has not stalled, because its `waits_for` is set. The orchestrator does not resolve the conflict.
+1. A `blocked` that names a conflict in another phase's file goes to the developer as a decision request, naming the owning phase `gamma` and the path, listed in the tracker and under **Decisions**. `beta` has not stalled, because its `waits_for` is set. The orchestrator does not resolve the conflict.
 2. It records the decision in `run-decisions.md` with its date, door type and reason, commits it, and sends `answer` to `beta`. Because the answer changes the feature plan's contract, it restarts the planner with an `instruction` that names the decision and the phases it affects. When the planner sends `done-planning`, it checks that the branch changes nothing outside `.foundry/plans/`, merges it with `--no-ff`, closes the planner's pane, writes the board's `phases` documents, starts each phase whose dependencies are met, and sends `move-back` to Plan to each started phase whose entry the message names as changed.
 
 ### Cold read 4b. A failing default-branch merge and generated-only failures on the default branch

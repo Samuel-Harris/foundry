@@ -116,6 +116,9 @@ class LauncherTestCase(unittest.TestCase):
             STUB_CLAUDE_LOG=str(self.claude_log),
         )
         self.addCleanup(shutil.rmtree, self.env["TMUX_TMPDIR"], ignore_errors=True)
+        # The launcher finds this server through TMUX_TMPDIR. The test itself names it with -S, so no call of its own can reach another server.
+        self.socket = Path(self.env["TMUX_TMPDIR"]) / f"tmux-{os.getuid()}" / "default"
+        self.socket.parent.mkdir(mode=0o700)
 
         seed = self.tmp / "seed"
         self.origin = self.tmp / "origin.git"
@@ -130,11 +133,11 @@ class LauncherTestCase(unittest.TestCase):
         self.seed = seed
 
         self.tmux("-f", "/dev/null", "new-session", "-d", "-x", "200", "-y", "50")
-        self.addCleanup(self.run_tool, ["tmux", "kill-server"])
+        self.addCleanup(self.run_tool, ["tmux", "-S", str(self.socket), "kill-server"])
         self.window = self.tmux("list-windows", "-F", "#{window_id}").strip()
-        socket = self.tmux("display-message", "-p", "#{socket_path}").strip()
-        if not os.path.realpath(socket).startswith(os.path.realpath(self.env["TMUX_TMPDIR"]) + os.sep):
-            self.fail(f"tmux would reach {socket}, outside the test's TMUX_TMPDIR")
+        reached = self.run_tool(["tmux", "display-message", "-p", "#{socket_path}"], check=True).stdout.strip()
+        if os.path.realpath(reached) != os.path.realpath(self.socket):
+            self.fail(f"the launcher's tmux would reach {reached}, not the test's server {self.socket}")
 
     def run_tool(self, args: list[str], *, check: bool = False) -> subprocess.CompletedProcess:
         return subprocess.run(args, env=self.env, cwd=self.tmp, capture_output=True, text=True, check=check, timeout=30)
@@ -143,7 +146,7 @@ class LauncherTestCase(unittest.TestCase):
         return self.run_tool(["git", *args], check=True).stdout
 
     def tmux(self, *args: str) -> str:
-        return self.run_tool(["tmux", *args], check=True).stdout
+        return self.run_tool(["tmux", "-S", str(self.socket), *args], check=True).stdout
 
     def launch(self, *args: str, env: dict[str, str] | None = None, cwd: Path | None = None) -> subprocess.CompletedProcess:
         return subprocess.run([str(LAUNCH), *args], env=env or self.env, cwd=cwd or self.root, capture_output=True, text=True, timeout=60)

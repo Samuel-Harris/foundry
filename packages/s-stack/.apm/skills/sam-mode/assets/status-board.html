@@ -31,6 +31,13 @@ board/meta, one document:
   stale_after_min      number, normally 40. The page marks itself stale when
                        tick_at is more than this many minutes old, and uses
                        40 when the field is absent.
+  afk                  null while the developer is present, or, in AFK mode,
+                       an object {since, until, sessions, rounds, notify}:
+                       since the time AFK mode began, until the time the
+                       developer expects to be back or null, sessions the
+                       most phase sessions that run at once, rounds the failed
+                       verdicts allowed per gate, and notify true when push
+                       notifications are on. The header shows it as a notice.
 
 board/recent, one document:
   items  list of at most 20 {at, phase, from, to} objects, newest first. at is
@@ -75,9 +82,21 @@ written as a string, such as prs/42:
 
 needs/<id>, one document per item waiting on the developer, its document id
 chosen by the orchestrator:
-  kind     "decision" or "prompt"
+  kind     "afk-decision", "decision" or "prompt". An afk-decision is a
+           two-way door the orchestrator decided while the developer was
+           away; a decision is a question waiting for the developer. Both
+           show under Decisions, and prompts under Permission prompts.
   phase    string, the phase id
   summary  string, one line
+  ref      string, the short id the developer uses, such as "AFK-1",
+           "alpha-r1" or "run-3", or null
+  detail   string, the decision in full, or null. For a decision, the
+           question's options and the recommendation; for an afk-decision,
+           the choice and its reason. The page shows it as plain text.
+  prs      list of the numbers of the pull requests the item concerns, such
+           as those that carry an afk-decision, or an empty list. Each may be
+           a number or a string of its decimal digits, which the page reads
+           as that number.
   door     "one-way", "two-way" or null
   pane     string naming the pane that shows a waiting prompt, or null
   since    time the item started waiting
@@ -87,7 +106,8 @@ WRITING
 Write once per tick, as one ArtifactData batch of at most 50 writes that holds
 only the documents that changed. Keep recent as one document: replace its
 items with the new list, trimmed to 20. When a needs item is resolved, delete
-its document rather than flag it.
+its document rather than flag it. An afk-decision is resolved once the
+developer has said whether they agree, whichever way they answer.
 
 needs_update is true when a draft or open pull request is not up to date, and
 false when it is. It is up to date when its head contains the default branch's
@@ -102,7 +122,7 @@ leave needs_update null.
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-  /* One column up to 960 px wide: header, notices, then six sections split by hairlines. */
+  /* One column up to 960 px wide: header, notices, then seven sections split by hairlines. */
   :root {
     --bg: #f5f7fa;
     --fg: #1a2130;
@@ -222,7 +242,8 @@ leave needs_update null.
   ul.items > li:last-child { border-bottom: 0; }
   .row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; min-width: 0; }
   .row > * { min-width: 0; overflow-wrap: anywhere; }
-  .summary, .pane { overflow-wrap: anywhere; }
+  .summary, .pane, .detail { overflow-wrap: anywhere; }
+  .detail { white-space: pre-wrap; }
   .pane { min-width: 0; }
   .sub { color: var(--muted); font-size: 0.88rem; }
 
@@ -278,10 +299,12 @@ leave needs_update null.
     <h1 id="feature">Status board</h1>
     <div class="meta-line" id="meta-line"></div>
     <div class="banner" id="stale-banner" hidden></div>
+    <div class="notice" id="afk-notice" hidden></div>
   </header>
   <div class="notice" id="notice" hidden></div>
   <main id="sections" class="sections">
-    <section id="s-needs"></section>
+    <section id="s-decisions"></section>
+    <section id="s-prompts"></section>
     <section id="s-review"></section>
     <section id="s-prs"></section>
     <section id="s-phases"></section>
@@ -294,7 +317,8 @@ leave needs_update null.
 (() => {
   const STATE_TONE = {Spec: "plain", Plan: "plain", Implement: "accent", Verify: "warn", Review: "warn", PR: "good", Done: "good"};
   const STATES = Object.keys(STATE_TONE);
-  const NEED_KINDS = ["decision", "prompt"];
+  const NEED_KINDS = ["afk-decision", "decision", "prompt"];
+  const DOOR_KINDS = ["afk-decision", "decision"];
   const DEFAULT_STALE_MIN = 40;
   const MINUTE = 60000;
 
@@ -609,30 +633,63 @@ leave needs_update null.
     banner.hidden = !(judged && judged.stale);
     if (!judged || judged.age === null) banner.textContent = "The orchestrator has not recorded a readable tick yet.";
     else banner.textContent = "The orchestrator has not ticked for " + Math.floor(judged.age / MINUTE) + " minutes.";
+
+    const afk = isObj(meta.afk) ? afkParts(meta.afk) : null;
+    $("afk-notice").hidden = afk === null;
+    $("afk-notice").replaceChildren(...(afk || []));
+  }
+
+  // An unreadable field drops its part, so the notice never shows a raw value.
+  function afkParts(afk) {
+    const at = (label, v) => (parseTime(v) === null ? null : [label, timeEl(v, "absolute")]);
+    const count = (n, one, many) => (typeof n === "number" ? n + (n === 1 ? one : many) : null);
+    const sessions = count(afk.sessions, " session", " sessions");
+    const rounds = count(afk.rounds, " failed round", " failed rounds");
+    const parts = [
+      at("AFK mode since ", afk.since) || ["AFK mode"],
+      at("back about ", afk.until),
+      sessions && ["up to " + sessions],
+      rounds && [rounds + " per gate"],
+      typeof afk.notify === "boolean" ? [afk.notify ? "push notifications on" : "no push notifications"] : null,
+    ].filter(Boolean);
+    return parts.flatMap((part, i) => (i ? [" · ", ...part] : part));
+  }
+
+  function needItem(n) {
+    const since = parseTime(n.since);
+    const waiting = since === null ? "since " + (str(n.since) || "unknown") : "waiting " + formatAge(Date.now() - since);
+    const prs = Array.isArray(n.prs) ? numbers(n.prs.map(digitsToNumber)) : [];
+    const prLink = (number) => link(prLabel(number), state.prs.find((p) => p.number === number)?.url, "need-" + str(n.ref) + "-" + number);
+    return el("li", {},
+      el("div", {class: "row"},
+        n.kind === "afk-decision" ? chip("AFK decision", "accent") : chip(str(n.kind) || "unknown"),
+        DOOR_KINDS.includes(n.kind) && str(n.door) ? chip(str(n.door), n.door === "one-way" ? "crit" : "") : null,
+        el("span", {class: "mono"}, str(n.phase)),
+        el("span", {class: "sub num"}, waiting)),
+      el("div", {class: "row"},
+        str(n.ref) ? el("span", {class: "mono"}, str(n.ref)) : null,
+        el("span", {class: "summary"}, str(n.summary))),
+      str(n.detail) ? el("div", {class: "detail"}, str(n.detail)) : null,
+      prs.length ? el("div", {class: "sub num"}, "In ", ...prs.flatMap((number, i) => [i ? ", " : null, prLink(number)])) : null,
+      n.kind === "prompt" && str(n.pane) ? el("div", {class: "sub pane"}, "pane ", el("span", {class: "mono"}, str(n.pane))) : null);
+  }
+
+  function needsSection(id, title, needs, empty) {
+    const section = sectionShell(id, title, isLoaded("needs") ? needs.length : null);
+    if (!renderLoadState(section, "needs")) return;
+    if (!needs.length) {
+      section.append(el("p", {class: "empty"}, empty));
+      return;
+    }
+    section.append(el("ul", {class: "items"}, ...needs.map(needItem)));
   }
 
   function renderNeeds() {
     const kindRank = (k) => (NEED_KINDS.includes(k) ? NEED_KINDS.indexOf(k) : NEED_KINDS.length);
     const sinceKey = (n) => parseTime(n.since) ?? Infinity;
     const needs = state.needs.slice().sort((a, b) => kindRank(a.kind) - kindRank(b.kind) || sinceKey(a) - sinceKey(b));
-    const section = sectionShell("s-needs", "Needs you", isLoaded("needs") ? needs.length : null);
-    if (!renderLoadState(section, "needs")) return;
-    if (!needs.length) {
-      section.append(el("p", {class: "empty"}, "Nothing needs you."));
-      return;
-    }
-    section.append(el("ul", {class: "items"}, ...needs.map((n) => {
-      const since = parseTime(n.since);
-      const waiting = since === null ? "since " + (str(n.since) || "unknown") : "waiting " + formatAge(Date.now() - since);
-      return el("li", {},
-        el("div", {class: "row"},
-          chip(str(n.kind) || "unknown"),
-          n.kind === "decision" && str(n.door) ? chip(str(n.door), n.door === "one-way" ? "crit" : "") : null,
-          el("span", {class: "mono"}, str(n.phase)),
-          el("span", {class: "sub num"}, waiting)),
-        el("div", {class: "summary"}, str(n.summary)),
-        n.kind === "prompt" && str(n.pane) ? el("div", {class: "sub pane"}, "pane ", el("span", {class: "mono"}, str(n.pane))) : null);
-    })));
+    needsSection("s-decisions", "Decisions", needs.filter((n) => n.kind !== "prompt"), "No decisions wait for you.");
+    needsSection("s-prompts", "Permission prompts", needs.filter((n) => n.kind === "prompt"), "No session waits on a permission prompt.");
   }
 
   function renderReview() {

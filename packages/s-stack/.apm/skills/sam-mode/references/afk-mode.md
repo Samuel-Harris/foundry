@@ -71,13 +71,13 @@ A park stops a phase session from starting work until its reason ends. Record ea
 
 | Reason | Send `park` when | It ends |
 | --- | --- | --- |
-| `start` | AFK mode starts with a later `start`: every working phase | At the `start` time, or when that AFK mode ends |
+| `start` | AFK mode starts with a later `start`: every working phase. A phase already parked keeps its park, and when its reason ends before the `start` time, its reason becomes `start`, with no `unpark` | At the `start` time, or when that AFK mode ends |
 | one-way door `<request id>` | The phase has nothing left that the request does not affect, as [Decisions](#decisions) says | At the answer to that request |
 | round cap | A phase's `NOT VERIFIED` and `INCONCLUSIVE` verdicts of one gate since AFK mode began, by their `at` times, reach `rounds`, or its `SIGNIFICANT` verdicts do | When the AFK mode it was sent in ends |
 | session cap | More phases work than `sessions`: the most recently started | At a free slot, oldest park first, or when the AFK mode it was sent in ends |
 | usage pause | A usage pause starts | When the usage pause ends |
 
-Send `unpark` once a park's reason has ended and no usage pause holds, in tick step 3, or in the turn AFK mode ends. In AFK mode, unpark up to `sessions`, in the order [Decisions](#decisions) sets. A phase left without a slot stays parked, and its reason becomes "session cap".
+Send `unpark` once a park's reason has ended, no usage pause holds and no later `start` waits, in tick step 3, or in the turn AFK mode ends. In AFK mode, unpark up to `sessions`, in the order [Decisions](#decisions) sets. A phase left without a slot stays parked, and its reason becomes "session cap".
 
 ### The usage pause
 
@@ -86,7 +86,7 @@ One rule covers every usage pause.
 - **Start.** A usage pause starts only while AFK mode is on, at its Starting step 3, or in the developer's message that ends it. It starts at a signal in [Usage](#usage), at a limit the developer tells you was reached, or when you choose to wait for a reset. In the message that ends AFK mode, start it before you unpark anything. Record a "Usage pause" row in the tracker with its cause and what ends it: for a signal or a reported limit, what the Usage row for its window says; for a reset you chose to wait for, that reset.
 - **Parks.** Send `park` with the reason "usage pause", and what ends the pause, to every phase session, working or idle, that has no park. A phase whose prompt is answered while the pause holds gets its `park` then. A phase parked for another reason keeps that park and gets no second one.
 - **Holds.** While the pause holds, whatever mode is on, start no phase session, send no `unpark`, and relaunch none that is idle at a gate boundary.
-- **End.** A pause that ends at a time ends at the first tick after it. Any pause ends at the developer's word, a message in your pane that tells you to go on. A message that starts AFK mode ends it at that start's step 3 when step 3 finds no signal; otherwise the pause holds, and its row takes what the new signal's window says. The developer's return alone, and the end of AFK mode, do not end a pause. When it ends, delete the "Usage pause" row and unpark as [Parks](#parks) says.
+- **End.** A pause that ends at a time ends at the first tick after it. Any pause ends at the developer's word, a message in your pane that tells you to go on. A message that starts AFK mode ends it at that start's step 3 when step 3 finds no signal; otherwise the pause holds, and its row takes what the new signal's window says. The developer's return alone, and the end of AFK mode, do not end a pause. When it ends, delete the "Usage pause" row and unpark as [Parks](#parks) says, so a phase it parked waits for a later `start`.
 
 ## Interrupted sessions and permission prompts
 

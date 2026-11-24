@@ -2,6 +2,8 @@
 
 Run one large feature as cooperating Claude Code sessions, each in its own worktree and tmux pane.
 
+[GUIDE.md](GUIDE.md) explains how s-stack works and how to run a feature, with diagrams of the roles, the phase states and the messages.
+
 ## What it installs
 
 | Primitive | Name | Purpose |

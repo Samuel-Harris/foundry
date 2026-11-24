@@ -71,13 +71,13 @@ A park stops a phase session from starting work until its reason ends. Record ea
 
 | Reason | Send `park` when | It ends |
 | --- | --- | --- |
-| `start` | AFK mode starts with a later `start`: every working phase. A phase already parked keeps its park, and when its reason ends before the `start` time, its reason becomes `start`, with no `unpark` | At the `start` time, or when that AFK mode ends |
+| `start` | AFK mode starts with a later `start`: every working phase. A phase already parked keeps its park, and when its reason ends before the `start` time, its reason becomes `start`, with no `unpark`. When an `answer` you send ends it, send that phase `park` with the reason `start` first, so the answer does not end its wait | At the `start` time, or when that AFK mode ends |
 | one-way door `<request id>` | The phase has nothing left that the request does not affect, as [Decisions](#decisions) says | At the answer to that request |
 | round cap | A phase's `NOT VERIFIED` and `INCONCLUSIVE` verdicts of one gate since AFK mode began, by their `at` times, reach `rounds`, or its `SIGNIFICANT` verdicts do | When the AFK mode it was sent in ends |
 | session cap | More phases work than `sessions`: the most recently started | At a free slot, oldest park first, or when the AFK mode it was sent in ends |
 | usage pause | A usage pause starts | When the usage pause ends |
 
-Send `unpark` once a park's reason has ended, no usage pause holds and no later `start` waits, in tick step 3, or in the turn AFK mode ends. In AFK mode, unpark up to `sessions`, in the order [Decisions](#decisions) sets. A phase left without a slot stays parked, and its reason becomes "session cap".
+Send `unpark` once a park's reason has ended, no usage pause holds and no later `start` of the AFK mode that is on waits, in tick step 3, or in the turn AFK mode ends. In AFK mode, unpark up to `sessions`, in the order [Decisions](#decisions) sets. A phase left without a slot stays parked, and its reason becomes "session cap".
 
 ### The usage pause
 

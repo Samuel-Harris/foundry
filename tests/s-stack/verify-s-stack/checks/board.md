@@ -33,7 +33,7 @@ Each line of the `LIST` block is one scenario: a virtual-time budget in millisec
 | Header: feature, both branches, an `https` architecture link; markup in `feature` shown as text and a non-`https` architecture link shown as plain text | `full`, `hostile` |
 | Decisions: every item but prompts, AFK decisions then decisions then unknown kinds, the retired `restack` among them, oldest first within a kind; an "AFK decision" chip, door chip only on AFK decisions and decisions, `ref` before the summary, `detail` in full as text with its line break, a long unbroken `detail` wrapping inside the page at every width, `prs` linked to an `https` pull request and plain otherwise, no pane, waiting time, count, empty state | `full`, `empty`, `swap`, every width scenario |
 | Permission prompts: only prompts, oldest first, with summary, phase, pane and waiting time, count, empty state | `full`, `empty`, `swap` |
-| AFK notice in the header, in the notice style and not the stale banner's: every part in order, "back about" only with a readable `until`, "starts work at" only with a `start` still to come, singular and plural counts, notifications on or off, unreadable fields skipped; no notice when `afk` is null or absent | `afk=full`, `afk=notify`, `afk=bad`, `afk=null`, every other scenario |
+| AFK notice in the header, in the notice style and not the stale banner's: every part in order, "back about" only with a readable `until`, singular and plural counts, notifications on or off, unreadable fields skipped; no notice when `afk` is null or absent | `afk=full`, `afk=notify`, `afk=bad`, `afk=null`, every other scenario |
 | Ready for your review: drafts only, rank order with null last and ties by number, dependencies first, cycle fallback, "after" notes for draft and open dependencies, chips, empty state | `full`, `review`, `empty` |
 | Pull requests: every row and cell, ordered by number, digit strings read as numbers, no update chip for a null `needs_update`, empty state | `full`, `review`, `empty` |
 | Phases: every row and cell, scheduling phrases, unknown values, Depends on, a live session with and without a pane, relative time with its `datetime`, empty state | `full`, `missing`, `unreadable`, `cycle`, `flat`, `empty` |
@@ -114,9 +114,9 @@ cat > "$dir/stub.js" <<'JS'
     if (q.has("stale")) meta.stale_after_min = Number(q.get("stale"));
     if (q.has("hostile")) Object.assign(meta, {feature: "placeholder-feature <b>bold</b><img src=x>", architecture_url: "javascript:alert(3)"});
     if (q.has("afk")) meta.afk = {
-      full: {since: ago(180), until: ago(-180), start: ago(-78), sessions: 2, rounds: 3, notify: false},
-      notify: {since: ago(180), until: null, start: ago(10), sessions: 1, rounds: 1, notify: true},
-      bad: {since: "soon", until: 5, start: "later", sessions: "2", rounds: null, notify: "yes"},
+      full: {since: ago(180), until: ago(-180), sessions: 2, rounds: 3, notify: false},
+      notify: {since: ago(180), until: null, sessions: 1, rounds: 1, notify: true},
+      bad: {since: "soon", until: 5, sessions: "2", rounds: null, notify: "yes"},
       null: null}[q.get("afk")];
     return meta;
   };
@@ -582,7 +582,7 @@ PROMPTS = [
     "prompt | launcher | waiting 15 min | Allow the launcher to run tmux. | pane %12",
     "prompt | board | waiting 4 min | A permission prompt waits in the session. | pane %" + "1234567890" * 6]
 AFK = {
-    "full": "AFK mode since 31 Jan 2026, 06:05 · back about 31 Jan 2026, 12:05 · starts work at 31 Jan 2026, 10:23"
+    "full": "AFK mode since 31 Jan 2026, 06:05 · back about 31 Jan 2026, 12:05"
             " · up to 2 sessions · 3 failed rounds per gate · no push notifications",
     "notify": "AFK mode since 31 Jan 2026, 06:05 · up to 1 session · 1 failed round per gate · push notifications on",
     "bad": "AFK mode"}

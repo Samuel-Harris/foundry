@@ -171,6 +171,15 @@ Every fact lives in a committed file or in live state that git, tmux or GitHub r
 
 A feature can span several repositories. The home repository is the one where you ran `/sam-mode start`. The roadmap names every repository and which is home, and the feature plan's Repositories table gives each one's checkout path, default branch, check command and regenerate command. Every phase works in exactly one repository and changes files there only. Each repository has its own orchestrator branch, `<feature>`, which the launcher cuts from that repository's default branch when the first phase starts there. A feature in one repository works the same way, with one row. [`SKILL.md`](.apm/skills/sam-mode/SKILL.md#repositories) owns the rules.
 
+### Links between repositories
+
+Phases in two repositories that build one interface are joined by a link, which the feature plan's Links table records. A link has one of two kinds.
+
+- **`api`.** One repository provides an interface that another consumes. The provider and consumer phases run at the same time against a contract written in the feature plan, and each verifier checks its own side against it. The provider's change is additive, so either side can merge first. The board's **Ready for your review** tells you to merge the provider's pull requests first.
+- **`library`.** One repository is a library that another consumes as a released dependency. The consumer phase builds against the library's feature worktree through a link command that changes no tracked file, which the planner proves by experiment. It waits in Review until you have merged and released the library's change, then pins the released version, passes both gates again and opens its pull requests, so none of them ships the link. When no such link command exists, the consumer phase starts only once the library is released.
+
+Once every phase of a link has merged into its own orchestrator branch, each later phase merge into either repository also runs the link's integration check, in a scratch workspace of both orchestrator branches. A failure counts as a failed check of that merge. [`planner.md`](.apm/skills/sam-mode/handbooks/planner.md#the-links-table) defines a link, and [`orchestrator.md`](.apm/skills/sam-mode/handbooks/orchestrator.md#links) owns the checks.
+
 ### Files under `.foundry/`
 
 Every file under `.foundry/` has one writer. Git tracks `.foundry/` on every repository's orchestrator branch and on every branch cut from one, so no repository of the feature may ignore it. A pull request branch never contains it. The roadmap, the feature plan and the tracker live only in the home repository. A phase's own files live on its phase branch, in its repository.
@@ -247,7 +256,7 @@ The board has seven sections under its header. In AFK mode the header also shows
 | --- | --- |
 | Decisions | Decision requests waiting for you, decisions the orchestrator took alone (`run-<n>`) and AFK decisions (`AFK-<n>`), each with its id and the decision in full |
 | Permission prompts | Sessions waiting on a permission prompt, with the pane that shows it |
-| Ready for your review | Draft pull requests, ordered so that each comes after the pull requests it depends on |
+| Ready for your review | Draft pull requests, ordered so that each comes after the pull requests it depends on and those it must merge after in another repository |
 | Pull requests | Every pull request with its state, checks, base and whether it needs an update |
 | Phases | Each phase's place in the seven states, its session and a dependency map |
 | Recent changes | The last 20 state changes |

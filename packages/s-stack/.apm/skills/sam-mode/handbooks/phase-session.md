@@ -11,6 +11,7 @@ Your first prompt names the feature, the phase, the roadmap, the feature plan an
 - The roadmap's `README.md`, then `run-decisions.md` beside it. Where they disagree, `run-decisions.md` is newer.
 - In the feature plan, its rules for every phase, its contracts between phases and your phase's entry. The entry gives the repository, the scope, the paths you own, the resources only one phase can use at a time, the planned pull requests and the **Done when** list.
 - The feature plan's Repositories table row for your repository. Every repository fact below, such as the generated paths and the regenerate command, comes from it.
+- Each row of the feature plan's Links table that names your phase, if any. [Links](#links) says what it changes.
 
 You work in your phase's repository, and its orchestrator branch is the one you merge and branch from. Outside the home repository, your first prompt names the roadmap and the plan by absolute path into the home feature worktree.
 
@@ -88,9 +89,21 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 | WAIVED, for the current code head | PR |
 | SIGNIFICANT | Implement |
 
+A consumer of a `library` link with a link command that has not pinned the release stays in Review instead of moving to PR, as [Links](#links) says.
+
+## Links
+
+A row of the Links table that names your phase adds these rules. `handbooks/planner.md` defines each field.
+
+- **`api` link.** Build your side against the contract in the feature plan. A consumer may stub the provider while it builds. A provider keeps its change additive, so everything its default branch already serves keeps working. A change to the contract needs a decision request, as for any contract.
+- **`library` link, library side.** Nothing changes. The orchestrator tells the consumer when your change is released.
+- **`library` link, consumer side, with a link command.** While you implement and verify, apply the link command in your worktree, pointing it at the library repository's feature worktree, which `workmux path <feature>` prints when run in that repository's Path. Tell the verifier to apply it too. Never commit what it changes. If `git status --porcelain --untracked-files=no` lists a file after you apply it, send a decision request. Your pull requests must never ship the link. So when a Review verdict would move the phase to PR before you have pinned the release, record the verdict and stay in Review instead, with `waits_for` set to the release of the link, by its id.
+- **The release.** The orchestrator sends an `instruction` that names the link and the released version once the release check passes. Record the version in `decisions` and commit. Move back to Implement, unless the phase is already there or before it. In Implement, run the pin command with that version, regenerate generated files if it made them stale, commit, clear `waits_for`, and pass both gates again. The pin is never waivable, because it is a dependency bumped by hand. Then move to PR as usual and open your pull requests.
+- **`library` link, consumer side, without a link command.** You start once the library phases are Done and released. Pin the released version with the pin command in Implement, as part of your work.
+
 ## PR
 
-1. Move to PR once the reference file's merge rule holds for the current code head.
+1. Move to PR once the reference file's merge rule holds for the current code head and, for a consumer of a `library` link with a link command, the phase has pinned the release, as [Links](#links) says.
 2. Start a PR creator subagent. Its brief gives the absolute path of `handbooks/pr-creator.md`, the roadmap, the feature plan, your phase plan, your status file, the phase branch, the local orchestrator branch (never `origin/<orchestrator branch>`, which may lag or not exist), every pull request branch in `pull_requests` as `OWN`, and `pushed` as `PUSHED`. That handbook owns the split, the bases and the proof that the pull requests equal the phase diff. When pull requests are already open, the PR creator carries each new commit to the open pull request that the phase plan assigns it to, as in [Fix rounds](#fix-rounds). A commit the phase plan does not assign, such as the verifier's, goes with the work it checks. It opens a new pull request for commits that the phase plan assigns to a new one, and for commits that no open pull request carries, such as a fix made after every pull request has merged. Act on its report:
    - A `STOP`: send no `prs-open`. Send the orchestrator a decision request that names the `STOP` line, and stay in your current state.
    - `DEVELOPER-COMMITS`: send no `prs-open`. Run the feedback round below for those commits.
@@ -104,7 +117,7 @@ Before you move to Verify, merge the current orchestrator branch into the phase 
 | Kind | What you do |
 | --- | --- |
 | `answer` | Remove the request from `requests`, record the outcome in `decisions`, with `afk: true` and the answer's `AFK-<n>` id when it says it is an AFK answer and `afk: false` otherwise, clear `waits_for` if the answer ends the wait, commit, and continue the work that waited. When the answer says a rewritten pull request branch holds no edits of the developer's, or once you have taken them, append `<pr>=<its current head>` to `pushed` and commit, as `pr-creator.md` says. |
-| `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. A notice that every pull request has merged is handled as [PR](#pr) step 4 says. An instruction to refresh a pull request, or to send `prs-open` at your code head, asks for a PR creator round, not new work. So does one saying the developer reviewed AFK decisions, once you have set each one's `afk` to `false` and committed, unless it changes one, which is a code change. In PR, run [PR](#pr) steps 2 and 3. On `DEVELOPER-COMMITS`, run the feedback round. Otherwise the phase stays in PR and no gate runs again. In any other state, reply with `state`. |
+| `instruction` | Follow it as an instruction from the developer, as in [Instructions from the developer](#instructions-from-the-developer), but send no `instruction` message back. A notice that every pull request has merged is handled as [PR](#pr) step 4 says, and a notice that a link's release passed as [Links](#links) says. An instruction to refresh a pull request, or to send `prs-open` at your code head, asks for a PR creator round, not new work. So does one saying the developer reviewed AFK decisions, once you have set each one's `afk` to `false` and committed, unless it changes one, which is a code change. In PR, run [PR](#pr) steps 2 and 3. On `DEVELOPER-COMMITS`, run the feedback round. Otherwise the phase stays in PR and no gate runs again. In any other state, reply with `state`. |
 | `merge-orchestrator-branch` | Merge as in [Merge the orchestrator branch](#merge-the-orchestrator-branch), once nothing is half done. If the merge moved the code head and the phase was in Verify or later, move back to Implement. If the code head did not move, the phase keeps its state and its verdicts. |
 | `fix-round` | Run the fix round below that matches it. In every fix round that starts a PR creator, it works out each pull request's base again, as `pr-creator.md` says. |
 | `move-back` | Move back as in [Moving back](#moving-back). |

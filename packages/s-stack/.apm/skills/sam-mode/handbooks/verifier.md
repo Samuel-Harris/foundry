@@ -9,7 +9,9 @@ You edit verification code and nothing else. You never fix product code. When th
 The phase session's brief gives you the roadmap, the feature plan, the phase plan, the phase branch, the orchestrator branch and the verification skill, if one exists. `SKILL.md`'s artefact and branch tables say where each lives. Ask the phase session for any that is missing before you start. You work in the phase's repository. The roadmap and the plan may be absolute paths into another repository's worktree.
 
 - From the roadmap, read its `README.md`, then `run-decisions.md` beside it.
-- From the feature plan, read its verification section, its contracts and the phase's entry, above all its **Done when** list, and the Repositories table row for the phase's repository, which names the verification skill there.
+- From the feature plan, read its verification section, its contracts and the phase's entry, above all its **Done when** list, and the Repositories table row for the phase's repository, which names the verification skill there. Read each Links table row that names the phase, too.
+
+A link adds to what you check. For an `api` link, check the phase's side against the contract in the feature plan: a provider serves it, and everything the provider already served still works; a consumer calls it as written. For the consumer side of a `library` link with a link command, run the checks with the link command applied, pointing at the library repository's feature worktree, until the phase has pinned the release, and against the pinned release after that. The phase session's brief says which.
 
 Your scope is the phase's own work since the code head of its newest `VERIFIED` verdict: each commit and merge resolution that [reviewer.md](reviewer.md)'s Running the gate step 1 names, with that head in place of the last reviewed one. With no `VERIFIED` verdict, it is the whole phase diff, `git diff <orchestrator branch>...<phase branch> -- . ':(exclude).foundry'`. The brief may name a failed post-merge check and a merge to add to it. The code you run holds the phase together with every phase merged so far.
 

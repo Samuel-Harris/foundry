@@ -86,6 +86,11 @@ which no owner or repository name contains.
   base          string, the base branch
   depends_on    list of the pull request ids this one depends on, in any
                 repository, empty when there are none
+  merge_after   list of the ids of pull requests in other repositories that
+                should merge into their default branch before this one, such
+                as an API's provider before its consumer, written from the
+                feature plan's links, empty when there are none. The page
+                treats a missing field as an empty list.
   review_rank   number, the lowest reviewed first, or null
   needs_update  boolean, or null, explained below
 
@@ -576,7 +581,7 @@ leave needs_update null.
     const ordered = [];
     while (remaining.length) {
       const next = remaining.findIndex((p) =>
-        prIds(p.depends_on).every((id) => !inList.has(id) || emitted.has(id)));
+        [...prIds(p.depends_on), ...prIds(p.merge_after)].every((id) => !inList.has(id) || emitted.has(id)));
       if (next === -1) {
         ordered.push(...remaining);
         break;
@@ -717,6 +722,7 @@ leave needs_update null.
     }
     section.append(el("ul", {class: "items", id: "review-list"}, ...ordered.map((p) => {
       const after = prIds(p.depends_on).filter((id) => unmerged.has(id));
+      const mergeAfter = prIds(p.merge_after).filter((id) => unmerged.has(id));
       return el("li", {"data-pr": p.id},
         el("div", {class: "row"},
           el("span", {class: "num"}, link(p.id, p.url, "review-" + p.id)),
@@ -725,7 +731,8 @@ leave needs_update null.
           el("span", {class: "mono sub"}, str(p.phase)),
           checksChip(p.checks),
           updateChip(p),
-          after.length ? el("span", {class: "sub num"}, "after " + after.join(", ")) : null));
+          after.length ? el("span", {class: "sub num"}, "after " + after.join(", ")) : null,
+          mergeAfter.length ? el("span", {class: "sub num"}, "merge after " + mergeAfter.join(", ")) : null));
     })));
   }
 

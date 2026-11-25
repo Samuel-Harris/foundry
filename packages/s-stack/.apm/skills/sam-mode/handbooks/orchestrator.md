@@ -27,6 +27,7 @@ Run `<this skill's directory>/scripts/launch.sh` from the feature worktree's roo
 | `--window <window> --fresh` | Start a new conversation, as Supervision says. |
 | `--close` | Close the session's pane. It changes nothing unless the pane runs that session. |
 | `--remove` | Remove the session's worktree. It refuses unless the worktree is clean and its branch is merged into the orchestrator branch. |
+| `--repo <path>` | With `--role phase` and `--window` or `--remove`, work in the repository checked out at `<path>`. The launcher adds, finds and removes the phase's worktree there, cut from that repository's own `<feature>` branch, which it first cuts from that repository's fetched default branch when it has none, and checks merges against that branch. The first prompt names the roadmap and plan by absolute path into the feature worktree. A `<path>` in the feature worktree's own repository changes nothing. |
 
 The launcher places every pane. Never place, move or resize panes yourself, and leave alone any pane the developer adds to your column. Record each `started` or `alive` pane in the tracker. Exit 4 means the window has no room: start the session when a pane closes. Any other failure prints its cause. Fix it, or tell the developer when a tool is missing. Before you message a phase whose pane is closed, start its session with the launcher.
 

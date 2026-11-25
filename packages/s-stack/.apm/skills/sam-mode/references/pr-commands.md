@@ -11,7 +11,7 @@ OWN=<own branches> MERGED=<merged branches> PUSHED=<pushed heads> bash pr.sh pro
 
 ## The parameters
 
-The feature plan names the generated files, the command that regenerates them and the regenerate commit's subject. The script's first lines hold them. The values shown are Foundry's.
+The feature plan's Repositories table row for the phase's repository names the generated files, the command that regenerates them and the regenerate commit's subject. The script's first lines hold them. The values shown are Foundry's.
 
 | Parameter | Holds |
 | --- | --- |

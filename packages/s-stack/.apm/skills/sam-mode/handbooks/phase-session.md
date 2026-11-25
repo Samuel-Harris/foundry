@@ -9,13 +9,16 @@ Follow `poteto-mode` for how to work, and `SKILL.md` for the rules every session
 Your first prompt names the feature, the phase, the roadmap, the feature plan and the orchestrator's session name. Read these before anything else.
 
 - The roadmap's `README.md`, then `run-decisions.md` beside it. Where they disagree, `run-decisions.md` is newer.
-- In the feature plan, its rules for every phase, its contracts between phases and your phase's entry. The entry gives the scope, the paths you own, the resources only one phase can use at a time, the planned pull requests and the **Done when** list.
+- In the feature plan, its rules for every phase, its contracts between phases and your phase's entry. The entry gives the repository, the scope, the paths you own, the resources only one phase can use at a time, the planned pull requests and the **Done when** list.
+- The feature plan's Repositories table row for your repository. Every repository fact below, such as the generated paths and the regenerate command, comes from it.
+
+You work in your phase's repository, and its orchestrator branch is the one you merge and branch from. Outside the home repository, your first prompt names the roadmap and the plan by absolute path into the home feature worktree.
 
 If the feature plan and the roadmap disagree, the roadmap wins, and you send the orchestrator a decision request that names both texts. If your status file already exists, a session before you worked on this phase. Go to [After a restart](#after-a-restart).
 
 ## What you may write
 
-- Product code inside your phase's owned paths, and the generated files the feature plan says to regenerate.
+- Product code inside your phase's owned paths, and your repository's generated files.
 - Your verifier also commits its check file, and any verification skill path the feature plan gives your phase.
 - Under `.foundry/`, only your phase plan, your status file and your evidence file.
 
@@ -23,7 +26,7 @@ A merge of another branch is the one commit that may bring files under `.foundry
 
 ## Verdicts
 
-Compute the code head as the reference file says, with an exclude for each generated path and each generated line the feature plan names. A verdict covers only the code head it names. A commit that moves the code head needs new verdicts, each from a fresh gate agent. Verify covers the blast radius of your own work since the last `VERIFIED` code head, as [verifier.md](verifier.md) says, and Review covers what [reviewer.md](reviewer.md) says. A gate agent may return `WAIVED` under the reference file's waiver rule. Record it as the verdict, with its reason in the evidence file. Never decide yourself that a change needs no gate.
+Compute the code head as the reference file says, with an exclude for each generated path and each generated line your repository's row names. A verdict covers only the code head it names. A commit that moves the code head needs new verdicts, each from a fresh gate agent. Verify covers the blast radius of your own work since the last `VERIFIED` code head, as [verifier.md](verifier.md) says, and Review covers what [reviewer.md](reviewer.md) says. A gate agent may return `WAIVED` under the reference file's waiver rule. Record it as the verdict, with its reason in the evidence file. Never decide yourself that a change needs no gate.
 
 ## Changing state
 
@@ -48,13 +51,13 @@ Whenever you wait, for an answer, a blocked merge, a `move-back` or the end of a
 - Commit along the planned pull request split, so each commit belongs to one pull request.
 - Run review's `quick-review` skill on each planned pull request layer, and fix its findings before you start the next layer. Pass it the layer's own diff as the packet, `git diff <layer's first commit>^ <layer's last commit> -- . ':(exclude).foundry'`, because the orchestrator branch may not exist on the remote.
 - Run the verification skill yourself whenever it helps. Your own run is not a verdict.
-- Regenerate generated files, such as lockfiles, the way the feature plan says, in the commit that makes them stale.
+- Regenerate generated files, such as lockfiles, with your repository's regenerate command, in the commit that makes them stale.
 
 The phase leaves Implement when the plan is built and committed, and every layer has had its `quick-review` pass with its findings fixed.
 
 ## Merge the orchestrator branch
 
-Before you move to Verify, merge the current orchestrator branch into the phase branch with `git merge --no-ff`. A fast-forward would put the orchestrator's own merges on the phase's first-parent line, and the review scope would then take them for the phase's work. Code a clean merge brings in counts as verified and reviewed, and the reference file's code head does not move for it. Your own conflict resolution is your work, and the gates cover it. One exception: after merging, read the orchestrator branch tracker's "Merged phases" table. If the newest post-merge check failed and it touches something your phase builds on or changes, treat the merged-in code as your own: record that check, and the merge, in the evidence file, and name both in the verifier's and the reviewers' briefs. A red default branch is the same: ignore it unless it fails in something your phase builds on or changes. Use the merge procedure the feature plan gives, if it gives one.
+Before you move to Verify, merge the current orchestrator branch into the phase branch with `git merge --no-ff`. A fast-forward would put the orchestrator's own merges on the phase's first-parent line, and the review scope would then take them for the phase's work. Code a clean merge brings in counts as verified and reviewed, and the reference file's code head does not move for it. Your own conflict resolution is your work, and the gates cover it. One exception: after merging, read the "Merged phases" table of the tracker, `status/orchestrator.md` beside the feature plan. If the newest post-merge check in your repository failed and it touches something your phase builds on or changes, treat the merged-in code as your own: record that check, and the merge, in the evidence file, and name both in the verifier's and the reviewers' briefs. A red default branch is the same: ignore it unless it fails in something your phase builds on or changes. Use the merge procedure the feature plan gives, if it gives one.
 
 - Resolve a conflict only in your owned paths or in generated files that the feature plan tells you to regenerate.
 - A conflict in a file another phase owns is not yours. Abort the merge, send a `blocked` message that names the file, and wait.

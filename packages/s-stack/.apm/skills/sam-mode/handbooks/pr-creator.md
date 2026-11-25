@@ -6,7 +6,7 @@ You move commits. You never change what the code does. When a pull request needs
 
 ## Before you start
 
-The phase session's brief gives you the roadmap, the feature plan, the phase plan, the phase's status file, the phase branch and the orchestrator branch. Ask it for any that are missing.
+The phase session's brief gives you the roadmap, the feature plan, the phase plan, the phase's status file, the phase branch and the orchestrator branch. Ask it for any that are missing. You work in the phase's repository. The roadmap and the plan may be absolute paths into another repository's worktree, and every repository fact this handbook takes from the feature plan comes from the Repositories table row for the phase's repository.
 
 - **Check the gates.** The merge rule in [references/status-and-messages.md](../references/status-and-messages.md) must hold for the current code head. If it does not, stop and report which verdict fails.
 - **Resolve the default branch** with `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`, then run `git fetch origin`. Base everything on `origin/<default>`, never on a local copy. Never prune remote-tracking refs, because a merged dependency's ref keeps its commits out of your pull requests.
@@ -33,7 +33,7 @@ A pull request holds the phase's content for its paths. A path that only one pul
 
 ## Dependencies and base
 
-For each pull request, work out exactly which open pull requests it needs, including other phases' open pull requests. A pull request needs another when its change does not build or pass its checks without that one's change. Two pull requests that change one hand-written path must also lie in one dependency chain: the later one in phase order depends on the earlier one. That holds for a pull request opened for uncarried commits too, and for a merged pull request, which then goes in the spec's fourth field. The proof prints `<path> is in <pr> and <pr>, which are not in one stack` otherwise. The base follows from the open dependencies.
+For each pull request, work out exactly which open pull requests it needs, including other phases' open pull requests. A dependency is always a pull request of the phase's own repository. A pull request needs another when its change does not build or pass its checks without that one's change. Two pull requests that change one hand-written path must also lie in one dependency chain: the later one in phase order depends on the earlier one. That holds for a pull request opened for uncarried commits too, and for a merged pull request, which then goes in the spec's fourth field. The proof prints `<path> is in <pr> and <pr>, which are not in one stack` otherwise. The base follows from the open dependencies.
 
 | Open dependencies | Base and form | Spec |
 | --- | --- | --- |

@@ -21,11 +21,17 @@ DOCUMENTS
 
 A time is a UTC ISO 8601 string, such as "2026-01-31T09:05:00Z". A state name
 is one of the seven names Spec, Plan, Implement, Verify, Review, PR and Done.
+A repository is its GitHub owner/name, as
+gh repo view --json nameWithOwner --jq .nameWithOwner prints it, such as
+"octo-org/api". A pull request id is its repository, "#" and its number, such
+as "octo-org/api#42", because two repositories can each have a #42.
 
 board/meta, one document:
   feature              string, the feature's name
   orchestrator_branch  string
-  default_branch       string
+  repos                list of {repo, default_branch} objects, one per
+                       repository the feature touches: repo a repository,
+                       default_branch that repository's default branch
   architecture_url     https URL of the architecture page, or null
   tick_at              time of the orchestrator's last tick
   stale_after_min      number, normally 40. The page marks itself stale when
@@ -46,6 +52,7 @@ board/recent, one document:
 
 phases/<phase id>, one document per phase:
   phase         string, the phase id, equal to the document id
+  repo          the repository the phase works in
   state         a state name. The page draws the seven states in order and
                 marks this one and those before it, so no other field is needed.
   scheduling    "queued", "blocked", "live" or "closed"
@@ -64,8 +71,11 @@ phases/<phase id>, one document per phase:
                 pull request of the other phase has to be merged into the
                 default branch. The page draws these as a dependency map.
 
-prs/<number>, one document per pull request, its document id the number
-written as a string, such as prs/42:
+prs/<owner>:<name>:<number>, one document per pull request, such as
+prs/octo-org:api:42. A document id may hold only letters, digits and
+_ - . ~ : @ +, so the id replaces the pull request id's "/" and "#" with ":",
+which no owner or repository name contains.
+  repo          the pull request's repository
   number        number, or a string of its decimal digits, such as "42",
                 which the page reads as that number
   url           https URL of the pull request
@@ -74,9 +84,8 @@ written as a string, such as prs/42:
   state         "draft", "open", "merged" or "closed"
   checks        "passing", "failing", "pending" or "none"
   base          string, the base branch
-  depends_on    list of pull request numbers, empty when there are none.
-                Each may be a number or a string of its decimal digits, which
-                the page reads as that number.
+  depends_on    list of the pull request ids this one depends on, in any
+                repository, empty when there are none
   review_rank   number, the lowest reviewed first, or null
   needs_update  boolean, or null, explained below
 
@@ -93,10 +102,8 @@ chosen by the orchestrator:
   detail   string, the decision in full, or null. For a decision, the
            question's options and the recommendation; for an afk-decision,
            the choice and its reason. The page shows it as plain text.
-  prs      list of the numbers of the pull requests the item concerns, such
-           as those that carry an afk-decision, or an empty list. Each may be
-           a number or a string of its decimal digits, which the page reads
-           as that number.
+  prs      list of the ids of the pull requests the item concerns, such as
+           those that carry an afk-decision, or an empty list
   door     "one-way", "two-way" or null
   pane     string naming the pane that shows a waiting prompt, or null
   since    time the item started waiting
@@ -110,8 +117,8 @@ its document rather than flag it. An afk-decision is resolved once the
 developer has said whether they agree, whichever way they answer.
 
 needs_update is true when a draft or open pull request is not up to date, and
-false when it is. It is up to date when its head contains the default branch's
-tip and the current head of every draft or open pull request it depends on,
+false when it is. It is up to date when its head contains the tip of its
+repository's default branch and the current head of every draft or open pull request it depends on,
 directly or through another, and every check the repository requires has
 passed on that head. The checks field does not tell required checks apart, so
 take them from the repository. A merged or closed pull request has no flag:
@@ -323,8 +330,10 @@ leave needs_update null.
   const MINUTE = 60000;
 
   const digitsToNumber = (v) => (typeof v === "string" && /^[0-9]+$/.test(v) ? Number(v) : v);
-  const prDoc = (p) => ({...p, number: digitsToNumber(p.number),
-    depends_on: Array.isArray(p.depends_on) ? p.depends_on.map(digitsToNumber) : p.depends_on});
+  function prDoc(p) {
+    const number = digitsToNumber(p.number);
+    return {...p, number, id: str(p.repo) + "#" + str(number)};
+  }
 
   const SOURCES = {
     meta: {ref: (db) => db.doc("board/meta")},
@@ -396,8 +405,7 @@ leave needs_update null.
     return el("time", {datetime: new Date(ms).toISOString(), title: local}, text);
   }
 
-  const numbers = (v) => (Array.isArray(v) ? v.filter((n) => typeof n === "number") : []);
-  const prLabel = (n) => "#" + n;
+  const prIds = (v) => (Array.isArray(v) ? v.filter((id) => typeof id === "string") : []);
 
   function checksChip(checks) {
     const tone = {passing: "good", pending: "warn", failing: "crit"}[checks];
@@ -546,31 +554,34 @@ leave needs_update null.
         svg("text", {class: "node-state", x: 10, y: 35}, truncate(stateLook(n.state).label, 24)))));
   }
 
-  function byRankThenNumber(a, b) {
+  const byRepoThenNumber = (a, b) =>
+    str(a.repo).localeCompare(str(b.repo)) || (Number(a.number) || 0) - (Number(b.number) || 0);
+
+  function byRankThenRepo(a, b) {
     const ra = typeof a.review_rank === "number" ? a.review_rank : Infinity;
     const rb = typeof b.review_rank === "number" ? b.review_rank : Infinity;
     if (ra !== rb) return ra < rb ? -1 : 1;
-    return (Number(a.number) || 0) - (Number(b.number) || 0);
+    return byRepoThenNumber(a, b);
   }
 
-  const unmergedNumbers = (prs) =>
-    new Set(prs.filter((p) => p.state === "draft" || p.state === "open").map((p) => p.number));
+  const unmergedIds = (prs) =>
+    new Set(prs.filter((p) => p.state === "draft" || p.state === "open").map((p) => p.id));
 
   // A dependency cycle falls back to rank order, so no draft drops off the list.
   function reviewOrder(prs) {
-    const remaining = prs.filter((p) => p.state === "draft").sort(byRankThenNumber);
-    const inList = new Set(remaining.map((p) => p.number));
+    const remaining = prs.filter((p) => p.state === "draft").sort(byRankThenRepo);
+    const inList = new Set(remaining.map((p) => p.id));
     const emitted = new Set();
     const ordered = [];
     while (remaining.length) {
       const next = remaining.findIndex((p) =>
-        numbers(p.depends_on).every((n) => !inList.has(n) || emitted.has(n)));
+        prIds(p.depends_on).every((id) => !inList.has(id) || emitted.has(id)));
       if (next === -1) {
         ordered.push(...remaining);
         break;
       }
       const [pr] = remaining.splice(next, 1);
-      emitted.add(pr.number);
+      emitted.add(pr.id);
       ordered.push(pr);
     }
     return ordered;
@@ -626,7 +637,9 @@ leave needs_update null.
     const line = $("meta-line");
     line.replaceChildren();
     if (str(meta.orchestrator_branch)) line.append(el("span", {}, "orchestrator ", el("span", {class: "mono"}, str(meta.orchestrator_branch))));
-    if (str(meta.default_branch)) line.append(el("span", {}, "default ", el("span", {class: "mono"}, str(meta.default_branch))));
+    for (const r of Array.isArray(meta.repos) ? meta.repos.filter(isObj) : []) {
+      line.append(el("span", {}, el("span", {class: "mono"}, str(r.repo)), " default ", el("span", {class: "mono"}, str(r.default_branch))));
+    }
     if (str(meta.architecture_url)) line.append(link("Architecture", meta.architecture_url, "architecture"));
 
     const banner = $("stale-banner");
@@ -658,8 +671,8 @@ leave needs_update null.
   function needItem(n) {
     const since = parseTime(n.since);
     const waiting = since === null ? "since " + (str(n.since) || "unknown") : "waiting " + formatAge(Date.now() - since);
-    const prs = Array.isArray(n.prs) ? numbers(n.prs.map(digitsToNumber)) : [];
-    const prLink = (number) => link(prLabel(number), state.prs.find((p) => p.number === number)?.url, "need-" + str(n.ref) + "-" + number);
+    const prs = prIds(n.prs);
+    const prLink = (id) => link(id, state.prs.find((p) => p.id === id)?.url, "need-" + str(n.ref) + "-" + id);
     return el("li", {},
       el("div", {class: "row"},
         n.kind === "afk-decision" ? chip("AFK decision", "accent") : chip(str(n.kind) || "unknown"),
@@ -670,7 +683,7 @@ leave needs_update null.
         str(n.ref) ? el("span", {class: "mono"}, str(n.ref)) : null,
         el("span", {class: "summary"}, str(n.summary))),
       str(n.detail) ? el("div", {class: "detail"}, str(n.detail)) : null,
-      prs.length ? el("div", {class: "sub num"}, "In ", ...prs.flatMap((number, i) => [i ? ", " : null, prLink(number)])) : null,
+      prs.length ? el("div", {class: "sub num"}, "In ", ...prs.flatMap((id, i) => [i ? ", " : null, prLink(id)])) : null,
       n.kind === "prompt" && str(n.pane) ? el("div", {class: "sub pane"}, "pane ", el("span", {class: "mono"}, str(n.pane))) : null);
   }
 
@@ -694,7 +707,7 @@ leave needs_update null.
 
   function renderReview() {
     const ordered = reviewOrder(state.prs);
-    const unmerged = unmergedNumbers(state.prs);
+    const unmerged = unmergedIds(state.prs);
     const section = sectionShell("s-review", "Ready for your review", isLoaded("prs") ? ordered.length : null);
     if (!renderLoadState(section, "prs")) return;
     if (!ordered.length) {
@@ -702,38 +715,38 @@ leave needs_update null.
       return;
     }
     section.append(el("ul", {class: "items", id: "review-list"}, ...ordered.map((p) => {
-      const after = numbers(p.depends_on).filter((n) => unmerged.has(n));
-      return el("li", {"data-number": str(p.number)},
+      const after = prIds(p.depends_on).filter((id) => unmerged.has(id));
+      return el("li", {"data-pr": p.id},
         el("div", {class: "row"},
-          el("span", {class: "num"}, link(prLabel(str(p.number)), p.url, "review-" + str(p.number))),
+          el("span", {class: "num"}, link(p.id, p.url, "review-" + p.id)),
           el("span", {class: "summary"}, str(p.title))),
         el("div", {class: "row"},
           el("span", {class: "mono sub"}, str(p.phase)),
           checksChip(p.checks),
           updateChip(p),
-          after.length ? el("span", {class: "sub num"}, "after " + after.map(prLabel).join(", ")) : null));
+          after.length ? el("span", {class: "sub num"}, "after " + after.join(", ")) : null));
     })));
   }
 
   function renderPrs() {
-    const prs = state.prs.slice().sort((a, b) => (Number(a.number) || 0) - (Number(b.number) || 0));
+    const prs = state.prs.slice().sort(byRepoThenNumber);
     const section = sectionShell("s-prs", "Pull requests", isLoaded("prs") ? prs.length : null);
     if (!renderLoadState(section, "prs")) return;
     if (!prs.length) {
       section.append(el("p", {class: "empty"}, "No pull requests yet."));
       return;
     }
-    const deps = (p) => numbers(p.depends_on);
+    const deps = (p) => prIds(p.depends_on);
     section.append(table("table-prs",
-      ["Number", "Title", "Phase", "State", "Checks", "Base", "Depends on", "Update"],
+      ["Pull request", "Title", "Phase", "State", "Checks", "Base", "Depends on", "Update"],
       prs.map((p) => [
-        el("span", {class: "num"}, link(prLabel(str(p.number)), p.url, "prs-" + str(p.number))),
+        el("span", {class: "num"}, link(p.id, p.url, "prs-" + p.id)),
         str(p.title),
         el("span", {class: "mono"}, str(p.phase)),
         chip(str(p.state) || "unknown", p.state === "merged" ? "good" : ""),
         checksChip(p.checks),
         el("span", {class: "mono"}, str(p.base)),
-        el("span", {class: "num"}, deps(p).length ? deps(p).map(prLabel).join(", ") : "none"),
+        el("span", {class: "num"}, deps(p).length ? deps(p).join(", ") : "none"),
         updateChip(p),
       ])));
   }
@@ -754,9 +767,10 @@ leave needs_update null.
     }
     const deps = new Map(phases.map((p) => [p, dependsOn(p)]));
     section.append(table("table-phases",
-      ["Phase", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"],
+      ["Phase", "Repository", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"],
       phases.map((p) => [
         el("span", {class: "mono"}, str(p.phase)),
+        el("span", {class: "mono"}, str(p.repo)),
         stateCell(p.state),
         schedulingChip(p.scheduling),
         str(p.waits_for) || "nothing",

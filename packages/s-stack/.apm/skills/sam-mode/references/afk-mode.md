@@ -49,7 +49,7 @@ Work that needs no decision from the developer comes first. In tick step 3, star
 
 - A phase session still decides an ordinary two-way door itself.
 - Answer a raised two-way request yourself. Take the session's recommendation unless you have a reason not to, and record that reason. The planner's requests follow the same rules.
-- Before you send `answer`, add a `run-decisions.md` row with the next free ID `AFK-<n>`, `Decided by: AFK` and the mark "AFK, pending review", naming the request id, and commit it. Write an `afk-decision` board item with the same ID as `ref`, the decision and its reason in full as `detail`, and the pull requests that will carry it as `prs`. The `answer` says it is an AFK decision and gives its ID, and the phase records it with that ID and `afk: true`.
+- Before you send `answer`, add a `run-decisions.md` row with the next free ID `AFK-<n>`, `Decided by: AFK` and the mark "AFK, pending review", naming the request id, and commit it. Write an `afk-decision` board item with the same ID as `ref`, the decision and its reason in full as `detail`, and the ids of the pull requests that will carry it as `prs`. The `answer` says it is an AFK decision and gives its ID, and the phase records it with that ID and `afk: true`.
 - Never answer a one-way request. List it under Decisions on the board with all its fields. The phase carries on with the work the decision does not affect. When nothing else is left, park it, as [Parks](#parks) says.
 
 ## Usage

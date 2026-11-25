@@ -121,6 +121,7 @@ The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-se
 | `fix-round` | A hand-written file the phase owns conflicts with the default branch | The conflicting paths and the default branch commit |
 | `move-back` | A roadmap or plan change touches a phase, or a check on the orchestrator branch failed after the phase merged | The state to move back to, and what changed or the failed check |
 | `instruction` | Every pull request of the phase merged into the default branch | The merged pull request numbers |
+| `instruction` | The release check of a `library` link with a link command passed, sent to the consumer phase | The link id and the released version |
 | `stop` | A phase's pane is about to close, or a stalled session is being replaced | A request to commit and stop |
 | `park` | A phase must stop starting work, for a reason [afk-mode.md](afk-mode.md) names | The reason, and what ends it: a time, or an event such as the developer's word |
 | `unpark` | [afk-mode.md](afk-mode.md) says the park ends | Nothing more |

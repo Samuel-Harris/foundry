@@ -11,7 +11,7 @@ You write `.foundry/plans/<id>/README.md`, the feature plan, and nothing else. Y
 ## Writing the feature plan
 
 1. **Read the roadmap** and `run-decisions.md` together. Run decisions amend the roadmap until a roadmap update folds them in. Then read the files the roadmap's `README.md` routes to.
-2. **Explore the code** with subagents. Keep each conclusion with the file and line it came from, because the plan cites them.
+2. **Explore the code** of every repository the roadmap names, with subagents, reading each through the developer's checkout of it. Keep each conclusion with the file and line it came from, because the plan cites them.
 3. **List the open questions.** Include the roadmap's questions for the planner, and every fact the plan would otherwise guess. Examples are whether a manifest passes the repository's checks, whether a tool behaves as documented on this host, or how large a generated file grows.
 4. **Settle each question by experiment**, using p-stack's Prototype playbook. Run it in a throwaway worktree, a scratch repository or a private server. Never run it against state the developer is using, such as their terminal multiplexer session or a shared local stack. Record each experiment in the plan with the question, the answer and how it was measured, and put the measured result in the plan itself, because the throwaway locations will not last.
 5. **Shape the phases** as the next section says.
@@ -25,10 +25,11 @@ Send a `started` message when you begin. The reference file `references/status-a
 ## Shaping the phases
 
 - **One session each.** Size every phase so one Claude Code session can plan, build and verify it. Put work that shares context in the same phase.
+- **One repository each.** A phase works in one repository and changes files there only. Split work that spans repositories into one phase for each.
 - **Parallel by default.** Make as many phases as possible independent of each other. Draw a dependency only where a phase needs another phase's code.
 - **Owned paths.** Give each phase the set of paths it may change. No two phases that can run at the same time own the same file. When many phases must change one file, such as a lockfile or a version line, treat it as generated: no phase owns it, and the plan names the command that regenerates it.
 - **Exclusive resources.** Name each resource that only one phase can use at a time, such as a port, a local stack or a GPU, and the phases that need it. The orchestrator never runs two phases that need the same exclusive resource at the same time, so those phases run one after the other. Name each shared resource that is not exclusive and say why.
-- **Verification first.** When no existing verification skill covers the feature, make writing one the first phase. Give every phase its own check file in that skill, listed among that phase's owned paths, so no two phases edit one verification file.
+- **Verification first.** When no existing verification skill in a repository covers the feature, make writing one the first phase in that repository. Give every phase its own check file in that skill, listed among that phase's owned paths, so no two phases edit one verification file.
 - **Dependencies and pull requests.** Read the PR creator's handbook, `handbooks/pr-creator.md`, before you draw the dependencies. A pull request stacks cleanly on one parent only, so prefer a split in which no phase depends on two phases whose pull requests can be open at the same time. When no split avoids it, keep the dependency and say so in the phase entry. That phase's pull request then targets the default branch and carries both parents' changes, as the PR creator's handbook describes.
 - **Contracts.** Write down every interface between phases, such as a file layout, a data schema or a command line, so a phase can build against a neighbour that does not exist yet. A phase that needs to change a contract sends the orchestrator a decision request.
 
@@ -36,8 +37,9 @@ Send a `started` message when you begin. The reference file `references/status-a
 
 | Field | Holds |
 | --- | --- |
+| Repository | The repository the phase works in, by `owner/name` |
 | Scope | What the phase builds, in enough detail that its session plans without guessing |
-| Depends on | The phases that must be merged into the orchestrator branch before it starts, or that must be Done, with every pull request merged into the default branch, or none. Say which for each. |
+| Depends on | The phases that must be merged into their own repository's orchestrator branch, and have passed its post-merge check, before it starts, or that must be Done, with every pull request merged into the default branch, or none. Say which for each. A phase in another repository is a dependency like any other. |
 | Owns | Every path the phase may change, its check file included |
 | Must not touch | Paths a reader might expect it to change but which another phase owns |
 | Exclusive resources | Each resource it needs alone, or none |
@@ -45,16 +47,20 @@ Send a `started` message when you begin. The reference file `references/status-a
 
 Also give a table of every phase at a glance with these fields, a diagram of the dependencies, and the order in which the orchestrator starts and merges phases. The phase session plans its own pull request split in its phase plan.
 
-## What other handbooks take from the plan
+## The Repositories table
 
-The other handbooks read these repository-specific facts from your plan. Give each one, or say that the repository has none.
+The other handbooks read repository-specific facts from your plan's "Repositories" table. Give it one row for each repository the roadmap names, with these fields. Give each one, or say that the repository has none. A session reads the row of its own repository.
 
-| Reader | Takes from the plan |
-| --- | --- |
-| Every phase session | The generated paths and generated lines whose changes move no code head |
-| Orchestrator | The repository's check command, for merges and for the merged-branch check |
-| PR creator | The generated paths, the command that regenerates them, and the subject of the regenerate commit |
-| Verifier | The verification skill's path and each phase's check file |
+| Field | Holds | Read by |
+| --- | --- | --- |
+| Repository | Its `owner/name` | Every session |
+| Path | The absolute path of the developer's main checkout, where workmux runs for that repository | Orchestrator |
+| Home | Yes for exactly one row, the repository the roadmap names as home | Orchestrator |
+| Default branch | Its name, resolved, never assumed | Orchestrator |
+| Check command | The repository's check command, for merges and for the merged-branch check | Orchestrator |
+| Generated paths and lines | The paths and lines whose changes move no code head | Every phase session |
+| Regenerate command | The command that regenerates the generated paths, and the subject of the regenerate commit | Orchestrator and PR creator |
+| Verification skill | Its path, and each phase's check file in it | Verifier |
 
 ## When the orchestrator starts you again
 

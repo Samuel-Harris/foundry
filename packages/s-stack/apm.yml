@@ -1,5 +1,5 @@
 name: s-stack
-version: "0.1.21"
+version: "0.1.22"
 description: "Run one large feature as cooperating Claude Code sessions, each in its own worktree and tmux pane."
 author: sam
 license: MIT

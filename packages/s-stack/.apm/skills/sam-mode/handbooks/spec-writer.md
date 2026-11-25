@@ -19,7 +19,7 @@ The roadmap describes the problems the feature solves, the intended behaviour, t
 
 | File | Holds |
 | --- | --- |
-| `README.md` | The problem and the outcome, then a table that routes each reader to the other files, so a reader loads only the part they need. It ends with a section of questions for the planner: each fact you could not settle by reading, and why it matters. |
+| `README.md` | The problem and the outcome, then the repositories the feature touches, each by `owner/name`, and which one is home: the repository where `/sam-mode start` ran. Then a table that routes each reader to the other files, so a reader loads only the part they need. It ends with a section of questions for the planner: each fact you could not settle by reading, and why it matters. |
 | `decisions.md` | Every decision that affects the whole feature, with its door type (one-way or two-way), who decided it, why, and the alternatives that lost. A decision that affects one phase only belongs in that phase's status file later. |
 | Further files | One for each topic the README routes to, such as the workflow, the data model or the evidence |
 
@@ -30,7 +30,7 @@ The directory is `.foundry/feature-roadmaps/<id>/`, where `<id>` is `<date-time>
 1. **Gather context.** Use read-only subagents to map the code, the docs and any earlier transcripts the developer points you to. Keep each conclusion with the source it came from.
 2. **Interview** the developer with `deep-interview`. The roadmap takes the place of that skill's crystallised spec: write the roadmap's files in the layout above instead of its spec template and its `.foundry/interviews/` file. The interview ends at the roadmap review. Nothing proceeds to execution from your session.
 3. **Ask about every one-way door and every ambiguity**, even when the skill's ambiguity score is already below its threshold, and even when the ambiguity is only a two-way door. Never settle an ambiguity in the specification yourself. Decide a two-way door yourself only when the specification is clear. Record every answer and every decision in `decisions.md` as you go, with its door type.
-4. **Check the repository's visibility** before your first commit, for example with `gh repo view --json visibility`. In a public repository, keep the names of private repositories, their features and their pages out of every file. Write placeholders instead.
+4. **Check the home repository's visibility** before your first commit, for example with `gh repo view --json visibility`. In a public repository, keep the names of private repositories, their features and their pages out of every file. Write placeholders instead.
 5. **Write the roadmap.** Commit it on the orchestrator branch as each part is written, so a restart loses at most the conversation since your last commit.
 6. **Review.** Tell the developer the roadmap is ready, with the path to its `README.md`, and make the changes they ask for.
 7. **Start the orchestrator** only when the developer explicitly approves the roadmap. Commit first. Then start it with role `orchestrator` as `SKILL.md`'s "Starting a session" says, and report any failure to the developer. The launcher writes the orchestrator's first prompt, so hand the orchestrator nothing else.

@@ -6,10 +6,10 @@ You edit verification code and nothing else. You never fix product code. When th
 
 ## Your inputs
 
-The phase session's brief gives you the roadmap, the feature plan, the phase plan, the phase branch, the orchestrator branch and the verification skill, if one exists. `SKILL.md`'s artefact and branch tables say where each lives. Ask the phase session for any that is missing before you start.
+The phase session's brief gives you the roadmap, the feature plan, the phase plan, the phase branch, the orchestrator branch and the verification skill, if one exists. `SKILL.md`'s artefact and branch tables say where each lives. Ask the phase session for any that is missing before you start. You work in the phase's repository. The roadmap and the plan may be absolute paths into another repository's worktree.
 
 - From the roadmap, read its `README.md`, then `run-decisions.md` beside it.
-- From the feature plan, read its verification section, its contracts and the phase's entry, above all its **Done when** list.
+- From the feature plan, read its verification section, its contracts and the phase's entry, above all its **Done when** list, and the Repositories table row for the phase's repository, which names the verification skill there.
 
 Your scope is the phase's own work since the code head of its newest `VERIFIED` verdict: each commit and merge resolution that [reviewer.md](reviewer.md)'s Running the gate step 1 names, with that head in place of the last reviewed one. With no `VERIFIED` verdict, it is the whole phase diff, `git diff <orchestrator branch>...<phase branch> -- . ':(exclude).foundry'`. The brief may name a failed post-merge check and a merge to add to it. The code you run holds the phase together with every phase merged so far.
 
@@ -29,7 +29,7 @@ Prose is behaviour too, when an agent acts on it. Check a handbook, a prompt or 
 
 ## The verification skill
 
-The skill's own files, its `SKILL.md` and its feature map, are shared by every phase. Change them only when the feature plan gives that path to your phase. A feature plan makes the verification skill its first phase when no skill covers the feature, so other phases find it in place.
+The skill's own files, its `SKILL.md` and its feature map, are shared by every phase. Change them only when the feature plan gives that path to your phase. A feature plan makes the verification skill the first phase in a repository when no skill there covers the feature, so other phases find it in place.
 
 - **Your phase owns the skill's files.** Create the skill by following p-stack's `../create-verification-skill/SKILL.md`, or update it within the edit scope and proof rules of `../maintain-verification-skill/SKILL.md`. Your changes stay on the phase branch, and the phase's pull requests carry them. Do not open a pull request yourself.
 - **Your phase does not own them, and the skill cannot reach what the phase built.** Do not edit them. Your verdict is INCONCLUSIVE, and your report names the change the skill needs.

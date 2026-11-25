@@ -35,7 +35,7 @@ Four roles run as main sessions, each started by the launcher in its own pane. T
 | Reviewers | Subagents of a phase session | Try to break the change, on two model families | [`reviewer.md`](.apm/skills/sam-mode/handbooks/reviewer.md) |
 | PR creator | Subagent of a phase session | Turns the verified phase into draft pull requests and keeps them current | [`pr-creator.md`](.apm/skills/sam-mode/handbooks/pr-creator.md) |
 
-You talk to the spec writer and the orchestrator. Every other session sends its questions for you to the orchestrator. You can still type into any pane, and that session follows your instruction.
+You talk to the spec writer, the orchestrator, and the planner while you review the planned architecture. Every other session sends its questions for you to the orchestrator. You can still type into any pane, and that session follows your instruction.
 
 The diagram shows who starts whom, with solid arrows, and who talks to whom, with dotted arrows. Phase sessions may also message each other to settle an interface between their phases.
 
@@ -52,6 +52,7 @@ flowchart TD
 
     dev <-.->|interview| spec
     dev <-.->|decisions and feedback| orch
+    dev <-.->|architecture review| plan
     spec -->|starts| orch
     orch -->|starts| plan
     orch -->|starts| upd
@@ -70,7 +71,7 @@ A message only wakes its receiver. It is never the record. A sender commits each
 
 Every phase moves through seven states: Spec, Plan, Implement, Verify, Review, PR and Done. A phase moves forward one state at a time and skips none. It can move back any number of states. Only the phase session changes its phase's state, by committing its status file and then sending the orchestrator a `state` message.
 
-The phase session commits its first status file in Plan. A phase returns to Spec only after a roadmap update touches it, and it waits there until the planner has revised the plan.
+The phase session commits its first status file in Plan. A phase returns to Spec only after a roadmap update touches it, and it waits there until the planner has revised the plan and you have approved the planned architecture.
 
 ```mermaid
 stateDiagram-v2
@@ -227,17 +228,18 @@ flowchart LR
 
 ### Panes
 
-The launcher places every pane in the feature's tmux window. The orchestrator holds the first column after the workmux sidebar. Spec writers stack in its column, and every other session opens to its right, as in this example. The launcher tags each pane it starts with the session's name, and never splits a pane that is not tagged, so your own panes stay where you put them.
+The launcher places every pane in the feature's tmux window. The orchestrator holds the first column after the workmux sidebar. Spec writers and the planner stack in its column, and every other session opens to its right, as in this example. The launcher tags each pane it starts with the session's name, and never splits a pane that is not tagged, so your own panes stay where you put them.
 
 Every pane runs in your own tmux server, yours included. No session runs `tmux kill-server`, and none ends a session, window or pane that the run did not start. The launcher's `--close` closes the panes the run started. A test that needs tmux starts its own server on its own socket and kills only that one. [`SKILL.md`](.apm/skills/sam-mode/SKILL.md#tmux) owns the rule.
 
 ```text
 +---------+--------------------+--------------------+
-| workmux | <feature>-         | <feature>-planner  |
-| sidebar | orchestrator       +--------------------+
-|         |                    | <feature>-phase-a  |
+| workmux | <feature>-         | <feature>-phase-a  |
+| sidebar | orchestrator       |                    |
 |         +--------------------+--------------------+
-|         | <feature>-spec-1   | <feature>-phase-b  |
+|         | <feature>-planner  | <feature>-phase-b  |
+|         +--------------------+                    |
+|         | <feature>-spec-1   |                    |
 +---------+--------------------+--------------------+
 ```
 
@@ -248,7 +250,7 @@ When the window has no room for another pane, the launcher exits with code 4 and
 The orchestrator publishes two private pages for each feature and records their addresses in the tracker.
 
 - **The status board** shows how the work is going. The orchestrator publishes it once from [`assets/status-board.html`](.apm/skills/sam-mode/assets/status-board.html) and then updates only its database, in one batch each tick. Every value comes from a status file, workmux's status or a pull request's live state.
-- **The architecture page** shows what is being built: a map of the system, its components, data model and main flows, each part marked as planned or built. A fresh subagent writes it and updates it after each phase merge that passes its check.
+- **The architecture page** shows what is being built: a map of the system, its components, data model and main flows, each part marked as planned or built. A fresh subagent writes it, rebuilds it from the plan for each architecture review, and updates it after each phase merge that passes its check.
 
 The board has seven sections under its header. In AFK mode the header also shows a notice with the mode's start, your expected return and its settings.
 
@@ -346,7 +348,7 @@ The owners are [`pr-creator.md`](.apm/skills/sam-mode/handbooks/pr-creator.md) a
 
 ## Running on its own
 
-Once you approve the roadmap, the orchestrator runs on its own and asks you only for real decisions. These rules keep it going whether or not you watch. [AFK mode](#afk-mode) adds rules for when you are away.
+Once you approve the roadmap and then the planned architecture, the orchestrator runs on its own and asks you only for real decisions. These rules keep it going whether or not you watch. [AFK mode](#afk-mode) adds rules for when you are away.
 
 - **The tick.** The orchestrator arms a recurring Claude Code scheduled task every 20 minutes, off the hour and half hour. Each tick reconciles every status file, session and pull request, merges each repository's default branch, starts phases whose dependencies are met, merges at most one phase per repository, puts new decisions to you, sends fix rounds and updates the board. A scheduled task fires only while the orchestrator runs and is idle, and expires after seven days, so the orchestrator creates it again at every start.
 - **Short contexts.** At the end of every sixth tick, the orchestrator relaunches itself with a fresh conversation. Phase sessions start fresh at each gate boundary.
@@ -490,7 +492,7 @@ The install brings in s-stack's dependencies: `p-stack`, `deep-interview`, `revi
 4. Answer the spec writer's interview. It asks about every one-way door and every ambiguity, then writes the roadmap and tells you where its `README.md` is.
 5. Read the roadmap and ask for changes. When you approve it explicitly, the spec writer starts the orchestrator and stops. You can close the spec writer's pane.
 
-From there the orchestrator starts the planner, then each phase as its dependencies are met. You never start the other roles yourself. The launcher types each session's first prompt, in the form `/sam-mode <role> feature=<feature> phase=<phase> ...`.
+From there the orchestrator starts the planner. Once the plan is ready, the orchestrator rebuilds the architecture page from it, adds a review item under **Decisions** on the board and sends you a push notification. Review the page and ask the planner, in its pane, for the changes you want. Each revision rebuilds the page. When you are happy, tell the planner you approve. Only then does the orchestrator close the planner's pane and start each phase as its dependencies are met. A roadmap update brings another review before the phases it touches go back to Plan. You never start the other roles yourself. The launcher types each session's first prompt, in the form `/sam-mode <role> feature=<feature> phase=<phase> ...`.
 
 ### What you watch
 
@@ -503,6 +505,7 @@ From there the orchestrator starts the planner, then each phase as its dependenc
 | You decide | Where |
 | --- | --- |
 | The roadmap, and when it is approved | The spec writer's pane |
+| The planned architecture, after the first plan and after each roadmap update | The planner's pane, with the page linked from **Decisions** on the board |
 | Every one-way door, and product or preference calls | The orchestrator relays each decision request with its options and a recommendation |
 | A change to the roadmap | Ask the orchestrator. It starts an update spec writer in its column. |
 | Permission prompts | The pane named in the notification, or under **Permission prompts** on the board |

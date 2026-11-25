@@ -31,7 +31,7 @@ AFK mode ends at the first message the developer types in your pane. Every other
 Your first reply is the return report, in this order:
 
 1. AFK decisions to accept or change, each with its ID, the question, the choice and the reason.
-2. Paused one-way doors, each with its options and recommendation.
+2. Paused one-way doors, each with its options and recommendation, and an open architecture review.
 3. Pull requests ready for review, dependencies first.
 4. Phases parked by the round cap, with their last findings, and other failures, stalls and permission prompts.
 5. Usage: the five-hour and seven-day figures at the start and now, waits for resets, any limit reached, and a usage pause that still holds, with what ends it.
@@ -50,6 +50,7 @@ Work that needs no decision from the developer comes first. In tick step 3, star
 - A phase session still decides an ordinary two-way door itself.
 - Answer a raised two-way request yourself. Take the session's recommendation unless you have a reason not to, and record that reason. The planner's requests follow the same rules.
 - Before you send `answer`, add a `run-decisions.md` row with the next free ID `AFK-<n>`, `Decided by: AFK` and the mark "AFK, pending review", naming the request id, and commit it. Write an `afk-decision` board item with the same ID as `ref`, the decision and its reason in full as `detail`, and the ids of the pull requests that will carry it as `prs`. The `answer` says it is an AFK decision and gives its ID, and the phase records it with that ID and `afk: true`.
+- Never approve an architecture review. It waits for the developer, and no phase starts while it is open, as `handbooks/orchestrator.md` says.
 - Never answer a one-way request. List it under Decisions on the board with all its fields. The phase carries on with the work the decision does not affect. When nothing else is left, park it, as [Parks](#parks) says.
 
 ## Usage

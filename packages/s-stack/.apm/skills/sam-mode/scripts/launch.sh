@@ -449,7 +449,7 @@ bottom_of_column() {
       if (!a) exit
       for (i = 1; i <= n; i++) {
         if (left[i] < left[a] || right[i] > right[a]) continue
-        if (i != a && tag[i] != feature "-spec" && tag[i] !~ ("^" feature "-spec-[0-9]+$")) continue
+        if (i != a && tag[i] != feature "-spec" && tag[i] != feature "-planner" && tag[i] !~ ("^" feature "-spec-[0-9]+$")) continue
         if (!best || top[i] > top[best]) best = i
       }
       print id[best]
@@ -508,11 +508,11 @@ widths_beside_column() {
 
 # Sets target_pane, direction, split_size, full_span and widths for a session
 # started by splitting a pane of $window. The orchestrator holds the first
-# column after the workmux sidebar, spec writers stack in its column and every
-# other session goes to its right. A pane without the @s-stack-session tag
-# belongs to the developer or to workmux and is never split, except the
-# orchestrator's pane, which a resurrect leaves untagged, and the first
-# column's top pane when the orchestrator starts with no spec writer.
+# column after the workmux sidebar, spec writers and the planner stack in its
+# column and phase sessions go to its right. A pane without the
+# @s-stack-session tag belongs to the developer or to workmux and is never
+# split, except the orchestrator's pane, which a resurrect leaves untagged, and
+# the first column's top pane when the orchestrator starts with no spec writer.
 choose_split() {
   local panes anchor
   # Spaces separate the fields, as in pane_inventory, and the command goes last.
@@ -533,7 +533,11 @@ choose_split() {
       fi
       [ -n "$target_pane" ] || die "no $feature-orchestrator pane in $window"
       ;;
-    planner|phase)
+    planner)
+      target_pane=$(printf '%s\n' "$panes" | bottom_of_column "$orchestrator_pane")
+      [ -n "$target_pane" ] || die "no $feature-orchestrator pane in $window"
+      ;;
+    phase)
       read -r target_pane direction split_size full_span <<EOF
 $(printf '%s\n' "$panes" | right_of_column "$orchestrator_pane")
 EOF

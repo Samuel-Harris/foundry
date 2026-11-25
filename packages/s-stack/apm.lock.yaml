@@ -2465,7 +2465,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a38f03718430503129582b1a3153c0823026b16debe72573fee4d15143d848d0
+  content_hash: sha256:73ef69e3468ca487fa1f3aacceee8c3eafccde57d82a9c1091d69041b4f322ba
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/assets/status-board.html
@@ -2600,7 +2600,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:11d4d5a5ae2c325ccdcc3fe19ec78ca7267b3be04fa2d7a36aebe9671707b524
+  content_hash: sha256:deb3726a1ad1de8066e30a3a613dbda992be3d34d5950b1f7782aebce65f1616
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/scripts/afk-watchdog.sh
@@ -5390,7 +5390,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:a38f03718430503129582b1a3153c0823026b16debe72573fee4d15143d848d0
+  content_hash: sha256:73ef69e3468ca487fa1f3aacceee8c3eafccde57d82a9c1091d69041b4f322ba
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/assets/status-board.html
@@ -5525,7 +5525,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:11d4d5a5ae2c325ccdcc3fe19ec78ca7267b3be04fa2d7a36aebe9671707b524
+  content_hash: sha256:deb3726a1ad1de8066e30a3a613dbda992be3d34d5950b1f7782aebce65f1616
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/scripts/afk-watchdog.sh
@@ -5584,7 +5584,7 @@ local_deployed_files:
 - .claude/skills/sam-mode/scripts/afk-watchdog.sh
 - .claude/skills/sam-mode/scripts/launch.sh
 local_deployed_file_hashes:
-  .agents/skills/sam-mode/SKILL.md: sha256:a38f03718430503129582b1a3153c0823026b16debe72573fee4d15143d848d0
+  .agents/skills/sam-mode/SKILL.md: sha256:73ef69e3468ca487fa1f3aacceee8c3eafccde57d82a9c1091d69041b4f322ba
   .agents/skills/sam-mode/assets/status-board.html: sha256:9ea617fedf1c9f0c9161b39e44f3581b3d51915420a35e1e714853a17fe1b21c
   .agents/skills/sam-mode/assets/usage-mod/.claude-plugin/plugin.json: sha256:72c497ec5d96d1cdfde0608b67b0bb7760d3bd2ccb0186b675cd8f4c516bb2cc
   .agents/skills/sam-mode/assets/usage-mod/hooks/hooks.json: sha256:c835c92d8e1159d20a40ca78ad654da7433942c3694ffeda0b376b0c4dfd52cf
@@ -5599,10 +5599,10 @@ local_deployed_file_hashes:
   .agents/skills/sam-mode/handbooks/verifier.md: sha256:d3f4877b2238cecc462498e6985c3fcbd85aa2a99044ce7256f76ba9b6c77a04
   .agents/skills/sam-mode/references/afk-mode.md: sha256:68b635ff6ad211f61668d28b1c5ee2a5eddc37af939c4558b2bb83995b4227b2
   .agents/skills/sam-mode/references/pr-commands.md: sha256:b6ae0fee5b0f1a88fe22596b7d80473f2729bea84cc27b2acf90adff5418ae12
-  .agents/skills/sam-mode/references/status-and-messages.md: sha256:11d4d5a5ae2c325ccdcc3fe19ec78ca7267b3be04fa2d7a36aebe9671707b524
+  .agents/skills/sam-mode/references/status-and-messages.md: sha256:deb3726a1ad1de8066e30a3a613dbda992be3d34d5950b1f7782aebce65f1616
   .agents/skills/sam-mode/scripts/afk-watchdog.sh: sha256:6cdcfb50c4ca2b30e73068f2adc8df0c4b088bc6e0815a0f9d08511f6dcae464
   .agents/skills/sam-mode/scripts/launch.sh: sha256:675aa222decb38d3b2a39dc1dbcb821e5b06059d861027ccaf1b06d8a315fa57
-  .claude/skills/sam-mode/SKILL.md: sha256:a38f03718430503129582b1a3153c0823026b16debe72573fee4d15143d848d0
+  .claude/skills/sam-mode/SKILL.md: sha256:73ef69e3468ca487fa1f3aacceee8c3eafccde57d82a9c1091d69041b4f322ba
   .claude/skills/sam-mode/assets/status-board.html: sha256:9ea617fedf1c9f0c9161b39e44f3581b3d51915420a35e1e714853a17fe1b21c
   .claude/skills/sam-mode/assets/usage-mod/.claude-plugin/plugin.json: sha256:72c497ec5d96d1cdfde0608b67b0bb7760d3bd2ccb0186b675cd8f4c516bb2cc
   .claude/skills/sam-mode/assets/usage-mod/hooks/hooks.json: sha256:c835c92d8e1159d20a40ca78ad654da7433942c3694ffeda0b376b0c4dfd52cf
@@ -5617,6 +5617,6 @@ local_deployed_file_hashes:
   .claude/skills/sam-mode/handbooks/verifier.md: sha256:d3f4877b2238cecc462498e6985c3fcbd85aa2a99044ce7256f76ba9b6c77a04
   .claude/skills/sam-mode/references/afk-mode.md: sha256:68b635ff6ad211f61668d28b1c5ee2a5eddc37af939c4558b2bb83995b4227b2
   .claude/skills/sam-mode/references/pr-commands.md: sha256:b6ae0fee5b0f1a88fe22596b7d80473f2729bea84cc27b2acf90adff5418ae12
-  .claude/skills/sam-mode/references/status-and-messages.md: sha256:11d4d5a5ae2c325ccdcc3fe19ec78ca7267b3be04fa2d7a36aebe9671707b524
+  .claude/skills/sam-mode/references/status-and-messages.md: sha256:deb3726a1ad1de8066e30a3a613dbda992be3d34d5950b1f7782aebce65f1616
   .claude/skills/sam-mode/scripts/afk-watchdog.sh: sha256:6cdcfb50c4ca2b30e73068f2adc8df0c4b088bc6e0815a0f9d08511f6dcae464
   .claude/skills/sam-mode/scripts/launch.sh: sha256:675aa222decb38d3b2a39dc1dbcb821e5b06059d861027ccaf1b06d8a315fa57

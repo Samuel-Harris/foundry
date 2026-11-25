@@ -80,7 +80,7 @@ dependencies:
   declared_license: MIT
 - repo_url: _local/s-stack
   name: s-stack
-  version: 0.1.19
+  version: 0.1.20
   package_type: apm_package
   deployed_files:
   - .agents/skills/sam-mode
@@ -122,13 +122,13 @@ dependencies:
   - .claude/skills/sam-mode/scripts/afk-watchdog.sh
   - .claude/skills/sam-mode/scripts/launch.sh
   deployed_file_hashes:
-    .agents/skills/sam-mode/SKILL.md: sha256:4c3a317770372fc060d5c4df383c144df6a48e0a9a3835095619445c903dde8e
+    .agents/skills/sam-mode/SKILL.md: sha256:a38f03718430503129582b1a3153c0823026b16debe72573fee4d15143d848d0
     .agents/skills/sam-mode/assets/status-board.html: sha256:f6ff6d5b8e8a456ededf368bff13546ad32ff9f40d731c0760d2c616ba0e2691
     .agents/skills/sam-mode/assets/usage-mod/.claude-plugin/plugin.json: sha256:72c497ec5d96d1cdfde0608b67b0bb7760d3bd2ccb0186b675cd8f4c516bb2cc
     .agents/skills/sam-mode/assets/usage-mod/hooks/hooks.json: sha256:c835c92d8e1159d20a40ca78ad654da7433942c3694ffeda0b376b0c4dfd52cf
     .agents/skills/sam-mode/assets/usage-mod/hooks/register.test.ts: sha256:3084fe75775734f749af24afbcfb8188222fdbb556aaa8891deed6f179d623d1
     .agents/skills/sam-mode/assets/usage-mod/hooks/register.ts: sha256:d64739ce8235aada08c05f467940cad114ba047c41fed8bb792af2449329ea01
-    .agents/skills/sam-mode/handbooks/orchestrator.md: sha256:569088f91373d373d79bee7e24d66db34742f7b5f803f0d4d7ef0493faac06ed
+    .agents/skills/sam-mode/handbooks/orchestrator.md: sha256:86627ec718f0a851895d42d37db8d5546ddc79ba9feb67443c6468b258a96a7e
     .agents/skills/sam-mode/handbooks/phase-session.md: sha256:1dc8a8548c9fc970061860f3a439c32af6dc641e3c400d64203ea79dfe44aa2c
     .agents/skills/sam-mode/handbooks/planner.md: sha256:a8f79fa54649de5f734e3eb22b501c30152735b0ad9fb18e70e9485c154ad023
     .agents/skills/sam-mode/handbooks/pr-creator.md: sha256:4c192bd3bd7d336612bea034a00ec1695499978530f1602aadf55eaf783f50c8
@@ -139,14 +139,14 @@ dependencies:
     .agents/skills/sam-mode/references/pr-commands.md: sha256:b6ae0fee5b0f1a88fe22596b7d80473f2729bea84cc27b2acf90adff5418ae12
     .agents/skills/sam-mode/references/status-and-messages.md: sha256:11d4d5a5ae2c325ccdcc3fe19ec78ca7267b3be04fa2d7a36aebe9671707b524
     .agents/skills/sam-mode/scripts/afk-watchdog.sh: sha256:6cdcfb50c4ca2b30e73068f2adc8df0c4b088bc6e0815a0f9d08511f6dcae464
-    .agents/skills/sam-mode/scripts/launch.sh: sha256:772963658e47daeb70716ba9bce3a2d2bd69f5211d9c2d7a14d17ea183b21974
-    .claude/skills/sam-mode/SKILL.md: sha256:4c3a317770372fc060d5c4df383c144df6a48e0a9a3835095619445c903dde8e
+    .agents/skills/sam-mode/scripts/launch.sh: sha256:675aa222decb38d3b2a39dc1dbcb821e5b06059d861027ccaf1b06d8a315fa57
+    .claude/skills/sam-mode/SKILL.md: sha256:a38f03718430503129582b1a3153c0823026b16debe72573fee4d15143d848d0
     .claude/skills/sam-mode/assets/status-board.html: sha256:f6ff6d5b8e8a456ededf368bff13546ad32ff9f40d731c0760d2c616ba0e2691
     .claude/skills/sam-mode/assets/usage-mod/.claude-plugin/plugin.json: sha256:72c497ec5d96d1cdfde0608b67b0bb7760d3bd2ccb0186b675cd8f4c516bb2cc
     .claude/skills/sam-mode/assets/usage-mod/hooks/hooks.json: sha256:c835c92d8e1159d20a40ca78ad654da7433942c3694ffeda0b376b0c4dfd52cf
     .claude/skills/sam-mode/assets/usage-mod/hooks/register.test.ts: sha256:3084fe75775734f749af24afbcfb8188222fdbb556aaa8891deed6f179d623d1
     .claude/skills/sam-mode/assets/usage-mod/hooks/register.ts: sha256:d64739ce8235aada08c05f467940cad114ba047c41fed8bb792af2449329ea01
-    .claude/skills/sam-mode/handbooks/orchestrator.md: sha256:569088f91373d373d79bee7e24d66db34742f7b5f803f0d4d7ef0493faac06ed
+    .claude/skills/sam-mode/handbooks/orchestrator.md: sha256:86627ec718f0a851895d42d37db8d5546ddc79ba9feb67443c6468b258a96a7e
     .claude/skills/sam-mode/handbooks/phase-session.md: sha256:1dc8a8548c9fc970061860f3a439c32af6dc641e3c400d64203ea79dfe44aa2c
     .claude/skills/sam-mode/handbooks/planner.md: sha256:a8f79fa54649de5f734e3eb22b501c30152735b0ad9fb18e70e9485c154ad023
     .claude/skills/sam-mode/handbooks/pr-creator.md: sha256:4c192bd3bd7d336612bea034a00ec1695499978530f1602aadf55eaf783f50c8
@@ -157,7 +157,7 @@ dependencies:
     .claude/skills/sam-mode/references/pr-commands.md: sha256:b6ae0fee5b0f1a88fe22596b7d80473f2729bea84cc27b2acf90adff5418ae12
     .claude/skills/sam-mode/references/status-and-messages.md: sha256:11d4d5a5ae2c325ccdcc3fe19ec78ca7267b3be04fa2d7a36aebe9671707b524
     .claude/skills/sam-mode/scripts/afk-watchdog.sh: sha256:6cdcfb50c4ca2b30e73068f2adc8df0c4b088bc6e0815a0f9d08511f6dcae464
-    .claude/skills/sam-mode/scripts/launch.sh: sha256:772963658e47daeb70716ba9bce3a2d2bd69f5211d9c2d7a14d17ea183b21974
+    .claude/skills/sam-mode/scripts/launch.sh: sha256:675aa222decb38d3b2a39dc1dbcb821e5b06059d861027ccaf1b06d8a315fa57
   source: local
   local_path: ../s-stack
   declared_license: MIT
@@ -2884,7 +2884,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:4c3a317770372fc060d5c4df383c144df6a48e0a9a3835095619445c903dde8e
+  content_hash: sha256:a38f03718430503129582b1a3153c0823026b16debe72573fee4d15143d848d0
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/assets/status-board.html
@@ -2938,7 +2938,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:569088f91373d373d79bee7e24d66db34742f7b5f803f0d4d7ef0493faac06ed
+  content_hash: sha256:86627ec718f0a851895d42d37db8d5546ddc79ba9feb67443c6468b258a96a7e
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/handbooks/phase-session.md
@@ -3037,7 +3037,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:772963658e47daeb70716ba9bce3a2d2bd69f5211d9c2d7a14d17ea183b21974
+  content_hash: sha256:675aa222decb38d3b2a39dc1dbcb821e5b06059d861027ccaf1b06d8a315fa57
 - kind: project-relative
   target: claude
   value: .claude/skills/setup-pstack
@@ -5278,7 +5278,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:4c3a317770372fc060d5c4df383c144df6a48e0a9a3835095619445c903dde8e
+  content_hash: sha256:a38f03718430503129582b1a3153c0823026b16debe72573fee4d15143d848d0
 - kind: project-relative
   target: copilot
   value: .agents/skills/sam-mode/assets/status-board.html
@@ -5332,7 +5332,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:569088f91373d373d79bee7e24d66db34742f7b5f803f0d4d7ef0493faac06ed
+  content_hash: sha256:86627ec718f0a851895d42d37db8d5546ddc79ba9feb67443c6468b258a96a7e
 - kind: project-relative
   target: copilot
   value: .agents/skills/sam-mode/handbooks/phase-session.md
@@ -5431,7 +5431,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:772963658e47daeb70716ba9bce3a2d2bd69f5211d9c2d7a14d17ea183b21974
+  content_hash: sha256:675aa222decb38d3b2a39dc1dbcb821e5b06059d861027ccaf1b06d8a315fa57
 - kind: project-relative
   target: copilot
   value: .agents/skills/setup-pstack

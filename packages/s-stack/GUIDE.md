@@ -167,9 +167,13 @@ Two details in the sequence are easy to miss.
 
 Every fact lives in a committed file or in live state that git, tmux or GitHub reports. A session that restarts reads the files again and continues.
 
+### Repositories
+
+A feature can span several repositories. The home repository is the one where you ran `/sam-mode start`. The roadmap names every repository and which is home, and the feature plan's Repositories table gives each one's checkout path, default branch, check command and regenerate command. Every phase works in exactly one repository and changes files there only. Each repository has its own orchestrator branch, `<feature>`, which the launcher cuts from that repository's default branch when the first phase starts there. A feature in one repository works the same way, with one row. [`SKILL.md`](.apm/skills/sam-mode/SKILL.md#repositories) owns the rules.
+
 ### Files under `.foundry/`
 
-Every file under `.foundry/` has one writer. Git tracks `.foundry/` on the orchestrator branch and on every branch cut from it, so a repository that uses s-stack must not ignore it. A pull request branch never contains it.
+Every file under `.foundry/` has one writer. Git tracks `.foundry/` on every repository's orchestrator branch and on every branch cut from one, so no repository of the feature may ignore it. A pull request branch never contains it. The roadmap, the feature plan and the tracker live only in the home repository. A phase's own files live on its phase branch, in its repository.
 
 | Artefact | Path | Writer |
 | --- | --- | --- |
@@ -182,7 +186,7 @@ Every file under `.foundry/` has one writer. Git tracks `.foundry/` on the orche
 
 `<id>` is the roadmap's directory name, `<date-time>-<feature>`. `run-decisions.md` records the decisions you make during the run. Each row amends the roadmap until a roadmap update folds it in.
 
-A status file starts with a YAML header that a program can read: the state, the code head, every verdict, every pull request, open decision requests and the decisions made for the phase. The orchestrator reads each status file through git, with `git show <phase branch>:<path>`, so no session reads outside its own worktree.
+A status file starts with a YAML header that a program can read: the state, the code head, every verdict, every pull request, open decision requests and the decisions made for the phase. The orchestrator reads each status file through git in the phase's repository, with `git -C <that repository's feature worktree> show <phase branch>:<path>`, so no session reads inside another session's worktree.
 
 ### Branches and worktrees
 
@@ -209,8 +213,8 @@ flowchart LR
 
 - The first spec writer and the orchestrator share the feature worktree, on the orchestrator branch. The planner, each update spec writer and each phase session get a worktree and branch of their own, which the launcher creates with [workmux](https://workmux.raine.dev).
 - The PR creator cuts pull request branches from the default branch, or from the branch of the pull request they depend on. They hold the phase's commits and never `.foundry/`.
-- No session pushes the orchestrator branch, or a branch cut from it, to a public remote unless you say so. Only the PR creator pushes, and only pull request branches.
-- s-stack never assumes the default branch is `main`. It resolves the name from the repository.
+- No session pushes an orchestrator branch, or a branch cut from one, in any repository, to a public remote unless you say so. Only the PR creator pushes, and only pull request branches.
+- s-stack never assumes a default branch is `main`. It resolves each name from its repository.
 
 ### Panes
 
@@ -312,9 +316,9 @@ A waiver counts only when the gate's last verdict that was not a waiver passed. 
 
 ### Checks after a phase merges
 
-When the orchestrator merges a phase into the orchestrator branch, a fresh subagent runs the checks in that merge's blast radius. If a check fails, the orchestrator branch freezes: no new phase starts and no other phase merges until the failing check passes on a new merge of the same phase. The phase moves back to Implement to fix it. When the last phase merges, a subagent runs the whole verification skill. When every phase is Done, it runs again unless a full run has passed since the last phase merge.
+When the orchestrator merges a phase into the orchestrator branch, a fresh subagent runs the checks in that merge's blast radius. If a check fails, that repository's orchestrator branch freezes: no new phase starts there and no other phase merges into it until the failing check passes on a new merge of the same phase. Other repositories carry on. The phase moves back to Implement to fix it. When the last phase of a repository merges, a subagent runs that repository's whole verification skill. When every phase is Done, it runs again in each repository unless a full run has passed there since its last phase merge.
 
-The orchestrator merges at most one phase each tick, so a failing check always points at one change. [`orchestrator.md`](.apm/skills/sam-mode/handbooks/orchestrator.md#merging-a-phase) owns the procedure.
+The orchestrator merges at most one phase per repository each tick, so a failing check always points at one change. [`orchestrator.md`](.apm/skills/sam-mode/handbooks/orchestrator.md#merging-a-phase) owns the procedure.
 
 ### Pull requests
 
@@ -335,7 +339,7 @@ The owners are [`pr-creator.md`](.apm/skills/sam-mode/handbooks/pr-creator.md) a
 
 Once you approve the roadmap, the orchestrator runs on its own and asks you only for real decisions. These rules keep it going whether or not you watch. [AFK mode](#afk-mode) adds rules for when you are away.
 
-- **The tick.** The orchestrator arms a recurring Claude Code scheduled task every 20 minutes, off the hour and half hour. Each tick reconciles every status file, session and pull request, merges the default branch, starts phases whose dependencies are met, merges at most one phase, puts new decisions to you, sends fix rounds and updates the board. A scheduled task fires only while the orchestrator runs and is idle, and expires after seven days, so the orchestrator creates it again at every start.
+- **The tick.** The orchestrator arms a recurring Claude Code scheduled task every 20 minutes, off the hour and half hour. Each tick reconciles every status file, session and pull request, merges each repository's default branch, starts phases whose dependencies are met, merges at most one phase per repository, puts new decisions to you, sends fix rounds and updates the board. A scheduled task fires only while the orchestrator runs and is idle, and expires after seven days, so the orchestrator creates it again at every start.
 - **Short contexts.** At the end of every sixth tick, the orchestrator relaunches itself with a fresh conversation. Phase sessions start fresh at each gate boundary.
 - **Stalled sessions.** The orchestrator judges a session by its commits and pull request activity. A session that still has work, waits for nothing, and has made no commit or pull request change for two ticks gets `stop`, then a fresh relaunch, then every message it left unanswered.
 - **Restarts.** The launcher resumes a session's last conversation. Every session reads its committed files again before it continues, and the orchestrator resends unanswered messages.
@@ -457,7 +461,7 @@ These parts need macOS. On other systems AFK mode runs without them.
 - [tmux](https://github.com/tmux/tmux/wiki) and [workmux](https://workmux.raine.dev).
 - The GitHub CLI with `gh stack`, which the PR creator uses to link stacked pull requests.
 - git 2.43 or later, for the PR creator's script.
-- A repository that does not ignore `.foundry/`.
+- Repositories that do not ignore `.foundry/`, every one the feature touches.
 - For AFK mode's usage figures, a Claude Code build with mod support, proven on 2.1.330. The launcher loads the usage mod into the orchestrator's session.
 - For AFK mode's keep-awake and watchdog, macOS. On other systems AFK mode runs without both.
 
@@ -471,7 +475,7 @@ The install brings in s-stack's dependencies: `p-stack`, `deep-interview`, `revi
 
 ### Start a feature
 
-1. Start Claude Code inside tmux, at the repository root.
+1. Start Claude Code inside tmux, at the root of the repository that will be home. Other repositories need only a checkout.
 2. Run `/sam-mode start <feature>`, where `<feature>` is a kebab-case name. The name must not contain `-phase-` or end with `-phase`, `-planner`, `-orchestrator`, `-spec` or `-spec-<n>`, and the launcher refuses one that does.
 3. The launcher creates the feature worktree and its workmux window from the default branch, and starts the spec writer there.
 4. Answer the spec writer's interview. It asks about every one-way door and every ambiguity, then writes the roadmap and tells you where its `README.md` is.

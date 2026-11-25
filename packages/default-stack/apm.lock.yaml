@@ -80,7 +80,7 @@ dependencies:
   declared_license: MIT
 - repo_url: _local/s-stack
   name: s-stack
-  version: 0.1.20
+  version: 0.1.22
   package_type: apm_package
   deployed_files:
   - .agents/skills/sam-mode

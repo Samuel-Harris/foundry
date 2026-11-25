@@ -32,10 +32,10 @@ Start every session after the first spec writer from a main session, never from 
 
 ```bash
 <this skill's directory>/scripts/launch.sh --print-window
-<this skill's directory>/scripts/launch.sh --feature <feature> --role <role> [--phase <phase>] [--update <n>] --window <window id>
+<this skill's directory>/scripts/launch.sh --feature <feature> --role <role> [--phase <phase>] [--update <n>] [--repo <path>] --window <window id>
 ```
 
-The first prints `window=<window id>` for your own pane. Pass that value to the second. If either command fails, report its exit code and standard error, and do not start the session another way.
+The first prints `window=<window id>` for your own pane. Pass that value to the second. `--repo` names a checkout of the repository a phase session works in, when that is not the feature worktree's repository, as the orchestrator handbook says. If either command fails, report its exit code and standard error, and do not start the session another way.
 
 ## Roles and handbooks
 

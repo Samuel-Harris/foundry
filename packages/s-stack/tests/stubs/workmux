@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import os, subprocess, sys
 
-root = os.environ["STUB_ROOT"]
+# Like workmux, act on the repository the command runs in: its main checkout keeps the worktrees beside it.
+common = subprocess.run(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], capture_output=True, text=True)
+root = os.path.dirname(common.stdout.strip()) if common.returncode == 0 else os.environ["STUB_ROOT"]
 with open(os.environ["STUB_WORKMUX_LOG"], "a") as log:
     log.write(" ".join(sys.argv[1:]) + "\n")
 

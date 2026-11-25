@@ -5,15 +5,22 @@ set -euo pipefail
 usage() {
   cat >&2 <<'EOF'
 Usage:
-  launch.sh --feature <f> --role <r> [--phase <p>] [--update <n>] [--window <window id>] [--fresh]
+  launch.sh --feature <f> --role <r> [--phase <p>] [--update <n>] [--repo <path>] [--window <window id>] [--fresh]
   launch.sh --feature <f> --role <r> [--phase <p>] [--update <n>] --close
-  launch.sh --feature <f> --role <r> [--phase <p>] [--update <n>] --remove
+  launch.sh --feature <f> --role <r> [--phase <p>] [--update <n>] [--repo <path>] --remove
   launch.sh --print-window
 
 Roles: spec, orchestrator, planner, phase. --phase is required with --role phase
 and refused otherwise. --update is allowed only with --role spec. --window is
 required for every session except the first spec writer of a feature, or a
 restart of it in its own pane.
+
+--repo is allowed only with --role phase, and not with --close. It names a
+checkout of the repository the phase works in, when that is not the working
+directory's. The launcher then adds, finds and removes the phase's worktree in
+that repository, first adding the repository's own <f> worktree from its
+origin default branch when it has none, and passes the roadmap and plan as
+absolute paths into the working directory's <f> worktree.
 
 Features and phases are kebab-case. A feature name may not contain -phase- or
 end with -phase, -planner, -orchestrator, -spec or -spec-<n>, because another
@@ -72,14 +79,14 @@ at_most_one() {
 }
 
 kebab='^[a-z0-9]+(-[a-z0-9]+)*$'
-feature='' role='' phase='' update='' window='' fresh='' mode=start
+feature='' role='' phase='' update='' window='' repo='' fresh='' mode=start
 set_mode() {
   [ "$mode" = start ] || usage
   mode=$1
 }
 while [ $# -gt 0 ]; do
   case "$1" in
-    --feature|--role|--phase|--update|--window)
+    --feature|--role|--phase|--update|--window|--repo)
       [ $# -ge 2 ] || usage
       case "$1" in
         --feature) feature=$2 ;;
@@ -87,6 +94,7 @@ while [ $# -gt 0 ]; do
         --phase) phase=$2 ;;
         --update) update=$2 ;;
         --window) window=$2 ;;
+        --repo) repo=$2 ;;
       esac
       shift 2
       ;;
@@ -99,7 +107,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ "$mode" = print-window ]; then
-  [ -z "$feature$role$phase$update$window$fresh" ] || usage
+  [ -z "$feature$role$phase$update$window$repo$fresh" ] || usage
 else
   [[ $feature =~ $kebab ]] || usage
   case "$feature" in *-phase-*|*-phase|*-planner|*-orchestrator|*-spec) usage ;; esac
@@ -117,6 +125,9 @@ else
   if [ "$mode" != start ]; then
     [ -z "$fresh$window" ] || usage
   fi
+  if [ -n "$repo" ]; then
+    [ "$role" = phase ] && [ "$mode" != close ] || usage
+  fi
 
   case "$role" in
     spec)
@@ -132,6 +143,37 @@ fi
 
 resolve() {
   (cd "$1" 2>/dev/null && pwd -P) || true
+}
+
+common_dir_of() {
+  local common
+  common=$(git -C "$1" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || return 0
+  resolve "$common"
+}
+
+in_repo() {
+  (cd "$repo" && "$@")
+}
+
+# Sets repo to the directory every command about the session's worktree runs
+# in, and other_repo when that is another repository than the working
+# directory's.
+choose_repo() {
+  other_repo=''
+  if [ -z "$repo" ]; then
+    repo=.
+    return
+  fi
+  local here there
+  here=$(common_dir_of .)
+  there=$(common_dir_of "$repo")
+  [ -n "$there" ] || die "$repo is not a git repository"
+  if [ "$there" = "$here" ]; then
+    repo=.
+  else
+    repo=$(resolve "$repo")
+    other_repo=1
+  fi
 }
 
 # A pane is idle when every process in its terminal's foreground group is an
@@ -503,9 +545,9 @@ EOF
 
 default_branch() {
   local ref
-  if ref=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null); then
+  if ref=$(in_repo git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null); then
     printf '%s\n' "${ref#origin/}"
-  elif ref=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name 2>/dev/null) && [ -n "$ref" ]; then
+  elif ref=$(in_repo gh repo view --json defaultBranchRef --jq .defaultBranchRef.name 2>/dev/null) && [ -n "$ref" ]; then
     printf '%s\n' "$ref"
   else
     die 'cannot resolve the default branch: both "git symbolic-ref --short refs/remotes/origin/HEAD" and "gh repo view --json defaultBranchRef" failed'
@@ -575,20 +617,22 @@ close_beside_orchestrator() {
 cmd_remove() {
   require workmux tmux
   local claudes dirty
-  worktree=$(workmux path "$worktree_name" 2>/dev/null) || refuse 'no such worktree'
+  choose_repo
+  worktree=$(in_repo workmux path "$worktree_name" 2>/dev/null) || refuse 'no such worktree'
   claudes=$(pane_inventory "$name" "$worktree" | awk '$4 == "strict" || ($4 != "none" && $5 == 1)')
   [ -z "$claudes" ] || refuse "a live session in pane ${claudes%% *}"
   dirty=$(git -C "$worktree" status --porcelain) || die "git -C $worktree status failed"
   [ -z "$dirty" ] || refuse "dirty worktree $worktree"
-  git merge-base --is-ancestor "$worktree_name" "$feature" || refuse "branch $worktree_name not merged into $feature"
+  in_repo git merge-base --is-ancestor "$worktree_name" "$feature" || refuse "branch $worktree_name not merged into $feature"
   git -C "$worktree" merge-base --is-ancestor HEAD "$feature" || refuse "HEAD of $worktree not merged into $feature"
-  workmux remove "$worktree_name" --keep-branch --force >&2 || die "workmux remove $worktree_name failed"
+  in_repo workmux remove "$worktree_name" --keep-branch --force >&2 || die "workmux remove $worktree_name failed"
   printf 'removed %s worktree=%s\n' "$name" "$worktree"
 }
 
 cmd_start() {
   require tmux workmux claude
-  worktree=$(workmux path "$worktree_name" 2>/dev/null) || worktree=''
+  choose_repo
+  worktree=$(in_repo workmux path "$worktree_name" 2>/dev/null) || worktree=''
   if [ -z "$window" ]; then
     [ -n "$first_spec" ] || usage
   fi
@@ -630,10 +674,15 @@ EOF
       workmux add "$feature" --base "origin/$branch" -C >&2 || die "workmux add $feature failed"
     else
       lock_worktrees
-      workmux add "$worktree_name" --headless --base "$feature" >&2 || die "workmux add $worktree_name failed"
+      if [ -n "$other_repo" ] && ! in_repo workmux path "$feature" >/dev/null 2>&1; then
+        branch=$(default_branch)
+        in_repo git fetch -q origin "$branch" || die "git fetch origin $branch in $repo failed"
+        in_repo workmux add "$feature" --headless --base "origin/$branch" >&2 || die "workmux add $feature in $repo failed"
+      fi
+      in_repo workmux add "$worktree_name" --headless --base "$feature" >&2 || die "workmux add $worktree_name failed"
     fi
     release_worktrees
-    worktree=$(workmux path "$worktree_name") || die "workmux path $worktree_name failed after workmux add"
+    worktree=$(in_repo workmux path "$worktree_name") || die "workmux path $worktree_name failed after workmux add"
     if [ -n "$first_spec" ]; then
       resolved_worktree=$(resolve "$worktree")
       new_windows=$(tmux list-panes -a -F '#{window_id} #{pane_current_path}' | while read -r window_id path; do
@@ -654,15 +703,19 @@ EOF
   fi
 
   roadmap_pattern='^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}-(.*)$'
-  roadmap=- plan=-
-  if [ -d "$worktree/.foundry/feature-roadmaps" ]; then
-    found=$(cd "$worktree/.foundry/feature-roadmaps" && for entry in *; do
+  roadmap=- plan=- foundry_root=$worktree foundry_prefix=''
+  if [ -n "$other_repo" ]; then
+    foundry_root=$(workmux path "$feature") || die "workmux path $feature failed"
+    foundry_prefix=$foundry_root/
+  fi
+  if [ -d "$foundry_root/.foundry/feature-roadmaps" ]; then
+    found=$(cd "$foundry_root/.foundry/feature-roadmaps" && for entry in *; do
       [ -d "$entry" ] && [[ $entry =~ $roadmap_pattern ]] && [ "${BASH_REMATCH[1]}" = "$feature" ] && printf '%s\n' "$entry"
     done || true)
     if [ -n "$found" ]; then
-      at_most_one "roadmap for $feature in $worktree/.foundry/feature-roadmaps" "$found"
-      roadmap=.foundry/feature-roadmaps/$found
-      plan=.foundry/plans/$found/README.md
+      at_most_one "roadmap for $feature in $foundry_root/.foundry/feature-roadmaps" "$found"
+      roadmap=$foundry_prefix.foundry/feature-roadmaps/$found
+      plan=$foundry_prefix.foundry/plans/$found/README.md
     fi
   fi
 

@@ -66,6 +66,7 @@ Main sessions take the role from their first prompt. Subagent roles have no laun
 - The home repository is the one where `/sam-mode start` ran. The roadmap names every repository and which is home. The feature plan's "Repositories" table gives each one's facts, and a session reads the row of its own repository.
 - Every phase works in exactly one repository, which its plan entry names, and changes files in that repository only.
 - The feature worktree is the worktree of a repository's orchestrator branch. The home one holds the spec writer and the orchestrator.
+- Two repositories may be linked, by a shared API or as a library and its consumer. The feature plan's "Links" table names each link and its phases, and `handbooks/planner.md` defines its fields. A phase that a link names reads that row.
 
 ### Artefacts
 

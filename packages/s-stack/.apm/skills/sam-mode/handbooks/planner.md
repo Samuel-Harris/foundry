@@ -32,6 +32,7 @@ Send a `started` message when you begin. The reference file `references/status-a
 - **Verification first.** When no existing verification skill in a repository covers the feature, make writing one the first phase in that repository. Give every phase its own check file in that skill, listed among that phase's owned paths, so no two phases edit one verification file.
 - **Dependencies and pull requests.** Read the PR creator's handbook, `handbooks/pr-creator.md`, before you draw the dependencies. A pull request stacks cleanly on one parent only, so prefer a split in which no phase depends on two phases whose pull requests can be open at the same time. When no split avoids it, keep the dependency and say so in the phase entry. That phase's pull request then targets the default branch and carries both parents' changes, as the PR creator's handbook describes.
 - **Contracts.** Write down every interface between phases, such as a file layout, a data schema or a command line, so a phase can build against a neighbour that does not exist yet. A phase that needs to change a contract sends the orchestrator a decision request.
+- **Links.** Record each interface between two repositories as a link in [the Links table](#the-links-table), with every phase that implements it.
 
 ## What each phase entry holds
 
@@ -61,6 +62,27 @@ The other handbooks read repository-specific facts from your plan's "Repositorie
 | Generated paths and lines | The paths and lines whose changes move no code head | Every phase session |
 | Regenerate command | The command that regenerates the generated paths, and the subject of the regenerate commit | Orchestrator and PR creator |
 | Verification skill | Its path, and each phase's check file in it | Verifier |
+
+## The Links table
+
+A link joins two repositories whose phases build one interface between them. Give the plan a "Links" table with one row for each link, or say the feature has none. Every link has one of two kinds.
+
+- **`api`.** One repository provides an interface, such as an HTTP API or a message schema, that another consumes. Provider and consumer phases run at the same time against the contract the plan writes down, so neither depends on the other. Each provider change must be additive: what the provider's default branch already serves keeps working, so either side can merge into its own orchestrator branch first and each default branch keeps working. The developer merges the provider's pull requests before the consumer's.
+- **`library`.** One repository is a library that another consumes as a released dependency. The consumer phase builds against the library repository's feature worktree through the link command, then pins the released version before it opens pull requests, as `handbooks/phase-session.md` says. With a link command, the consumer phase depends with `until: merged` on the library phases whose code it needs, so that code is in the library's feature worktree.
+
+| Field | `api` | `library` |
+| --- | --- | --- |
+| Link id | Kebab-case, unique in the plan | Kebab-case, unique in the plan |
+| From | The provider repository, by `owner/name` | The library repository |
+| To | The consumer repository | The consumer repository |
+| Phases | Each phase that implements the link, and whether it is on the provider or the consumer side | Each phase that implements the link, and whether it is on the library or the consumer side |
+| Contract | The interface, in full, in the plan | None |
+| Link command | None | A command, run in the consumer's worktree, that points it at a local checkout of the library, given by path. None when no command passes the experiment below. |
+| Pin command | None | A command, run in the consumer's worktree, that points it at a released version of the library, given by version |
+| Release check | None | A command that exits 0 once the library phases' merged change is released, and prints the released version |
+| Integration check | A command that runs provider and consumer together | A command that runs the consumer's checks against the linked library |
+
+**Prove the link command.** A link command must leave every tracked file of the consumer unchanged, so that no pull request can ship the link. Settle it by experiment: in a throwaway worktree of the consumer, run the command against a throwaway worktree of the library, then run `git status --porcelain --untracked-files=no`, which must print nothing. Record the command, the output and the result in the plan. When no command passes, the link has no link command, and the plan says so. The consumer phase then depends on the library phases with `until: done`, and builds against the released library, which it pins with the pin command.
 
 ## When the orchestrator starts you again
 

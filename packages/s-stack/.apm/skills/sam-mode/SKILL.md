@@ -55,7 +55,7 @@ Main sessions take the role from their first prompt. Subagent roles have no laun
 
 - Orchestrate your own part. Hand bulk reading and writing to subagents and keep their summaries in your own context.
 - Write only the files your role owns. The artefact table below names each owner.
-- The developer talks to the spec writer and the orchestrator. Every other session sends its questions for the developer to the orchestrator.
+- The developer talks to the spec writer, the orchestrator, and the planner during an architecture review. Every other session sends its questions for the developer to the orchestrator.
 - The developer can still type into any session. Follow a direct instruction. Report it to the orchestrator when it changes the phase's scope or a recorded decision.
 
 ## Rules for every session, subagents included

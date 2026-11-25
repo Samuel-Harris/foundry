@@ -103,9 +103,10 @@ A phase session, the planner or a spec writer sends these to the orchestrator:
 | `prs-open` | A phase's pull requests are open | Each number with its `depends_on` list, the code head the pull requests hold, and the `pushed` line from the status file |
 | `instruction` | The developer gave it an instruction that changes the phase's scope or a recorded decision | The instruction |
 | `done-planning` | The planner has finished | The branch and commit to merge, and the phases whose plan entry changed |
+| `architecture-approved` | The developer approved the planned architecture in the planner's pane | The planner commit the approved page describes |
 | `roadmap-update` | A spec writer has an approved update | The branch and commit to merge, what changed, the behaviour that the change affects, and the `run-decisions.md` rows it folded in |
 
-The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-session.md) says what the phase does. The planner takes an `instruction` to revise the plan, as [handbooks/planner.md](../handbooks/planner.md#when-the-orchestrator-starts-you-again) says.
+The orchestrator sends these. [handbooks/phase-session.md](../handbooks/phase-session.md) says what the phase does. The planner takes an `instruction` to revise the plan, as [handbooks/planner.md](../handbooks/planner.md#when-the-orchestrator-starts-you-again) says, and an `instruction` that gives the architecture page's address and the commit it describes during an architecture review, as [handbooks/planner.md](../handbooks/planner.md#architecture-review) says.
 
 | Kind | When | The message carries |
 | --- | --- | --- |

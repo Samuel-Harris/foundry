@@ -79,7 +79,7 @@ The board documents a tick writes:
 - `board/meta`, every tick, for `tick_at`.
 - `board/recent`, when any phase changed state.
 - One `phases/<phase>` for each phase whose state, scheduling, `waits_for`, session or pane changed.
-- One `prs/<number>` for each pull request whose state, checks, base, dependencies or `needs_update` changed. A pull request that merged or closed this tick has changed state.
+- One `prs` document for each pull request whose state, checks, base, dependencies or `needs_update` changed. A pull request that merged or closed this tick has changed state.
 - A `needs` document added for each new decision request, recorded decision or waiting prompt, and removed once it is resolved.
 
 ## Merging a phase
@@ -161,7 +161,7 @@ From the reconcile summary, and whenever a session reports `blocked`, find each 
 
 ## The status board
 
-Publish the board once for each feature from the template `assets/status-board.html`, with the `db` capability, and record its address in the tracker. Never publish it again. Update it only through its database with `ArtifactData`, in one batch per tick of at most 50 writes. The comment at the top of the template is the schema. Read it before your first write. When the planner's first `done-planning` merges, write a `phases` document for every phase in the feature plan, with `depends_on` taken from each phase's entry. Write `depends_on` again for each phase whose entry a later `done-planning` names as changed. Every value comes from a status file, workmux's status or a pull request's live state. Write no free-text status. The phases section shows each phase's states from Spec to Done, with the states before the current one, the current one and the later ones told apart, so write each `state` change in the tick that sees it.
+Publish the board once for each feature from the template `assets/status-board.html`, with the `db` capability, and record its address in the tracker. Never publish it again. Update it only through its database with `ArtifactData`, in one batch per tick of at most 50 writes. The comment at the top of the template is the schema. Read it before your first write. Name a repository by its `owner/name`, as `gh repo view --json nameWithOwner --jq .nameWithOwner` prints it, and a pull request by `owner/name#number`, in every document, including `depends_on` and a needs item's `prs`. Write `board/meta.repos` with each repository and its default branch. When the planner's first `done-planning` merges, write a `phases` document for every phase in the feature plan, with `depends_on` taken from each phase's entry. Write `depends_on` again for each phase whose entry a later `done-planning` names as changed. Every value comes from a status file, workmux's status or a pull request's live state. Write no free-text status. The phases section shows each phase's states from Spec to Done, with the states before the current one, the current one and the later ones told apart, so write each `state` change in the tick that sees it.
 
 ## The architecture page
 

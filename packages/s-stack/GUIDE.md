@@ -221,7 +221,7 @@ flowchart LR
     prb -.->|you merge| default
 ```
 
-- The first spec writer and the orchestrator share the feature worktree, on the orchestrator branch. The planner, each update spec writer and each phase session get a worktree and branch of their own, which the launcher creates with [workmux](https://workmux.raine.dev).
+- The first spec writer and the orchestrator share the feature worktree, on the orchestrator branch. The planner, each update spec writer and each phase session get a worktree and branch of their own, which the launcher creates with [workmux](https://workmux.raine.dev). Once a session's work is merged into the orchestrator branch, the orchestrator removes its worktree and branch with `scripts/clean-worktree.sh`, which first stops the Docker Compose projects started in it, with their volumes and built images. Each phase removes its reviewers' worktrees the same way after each review. The script refuses, and deletes nothing, while a process works in the worktree or it holds uncommitted changes or unmerged commits.
 - The PR creator cuts pull request branches from the default branch, or from the branch of the pull request they depend on. They hold the phase's commits and never `.foundry/`.
 - No session pushes an orchestrator branch, or a branch cut from one, in any repository, to a public remote unless you say so. Only the PR creator pushes, and only pull request branches.
 - s-stack never assumes a default branch is `main`. It resolves each name from its repository.

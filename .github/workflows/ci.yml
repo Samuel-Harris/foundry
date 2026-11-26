@@ -222,9 +222,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The Ubuntu runner images do not list tmux.
-      - name: Install tmux
-        run: command -v tmux || { sudo apt-get update && sudo apt-get install -y tmux; }
+      # The Ubuntu runner images do not list tmux. clean-worktree.sh needs lsof.
+      - name: Install tmux and lsof
+        run: command -v tmux && command -v lsof || { sudo apt-get update && sudo apt-get install -y tmux lsof; }
 
       - name: Run tests
         run: python3 -m unittest discover -s packages/s-stack/tests

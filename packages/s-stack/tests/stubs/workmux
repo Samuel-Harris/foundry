@@ -23,5 +23,3 @@ elif command == "path":
     if not os.path.isdir(path):
         sys.exit(f"Worktree '{name}' not found")
     print(path)
-elif command == "remove":
-    subprocess.run(["git", "-C", root, "worktree", "remove", path], check=True)

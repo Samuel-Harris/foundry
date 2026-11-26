@@ -65,14 +65,14 @@ class RepoTests(LauncherTestCase):
 
         self.assertEqual(self.git("-C", worktree, "rev-parse", "HEAD").strip(), merged)
 
-    def test_remove_removes_the_worktree_in_the_other_repository(self) -> None:
+    def test_remove_removes_the_worktree_and_branch_in_the_other_repository(self) -> None:
         self.make_other_phase_worktree()
 
         result = self.launch_phase("--phase", "p", "--remove")
 
         self.assertEqual((result.returncode, result.stdout), (0, f"removed f-phase-p worktree={self.other_worktree('f-phase-p')}\n"), result.stderr)
         self.assertFalse(self.other_worktree("f-phase-p").exists())
-        self.assertEqual(self.git("-C", str(self.other), "branch", "--list", "f-phase-p").strip(), "f-phase-p")
+        self.assertEqual(self.git("-C", str(self.other), "branch", "--list", "f-phase-p"), "")
 
     def test_remove_refuses_a_branch_not_merged_into_the_other_repositorys_feature_branch(self) -> None:
         worktree = self.make_other_phase_worktree()

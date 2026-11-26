@@ -1,0 +1,7 @@
+{
+  "name": "mermaid-pane",
+  "version": "0.1.0",
+  "description": "Renders Mermaid diagrams from the conversation in a pane beside the chat",
+  "author": { "name": "Sam Harris" },
+  "types": "./types/index.d.ts"
+}

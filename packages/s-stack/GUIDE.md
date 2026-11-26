@@ -260,12 +260,12 @@ The board has seven sections under its header. In AFK mode the header also shows
 | Decisions | Decision requests waiting for you, decisions the orchestrator took alone (`run-<n>`) and AFK decisions (`AFK-<n>`), each with its id and the decision in full |
 | Permission prompts | Sessions waiting on a permission prompt, with the pane that shows it |
 | Ready for your review | Draft pull requests, ordered so that each comes after the pull requests it depends on and those it must merge after in another repository |
+| Phases | A dependency map of the phases, then each phase's place in the seven states and its session |
 | Pull requests | Every pull request with its state, checks, base and whether it needs an update |
-| Phases | Each phase's place in the seven states, its session and a dependency map |
 | Recent changes | The last 20 state changes |
 | Heartbeat | When the orchestrator last ticked. The board marks itself stale after 40 minutes without a tick. |
 
-The screenshot shows the board from the run that built s-stack, rendered from that run's data near its end. Nine of the eleven phases are Done, `afk-mode` is in PR, and nothing waits for you. The dependency map under Phases draws a solid line where a phase needs another merged into the orchestrator branch, and a dashed line where it needs every pull request of the other merged into the default branch.
+The screenshot shows the board from the run that built s-stack, rendered from that run's data near its end. Nine of the eleven phases are Done, `afk-mode` is in PR, and nothing waits for you. The dependency map at the top of Phases draws a solid line where a phase needs another merged into the orchestrator branch, and a dashed line where it needs every pull request of the other merged into the default branch.
 
 ![The status board for the run that built s-stack: empty Decisions, Permission prompts and Ready for your review sections, 23 merged pull requests, 11 phases with their state steppers and dependency map, the last 20 state changes and a fresh heartbeat](docs/images/status-board.png)
 

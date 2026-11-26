@@ -565,7 +565,7 @@ cat > "$dir/check.py" <<'PY'
 import html, json, re, sys
 from datetime import datetime, timezone
 
-HEADINGS = ["Decisions", "Permission prompts", "Ready for your review", "Pull requests", "Phases", "Recent changes", "Heartbeat"]
+HEADINGS = ["Decisions", "Permission prompts", "Ready for your review", "Phases", "Pull requests", "Recent changes", "Heartbeat"]
 SOURCES = ["board/meta", "board/recent", "needs", "phases", "prs"]
 DECISIONS = [
     "AFK decision | board | waiting 40 min | AFK-1 | Name the board's section Decisions. | Chose Decisions. Reason: "
@@ -622,8 +622,8 @@ RECENT = ["p01 | → Implement"] + [f"p{i:02d} | Plan → Implement" for i in ra
 RECENT_AGES = [0, 10, 5] + [i * 5 for i in range(3, 20)]
 PR_COLS = ["Number", "Title", "Phase", "State", "Checks", "Base", "Depends on", "Update"]
 PHASE_COLS = ["Phase", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"]
-EMPTIES = ["No decisions wait for you.", "No session waits on a permission prompt.", "No draft pull requests yet.", "No pull requests yet.",
-           "No phases yet. The orchestrator adds them once the feature plan exists.", "No state changes yet.", "No tick recorded yet."]
+EMPTIES = ["No decisions wait for you.", "No session waits on a permission prompt.", "No draft pull requests yet.",
+           "No phases yet. The orchestrator adds them once the feature plan exists.", "No pull requests yet.", "No state changes yet.", "No tick recorded yet."]
 STOPPED = "This section stopped updating (permission-denied). Reload the page to try again."
 NODB = "This board reads its data from the page's database, which this view cannot open. Open the board in Claude."
 SLOW = "The board's data can't be reached yet. What is shown may be out of date."

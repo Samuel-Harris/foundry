@@ -32,17 +32,19 @@ Standard output is one line, except one closed line per pane for --close:
   closed <name> pane=<pane id>                    --close closed a pane running the session,
                                                   or tagged with its name and idle at a shell
   absent <name>                                   --close found neither
-  removed <name> worktree=<path>                  --remove removed the session's worktree
+  removed <name> worktree=<path>                  --remove removed the session's worktree as
+                                                  clean-worktree.sh does, whose lines go to
+                                                  standard error
   window=<window id>                              --print-window
 
 Exit codes:
   1  any other failure, named on standard error
   2  bad arguments
-  3  tmux, workmux or claude is not on PATH
+  3  tmux, workmux, claude, or for --remove git or lsof, is not on PATH
   4  tmux could not split a pane; tmux's error is on standard error
   5  --remove refused: no such worktree, a claude running in or under it or
-     under the session's name, a dirty worktree, or a branch or HEAD not merged
-     into the feature
+     under the session's name, or any refusal of clean-worktree.sh with the
+     feature as the ref its work must be merged into
 EOF
   exit 2
 }
@@ -144,6 +146,7 @@ fi
 resolve() {
   (cd "$1" 2>/dev/null && pwd -P) || true
 }
+script_dir=$(resolve "$(dirname "${BASH_SOURCE[0]}")")
 
 common_dir_of() {
   local common
@@ -620,16 +623,12 @@ close_beside_orchestrator() {
 
 cmd_remove() {
   require workmux tmux
-  local claudes dirty
+  local claudes
   choose_repo
   worktree=$(in_repo workmux path "$worktree_name" 2>/dev/null) || refuse 'no such worktree'
   claudes=$(pane_inventory "$name" "$worktree" | awk '$4 == "strict" || ($4 != "none" && $5 == 1)')
   [ -z "$claudes" ] || refuse "a live session in pane ${claudes%% *}"
-  dirty=$(git -C "$worktree" status --porcelain) || die "git -C $worktree status failed"
-  [ -z "$dirty" ] || refuse "dirty worktree $worktree"
-  in_repo git merge-base --is-ancestor "$worktree_name" "$feature" || refuse "branch $worktree_name not merged into $feature"
-  git -C "$worktree" merge-base --is-ancestor HEAD "$feature" || refuse "HEAD of $worktree not merged into $feature"
-  in_repo workmux remove "$worktree_name" --keep-branch --force >&2 || die "workmux remove $worktree_name failed"
+  in_repo "$script_dir/clean-worktree.sh" "$worktree" "$feature" >&2
   printf 'removed %s worktree=%s\n' "$name" "$worktree"
 }
 

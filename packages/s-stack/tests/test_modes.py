@@ -226,20 +226,20 @@ class RemoveTests(LauncherTestCase):
         self.assertIn(reason, result.stderr)
         self.assertEqual(self.git("-C", str(self.root), "worktree", "list", "--porcelain"), worktrees_before)
 
-    def test_removes_a_clean_merged_worktree_and_keeps_its_branch(self) -> None:
+    def test_removes_a_clean_merged_worktree_and_its_branch(self) -> None:
         worktree = self.make_worktree(name="f-phase-p", base="f")
 
         result = self.launch(*self.args, "--remove")
 
         self.assertEqual((result.returncode, result.stdout), (0, f"removed f-phase-p worktree={worktree}\n"), result.stderr)
         self.assertFalse(worktree.exists())
-        self.assertEqual(self.git("-C", str(self.root), "branch", "--list", "f-phase-p").strip(), "f-phase-p")
+        self.assertEqual(self.git("-C", str(self.root), "branch", "--list", "f-phase-p"), "")
 
     def test_dirty_worktree_is_refused(self) -> None:
         worktree = self.make_worktree(name="f-phase-p", base="f")
         (worktree / "untracked.txt").write_text("x\n")
 
-        self.assert_refused("dirty")
+        self.assert_refused("uncommitted changes")
         self.assertTrue(worktree.exists())
 
     def test_unmerged_branch_is_refused(self) -> None:

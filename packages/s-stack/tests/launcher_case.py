@@ -55,14 +55,14 @@ def conversation(*, args: str, flag: str) -> str | None:
 def build_system_bin(target: Path) -> None:
     """Every system tool except the ones a test must be able to remove."""
     target.mkdir()
-    withheld = {"tmux", "workmux", "claude", "gh"}
+    withheld = {"tmux", "workmux", "claude", "gh", "docker"}
     for directory in ("/usr/bin", "/bin"):
         for entry in os.listdir(directory):
             link = target / entry
             # A dangling link in /usr/bin would pass an exists() check and collide.
             if entry not in withheld and not os.path.lexists(link):
                 link.symlink_to(os.path.join(directory, entry))
-    for tool in ("git", "python3", "perl"):
+    for tool in ("git", "python3", "perl", "lsof"):
         found = shutil.which(tool)
         if found:
             link = target / tool

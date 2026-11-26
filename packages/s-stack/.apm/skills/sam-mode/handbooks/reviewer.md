@@ -18,6 +18,8 @@ Read `../interrogate/SKILL.md` relative to the `sam-mode` directory, and follow 
 
 Record the verdict in the status file. Put every finding in the evidence file, with its command, its output and your classification. A finding that is not significant changes no state, and you may still fix it in a later commit.
 
+Once the verdict is committed, remove each reviewer's worktree with `scripts/clean-worktree.sh <worktree> <phase branch>`, relative to the `sam-mode` directory, run from the phase worktree's root, so that no review leaves a checkout and its dependencies on disk. When it refuses, leave that worktree and add its path and the refusal to the evidence file.
+
 ## The brief
 
 You are a reviewer for one change. Break it, as `interrogate`'s brief says.
@@ -42,3 +44,5 @@ You are a reviewer for one change. Break it, as `interrogate`'s brief says.
 A preference between two working designs is not significant, and neither is anything `interrogate`'s brief tells you to leave out.
 
 **Your report.** Report as `interrogate`'s brief says, and add whether you judge each finding significant and why.
+
+**Leave your worktree clean.** Put each probe's files in your report with its command. Then, before you report, delete the files you added to your worktree and restore those you changed, so that it can be removed. Stop any process you started in it.

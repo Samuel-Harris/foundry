@@ -56,6 +56,19 @@ Before any phase builds the plan, the developer reviews it with you in your pane
 
 Also give a table of every phase at a glance with these fields, a diagram of the dependencies, and the order in which the orchestrator starts and merges phases. The phase session plans its own pull request split in its phase plan.
 
+## Gates outside the phases
+
+A gate is an irreversible step that only the developer takes, such as a deploy, a production dispatch or a one-off backfill, and that a phase waits on. Give the plan a "Gates outside the phases" table with one row for each gate, or say the feature has none. The orchestrator tracks every row on the status board, so a gate missing from the table goes untracked.
+
+| Field | Holds |
+| --- | --- |
+| Gate id | `gate-<n>`, unique in the plan |
+| Summary | One line saying what the developer does |
+| Waits on | The phases, each merged or Done, and the other gates that must pass before the developer can take it, or none |
+| Blocks | Each phase that waits on it, and whether the phase cannot start or cannot reach Done until the gate passes |
+| Instructions | The plan section or evidence file that gives the developer's steps |
+| Passed when | What shows the gate passed, such as the developer saying so or a command that checks the result |
+
 ## The Repositories table
 
 The other handbooks read repository-specific facts from your plan's "Repositories" table. Give it one row for each repository the roadmap names, with these fields. Give each one, or say that the repository has none. A session reads the row of its own repository.

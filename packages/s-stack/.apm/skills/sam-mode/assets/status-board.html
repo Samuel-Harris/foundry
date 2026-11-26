@@ -113,12 +113,30 @@ chosen by the orchestrator:
   pane     string naming the pane that shows a waiting prompt, or null
   since    time the item started waiting
 
+gates/<gate id>, one document per gate in the feature plan's "Gates outside
+the phases" table that has not passed, its document id the gate's id, such as
+gates/gate-6:
+  gate          string, the gate id, equal to the document id
+  summary       string, one line saying what the developer does
+  state         "not-runnable", "runnable" or "in-progress"
+  waits_on      string, a one-line description of what must happen before
+                the developer can take the gate, or null once it is runnable
+  blocks        list of {phase, until} objects, one per phase the gate holds
+                back. until is "start" when the phase cannot start, or
+                "done" when it cannot reach Done, until the gate passes.
+  instructions  string, the plan section or evidence file that gives the
+                developer's steps
+  flagged       boolean, true once the gate holds back a phase that is
+                otherwise ready. The page lists flagged gates first.
+  since         time the gate entered its state
+
 WRITING
 
 Write once per tick, as one ArtifactData batch of at most 50 writes that holds
 only the documents that changed. Keep recent as one document: replace its
 items with the new list, trimmed to 20. When a needs item is resolved, delete
-its document rather than flag it. An afk-decision is resolved once the
+its document rather than flag it, and delete a gate's document once the gate
+has passed. An afk-decision is resolved once the
 developer has said whether they agree, whichever way they answer.
 
 needs_update is true when a draft or open pull request is not up to date, and
@@ -134,7 +152,7 @@ leave needs_update null.
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-  /* One column up to 960 px wide: header, notices, then seven sections split by hairlines. */
+  /* One column up to 960 px wide: header, notices, then eight sections split by hairlines. */
   :root {
     --bg: #f5f7fa;
     --fg: #1a2130;
@@ -317,6 +335,7 @@ leave needs_update null.
   <div class="notice" id="notice" hidden></div>
   <main id="sections" class="sections">
     <section id="s-decisions"></section>
+    <section id="s-gates"></section>
     <section id="s-prompts"></section>
     <section id="s-review"></section>
     <section id="s-prs"></section>
@@ -332,6 +351,7 @@ leave needs_update null.
   const STATES = Object.keys(STATE_TONE);
   const NEED_KINDS = ["afk-decision", "decision", "prompt"];
   const DOOR_KINDS = ["afk-decision", "decision"];
+  const GATE_STATES = {"runnable": ["Runnable", "warn"], "in-progress": ["In progress", "accent"], "not-runnable": ["Not runnable", ""]};
   const DEFAULT_STALE_MIN = 40;
   const MINUTE = 60000;
 
@@ -347,6 +367,7 @@ leave needs_update null.
     phases: {ref: (db) => db.collection("phases")},
     prs: {ref: (db) => db.collection("prs"), normalise: prDoc},
     needs: {ref: (db) => db.collection("needs")},
+    gates: {ref: (db) => db.collection("gates")},
   };
 
   const state = {
@@ -356,6 +377,7 @@ leave needs_update null.
     phases: [],
     prs: [],
     needs: [],
+    gates: [],
     status: Object.fromEntries(Object.keys(SOURCES).map((source) => [source, "loading"])),
     noDatabase: false,
     waitedLong: false,
@@ -711,6 +733,39 @@ leave needs_update null.
     needsSection("s-prompts", "Permission prompts", needs.filter((n) => n.kind === "prompt"), "No session waits on a permission prompt.");
   }
 
+  function gateItem(g) {
+    const since = parseTime(g.since);
+    const age = since === null ? "since " + (str(g.since) || "unknown") : formatAge(Date.now() - since);
+    const [label, tone] = GATE_STATES[g.state] || [str(g.state) || "unknown", ""];
+    const blocks = (Array.isArray(g.blocks) ? g.blocks.filter(isObj) : [])
+      .map((b) => str(b.phase) + (b.until === "start" ? " (start)" : b.until === "done" ? " (Done)" : ""));
+    return el("li", {},
+      el("div", {class: "row"},
+        g.flagged === true ? chip("Holding a phase", "crit") : null,
+        chip(label, tone),
+        el("span", {class: "mono"}, str(g.gate)),
+        el("span", {class: "sub num"}, age)),
+      el("div", {class: "row"}, el("span", {class: "summary"}, str(g.summary))),
+      str(g.waits_on) ? el("div", {class: "sub"}, "Waits on " + str(g.waits_on)) : null,
+      blocks.length ? el("div", {class: "sub"}, "Blocks ", el("span", {class: "mono"}, blocks.join(", "))) : null,
+      str(g.instructions) ? el("div", {class: "sub"}, "Instructions in ", el("span", {class: "mono"}, str(g.instructions))) : null);
+  }
+
+  function renderGates() {
+    const stateOrder = Object.keys(GATE_STATES);
+    const stateRank = (g) => (stateOrder.includes(g.state) ? stateOrder.indexOf(g.state) : stateOrder.length);
+    const flagRank = (g) => (g.flagged === true ? 0 : 1);
+    const byId = (a, b) => str(a.gate).localeCompare(str(b.gate), undefined, {numeric: true});
+    const gates = state.gates.slice().sort((a, b) => flagRank(a) - flagRank(b) || stateRank(a) - stateRank(b) || byId(a, b));
+    const section = sectionShell("s-gates", "Gates", isLoaded("gates") ? gates.length : null);
+    if (!renderLoadState(section, "gates")) return;
+    if (!gates.length) {
+      section.append(el("p", {class: "empty"}, "No gate is open."));
+      return;
+    }
+    section.append(el("ul", {class: "items"}, ...gates.map(gateItem)));
+  }
+
   function renderReview() {
     const ordered = reviewOrder(state.prs);
     const unmerged = unmergedIds(state.prs);
@@ -865,6 +920,7 @@ leave needs_update null.
       const judged = verdict();
       renderHeader(judged);
       renderNeeds();
+      renderGates();
       renderReview();
       renderPrs();
       renderPhases();

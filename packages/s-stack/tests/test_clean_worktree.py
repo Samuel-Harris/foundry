@@ -142,6 +142,16 @@ class CleanWorktreeTests(unittest.TestCase):
         self.assertEqual(self.git("-C", str(self.root), "worktree", "list", "--porcelain").count("worktree "), 1)
         self.assertNotIn("review-1", self.branches())
 
+    def test_removes_nested_worktrees_deepest_first(self) -> None:
+        worktree = self.add_worktree(self.tmp / "wt", branch="f-phase-p")
+        outer = self.add_worktree(worktree / "scratch" / "review-1", branch="review-1", base="f-phase-p")
+        inner = self.add_worktree(outer / "scratch" / "review-2", branch="review-2", base="f-phase-p")
+
+        result = self.clean(worktree)
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"removed {inner}\nremoved {outer}\nremoved {worktree}\n"), result.stderr)
+        self.assertEqual(self.git("-C", str(self.root), "worktree", "list", "--porcelain").count("worktree "), 1)
+
     def test_a_nested_worktree_with_local_only_commits_is_refused(self) -> None:
         worktree = self.add_worktree(self.tmp / "wt", branch="f-phase-p")
         nested = self.add_worktree(worktree / "scratch" / "review-1", branch="review-1", base="f-phase-p")
@@ -156,11 +166,60 @@ class CleanWorktreeTests(unittest.TestCase):
 
         self.assert_refused(worktree, f"uncommitted changes in {nested}")
 
-    def test_another_repository_inside_is_refused(self) -> None:
+    def test_a_repository_inside_an_ignored_directory_is_refused(self) -> None:
         worktree = self.add_worktree(self.tmp / "wt", branch="f-phase-p")
-        self.git("init", "-q", str(worktree / "scratch" / "probe-repo"))
+        self.git("init", "-q", str(worktree / ".venvs" / "pkg" / "probe-repo"))
 
-        self.assert_refused(worktree, "another repository")
+        self.assert_refused(worktree, "git repository at")
+
+    def other_repository(self) -> Path:
+        """A second repository whose default branch is pushed to its own remote."""
+        other = self.tmp / "other"
+        self.git("init", "-q", "-b", "main", str(other))
+        self.git("-C", str(other), "commit", "-q", "--allow-empty", "-m", "seed")
+        self.git("init", "-q", "--bare", str(self.tmp / "other.git"))
+        self.git("-C", str(other), "remote", "add", "origin", str(self.tmp / "other.git"))
+        self.git("-C", str(other), "push", "-q", "origin", "main")
+        return other
+
+    def test_removes_a_pushed_worktree_of_another_repository_nested_inside(self) -> None:
+        worktree = self.add_worktree(self.tmp / "wt", branch="f-phase-p")
+        other = self.other_repository()
+        nested = worktree / "scratch" / "Other"
+        self.git("-C", str(other), "worktree", "add", "-q", "-b", "feature", str(nested), "main")
+        self.commit_in(nested, "work.txt")
+        self.git("-C", str(nested), "push", "-q", "origin", "feature")
+
+        result = self.clean(worktree)
+
+        self.assertEqual((result.returncode, result.stdout), (0, f"removed {nested}\nremoved {worktree}\n"), result.stderr)
+        self.assertEqual(self.git("-C", str(other), "worktree", "list", "--porcelain").count("worktree "), 1)
+        self.assertEqual(self.git("-C", str(other), "branch", "--list", "feature"), "")
+
+    def test_a_nested_worktree_of_another_repository_with_unpushed_commits_is_refused(self) -> None:
+        worktree = self.add_worktree(self.tmp / "wt", branch="f-phase-p")
+        other = self.other_repository()
+        nested = worktree / "scratch" / "Other"
+        self.git("-C", str(other), "worktree", "add", "-q", "-b", "feature", str(nested), "main")
+        self.commit_in(nested, "work.txt")
+
+        self.assert_refused(worktree, f"nested worktree {nested} has commits on no remote branch")
+        self.assertIn(str(nested), self.git("-C", str(other), "worktree", "list"))
+
+    def test_a_failed_search_for_nested_checkouts_removes_nothing(self) -> None:
+        worktree = self.add_worktree(self.tmp / "wt", branch="f-phase-p")
+        failing = self.tmp / "failing-bin"
+        failing.mkdir()
+        (failing / "git").write_text(f'#!/bin/sh\ncase " $* " in *" ls-files "*) exit 128 ;; esac\nexec {shutil.which("git")} "$@"\n')
+        (failing / "git").chmod(0o755)
+        self.env["PATH"] = f"{failing}:{self.env['PATH']}"
+
+        result = self.clean(worktree)
+
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("cannot list the checkouts nested in", result.stderr)
+        self.assertTrue(worktree.exists())
+        self.assertIn("f-phase-p", self.branches())
 
     def test_stops_only_the_compose_projects_started_inside_it(self) -> None:
         worktree = self.add_worktree(self.tmp / "wt", branch="f-phase-p")

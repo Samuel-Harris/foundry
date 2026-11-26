@@ -141,7 +141,7 @@ dependencies:
     .agents/skills/sam-mode/references/pr-commands.md: sha256:868f2402d2fb17b10a650d062d7c1df04256b850946ff45cc08de0a83eb43b6e
     .agents/skills/sam-mode/references/status-and-messages.md: sha256:8538313a3f9854241edc52430f8b8960c46c8d4ede22adda5733ba059e62fb9d
     .agents/skills/sam-mode/scripts/afk-watchdog.sh: sha256:6cdcfb50c4ca2b30e73068f2adc8df0c4b088bc6e0815a0f9d08511f6dcae464
-    .agents/skills/sam-mode/scripts/clean-worktree.sh: sha256:06d40cdf525069080ed1b0ecdb859a177859eae74c800856668372466d346932
+    .agents/skills/sam-mode/scripts/clean-worktree.sh: sha256:cf3213cb07dde74702690360830cc6b4334a652e3e40fb30a2a7cea5ae832a4a
     .agents/skills/sam-mode/scripts/launch.sh: sha256:39bed4f93817d606e436cae348a1ccfb30b2044bf5889bca7146465914ef31c3
     .claude/skills/sam-mode/SKILL.md: sha256:32ac20614026aac9813c7d80ad56c9a247b7edc039f53be09281d52605b6debf
     .claude/skills/sam-mode/assets/status-board.html: sha256:96b72514e1c0cf7ead0d1acc2ab680544c398b4cb1981e06b8793c8203c84222
@@ -160,7 +160,7 @@ dependencies:
     .claude/skills/sam-mode/references/pr-commands.md: sha256:868f2402d2fb17b10a650d062d7c1df04256b850946ff45cc08de0a83eb43b6e
     .claude/skills/sam-mode/references/status-and-messages.md: sha256:8538313a3f9854241edc52430f8b8960c46c8d4ede22adda5733ba059e62fb9d
     .claude/skills/sam-mode/scripts/afk-watchdog.sh: sha256:6cdcfb50c4ca2b30e73068f2adc8df0c4b088bc6e0815a0f9d08511f6dcae464
-    .claude/skills/sam-mode/scripts/clean-worktree.sh: sha256:06d40cdf525069080ed1b0ecdb859a177859eae74c800856668372466d346932
+    .claude/skills/sam-mode/scripts/clean-worktree.sh: sha256:cf3213cb07dde74702690360830cc6b4334a652e3e40fb30a2a7cea5ae832a4a
     .claude/skills/sam-mode/scripts/launch.sh: sha256:39bed4f93817d606e436cae348a1ccfb30b2044bf5889bca7146465914ef31c3
   source: local
   local_path: ../s-stack
@@ -3041,7 +3041,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:06d40cdf525069080ed1b0ecdb859a177859eae74c800856668372466d346932
+  content_hash: sha256:cf3213cb07dde74702690360830cc6b4334a652e3e40fb30a2a7cea5ae832a4a
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/scripts/launch.sh
@@ -5444,7 +5444,7 @@ deployments:
   owners:
   - ../s-stack
   active_owner: ../s-stack
-  content_hash: sha256:06d40cdf525069080ed1b0ecdb859a177859eae74c800856668372466d346932
+  content_hash: sha256:cf3213cb07dde74702690360830cc6b4334a652e3e40fb30a2a7cea5ae832a4a
 - kind: project-relative
   target: copilot
   value: .agents/skills/sam-mode/scripts/launch.sh

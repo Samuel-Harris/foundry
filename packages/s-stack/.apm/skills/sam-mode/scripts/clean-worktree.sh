@@ -8,17 +8,19 @@ Usage:
   clean-worktree.sh <worktree> <merged-into>
 
 Run it in the repository that owns <worktree>. It removes a worktree whose work
-is finished, with the Docker Compose projects started from it, the worktrees of
-the same repository nested inside it, and its branch. <merged-into> is the ref
-that must contain the worktree's HEAD and branch, such as the feature branch.
+is finished, with the Docker Compose projects started from it, the linked
+worktrees of any repository nested inside it, and its branch. <merged-into> is
+the ref that must contain the worktree's HEAD and branch, such as the feature
+branch.
 
 It refuses, and changes nothing, when any of these holds:
   - <worktree> is not a linked worktree of this repository
   - a process has its working directory in or under it
   - it or a nested worktree has uncommitted or untracked changes
   - its HEAD or branch is not merged into <merged-into>
-  - a nested worktree's HEAD is in neither <merged-into> nor a remote branch
-  - it holds a nested git repository or another repository's worktree
+  - a nested worktree's HEAD is on no remote branch, nor, for a worktree of
+    this repository, in <merged-into>
+  - it holds a git repository or a submodule, whose work would go with it
 
 Standard output is one line per removal:
   stopped <compose project>   removed its containers, volumes, networks and built images
@@ -77,10 +79,6 @@ busy=$(lsof -a -d cwd -F pn 2>/dev/null | awk -v root="$worktree" '
 ' | sort -un | tr '\n' ' ') || true
 [ -z "$busy" ] || refuse "processes ${busy% } have their working directory in it"
 
-nested=$(printf '%s\n' "$registered" | while IFS= read -r path; do
-  [ "$path" != "$worktree" ] && under "$path" && printf '%s\n' "$path"
-done) || true
-
 check_clean() {
   local dirty
   dirty=$(git -C "$1" status --porcelain) || die "git -C $1 status failed"
@@ -91,30 +89,53 @@ branch_of() {
   git -C "$1" symbolic-ref --quiet --short HEAD || true
 }
 
+git_path() {
+  local path
+  path=$(git -C "$1" rev-parse --path-format=absolute "$2") || die "git -C $1 rev-parse $2 failed"
+  (cd "$path" && pwd -P)
+}
+
 check_clean "$worktree"
 git -C "$worktree" merge-base --is-ancestor HEAD "$merged_into" || refuse "HEAD of $worktree not merged into $merged_into"
 branch=$(branch_of "$worktree")
 if [ -n "$branch" ]; then
   git merge-base --is-ancestor "$branch" "$merged_into" || refuse "branch $branch not merged into $merged_into"
 fi
-while IFS= read -r path; do
-  [ -n "$path" ] || continue
-  check_clean "$path"
-  [ -z "$(git -C "$path" rev-list -n 1 HEAD --not "$merged_into" --remotes)" ] \
-    || refuse "nested worktree $path has commits in neither $merged_into nor a remote branch"
-done <<EOF
-$nested
-EOF
+own_common=$(git_path . --git-common-dir)
 
-# A nested repository's work would go with the directory, so only nested
-# worktrees of this repository, removed first, may be inside it. Dependency
-# directories are pruned because they are large and hold no work.
-foreign=$(find "$worktree" -mindepth 2 \( -name node_modules -o -name '.venv*' -o -name .pixi \) -prune \
-  -o -name .git -print 2>/dev/null | while IFS= read -r dot_git; do
-  holder=$(cd "$(dirname "$dot_git")" && pwd -P)
-  printf '%s\n' "$nested" | grep -qxF "$holder" || printf '%s\n' "$holder"
-done) || true
-[ -z "$foreign" ] || refuse "it holds another repository at $(printf '%s\n' "$foreign" | head -n 1)"
+# A clean worktree can hide another checkout only where git ignores files.
+# Listing ignored files names each checkout there as one "<dir>/" entry, and
+# git does not descend into it, so each nested worktree is listed in turn.
+nested_checkouts() {
+  git -C "$1" ls-files -z --others --ignored --exclude-standard | tr '\0' '\n' | { grep '/$' || true; } | while IFS= read -r entry; do
+    (cd "$1/$entry" && pwd -P)
+  done
+}
+
+# Each line is <depth> <tab> <path> <tab> <common dir>, for removal deepest first.
+nested=''
+queue=$(nested_checkouts "$worktree") || die "cannot list the checkouts nested in $worktree"
+while [ -n "$queue" ]; do
+  holder=${queue%%
+*}
+  if [ "$holder" = "$queue" ]; then queue=''; else queue=${queue#*
+}; fi
+  [ -f "$holder/.git" ] || refuse "it holds a git repository at $holder"
+  common=$(git_path "$holder" --git-common-dir)
+  [ "$(dirname "$(git_path "$holder" --git-dir)")" = "$common/worktrees" ] || refuse "it holds a submodule at $holder"
+  check_clean "$holder"
+  if [ "$common" = "$own_common" ]; then
+    [ -z "$(git -C "$holder" rev-list -n 1 HEAD --not "$merged_into" --remotes)" ] \
+      || refuse "nested worktree $holder has commits in neither $merged_into nor a remote branch"
+  else
+    [ -z "$(git -C "$holder" rev-list -n 1 HEAD --not --remotes)" ] \
+      || refuse "nested worktree $holder has commits on no remote branch"
+  fi
+  nested="$nested$(printf '%s' "$holder" | tr -cd / | wc -c | tr -d ' ')	$holder	$common
+"
+  deeper=$(nested_checkouts "$holder") || die "cannot list the checkouts nested in $holder"
+  [ -z "$deeper" ] || queue=$(printf '%s\n%s' "$deeper" "$queue" | sed '/^$/d')
+done
 
 # Compose labels each container with the directory its project was started
 # from, and a file-less down finds the rest of the project by its label.
@@ -136,18 +157,21 @@ else
   printf 'clean-worktree.sh: Docker is not running, so no compose project was stopped\n' >&2
 fi
 
+# A branch goes only when its work survives elsewhere: merged into
+# <merged-into>, for this repository, or pushed.
 remove_worktree() {
-  local path=$1 path_branch
+  local path=$1 common=$2 path_branch
   path_branch=$(branch_of "$path")
-  git worktree remove "$path" >&2 || die "git worktree remove $path failed"
-  if [ -n "$path_branch" ] && git merge-base --is-ancestor "$path_branch" "$merged_into" 2>/dev/null; then
-    git branch -D "$path_branch" >&2 || die "git branch -D $path_branch failed"
+  git --git-dir="$common" worktree remove "$path" >&2 || die "git worktree remove $path failed"
+  [ -n "$path_branch" ] || { printf 'removed %s\n' "$path"; return; }
+  if { [ "$common" = "$own_common" ] && git merge-base --is-ancestor "$path_branch" "$merged_into"; } \
+     || [ -z "$(git --git-dir="$common" rev-list -n 1 "$path_branch" --not --remotes)" ]; then
+    git --git-dir="$common" branch -D "$path_branch" >&2 || die "git branch -D $path_branch failed"
   fi
   printf 'removed %s\n' "$path"
 }
 
-# Deepest first, so no worktree is removed while another is still inside it.
-printf '%s\n' "$nested" | awk 'NF { print length($0) "\t" $0 }' | sort -rn | cut -f2- | while IFS= read -r path; do
-  remove_worktree "$path"
+printf '%s' "$nested" | sort -t '	' -k1,1rn | while IFS='	' read -r _ path common; do
+  remove_worktree "$path" "$common"
 done
-remove_worktree "$worktree"
+remove_worktree "$worktree" "$own_common"

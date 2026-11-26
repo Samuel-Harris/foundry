@@ -2474,7 +2474,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:63f91a1ca91b5ef4e6f0a1a54ae0126467117ed378af0fc691de79d7718a414c
+  content_hash: sha256:618ccf35b4db2444d484cc5f6e93ce21bbe357d65908966a35d7f563ab17f504
 - kind: project-relative
   target: claude
   value: .claude/skills/sam-mode/assets/usage-mod/.claude-plugin/plugin.json
@@ -5408,7 +5408,7 @@ deployments:
   owners:
   - .
   active_owner: .
-  content_hash: sha256:63f91a1ca91b5ef4e6f0a1a54ae0126467117ed378af0fc691de79d7718a414c
+  content_hash: sha256:618ccf35b4db2444d484cc5f6e93ce21bbe357d65908966a35d7f563ab17f504
 - kind: project-relative
   target: legacy
   value: .agents/skills/sam-mode/assets/usage-mod/.claude-plugin/plugin.json
@@ -5605,7 +5605,7 @@ local_deployed_files:
 - .claude/skills/sam-mode/scripts/launch.sh
 local_deployed_file_hashes:
   .agents/skills/sam-mode/SKILL.md: sha256:07f09fdc0c932696ea545d69cdeb0bd256fa94c5e1995a88b64096a7c2c6d2f6
-  .agents/skills/sam-mode/assets/status-board.html: sha256:63f91a1ca91b5ef4e6f0a1a54ae0126467117ed378af0fc691de79d7718a414c
+  .agents/skills/sam-mode/assets/status-board.html: sha256:618ccf35b4db2444d484cc5f6e93ce21bbe357d65908966a35d7f563ab17f504
   .agents/skills/sam-mode/assets/usage-mod/.claude-plugin/plugin.json: sha256:72c497ec5d96d1cdfde0608b67b0bb7760d3bd2ccb0186b675cd8f4c516bb2cc
   .agents/skills/sam-mode/assets/usage-mod/hooks/hooks.json: sha256:c835c92d8e1159d20a40ca78ad654da7433942c3694ffeda0b376b0c4dfd52cf
   .agents/skills/sam-mode/assets/usage-mod/hooks/register.test.ts: sha256:3084fe75775734f749af24afbcfb8188222fdbb556aaa8891deed6f179d623d1
@@ -5624,7 +5624,7 @@ local_deployed_file_hashes:
   .agents/skills/sam-mode/scripts/clean-worktree.sh: sha256:cf3213cb07dde74702690360830cc6b4334a652e3e40fb30a2a7cea5ae832a4a
   .agents/skills/sam-mode/scripts/launch.sh: sha256:39bed4f93817d606e436cae348a1ccfb30b2044bf5889bca7146465914ef31c3
   .claude/skills/sam-mode/SKILL.md: sha256:07f09fdc0c932696ea545d69cdeb0bd256fa94c5e1995a88b64096a7c2c6d2f6
-  .claude/skills/sam-mode/assets/status-board.html: sha256:63f91a1ca91b5ef4e6f0a1a54ae0126467117ed378af0fc691de79d7718a414c
+  .claude/skills/sam-mode/assets/status-board.html: sha256:618ccf35b4db2444d484cc5f6e93ce21bbe357d65908966a35d7f563ab17f504
   .claude/skills/sam-mode/assets/usage-mod/.claude-plugin/plugin.json: sha256:72c497ec5d96d1cdfde0608b67b0bb7760d3bd2ccb0186b675cd8f4c516bb2cc
   .claude/skills/sam-mode/assets/usage-mod/hooks/hooks.json: sha256:c835c92d8e1159d20a40ca78ad654da7433942c3694ffeda0b376b0c4dfd52cf
   .claude/skills/sam-mode/assets/usage-mod/hooks/register.test.ts: sha256:3084fe75775734f749af24afbcfb8188222fdbb556aaa8891deed6f179d623d1

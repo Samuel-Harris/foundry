@@ -338,8 +338,8 @@ leave needs_update null.
     <section id="s-gates"></section>
     <section id="s-prompts"></section>
     <section id="s-review"></section>
-    <section id="s-prs"></section>
     <section id="s-phases"></section>
+    <section id="s-prs"></section>
     <section id="s-recent"></section>
     <section id="s-heartbeat"></section>
   </main>
@@ -829,6 +829,17 @@ leave needs_update null.
       return;
     }
     const deps = new Map(phases.map((p) => [p, dependsOn(p)]));
+    const graph = phaseGraph(phases, deps);
+    if (graph.cycle) {
+      section.append(el("p", {class: "section-error"},
+        "The phases depend on each other in a cycle: " + graph.cycle.join(", ") + ". Fix depends_on in the feature plan."));
+    } else if (graph.edges.length) {
+      section.append(
+        el("h3", {class: "map-heading"}, "Dependency map"),
+        el("div", {class: "map", "data-key": "map"}, drawMap(graph)),
+        el("p", {class: "map-legend sub"},
+          "Solid line: needed merged into the orchestrator branch. Dashed line: needed with every pull request merged into the default branch."));
+    }
     section.append(table("table-phases",
       ["Phase", "Repository", "State", "Scheduling", "Waits for", "Depends on", "Session", "Last change"],
       phases.map((p) => [
@@ -843,18 +854,6 @@ leave needs_update null.
           : "not live",
         timeEl(p.changed_at, "relative"),
       ])));
-    const graph = phaseGraph(phases, deps);
-    if (graph.cycle) {
-      section.append(el("p", {class: "section-error"},
-        "The phases depend on each other in a cycle: " + graph.cycle.join(", ") + ". Fix depends_on in the feature plan."));
-      return;
-    }
-    if (!graph.edges.length) return;
-    section.append(
-      el("h3", {class: "map-heading"}, "Dependency map"),
-      el("div", {class: "map", "data-key": "map"}, drawMap(graph)),
-      el("p", {class: "map-legend sub"},
-        "Solid line: needed merged into the orchestrator branch. Dashed line: needed with every pull request merged into the default branch."));
   }
 
   function renderRecent() {
@@ -922,8 +921,8 @@ leave needs_update null.
       renderNeeds();
       renderGates();
       renderReview();
-      renderPrs();
       renderPhases();
+      renderPrs();
       renderRecent();
       renderHeartbeat(staleness(state.meta), judged);
       renderNotice();

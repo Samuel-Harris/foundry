@@ -108,7 +108,7 @@ Every repository of the feature has its own default branch and its own orchestra
 
 Never assume a default branch is `main`. Resolve each one, for example with `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`.
 
-Every orchestrator branch and every branch cut from one carry `.foundry/`. Push none of them, in any repository, to a public remote unless the developer says so. Pull request branches never contain `.foundry/`, and the PR creator pushes them.
+Every orchestrator branch and every branch cut from one carry `.foundry/`. The orchestrator pushes each orchestrator branch to a private `origin` at every tick, as its handbook says. Push no other of them, and none to a public remote, unless the developer says so. Pull request branches never contain `.foundry/`, and the PR creator pushes them.
 
 ### Pull requests
 
@@ -126,6 +126,7 @@ Every orchestrator branch and every branch cut from one carry `.foundry/`. Push 
 The developer's own tmux server runs every pane of the run, theirs included. Inside a pane, `$TMUX` names that server, and tmux then ignores `TMUX_TMPDIR`, so `TMUX_TMPDIR=<dir> tmux kill-server` kills the developer's server.
 
 - Never run `kill-server`, and never end a session, window or pane that the run did not start. The launcher's `--close` is how a pane the run started is closed.
+- Never run `workmux remove`. Every session's pane sits in the orchestrator's window, and removing the feature worktree closes that window and ends them all. The launcher's `--remove` is how a worktree the run started is removed.
 - To reach any other server, pass `-S <full socket path>`, or unset `TMUX`, and first confirm the target with `tmux -S <path> list-sessions -F '#{socket_path}'`.
 - A test that starts tmux runs it with `env -u TMUX` and `-S` into its own temporary directory, and on teardown kills only that server, also when the test fails.
 

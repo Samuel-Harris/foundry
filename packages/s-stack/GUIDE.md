@@ -222,8 +222,9 @@ flowchart LR
 ```
 
 - The first spec writer and the orchestrator share the feature worktree, on the orchestrator branch. The planner, each update spec writer and each phase session get a worktree and branch of their own, which the launcher creates with [workmux](https://workmux.raine.dev). Once a session's work is merged into the orchestrator branch, the orchestrator removes its worktree and branch with `scripts/clean-worktree.sh`, which first stops the Docker Compose projects started in it, with their volumes and built images. Each phase removes its reviewers' worktrees the same way after each review. The script refuses, and deletes nothing, while a process works in the worktree or it holds uncommitted changes or unmerged commits.
+- Every session's pane sits in the orchestrator's window, so `workmux remove` of the feature worktree closes that window and ends every session in it, and deletes the orchestrator branch. Start any session of your own, such as a cleanup or review session, in a worktree of its own, never in a run's worktree, so that removing it after it finishes cannot take the run with it. The orchestrator pushes each orchestrator branch to a private `origin` at every tick, so a removal costs a restart of the sessions, not the run's state.
 - The PR creator cuts pull request branches from the default branch, or from the branch of the pull request they depend on. They hold the phase's commits and never `.foundry/`.
-- No session pushes an orchestrator branch, or a branch cut from one, in any repository, to a public remote unless you say so. Only the PR creator pushes, and only pull request branches.
+- No session pushes an orchestrator branch, or a branch cut from one, in any repository, to a public remote unless you say so. The orchestrator pushes only orchestrator branches, and only to a private `origin`. The PR creator pushes only pull request branches.
 - s-stack never assumes a default branch is `main`. It resolves each name from its repository.
 
 ### Panes
